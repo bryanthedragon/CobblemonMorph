@@ -1,0 +1,7 @@
+Java Launcher: C:\Users\gumbr\.gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+Arguments: '--inJar, C:\Users\gumbr\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.20.4-49.2.0\forge-1.20.4-49.2.0-injected.jar, --outJar, C:\Users\gumbr\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.20.4-49.2.0_mapped_parchment_2024.04.14-1.20.4\forge-1.20.4-49.2.0_mapped_parchment_2024.04.14-1.20.4.jar, --logFile, accesstransform.log, --atFile, C:\Users\gumbr\source\repos\CobblemonMorph\build\_atJar_4\parent_at.cfg'
+Classpath:
+ - C:\Users\gumbr\.gradle\caches\forge_gradle\maven_downloader\net\minecraftforge\accesstransformers\8.2.1\accesstransformers-8.2.1-fatjar.jar
+Working directory: C:\Users\gumbr\source\repos\CobblemonMorph\build\_atJar_4
+Main class: net.minecraftforge.accesstransformer.TransformerProcessor
+====================================
