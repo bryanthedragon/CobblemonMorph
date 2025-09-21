@@ -1,0 +1,8 @@
+Java Launcher: C:\Users\gumbr\.gradle\jdks\eclipse_adoptium-17-amd64-windows.2\bin\java.exe
+Arguments: '--clean, C:\Users\gumbr\.gradle\caches\forge_gradle\mcp_repo\net\minecraft\joined\1.20.4-20231207.112700\joined-1.20.4-20231207.112700-srg.jar, --output, C:\Users\gumbr\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.20.4-49.2.0\forge-1.20.4-49.2.0-binpatched.jar, --apply, C:\Users\gumbr\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.20.4-49.2.0\forge-1.20.4-49.2.0-binpatches.lzma'
+Classpath:
+ - C:\Users\gumbr\.gradle\caches\forge_gradle\maven_downloader\net\minecraftforge\binarypatcher\1.2.0\binarypatcher-1.2.0-fatjar.jar
+Working directory: C:\Users\gumbr\source\repos\CobblemonMorph\build\_applyBinpatches_4
+Main class: net.minecraftforge.binarypatcher.ConsoleTool
+====================================
+Could not delete output file: C:\Users\gumbr\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.20.4-49.2.0\forge-1.20.4-49.2.0-binpatched.jar
