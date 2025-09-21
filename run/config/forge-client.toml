@@ -1,3 +1,4 @@
+
 #Client only settings, mostly things related to rendering
 [client]
 	#Enable Forge to queue all chunk updates to the Chunk Update thread.
@@ -22,3 +23,4 @@
 	stabilizeDirectionGetNearest = true
 	#When enabled, Forge will allow mipmaps to be lowered in real-time. This is the default behavior in vanilla. Use this if you experience issues with resource packs that use textures lower than 8x8.
 	allowMipmapLowering = false
+

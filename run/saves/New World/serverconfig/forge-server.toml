@@ -1,3 +1,4 @@
+
 #Server configuration settings
 [server]
 	#Set this to true to remove any BlockEntity that throws an error in its update method instead of closing the server and reporting a crash log. BE WARNED THIS COULD SCREW UP EVERYTHING USE SPARINGLY WE ARE NOT RESPONSIBLE FOR DAMAGES.
@@ -18,3 +19,4 @@
 	advertiseDedicatedServerToLan = true
 	#Set this to true to enable living entities to use items with durations of 0. Fixes being able to use Eyes of Ender repeatedly by holding down the use button. Disabled by default as it could change interactions with items of existing mods.
 	useItemWithDurationZero = false
+

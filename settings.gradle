@@ -13,6 +13,7 @@ pluginManagement
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org' 
         }
+        mavenCentral()
     }
 }
 
