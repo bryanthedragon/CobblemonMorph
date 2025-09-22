@@ -1,0 +1,3966 @@
+{
+    "cobblemonmorph":
+    {
+        "morphs":
+        [
+            {
+                "gen1":
+                {
+                    "cobblemon:bulbasuar":
+                    {
+
+                    },
+                    "cobblemon:ivysaur":
+                    {
+
+                    },
+                    "cobblemon:venusaur":
+                    {
+
+                    },
+                    "cobblemon:charmander":
+                    {
+
+                    },
+                    "cobblemon:charmeleon":
+                    {
+
+                    },
+                    "cobblemon:charizard":
+                    {
+
+                    },
+                    "cobblemon:squirtle":
+                    {
+
+                    },
+                    "cobblemon:wartortle":
+                    {
+
+                    },
+                    "cobblemon:blastoise":
+                    {
+
+                    },
+                    "cobblemon:caterpie":
+                    {
+
+                    },
+                    "cobblemon:metapod":
+                    {
+
+                    },
+                    "cobblemon:butterfree":
+                    {
+
+                    },
+                    "cobblemon:weedle":
+                    {
+
+                    },
+                    "cobblemon:kakuna":
+                    {
+
+                    },
+                    "cobblemon:beedrill":
+                    {
+
+                    },
+                    "cobblemon:pidgey":
+                    {
+
+                    },
+                    "cobblemon:pidgeotto":
+                    {
+
+                    },
+                    "cobblemon:pidgeot":
+                    {
+
+                    },
+                    "cobblemon:rattata":
+                    {
+
+                    },
+                    "cobblemon:raticate":
+                    {
+
+                    },
+                    "cobblemon:spearow":
+                    {
+
+                    },
+                    "cobblemon:fearow":
+                    {
+
+                    },
+                    "cobblemon:ekans":
+                    {
+
+                    },
+                    "cobblemon:arbok":
+                    {
+
+                    },
+                    "cobblemon:pikachu":
+                    {
+
+                    },
+                    "cobblemon:raichu":
+                    {
+
+                    },
+                    "cobblemon:sandshrew":
+                    {
+
+                    },
+                    "cobblemon:sandslash":
+                    {
+
+                    },
+                    "cobblemon:nidoranf":
+                    {
+
+                    },
+                    "cobblemon:nidorina":
+                    {
+
+                    },
+                    "cobblemon:nidoqueen":
+                    {
+
+                    },
+                    "cobblemon:nidoranm":
+                    {
+
+                    },
+                    "cobblemon:nidorino":
+                    {
+
+                    },
+                    "cobblemon:nidoking":
+                    {
+
+                    },
+                    "cobblemon:clefairy":
+                    {
+
+                    },
+                    "cobblemon:clefable":
+                    {
+
+                    },
+                    "cobblemon:vulpix":
+                    {
+
+                    },
+                    "cobblemon:ninetales":
+                    {
+
+                    },
+                    "cobblemon:jigglypuff":
+                    {
+
+                    },
+                    "cobblemon:wigglytuff":
+                    {
+
+                    },
+                    "cobblemon:zubat":
+                    {
+
+                    },
+                    "cobblemon:golbat":
+                    {
+
+                    },
+                    "cobblemon:oddish":
+                    {
+
+                    },
+                    "cobblemon:gloom":
+                    {
+
+                    },
+                    "cobblemon:vileplume":
+                    {
+
+                    },
+                    "cobblemon:paras":
+                    {
+
+                    },
+                    "cobblemon:parasect":
+                    {
+
+                    },
+                    "cobblemon:venonat":
+                    {
+
+                    },
+                    "cobblemon:venomoth":
+                    {
+
+                    },
+                    "cobblemon:diglett":
+                    {
+
+                    },
+                    "cobblemon:dugtrio":
+                    {
+
+                    },
+                    "cobblemon:meowth":
+                    {
+
+                    },
+                    "cobblemon:persian":
+                    {
+
+                    },
+                    "cobblemon:psyduck":
+                    {
+
+                    },
+                    "cobblemon:golduck":
+                    {
+
+                    },
+                    "cobblemon:mankey":
+                    {
+
+                    },
+                    "cobblemon:primeape":
+                    {
+
+                    },
+                    "cobblemon:growlithe":
+                    {
+
+                    },
+                    "cobblemon:arcanine":
+                    {
+
+                    },
+                    "cobblemon:poliwag":
+                    {
+
+                    },
+                    "cobblemon:poliwhirl":
+                    {
+
+                    },
+                    "cobblemon:poliwrath":
+                    {
+
+                    },
+                    "cobblemon:abra":
+                    {
+
+                    },
+                    "cobblemon:kadabra":
+                    {
+
+                    },
+                    "cobblemon:alakazam":
+                    {
+
+                    },
+                    "cobblemon:machop":
+                    {
+
+                    },
+                    "cobblemon:machoke":
+                    {
+
+                    },
+                    "cobblemon:machamp":
+                    {
+
+                    },
+                    "cobblemon:bellsprout":
+                    {
+
+                    },
+                    "cobblemon:weepinbell":
+                    {
+
+                    },
+                    "cobblemon:victreebel":
+                    {
+
+                    },
+                    "cobblemon:tentacool":
+                    {
+
+                    },
+                    "cobblemon:tentacruel":
+                    {
+
+                    },
+                    "cobblemon:geodude":
+                    {
+
+                    },
+                    "cobblemon:graveler":
+                    {
+
+                    },
+                    "cobblemon:golem":
+                    {
+
+                    },
+                    "cobblemon:ponyta":
+                    {
+
+                    },
+                    "cobblemon:rapidash":
+                    {
+
+                    },
+                    "cobblemon:slowpoke":
+                    {
+
+                    },
+                    "cobblemon:slowbro":
+                    {
+
+                    },
+                    "cobblemon:magnemite":
+                    {
+
+                    },
+                    "cobblemon:magneton":
+                    {
+
+                    },
+                    "cobblemon:farfetchd":
+                    {
+
+                    },
+                    "cobblemon:doduo":
+                    {
+
+                    },
+                    "cobblemon:dodrio":
+                    {
+
+                    },
+                    "cobblemon:seel":
+                    {
+
+                    },
+                    "cobblemon:dewgong":
+                    {
+
+                    },
+                    "cobblemon:grimer":
+                    {
+
+                    },
+                    "cobblemon:muk":
+                    {
+
+                    },
+                    "cobblemon:shellder":
+                    {
+
+                    },
+                    "cobblemon:cloyster":
+                    {
+
+                    },
+                    "cobblemon:gastly":
+                    {
+
+                    },
+                    "cobblemon:haunter":
+                    {
+
+                    },
+                    "cobblemon:gengar":
+                    {
+
+                    },
+                    "cobblemon:onix":
+                    {
+
+                    },
+                    "cobblemon:drowzee":
+                    {
+
+                    },
+                    "cobblemon:hypno":
+                    {
+
+                    },
+                    "cobblemon:krabby":
+                    {
+
+                    },
+                    "cobblemon:kingler":
+                    {
+
+                    },
+                    "cobblemon:voltorb":
+                    {
+
+                    },
+                    "cobblemon:electrode":
+                    {
+
+                    },
+                    "cobblemon:exeggcute":
+                    {
+
+                    },
+                    "cobblemon:exeggutor":
+                    {
+
+                    },
+                    "cobblemon:cubone":
+                    {
+
+                    },
+                    "cobblemon:marowak":
+                    {
+
+                    },
+                    "cobblemon:hitmonlee":
+                    {
+
+                    },
+                    "cobblemon:hitmonchan":
+                    {
+
+                    },
+                    "cobblemon:lickitung":
+                    {
+
+                    },
+                    "cobblemon:koffing":
+                    {
+
+                    },
+                    "cobblemon:weezing":
+                    {
+
+                    },
+                    "cobblemon:rhyhorn":
+                    {
+
+                    },
+                    "cobblemon:rhydon":
+                    {
+
+                    },
+                    "cobblemon:chansey":
+                    {
+
+                    },
+                    "cobblemon:tangela":
+                    {
+
+                    },
+                    "cobblemon:kangaskhan":
+                    {
+
+                    },
+                    "cobblemon:horsea":
+                    {
+
+                    },
+                    "cobblemon:seadra":
+                    {
+
+                    },
+                    "cobblemon:goldeen":
+                    {
+
+                    },
+                    "cobblemon:seaking":
+                    {
+
+                    },
+                    "cobblemon:staryu":
+                    {
+
+                    },
+                    "cobblemon:starmie":
+                    {
+
+                    },
+                    "cobblemon:mrmime":
+                    {
+
+                    },
+                    "cobblemon:scyther":
+                    {
+
+                    },
+                    "cobblemon:jynx":
+                    {
+
+                    },
+                    "cobblemon:electabuzz":
+                    {
+
+                    },
+                    "cobblemon:magmar":
+                    {
+
+                    },
+                    "cobblemon:pinsir":
+                    {
+
+                    },
+                    "cobblemon:tauros":
+                    {
+
+                    },
+                    "cobblemon:magikarp":
+                    {
+
+                    },
+                    "cobblemon:gyarados":
+                    {
+
+                    },
+                    "cobblemon:lapras":
+                    {
+
+                    },
+                    "cobblemon:ditto":
+                    {
+
+                    },
+                    "cobblemon:eevee":
+                    {
+
+                    },
+                    "cobblemon:vaporeon":
+                    {
+
+                    },
+                    "cobblemon:jolteon":
+                    {
+
+                    },
+                    "cobblemon:flareon":
+                    {
+
+                    },
+                    "cobblemon:porygon":
+                    {
+
+                    },
+                    "cobblemon:omanyte":
+                    {
+
+                    },
+                    "cobblemon:omastar":
+                    {
+
+                    },
+                    "cobblemon:kabuto":
+                    {
+
+                    },
+                    "cobblemon:kabutops":
+                    {
+
+                    },
+                    "cobblemon:aerodactyl":
+                    {
+
+                    },
+                    "cobblemon:snorlax":
+                    {
+
+                    },
+                    "cobblemon:articuno":
+                    {
+
+                    },
+                    "cobblemon:zapdos":
+                    {
+
+                    },
+                    "cobblemon:moltres":
+                    {
+
+                    },
+                    "cobblemon:dratini":
+                    {
+
+                    },
+                    "cobblemon:dragonair":
+                    {
+
+                    },
+                    "cobblemon:dragonite":
+                    {
+
+                    },
+                    "cobblemon:mewtwo":
+                    {
+
+                    },
+                    "cobblemon:mew":
+                    {
+
+                    }
+                },
+                "gen2":
+                {
+                    "cobblemon:chikorita":
+                    {
+
+                    },
+                    "cobblemon:bayleef":
+                    {
+
+                    },
+                    "cobblemon:meganium":
+                    {
+
+                    },
+                    "cobblemon:cyndaquil":
+                    {
+
+                    },
+                    "cobblemon:quilava":
+                    {
+
+                    },
+                    "cobblemon:typhlosion":
+                    {
+
+                    },
+                    "cobblemon:totodile":
+                    {
+
+                    },
+                    "cobblemon:croconaw":
+                    {
+
+                    },
+                    "cobblemon:feraligatr":
+                    {
+
+                    },
+                    "cobblemon:sentret":
+                    {
+
+                    },
+                    "cobblemon:furret":
+                    {
+
+                    },
+                    "cobblemon:hoothoot":
+                    {
+
+                    },
+                    "cobblemon:noctowl":
+                    {
+
+                    },
+                    "cobblemon:ledyba":
+                    {
+
+                    },
+                    "cobblemon:ledian":
+                    {
+
+                    },
+                    "cobblemon:spinarak":
+                    {
+
+                    },
+                    "cobblemon:ariados":
+                    {
+
+                    },
+                    "cobblemon:crobat":
+                    {
+
+                    },
+                    "cobblemon:chinchou":
+                    {
+
+                    },
+                    "cobblemon:lanturn":
+                    {
+
+                    },
+                    "cobblemon:pichu":
+                    {
+
+                    },
+                    "cobblemon:cleffa":
+                    {
+
+                    },
+                    "cobblemon:igglybuff":
+                    {
+
+                    },
+                    "cobblemon:togepi":
+                    {
+
+                    },
+                    "cobblemon:togetic":
+                    {
+
+                    },
+                    "cobblemon:natu":
+                    {
+
+                    },
+                    "cobblemon:xatu":
+                    {
+
+                    },
+                    "cobblemon:mareep":
+                    {
+
+                    },
+                    "cobblemon:flaaffy":
+                    {
+
+                    },
+                    "cobblemon:ampharos":
+                    {
+
+                    },
+                    "cobblemon:bellossom":
+                    {
+
+                    },
+                    "cobblemon:marill":
+                    {
+
+                    },
+                    "cobblemon:azumarill":
+                    {
+
+                    },
+                    "cobblemon:sudowoodo":
+                    {
+
+                    },
+                    "cobblemon:politoed":
+                    {
+
+                    },
+                    "cobblemon:hoppip":
+                    {
+
+                    },
+                    "cobblemon:skiploom":
+                    {
+
+                    },
+                    "cobblemon:jumpluff":
+                    {
+
+                    },
+                    "cobblemon:aipom":
+                    {
+
+                    },
+                    "cobblemon:sunkern":
+                    {
+
+                    },
+                    "cobblemon:sunflora":
+                    {
+
+                    },
+                    "cobblemon:yanma":
+                    {
+
+                    },
+                    "cobblemon:wooper":
+                    {
+
+                    },
+                    "cobblemon:quagsire":
+                    {
+
+                    },
+                    "cobblemon:espeon":
+                    {
+
+                    },
+                    "cobblemon:umbreon":
+                    {
+
+                    },
+                    "cobblemon:murkrow":
+                    {
+
+                    },
+                    "cobblemon:slowking":
+                    {
+
+                    },
+                    "cobblemon:misdreavus":
+                    {
+
+                    },
+                    "cobblemon:unown":
+                    {
+
+                    },
+                    "cobblemon:wynaut":
+                    {
+
+                    },
+                    "cobblemon:wobbuffet":
+                    {
+
+                    },
+                    "cobblemon:girafarig":
+                    {
+
+                    },
+                    "cobblemon:pineco":
+                    {
+
+                    },
+                    "cobblemon:forretress":
+                    {
+
+                    },
+                    "cobblemon:dunsparce":
+                    {
+
+                    },
+                    "cobblemon:gligar":
+                    {
+
+                    },
+                    "cobblemon:steelix":
+                    {
+
+                    },
+                    "cobblemon:snubbull":
+                    {
+
+                    },
+                    "cobblemon:granbull":
+                    {
+
+                    },
+                    "cobblemon:qwilfish":
+                    {
+
+                    },
+                    "cobblemon:scizor":
+                    {
+
+                    },
+                    "cobblemon:shuckle":
+                    {
+
+                    },
+                    "cobblemon:heracross":
+                    {
+
+                    },
+                    "cobblemon:sneasel":
+                    {
+
+                    },
+                    "cobblemon:teddiursa":
+                    {
+
+                    },
+                    "cobblemon:ursaring":
+                    {
+
+                    },
+                    "cobblemon:slugma":
+                    {
+
+                    },
+                    "cobblemon:magcargo":
+                    {
+
+                    },
+                    "cobblemon:swinub":
+                    {
+
+                    },
+                    "cobblemon:piloswine":
+                    {
+
+                    },
+                    "cobblemon:corsola":
+                    {
+
+                    },
+                    "cobblemon:remoraid":
+                    {
+
+                    },
+                    "cobblemon:octillery":
+                    {
+
+                    },
+                    "cobblemon:delibird":
+                    {
+
+                    },
+                    "cobblemon:mantine":
+                    {
+
+                    },
+                    "cobblemon:skarmory":
+                    {
+
+                    },
+                    "cobblemon:houndour":
+                    {
+
+                    },
+                    "cobblemon:houndoom":
+                    {
+
+                    },
+                    "cobblemon:phanpy":
+                    {
+
+                    },
+                    "cobblemon:donphan":
+                    {
+
+                    },
+                    "cobblemon:porygon2":
+                    {
+
+                    },
+                    "cobblemon:stantler":
+                    {
+
+                    },
+                    "cobblemon:smeargle":
+                    {
+
+                    },
+                    "cobblemon:tyrogue":
+                    {
+
+                    },
+                    "cobblemon:hitmontop":
+                    {
+
+                    },
+                    "cobblemon:smoochum":
+                    {
+
+                    },
+                    "cobblemon:elekid":
+                    {
+
+                    },
+                    "cobblemon:magby":
+                    {
+
+                    },
+                    "cobblemon:miltank":
+                    {
+
+                    },
+                    "cobblemon:blissey":
+                    {
+
+                    },
+                    "cobblemon:raikou":
+                    {
+
+                    },
+                    "cobblemon:entei":
+                    {
+
+                    },
+                    "cobblemon:suicune":
+                    {
+
+                    },
+                    "cobblemon:larvitar":
+                    {
+
+                    },
+                    "cobblemon:pupitar":
+                    {
+
+                    },
+                    "cobblemon:tyranitar":
+                    {
+
+                    },
+                    "cobblemon:lugia":
+                    {
+
+                    },
+                    "cobblemon:ho-oh":
+                    {
+
+                    },
+                    "cobblemon:celebi":
+                    {
+
+                    }
+                },
+                "gen3":
+                {
+                    "cobblemon:treecko":
+                    {
+
+                    },
+                    "cobblemon:grovyle":
+                    {
+
+                    },
+                    "cobblemon:sceptile":
+                    {
+
+                    },
+                    "cobblemon:torchic":
+                    {
+
+                    },
+                    "cobblemon:combusken":
+                    {
+
+                    },
+                    "cobblemon:blaziken":
+                    {
+
+                    },
+                    "cobblemon:mudkip":
+                    {
+
+                    },
+                    "cobblemon:marshtomp":
+                    {
+
+                    },
+                    "cobblemon:swampert":
+                    {
+
+                    },
+                    "cobblemon:poochyena":
+                    {
+
+                    },
+                    "cobblemon:mightyena":
+                    {
+
+                    },
+                    "cobblemon:zigzagoon":
+                    {
+
+                    },
+                    "cobblemon:linoone":
+                    {
+
+                    },
+                    "cobblemon:wurmple":
+                    {
+
+                    },
+                    "cobblemon:silcoon":
+                    {
+
+                    },
+                    "cobblemon:beautifly":
+                    {
+
+                    },
+                    "cobblemon:cascoon":
+                    {
+
+                    },
+                    "cobblemon:dustox":
+                    {
+
+                    },
+                    "cobblemon:lotad":
+                    {
+
+                    },
+                    "cobblemon:lombre":
+                    {
+
+                    },
+                    "cobblemon:ludicolo":
+                    {
+
+                    },
+                    "cobblemon:seedot":
+                    {
+
+                    },
+                    "cobblemon:nuzleaf":
+                    {
+
+                    },
+                    "cobblemon:shiftry":
+                    {
+
+                    },
+                    "cobblemon:taillow":
+                    {
+
+                    },
+                    "cobblemon:swellow":
+                    {
+
+                    },
+                    "cobblemon:wingull":
+                    {
+
+                    },
+                    "cobblemon:pelipper":
+                    {
+
+                    },
+                    "cobblemon:ralts":
+                    {
+
+                    },
+                    "cobblemon:kirlia":
+                    {
+
+                    },
+                    "cobblemon:gardevoir":
+                    {
+
+                    },
+                    "cobblemon:surskit":
+                    {
+
+                    },
+                    "cobblemon:masquerain":
+                    {
+
+                    },
+                    "cobblemon:shroomish":
+                    {
+
+                    },
+                    "cobblemon:breloom":
+                    {
+
+                    },
+                    "cobblemon:slakoth":
+                    {
+
+                    },
+                    "cobblemon:vigoroth":
+                    {
+
+                    },
+                    "cobblemon:slaking":
+                    {
+
+                    },
+                    "cobblemon:nincada":
+                    {
+
+                    },
+                    "cobblemon:ninjask":
+                    {
+
+                    },
+                    "cobblemon:shedinja":
+                    {
+
+                    },
+                    "cobblemon:whismur":
+                    {
+
+                    },
+                    "cobblemon:loudred":
+                    {
+
+                    },
+                    "cobblemon:exploud":
+                    {
+
+                    },
+                    "cobblemon:makuhita":
+                    {
+
+                    },
+                    "cobblemon:hariyama":
+                    {
+
+                    },
+                    "cobblemon:azurill":
+                    {
+
+                    },
+                    "cobblemon:nosepass":
+                    {
+
+                    },
+                    "cobblemon:skitty":
+                    {
+
+                    },
+                    "cobblemon:delcatty":
+                    {
+
+                    },
+                    "cobblemon:sableye":
+                    {
+
+                    },
+                    "cobblemon:mawile":
+                    {
+
+                    },
+                    "cobblemon:aron":
+                    {
+
+                    },
+                    "cobblemon:lairon":
+                    {
+
+                    },
+                    "cobblemon:aggron":
+                    {
+
+                    },
+                    "cobblemon:meditite":
+                    {
+
+                    },
+                    "cobblemon:medicham":
+                    {
+
+                    },
+                    "cobblemon:electrike":
+                    {
+
+                    },
+                    "cobblemon:manectric":
+                    {
+
+                    },
+                    "cobblemon:plusle":
+                    {
+
+                    },
+                    "cobblemon:minun":
+                    {
+
+                    },
+                    "cobblemon:volbeat":
+                    {
+
+                    },
+                    "cobblemon:illumise":
+                    {
+
+                    },
+                    "cobblemon:roselia":
+                    {
+
+                    },
+                    "cobblemon:gulpin":
+                    {
+
+                    },
+                    "cobblemon:swalot":
+                    {
+
+                    },
+                    "cobblemon:carvanha":
+                    {
+
+                    },
+                    "cobblemon:sharpedo":
+                    {
+
+                    },
+                    "cobblemon:wailmer":
+                    {
+
+                    },
+                    "cobblemon:wailord":
+                    {
+
+                    },
+                    "cobblemon:numel":
+                    {
+
+                    },
+                    "cobblemon:cacturne":
+                    {
+
+                    },
+                    "cobblemon:snorunt":
+                    {
+
+                    },
+                    "cobblemon:glalie":
+                    {
+
+                    },
+                    "cobblemon:spheal":
+                    {
+
+                    },
+                    "cobblemon:sealeo":
+                    {
+
+                    },
+                    "cobblemon:walrein":
+                    {
+
+                    },
+                    "cobblemon:clamperl":
+                    {
+
+                    },
+                    "cobblemon:huntail":
+                    {
+
+                    },
+                    "cobblemon:gorebyss":
+                    {
+
+                    },
+                    "cobblemon:relicanth":
+                    {
+
+                    },
+                    "cobblemon:luvdisc":
+                    {
+
+                    },
+                    "cobblemon:bagon":
+                    {
+
+                    },
+                    "cobblemon:shelgon":
+                    {
+
+                    },
+                    "cobblemon:salamence":
+                    {
+
+                    },
+                    "cobblemon:beldum":
+                    {
+
+                    },
+                    "cobblemon:metang":
+                    {
+
+                    },
+                    "cobblemon:metagross":
+                    {
+
+                    },
+                    "cobblemon:regirock":
+                    {
+
+                    },
+                    "cobblemon:regice":
+                    {
+
+                    },
+                    "cobblemon:registeel":
+                    {
+
+                    },
+                    "cobblemon:latias":
+                    {
+
+                    },
+                    "cobblemon:latios":
+                    {
+
+                    },
+                    "cobblemon:kyogre":
+                    {
+
+                    },
+                    "cobblemon:groudon":
+                    {
+
+                    },
+                    "cobblemon:rayquaza":
+                    {
+
+                    },
+                    "cobblemon:jirachi":
+                    {
+
+                    },
+                    "cobblemon:deoxys":
+                    {
+
+                    }
+                },
+                "gen4":
+                {
+                    "cobblemon:turtwig":
+                    {
+
+                    },
+                    "cobblemon:grotle":
+                    {
+
+                    },
+                    "cobblemon:torterra":
+                    {
+
+                    },
+                    "cobblemon:chimchar":
+                    {
+
+                    },
+                    "cobblemon:monferno":
+                    {
+
+                    },
+                    "cobblemon:infernape":
+                    {
+
+                    },
+                    "cobblemon:piplup":
+                    {
+
+                    },
+                    "cobblemon:prinplup":
+                    {
+
+                    },
+                    "cobblemon:empoleon":
+                    {
+
+                    },
+                    "cobblemon:starly":
+                    {
+
+                    },
+                    "cobblemon:staravia":
+                    {
+
+                    },
+                    "cobblemon:staraptor":
+                    {
+
+                    },
+                    "cobblemon:bidoof":
+                    {
+
+                    },
+                    "cobblemon:bibarel":
+                    {
+
+                    },
+                    "cobblemon:kricketot":
+                    {
+
+                    },
+                    "cobblemon:kricketune":
+                    {
+
+                    },
+                    "cobblemon:shinx":
+                    {
+
+                    },
+                    "cobblemon:luxio":
+                    {
+
+                    },
+                    "cobblemon:luxray":
+                    {
+
+                    },
+                    "cobblemon:budew":
+                    {
+
+                    },
+                    "cobblemon:roserade":
+                    {
+
+                    },
+                    "cobblemon:cranidos":
+                    {
+
+                    },
+                    "cobblemon:rampardos":
+                    {
+
+                    },
+                    "cobblemon:shieldon":
+                    {
+
+                    },
+                    "cobblemon:bastiodon":
+                    {
+
+                    },
+                    "cobblemon:burmy":
+                    {
+
+                    },
+                    "cobblemon:wormadam":
+                    {
+
+                    },
+                    "cobblemon:mothim":
+                    {
+
+                    },
+                    "cobblemon:combee":
+                    {
+
+                    },
+                    "cobblemon:vespiquen":
+                    {
+
+                    },
+                    "cobblemon:pachirisu":
+                    {
+
+                    },
+                    "cobblemon:buizel":
+                    {
+
+                    },
+                    "cobblemon:floatzel":
+                    {
+
+                    },
+                    "cobblemon:cherubi":
+                    {
+
+                    },
+                    "cobblemon:cherrim":
+                    {
+
+                    },
+                    "cobblemon:shellos":
+                    {
+
+                    },
+                    "cobblemon:gastrodon":
+                    {
+
+                    },
+                    "cobblemon:ambipom":
+                    {
+
+                    },
+                    "cobblemon:drifloon":
+                    {
+
+                    },
+                    "cobblemon:drifblim":
+                    {
+
+                    },
+                    "cobblemon:buneary":
+                    {
+
+                    },
+                    "cobblemon:lopunny":
+                    {
+
+                    },
+                    "cobblemon:mismagius":
+                    {
+
+                    },
+                    "cobblemon:honchkrow":
+                    {
+
+                    },
+                    "cobblemon:glameow":
+                    {
+
+                    },
+                    "cobblemon:purugly":
+                    {
+
+                    },
+                    "cobblemon:chingling":
+                    {
+
+                    },
+                    "cobblemon:stunky":
+                    {
+
+                    },
+                    "cobblemon:skuntank":
+                    {
+
+                    },
+                    "cobblemon:bronzor":
+                    {
+
+                    },
+                    "cobblemon:bronzong":
+                    {
+
+                    },
+                    "cobblemon:chatot":
+                    {
+
+                    },
+                    "cobblemon:spiritomb":
+                    {
+
+                    },
+                    "cobblemon:gible":
+                    {
+
+                    },
+                    "cobblemon:gabite":
+                    {
+
+                    },
+                    "cobblemon:garchomp":
+                    {
+
+                    },
+                    "cobblemon:munchlax":
+                    {
+
+                    },
+                    "cobblemon:riolu":
+                    {
+
+                    },
+                    "cobblemon:lucario":
+                    {
+
+                    },
+                    "cobblemon:hippopotas":
+                    {
+
+                    },
+                    "cobblemon:hippowdon":
+                    {
+
+                    },
+                    "cobblemon:skorupi":
+                    {
+
+                    },
+                    "cobblemon:drapion":
+                    {
+
+                    },
+                    "cobblemon:croagunk":
+                    {
+
+                    },
+                    "cobblemon:toxicroak":
+                    {
+
+                    },
+                    "cobblemon:carnivine":
+                    {
+
+                    },
+                    "cobblemon:finneon":
+                    {
+
+                    },
+                    "cobblemon:lumineon":
+                    {
+
+                    },
+                    "cobblemon:mantyke":
+                    {
+
+                    },
+                    "cobblemon:snover":
+                    {
+
+                    },
+                    "cobblemon:abomasnow":
+                    {
+
+                    },
+                    "cobblemon:weavile":
+                    {
+
+                    },
+                    "cobblemon:magnezone":
+                    {
+
+                    },
+                    "cobblemon:lickilicky":
+                    {
+
+                    },
+                    "cobblemon:rhyperior":
+                    {
+
+                    },
+                    "cobblemon:tangrowth":
+                    {
+
+                    },
+                    "cobblemon:electivire":
+                    {
+
+                    },
+                    "cobblemon:magmortar":
+                    {
+
+                    },
+                    "cobblemon:togetic":
+                    {
+
+                    },
+                    "cobblemon:togekiss":
+                    {
+
+                    },
+                    "cobblemon:yanmega":
+                    {
+
+                    },
+                    "cobblemon:leafeon":
+                    {
+
+                    },
+                    "cobblemon:glaceon":
+                    {
+
+                    },
+                    "cobblemon:gliscor":
+                    {
+
+                    },
+                    "cobblemon:mamoswine":
+                    {
+
+                    },
+                    "cobblemon:porygon-z":
+                    {
+
+                    },
+                    "cobblemon:gallade":
+                    {
+
+                    },
+                    "cobblemon:probopass":
+                    {
+
+                    },
+                    "cobblemon:dusknoir":
+                    {
+
+                    },
+                    "cobblemon:froslass":
+                    {
+
+                    },
+                    "cobblemon:rotom":
+                    {
+
+                    },
+                    "cobblemon:uxie":
+                    {
+
+                    },
+                    "cobblemon:mesprit":
+                    {
+
+                    },
+                    "cobblemon:azelf":
+                    {
+
+                    },
+                    "cobblemon:dialga":
+                    {
+
+                    },
+                    "cobblemon:palkia":
+                    {
+
+                    },
+                    "cobblemon:heatran":
+                    {
+
+                    },
+                    "cobblemon:registeel":
+                    {
+
+                    },
+                    "cobblemon:regigigas":
+                    {
+
+                    },
+                    "cobblemon:giratina":
+                    {
+
+                    },
+                    "cobblemon:cresselia":
+                    {
+
+                    },
+                    "cobblemon:phione":
+                    {
+
+                    },
+                    "cobblemon:manaphy":
+                    {
+
+                    },
+                    "cobblemon:darkrai":
+                    {
+
+                    },
+                    "cobblemon:shaymin":
+                    {
+
+                    },
+                    "cobblemon:arceus":
+                    {
+
+                    },
+                    "cobblemon:victini":
+                    {
+
+                    }
+                },
+                "gen5":
+                {
+                    "cobblemon:snivy":
+                    {
+
+                    },
+                    "cobblemon:servine":
+                    {
+
+                    },
+                    "cobblemon:serperior":
+                    {
+
+                    },
+                    "cobblemon:tepig":
+                    {
+
+                    },
+                    "cobblemon:pignite":
+                    {
+
+                    },
+                    "cobblemon:emboar":
+                    {
+
+                    },
+                    "cobblemon:oshawott":
+                    {
+
+                    },
+                    "cobblemon:dewott":
+                    {
+
+                    },
+                    "cobblemon:samurott":
+                    {
+
+                    },
+                    "cobblemon:patrat":
+                    {
+
+                    },
+                    "cobblemon:watchog":
+                    {
+
+                    },
+                    "cobblemon:lillipup":
+                    {
+
+                    },
+                    "cobblemon:herdier":
+                    {
+
+                    },
+                    "cobblemon:stoutland":
+                    {
+
+                    },
+                    "cobblemon:purrloin":
+                    {
+
+                    },
+                    "cobblemon:liepard":
+                    {
+
+                    },
+                    "cobblemon:pansage":
+                    {
+
+                    },
+                    "cobblemon:simisage":
+                    {
+
+                    },
+                    "cobblemon:pansear":
+                    {
+
+                    },
+                    "cobblemon:simisear":
+                    {
+
+                    },
+                    "cobblemon:panpour":
+                    {
+
+                    },
+                    "cobblemon:simipour":
+                    {
+
+                    },
+                    "cobblemon:munna":
+                    {
+
+                    },
+                    "cobblemon:musharna":
+                    {
+
+                    },
+                    "cobblemon:pidove":
+                    {
+
+                    },
+                    "cobblemon:tranquill":
+                    {
+
+                    },
+                    "cobblemon:unfezant":
+                    {
+
+                    },
+                    "cobblemon:blitzle":
+                    {
+
+                    },
+                    "cobblemon:zebstrika":
+                    {
+
+                    },
+                    "cobblemon:roggenrola":
+                    {
+
+                    },
+                    "cobblemon:boldore":
+                    {
+
+                    },
+                    "cobblemon:gigalith":
+                    {
+
+                    },
+                    "cobblemon:woobat":
+                    {
+
+                    },
+                    "cobblemon:swoobat":
+                    {
+
+                    },
+                    "cobblemon:drilbur":
+                    {
+
+                    },
+                    "cobblemon:excadrill":
+                    {
+
+                    },
+                    "cobblemon:audino":
+                    {
+
+                    },
+                    "cobblemon:timburr":
+                    {
+
+                    },
+                    "cobblemon:gurdurr":
+                    {
+
+                    },
+                    "cobblemon:conkeldurr":
+                    {
+
+                    },
+                    "cobblemon:tympole":
+                    {
+
+                    },
+                    "cobblemon:palpitoad":
+                    {
+
+                    },
+                    "cobblemon:seismitoad":
+                    {
+
+                    },
+                    "cobblemon:throh":
+                    {
+
+                    },
+                    "cobblemon:sawk":
+                    {
+
+                    },
+                    "cobblemon:sewaddle":
+                    {
+
+                    },
+                    "cobblemon:swadloon":
+                    {
+
+                    },
+                    "cobblemon:leavanny":
+                    {
+
+                    },
+                    "cobblemon:venipede":
+                    {
+
+                    },
+                    "cobblemon:whirlipede":
+                    {
+
+                    },
+                    "cobblemon:scolipede":
+                    {
+
+                    },
+                    "cobblemon:cottonee":
+                    {
+
+                    },
+                    "cobblemon:whimsicott":
+                    {
+
+                    },
+                    "cobblemon:petilil":
+                    {
+
+                    },
+                    "cobblemon:lilligant":
+                    {
+
+                    },
+                    "cobblemon:basculin":
+                    {
+
+                    },
+                    "cobblemon:sandile":
+                    {
+
+                    },
+                    "cobblemon:krokorok":
+                    {
+
+                    },
+                    "cobblemon:krookodile":
+                    {
+
+                    },
+                    "cobblemon:darumaka":
+                    {
+
+                    },
+                    "cobblemon:darmanitan":
+                    {
+
+                    },
+                    "cobblemon:maractus":
+                    {
+
+                    },
+                    "cobblemon:dwebble":
+                    {
+
+                    },
+                    "cobblemon:crustle":
+                    {
+
+                    },
+                    "cobblemon:scraggy":
+                    {
+
+                    },
+                    "cobblemon:scrafty":
+                    {
+
+                    },
+                    "cobblemon:sigilyph":
+                    {
+
+                    },
+                    "cobblemon:yamask":
+                    {
+
+                    },
+                    "cobblemon:cofagrigus":
+                    {
+
+                    },
+                    "cobblemon:tirtouga":
+                    {
+
+                    },
+                    "cobblemon:carracosta":
+                    {
+
+                    },
+                    "cobblemon:archeops":
+                    {
+
+                    },
+                    "cobblemon:trubbish":
+                    {
+
+                    },
+                    "cobblemon:garbodor":
+                    {
+
+                    },
+                    "cobblemon:zorua":
+                    {
+
+                    },
+                    "cobblemon:zoroark":
+                    {
+
+                    },
+                    "cobblemon:minccino":
+                    {
+
+                    },
+                    "cobblemon:cinccino":
+                    {
+
+                    },
+                    "cobblemon:gothita":
+                    {
+
+                    },
+                    "cobblemon:gothorita":
+                    {
+
+                    },
+                    "cobblemon:gothitelle":
+                    {
+
+                    },
+                    "cobblemon:solosis":
+                    {
+
+                    },
+                    "cobblemon:duosion":
+                    {
+
+                    },
+                    "cobblemon:reuniclus":
+                    {
+
+                    },
+                    "cobblemon:ducklett":
+                    {
+
+                    },
+                    "cobblemon:swanna":
+                    {
+
+                    },
+                    "cobblemon:vanillite":
+                    {
+
+                    },
+                    "cobblemon:vanillish":
+                    {
+
+                    },
+                    "cobblemon:vanilluxe":
+                    {
+
+                    },
+                    "cobblemon:deerling":
+                    {
+
+                    },
+                    "cobblemon:sawsbuck":
+                    {
+
+                    },
+                    "cobblemon:emolga":
+                    {
+
+                    },
+                    "cobblemon:karrablast":
+                    {
+
+                    },
+                    "cobblemon:escavalier":
+                    {
+
+                    },
+                    "cobblemon:foongus":
+                    {
+
+                    },
+                    "cobblemon:amoonguss":
+                    {
+
+                    },
+                    "cobblemon:frillish":
+                    {
+
+                    },
+                    "cobblemon:jellicent":
+                    {
+
+                    },
+                    "cobblemon:alomomola":
+                    {
+
+                    },
+                    "cobblemon:joltik":
+                    {
+
+                    },
+                    "cobblemon:galvantula":
+                    {
+
+                    },
+                    "cobblemon:ferroseed":
+                    {
+
+                    },
+                    "cobblemon:ferrothorn":
+                    {
+
+                    },
+                    "cobblemon:klink":
+                    {
+
+                    },
+                    "cobblemon:klang":
+                    {
+
+                    },
+                    "cobblemon:klinklang":
+                    {
+
+                    },
+                    "cobblemon:tynamo":
+                    {
+
+                    },
+                    "cobblemon:eelektrik":
+                    {
+
+                    },
+                    "cobblemon:eelektross":
+                    {
+
+                    },
+                    "cobblemon:elgyem":
+                    {
+
+                    },
+                    "cobblemon:beheeyem":
+                    {
+
+                    },
+                    "cobblemon:litwick":
+                    {
+
+                    },
+                    "cobblemon:lampent":
+                    {
+
+                    },
+                    "cobblemon:chandelure":
+                    {
+
+                    },
+                    "cobblemon:axew":
+                    {
+
+                    },
+                    "cobblemon:fraxure":
+                    {
+
+                    },
+                    "cobblemon:haxorus":
+                    {
+
+                    },
+                    "cobblemon:cubchoo":
+                    {
+
+                    },
+                    "cobblemon:beartic":
+                    {
+
+                    },
+                    "cobblemon:cryogonal":
+                    {
+
+                    },
+                    "cobblemon:shelmet":
+                    {
+
+                    },
+                    "cobblemon:accelgor":
+                    {
+
+                    },
+                    "cobblemon:stunfisk":
+                    {
+
+                    },
+                    "cobblemon:mienfoo":
+                    {
+
+                    },
+                    "cobblemon:mienshao":
+                    {
+
+                    },
+                    "cobblemon:druddigon":
+                    {
+
+                    },
+                    "cobblemon:golett":
+                    {
+
+                    },
+                    "cobblemon:golurk":
+                    {
+
+                    },
+                    "cobblemon:pawniard":
+                    {
+
+                    },
+                    "cobblemon:bisharp":
+                    {
+
+                    },
+                    "cobblemon:bouffalant":
+                    {
+
+                    },
+                    "cobblemon:rufflet":
+                    {
+
+                    },
+                    "cobblemon:braviary":
+                    {
+
+                    },
+                    "cobblemon:vullaby":
+                    {
+
+                    },
+                    "cobblemon:mandibuzz":
+                    {
+
+                    },
+                    "cobblemon:heatmor":
+                    {
+
+                    },
+                    "cobblemon:durant":
+                    {
+
+                    },
+                    "cobblemon:deino":
+                    {
+
+                    },
+                    "cobblemon:zweilous":
+                    {
+
+                    },
+                    "cobblemon:hydreigon":
+                    {
+
+                    },
+                    "cobblemon:larvesta":
+                    {
+
+                    },
+                    "cobblemon:volcarona":
+                    {
+
+                    },
+                    "cobblemon:cobalion":
+                    {
+
+                    },
+                    "cobblemon:terrakion":
+                    {
+
+                    },
+                    "cobblemon:virizion":
+                    {
+
+                    },
+                    "cobblemon:tornadus":
+                    {
+
+                    },
+                    "cobblemon:thundurus":
+                    {
+
+                    },
+                    "cobblemon:reshiram":
+                    {
+
+                    },
+                    "cobblemon:zekrom":
+                    {
+
+                    },
+                    "cobblemon:landorus":
+                    {
+
+                    },
+                    "cobblemon:kyurem":
+                    {
+
+                    },
+                    "cobblemon:keldeo":
+                    {
+
+                    },
+                    "cobblemon:meloetta":
+                    {
+
+                    },
+                    "cobblemon:genesect":
+                    {
+
+                    }
+                },
+                "gen6":
+                {
+                    "cobblemon:chespin":
+                    {
+
+                    },
+                    "cobblemon:quilladin":
+                    {
+
+                    },
+                    "cobblemon:chesnaught":
+                    {
+
+                    },
+                    "cobblemon:fennekin":
+                    {
+
+                    },
+                    "cobblemon:braixen":
+                    {
+
+                    },
+                    "cobblemon:delphox":
+                    {
+
+                    },
+                    "cobblemon:froakie":
+                    {
+
+                    },
+                    "cobblemon:frogadier":
+                    {
+
+                    },
+                    "cobblemon:greninja":
+                    {
+
+                    },
+                    "cobblemon:bunnelby":
+                    {
+
+                    },
+                    "cobblemon:diggersby":
+                    {
+
+                    },
+                    "cobblemon:fletchling":
+                    {
+
+                    },
+                    "cobblemon:fletchinder":
+                    {
+
+                    },
+                    "cobblemon:talonflame":
+                    {
+
+                    },
+                    "cobblemon:scatterbug":
+                    {
+
+                    },
+                    "cobblemon:spewpa":
+                    {
+
+                    },
+                    "cobblemon:vivillon":
+                    {
+
+                    },
+                    "cobblemon:litleo":
+                    {
+
+                    },
+                    "cobblemon:pyroar":
+                    {
+
+                    },
+                    "cobblemon:flabebe":
+                    {
+
+                    },
+                    "cobblemon:floette":
+                    {
+
+                    },
+                    "cobblemon:florges":
+                    {
+
+                    },
+                    "cobblemon:skiddo":
+                    {
+
+                    },
+                    "cobblemon:gogoat":
+                    {
+
+                    },
+                    "cobblemon:pancham":
+                    {
+
+                    },
+                    "cobblemon:pangoro":
+                    {
+
+                    },
+                    "cobblemon:furfrou":
+                    {
+
+                    },
+                    "cobblemon:espurr":
+                    {
+
+                    },
+                    "cobblemon:meowstic":
+                    {
+
+                    },
+                    "cobblemon:honedge":
+                    {
+
+                    },
+                    "cobblemon:doublade":
+                    {
+
+                    },
+                    "cobblemon:aegislash":
+                    {
+
+                    },
+                    "cobblemon:spritzee":
+                    {
+
+                    },
+                    "cobblemon:aromatisse":
+                    {
+
+                    },
+                    "cobblemon:swirlix":
+                    {
+
+                    },
+                    "cobblemon:slurpuff":
+                    {
+
+                    },
+                    "cobblemon:inkay":
+                    {
+
+                    },
+                    "cobblemon:malamar":
+                    {
+
+                    },
+                    "cobblemon:binacle":
+                    {
+
+                    },
+                    "cobblemon:barbaracle":
+                    {
+
+                    },
+                    "cobblemon:skrelp":
+                    {
+
+                    },
+                    "cobblemon:dragalge":
+                    {
+
+                    },
+                    "cobblemon:clauncher":
+                    {
+
+                    },
+                    "cobblemon:clawitzer":
+                    {
+
+                    },
+                    "cobblemon:helioptile":
+                    {
+
+                    },
+                    "cobblemon:heliolisk":
+                    {
+
+                    },
+                    "cobblemon:tyrunt":
+                    {
+
+                    },
+                    "cobblemon:tyrantrum":
+                    {
+
+                    },
+                    "cobblemon:amaura":
+                    {
+
+                    },
+                    "cobblemon:aurorus":
+                    {
+
+                    },
+                    "cobblemon:sylveon":
+                    {
+
+                    },
+                    "cobblemon:hawlucha":
+                    {
+
+                    },
+                    "cobblemon:dedenne":
+                    {
+
+                    },
+                    "cobblemon:carbink":
+                    {
+
+                    },
+                    "cobblemon:goomy":
+                    {
+
+                    },
+                    "cobblemon:sliggoo":
+                    {
+
+                    },
+                    "cobblemon:goodra":
+                    {
+
+                    },
+                    "cobblemon:klefki":
+                    {
+
+                    },
+                    "cobblemon:phantump":
+                    {
+
+                    },
+                    "cobblemon:trevenant":
+                    {
+
+                    },
+                    "cobblemon:pumpkaboo":
+                    {
+
+                    },
+                    "cobblemon:gourgeist":
+                    {
+
+                    },
+                    "cobblemon:bergmite":
+                    {
+
+                    },
+                    "cobblemon:avalugg":
+                    {
+
+                    },
+                    "cobblemon:noibat":
+                    {
+
+                    },
+                    "cobblemon:noivern":
+                    {
+
+                    },
+                    "cobblemon:xerneas":
+                    {
+
+                    },
+                    "cobblemon:yveltal":
+                    {
+
+                    },
+                    "cobblemon:zygarde":
+                    {
+
+                    },
+                    "cobblemon:diancie":
+                    {
+
+                    },
+                    "cobblemon:hoopa":
+                    {
+
+                    },
+                    "cobblemon:volcanion":
+                    {
+
+                    }
+                },
+                "gen7":
+                {
+                    "cobblemon:rowlet":
+                    {
+
+                    },
+                    "cobblemon:dartrix":
+                    {
+
+                    },
+                    "cobblemon:decidueye":
+                    {
+
+                    },
+                    "cobblemon:litten":
+                    {
+
+                    },
+                    "cobblemon:torracat":
+                    {
+
+                    },
+                    "cobblemon:incineroar":
+                    {
+
+                    },
+                    "cobblemon:popplio":
+                    {
+
+                    },
+                    "cobblemon:brionne":
+                    {
+
+                    },
+                    "cobblemon:primarina":
+                    {
+
+                    },
+                    "cobblemon:pikipek":
+                    {
+
+                    },
+                    "cobblemon:trumbeak":
+                    {
+
+                    },
+                    "cobblemon:toucannon":
+                    {
+
+                    },
+                    "cobblemon:yungoos":
+                    {
+
+                    },
+                    "cobblemon:gumshoos":
+                    {
+
+                    },
+                    "cobblemon:grubbin":
+                    {
+
+                    },
+                    "cobblemon:charjabug":
+                    {
+
+                    },
+                    "cobblemon:vikavolt":
+                    {
+
+                    },
+                    "cobblemon:crabrawler":
+                    {
+
+                    },
+                    "cobblemon:crabominable":
+                    {
+
+                    },
+                    "cobblemon:oricorio":
+                    {
+
+                    },
+                    "cobblemon:cutiefly":
+                    {
+
+                    },
+                    "cobblemon:ribombee":
+                    {
+
+                    },
+                    "cobblemon:rockruff":
+                    {
+
+                    },
+                    "cobblemon:lycanroc":
+                    {
+
+                    },
+                    "cobblemon:wishiwashi":
+                    {
+
+                    },
+                    "cobblemon:mareanie":
+                    {
+
+                    },
+                    "cobblemon:toxapex":
+                    {
+
+                    },
+                    "cobblemon:mudbray":
+                    {
+
+                    },
+                    "cobblemon:mudsdale":
+                    {
+
+                    },
+                    "cobblemon:dewpider":
+                    {
+
+                    },
+                    "cobblemon:araquanid":
+                    {
+
+                    },
+                    "cobblemon:fomantis":
+                    {
+
+                    },
+                    "cobblemon:lurantis":
+                    {
+
+                    },
+                    "cobblemon:morelull":
+                    {
+
+                    },
+                    "cobblemon:shiinotic":
+                    {
+
+                    },
+                    "cobblemon:salandit":
+                    {
+
+                    },
+                    "cobblemon:salazzle":
+                    {
+
+                    },
+                    "cobblemon:stufful":
+                    {
+
+                    },
+                    "cobblemon:bewear":
+                    {
+
+                    },
+                    "cobblemon:bounsweet":
+                    {
+
+                    },
+                    "cobblemon:steenee":
+                    {
+
+                    },
+                    "cobblemon:tsareena":
+                    {
+
+                    },
+                    "cobblemon:comfey":
+                    {
+
+                    },
+                    "cobblemon:oranguru":
+                    {
+
+                    },
+                    "cobblemon:passimian":
+                    {
+
+                    },
+                    "cobblemon:wimpod":
+                    {
+
+                    },
+                    "cobblemon:golisopod":
+                    {
+
+                    },
+                    "cobblemon:sandygast":
+                    {
+
+                    },
+                    "cobblemon:palossand":
+                    {
+
+                    },
+                    "cobblemon:silvally":
+                    {
+
+                    },
+                    "cobblemon:minior":
+                    {
+
+                    },
+                    "cobblemon:komala":
+                    {
+
+                    },
+                    "cobblemon:turtonator":
+                    {
+
+                    },
+                    "cobblemon:togedemaru":
+                    {
+
+                    },
+                    "cobblemon:mimikyu":
+                    {
+
+                    },
+                    "cobblemon:bruxish":
+                    {
+
+                    },
+                    "cobblemon:drampa":
+                    {
+
+                    },
+                    "cobblemon:dhelmise":
+                    {
+
+                    },
+                    "cobblemon:jangmo-o":
+                    {
+
+                    },
+                    "cobblemon:hakamo-o":
+                    {
+
+                    },
+                    "cobblemon:kommo-o":
+                    {
+
+                    },
+                    "cobblemon:tapu-koko":
+                    {
+
+                    },
+                    "cobblemon:tapu-lele":
+                    {
+
+                    },
+                    "cobblemon:tapu-bulu":
+                    {
+
+                    },
+                    "cobblemon:tapu-fini":
+                    {
+
+                    },
+                    "cobblemon:cosmog":
+                    {
+
+                    },
+                    "cobblemon:cosmoem":
+                    {
+
+                    },
+                    "cobblemon:solgaleo":
+                    {
+
+                    },
+                    "cobblemon:lunala":
+                    {
+
+                    },
+                    "cobblemon:nihilego":
+                    {
+
+                    },
+                    "cobblemon:buzzwole":
+                    {   
+
+                    },
+                    "cobblemon:pheromosa":
+                    {
+
+                    },
+                    "cobblemon:xurkitree":
+                    {
+
+                    },
+                    "cobblemon:celesteela":
+                    {
+
+                    },
+                    "cobblemon:kartana":
+                    {
+
+                    },
+                    "cobblemon:guzzlord":
+                    {
+
+                    },
+                    "cobblemon:necrozma":
+                    {
+
+                    },
+                    "cobblemon:magearna":
+                    {
+
+                    },
+                    "cobblemon:marshadow":
+                    {
+
+                    },
+                    "cobblemon:poipole":
+                    {
+
+                    },
+                    "cobblemon:naganadel":
+                    {
+
+                    },
+                    "cobblemon:stakataka":
+                    {
+
+                    },
+                    "cobblemon:blacephalon":
+                    {
+
+                    },
+                    "cobblemon:zeraora":
+                    {   
+
+                    },
+                    "cobblemon:meltan":
+                    {
+
+                    },
+                    "cobblemon:melmetal":
+                    {
+
+                    }
+                },
+                "gen8":
+                {
+                    "cobblemon:grookey":
+                    {
+
+                    },
+                    "cobblemon:thwackey":
+                    {
+
+                    },
+                    "cobblemon:rillaboom":
+                    {
+
+                    },
+                    "cobblemon:scorbunny":
+                    {
+
+                    },
+                    "cobblemon:raboot":
+                    {
+
+                    },
+                    "cobblemon:cinderace":
+                    {
+
+                    },
+                    "cobblemon:sobble":
+                    {
+
+                    },
+                    "cobblemon:drizzile":
+                    {
+
+                    },
+                    "cobblemon:inteleon":
+                    {
+
+                    },
+                    "cobblemon:skwovet":
+                    {
+
+                    },
+                    "cobblemon:greedent":
+                    {
+
+                    },
+                    "cobblemon:rookidee":
+                    {
+
+                    },
+                    "cobblemon:corvisquire":
+                    {
+
+                    },
+                    "cobblemon:corviknight":
+                    {
+
+                    },
+                    "cobblemon:blipbug":
+                    {
+
+                    },
+                    "cobblemon:dottler":
+                    {
+
+                    },
+                    "cobblemon:orbeetle":
+                    {
+
+                    },
+                    "cobblemon:nickit":
+                    {
+
+                    },
+                    "cobblemon:thievul":
+                    {
+
+                    },
+                    "cobblemon:gossifleur":
+                    {
+
+                    },
+                    "cobblemon:eldegoss":
+                    {
+
+                    },
+                    "cobblemon:wooper":
+                    {
+
+                    },
+                    "cobblemon:clodsire":
+                    {
+
+                    },
+                    "cobblemon:chewtle":
+                    {
+
+                    },
+                    "cobblemon:drednaw":
+                    {
+
+                    },
+                    "cobblemon:yamper":
+                    {
+
+                    },
+                    "cobblemon:bolthound":
+                    {
+
+                    },
+                    "cobblemon:rolycoly":
+                    {
+
+                    },
+                    "cobblemon:carkol":
+                    {
+
+                    },
+                    "cobblemon:coalossal":
+                    {
+
+                    },
+                    "cobblemon:applin":
+                    {
+
+                    },
+                    "cobblemon:flapple":
+                    {
+
+                    },
+                    "cobblemon:appletun":
+                    {
+
+                    },
+                    "cobblemon:silicobra":
+                    {
+
+                    },
+                    "cobblemon:sandaconda":
+                    {
+
+                    },
+                    "cobblemon:cramorant":
+                    {
+
+                    },
+                    "cobblemon:arrokuda":
+                    {
+
+                    },
+                    "cobblemon:barraskewda":
+                    {
+
+                    },
+                    "cobblemon:toxel":
+                    {
+
+                    },
+                    "cobblemon:toxtricity":
+                    {
+
+                    },
+                    "cobblemon:sizzlipede":
+                    {
+
+                    },
+                    "cobblemon:centiskorch":
+                    {
+
+                    },
+                    "cobblemon:clobbopus":
+                    {
+
+                    },
+                    "cobblemon:grapploct":
+                    {
+
+                    },
+                    "cobblemon:sinistea":
+                    {
+
+                    },
+                    "cobblemon:polteageist":
+                    {
+
+                    }
+                    ,
+                    "cobblemon:hatenna":
+                    {
+
+                    },
+                    "cobblemon:hattrem":
+                    {
+
+                    },
+                    "cobblemon:hatterene":
+                    {
+
+                    },
+                    "cobblemon:impidimp":
+                    {
+
+                    },
+                    "cobblemon:morgrem":
+                    {
+
+                    },
+                    "cobblemon:grimmsnarl":
+                    {
+
+                    },
+                    "cobblemon:obstagoon":
+                    {
+
+                    },
+                    "cobblemon:perrserker":
+                    {
+
+                    },
+                    "cobblemon:cursola":
+                    {
+
+                    },
+                    "cobblemon:sirfetchd":
+                    {
+
+                    },
+                    "cobblemon:mr_rime":
+                    {
+
+                    },
+                    "cobblemon:runerigus":
+                    {
+
+                    },
+                    "cobblemon:milcery":
+                    {
+
+                    },
+                    "cobblemon:alcremie":
+                    {
+
+                    },
+                    "cobblemon:falinks":
+                    {
+
+                    },
+                    "cobblemon:pincurchin":
+                    {
+
+                    },
+                    "cobblemon:snom":
+                    {
+
+                    },
+                    "cobblemon:frosmoth":
+                    {
+
+                    },
+                    "cobblemon:stonjourner":
+                    {
+
+                    },
+                    "cobblemon:eiscue":
+                    {
+
+                    },
+                    "cobblemon:indeedee":
+                    {
+
+                    },
+                    "cobblemon:morpeko":
+                    {
+
+                    },
+                    "cobblemon:cufant":
+                    {
+
+                    },
+                    "cobblemon:copperajah":
+                    {
+
+                    },
+                    "cobblemon:dracozolt":
+                    {
+
+                    },
+                    "cobblemon:arctozolt":
+                    {
+
+                    },
+                    "cobblemon:dracovish":
+                    {
+
+                    },
+                    "cobblemon:arctovish":
+                    {
+
+                    },
+                    "cobblemon:duraludon":
+                    {
+
+                    },
+                    "cobblemon:dreepy":
+                    {
+
+                    },
+                    "cobblemon:drakloak":
+                    {
+
+                    },
+                    "cobblemon:dragapult":
+                    {
+
+                    },
+                    "cobblemon:zacian":
+                    {
+
+                    },
+                    "cobblemon:zamazenta":
+                    {
+
+                    },
+                    "cobblemon:eternatus":
+                    {
+
+                    },
+                    "cobblemon:kubfu":
+                    {
+
+                    },
+                    "cobblemon:urshifu":
+                    {
+
+                    },
+                    "cobblemon:zarude":
+                    {
+
+                    },
+                    "cobblemon:regieleki":
+                    {
+
+                    },
+                    "cobblemon:regidrago":
+                    {
+
+                    },
+                    "cobblemon:glastrier":
+                    {
+
+                    },
+                    "cobblemon:spectrier":
+                    {
+
+                    },
+                    "cobblemon:calyrex":
+                    {
+
+                    },
+                    "cobblemon:wyrdeer":
+                    {
+
+                    },
+                    "cobblemon:kleavor":
+                    {
+
+                    },
+                    "cobblemon:ursaluna":
+                    {
+
+                    },
+                    "cobblemon:basculegion":
+                    {
+
+                    },
+                    "cobblemon:sneasler":
+                    {
+
+                    },
+                    "cobblemon:overqwil":
+                    {
+
+                    },
+                    "cobblemon:enamorus":
+                    {
+
+                    }
+                },
+                "gen9":
+                {
+                    "cobblemon:sprigatito":
+                    {
+
+                    },
+                    "cobblemon:floragato":
+                    {
+
+                    },
+                    "cobblemon:meowscarada":
+                    {
+
+                    },
+                    "cobblemon:fuecoco":
+                    {
+
+                    },
+                    "cobblemon:crocalor":
+                    {
+
+                    },
+                    "cobblemon:skeledirge":
+                    {
+
+                    },
+                    "cobblemon:quaxly":
+                    {
+
+                    },
+                    "cobblemon:quaxwell":
+                    {
+
+                    },
+                    "cobblemon:quaquaval":
+                    {
+
+                    },
+                    "cobblemon:lechonk":
+                    {
+
+                    },
+                    "cobblemon:oinkologne":
+                    {
+
+                    },
+                    "cobblemon:tarountula":
+                    {
+
+                    },
+                    "cobblemon:spidops":
+                    {
+
+                    },
+                    "cobblemon:nymble":
+                    {
+
+                    },
+                    "cobblemon:lokix":
+                    {
+
+                    },
+                    "cobblemon:pawmot":
+                    {
+
+                    },
+                    "cobblemon:tandemaus":
+                    {
+
+                    },
+                    "cobblemon:maushold":
+                    {
+
+                    },
+                    "cobblemon:fidough":
+                    {
+
+                    },
+                    "cobblemon:dachsbun":
+                    {
+
+                    },
+                    "cobblemon:smoliv":
+                    {
+
+                    },
+                    "cobblemon:dolliv":
+                    {
+
+                    },
+                    "cobblemon:arboliva":
+                    {
+
+                    },
+                    "cobblemon:squawkabilly":
+                    {
+
+                    },
+                    "cobblemon:nacli":
+                    {
+
+                    },
+                    "cobblemon:naclstack":
+                    {
+
+                    },
+                    "cobblemon:garganacl":
+                    {
+
+                    },
+                    "cobblemon:charcadet":
+                    {
+
+                    },
+                    "cobblemon:armarouge":
+                    {
+
+                    },
+                    "cobblemon:ceruledge":
+                    {
+
+                    },    
+                    "cobblemon:tadbulb":
+                    {
+
+                    },
+                    "cobblemon:bellibolt":
+                    {
+
+                    },
+                    "cobblemon:wattrel":
+                    {
+
+                    },
+                    "cobblemon:kilowattrel":
+                    {
+
+                    },
+                    "cobblemon:maschiff":
+                    {
+
+                    },
+                    "cobblemon:mastiff":
+                    {
+
+                    },
+                    "cobblemon:shroodle":
+                    {
+
+                    },
+                    "cobblemon:grafle":
+                    {
+
+                    },
+                    "cobblemon:bramblin":
+                    {
+
+                    },
+                    "cobblemon:brambleghast":
+                    {
+
+                    },
+                    "cobblemon:toedscool":
+                    {
+
+                    },
+                    "cobblemon:toedscruel":
+                    {
+
+                    },
+                    "cobblemon:klawf":
+                    {
+
+                    },
+                    "cobblemon:capsakid":
+                    {
+
+                    },
+                    "cobblemon:scovillain":
+                    {
+
+                    },
+                    "cobblemon:rellor":
+                    {
+
+                    },
+                    "cobblemon:rabsca":
+                    {
+
+                    },
+                    "cobblemon:flittle":
+                    {
+
+                    },
+                    "cobblemon:espathra":
+                    {
+
+                    },
+                    "cobblemon:tinkatink":
+                    {
+
+                    },
+                    "cobblemon:tinkatuff":
+                    {
+
+                    },
+                    "cobblemon:tinkaton":
+                    {
+
+                    },
+                    "cobblemon:wuglet":
+                    {
+
+                    },
+                    "cobblemon:wugtrio":
+                    {
+
+                    },
+                    "cobblemon:bombirdier":
+                    {
+
+                    },
+                    "cobblemon:finizen":
+                    {
+
+                    },
+                    "cobblemon:palafin":
+                    {
+
+                    },
+                    "cobblemon:varoom":
+                    {
+
+                    },
+                    "cobblemon:revavroom":
+                    {
+
+                    },
+                    "cobblemon:cyclizar":
+                    {
+
+                    },
+                    "cobblemon:orthworm":
+                    {
+
+                    },
+                    "cobblemon:glimmet":
+                    {
+
+                    },
+                    "cobblemon:glimmora":
+                    {
+
+                    },
+                    "cobblemon:greavard":
+                    {
+
+                    },
+                    "cobblemon:houndstone":
+                    {
+
+                    },
+                    "cobblemon:flamigo":
+                    {
+
+                    },
+                    "cobblemon:cetoddle":
+                    {
+
+                    },
+                    "cobblemon:cetitan":
+                    {
+
+                    },
+                    "cobblemon:veluza":
+                    {
+
+                    },
+                    "cobblemon:dondozo":
+                    {
+
+                    },
+                    "cobblemon:tatsugiri":
+                    {
+
+                    },
+                    "cobblemon:annihilape":
+                    {
+
+                    },
+                    "cobblemon:clodsire":
+                    {
+
+                    },
+                    "cobblemon:farigiraf":
+                    {
+
+                    },
+                    "cobblemon:dudunsparce":
+                    {
+
+                    },
+                    "cobblemon:kingambit":
+                    {
+
+                    },
+                    "cobblemon:greattusk":
+                    {
+
+                    },
+                    "cobblemon:screamtail":
+                    {
+
+                    },
+                    "cobblemon:brutebonnet":
+                    {
+
+                    },
+                    "cobblemon:fluttermane":
+                    {
+
+                    },
+                    "cobblemon:slitherwing":
+                    {
+
+                    },
+                    "cobblemon:sandyshocks":
+                    {
+
+                    },
+                    "cobblemon:iron-treads":
+                    {
+
+                    },
+                    "cobblemon:iron-bundle":
+                    {
+
+                    },
+                    "cobblemon:iron-hands":
+                    {
+
+                    },
+                    "cobblemon:iron-jugulis":
+                    {
+
+                    },
+                    "cobblemon:iron-moth":
+                    {
+
+                    },
+                    "cobblemon:iron-thorns":
+                    {
+
+                    },
+                    "cobblemon:frigibax":
+                    {
+
+                    },
+                    "cobblemon:arctibax":
+                    {
+
+                    },
+                    "cobblemon:baxcalibur":
+                    {
+
+                    },
+                    "cobblemon:gimmighoul":
+                    {
+                        
+                    },
+                    "cobblemon:gholdengo":
+                    {
+
+                    },
+                    "cobblemon:wo-chien":
+                    {
+
+                    },
+                    "cobblemon:chien-pao":
+                    {
+
+                    },
+                    "cobblemon:ting-lu":
+                    {
+
+                    },
+                    "cobblemon:chi-yu":
+                    {
+
+                    },
+                    "cobblemon:roaringmoon":
+                    {
+
+                    },
+                    "cobblemon:iron-valiant":
+                    {
+
+                    },
+                    "cobblemon:koraidon":
+                    {
+
+                    },
+                    "cobblemon:miraidon":
+                    {
+
+                    },
+                    "cobblemon:walkingwake":
+                    {
+
+                    },
+                    "cobblemon:iron-leaves":
+                    {
+
+                    },
+                    "cobblemon:dipplin":
+                    {
+
+                    },
+                    "cobblemon:poltchageist":
+                    {
+
+                    },
+                    "cobblemon:sinistcha":
+                    {
+
+                    },
+                    "cobblemon:okidogi":
+                    {
+
+                    },
+                    "cobblemon:munkid":
+                    {
+
+                    },
+                    "cobblemon:fezandipiti":
+                    {
+
+                    },
+                    "cobblemon:ogerpon":
+                    {
+
+                    },
+                    "cobblemon:archaludon":
+                    {
+
+                    },
+                    "cobblemon:hydrapple":
+                    {
+
+                    },
+                    "cobblemon:gouging-fire":
+                    {
+
+                    },
+                    "cobblemon:raging-bolt":
+                    {
+
+                    },
+                    "cobblemon:iron-boulder":
+                    {
+
+                    },
+                    "cobblemon:iron-crown":
+                    {
+
+                    },
+                    "cobblemon:terapagos":
+                    {
+
+                    },
+                    "cobblemon:pecharunt":
+                    {
+
+                    }
+                }
+            }
+        ]
+    }
+}

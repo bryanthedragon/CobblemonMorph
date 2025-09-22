@@ -19,6 +19,7 @@ base
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+
 minecraft 
 {
     // The mappings can be changed at any time and must be in the following format.
@@ -120,64 +121,82 @@ sourceSets.main.resources
 
 repositories 
 {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
+    mavenCentral() // keep default repos
     flatDir 
     {
-        dir 'libs'
-    }
-    maven 
-    {
-        name = 'Cafeteria'
-        url "https://maven.cafeteria.dev/releases" 
-    }
-    maven 
-    {
-        name = 'Cobblemon'
-        url "https://maven.pkg.github.com/Cobblemon/Cobblemon"
+        dirs 'libs'
     }
 }
 
-dependencies 
-{
-    // Specify the version of Minecraft to use.
-    // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
-    // The "userdev" classifier will be requested and setup by ForgeGradle.
-    // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
-    // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
-    minecraft "net.minecraftforge:forge:1.20.1-47.4.9"
+// dependencies 
+// {
+    // // Forge itself
+    // minecraft "net.minecraftforge:forge:1.20.1-47.4.9"
 
-    // ReMorphed Forge build
-    implementation files("libs/remorphed-1.20.1-forge-4.2.jar")
+    // Mod dependencies
+    // modImplementation "bryanthedragon.morph.cobblemonmorph:craftedcore:5.8"   // replace com.examplemod with the actual groupId
+    // modImplementation "bryanthedragon.morph.cobblemonmorph:walkers:5.7"
+    // modImplementation "bryanthedragon.morph.cobblemonmorph:remorphed:4.2"
+    // modImplementation "bryanthedragon.morph.cobblemonmorph:cobblemon:1.5.2"
+    // implementation fg.deobf(name: "cobblemon-forge-1.5.2-1.20.1", ext: "jar")
+    // implementation fg.deobf(name: "craftedcore-5.8", ext: "jar")
+    // implementation fg.deobf(name: "kotlinforforge-4.11.0-all", ext: "jar")
+    // implementation fg.deobf(name: "remorphed-4.2", ext: "jar")
+    // implementation fg.deobf(name: "walkers-5.7", ext: "jar")
+// }
 
-    // Also include its dependencies:
-    implementation fg.deobf("dev.cafeteria:walkers-forge:1.20.1-5.7.0")
-    implementation fg.deobf("dev.tocraft:craftedcore-forge:1.20.1-2.0")
+// dependencies 
+// {
+//     // Specify the version of Minecraft to use.
+//     // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
+//     // The "userdev" classifier will be requested and setup by ForgeGradle.
+//     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
+//     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
+//     minecraft "net.minecraftforge:forge:1.20.1-47.4.9"
 
-    // Cobblemon
-    implementation files("libs/cobblemon-1.20.1-forge-1.5.2.jar")
-    
-    // cobblemon dependencies
-    implementation fg.deobf("thedarkcolour:kotlinforforge:4.11.0")
+//    // ReMorphed Forge build
+//    implementation files("libs/remorphed-1.20.1-forge-4.2.jar")
 
-    // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+//     // Remorphed dependencies:
+//     compileOnly files("libs/walkers-5.7.jar")
+//     runtimeOnly files("libs/walkers-5.7.jar")
 
-    // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
-    // The group id is ignored when searching -- in this case, it is "blank"
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
+//     compileOnly files("libs/craftedcore-5.8.jar")
+//     runtimeOnly files("libs/craftedcore-5.8.jar")
 
-    // For more info:
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-}
+//     // Cobblemon
+//     compileOnly files("libs/cobblemon-forge-1.5.2-1.20.1.jar")
+//     runtimeOnly files("libs/cobblemon-forge-1.5.2-1.20.1.jar")
+
+//     // Cobblemon dependencies
+//     compileOnly files("libs/kotlinforforge-4.11.0-all.jar")
+//     runtimeOnly files("libs/kotlinforforge-4.11.0-all.jar")
+
+//     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
+//     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
+//     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+//     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+//     // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+
+//     // Example mod dependency using a mod jar from ./libs with a flat dir repository
+//     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
+//     // The group id is ignored when searching -- in this case, it is "blank"
+//     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
+
+//     // For more info:
+//     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+//     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+// }
+
+
+// dependencies 
+// {
+//     minecraft "net.minecraftforge:forge:1.20.1-47.4.9"
+//     implementation fg.deobf(files("libs/cobblemon-${cobblemon}.jar"))
+//     implementation fg.deobf(files("libs/remorphed-${remorphed}.jar"))
+// }
+
+
 
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
@@ -243,6 +262,29 @@ publishing
         }
     }
 }
+
+dependencies 
+{
+    minecraft 'net.minecraftforge:forge:1.20.1-47.4.9'
+
+    // Local mod .jar dependencies so that Remorphed/Cobblemon dependencies are satisfied
+
+    // implementation name: 'craftedcore-5.8'   // toss craftedcore-5.8.jar into libs/
+    // implementation name: 'walkers-5.7'        // walkers-5.7.jar in libs/
+    // implementation name: 'remorphed-4.2'       // remorphed-4.2.jar in libs/
+    // implementation name: 'cobblemon-forge-1.5.2' // cobblemon-forge-1.5.2.jar in libs/
+
+    // plus your mod’s code:
+    // implementation project(':cobblemonMorph')  // or your mod source
+}
+
+jar 
+{
+    // ensure mods.toml lists your mod’s dependencies:
+    // something like in src/main/resources/META-INF/mods.toml
+    // dependencies = "required-after:craftedcore@[5.8,); required-after:walkers@[5.7,); required-after:remorphed@[4.2,); required-after:cobblemon@[1.5.2,); required-after:forge@[47.4.9,); required-after:minecraft@[1.20.1,); required-after:kotlinforforge@[4.11.0,);"
+}
+
 
 tasks.withType(JavaCompile).configureEach 
 {
