@@ -8,6 +8,10 @@ import bryanthedragon.morph.cobblemonmorph.utils.mon.MonUtils;
 public class Gen4MonUtils extends MonUtils
 {
     private static List<String> validMonNames = new ArrayList<>();
+
+    /**
+     * Gen4MonUtil is a utility class which contains the valid names of the pokemon of Gen 4.
+    */
     private static void Gen4MonUtil()
     {
         validMonNames.add("Turtwig");
@@ -118,6 +122,10 @@ public class Gen4MonUtils extends MonUtils
         validMonNames.add("Shaymin");
         validMonNames.add("Arceus");
     }
+
+    /**
+     * Returns a utility class which contains the valid names of the pokemon of Gen 4.
+    */
     public static void getGen4MonUtils() 
     {
         Gen4MonUtil();

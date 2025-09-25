@@ -36,9 +36,7 @@ public class CobblemonMorph
     public CobblemonMorph(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
         modEventBus.addListener(this::commonSetup);
-
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
     }
@@ -73,8 +71,12 @@ public class CobblemonMorph
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
     }
+
     public static class DependencyHelper
     {
+        /**
+         * Returns whether or not a mod with the given id is loaded.
+         */
         public static boolean isModLoaded(String modid)
         {
             return net.minecraftforge.fml.ModList.get().isLoaded(modid);
@@ -119,6 +121,7 @@ public class CobblemonMorph
             return net.minecraftforge.fml.ModList.get().getModContainerById(modid).map(modContainer -> modContainer.getModInfo().getModURL()).orElseThrow();
         }
     }
+
     public static class LoggerHelper
     {
         public static void logInfo(String message)
@@ -136,6 +139,19 @@ public class CobblemonMorph
             LOGGER.error(message);
         }
     }
+
+    public static class ModHelper
+    {
+        public static String getModID()
+        {
+            return MODID;
+        }
+        public static Logger getLogger()
+        {
+            return LOGGER;
+        }
+    }
+
     public static class ItemHelper
     {
         @SuppressWarnings("removal")

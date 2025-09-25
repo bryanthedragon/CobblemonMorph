@@ -8,6 +8,10 @@ import bryanthedragon.morph.cobblemonmorph.utils.mon.MonUtils;
 public class Gen2MonUtils extends MonUtils
 {
     private static List<String> validMonNames = new ArrayList<>();
+
+    /**
+     * Gen2MonUtil is a utility class which contains the valid names of the pokemon of Gen 2.
+    */
     private static void Gen2MonUtil() 
     {
         validMonNames.add("Chikorita");
@@ -111,6 +115,10 @@ public class Gen2MonUtils extends MonUtils
         validMonNames.add("Ho-Oh");
         validMonNames.add("Celebi");
     }
+    
+    /**
+     * Returns a utility class which contains the valid names of the pokemon of Gen 2.
+    */
     public static void getGen2MonUtils() 
     {
         Gen2MonUtil();

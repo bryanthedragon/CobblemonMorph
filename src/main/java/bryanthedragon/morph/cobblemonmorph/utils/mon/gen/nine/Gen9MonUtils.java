@@ -8,6 +8,10 @@ import bryanthedragon.morph.cobblemonmorph.utils.mon.MonUtils;
 public class Gen9MonUtils extends MonUtils
 {
     private static List<String> validMonNames = new ArrayList<>();
+
+    /**
+     * Gen9MonUtil is a utility class which contains the valid names of the pokemon of Gen 9.
+    */
     public static void Gen9MonUtil()
     {
         validMonNames.add("Sprigatito");
@@ -132,6 +136,10 @@ public class Gen9MonUtils extends MonUtils
         validMonNames.add("Terapagos");
         validMonNames.add("Pecharunt");
     }
+
+    /**
+     * Returns a utility class which contains the valid names of the pokemon of Gen 9.
+    */
     public static void getGen9MonUtils() 
     {
         Gen9MonUtil();

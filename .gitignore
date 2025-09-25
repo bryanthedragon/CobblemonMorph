@@ -20,11 +20,18 @@
 # # other
 # eclipse
 
-
 # run
 /run/logs
 /run/crash-reports
 /run/saves
 
-# # Files from Forge MDK
+# run-data
+# /run-data/logs
+# /run-data/crash-reports
+# /run-data/saves
+# /run-data/mods
+# /run-data/resourcepacks
+# /run-data/config
+
+# Files from Forge MDK
 # forge*changelog.txt

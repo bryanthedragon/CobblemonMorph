@@ -8,6 +8,10 @@ import bryanthedragon.morph.cobblemonmorph.utils.mon.MonUtils;
 public class Gen6MonUtils extends MonUtils
 {
     private static List<String> validMonNames = new ArrayList<>();
+
+    /**
+     * Gen6MonUtil is a utility class which contains the valid names of the pokemon of Gen 6.
+    */
     private static void Gen6MonUtil()
     {
         validMonNames.add("Chesnaught");
@@ -81,6 +85,10 @@ public class Gen6MonUtils extends MonUtils
         validMonNames.add("Hoopa");
         validMonNames.add("Volcanion");
     }
+
+    /**
+     * Returns a utility class which contains the valid names of the pokemon of Gen 6.
+    */
     public static void getGen6MonUtils() 
     {
         Gen6MonUtil();
