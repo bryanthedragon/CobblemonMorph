@@ -8,6 +8,10 @@ import bryanthedragon.morph.cobblemonmorph.utils.mon.MonUtils;
 public class Gen3MonUtils extends MonUtils
 {
     private static List<String> validMonNames = new ArrayList<>();
+
+    /**
+     * Gen3MonUtil is a utility class which contains the valid names of the pokemon of Gen 3.
+    */
     private static void Gen3MonUtil()
     {
         validMonNames.add("Treecko");
@@ -146,6 +150,10 @@ public class Gen3MonUtils extends MonUtils
         validMonNames.add("Jirachi");
         validMonNames.add("Deoxys");
     }
+
+    /**
+     * Returns a utility class which contains the valid names of the pokemon of Gen 3.
+    */
     public static void getGen3MonUtils() 
     {
         Gen3MonUtil();

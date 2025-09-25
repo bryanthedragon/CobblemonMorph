@@ -8,6 +8,10 @@ import bryanthedragon.morph.cobblemonmorph.utils.mon.MonUtils;
 public class Gen5MonUtils extends MonUtils
 {
     private static List<String> validMonNames = new ArrayList<>();
+
+    /**
+     * Gen5MonUtil is a utility class which contains the valid names of the pokemon of Gen 5.
+    */
     private static void Gen5MonUtil()
     {
         validMonNames.add("Victini");
@@ -167,6 +171,10 @@ public class Gen5MonUtils extends MonUtils
         validMonNames.add("Meloetta");
         validMonNames.add("Genesect");
     }
+
+    /**
+     * Returns a utility class which contains the valid names of the pokemon of Gen 5.
+    */
     public static void getGen5MonUtils() 
     {
         Gen5MonUtil();

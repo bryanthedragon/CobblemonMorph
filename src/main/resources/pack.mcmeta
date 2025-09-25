@@ -1,6 +1,7 @@
 {
-  "pack": {
-    "description": "${mod_id} resources",
+  "pack": 
+  {
+    "description": "CobblemonMorph resources",
     "pack_format": 22
   }
 }

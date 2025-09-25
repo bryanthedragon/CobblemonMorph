@@ -29,6 +29,11 @@ public class MonUtils
         Gen9MonUtils.getGen9MonUtils();
     }
 
+    /**
+     * Checks if the given name is valid for a mon.
+     * @param name The name to check.
+     * @return true if the name is valid, false otherwise.
+     */
     public static boolean isValidMonName(String name) 
     {
         return name != null && !name.trim().isEmpty() && validMonNames.contains(name);

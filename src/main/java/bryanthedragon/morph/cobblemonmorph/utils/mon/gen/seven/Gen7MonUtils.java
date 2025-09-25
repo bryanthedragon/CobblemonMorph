@@ -9,6 +9,9 @@ public class Gen7MonUtils extends MonUtils
 {
     private static List<String> validMonNames = new ArrayList<>();
 
+    /**
+     * Gen7MonUtil is a utility class which contains the valid names of the pokemon of Gen 7.
+    */
     public static void Gen7MonUtil() 
     {
         validMonNames.add("Rowlet");
@@ -99,6 +102,10 @@ public class Gen7MonUtils extends MonUtils
         validMonNames.add("Meltan");
         validMonNames.add("Melmetal");
     }
+
+    /**
+     * Returns a utility class which contains the valid names of the pokemon of Gen 7.
+    */
     public static void getGen7MonUtils() 
     {
         Gen7MonUtil();

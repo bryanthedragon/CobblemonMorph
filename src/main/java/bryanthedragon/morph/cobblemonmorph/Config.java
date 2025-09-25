@@ -32,12 +32,25 @@ public class Config
         public static String magicNumberIntroduction;
         public static Set<Item> items;
 
+        /**
+         * Validates that the given object is a string representing a valid item resource location.
+         * This is used to validate the config value for the list of items to log on common setup.
+         * @param obj the object to validate
+         * @return true if the object is a valid item resource location, false otherwise
+         */
         @SuppressWarnings("removal")
         private static boolean validateItemName(final Object obj)
         {
                 return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
         }
 
+        /**
+         * Called when the mod's configuration is loaded.
+         * This is a good time to initialize any config values that need to be accessed
+         * during the course of the mod's operation.
+         *
+         * @param event The event that triggered this method call.
+         */
         @SuppressWarnings("removal")
         @SubscribeEvent
         static void onLoad(final ModConfigEvent event)

@@ -9,6 +9,10 @@ import bryanthedragon.morph.cobblemonmorph.utils.mon.MonUtils;
 public class Gen1MonUtils extends MonUtils
 {
     private static List<String> validMonNames = new ArrayList<>();
+
+    /**
+     * Gen1MonUtil is a utility class which contains the valid names of the pokemon of Gen 1.
+    */
     private static void Gen1MonUtil() 
     {
         validMonNames.add("Bulbasaur");
@@ -163,6 +167,10 @@ public class Gen1MonUtils extends MonUtils
         validMonNames.add("Mewtwo");
         validMonNames.add("Mew");
     }
+
+    /**
+     * Returns a utility class which contains the valid names of the pokemon of Gen 1.
+    */
     public static void getGen1MonUtils() 
     {
         Gen1MonUtil();

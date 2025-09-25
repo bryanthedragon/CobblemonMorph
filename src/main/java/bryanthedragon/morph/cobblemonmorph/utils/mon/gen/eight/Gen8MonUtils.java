@@ -9,6 +9,9 @@ public class Gen8MonUtils extends MonUtils
 {
     private static List<String> validMonNames = new ArrayList<>();
 
+    /**
+     * Gen8MonUtil is a utility class which contains the valid names of the pokemon of Gen 8.
+    */
     public static void Gen8MonUtil() 
     {
         validMonNames.add("Grookey");
@@ -99,6 +102,10 @@ public class Gen8MonUtils extends MonUtils
         validMonNames.add("Overqwil");
         validMonNames.add("Enamorus");
     }
+
+    /**
+     * Returns a utility class which contains the valid names of the pokemon of Gen 8.
+    */
     public static void getGen8MonUtils() 
     {
         Gen8MonUtil();

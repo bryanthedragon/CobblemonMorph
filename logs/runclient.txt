@@ -1,0 +1,545 @@
+PS C:\Users\gumbr\source\repos\CobblemonMorph> ./gradlew runClient  --scan
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+Java: 17.0.12, JVM: 17.0.12+8-LTS-286 (Oracle Corporation), Arch: amd64
+
+> Task :runClient
+2025-09-29 23:34:26,510 main WARN Advanced terminal features are not available in this environment
+[23:34:27] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.9, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[23:34:27] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 21.0.8 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0
+[23:34:27] [main/DEBUG] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Found launch services [fmlclientdev,forgeclient,minecraft,forgegametestserverdev,fmlserveruserdev,fmlclient,fmldatauserdev,forgeserverdev,forgeserveruserdev,forgeclientdev,forgeclientuserdev,forgeserver,forgedatadev,fmlserver,fmlclientuserdev,fmlserverdev,forgedatauserdev,testharness,forgegametestserveruserdev]
+[23:34:27] [main/DEBUG] [cp.mo.mo.NameMappingServiceHandler/MODLAUNCHER]: Found naming services : [srgtomcp]
+[23:34:27] [main/DEBUG] [cp.mo.mo.LaunchPluginHandler/MODLAUNCHER]: Found launch plugins: [mixin,eventbus,slf4jfixer,object_holder_definalize,runtime_enum_extender,capability_token_subclass,accesstransformer,runtimedistcleaner]
+[23:34:27] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Discovering transformation services
+[23:34:27] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path GAMEDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run
+[23:34:27] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path MODSDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\mods
+[23:34:27] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path CONFIGDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\config
+[23:34:27] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path FMLCONFIG is C:\Users\gumbr\source\repos\CobblemonMorph\run\config\fml.toml
+[23:34:28] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Found additional transformation services from discovery services: 
+[23:34:28] [main/INFO] [ne.mi.fm.lo.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[LWJGL] [ThreadLocalUtil] Unsupported JNI version detected, this may result in a crash. Please inform LWJGL developers.
+[23:34:29] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[23:34:29] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Found transformer services : [mixin,fml]
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Transformation services loading
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Loading service mixin
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Loaded service mixin
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Loading service fml
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.LauncherVersion/CORE]: Found FMLLauncher version 1.0
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: FML 1.0 loading
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: FML found ModLauncher version : 10.0.9+10.0.9+main.dcd20f30
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: Requesting CoreMods to not apply the fix for ASMAPI.findFirstInstructionBefore by default
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: FML found AccessTransformer version : 8.0.4+66+master.c09db6d7
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: FML found EventBus version : 6.0.5+6.0.5+master.eb8e549b
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: Found Runtime Dist Cleaner
+[23:34:29] [main/DEBUG] [ne.mi.co.CoreModEngine/]: CoreMods will preserve legacy behavior of ASMAPI.findFirstInstructionBefore for backwards-compatibility
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: FML found CoreMod version : 5.2.4
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: Found ForgeSPI package implementation version 7.0.1+7.0.1+master.d2b38bf6
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: Found ForgeSPI package specification 5
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Loaded service fml
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Configuring option handling for services
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Transformation services initializing
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Initializing transformation service mixin
+[23:34:29] [main/DEBUG] [mixin/]: MixinService [ModLauncher] was successfully booted in cpw.mods.cl.ModuleClassLoader@7ee955a8
+[23:34:29] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/gumbr/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[23:34:29] [main/DEBUG] [mixin/]: Initialising Mixin Platform Manager
+[23:34:29] [main/DEBUG] [mixin/]: Adding mixin platform agents for container ModLauncher Root Container(ModLauncher:4f56a0a2)
+[23:34:29] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for ModLauncher Root Container(ModLauncher:4f56a0a2)
+[23:34:29] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container ModLauncher Root Container(ModLauncher:4f56a0a2)
+[23:34:29] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for ModLauncher Root Container(ModLauncher:4f56a0a2)
+[23:34:29] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container ModLauncher Root Container(ModLauncher:4f56a0a2)
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Initialized transformation service mixin
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Initializing transformation service fml
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLServiceProvider/CORE]: Setting up basic FML game directories
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path GAMEDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path MODSDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\mods
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path CONFIGDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\config
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path FMLCONFIG is C:\Users\gumbr\source\repos\CobblemonMorph\run\config\fml.toml
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLServiceProvider/CORE]: Loading configuration
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLServiceProvider/CORE]: Preparing ModFile
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLServiceProvider/CORE]: Preparing launch handler
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: Using forgeclientuserdev as launch service
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLLoader/CORE]: Received command line version data  : VersionInfo[forgeVersion=47.4.9, mcVersion=1.20.1, mcpVersion=20230612.114412, forgeGroup=net.minecraftforge]
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Initialized transformation service fml
+[23:34:29] [main/DEBUG] [cp.mo.mo.NameMappingServiceHandler/MODLAUNCHER]: Current naming domain is 'mcp'
+[23:34:29] [main/DEBUG] [cp.mo.mo.NameMappingServiceHandler/MODLAUNCHER]: Identified name mapping providers {srg=srgtomcp:1234}
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Transformation services begin scanning
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Beginning scan trigger - transformation service mixin
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: End scan trigger - transformation service mixin
+[23:34:29] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Beginning scan trigger - transformation service fml
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.FMLServiceProvider/CORE]: Initiating mod scan
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.mo.ModListHandler/CORE]: Found mod coordinates from lists: []
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.mo.ModDiscoverer/CORE]: Found Mod Locators : (mods folder:null),(maven libs:null),(exploded directory:null),(minecraft:null),(userdev classpath:null)
+[23:34:29] [main/DEBUG] [ne.mi.fm.lo.mo.ModDiscoverer/CORE]: Found Dependency Locators : (JarInJar:null)
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\cobblemon-forge-1.5.2-1.20.1.jar
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file cobblemon-forge-1.5.2-1.20.1.jar with {cobblemon} mods - versions {1.5.2+1.20.1}
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\craftedcore-5.8.jar
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file craftedcore-5.8.jar with {craftedcore} mods - versions {5.8}
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\remorphed-4.2.jar
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file remorphed-4.2.jar with {remorphed} mods - versions {4.2}
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\walkers-5.7.jar
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file walkers-5.7.jar with {walkers} mods - versions {5.7}
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.ta.CommonLaunchHandler/CORE]: Got mod coordinates C:\Users\gumbr\source\repos\CobblemonMorph\build\sourcesSets\main from env
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.ta.CommonLaunchHandler/CORE]: Found supplied mod coordinates [{defaultmodid=[C:\Users\gumbr\source\repos\CobblemonMorph\build\sourcesSets\main]}]
+[23:34:30] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: AMD Radeon(TM) Graphics GL version 4.6.0 Core Profile Context 23.19.14.08.240820, ATI Technologies Inc.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file forge-1.20.1-47.4.9_mapped_official_1.20.1-recomp.jar with {minecraft} mods - versions {1.20.1}
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.9\6802c410879d06cd2c16ac24988dd5893293e21c\javafmllanguage-1.20.1-47.4.9.jar
+[23:34:30] [main/WARN] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.9\6802c410879d06cd2c16ac24988dd5893293e21c\javafmllanguage-1.20.1-47.4.9.jar is missing mods.toml file
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.9\1a098871d069f3cb2ed12f392f96f462902c0350\lowcodelanguage-1.20.1-47.4.9.jar
+[23:34:30] [main/WARN] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.9\1a098871d069f3cb2ed12f392f96f462902c0350\lowcodelanguage-1.20.1-47.4.9.jar is missing mods.toml file
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.9\5279b751da7297817db4fa9729e3f3c7bf03d594\mclanguage-1.20.1-47.4.9.jar
+[23:34:30] [main/WARN] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.9\5279b751da7297817db4fa9729e3f3c7bf03d594\mclanguage-1.20.1-47.4.9.jar is missing mods.toml file
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.9\f4f03c369d155fb551ebf908db260a0c5600c29b\fmlcore-1.20.1-47.4.9.jar
+[23:34:30] [main/WARN] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.9\f4f03c369d155fb551ebf908db260a0c5600c29b\fmlcore-1.20.1-47.4.9.jar is missing mods.toml file
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\build\sourcesSets\main
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file main with {cobblemonmorph} mods - versions {1.0.0}
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate /
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file  with {forge} mods - versions {47.4.9}
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from forge-1.20.1-47.4.9_mapped_official_1.20.1-recomp.jar, it does not contain dependency information.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from walkers-5.7.jar, it does not contain dependency information.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from , it does not contain dependency information.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from remorphed-4.2.jar, it does not contain dependency information.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from main, it does not contain dependency information.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from cobblemon-forge-1.5.2-1.20.1.jar, it does not contain dependency information.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from mclanguage-1.20.1-47.4.9.jar, it does not contain dependency information.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from javafmllanguage-1.20.1-47.4.9.jar, it does not contain dependency information.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from fmlcore-1.20.1-47.4.9.jar, it does not contain dependency information.
+[23:34:30] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from lowcodelanguage-1.20.1-47.4.9.jar, it does not contain dependency information.
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate 
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file mixinextras-forge-0.4.1.jar with {mixinextras} mods - versions {0.4.1}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate 
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file kffmod-4.11.0.jar with {kotlinforforge} mods - versions {4.11.0}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from kfflang-4.11.0.jar, it does not contain dependency information.
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from kfflib-4.11.0.jar, it does not contain dependency information.
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from kffmod-4.11.0.jar, it does not contain dependency information.
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.AbstractJarFileDependencyLocator/]: Failed to load resource META-INF\jarjar\metadata.json from MixinExtras-0.4.1.jar, it does not contain dependency information.
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate 
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file kffmod-4.11.0.jar with {kotlinforforge} mods - versions {4.11.0}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate 
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file mixinextras-forge-0.4.1.jar with {mixinextras} mods - versions {0.4.1}
+[23:34:31] [main/INFO] [ne.mi.fm.lo.mo.JarInJarDependencyLocator/]: Found 5 dependencies adding them to mods collection
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file forge-1.20.1-47.4.9_mapped_official_1.20.1-recomp.jar with {minecraft} mods - versions {1.20.1}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file C:\Users\gumbr\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.20.1-47.4.9_mapped_official_1.20.1\forge-1.20.1-47.4.9_mapped_official_1.20.1-recomp.jar with languages [LanguageSpec[languageName=minecraft, acceptedVersions=1]]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\walkers-5.7.jar
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file walkers-5.7.jar with {walkers} mods - versions {5.7}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\walkers-5.7.jar with languages [LanguageSpec[languageName=javafml, acceptedVersions=[1,)]]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file kffmod-4.11.0.jar with {kotlinforforge} mods - versions {4.11.0}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file  with languages [LanguageSpec[languageName=kotlinforforge, acceptedVersions=[4,)]]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate /
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file  with {forge} mods - versions {47.4.9}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file / with languages [LanguageSpec[languageName=javafml, acceptedVersions=[24,]]]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Found coremod field_to_method with Javascript path coremods/field_to_method.js
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Found coremod field_to_instanceof with Javascript path coremods/field_to_instanceof.js
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Found coremod add_bouncer_method with Javascript path coremods/add_bouncer_method.js
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Found coremod method_redirector with Javascript path coremods/method_redirector.js
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Found coremod coremods/field_to_method.js
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Found coremod coremods/field_to_instanceof.js
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Found coremod coremods/add_bouncer_method.js
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Found coremod coremods/method_redirector.js
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\remorphed-4.2.jar
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file remorphed-4.2.jar with {remorphed} mods - versions {4.2}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\remorphed-4.2.jar with languages [LanguageSpec[languageName=javafml, acceptedVersions=[1,)]]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\craftedcore-5.8.jar       
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file craftedcore-5.8.jar with {craftedcore} mods - versions {5.8}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\craftedcore-5.8.jar with languages [LanguageSpec[languageName=javafml, acceptedVersions=[1,)]]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\build\sourcesSets\main
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file main with {cobblemonmorph} mods - versions {1.0.0}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file C:\Users\gumbr\source\repos\CobblemonMorph\build\sourcesSets\main with languages [LanguageSpec[languageName=javafml, acceptedVersions=[47,)]]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\cobblemon-forge-1.5.2-1.20.1.jar
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file cobblemon-forge-1.5.2-1.20.1.jar with {cobblemon} mods - versions {1.5.2+1.20.1}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file C:\Users\gumbr\source\repos\CobblemonMorph\run\mods\cobblemon-forge-1.5.2-1.20.1.jar with languages [LanguageSpec[languageName=kotlinforforge, acceptedVersions=[3,)]]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file  with languages []
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file  with languages []
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file mixinextras-forge-0.4.1.jar with {mixinextras} mods - versions {0.4.1}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file  with languages [LanguageSpec[languageName=javafml, acceptedVersions=*]]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file  with languages []
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file  with languages []
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileParser/LOADING]: Considering mod file candidate
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFileInfo/LOADING]: Found valid mod file mixinextras-forge-0.4.1.jar with {mixinextras} mods - versions {0.4.1}
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.mo.ModFile/LOADING]: Loading mod file  with languages [LanguageSpec[languageName=javafml, acceptedVersions=*]]
+[23:34:31] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: End scan trigger - transformation service fml
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.LanguageLoadingProvider/CORE]: Found 4 language providers
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.LanguageLoadingProvider/CORE]: Found language provider minecraft, version 1.0
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.LanguageLoadingProvider/CORE]: Found language provider kotlinforforge, version 4.11.0
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.LanguageLoadingProvider/CORE]: Found language provider lowcodefml, version 47
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.LanguageLoadingProvider/CORE]: Found language provider javafml, version 47
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.UniqueModListBuilder/]: Found 2 mods for first modid MixinExtras, selecting most recent based on version data
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.UniqueModListBuilder/]: Selected file MixinExtras-0.4.1.jar for modid MixinExtras with version 0.0NONE
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.UniqueModListBuilder/]: Found 2 mods for first modid mixinextras, selecting most recent based on version data
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.UniqueModListBuilder/]: Selected file mixinextras-forge-0.4.1.jar for modid mixinextras with version 0.4.1
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.UniqueModListBuilder/]: Found 2 mods for first modid thedarkcolour.kotlinforforge.kfflib, selecting most recent based on version data   
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.UniqueModListBuilder/]: Selected file kfflib-4.11.0.jar for modid thedarkcolour.kotlinforforge.kfflib with version 4.11.0
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.ModSorter/]: Configured system mods: [minecraft, forge]
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.ModSorter/]: Found system mod: minecraft
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.ModSorter/]: Found system mod: forge
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.ModSorter/LOADING]: Found 17 mod requirements (16 mandatory, 1 optional)
+[23:34:31] [main/DEBUG] [ne.mi.fm.lo.ModSorter/LOADING]: Found 0 mod requirements missing (0 mandatory, 0 optional)
+[23:34:32] [main/DEBUG] [ne.mi.fm.lo.MCPNamingService/CORE]: Loaded 33222 method mappings from methods.csv
+[23:34:32] [main/DEBUG] [ne.mi.fm.lo.MCPNamingService/CORE]: Loaded 31003 field mappings from fields.csv
+[23:34:32] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Transformation services loading transformers
+[23:34:32] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Initializing transformers for transformation service mixin
+[23:34:32] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Initialized transformers for transformation service mixin
+[23:34:32] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Initializing transformers for transformation service fml
+[23:34:32] [main/DEBUG] [ne.mi.fm.lo.FMLServiceProvider/CORE]: Loading coremod transformers
+[23:34:32] [main/DEBUG] [ne.mi.co.CoreModEngine/COREMOD]: Loading CoreMod from coremods/field_to_method.js
+[23:34:33] [main/DEBUG] [ne.mi.co.CoreModEngine/COREMOD]: CoreMod loaded successfully
+[23:34:33] [main/DEBUG] [ne.mi.co.CoreModEngine/COREMOD]: Loading CoreMod from coremods/field_to_instanceof.js
+[23:34:33] [main/DEBUG] [ne.mi.co.CoreModEngine/COREMOD]: CoreMod loaded successfully
+[23:34:33] [main/DEBUG] [ne.mi.co.CoreModEngine/COREMOD]: Loading CoreMod from coremods/add_bouncer_method.js
+[23:34:33] [main/DEBUG] [ne.mi.co.CoreModEngine/COREMOD]: CoreMod loaded successfully
+[23:34:33] [main/DEBUG] [ne.mi.co.CoreModEngine/COREMOD]: Loading CoreMod from coremods/method_redirector.js
+[23:34:33] [main/DEBUG] [ne.mi.co.CoreModEngine/COREMOD]: CoreMod loaded successfully
+[23:34:33] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@19b206ee to Target : CLASS {Lnet/minecraft/world/level/biome/Biome;} {} {V}
+[23:34:33] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@708eb310 to Target : CLASS {Lnet/minecraft/world/level/levelgen/structure/Structure;} {} {V}
+[23:34:33] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@6ebc9573 to Target : CLASS {Lnet/minecraft/world/effect/MobEffectInstance;} {} {V}
+[23:34:33] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@1e977098 to Target : CLASS {Lnet/minecraft/world/level/block/LiquidBlock;} {} {V}
+[23:34:33] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@630390b9 to Target : CLASS {Lnet/minecraft/world/item/BucketItem;} {} {V}
+[23:34:33] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@6690b9fa to Target : CLASS {Lnet/minecraft/world/level/block/StairBlock;} {} {V}
+[23:34:33] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@6c8dbf56 to Target : CLASS {Lnet/minecraft/world/level/block/FlowerPotBlock;} {} {V}
+[23:34:33] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@493b01ef to Target : CLASS {Lnet/minecraft/world/item/ItemStack;} {} {V}
+[23:34:33] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@36c2d629 to Target : CLASS {Lnet/minecraft/network/play/client/CClientSettingsPacket;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/monster/Zombie;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/level/levelgen/PhantomSpawner;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/animal/frog/Tadpole;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/monster/ZombieVillager;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/animal/horse/SkeletonTrapGoal;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/ai/village/VillageSiege;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/EntityType;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/npc/Villager;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/server/commands/SummonCommand;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/monster/Evoker$EvokerSummonSpellGoal;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/monster/Spider;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/server/commands/RaidCommand;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/level/levelgen/structure/structures/OceanRuinPieces$OceanRuinPiece;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/level/levelgen/PatrolSpawner;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/raid/Raid;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/level/levelgen/structure/structures/OceanMonumentPieces$OceanMonumentPiece;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/monster/Strider;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/level/levelgen/structure/structures/SwampHutPiece;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/level/levelgen/structure/structures/WoodlandMansionPieces$WoodlandMansionPiece;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/entity/npc/CatSpawner;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformStore/MODLAUNCHER]: Adding transformer net.minecraftforge.coremod.transformer.CoreModClassTransformer@55fee662 to Target : CLASS {Lnet/minecraft/world/level/NaturalSpawner;} {} {V}
+[23:34:34] [main/DEBUG] [cp.mo.mo.TransformationServiceDecorator/MODLAUNCHER]: Initialized transformers for transformation service fml
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:ModLauncher Root Container(ModLauncher:4f56a0a2)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing launch tasks for PlatformAgent[MixinPlatformAgentDefault:ModLauncher Root Container(ModLauncher:4f56a0a2)]
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(minecraft)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(minecraft)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(minecraft)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(minecraft)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(minecraft)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(minecraft)]
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(mixinextras)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(mixinextras)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(mixinextras)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(mixinextras)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(mixinextras)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(mixinextras)]
+[23:34:40] [main/DEBUG] [mixin/]: Registering mixin config: mixinextras.init.mixins.json
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(kotlinforforge)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(kotlinforforge)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(kotlinforforge)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(kotlinforforge)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(kotlinforforge)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(kotlinforforge)]
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(forge)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(forge)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(forge)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(forge)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(forge)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(forge)]
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(craftedcore)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(craftedcore)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(craftedcore)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(craftedcore)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(craftedcore)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(craftedcore)]
+[23:34:40] [main/DEBUG] [mixin/]: Registering mixin config: craftedcore.mixins.json
+[23:34:40] [main/DEBUG] [mixin/]: Compatibility level JAVA_17 specified by craftedcore.mixins.json is higher than the maximum level supported by this version of mixin (JAVA_13).
+[23:34:40] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(walkers)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(walkers)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(walkers)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(walkers)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(walkers)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(walkers)]
+[23:34:40] [main/DEBUG] [mixin/]: Registering mixin config: walkers.mixins.json
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(remorphed)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(remorphed)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(remorphed)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(remorphed)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(remorphed)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(remorphed)]
+[23:34:40] [main/DEBUG] [mixin/]: Registering mixin config: remorphed.mixins.json
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(cobblemon)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(cobblemon)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(cobblemon)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(cobblemon)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(cobblemon)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(cobblemon)]
+[23:34:40] [main/DEBUG] [mixin/]: Registering mixin config: mixins.cobblemon-forge.json
+[23:34:40] [main/DEBUG] [mixin/]: Compatibility level JAVA_8 specified by mixins.cobblemon-forge.json is lower than the default level supported by the current mixin service (JAVA_16).
+[23:34:40] [main/DEBUG] [mixin/]: Registering mixin config: mixins.cobblemon-common.json
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(cobblemonmorph)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(cobblemonmorph)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(cobblemonmorph)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(cobblemonmorph)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(cobblemonmorph)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(cobblemonmorph)]
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(MixinExtras)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(MixinExtras)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(MixinExtras)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(MixinExtras)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(MixinExtras)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(MixinExtras)]
+[23:34:40] [main/DEBUG] [mixin/]: Adding mixin platform agents for container SecureJarResource(thedarkcolour.kotlinforforge.kfflib)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentMinecraftForge for SecureJarResource(thedarkcolour.kotlinforforge.kfflib)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentMinecraftForge rejected container SecureJarResource(thedarkcolour.kotlinforforge.kfflib)
+[23:34:40] [main/DEBUG] [mixin/]: Instancing new MixinPlatformAgentDefault for SecureJarResource(thedarkcolour.kotlinforforge.kfflib)
+[23:34:40] [main/DEBUG] [mixin/]: MixinPlatformAgentDefault accepted container SecureJarResource(thedarkcolour.kotlinforforge.kfflib)
+[23:34:40] [main/DEBUG] [mixin/]: Processing prepare() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(thedarkcolour.kotlinforforge.kfflib)]
+[23:34:40] [main/DEBUG] [mixin/]: inject() running with 12 agents
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:ModLauncher Root Container(ModLauncher:4f56a0a2)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(minecraft)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(mixinextras)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(kotlinforforge)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(forge)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(craftedcore)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(walkers)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(remorphed)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(cobblemon)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(cobblemonmorph)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(MixinExtras)]
+[23:34:40] [main/DEBUG] [mixin/]: Processing inject() for PlatformAgent[MixinPlatformAgentDefault:SecureJarResource(thedarkcolour.kotlinforforge.kfflib)]
+[23:34:40] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientuserdev' with arguments [--version, MOD_DEV, --gameDir, ., --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --assetIndex, 5]
+[23:34:40] [main/DEBUG] [mixin/]: Error cleaning class output directory: .mixin.out
+[23:34:40] [main/DEBUG] [mixin/]: Preparing mixins for MixinEnvironment[DEFAULT]
+[23:34:40] [main/DEBUG] [mixin/]: Selecting config mixinextras.init.mixins.json
+[23:34:40] [main/DEBUG] [MixinExtras|Service/]: com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1) is taking over from null
+[23:34:40] [main/DEBUG] [mixin/]: Registering new injector for @Inject with org.spongepowered.asm.mixin.injection.struct.CallbackInjectionInfo
+[23:34:40] [main/DEBUG] [mixin/]: Registering new injector for @ModifyArg with org.spongepowered.asm.mixin.injection.struct.ModifyArgInjectionInfo
+[23:34:40] [main/DEBUG] [mixin/]: Registering new injector for @ModifyArgs with org.spongepowered.asm.mixin.injection.struct.ModifyArgsInjectionInfo
+[23:34:40] [main/DEBUG] [mixin/]: Registering new injector for @Redirect with org.spongepowered.asm.mixin.injection.struct.RedirectInjectionInfo
+[23:34:40] [main/DEBUG] [mixin/]: Registering new injector for @ModifyVariable with org.spongepowered.asm.mixin.injection.struct.ModifyVariableInjectionInfo
+[23:34:40] [main/DEBUG] [mixin/]: Registering new injector for @ModifyConstant with org.spongepowered.asm.mixin.injection.struct.ModifyConstantInjectionInfo
+[23:34:40] [main/DEBUG] [mixin/]: Selecting config craftedcore.mixins.json
+[23:34:40] [main/DEBUG] [mixin/]: Selecting config walkers.mixins.json
+[23:34:40] [main/DEBUG] [mixin/]: Selecting config remorphed.mixins.json
+[23:34:40] [main/DEBUG] [mixin/]: Selecting config mixins.cobblemon-forge.json
+[23:34:40] [main/DEBUG] [mixin/]: Selecting config mixins.cobblemon-common.json
+[23:34:40] [main/DEBUG] [mixin/]: Preparing mixinextras.init.mixins.json (0)
+[23:34:40] [main/DEBUG] [mixin/]: Preparing craftedcore.mixins.json (10)
+[23:34:41] [main/DEBUG] [mixin/]: Preparing walkers.mixins.json (76)
+[23:34:41] [main/DEBUG] [ne.mi.co.tr.CoreModBaseTransformer/COREMOD]: Transforming net/minecraft/world/effect/MobEffectInstance
+[23:34:41] [main/DEBUG] [ne.mi.co.tr.CoreModBaseTransformer/COREMOD]: Transforming net/minecraft/world/entity/npc/Villager
+[23:34:42] [main/DEBUG] [ne.mi.co.tr.CoreModBaseTransformer/COREMOD]: Transforming net/minecraft/world/level/biome/Biome
+[23:34:42] [main/ERROR] [ne.mi.co.tr.CoreModBaseTransformer/COREMOD]: Error occurred applying transform of coremod coremods/field_to_method.js function biome
+java.lang.IllegalStateException: Field climateSettings is not private and an instance field
+        at net.minecraftforge.coremod.api.ASMAPI.redirectFieldToMethod(ASMAPI.java:1069) ~[coremods-5.2.4.jar:?] {}
+        at org.openjdk.nashorn.internal.scripts.Script$Recompilation$17$292A$\^eval\_.initializeCoreMod#transformer(<eval>:11) ~[?:?] {}
+        at org.openjdk.nashorn.internal.runtime.ScriptFunctionData.invoke(ScriptFunctionData.java:648) ~[nashorn-core-15.4.jar:?] {}
+        at org.openjdk.nashorn.internal.runtime.ScriptFunction.invoke(ScriptFunction.java:513) ~[nashorn-core-15.4.jar:?] {}
+        at org.openjdk.nashorn.internal.runtime.ScriptRuntime.apply(ScriptRuntime.java:520) ~[nashorn-core-15.4.jar:?] {}
+        at org.openjdk.nashorn.api.scripting.ScriptObjectMirror.call(ScriptObjectMirror.java:111) ~[nashorn-core-15.4.jar:?] {}
+        at net.minecraftforge.coremod.NashornFactory.lambda$getFunction$0(NashornFactory.java:37) ~[coremods-5.2.4.jar:5.2.4] {}
+        at net.minecraftforge.coremod.transformer.CoreModClassTransformer.runCoremod(CoreModClassTransformer.java:22) ~[coremods-5.2.4.jar:?] {}
+        at net.minecraftforge.coremod.transformer.CoreModClassTransformer.runCoremod(CoreModClassTransformer.java:14) ~[coremods-5.2.4.jar:?] {}
+        at net.minecraftforge.coremod.transformer.CoreModBaseTransformer.transform(CoreModBaseTransformer.java:60) ~[coremods-5.2.4.jar:?] {}
+        at cpw.mods.modlauncher.TransformerHolder.transform(TransformerHolder.java:41) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.ClassTransformer.performVote(ClassTransformer.java:179) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:117) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.getMaybeTransformedClassBytes(ModuleClassLoader.java:250) ~[securejarhandler-2.1.10.jar:?] {}
+        at cpw.mods.modlauncher.TransformingClassLoader.buildTransformedClassNodeFor(TransformingClassLoader.java:58) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.LaunchPluginHandler.lambda$announceLaunch$10(LaunchPluginHandler.java:100) ~[modlauncher-10.0.9.jar:?] {}
+        at org.spongepowered.asm.launch.MixinLaunchPluginLegacy.getClassNode(MixinLaunchPluginLegacy.java:222) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.launch.MixinLaunchPluginLegacy.getClassNode(MixinLaunchPluginLegacy.java:207) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.ClassInfo.forName(ClassInfo.java:2005) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinInfo.getTargetClass(MixinInfo.java:1017) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinInfo.readTargetClasses(MixinInfo.java:1007) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinInfo.parseTargets(MixinInfo.java:895) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinConfig.prepareMixins(MixinConfig.java:867) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinConfig.prepare(MixinConfig.java:775) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinProcessor.prepareConfigs(MixinProcessor.java:539) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinProcessor.select(MixinProcessor.java:462) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinProcessor.checkSelect(MixinProcessor.java:438) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:290) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:250) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.service.modlauncher.MixinTransformationHandler.processClass(MixinTransformationHandler.java:131) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.launch.MixinLaunchPluginLegacy.processClass(MixinLaunchPluginLegacy.java:131) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:156) ~[modlauncher-10.0.9.jar:10.0.9+10.0.9+main.dcd20f30] {}
+        at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?] {}
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:638) ~[?:?] {}
+        at java.lang.Class.forName(Class.java:625) ~[?:?] {}
+        at java.lang.Class.forName(Class.java:600) ~[?:?] {}
+        at net.minecraftforge.fml.earlydisplay.DisplayWindow.lambda$updateModuleReads$13(DisplayWindow.java:615) ~[fmlearlydisplay-1.20.1-47.4.9.jar:1.0] {}
+        at java.util.Optional.map(Optional.java:260) ~[?:?] {}
+        at net.minecraftforge.fml.earlydisplay.DisplayWindow.updateModuleReads(DisplayWindow.java:615) ~[fmlearlydisplay-1.20.1-47.4.9.jar:1.0] {}
+        at net.minecraftforge.fml.loading.ImmediateWindowHandler.acceptGameLayer(ImmediateWindowHandler.java:71) ~[fmlloader-1.20.1-47.4.9.jar:1.0] {}
+        at net.minecraftforge.fml.loading.FMLLoader.beforeStart(FMLLoader.java:216) ~[fmlloader-1.20.1-47.4.9.jar:1.0] {}
+        at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.launchService(CommonLaunchHandler.java:92) ~[fmlloader-1.20.1-47.4.9.jar:?] {}
+        at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?] {}
+[23:34:42] [main/WARN] [mixin/]: Error loading class: net/bettercombat/compatibility/CompatibilityFlags (java.lang.ClassNotFoundException: net.bettercombat.compatibility.CompatibilityFlags)
+[23:34:42] [main/DEBUG] [mixin/]: Skipping virtual target net.bettercombat.compatibility.CompatibilityFlags for walkers.mixins.json:integrations.client.BetterCombatMixin
+[23:34:42] [main/DEBUG] [mixin/]: Preparing remorphed.mixins.json (3)
+[23:34:42] [main/DEBUG] [mixin/]: Preparing mixins.cobblemon-forge.json (1)
+[23:34:42] [main/DEBUG] [mixin/]: Preparing mixins.cobblemon-common.json (40)
+[23:34:42] [main/WARN] [mixin/]: Error loading class: juuxel/adorn/block/variant/BlockVariantSets (java.lang.ClassNotFoundException: juuxel.adorn.block.variant.BlockVariantSets)
+[23:34:42] [main/WARN] [mixin/]: @Mixin target juuxel.adorn.block.variant.BlockVariantSets was not found mixins.cobblemon-common.json:invoker.AdornRegisterInvoker
+[23:34:42] [main/DEBUG] [ne.mi.co.tr.CoreModBaseTransformer/COREMOD]: Transforming net/minecraft/world/level/block/StairBlock
+[23:34:43] [main/DEBUG] [mixin/]: Prepared 128 mixins in 2.420 sec (18.9ms avg) (0ms load, 0ms transform, 0ms plugin)
+[23:34:43] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
+[23:34:43] [main/DEBUG] [mixin/]: Registering new injector for @SugarWrapper with com.llamalad7.mixinextras.sugar.impl.SugarWrapperInjectionInfo
+[23:34:43] [main/DEBUG] [mixin/]: Registering new injector for @FactoryRedirectWrapper with com.llamalad7.mixinextras.wrapper.factory.FactoryRedirectWrapperInjectionInfo    
+[23:34:43] [main/DEBUG] [mixin/]: Mixing client.MinecraftMixin from craftedcore.mixins.json into net.minecraft.client.Minecraft
+[23:34:43] [main/FATAL] [mixin/]: Mixin apply failed craftedcore.mixins.json:client.MinecraftMixin -> net.minecraft.client.Minecraft: org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException Critical injection failure: @Inject annotation on onCrash could not find any targets matching 'Lnet/minecraft/client/Minecraft;m_91332_(Lnet/minecraft/CrashReport;)V' in net.minecraft.client.Minecraft. Using refmap craftedcore-1.20.1_common-refmap.json [PREINJECT Applicator Phase -> craftedcore.mixins.json:client.MinecraftMixin -> Prepare Injections ->  -> handler$zzj000$onCrash(Lnet/minecraft/CrashReport;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V -> Parse] 
+org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException: Critical injection failure: @Inject annotation on onCrash could not find any targets matching 'Lnet/minecraft/client/Minecraft;m_91332_(Lnet/minecraft/CrashReport;)V' in net.minecraft.client.Minecraft. Using refmap craftedcore-1.20.1_common-refmap.json [PREINJECT Applicator Phase -> craftedcore.mixins.json:client.MinecraftMixin -> Prepare Injections ->  -> handler$zzj000$onCrash(Lnet/minecraft/CrashReport;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V -> Parse]
+        at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.validateTargets(InjectionInfo.java:656) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.findTargets(InjectionInfo.java:587) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.readAnnotation(InjectionInfo.java:330) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:316) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:308) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.injection.struct.CallbackInjectionInfo.<init>(CallbackInjectionInfo.java:46) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62) ~[?:?] {}
+        at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502) ~[?:?] {}
+        at java.lang.reflect.Constructor.newInstance(Constructor.java:486) ~[?:?] {}
+        at org.spongepowered.asm.mixin.injection.struct.InjectionInfo$InjectorEntry.create(InjectionInfo.java:149) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.parse(InjectionInfo.java:708) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinTargetContext.prepareInjections(MixinTargetContext.java:1311) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.prepareInjections(MixinApplicatorStandard.java:1042) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:393) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:325) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.TargetClassContext.apply(TargetClassContext.java:383) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:365) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:250) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.service.modlauncher.MixinTransformationHandler.processClass(MixinTransformationHandler.java:131) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at org.spongepowered.asm.launch.MixinLaunchPluginLegacy.processClass(MixinLaunchPluginLegacy.java:131) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4] {}
+        at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:156) ~[modlauncher-10.0.9.jar:10.0.9+10.0.9+main.dcd20f30] {}
+        at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?] {}
+        at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?] {}
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:526) ~[?:?] {}
+        at java.lang.Class.getDeclaredMethods0(Native Method) ~[?:?] {}
+        at java.lang.Class.privateGetDeclaredMethods(Class.java:3578) ~[?:?] {}
+        at java.lang.Class.privateGetPublicMethods(Class.java:3603) ~[?:?] {}
+        at java.lang.Class.privateGetPublicMethods(Class.java:3609) ~[?:?] {}
+        at java.lang.Class.getMethods(Class.java:2185) ~[?:?] {}
+        at net.minecraftforge.fml.earlydisplay.DisplayWindow.updateModuleReads(DisplayWindow.java:616) ~[fmlearlydisplay-1.20.1-47.4.9.jar:1.0] {}
+        at net.minecraftforge.fml.loading.ImmediateWindowHandler.acceptGameLayer(ImmediateWindowHandler.java:71) ~[fmlloader-1.20.1-47.4.9.jar:1.0] {}
+        at net.minecraftforge.fml.loading.FMLLoader.beforeStart(FMLLoader.java:216) ~[fmlloader-1.20.1-47.4.9.jar:1.0] {}
+        at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.launchService(CommonLaunchHandler.java:92) ~[fmlloader-1.20.1-47.4.9.jar:?] {}
+        at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?] {}
+        at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?] {}
+Exception in thread "main" java.lang.RuntimeException: org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:32)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.run(Launcher.java:108)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.Launcher.main(Launcher.java:78)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23)
+        at cpw.mods.bootstraplauncher@1.1.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141)
+Caused by: org.spongepowered.asm.mixin.transformer.throwables.MixinTransformerError: An unexpected critical error was encountered
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:392)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:250)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.service.modlauncher.MixinTransformationHandler.processClass(MixinTransformationHandler.java:131)       
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.launch.MixinLaunchPluginLegacy.processClass(MixinLaunchPluginLegacy.java:131)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:156)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50)
+        at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113)
+        at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
+        at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
+        at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
+        at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
+        at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+        at java.base/java.lang.Class.getDeclaredMethods0(Native Method)
+        at java.base/java.lang.Class.privateGetDeclaredMethods(Class.java:3578)
+        at java.base/java.lang.Class.privateGetPublicMethods(Class.java:3603)
+        at java.base/java.lang.Class.privateGetPublicMethods(Class.java:3609)
+        at java.base/java.lang.Class.getMethods(Class.java:2185)
+        at MC-BOOTSTRAP/fmlearlydisplay@1.20.1-47.4.9/net.minecraftforge.fml.earlydisplay.DisplayWindow.updateModuleReads(DisplayWindow.java:616)
+        at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.9/net.minecraftforge.fml.loading.ImmediateWindowHandler.acceptGameLayer(ImmediateWindowHandler.java:71)
+        at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.9/net.minecraftforge.fml.loading.FMLLoader.beforeStart(FMLLoader.java:216)
+        at MC-BOOTSTRAP/fmlloader@1.20.1-47.4.9/net.minecraftforge.fml.loading.targets.CommonLaunchHandler.launchService(CommonLaunchHandler.java:92)
+        at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30)
+        ... 7 more
+Caused by: org.spongepowered.asm.mixin.throwables.MixinApplyError: Mixin [craftedcore.mixins.json:client.MinecraftMixin] from phase [DEFAULT] in config [craftedcore.mixins.json] FAILED during APPLY
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinError(MixinProcessor.java:636)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.handleMixinApplyError(MixinProcessor.java:588)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:379)
+        ... 30 more
+Caused by: org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException: Critical injection failure: @Inject annotation on onCrash could not find any targets matching 'Lnet/minecraft/client/Minecraft;m_91332_(Lnet/minecraft/CrashReport;)V' in net.minecraft.client.Minecraft. Using refmap craftedcore-1.20.1_common-refmap.json [PREINJECT Applicator Phase -> craftedcore.mixins.json:client.MinecraftMixin -> Prepare Injections ->  -> handler$zzj000$onCrash(Lnet/minecraft/CrashReport;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V -> Parse]
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.validateTargets(InjectionInfo.java:656)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.findTargets(InjectionInfo.java:587)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.readAnnotation(InjectionInfo.java:330)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:316)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:308)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.CallbackInjectionInfo.<init>(CallbackInjectionInfo.java:46)
+        at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+        at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+        at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo$InjectorEntry.create(InjectionInfo.java:149)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.injection.struct.InjectionInfo.parse(InjectionInfo.java:708)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinTargetContext.prepareInjections(MixinTargetContext.java:1311)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.prepareInjections(MixinApplicatorStandard.java:1042)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:393)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:325)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.TargetClassContext.apply(TargetClassContext.java:383)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:365)
+        at MC-BOOTSTRAP/org.spongepowered.mixin/org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363)
+        ... 30 more
+
+> Task :runClient FAILED
+
+[Incubating] Problems report is available at: file:///C:/Users/gumbr/source/repos/CobblemonMorph/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':runClient'.
+> Process 'command 'C:\Users\gumbr\.gradle\jdks\eclipse_adoptium-21-amd64-windows.2\bin\java.exe'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 1m 9s
+11 actionable tasks: 10 executed, 1 up-to-date
