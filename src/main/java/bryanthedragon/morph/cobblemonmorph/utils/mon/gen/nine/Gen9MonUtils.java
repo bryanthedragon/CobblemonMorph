@@ -12,7 +12,7 @@ public class Gen9MonUtils extends MonUtils
     /**
      * Gen9MonUtil is a utility class which contains the valid names of the pokemon of Gen 9.
     */
-    public static void Gen9MonUtil()
+    protected static void Gen9MonUtil()
     {
         validMonNames.add("Sprigatito");
         validMonNames.add("Floragato");

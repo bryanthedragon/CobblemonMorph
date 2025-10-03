@@ -12,7 +12,7 @@ public class Gen7MonUtils extends MonUtils
     /**
      * Gen7MonUtil is a utility class which contains the valid names of the pokemon of Gen 7.
     */
-    public static void Gen7MonUtil() 
+    protected static void Gen7MonUtil() 
     {
         validMonNames.add("Rowlet");
         validMonNames.add("Dartrix");

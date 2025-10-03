@@ -1,18 +1,18 @@
-[30Sep2025 21:54:21.071] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.9, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
-[30Sep2025 21:54:21.080] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 21.0.8 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0
-[30Sep2025 21:54:24.905] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
-[30Sep2025 21:54:25.022] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
-[30Sep2025 21:54:25.268] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
-[30Sep2025 21:54:25.488] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/gumbr/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
-[30Sep2025 21:54:25.757] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: AMD Radeon(TM) Graphics GL version 4.6.0 Core Profile Context 23.19.14.08.240820, ATI Technologies Inc.
-[30Sep2025 21:54:26.112] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.9\6802c410879d06cd2c16ac24988dd5893293e21c\javafmllanguage-1.20.1-47.4.9.jar is missing mods.toml file
-[30Sep2025 21:54:26.117] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.9\1a098871d069f3cb2ed12f392f96f462902c0350\lowcodelanguage-1.20.1-47.4.9.jar is missing mods.toml file
-[30Sep2025 21:54:26.120] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.9\5279b751da7297817db4fa9729e3f3c7bf03d594\mclanguage-1.20.1-47.4.9.jar is missing mods.toml file
-[30Sep2025 21:54:26.125] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.9\f4f03c369d155fb551ebf908db260a0c5600c29b\fmlcore-1.20.1-47.4.9.jar is missing mods.toml file
-[30Sep2025 21:54:26.390] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 5 dependencies adding them to mods collection
-[30Sep2025 21:54:32.817] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[30Sep2025 21:54:32.833] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientuserdev' with arguments [--version, MOD_DEV, --gameDir, ., --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --assetIndex, 5]
-[30Sep2025 21:54:33.671] [main/ERROR] [net.minecraftforge.coremod.transformer.CoreModBaseTransformer/COREMOD]: Error occurred applying transform of coremod coremods/field_to_method.js function biome
+[12Oct2025 22:46:21.998] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.9, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[12Oct2025 22:46:22.007] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[12Oct2025 22:46:23.770] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[12Oct2025 22:46:23.994] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[12Oct2025 22:46:24.198] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
+[12Oct2025 22:46:24.377] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/gumbr/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[12Oct2025 22:46:24.414] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: AMD Radeon(TM) Graphics GL version 4.6.0 Core Profile Context 25.8.1.250617, ATI Technologies Inc.
+[12Oct2025 22:46:25.193] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.9\6802c410879d06cd2c16ac24988dd5893293e21c\javafmllanguage-1.20.1-47.4.9.jar is missing mods.toml file
+[12Oct2025 22:46:25.201] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.9\1a098871d069f3cb2ed12f392f96f462902c0350\lowcodelanguage-1.20.1-47.4.9.jar is missing mods.toml file
+[12Oct2025 22:46:25.210] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.9\5279b751da7297817db4fa9729e3f3c7bf03d594\mclanguage-1.20.1-47.4.9.jar is missing mods.toml file
+[12Oct2025 22:46:25.217] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.9\f4f03c369d155fb551ebf908db260a0c5600c29b\fmlcore-1.20.1-47.4.9.jar is missing mods.toml file
+[12Oct2025 22:46:25.580] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 5 dependencies adding them to mods collection
+[12Oct2025 22:46:33.182] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[12Oct2025 22:46:33.211] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientuserdev' with arguments [--version, MOD_DEV, --gameDir, ., --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --assetIndex, 5]
+[12Oct2025 22:46:35.128] [main/ERROR] [net.minecraftforge.coremod.transformer.CoreModBaseTransformer/COREMOD]: Error occurred applying transform of coremod coremods/field_to_method.js function biome
 java.lang.IllegalStateException: Field climateSettings is not private and an instance field
 	at net.minecraftforge.coremod.api.ASMAPI.redirectFieldToMethod(ASMAPI.java:1069) ~[coremods-5.2.4.jar:?]
 	at org.openjdk.nashorn.internal.scripts.Script$Recompilation$17$292A$\^eval\_.initializeCoreMod#transformer(<eval>:11) ~[?:?]
@@ -54,11 +54,10 @@ java.lang.IllegalStateException: Field climateSettings is not private and an ins
 	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
 	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
 	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(Unknown Source) ~[?:?]
-	at java.lang.Class.forName(Unknown Source) ~[?:?]
-	at java.lang.Class.forName(Unknown Source) ~[?:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:637) ~[?:?]
+	at java.lang.Class.forName(Class.java:545) ~[?:?]
 	at net.minecraftforge.fml.earlydisplay.DisplayWindow.lambda$updateModuleReads$13(DisplayWindow.java:615) ~[fmlearlydisplay-1.20.1-47.4.9.jar:1.0]
-	at java.util.Optional.map(Unknown Source) ~[?:?]
+	at java.util.Optional.map(Optional.java:260) ~[?:?]
 	at net.minecraftforge.fml.earlydisplay.DisplayWindow.updateModuleReads(DisplayWindow.java:615) ~[fmlearlydisplay-1.20.1-47.4.9.jar:1.0]
 	at net.minecraftforge.fml.loading.ImmediateWindowHandler.acceptGameLayer(ImmediateWindowHandler.java:71) ~[fmlloader-1.20.1-47.4.9.jar:1.0]
 	at net.minecraftforge.fml.loading.FMLLoader.beforeStart(FMLLoader.java:216) ~[fmlloader-1.20.1-47.4.9.jar:1.0]
@@ -71,11 +70,11 @@ java.lang.IllegalStateException: Field climateSettings is not private and an ins
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?]
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?]
 	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[30Sep2025 21:54:33.834] [main/WARN] [mixin/]: Error loading class: net/bettercombat/compatibility/CompatibilityFlags (java.lang.ClassNotFoundException: net.bettercombat.compatibility.CompatibilityFlags)
-[30Sep2025 21:54:33.899] [main/WARN] [mixin/]: Error loading class: juuxel/adorn/block/variant/BlockVariantSets (java.lang.ClassNotFoundException: juuxel.adorn.block.variant.BlockVariantSets)
-[30Sep2025 21:54:33.899] [main/WARN] [mixin/]: @Mixin target juuxel.adorn.block.variant.BlockVariantSets was not found mixins.cobblemon-common.json:invoker.AdornRegisterInvoker
-[30Sep2025 21:54:34.068] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
-[30Sep2025 21:54:34.135] [main/FATAL] [mixin/]: Mixin apply failed craftedcore.mixins.json:client.MinecraftMixin -> net.minecraft.client.Minecraft: org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException Critical injection failure: @Inject annotation on onCrash could not find any targets matching 'Lnet/minecraft/client/Minecraft;m_91332_(Lnet/minecraft/CrashReport;)V' in net.minecraft.client.Minecraft. Using refmap craftedcore-1.20.1_common-refmap.json [PREINJECT Applicator Phase -> craftedcore.mixins.json:client.MinecraftMixin -> Prepare Injections ->  -> handler$zzj000$onCrash(Lnet/minecraft/CrashReport;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V -> Parse]
+[12Oct2025 22:46:35.414] [main/WARN] [mixin/]: Error loading class: net/bettercombat/compatibility/CompatibilityFlags (java.lang.ClassNotFoundException: net.bettercombat.compatibility.CompatibilityFlags)
+[12Oct2025 22:46:35.514] [main/WARN] [mixin/]: Error loading class: juuxel/adorn/block/variant/BlockVariantSets (java.lang.ClassNotFoundException: juuxel.adorn.block.variant.BlockVariantSets)
+[12Oct2025 22:46:35.514] [main/WARN] [mixin/]: @Mixin target juuxel.adorn.block.variant.BlockVariantSets was not found mixins.cobblemon-common.json:invoker.AdornRegisterInvoker
+[12Oct2025 22:46:35.952] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
+[12Oct2025 22:46:36.167] [main/FATAL] [mixin/]: Mixin apply failed craftedcore.mixins.json:client.MinecraftMixin -> net.minecraft.client.Minecraft: org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException Critical injection failure: @Inject annotation on onCrash could not find any targets matching 'Lnet/minecraft/client/Minecraft;m_91332_(Lnet/minecraft/CrashReport;)V' in net.minecraft.client.Minecraft. Using refmap craftedcore-1.20.1_common-refmap.json [PREINJECT Applicator Phase -> craftedcore.mixins.json:client.MinecraftMixin -> Prepare Injections ->  -> handler$zzj000$onCrash(Lnet/minecraft/CrashReport;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V -> Parse]
 org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException: Critical injection failure: @Inject annotation on onCrash could not find any targets matching 'Lnet/minecraft/client/Minecraft;m_91332_(Lnet/minecraft/CrashReport;)V' in net.minecraft.client.Minecraft. Using refmap craftedcore-1.20.1_common-refmap.json [PREINJECT Applicator Phase -> craftedcore.mixins.json:client.MinecraftMixin -> Prepare Injections ->  -> handler$zzj000$onCrash(Lnet/minecraft/CrashReport;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V -> Parse]
 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.validateTargets(InjectionInfo.java:656) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.findTargets(InjectionInfo.java:587) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
@@ -83,9 +82,11 @@ org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException: Crit
 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:316) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:308) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
 	at org.spongepowered.asm.mixin.injection.struct.CallbackInjectionInfo.<init>(CallbackInjectionInfo.java:46) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
-	at jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(Unknown Source) ~[?:?]
-	at java.lang.reflect.Constructor.newInstanceWithCaller(Unknown Source) ~[?:?]
-	at java.lang.reflect.Constructor.newInstance(Unknown Source) ~[?:?]
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+	at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[?:?]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[?:?]
 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo$InjectorEntry.create(InjectionInfo.java:149) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
 	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.parse(InjectionInfo.java:708) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
 	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.prepareInjections(MixinTargetContext.java:1311) ~[mixin-0.8.5.jar:0.8.5+Jenkins-b310.git-155314e6e91465dad727e621a569906a410cd6f4]
@@ -107,12 +108,12 @@ org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException: Crit
 	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
 	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
 	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(Unknown Source) ~[?:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
 	at java.lang.Class.getDeclaredMethods0(Native Method) ~[?:?]
-	at java.lang.Class.privateGetDeclaredMethods(Unknown Source) ~[?:?]
-	at java.lang.Class.privateGetPublicMethods(Unknown Source) ~[?:?]
-	at java.lang.Class.privateGetPublicMethods(Unknown Source) ~[?:?]
-	at java.lang.Class.getMethods(Unknown Source) ~[?:?]
+	at java.lang.Class.privateGetDeclaredMethods(Class.java:3402) ~[?:?]
+	at java.lang.Class.privateGetPublicMethods(Class.java:3427) ~[?:?]
+	at java.lang.Class.privateGetPublicMethods(Class.java:3433) ~[?:?]
+	at java.lang.Class.getMethods(Class.java:2019) ~[?:?]
 	at net.minecraftforge.fml.earlydisplay.DisplayWindow.updateModuleReads(DisplayWindow.java:616) ~[fmlearlydisplay-1.20.1-47.4.9.jar:1.0]
 	at net.minecraftforge.fml.loading.ImmediateWindowHandler.acceptGameLayer(ImmediateWindowHandler.java:71) ~[fmlloader-1.20.1-47.4.9.jar:1.0]
 	at net.minecraftforge.fml.loading.FMLLoader.beforeStart(FMLLoader.java:216) ~[fmlloader-1.20.1-47.4.9.jar:1.0]

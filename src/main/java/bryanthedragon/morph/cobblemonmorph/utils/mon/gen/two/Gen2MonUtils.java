@@ -12,7 +12,7 @@ public class Gen2MonUtils extends MonUtils
     /**
      * Gen2MonUtil is a utility class which contains the valid names of the pokemon of Gen 2.
     */
-    private static void Gen2MonUtil() 
+    protected static void Gen2MonUtil() 
     {
         validMonNames.add("Chikorita");
         validMonNames.add("Bayleef");

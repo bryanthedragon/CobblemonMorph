@@ -12,7 +12,7 @@ public class Gen4MonUtils extends MonUtils
     /**
      * Gen4MonUtil is a utility class which contains the valid names of the pokemon of Gen 4.
     */
-    private static void Gen4MonUtil()
+    protected static void Gen4MonUtil()
     {
         validMonNames.add("Turtwig");
         validMonNames.add("Grotle");
