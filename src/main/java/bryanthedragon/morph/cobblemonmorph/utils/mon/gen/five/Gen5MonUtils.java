@@ -12,7 +12,7 @@ public class Gen5MonUtils extends MonUtils
     /**
      * Gen5MonUtil is a utility class which contains the valid names of the pokemon of Gen 5.
     */
-    private static void Gen5MonUtil()
+    protected static void Gen5MonUtil()
     {
         validMonNames.add("Victini");
         validMonNames.add("Snivy");

@@ -12,7 +12,7 @@ public class Gen6MonUtils extends MonUtils
     /**
      * Gen6MonUtil is a utility class which contains the valid names of the pokemon of Gen 6.
     */
-    private static void Gen6MonUtil()
+    protected static void Gen6MonUtil()
     {
         validMonNames.add("Chesnaught");
         validMonNames.add("Fennekin");

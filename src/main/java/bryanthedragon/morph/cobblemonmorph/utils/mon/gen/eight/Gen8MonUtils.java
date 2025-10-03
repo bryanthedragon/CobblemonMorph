@@ -12,7 +12,7 @@ public class Gen8MonUtils extends MonUtils
     /**
      * Gen8MonUtil is a utility class which contains the valid names of the pokemon of Gen 8.
     */
-    public static void Gen8MonUtil() 
+    protected static void Gen8MonUtil() 
     {
         validMonNames.add("Grookey");
         validMonNames.add("Thwackey");

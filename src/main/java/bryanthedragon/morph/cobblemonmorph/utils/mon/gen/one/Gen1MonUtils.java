@@ -13,7 +13,7 @@ public class Gen1MonUtils extends MonUtils
     /**
      * Gen1MonUtil is a utility class which contains the valid names of the pokemon of Gen 1.
     */
-    private static void Gen1MonUtil() 
+    protected static void Gen1MonUtil() 
     {
         validMonNames.add("Bulbasaur");
         validMonNames.add("Ivysaur");

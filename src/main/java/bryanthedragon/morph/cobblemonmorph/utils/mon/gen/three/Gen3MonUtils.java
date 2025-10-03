@@ -12,7 +12,7 @@ public class Gen3MonUtils extends MonUtils
     /**
      * Gen3MonUtil is a utility class which contains the valid names of the pokemon of Gen 3.
     */
-    private static void Gen3MonUtil()
+    protected static void Gen3MonUtil()
     {
         validMonNames.add("Treecko");
         validMonNames.add("Grovyle");

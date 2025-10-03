@@ -36,6 +36,20 @@ public class MonUtils
      */
     public static boolean isValidMonName(String name) 
     {
-        return name != null && !name.trim().isEmpty() && validMonNames.contains(name);
+        if (name == null) 
+        {
+            return false;
+        }
+        else
+        {
+            return validMonNames.contains(name);
+        }
+    }
+    /**
+     * * Returns a list of valid names of the pokemon of Gen 8.
+     */
+    public static List<String> getValidMonNames() 
+    { 
+        return validMonNames; 
     }
 }
