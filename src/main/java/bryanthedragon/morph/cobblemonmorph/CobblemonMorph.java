@@ -1,6 +1,12 @@
 package bryanthedragon.morph.cobblemonmorph;
 
+import bryanthedragon.morph.cobblemonmorph.helper.CobblemonMorphDependencyHelper;
+import bryanthedragon.morph.cobblemonmorph.items.armor.ModArmorItems;
+
 import com.mojang.logging.LogUtils;
+
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -21,6 +27,9 @@ public class CobblemonMorph
     public static final String MODID = "cobblemonmorph";
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static final String COBBLEMON_MORPH_TAB = null;
+    private static final ResourceKey<CreativeModeTab> COBBLEMONMORPH_ARMOR_TAB = null;
+    private static final ResourceKey<CreativeModeTab> COBBLEMON_ITEMS_MORPH_TAB = null;
 
     @SuppressWarnings("removal")
     public CobblemonMorph(FMLJavaModLoadingContext context)
@@ -29,23 +38,60 @@ public class CobblemonMorph
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
+        CobblemonMorphDependencyHelper.dependencyCheck();
     }
 
+    /**
+     * Called when the mod is being setup. This is a good time to initialize any config values that need to be accessed
+     * during the course of the mod's operation.
+     * @param event The event that triggered this method call.
+     */
     private void commonSetup(final FMLCommonSetupEvent event) 
     {
 
     }
 
-    // Add the example block item to the building blocks tab
+    /**
+     * Called when the mod is being setup. This is a good time to initialize any config values that need to be accessed
+     * during the course of the mod's operation.
+     * @param event The event that triggered this method call.
+     */
     private void addCreative(BuildCreativeModeTabContentsEvent event) 
     {
-
+        if (event.getTabKey() == CobblemonMorph.COBBLEMON_ITEMS_MORPH_TAB) 
+        {
+            addItemsCreativeModeTab(event);
+        }
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
+    /**
+     * Called when the server is starting.
+     * This is a good time to initialize any config values that need to be accessed
+     * during the course of the server's operation.
+     * @param event The event that triggered this method call.
+     */
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) 
     {
         
+    }
+    
+    private void addItemsCreativeModeTab(BuildCreativeModeTabContentsEvent event)
+    {
+        if(event.getTabKey() == CobblemonMorph.COBBLEMONMORPH_ARMOR_TAB) 
+        {
+            addArmorItemsCreativeModeTab(event);
+        }
+    }
+
+    private void addArmorItemsCreativeModeTab(BuildCreativeModeTabContentsEvent event)
+    {
+        if(event.getTabKey() == CobblemonMorph.COBBLEMONMORPH_ARMOR_TAB) 
+        {
+            event.accept(ModArmorItems.CHESTPLATE);
+            event.accept(ModArmorItems.LEGGINGS);
+            event.accept(ModArmorItems.BOOTS);
+            event.accept(ModArmorItems.HELMET);
+        }
     }
 }

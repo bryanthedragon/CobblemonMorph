@@ -1,6 +1,8 @@
 package bryanthedragon.morph.cobblemonmorph.items.armor.leggings.pants.longpants;
 
-public class Pants_Long 
+import bryanthedragon.morph.cobblemonmorph.items.armor.leggings.pants.Pants;
+
+public class Pants_Long extends Pants
 {
 
 }
