@@ -38,7 +38,7 @@
 
 # The modid of the mod
 # modId
-    modId="cobblemonmorph" #mandatory
+    modId="cobblemonmorphv2" #mandatory
 
 # The version number of the mod
 # version
@@ -80,7 +80,7 @@
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 # dependencies
     # forge
-    [[dependencies.cobblemonmorph]] #optional
+    [[dependencies.cobblemonmorphv2]] #optional
         # the modid of the dependency
         modId="forge" #mandatory
         # Does this dependency have to exist - if not, ordering below must be specified
@@ -95,7 +95,7 @@
         side="BOTH"
 
     # minecraft
-    [[dependencies.cobblemonmorph]]
+    [[dependencies.cobblemonmorphv2]]
         modId="minecraft"
         mandatory=true
         # This version range declares a minimum of the current minecraft version up to but not including the next major version
@@ -104,7 +104,7 @@
         side="BOTH"
 
     # remorph morpher
-    [[dependencies.cobblemonmorph]]
+    [[dependencies.cobblemonmorphv2]]
         modId="walkers"
         mandatory=true
         versionRange="[5.7,)"
@@ -112,7 +112,7 @@
         side="BOTH"
 
     # remorph core
-    [[dependencies.cobblemonmorph]]
+    [[dependencies.cobblemonmorphv2]]
         modId="craftedcore"
         mandatory=true
         versionRange="[5.8,)"
@@ -120,7 +120,7 @@
         side="BOTH"
 
     # remorph
-    [[dependencies.cobblemonmorph]]
+    [[dependencies.cobblemonmorphv2]]
         modId="remorphed"
         mandatory=true
         versionRange="[4.2,)"
@@ -131,7 +131,7 @@
 # that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't
 # stop your mod loading on the server for example.
 # features
-    #[features.cobblemonmorph]
+    #[features.cobblemonmorphv2]
 
 # openGLVersion
     #openGLVersion="[3.2,)"
