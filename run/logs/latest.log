@@ -1,5 +1,5 @@
-[27Oct2025 19:03:45.784] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.9, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
-[27Oct2025 19:03:45.801] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
-[27Oct2025 19:03:47.618] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
-[27Oct2025 19:03:47.906] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
-[27Oct2025 19:03:48.385] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
+[27Oct2025 22:59:25.391] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.9, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[27Oct2025 22:59:25.407] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[27Oct2025 22:59:31.628] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[27Oct2025 22:59:31.845] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[27Oct2025 22:59:32.347] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6

@@ -1,4 +1,4 @@
-package bryanthedragon.morph.cobblemonmorph.helper;
+package bryanthedragon.morph.cobblemonmorph.helper.item;
 
 import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
 
@@ -15,13 +15,13 @@ public class CobblemonMorphItemHelper extends CobblemonMorph
         super(context);
     }
 
-    @SuppressWarnings("removal")
+    @SuppressWarnings({ "removal", "null" })
     public static Item getItemByName(String itemName)
     {
         return ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName));
     }
 
-    @SuppressWarnings("removal")
+    @SuppressWarnings({ "removal", "null" })
     public static boolean isItemRegistered(String itemName)
     {
         return ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));

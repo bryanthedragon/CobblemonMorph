@@ -1,14 +1,14 @@
-[27Oct2025 19:03:45.784] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.9, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
-[27Oct2025 19:03:45.801] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
-[27Oct2025 19:03:45.899] [main/DEBUG] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Found launch services [fmlclientdev,forgeclient,minecraft,forgegametestserverdev,fmlserveruserdev,fmlclient,fmldatauserdev,forgeserverdev,forgeserveruserdev,forgeclientdev,forgeclientuserdev,forgeserver,forgedatadev,fmlserver,fmlclientuserdev,fmlserverdev,forgedatauserdev,testharness,forgegametestserveruserdev]
-[27Oct2025 19:03:45.937] [main/DEBUG] [cpw.mods.modlauncher.NameMappingServiceHandler/MODLAUNCHER]: Found naming services : [srgtomcp]
-[27Oct2025 19:03:45.988] [main/DEBUG] [cpw.mods.modlauncher.LaunchPluginHandler/MODLAUNCHER]: Found launch plugins: [mixin,eventbus,slf4jfixer,object_holder_definalize,runtime_enum_extender,capability_token_subclass,accesstransformer,runtimedistcleaner]
-[27Oct2025 19:03:46.028] [main/DEBUG] [cpw.mods.modlauncher.TransformationServicesHandler/MODLAUNCHER]: Discovering transformation services
-[27Oct2025 19:03:46.043] [main/DEBUG] [net.minecraftforge.fml.loading.FMLPaths/CORE]: Path GAMEDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run
-[27Oct2025 19:03:46.046] [main/DEBUG] [net.minecraftforge.fml.loading.FMLPaths/CORE]: Path MODSDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\mods
-[27Oct2025 19:03:46.049] [main/DEBUG] [net.minecraftforge.fml.loading.FMLPaths/CORE]: Path CONFIGDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\config
-[27Oct2025 19:03:46.050] [main/DEBUG] [net.minecraftforge.fml.loading.FMLPaths/CORE]: Path FMLCONFIG is C:\Users\gumbr\source\repos\CobblemonMorph\run\config\fml.toml
-[27Oct2025 19:03:47.551] [main/DEBUG] [cpw.mods.modlauncher.TransformationServicesHandler/MODLAUNCHER]: Found additional transformation services from discovery services: [C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.spongepowered\mixin\0.8.6\c506686c29c922aa1e726178f27ec0e6fac4259\mixin-0.8.6.jar]
-[27Oct2025 19:03:47.618] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
-[27Oct2025 19:03:47.906] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
-[27Oct2025 19:03:48.385] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
+[27Oct2025 22:59:25.391] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.9, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[27Oct2025 22:59:25.407] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[27Oct2025 22:59:25.527] [main/DEBUG] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Found launch services [fmlclientdev,forgeclient,minecraft,forgegametestserverdev,fmlserveruserdev,fmlclient,fmldatauserdev,forgeserverdev,forgeserveruserdev,forgeclientdev,forgeclientuserdev,forgeserver,forgedatadev,fmlserver,fmlclientuserdev,fmlserverdev,forgedatauserdev,testharness,forgegametestserveruserdev]
+[27Oct2025 22:59:25.563] [main/DEBUG] [cpw.mods.modlauncher.NameMappingServiceHandler/MODLAUNCHER]: Found naming services : [srgtomcp]
+[27Oct2025 22:59:25.599] [main/DEBUG] [cpw.mods.modlauncher.LaunchPluginHandler/MODLAUNCHER]: Found launch plugins: [mixin,eventbus,slf4jfixer,object_holder_definalize,runtime_enum_extender,capability_token_subclass,accesstransformer,runtimedistcleaner]
+[27Oct2025 22:59:25.627] [main/DEBUG] [cpw.mods.modlauncher.TransformationServicesHandler/MODLAUNCHER]: Discovering transformation services
+[27Oct2025 22:59:25.644] [main/DEBUG] [net.minecraftforge.fml.loading.FMLPaths/CORE]: Path GAMEDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run
+[27Oct2025 22:59:25.646] [main/DEBUG] [net.minecraftforge.fml.loading.FMLPaths/CORE]: Path MODSDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\mods
+[27Oct2025 22:59:25.647] [main/DEBUG] [net.minecraftforge.fml.loading.FMLPaths/CORE]: Path CONFIGDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\config
+[27Oct2025 22:59:25.647] [main/DEBUG] [net.minecraftforge.fml.loading.FMLPaths/CORE]: Path FMLCONFIG is C:\Users\gumbr\source\repos\CobblemonMorph\run\config\fml.toml
+[27Oct2025 22:59:31.570] [main/DEBUG] [cpw.mods.modlauncher.TransformationServicesHandler/MODLAUNCHER]: Found additional transformation services from discovery services: [C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.spongepowered\mixin\0.8.6\c506686c29c922aa1e726178f27ec0e6fac4259\mixin-0.8.6.jar]
+[27Oct2025 22:59:31.628] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[27Oct2025 22:59:31.845] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[27Oct2025 22:59:32.347] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6

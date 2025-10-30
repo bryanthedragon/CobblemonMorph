@@ -1,4 +1,4 @@
-package bryanthedragon.morph.cobblemonmorph.helper;
+package bryanthedragon.morph.cobblemonmorph.helper.dependency;
 
 import java.net.URL;
 import java.util.Optional;
