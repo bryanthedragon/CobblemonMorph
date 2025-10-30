@@ -1,4 +1,4 @@
-package bryanthedragon.morph.cobblemonmorph.helper;
+package bryanthedragon.morph.cobblemonmorph.helper.logger;
 
 import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
 

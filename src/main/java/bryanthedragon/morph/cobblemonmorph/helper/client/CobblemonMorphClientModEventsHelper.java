@@ -1,7 +1,9 @@
-package bryanthedragon.morph.cobblemonmorph.helper;
+package bryanthedragon.morph.cobblemonmorph.helper.client;
 
 import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
+
 import net.minecraft.client.Minecraft;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
