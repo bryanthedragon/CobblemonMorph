@@ -17,6 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Forge's config APIs
+@SuppressWarnings({"removal", "null"})
 @Mod.EventBusSubscriber(modid = CobblemonMorph.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CobblemonMorphConfig
 {
@@ -40,7 +41,6 @@ public class CobblemonMorphConfig
          * @param obj the object to validate
          * @return true if the object is a valid item resource location, false otherwise
          */
-        @SuppressWarnings("removal")
         private static boolean validateItemName(final Object obj)
         {
                 return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
@@ -53,7 +53,6 @@ public class CobblemonMorphConfig
          *
          * @param event The event that triggered this method call.
          */
-        @SuppressWarnings("removal")
         @SubscribeEvent
         static void onLoad(final ModConfigEvent event)
         {

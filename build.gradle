@@ -304,6 +304,10 @@ dependencies
     compileOnly files("libs/kotlinforforge-4.11.0-all.jar")
     runtimeOnly files("libs/kotlinforforge-4.11.0-all.jar")
 
+    // Kotlin dependencies for Cobblemon and KotlinforForge
+    runtimeOnly "org.jetbrains.kotlin:kotlin-stdlib:1.9.25"
+    runtimeOnly "org.jetbrains.kotlin:kotlin-reflect:1.9.25"
+
     // due to mixin mixing in craftedcore interfering with above code causing errors when building only use below code if absolutely necessary
     // runtimeOnly 'org.spongepowered:mixin:0.8.6'
     // compileOnly 'org.spongepowered:mixin:0.8.6'

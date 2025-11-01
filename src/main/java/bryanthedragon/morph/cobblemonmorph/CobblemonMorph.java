@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 public class CobblemonMorph
 {
     // Define mod id in a common place for everything to reference
-    public static final String MODID = "cobblemonmorphv2";
+    public static final String MODID = "cobblemonmorph";
 
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();

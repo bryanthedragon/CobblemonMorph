@@ -1,7 +1,7 @@
 package bryanthedragon.morph.cobblemonmorph.helper.tabs;
 
 import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
-import bryanthedragon.morph.cobblemonmorph.helper.registries.tabs.TabRegistry;
+import bryanthedragon.morph.cobblemonmorph.helper.registries.tabs.CobblemonMorphTabRegistry;
 
 import net.minecraftforge.eventbus.api. IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -17,6 +17,6 @@ public class CobblemonMorphModTabHelper extends CobblemonMorph
 
     public static void register(IEventBus eventBus)
     {
-        TabRegistry.COBBLEMONMORPH_TABS.register(eventBus);
+        CobblemonMorphTabRegistry.COBBLEMONMORPH_TABS.register(eventBus);
     }
 }
