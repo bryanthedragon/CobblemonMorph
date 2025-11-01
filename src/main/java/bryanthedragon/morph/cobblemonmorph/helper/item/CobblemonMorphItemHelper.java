@@ -8,6 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 
+@SuppressWarnings({ "removal", "null" })
 public class CobblemonMorphItemHelper extends CobblemonMorph
 {
     public CobblemonMorphItemHelper(FMLJavaModLoadingContext context) 
@@ -15,13 +16,12 @@ public class CobblemonMorphItemHelper extends CobblemonMorph
         super(context);
     }
 
-    @SuppressWarnings({ "removal", "null" })
     public static Item getItemByName(String itemName)
     {
         return ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName));
     }
 
-    @SuppressWarnings({ "removal", "null" })
+
     public static boolean isItemRegistered(String itemName)
     {
         return ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));

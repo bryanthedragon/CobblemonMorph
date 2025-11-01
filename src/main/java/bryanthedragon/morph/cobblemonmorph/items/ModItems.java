@@ -13,7 +13,6 @@ public class ModItems
 {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CobblemonMorph.MODID);
 
-
     @SuppressWarnings("null")
     public static final RegistryObject<Item> EXAMPLE  = ITEMS.register("example", () -> new Item(null));
 

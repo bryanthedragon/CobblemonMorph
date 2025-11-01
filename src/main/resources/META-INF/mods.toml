@@ -107,7 +107,7 @@
     [[dependencies.${mod_id}]]
         modId="walkers"
         mandatory=true
-        versionRange="[5.7,)"
+        versionRange="[5.2,)"
         ordering="AFTER"
         side="BOTH"
 
@@ -115,7 +115,7 @@
     [[dependencies.${mod_id}]]
         modId="craftedcore"
         mandatory=true
-        versionRange="[5.8,)"
+        versionRange="[5.5,)"
         ordering="AFTER"
         side="BOTH"
 
