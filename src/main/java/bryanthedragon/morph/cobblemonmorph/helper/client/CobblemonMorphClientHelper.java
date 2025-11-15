@@ -11,9 +11,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod.EventBusSubscriber(modid = CobblemonMorph.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class CobblemonMorphClientModEventsHelper extends CobblemonMorph
+public class CobblemonMorphClientHelper extends CobblemonMorph
 {
-    public CobblemonMorphClientModEventsHelper(FMLJavaModLoadingContext context) 
+    public CobblemonMorphClientHelper(FMLJavaModLoadingContext context) 
     {
         super(context);
     }
