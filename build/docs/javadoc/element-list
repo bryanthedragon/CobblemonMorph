@@ -1,10 +1,13 @@
 bryanthedragon.morph.cobblemonmorph
 bryanthedragon.morph.cobblemonmorph.config
+bryanthedragon.morph.cobblemonmorph.helper
 bryanthedragon.morph.cobblemonmorph.helper.client
 bryanthedragon.morph.cobblemonmorph.helper.dependency
 bryanthedragon.morph.cobblemonmorph.helper.item
 bryanthedragon.morph.cobblemonmorph.helper.logger
+bryanthedragon.morph.cobblemonmorph.helper.mixins
 bryanthedragon.morph.cobblemonmorph.helper.mod
+bryanthedragon.morph.cobblemonmorph.helper.registries
 bryanthedragon.morph.cobblemonmorph.helper.registries.tabs
 bryanthedragon.morph.cobblemonmorph.helper.tabs
 bryanthedragon.morph.cobblemonmorph.icons
@@ -59,6 +62,7 @@ bryanthedragon.morph.cobblemonmorph.items.armor.materials.chestplate.tunic
 bryanthedragon.morph.cobblemonmorph.items.armor.materials.chestplate.vest
 bryanthedragon.morph.cobblemonmorph.items.properties
 bryanthedragon.morph.cobblemonmorph.items.properties.armor
+bryanthedragon.morph.cobblemonmorph.mixins
 bryanthedragon.morph.cobblemonmorph.renderer.mon.gen
 bryanthedragon.morph.cobblemonmorph.renderer.mon.gen.eight
 bryanthedragon.morph.cobblemonmorph.renderer.mon.gen.five
