@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Specification-Title: cobblemonmorphv2
+Specification-Title: cobblemonmorph
 Specification-Vendor: YourNameHere, OtherNameHere
 Specification-Version: 1
 Implementation-Title: CobblemonMorph
