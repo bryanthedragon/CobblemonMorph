@@ -15,7 +15,7 @@ public class CobblemonMorphModTabHelper extends CobblemonMorph
 
     // Register Creative Mode Tabs
 
-    public static void register(IEventBus eventBus)
+    public void register(IEventBus eventBus)
     {
         CobblemonMorphTabRegistry.COBBLEMONMORPH_TABS.register(eventBus);
     }
