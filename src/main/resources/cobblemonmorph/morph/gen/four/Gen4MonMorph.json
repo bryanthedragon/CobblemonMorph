@@ -4,7 +4,7 @@
         "morphs":
         [
             {
-                "gen4":
+                                "gen4":
                 {
                     "cobblemon:turtwig":
                     {
@@ -210,6 +210,18 @@
                     {
 
                     },
+                    "cobblemon:bonsly":
+                    {
+
+                    },
+                    "cobblemon:mimejr":
+                    {
+                        
+                    },
+                    "cobblemon:happiny":
+                    {
+                        
+                    },
                     "cobblemon:chatot":
                     {
 
@@ -346,7 +358,7 @@
                     {
 
                     },
-                    "cobblemon:porygon-z":
+                    "cobblemon:porygonz":
                     {
 
                     },
