@@ -1005,7 +1005,7 @@
                     {
 
                     },
-                    "cobblemon:ho-oh":
+                    "cobblemon:hooh":
                     {
 
                     },
@@ -1300,9 +1300,153 @@
                     {
 
                     },
+                    "cobblemon:camerupt":
+                    {
+
+                    },
+                    "cobblemon:torkoal":
+                    {
+
+                    },
+                    "cobblemon:spoink":
+                    {
+
+                    },
+                    "cobblemon:grumpig":
+                    {
+                        
+                    },
+                    "cobblemon:spinda":
+                    {
+
+                    },
+                    "cobblemon:trapinch":
+                    {
+                        
+                    },
+                    "cobblemon:vibrava":
+                    {
+
+                    },
+                    "cobblemon:flygon":
+                    {
+                        
+                    },
+                    "cobblemon:cacnea":
+                    {
+                        
+                    },
                     "cobblemon:cacturne":
                     {
 
+                    },
+                    "cobblemon:swablu":
+                    {
+
+                    },
+                    "cobblemon:altaria":
+                    {
+                        
+                    },
+                    "cobblemon:zangoose":
+                    {
+                        
+                    },
+                    "cobblemon:seviper":
+                    {
+
+                    },
+                    "cobblemon:lunatone":
+                    {
+
+                    },
+                    "cobblemon:solrock":
+                    {
+                        
+                    },
+                    "cobblemon:barboach":
+                    {
+
+                    },
+                    "cobblemon:whiscash":
+                    {
+                        
+                    },
+                    "cobblemon:corphish":
+                    {
+                        
+                    },
+                    "cobblemon:crawdaunt":
+                    {
+                        
+                    },
+                    "cobblemon:baltoy":
+                    {
+
+                    },
+                    "cobblemon:claydol":
+                    {
+                        
+                    },
+                    "cobblemon:lileep":
+                    {
+
+                    },
+                    "cobblemon:cradily":
+                    {
+                        
+                    },
+                    "cobblemon:anorith":
+                    {
+                        
+                    },
+                    "cobblemon:armaldo":
+                    {
+                        
+                    },
+                    "cobblemon:feebas":
+                    {
+                        
+                    },
+                    "cobblemon:milotic":
+                    {
+                        
+                    },
+                    "cobblemon:kecleon":
+                    {
+                        
+                    },
+                    "cobblemon:shuppet":
+                    {
+                        
+                    },
+                    "cobblemon:banette":
+                    {
+                        
+                    },
+                    "cobblemon:duskull":
+                    {
+                        
+                    },
+                    "cobblemon:dusclops":
+                    {
+                        
+                    },
+                    "cobblemon:tropius":
+                    {
+                        
+                    },
+                    "cobblemon:chimecho":
+                    {
+                        
+                    },
+                    "cobblemon:absol":
+                    {
+                        
+                    },
+                    "cobblemon:wynaut":
+                    {
+                        
                     },
                     "cobblemon:snorunt":
                     {
@@ -1615,6 +1759,18 @@
                     {
 
                     },
+                    "cobblemon:bonsly":
+                    {
+
+                    },
+                    "cobblemon:mimejr":
+                    {
+                        
+                    },
+                    "cobblemon:happiny":
+                    {
+                        
+                    },
                     "cobblemon:chatot":
                     {
 
@@ -1751,7 +1907,7 @@
                     {
 
                     },
-                    "cobblemon:porygon-z":
+                    "cobblemon:porygonz":
                     {
 
                     },
@@ -2123,6 +2279,10 @@
 
                     },
                     "cobblemon:carracosta":
+                    {
+
+                    },
+                    "cobblemon:archen":
                     {
 
                     },
@@ -2948,6 +3108,14 @@
                     {
 
                     },
+                    "cobblemon:pyukumuku":
+                    {
+
+                    },
+                    "cobblemon:typenull":
+                    {
+
+                    },
                     "cobblemon:silvally":
                     {
 
@@ -2984,31 +3152,31 @@
                     {
 
                     },
-                    "cobblemon:jangmo-o":
+                    "cobblemon:jangmoo":
                     {
 
                     },
-                    "cobblemon:hakamo-o":
+                    "cobblemon:hakamoo":
                     {
 
                     },
-                    "cobblemon:kommo-o":
+                    "cobblemon:kommoo":
                     {
 
                     },
-                    "cobblemon:tapu-koko":
+                    "cobblemon:tapukoko":
                     {
 
                     },
-                    "cobblemon:tapu-lele":
+                    "cobblemon:tapulele":
                     {
 
                     },
-                    "cobblemon:tapu-bulu":
+                    "cobblemon:tapubulu":
                     {
 
                     },
-                    "cobblemon:tapu-fini":
+                    "cobblemon:tapufini":
                     {
 
                     },
@@ -3324,7 +3492,7 @@
                     {
 
                     },
-                    "cobblemon:mr_rime":
+                    "cobblemon:mrrime":
                     {
 
                     },
@@ -3635,7 +3803,7 @@
                     {
 
                     },
-                    "cobblemon:mastiff":
+                    "cobblemon:mabosstiff":
                     {
 
                     },
@@ -3643,7 +3811,7 @@
                     {
 
                     },
-                    "cobblemon:grafle":
+                    "cobblemon:grafaiai":
                     {
 
                     },
@@ -3703,7 +3871,7 @@
                     {
 
                     },
-                    "cobblemon:wuglet":
+                    "cobblemon:wiglet":
                     {
 
                     },
@@ -3823,27 +3991,27 @@
                     {
 
                     },
-                    "cobblemon:iron-treads":
+                    "cobblemon:irontreads":
                     {
 
                     },
-                    "cobblemon:iron-bundle":
+                    "cobblemon:ironbundle":
                     {
 
                     },
-                    "cobblemon:iron-hands":
+                    "cobblemon:ironhands":
                     {
 
                     },
-                    "cobblemon:iron-jugulis":
+                    "cobblemon:ironjugulis":
                     {
 
                     },
-                    "cobblemon:iron-moth":
+                    "cobblemon:ironmoth":
                     {
 
                     },
-                    "cobblemon:iron-thorns":
+                    "cobblemon:ironthorns":
                     {
 
                     },
@@ -3867,27 +4035,27 @@
                     {
 
                     },
-                    "cobblemon:wo-chien":
+                    "cobblemon:wochien":
                     {
 
                     },
-                    "cobblemon:chien-pao":
+                    "cobblemon:chienpao":
                     {
 
                     },
-                    "cobblemon:ting-lu":
+                    "cobblemon:tinglu":
                     {
 
                     },
-                    "cobblemon:chi-yu":
+                    "cobblemon:chiyu":
                     {
 
                     },
-                    "cobblemon:roaring-moon":
+                    "cobblemon:roaringmoon":
                     {
 
                     },
-                    "cobblemon:iron-valiant":
+                    "cobblemon:ironvaliant":
                     {
 
                     },
@@ -3899,11 +4067,11 @@
                     {
 
                     },
-                    "cobblemon:walking-wake":
+                    "cobblemon:walkingwake":
                     {
 
                     },
-                    "cobblemon:iron-leaves":
+                    "cobblemon:ironleaves":
                     {
 
                     },
@@ -3943,19 +4111,19 @@
                     {
 
                     },
-                    "cobblemon:gouging-fire":
+                    "cobblemon:gougingfire":
                     {
 
                     },
-                    "cobblemon:raging-bolt":
+                    "cobblemon:ragingbolt":
                     {
 
                     },
-                    "cobblemon:iron-boulder":
+                    "cobblemon:ironboulder":
                     {
 
                     },
-                    "cobblemon:iron-crown":
+                    "cobblemon:ironcrown":
                     {
 
                     },
