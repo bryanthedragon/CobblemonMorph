@@ -4,7 +4,7 @@
         "morphs":
         [
             {
-                "gen7":
+                                "gen7":
                 {
                     "cobblemon:rowlet":
                     {
@@ -202,6 +202,14 @@
                     {
 
                     },
+                    "cobblemon:pyukumuku":
+                    {
+
+                    },
+                    "cobblemon:typenull":
+                    {
+
+                    },
                     "cobblemon:silvally":
                     {
 
@@ -238,31 +246,31 @@
                     {
 
                     },
-                    "cobblemon:jangmo-o":
+                    "cobblemon:jangmoo":
                     {
 
                     },
-                    "cobblemon:hakamo-o":
+                    "cobblemon:hakamoo":
                     {
 
                     },
-                    "cobblemon:kommo-o":
+                    "cobblemon:kommoo":
                     {
 
                     },
-                    "cobblemon:tapu-koko":
+                    "cobblemon:tapukoko":
                     {
 
                     },
-                    "cobblemon:tapu-lele":
+                    "cobblemon:tapulele":
                     {
 
                     },
-                    "cobblemon:tapu-bulu":
+                    "cobblemon:tapubulu":
                     {
 
                     },
-                    "cobblemon:tapu-fini":
+                    "cobblemon:tapufini":
                     {
 
                     },
