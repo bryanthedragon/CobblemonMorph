@@ -1,0 +1,31 @@
+
+package com.oracle.truffle.js.nodes.control;
+
+import com.oracle.truffle.js.nodes.control.BreakException;
+import com.oracle.truffle.js.nodes.control.BreakTarget;
+import com.oracle.truffle.js.nodes.control.ContinueException;
+import com.oracle.truffle.js.nodes.control.DirectBreakException;
+
+public class ContinueTarget
+extends BreakTarget {
+    private static final ContinueTarget DEFAULT_LOOP_CONTINUE_TARGET = new ContinueTarget(null, 0, DirectBreakException.instance, ContinueException.instance);
+    private final ContinueException continueException;
+
+    protected ContinueTarget(String label, int id, BreakException breakException, ContinueException continueException) {
+        super(label, id, breakException);
+        this.continueException = continueException;
+    }
+
+    public final ContinueException getContinueException() {
+        return this.continueException;
+    }
+
+    public static ContinueTarget forLoop(String label, int id) {
+        return new ContinueTarget(label, id, DirectBreakException.instance, new ContinueException(id));
+    }
+
+    public static ContinueTarget forUnlabeledLoop() {
+        return DEFAULT_LOOP_CONTINUE_TARGET;
+    }
+}
+

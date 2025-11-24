@@ -1,0 +1,87 @@
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.text;
+
+import com.cobblemon.mod.relocations.ibm.icu.text.ChineseDateFormatSymbols;
+import com.cobblemon.mod.relocations.ibm.icu.text.DateFormat;
+import com.cobblemon.mod.relocations.ibm.icu.text.DisplayContext;
+import com.cobblemon.mod.relocations.ibm.icu.text.SimpleDateFormat;
+import com.cobblemon.mod.relocations.ibm.icu.util.Calendar;
+import com.cobblemon.mod.relocations.ibm.icu.util.ChineseCalendar;
+import com.cobblemon.mod.relocations.ibm.icu.util.TimeZone;
+import com.cobblemon.mod.relocations.ibm.icu.util.ULocale;
+import java.io.InvalidObjectException;
+import java.text.FieldPosition;
+import java.util.Locale;
+
+@Deprecated
+public class ChineseDateFormat
+extends SimpleDateFormat {
+    static final long serialVersionUID = -4610300753104099899L;
+
+    @Deprecated
+    public ChineseDateFormat(String pattern, Locale locale) {
+        this(pattern, ULocale.forLocale(locale));
+    }
+
+    @Deprecated
+    public ChineseDateFormat(String pattern, ULocale locale) {
+        this(pattern, (String)null, locale);
+    }
+
+    @Deprecated
+    public ChineseDateFormat(String pattern, String override, ULocale locale) {
+        super(pattern, new ChineseDateFormatSymbols(locale), new ChineseCalendar(TimeZone.getDefault(), locale), locale, true, override);
+    }
+
+    @Override
+    @Deprecated
+    protected void subFormat(StringBuffer buf, char ch, int count, int beginOffset, int fieldNum, DisplayContext capitalizationContext, FieldPosition pos, char patternCharToOutput, Calendar cal) {
+        super.subFormat(buf, ch, count, beginOffset, fieldNum, capitalizationContext, pos, patternCharToOutput, cal);
+    }
+
+    @Override
+    @Deprecated
+    protected int subParse(String text, int start2, char ch, int count, boolean obeyCount, boolean allowNegative, boolean[] ambiguousYear, Calendar cal) {
+        return super.subParse(text, start2, ch, count, obeyCount, allowNegative, ambiguousYear, cal);
+    }
+
+    @Override
+    @Deprecated
+    protected DateFormat.Field patternCharToDateFormatField(char ch) {
+        return super.patternCharToDateFormatField(ch);
+    }
+
+    @Deprecated
+    public static class Field
+    extends DateFormat.Field {
+        private static final long serialVersionUID = -5102130532751400330L;
+        @Deprecated
+        public static final Field IS_LEAP_MONTH = new Field("is leap month", 22);
+
+        @Deprecated
+        protected Field(String name, int calendarField) {
+            super(name, calendarField);
+        }
+
+        @Deprecated
+        public static DateFormat.Field ofCalendarField(int calendarField) {
+            if (calendarField == 22) {
+                return IS_LEAP_MONTH;
+            }
+            return DateFormat.Field.ofCalendarField(calendarField);
+        }
+
+        @Override
+        @Deprecated
+        protected Object readResolve() throws InvalidObjectException {
+            if (this.getClass() != Field.class) {
+                throw new InvalidObjectException("A subclass of ChineseDateFormat.Field must implement readResolve.");
+            }
+            if (this.getName().equals(IS_LEAP_MONTH.getName())) {
+                return IS_LEAP_MONTH;
+            }
+            throw new InvalidObjectException("Unknown attribute name.");
+        }
+    }
+}
+

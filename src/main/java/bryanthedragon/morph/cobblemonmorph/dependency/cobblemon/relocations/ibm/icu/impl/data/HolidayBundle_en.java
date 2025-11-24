@@ -1,0 +1,15 @@
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.data;
+
+import java.util.ListResourceBundle;
+
+public class HolidayBundle_en
+extends ListResourceBundle {
+    private static final Object[][] fContents = new Object[][]{{"", ""}};
+
+    @Override
+    public synchronized Object[][] getContents() {
+        return fContents;
+    }
+}
+
