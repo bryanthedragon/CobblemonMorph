@@ -1,0 +1,36 @@
+
+package org.graalvm.shadowed.org.jcodings.transcode.specific;
+
+import org.graalvm.shadowed.org.jcodings.transcode.AsciiCompatibility;
+import org.graalvm.shadowed.org.jcodings.transcode.TranscodeFunctions;
+import org.graalvm.shadowed.org.jcodings.transcode.Transcoder;
+
+public class Iso2022jp_decoder_Transcoder
+extends Transcoder {
+    public static final Transcoder INSTANCE = new Iso2022jp_decoder_Transcoder();
+
+    protected Iso2022jp_decoder_Transcoder() {
+        super("ISO-2022-JP", "stateless-ISO-2022-JP", 56, "Iso2022", 1, 3, 3, AsciiCompatibility.DECODER, 1);
+    }
+
+    @Override
+    public int stateInit(byte[] statep) {
+        return TranscodeFunctions.iso2022jpInit(statep);
+    }
+
+    @Override
+    public int stateFinish(byte[] state) {
+        return TranscodeFunctions.iso2022jpInit(state);
+    }
+
+    @Override
+    public int startToInfo(byte[] statep, byte[] s, int sStart, int l) {
+        return TranscodeFunctions.funSiIso50220jpDecoder(statep, s, sStart, l);
+    }
+
+    @Override
+    public int startToOutput(byte[] statep, byte[] s, int sStart, int l, byte[] o, int oStart, int oSize) {
+        return TranscodeFunctions.funSoIso2022jpDecoder(statep, s, sStart, l, o, oStart, oSize);
+    }
+}
+

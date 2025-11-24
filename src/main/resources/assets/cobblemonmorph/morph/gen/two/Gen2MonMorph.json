@@ -8,403 +8,703 @@
                 {
                     "cobblemon:chikorita":
                     {
-
+                        "model":
+                        {
+                            "json": "cobblemonmorph:morph/gen/two/chikorita.json"
+                        }
                     },
                     "cobblemon:bayleef":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/bayleef.json"
+                        }
                     },
                     "cobblemon:meganium":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/meganium.json"
+                        }
                     },
                     "cobblemon:cyndaquil":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/cyndaquil.json"
+                        }
                     },
                     "cobblemon:quilava":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/quilava.json"
+                        }
                     },
                     "cobblemon:typhlosion":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/typhlosion.json"
+                        }
                     },
                     "cobblemon:totodile":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/totodile.json"
+                        }
                     },
                     "cobblemon:croconaw":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/croconaw.json"
+                        }
                     },
                     "cobblemon:feraligatr":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/feraligatr.json"
+                        }
                     },
                     "cobblemon:sentret":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/sentret.json"
+                        }
                     },
                     "cobblemon:furret":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/furret.json"
+                        }
                     },
                     "cobblemon:hoothoot":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/hoothoot.json"
+                        }
                     },
                     "cobblemon:noctowl":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/noctowl.json"
+                        }
                     },
                     "cobblemon:ledyba":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/ledyba.json"
+                        }
                     },
                     "cobblemon:ledian":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/ledian.json"
+                        }
                     },
                     "cobblemon:spinarak":
                     {
-
-                    },
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/spinarak.json"
+                        }
+                    },  
                     "cobblemon:ariados":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/ariados.json"
+                        }
                     },
                     "cobblemon:crobat":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/crobat.json"
+                        }
                     },
                     "cobblemon:chinchou":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/chinchou.json"
+                        }
                     },
                     "cobblemon:lanturn":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/lanturn.json"
+                        }
                     },
                     "cobblemon:pichu":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/pichu.json"
+                        }
                     },
                     "cobblemon:cleffa":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/cleffa.json"
+                        }
                     },
                     "cobblemon:igglybuff":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/igglybuff.json"
+                        }
                     },
                     "cobblemon:togepi":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/togepi.json"
+                        }
                     },
                     "cobblemon:togetic":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/togetic.json"
+                        }
                     },
                     "cobblemon:natu":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/natu.json"
+                        }
                     },
                     "cobblemon:xatu":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/xatu.json"
+                        }
                     },
                     "cobblemon:mareep":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/mareep.json"
+                        }
                     },
                     "cobblemon:flaaffy":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/flaaffy.json"
+                        }
                     },
                     "cobblemon:ampharos":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/ampharos.json"
+                        }
                     },
                     "cobblemon:bellossom":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/bellossom.json"
+                        }
                     },
                     "cobblemon:marill":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/marill.json"
+                        }
                     },
                     "cobblemon:azumarill":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/azumarill.json"
+                        }
                     },
                     "cobblemon:sudowoodo":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/sudowoodo.json"
+                        }
                     },
                     "cobblemon:politoed":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/politoed.json"
+                        }
                     },
                     "cobblemon:hoppip":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/hoppip.json"
+                        }
                     },
                     "cobblemon:skiploom":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/skiploom.json"
+                        }
                     },
                     "cobblemon:jumpluff":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/jumpluff.json"
+                        }
                     },
                     "cobblemon:aipom":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/aipom.json"
+                        }
                     },
                     "cobblemon:sunkern":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/sunkern.json"
+                        }
                     },
                     "cobblemon:sunflora":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/sunflora.json"
+                        }
                     },
                     "cobblemon:yanma":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/yanma.json"
+                        }
                     },
                     "cobblemon:wooper":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/wooper.json"
+                        }
                     },
                     "cobblemon:quagsire":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/quagsire.json"
+                        }
                     },
                     "cobblemon:espeon":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/espeon.json"
+                        }
                     },
                     "cobblemon:umbreon":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/umbreon.json"
+                        }
                     },
                     "cobblemon:murkrow":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/murkrow.json"
+                        }
                     },
                     "cobblemon:slowking":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/slowking.json"
+                        }
                     },
                     "cobblemon:misdreavus":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/misdreavus.json"
+                        }
                     },
                     "cobblemon:unown":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/unown.json"
+                        }
                     },
                     "cobblemon:wynaut":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/wynaut.json"
+                        }
                     },
                     "cobblemon:wobbuffet":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/wobbuffet.json"
+                        }
                     },
                     "cobblemon:girafarig":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/girafarig.json"
+                        }
                     },
                     "cobblemon:pineco":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/pineco.json"
+                        }
                     },
                     "cobblemon:forretress":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/forretress.json"
+                        }
                     },
                     "cobblemon:dunsparce":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/dunsparce.json"
+                        }
                     },
                     "cobblemon:gligar":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/gligar.json"
+                        }
                     },
                     "cobblemon:steelix":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/steelix.json"
+                        }
                     },
                     "cobblemon:snubbull":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/snubbull.json"
+                        }
                     },
                     "cobblemon:granbull":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/granbull.json"
+                        }
                     },
                     "cobblemon:qwilfish":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/qwilfish.json"
+                        }
                     },
                     "cobblemon:scizor":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/scizor.json"
+                        }
                     },
                     "cobblemon:shuckle":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/shuckle.json"
+                        }
                     },
                     "cobblemon:heracross":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/heracross.json"
+                        }
                     },
                     "cobblemon:sneasel":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/sneasel.json"
+                        }
                     },
                     "cobblemon:teddiursa":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/teddiursa.json"
+                        }
                     },
                     "cobblemon:ursaring":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/ursaring.json"
+                        }
                     },
                     "cobblemon:slugma":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/slugma.json"
+                        }
                     },
                     "cobblemon:magcargo":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/magcargo.json"
+                        }
                     },
                     "cobblemon:swinub":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/swinub.json"
+                        }
                     },
                     "cobblemon:piloswine":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/piloswine.json"
+                        }
                     },
                     "cobblemon:corsola":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/corsola.json"
+                        }
                     },
                     "cobblemon:remoraid":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/remoraid.json"
+                        }
                     },
                     "cobblemon:octillery":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/octillery.json"
+                        }
                     },
                     "cobblemon:delibird":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/delibird.json"
+                        }
                     },
                     "cobblemon:mantine":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/mantine.json"
+                        }
                     },
                     "cobblemon:skarmory":
                     {
-
-                    },
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/skarmory.json"
+                        }
+                    },  
                     "cobblemon:houndour":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/houndour.json"
+                        }
                     },
                     "cobblemon:houndoom":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/houndoom.json"
+                        }
                     },
                     "cobblemon:phanpy":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/phanpy.json"
+                        }
                     },
                     "cobblemon:donphan":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/donphan.json"
+                        }
                     },
                     "cobblemon:porygon2":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/porygon2.json"
+                        }
                     },
                     "cobblemon:stantler":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/stantler.json"
+                        }
                     },
                     "cobblemon:smeargle":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/smeargle.json"
+                        }
                     },
                     "cobblemon:tyrogue":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/tyrogue.json"
+                        }
                     },
                     "cobblemon:hitmontop":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/hitmontop.json"
+                        }
                     },
                     "cobblemon:smoochum":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/smoochum.json"
+                        }
                     },
                     "cobblemon:elekid":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/elekid.json"
+                        }
                     },
                     "cobblemon:magby":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/magby.json"
+                        }
                     },
                     "cobblemon:miltank":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/miltank.json"
+                        }
                     },
                     "cobblemon:blissey":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/blissey.json"
+                        }
                     },
                     "cobblemon:raikou":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/raikou.json"
+                        }
                     },
                     "cobblemon:entei":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/entei.json"
+                        }
                     },
                     "cobblemon:suicune":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/suicune.json"
+                        }
                     },
                     "cobblemon:larvitar":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/larvitar.json"
+                        }
                     },
                     "cobblemon:pupitar":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/pupitar.json"
+                        }
                     },
                     "cobblemon:tyranitar":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/tyranitar.json"
+                        }
                     },
                     "cobblemon:lugia":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/lugia.json"
+                        }
                     },
-                    "cobblemon:ho-oh":
+                    "cobblemon:hooh":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/hooh.json"
+                        }
                     },
                     "cobblemon:celebi":
                     {
-
+                        "model":
+                        { 
+                            "json": "cobblemonmorph:morph/gen/two/celebi.json"
+                        }
                     }
                 }
             }
