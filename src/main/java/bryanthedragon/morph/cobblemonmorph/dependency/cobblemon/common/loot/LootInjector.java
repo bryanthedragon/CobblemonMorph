@@ -23,7 +23,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.loot;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.HashSet;
@@ -53,7 +53,7 @@ public final class LootInjector {
     @NotNull
     private static final String PREFIX = "injection/";
     @NotNull
-    private static final ResourceLocation VILLAGE_HOUSE = MiscUtilsKt.cobblemonResource("injection/chests/village_house");
+    private static final ResourceLocation VILLAGE_HOUSE = MiscUtils.cobblemonResource("injection/chests/village_house");
     @NotNull
     private static final HashSet<ResourceLocation> villageHouseLootTables;
     @NotNull
@@ -78,7 +78,7 @@ public final class LootInjector {
         if (villageHouseLootTables.contains(source)) {
             return VILLAGE_HOUSE;
         }
-        return MiscUtilsKt.cobblemonResource(PREFIX + source.m_135815_());
+        return MiscUtils.cobblemonResource(PREFIX + source.m_135815_());
     }
 
     private final LootPool.Builder injectLootPool(ResourceLocation resulting) {

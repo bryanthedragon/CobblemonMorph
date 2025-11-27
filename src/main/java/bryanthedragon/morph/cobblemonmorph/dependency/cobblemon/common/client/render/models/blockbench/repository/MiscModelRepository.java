@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.JsonDataRegistry;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.TexturedModel;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ implements JsonDataRegistry<TexturedModel> {
     @NotNull
     public static final MiscModelRepository INSTANCE = new MiscModelRepository();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("misc_models");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("misc_models");
     @NotNull
     private static final PackType type = PackType.CLIENT_RESOURCES;
     @NotNull

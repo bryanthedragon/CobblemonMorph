@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stora
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.PokemonDTO;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt;
 import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ implements NetworkPacket<SetPCBoxPokemonPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("set_pc_box");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("set_pc_box");
 
     public SetPCBoxPokemonPacket(@NotNull UUID storeID, int boxNumber, @NotNull Map<Integer, PokemonDTO> pokemon) {
         Intrinsics.checkNotNullParameter((Object)storeID, (String)"storeID");

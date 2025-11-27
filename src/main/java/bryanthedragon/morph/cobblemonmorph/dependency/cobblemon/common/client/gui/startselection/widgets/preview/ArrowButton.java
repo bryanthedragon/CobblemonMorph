@@ -17,7 +17,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.startselection.widgets.preview;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -38,9 +38,9 @@ extends ImageButton {
     @NotNull
     private final ResourceLocation texture;
     @NotNull
-    private static final ResourceLocation RIGHT_ARROW_BUTTON_RESOURCE = MiscUtilsKt.cobblemonResource("textures/gui/starterselection/starterselection_arrow_right.png");
+    private static final ResourceLocation RIGHT_ARROW_BUTTON_RESOURCE = MiscUtils.cobblemonResource("textures/gui/starterselection/starterselection_arrow_right.png");
     @NotNull
-    private static final ResourceLocation LEFT_ARROW_BUTTON_RESOURCE = MiscUtilsKt.cobblemonResource("textures/gui/starterselection/starterselection_arrow_left.png");
+    private static final ResourceLocation LEFT_ARROW_BUTTON_RESOURCE = MiscUtils.cobblemonResource("textures/gui/starterselection/starterselection_arrow_left.png");
     private static final float ARROW_BUTTON_WIDTH = 9.0f;
     private static final float ARROW_BUTTON_HEIGHT = 14.0f;
 

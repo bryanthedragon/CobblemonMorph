@@ -8,7 +8,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.ranges.IntRange;
 
@@ -16,7 +16,7 @@ import kotlin.ranges.IntRange;
 public final class BurnStatus
 extends PersistentStatus {
     public BurnStatus() {
-        super(MiscUtilsKt.cobblemonResource("burn"), "brn", "cobblemon.status.burn.apply", "cobblemon.status.burn.cure", new IntRange(180, 300));
+        super(MiscUtils.cobblemonResource("burn"), "brn", "cobblemon.status.burn.apply", "cobblemon.status.burn.cure", new IntRange(180, 300));
     }
 }
 

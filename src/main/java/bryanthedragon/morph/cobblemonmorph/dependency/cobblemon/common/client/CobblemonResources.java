@@ -8,7 +8,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -18,11 +18,11 @@ public final class CobblemonResources {
     @NotNull
     public static final CobblemonResources INSTANCE = new CobblemonResources();
     @NotNull
-    private static final ResourceLocation RED = MiscUtilsKt.cobblemonResource("textures/red.png");
+    private static final ResourceLocation RED = MiscUtils.cobblemonResource("textures/red.png");
     @NotNull
-    private static final ResourceLocation WHITE = MiscUtilsKt.cobblemonResource("textures/white.png");
+    private static final ResourceLocation WHITE = MiscUtils.cobblemonResource("textures/white.png");
     @NotNull
-    private static final ResourceLocation PHASE_BEAM = MiscUtilsKt.cobblemonResource("textures/phase_beam.png");
+    private static final ResourceLocation PHASE_BEAM = MiscUtils.cobblemonResource("textures/phase_beam.png");
     @NotNull
     private static final ResourceLocation DEFAULT_LARGE = new ResourceLocation("uniform");
 

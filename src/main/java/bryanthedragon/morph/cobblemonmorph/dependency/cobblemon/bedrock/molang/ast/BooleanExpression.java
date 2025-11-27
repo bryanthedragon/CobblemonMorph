@@ -44,6 +44,7 @@ implements Expression {
         return other instanceof BooleanExpression;
     }
 
+    @SuppressWarnings("unused")
     public int hashCode() {
         int PRIME = 59;
         int result = 1;

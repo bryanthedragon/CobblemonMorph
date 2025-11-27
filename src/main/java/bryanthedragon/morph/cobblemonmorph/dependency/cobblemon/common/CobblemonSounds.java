@@ -18,7 +18,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.PlatformRegistry;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.JvmField;
 import kotlin.jvm.internal.Intrinsics;
@@ -394,7 +394,7 @@ extends PlatformRegistry<Registry<SoundEvent>, ResourceKey<Registry<SoundEvent>>
     }
 
     private final SoundEvent create(String name) {
-        SoundEvent soundEvent = this.create(name, SoundEvent.m_262824_((ResourceLocation)MiscUtilsKt.cobblemonResource(name)));
+        SoundEvent soundEvent = this.create(name, SoundEvent.m_262824_((ResourceLocation)MiscUtils.cobblemonResource(name)));
         Intrinsics.checkNotNullExpressionValue((Object)soundEvent, (String)"this.create(name, SoundE\u2026cobblemonResource(name)))");
         return soundEvent;
     }

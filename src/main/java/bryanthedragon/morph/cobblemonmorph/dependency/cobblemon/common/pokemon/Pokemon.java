@@ -188,19 +188,22 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.s
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DistributionUtilsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.EntityExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.Vec3ExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.WorldExtensionsKt;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+
 import java.lang.invoke.LambdaMetafactory;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -215,6 +218,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
 import kotlin.Lazy;
 import kotlin.LazyKt;
 import kotlin.Metadata;
@@ -233,6 +237,7 @@ import kotlin.ranges.ClosedRange;
 import kotlin.ranges.IntRange;
 import kotlin.ranges.RangesKt;
 import kotlin.text.StringsKt;
+
 import net.minecraft.ResourceLocationException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -264,6 +269,7 @@ import net.minecraft.world.level.block.MagmaBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.WitherRoseBlock;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -412,7 +418,7 @@ implements ShowdownIdentifiable {
     @NotNull
     private static FriendshipMutationCalculator LEVEL_UP_FRIENDSHIP_CALCULATOR = FriendshipMutationCalculator.Companion.getSWORD_AND_SHIELD_LEVEL_UP();
     @NotNull
-    private static final ResourceLocation SHEDINJA = MiscUtilsKt.cobblemonResource("shedinja");
+    private static final ResourceLocation SHEDINJA = MiscUtils.cobblemonResource("shedinja");
 
     public Pokemon() {
         ItemStack itemStack = ItemStack.f_41583_;
@@ -630,7 +636,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(@NotNull Nature it) {
+            public final PokemonUpdatePacket<?> invokeNature(@NotNull Nature it) {
                 Intrinsics.checkNotNullParameter((Object)it, (String)"it");
                 return new NatureUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
@@ -654,7 +660,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(@Nullable Nature it) {
+            public final PokemonUpdatePacket<?> invokeNature(@Nullable Nature it) {
                 return new NatureUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
                     {
@@ -701,7 +707,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(@NotNull PokemonState it) {
+            public final PokemonUpdatePacket<?> invokeState(@NotNull PokemonState it) {
                 Intrinsics.checkNotNullParameter((Object)it, (String)"it");
                 return new PokemonStateUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
@@ -892,7 +898,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(@NotNull Ability it) {
+            public final PokemonUpdatePacket<?> invokeAbility(@NotNull Ability it) {
                 Intrinsics.checkNotNullParameter((Object)it, (String)"it");
                 return new AbilityUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
@@ -916,7 +922,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(@NotNull ItemStack it) {
+            public final PokemonUpdatePacket<?> invokeItemStack(@NotNull ItemStack it) {
                 Intrinsics.checkNotNullParameter((Object)it, (String)"it");
                 return new HeldItemUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
@@ -940,7 +946,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(@Nullable UUID it) {
+            public final PokemonUpdatePacket<?> invokeTetheringId(@Nullable UUID it) {
                 return new TetheringUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
                     {
@@ -963,7 +969,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(@NotNull TeraType it) {
+            public final PokemonUpdatePacket<?> invokeTeraType(@NotNull TeraType it) {
                 Intrinsics.checkNotNullParameter((Object)it, (String)"it");
                 return new TeraTypeUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
@@ -987,7 +993,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(int it) {
+            public final PokemonUpdatePacket<?> invokeDmaxLevel(int it) {
                 return new DmaxLevelUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
                     {
@@ -1010,7 +1016,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(boolean it) {
+            public final PokemonUpdatePacket<?> invokeGmaxFactor(boolean it) {
                 return new GmaxFactorUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
                     {
@@ -1033,7 +1039,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(@Nullable String it) {
+            public final PokemonUpdatePacket<?> invokeOriginalTrainerName(@Nullable String it) {
                 return new OriginalTrainerUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){
                     final /* synthetic */ Pokemon this$0;
                     {
@@ -1056,7 +1062,7 @@ implements ShowdownIdentifiable {
             }
 
             @Nullable
-            public final PokemonUpdatePacket<?> invoke(@NotNull SpeciesFeature it) {
+            public final PokemonUpdatePacket<?> invokeSpeciesFeature(@NotNull SpeciesFeature it) {
                 Intrinsics.checkNotNullParameter((Object)it, (String)"it");
                 SpeciesFeatureProvider<? extends SpeciesFeature> featureProvider = SpeciesFeatures.INSTANCE.getFeature(it.getName());
                 return it instanceof SynchronizedSpeciesFeature && featureProvider instanceof SynchronizedSpeciesFeatureProvider && ((SynchronizedSpeciesFeatureProvider)featureProvider).getVisible() ? (PokemonUpdatePacket)new SpeciesFeatureUpdatePacket((Function0<? extends Pokemon>)((Function0)new Function0<Pokemon>(this.this$0){

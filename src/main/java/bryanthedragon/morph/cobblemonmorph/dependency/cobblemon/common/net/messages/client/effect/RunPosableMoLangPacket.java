@@ -17,7 +17,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +44,7 @@ implements NetworkPacket<RunPosableMoLangPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("run_posable_molang");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("run_posable_molang");
 
     public RunPosableMoLangPacket(int entityId, @NotNull Set<String> expressions) {
         Intrinsics.checkNotNullParameter(expressions, (String)"expressions");

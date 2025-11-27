@@ -14,7 +14,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.poke
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.EnumSet;
 import java.util.Set;
 import kotlin.Metadata;
@@ -95,35 +95,35 @@ implements Stat {
     }
 
     static {
-        ResourceLocation resourceLocation = MiscUtilsKt.cobblemonResource("hp");
+        ResourceLocation resourceLocation = MiscUtils.cobblemonResource("hp");
         MutableComponent mutableComponent = LocalizationUtilsKt.lang("stat.hp.name", new Object[0]);
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"lang(\"stat.hp.name\")");
         HP = new Stats(resourceLocation, (Component)mutableComponent, Stat.Type.PERMANENT, "hp");
-        ResourceLocation resourceLocation2 = MiscUtilsKt.cobblemonResource("attack");
+        ResourceLocation resourceLocation2 = MiscUtils.cobblemonResource("attack");
         MutableComponent mutableComponent2 = LocalizationUtilsKt.lang("stat.attack.name", new Object[0]);
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent2, (String)"lang(\"stat.attack.name\")");
         ATTACK = new Stats(resourceLocation2, (Component)mutableComponent2, Stat.Type.PERMANENT, "atk");
-        ResourceLocation resourceLocation3 = MiscUtilsKt.cobblemonResource("defence");
+        ResourceLocation resourceLocation3 = MiscUtils.cobblemonResource("defence");
         MutableComponent mutableComponent3 = LocalizationUtilsKt.lang("stat.defence.name", new Object[0]);
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent3, (String)"lang(\"stat.defence.name\")");
         DEFENCE = new Stats(resourceLocation3, (Component)mutableComponent3, Stat.Type.PERMANENT, "def");
-        ResourceLocation resourceLocation4 = MiscUtilsKt.cobblemonResource("special_attack");
+        ResourceLocation resourceLocation4 = MiscUtils.cobblemonResource("special_attack");
         MutableComponent mutableComponent4 = LocalizationUtilsKt.lang("stat.special_attack.name", new Object[0]);
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent4, (String)"lang(\"stat.special_attack.name\")");
         SPECIAL_ATTACK = new Stats(resourceLocation4, (Component)mutableComponent4, Stat.Type.PERMANENT, "spa");
-        ResourceLocation resourceLocation5 = MiscUtilsKt.cobblemonResource("special_defence");
+        ResourceLocation resourceLocation5 = MiscUtils.cobblemonResource("special_defence");
         MutableComponent mutableComponent5 = LocalizationUtilsKt.lang("stat.special_defence.name", new Object[0]);
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent5, (String)"lang(\"stat.special_defence.name\")");
         SPECIAL_DEFENCE = new Stats(resourceLocation5, (Component)mutableComponent5, Stat.Type.PERMANENT, "spd");
-        ResourceLocation resourceLocation6 = MiscUtilsKt.cobblemonResource("speed");
+        ResourceLocation resourceLocation6 = MiscUtils.cobblemonResource("speed");
         MutableComponent mutableComponent6 = LocalizationUtilsKt.lang("stat.speed.name", new Object[0]);
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent6, (String)"lang(\"stat.speed.name\")");
         SPEED = new Stats(resourceLocation6, (Component)mutableComponent6, Stat.Type.PERMANENT, "spe");
-        ResourceLocation resourceLocation7 = MiscUtilsKt.cobblemonResource("evasion");
+        ResourceLocation resourceLocation7 = MiscUtils.cobblemonResource("evasion");
         MutableComponent mutableComponent7 = LocalizationUtilsKt.lang("stat.evasion.name", new Object[0]);
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent7, (String)"lang(\"stat.evasion.name\")");
         EVASION = new Stats(resourceLocation7, (Component)mutableComponent7, Stat.Type.BATTLE_ONLY, "evasion");
-        ResourceLocation resourceLocation8 = MiscUtilsKt.cobblemonResource("accuracy");
+        ResourceLocation resourceLocation8 = MiscUtils.cobblemonResource("accuracy");
         MutableComponent mutableComponent8 = LocalizationUtilsKt.lang("stat.accuracy.name", new Object[0]);
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent8, (String)"lang(\"stat.accuracy.name\")");
         ACCURACY = new Stats(resourceLocation8, (Component)mutableComponent8, Stat.Type.BATTLE_ONLY, "accuracy");

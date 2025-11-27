@@ -21,7 +21,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.IntRanges;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IntRangesAdapter;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -99,7 +99,7 @@ JsonSerializer<T> {
             boolean bl = false;
             String[] stringArray2 = new String[]{"-"};
             List range = StringsKt.split$default((CharSequence)it, (String[])stringArray2, (boolean)false, (int)0, (int)6, null);
-            if (range.size() == 2 && MiscUtilsKt.isInt((String)range.get(0)) && MiscUtilsKt.isInt((String)range.get(1))) {
+            if (range.size() == 2 && MiscUtils.isInt((String)range.get(0)) && MiscUtils.isInt((String)range.get(1))) {
                 ranges.add(new IntRange(Integer.parseInt((String)range.get(0)), Integer.parseInt((String)range.get(1))));
                 continue;
             }
@@ -111,7 +111,7 @@ JsonSerializer<T> {
                 ranges.addAll((Collection)matchingRange.getRanges());
                 continue;
             }
-            if (!MiscUtilsKt.isInt((String)range.get(0))) continue;
+            if (!MiscUtils.isInt((String)range.get(0))) continue;
             ranges.add(new IntRange(Integer.parseInt((String)range.get(0)), Integer.parseInt((String)range.get(0))));
         }
         Collection $this$toTypedArray$iv = ranges;

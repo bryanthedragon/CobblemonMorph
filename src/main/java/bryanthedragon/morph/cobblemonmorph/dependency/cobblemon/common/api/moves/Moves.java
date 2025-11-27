@@ -33,7 +33,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.MoveTarget;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.ShowdownService;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.MovesRegistrySyncPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -64,7 +64,7 @@ implements DataRegistry {
     @NotNull
     public static final Moves INSTANCE = new Moves();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("moves");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("moves");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull

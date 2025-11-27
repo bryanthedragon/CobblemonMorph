@@ -46,7 +46,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Poseable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.generic.GenericBedrockServerDelegate;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnGenericBedrockPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -189,7 +189,7 @@ Schedulable {
     }
 
     protected void m_8097_() {
-        this.f_19804_.m_135372_(CATEGORY, (Object)MiscUtilsKt.cobblemonResource("generic"));
+        this.f_19804_.m_135372_(CATEGORY, (Object)MiscUtils.cobblemonResource("generic"));
         this.f_19804_.m_135372_(ASPECTS, (Object)SetsKt.emptySet());
         this.f_19804_.m_135372_(SCALE, (Object)Float.valueOf(1.0f));
         this.f_19804_.m_135372_(POSE_TYPE, (Object)PoseType.NONE);

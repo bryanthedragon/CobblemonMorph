@@ -17,7 +17,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -44,7 +44,7 @@ implements NetworkPacket<SetNicknamePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("set_nickname");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("set_nickname");
 
     public SetNicknamePacket(@NotNull UUID pokemonUUID, boolean isParty, @Nullable String nickname) {
         Intrinsics.checkNotNullParameter((Object)pokemonUUID, (String)"pokemonUUID");

@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.JsonPokemonPoseableModel;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Bone;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.VaryingModelRepository;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -207,7 +207,7 @@ extends VaryingModelRepository<Entity, BlockEntityModel> {
         poserDirectories = CollectionsKt.listOf((Object)("bedrock/" + INSTANCE.getType() + "/posers"));
         modelDirectories = CollectionsKt.listOf((Object)("bedrock/" + INSTANCE.getType() + "/models"));
         animationDirectories = CollectionsKt.listOf((Object)("bedrock/" + INSTANCE.getType() + "/animations"));
-        fallback = MiscUtilsKt.cobblemonResource("substitute");
+        fallback = MiscUtils.cobblemonResource("substitute");
         gson = new GsonBuilder().create();
     }
 }

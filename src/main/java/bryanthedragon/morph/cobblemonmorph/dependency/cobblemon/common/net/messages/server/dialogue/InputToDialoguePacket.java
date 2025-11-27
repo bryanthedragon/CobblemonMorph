@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.dialogue;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -41,7 +41,7 @@ implements NetworkPacket<InputToDialoguePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("input_to_dialogue");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("input_to_dialogue");
 
     public InputToDialoguePacket(@NotNull UUID inputId, @NotNull String input) {
         Intrinsics.checkNotNullParameter((Object)inputId, (String)"inputId");

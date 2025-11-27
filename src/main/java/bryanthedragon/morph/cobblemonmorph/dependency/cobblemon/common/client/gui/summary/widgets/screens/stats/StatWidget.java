@@ -49,7 +49,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Nature;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
@@ -110,21 +110,21 @@ extends SoundlessWidget {
     private static final int BLUE = 5540859;
     private static final int RED = 16471124;
     @NotNull
-    private static final ResourceLocation statsBaseResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_chart_base.png");
+    private static final ResourceLocation statsBaseResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_chart_base.png");
     @NotNull
-    private static final ResourceLocation statsChartResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_chart.png");
+    private static final ResourceLocation statsChartResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_chart.png");
     @NotNull
-    private static final ResourceLocation statsOtherBaseResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_other_base.png");
+    private static final ResourceLocation statsOtherBaseResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_other_base.png");
     @NotNull
-    private static final ResourceLocation statsOtherBarTemplate = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_other_bar.png");
+    private static final ResourceLocation statsOtherBarTemplate = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_other_bar.png");
     @NotNull
-    private static final ResourceLocation friendshipOverlayResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_friendship_overlay.png");
+    private static final ResourceLocation friendshipOverlayResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_friendship_overlay.png");
     @NotNull
-    private static final ResourceLocation tabMarkerResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_tab_marker.png");
+    private static final ResourceLocation tabMarkerResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_tab_marker.png");
     @NotNull
-    private static final ResourceLocation statIncreaseResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_icon_increase.png");
+    private static final ResourceLocation statIncreaseResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_icon_increase.png");
     @NotNull
-    private static final ResourceLocation statDecreaseResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_icon_decrease.png");
+    private static final ResourceLocation statDecreaseResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_icon_decrease.png");
     private static final MutableComponent statsLabel = LocalizationUtilsKt.lang("ui.stats", new Object[0]);
     private static final MutableComponent baseLabel = LocalizationUtilsKt.lang("ui.stats.base", new Object[0]);
     private static final MutableComponent ivLabel = LocalizationUtilsKt.lang("ui.stats.ivs", new Object[0]);

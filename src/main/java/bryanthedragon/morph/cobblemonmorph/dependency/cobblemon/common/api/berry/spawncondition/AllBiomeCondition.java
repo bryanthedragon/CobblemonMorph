@@ -15,7 +15,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berr
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Berry;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.spawncondition.BerrySpawnCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
@@ -33,7 +33,7 @@ implements BerrySpawnCondition {
     private final int minGroveSize;
     private final int maxGroveSize;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("all_biome");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("all_biome");
 
     public AllBiomeCondition(int minGroveSize, int maxGroveSize) {
         this.minGroveSize = minGroveSize;

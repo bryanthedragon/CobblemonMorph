@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -36,7 +36,7 @@ implements NetworkPacket<ClosePasturePacket> {
     @NotNull
     private final ResourceLocation id = ID;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("close_pasture");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("close_pasture");
 
     @Override
     @NotNull

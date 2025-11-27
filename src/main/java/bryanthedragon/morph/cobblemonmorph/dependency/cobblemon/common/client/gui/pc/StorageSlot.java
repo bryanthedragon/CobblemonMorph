@@ -30,7 +30,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.QuaternionUtilsKt;
 import java.util.Collection;
 import kotlin.Metadata;
@@ -59,17 +59,17 @@ extends Button {
     private final StorageWidget parent;
     public static final int SIZE = 25;
     @NotNull
-    private static final ResourceLocation genderIconMale = MiscUtilsKt.cobblemonResource("textures/gui/pc/gender_icon_male.png");
+    private static final ResourceLocation genderIconMale = MiscUtils.cobblemonResource("textures/gui/pc/gender_icon_male.png");
     @NotNull
-    private static final ResourceLocation genderIconFemale = MiscUtilsKt.cobblemonResource("textures/gui/pc/gender_icon_female.png");
+    private static final ResourceLocation genderIconFemale = MiscUtils.cobblemonResource("textures/gui/pc/gender_icon_female.png");
     @NotNull
-    private static final ResourceLocation selectPointerResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/pc_pointer.png");
+    private static final ResourceLocation selectPointerResource = MiscUtils.cobblemonResource("textures/gui/pc/pc_pointer.png");
     @NotNull
-    private static final ResourceLocation slotOverlayResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/pc_slot_overlay.png");
+    private static final ResourceLocation slotOverlayResource = MiscUtils.cobblemonResource("textures/gui/pc/pc_slot_overlay.png");
     @NotNull
-    private static final ResourceLocation slotOverlayPastureIconResource = MiscUtilsKt.cobblemonResource("textures/gui/pasture/pc_slot_icon_pasture.png");
+    private static final ResourceLocation slotOverlayPastureIconResource = MiscUtils.cobblemonResource("textures/gui/pasture/pc_slot_icon_pasture.png");
     @NotNull
-    private static final ResourceLocation slotOverlayMoveIconResource = MiscUtilsKt.cobblemonResource("textures/gui/pasture/pc_slot_icon_move.png");
+    private static final ResourceLocation slotOverlayMoveIconResource = MiscUtils.cobblemonResource("textures/gui/pasture/pc_slot_icon_move.png");
 
     public StorageSlot(int x, int y, @NotNull StorageWidget parent, @NotNull Button.OnPress onPress) {
         Intrinsics.checkNotNullParameter((Object)((Object)parent), (String)"parent");

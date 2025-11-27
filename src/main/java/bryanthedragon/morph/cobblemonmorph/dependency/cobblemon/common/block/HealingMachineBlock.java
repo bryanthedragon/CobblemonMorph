@@ -55,7 +55,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.HealingMachineBlockEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt;
 import java.util.Collection;
 import java.util.List;
@@ -371,10 +371,10 @@ extends BaseEntityBlock {
 
     public void m_5871_(@Nullable ItemStack stack, @Nullable BlockGetter world, @NotNull List<Component> tooltip, @Nullable TooltipFlag options) {
         Intrinsics.checkNotNullParameter(tooltip, (String)"tooltip");
-        MutableComponent mutableComponent = MiscUtilsKt.asTranslated("block.cobblemon.healing_machine.tooltip1");
+        MutableComponent mutableComponent = MiscUtils.asTranslated("block.cobblemon.healing_machine.tooltip1");
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"block.${Cobblemon.MODID}\u2026.tooltip1\".asTranslated()");
         tooltip.add((Component)TextKt.gray(mutableComponent));
-        MutableComponent mutableComponent2 = MiscUtilsKt.asTranslated("block.cobblemon.healing_machine.tooltip2");
+        MutableComponent mutableComponent2 = MiscUtils.asTranslated("block.cobblemon.healing_machine.tooltip2");
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent2, (String)"block.${Cobblemon.MODID}\u2026.tooltip2\".asTranslated()");
         tooltip.add((Component)TextKt.gray(mutableComponent2));
     }

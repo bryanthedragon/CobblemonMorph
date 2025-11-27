@@ -67,7 +67,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.Act
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.DummyTradeParticipant;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.PlayerTradeParticipant;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.TradeParticipant;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.StringExtensionsKt;
 import com.google.gson.Gson;
@@ -146,7 +146,7 @@ public final class TestCommand {
             Intrinsics.checkNotNullExpressionValue((Object)level, (String)"player.world");
             GenericBedrockEntity $this$execute_u24lambda_u241 = genericBedrockEntity = (evolutionEntity = new GenericBedrockEntity(level));
             boolean bl = false;
-            $this$execute_u24lambda_u241.setCategory(MiscUtilsKt.cobblemonResource("evolution"));
+            $this$execute_u24lambda_u241.setCategory(MiscUtils.cobblemonResource("evolution"));
             $this$execute_u24lambda_u241.setColliderHeight(1.5f);
             $this$execute_u24lambda_u241.setColliderWidth(1.5f);
             $this$execute_u24lambda_u241.setScale(1.0f);

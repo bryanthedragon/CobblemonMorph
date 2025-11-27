@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.item.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.CobblemonItem;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Set;
 import kotlin.Metadata;
 import kotlin.collections.SetsKt;
@@ -73,7 +73,7 @@ implements PokemonEntityInteraction {
             EntityInteraction.DefaultImpls.consumeItem$default(this, player, stack, 0, 4, null);
             Object[] objectArray = new Object[2];
             objectArray[0] = entity2.getPokemon().getDisplayName();
-            Intrinsics.checkNotNullExpressionValue((Object)MiscUtilsKt.asTranslated(entity2.getPokemon().getAbility().getDisplayName()), (String)"entity.pokemon.ability.displayName.asTranslated()");
+            Intrinsics.checkNotNullExpressionValue((Object)MiscUtils.asTranslated(entity2.getPokemon().getAbility().getDisplayName()), (String)"entity.pokemon.ability.displayName.asTranslated()");
             MutableComponent feedback = LocalizationUtilsKt.lang("ability_changer.changed", objectArray);
             player.m_213846_((Component)feedback);
             return true;

@@ -18,7 +18,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import kotlin.Metadata;
@@ -44,7 +44,7 @@ implements NetworkPacket<BattleMessagePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("battle_message");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("battle_message");
 
     public BattleMessagePacket(@NotNull List<? extends Component> messages) {
         Intrinsics.checkNotNullParameter(messages, (String)"messages");

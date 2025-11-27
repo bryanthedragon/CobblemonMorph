@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SpawningPrecalculation;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SpawningContext;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ KMappedMarker {
     public SpawnPool(@NotNull String name) {
         Intrinsics.checkNotNullParameter((Object)name, (String)"name");
         this.name = name;
-        this.id = MiscUtilsKt.cobblemonResource("spawn_pool_" + this.name);
+        this.id = MiscUtils.cobblemonResource("spawn_pool_" + this.name);
         this.type = PackType.SERVER_DATA;
         this.observable = new SimpleObservable();
         Gson gson2 = SpawnLoader.INSTANCE.getGson();

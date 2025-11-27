@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialo
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.input.DialogueInput;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.DialogueActionAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.DialogueFaceProviderAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.DialogueInputAdapter;
@@ -141,7 +141,7 @@ implements JsonDataRegistry<Dialogue> {
     static {
         GsonBuilder gsonBuilder;
         INSTANCE = new Dialogues();
-        id = MiscUtilsKt.cobblemonResource("dialogues");
+        id = MiscUtils.cobblemonResource("dialogues");
         type = PackType.SERVER_DATA;
         observable = new SimpleObservable();
         dialogues = new LinkedHashMap();

@@ -36,7 +36,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.interact.InteractPokemonPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.AcceptTradeRequestPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.OfferTradePacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public final class InteractWheelGuiFactoryKt {
     public static final InteractWheelGUI createPokemonInteractGui(@NotNull UUID pokemonID, boolean canMountShoulder) {
         void $this$iv;
         Intrinsics.checkNotNullParameter((Object)pokemonID, (String)"pokemonID");
-        InteractWheelOption mountShoulder2 = new InteractWheelOption(MiscUtilsKt.cobblemonResource("textures/gui/interact/icon_shoulder.png"), "cobblemon.ui.interact.mount.shoulder", null, (Function0)new Function0<Unit>(canMountShoulder, pokemonID){
+        InteractWheelOption mountShoulder2 = new InteractWheelOption(MiscUtils.cobblemonResource("textures/gui/interact/icon_shoulder.png"), "cobblemon.ui.interact.mount.shoulder", null, (Function0)new Function0<Unit>(canMountShoulder, pokemonID){
             final /* synthetic */ boolean $canMountShoulder;
             final /* synthetic */ UUID $pokemonID;
             {
@@ -84,7 +84,7 @@ public final class InteractWheelGuiFactoryKt {
                 }
             }
         }, 4, null);
-        InteractWheelOption giveItem2 = new InteractWheelOption(MiscUtilsKt.cobblemonResource("textures/gui/interact/icon_held_item.png"), "cobblemon.ui.interact.give.item", null, (Function0)new Function0<Unit>(pokemonID){
+        InteractWheelOption giveItem2 = new InteractWheelOption(MiscUtils.cobblemonResource("textures/gui/interact/icon_held_item.png"), "cobblemon.ui.interact.give.item", null, (Function0)new Function0<Unit>(pokemonID){
             final /* synthetic */ UUID $pokemonID;
             {
                 this.$pokemonID = $pokemonID;
@@ -129,7 +129,7 @@ public final class InteractWheelGuiFactoryKt {
     public static final InteractWheelGUI createPlayerInteractGui(@NotNull PlayerInteractOptionsPacket optionsPacket) {
         void $this$mapTo$iv$iv;
         Intrinsics.checkNotNullParameter((Object)optionsPacket, (String)"optionsPacket");
-        ResourceLocation resourceLocation = MiscUtilsKt.cobblemonResource("textures/gui/interact/icon_trade.png");
+        ResourceLocation resourceLocation = MiscUtils.cobblemonResource("textures/gui/interact/icon_trade.png");
         InteractWheelOption trade2 = new InteractWheelOption(resourceLocation, "cobblemon.ui.interact.trade", (Function0<? extends Vector3f>)((Function0)new Function0<Vector3f>(optionsPacket){
             final /* synthetic */ PlayerInteractOptionsPacket $optionsPacket;
             {
@@ -195,7 +195,7 @@ public final class InteractWheelGuiFactoryKt {
                 InteractWheelGuiFactoryKt.access$closeGUI();
             }
         }));
-        ResourceLocation resourceLocation2 = MiscUtilsKt.cobblemonResource("textures/gui/interact/icon_battle.png");
+        ResourceLocation resourceLocation2 = MiscUtils.cobblemonResource("textures/gui/interact/icon_battle.png");
         InteractWheelOption battle2 = new InteractWheelOption(resourceLocation2, "cobblemon.ui.interact.battle", (Function0<? extends Vector3f>)((Function0)new Function0<Vector3f>(optionsPacket){
             final /* synthetic */ PlayerInteractOptionsPacket $optionsPacket;
             {
@@ -256,7 +256,7 @@ public final class InteractWheelGuiFactoryKt {
                 InteractWheelGuiFactoryKt.access$closeGUI();
             }
         }));
-        ResourceLocation resourceLocation3 = MiscUtilsKt.cobblemonResource("textures/gui/interact/icon_spectate_battle.png");
+        ResourceLocation resourceLocation3 = MiscUtils.cobblemonResource("textures/gui/interact/icon_spectate_battle.png");
         InteractWheelOption spectate2 = new InteractWheelOption(resourceLocation3, "cobblemon.ui.interact.spectate", (Function0<? extends Vector3f>)((Function0)new Function0<Vector3f>(optionsPacket){
             final /* synthetic */ PlayerInteractOptionsPacket $optionsPacket;
             {

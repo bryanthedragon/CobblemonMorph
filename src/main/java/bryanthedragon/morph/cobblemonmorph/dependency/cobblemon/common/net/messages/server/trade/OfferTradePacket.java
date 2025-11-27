@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -39,7 +39,7 @@ implements NetworkPacket<OfferTradePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("offer_trade");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("offer_trade");
 
     public OfferTradePacket(@NotNull UUID offeredPlayerId) {
         Intrinsics.checkNotNullParameter((Object)offeredPlayerId, (String)"offeredPlayerId");

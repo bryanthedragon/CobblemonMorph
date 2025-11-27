@@ -37,7 +37,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.BerryRegistrySyncPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.adapters.CobblemonStatTypeAdapter;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.BoxAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.BoxCollectionAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.CobblemonBerrySpawnConditionAdapter;
@@ -86,7 +86,7 @@ implements JsonDataRegistry<Berry> {
     @NotNull
     public static final Berries INSTANCE = new Berries();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("berries");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("berries");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull
@@ -185,7 +185,7 @@ implements JsonDataRegistry<Berry> {
     @Nullable
     public final Berry getByName(@NotNull String name) {
         Intrinsics.checkNotNullParameter((Object)name, (String)"name");
-        return this.getByIdentifier(MiscUtilsKt.cobblemonResource(name));
+        return this.getByIdentifier(MiscUtils.cobblemonResource(name));
     }
 
     @Override

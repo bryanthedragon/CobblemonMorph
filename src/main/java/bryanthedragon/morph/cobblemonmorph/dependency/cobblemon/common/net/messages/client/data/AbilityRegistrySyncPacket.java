@@ -16,7 +16,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Abilities;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.AbilityTemplate;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.DataRegistrySyncPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import kotlin.Metadata;
 import kotlin.collections.CollectionsKt;
@@ -35,7 +35,7 @@ extends DataRegistrySyncPacket<AbilityTemplate, AbilityRegistrySyncPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("ability_sync");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("ability_sync");
 
     public AbilityRegistrySyncPacket(@NotNull Collection<AbilityTemplate> abilities) {
         Intrinsics.checkNotNullParameter(abilities, (String)"abilities");

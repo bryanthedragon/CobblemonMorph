@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.integrat
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.integration.jei.CobblemonJeiProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.integration.jei.berry.BerryMutationProvider;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Set;
 import kotlin.Metadata;
 import kotlin.collections.SetsKt;
@@ -42,7 +42,7 @@ implements IModPlugin {
     @NotNull
     private final Set<CobblemonJeiProvider> jeiProviders = SetsKt.setOf((Object)new BerryMutationProvider());
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("jei_plugin");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("jei_plugin");
 
     @NotNull
     public ResourceLocation getPluginUid() {

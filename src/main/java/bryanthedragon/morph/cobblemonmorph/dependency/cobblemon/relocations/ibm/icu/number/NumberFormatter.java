@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.number;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.number;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.number.DecimalFormatProperties;
 import com.cobblemon.mod.relocations.ibm.icu.number.LocalizedNumberFormatter;

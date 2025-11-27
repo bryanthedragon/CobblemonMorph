@@ -30,7 +30,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,7 +61,7 @@ extends SoundlessWidget {
     private static final int WIDTH = 134;
     private static final int HEIGHT = 148;
     @NotNull
-    private static final ResourceLocation infoBaseResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_info_base.png");
+    private static final ResourceLocation infoBaseResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_info_base.png");
     private static final int ROW_HEIGHT = 15;
 
     public InfoWidget(int pX, int pY, @NotNull Pokemon pokemon) {
@@ -165,14 +165,14 @@ extends SoundlessWidget {
         MutableComponent mutableComponent8 = LocalizationUtilsKt.lang("ui.info.ability", new Object[0]);
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent8, (String)"lang(\"ui.info.ability\")");
         MutableComponent mutableComponent9 = TextKt.bold(mutableComponent8);
-        MutableComponent mutableComponent10 = MiscUtilsKt.asTranslated(this.pokemon.getAbility().getDisplayName());
+        MutableComponent mutableComponent10 = MiscUtils.asTranslated(this.pokemon.getAbility().getDisplayName());
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent10, (String)"pokemon.ability.displayName.asTranslated()");
         InfoOneLineWidget abilityWidget = new InfoOneLineWidget(n15, n16, this.f_93618_, 0, mutableComponent9, TextKt.bold(mutableComponent10), 8, null);
         abilityWidget.m_88315_(context, pMouseX, pMouseY, pPartialTicks);
         float smallTextScale = 0.5f;
         matrices.m_85836_();
         matrices.m_85841_(smallTextScale, smallTextScale, 1.0f);
-        MutableComponent mutableComponent11 = MiscUtilsKt.asTranslated(this.pokemon.getAbility().getDescription());
+        MutableComponent mutableComponent11 = MiscUtils.asTranslated(this.pokemon.getAbility().getDescription());
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent11, (String)"pokemon.ability.description.asTranslated()");
         MultiLineLabelK.Companion.create((Component)mutableComponent11, Float.valueOf((float)117 / smallTextScale), 3).renderLeftAligned(context, Float.valueOf((float)(this.m_252754_() + 8) / smallTextScale), ((double)this.m_252907_() + 94.5) / (double)smallTextScale, 5.5 / (double)smallTextScale, 0xFFFFFF, true);
         matrices.m_85849_();

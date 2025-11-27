@@ -35,7 +35,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.i
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -89,7 +89,7 @@ implements ActionEffectInstruction {
         Intrinsics.checkNotNullExpressionValue(completableFuture, (String)"completedFuture(Unit)");
         this.future = completableFuture;
         this.holds = new LinkedHashSet();
-        this.id = MiscUtilsKt.cobblemonResource("boost");
+        this.id = MiscUtils.cobblemonResource("boost");
     }
 
     public /* synthetic */ BoostInstruction(InstructionSet instructionSet, BattleMessage battleMessage, Iterator iterator, boolean bl, int n, DefaultConstructorMarker defaultConstructorMarker) {
@@ -294,10 +294,10 @@ implements ActionEffectInstruction {
     }
 
     static {
-        ActionEffectTimeline actionEffectTimeline = ActionEffects.INSTANCE.getActionEffects().get(MiscUtilsKt.cobblemonResource("boost"));
+        ActionEffectTimeline actionEffectTimeline = ActionEffects.INSTANCE.getActionEffects().get(MiscUtils.cobblemonResource("boost"));
         Intrinsics.checkNotNull((Object)actionEffectTimeline);
         BOOST_EFFECT = actionEffectTimeline;
-        ActionEffectTimeline actionEffectTimeline2 = ActionEffects.INSTANCE.getActionEffects().get(MiscUtilsKt.cobblemonResource("unboost"));
+        ActionEffectTimeline actionEffectTimeline2 = ActionEffects.INSTANCE.getActionEffects().get(MiscUtils.cobblemonResource("unboost"));
         Intrinsics.checkNotNull((Object)actionEffectTimeline2);
         UNBOOST_EFFECT = actionEffectTimeline2;
     }

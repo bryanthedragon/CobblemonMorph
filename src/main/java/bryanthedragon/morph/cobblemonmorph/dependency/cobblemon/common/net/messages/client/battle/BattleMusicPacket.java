@@ -20,7 +20,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -50,7 +50,7 @@ implements NetworkPacket<BattleMusicPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("battle_music");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("battle_music");
 
     public BattleMusicPacket(@Nullable SoundEvent music, float volume, float pitch) {
         this.music = music;

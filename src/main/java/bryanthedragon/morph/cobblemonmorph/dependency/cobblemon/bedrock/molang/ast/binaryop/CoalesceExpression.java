@@ -21,6 +21,7 @@ extends BinaryOpExpression {
     }
 
     @Override
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public MoValue evaluate(MoScope scope, MoLangEnvironment environment) {
         MoValue evalLeft = this.left.evaluate(scope, environment);
         String leftString = evalLeft.asString();

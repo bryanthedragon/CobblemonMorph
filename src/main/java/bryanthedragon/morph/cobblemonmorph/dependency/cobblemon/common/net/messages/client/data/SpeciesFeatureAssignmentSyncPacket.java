@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatureAssignments;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.DataRegistrySyncPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,7 +45,7 @@ extends DataRegistrySyncPacket<Map.Entry<? extends ResourceLocation, ? extends S
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("species_feature_assignment_sync");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("species_feature_assignment_sync");
 
     public SpeciesFeatureAssignmentSyncPacket(@NotNull Map<ResourceLocation, ? extends Set<String>> data) {
         Intrinsics.checkNotNullParameter(data, (String)"data");

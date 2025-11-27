@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.duration.impl;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration.impl;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUData;
 import com.cobblemon.mod.relocations.ibm.icu.impl.duration.impl.DataRecord;

@@ -132,7 +132,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.p
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.stat.CobblemonStatProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.starter.CobblemonStarterHandler;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DistributionUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerInventoryExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.StringExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.feature.CobblemonPlacedFeatures;
@@ -531,7 +531,7 @@ public final class Cobblemon {
                 Intrinsics.checkNotNullParameter((Object)event, (String)"event");
                 AdvancementHandler.INSTANCE.onEvolve(event);
                 Pokemon pokemon = event.getPokemon();
-                ResourceLocation ninjaskIdentifier = MiscUtilsKt.cobblemonResource("ninjask");
+                ResourceLocation ninjaskIdentifier = MiscUtils.cobblemonResource("ninjask");
                 if (this.this$0.getConfig().getNinjaskCreatesShedinja() && Intrinsics.areEqual((Object)pokemon.getSpecies().getResourceIdentifier(), (Object)ninjaskIdentifier) && PokemonSpecies.INSTANCE.getByIdentifier(Pokemon.Companion.getSHEDINJA$common()) != null) {
                     ServerPlayer serverPlayer = pokemon.getOwnerPlayer();
                     if (serverPlayer == null) {
@@ -719,43 +719,43 @@ public final class Cobblemon {
 
     private final void registerArgumentTypes() {
         CobblemonImplementation cobblemonImplementation = this.getImplementation();
-        ResourceLocation resourceLocation = MiscUtilsKt.cobblemonResource("pokemon");
+        ResourceLocation resourceLocation = MiscUtils.cobblemonResource("pokemon");
         KClass kClass = Reflection.getOrCreateKotlinClass(PokemonArgumentType.class);
         SingletonArgumentInfo singletonArgumentInfo = SingletonArgumentInfo.m_235451_(PokemonArgumentType.Companion::pokemon);
         Intrinsics.checkNotNullExpressionValue((Object)singletonArgumentInfo, (String)"of(PokemonArgumentType::pokemon)");
         cobblemonImplementation.registerCommandArgument(resourceLocation, kClass, (ArgumentTypeInfo)singletonArgumentInfo);
         CobblemonImplementation cobblemonImplementation2 = this.getImplementation();
-        ResourceLocation resourceLocation2 = MiscUtilsKt.cobblemonResource("pokemon_properties");
+        ResourceLocation resourceLocation2 = MiscUtils.cobblemonResource("pokemon_properties");
         KClass kClass2 = Reflection.getOrCreateKotlinClass(PokemonPropertiesArgumentType.class);
         SingletonArgumentInfo singletonArgumentInfo2 = SingletonArgumentInfo.m_235451_(PokemonPropertiesArgumentType.Companion::properties);
         Intrinsics.checkNotNullExpressionValue((Object)singletonArgumentInfo2, (String)"of(PokemonPropertiesArgumentType::properties)");
         cobblemonImplementation2.registerCommandArgument(resourceLocation2, kClass2, (ArgumentTypeInfo)singletonArgumentInfo2);
         CobblemonImplementation cobblemonImplementation3 = this.getImplementation();
-        ResourceLocation resourceLocation3 = MiscUtilsKt.cobblemonResource("spawn_bucket");
+        ResourceLocation resourceLocation3 = MiscUtils.cobblemonResource("spawn_bucket");
         KClass kClass3 = Reflection.getOrCreateKotlinClass(SpawnBucketArgumentType.class);
         SingletonArgumentInfo singletonArgumentInfo3 = SingletonArgumentInfo.m_235451_(SpawnBucketArgumentType.Companion::spawnBucket);
         Intrinsics.checkNotNullExpressionValue((Object)singletonArgumentInfo3, (String)"of(SpawnBucketArgumentType::spawnBucket)");
         cobblemonImplementation3.registerCommandArgument(resourceLocation3, kClass3, (ArgumentTypeInfo)singletonArgumentInfo3);
         CobblemonImplementation cobblemonImplementation4 = this.getImplementation();
-        ResourceLocation resourceLocation4 = MiscUtilsKt.cobblemonResource("move");
+        ResourceLocation resourceLocation4 = MiscUtils.cobblemonResource("move");
         KClass kClass4 = Reflection.getOrCreateKotlinClass(MoveArgumentType.class);
         SingletonArgumentInfo singletonArgumentInfo4 = SingletonArgumentInfo.m_235451_(MoveArgumentType.Companion::move);
         Intrinsics.checkNotNullExpressionValue((Object)singletonArgumentInfo4, (String)"of(MoveArgumentType::move)");
         cobblemonImplementation4.registerCommandArgument(resourceLocation4, kClass4, (ArgumentTypeInfo)singletonArgumentInfo4);
         CobblemonImplementation cobblemonImplementation5 = this.getImplementation();
-        ResourceLocation resourceLocation5 = MiscUtilsKt.cobblemonResource("party_slot");
+        ResourceLocation resourceLocation5 = MiscUtils.cobblemonResource("party_slot");
         KClass kClass5 = Reflection.getOrCreateKotlinClass(PartySlotArgumentType.class);
         SingletonArgumentInfo singletonArgumentInfo5 = SingletonArgumentInfo.m_235451_(PartySlotArgumentType.Companion::partySlot);
         Intrinsics.checkNotNullExpressionValue((Object)singletonArgumentInfo5, (String)"of(PartySlotArgumentType::partySlot)");
         cobblemonImplementation5.registerCommandArgument(resourceLocation5, kClass5, (ArgumentTypeInfo)singletonArgumentInfo5);
         CobblemonImplementation cobblemonImplementation6 = this.getImplementation();
-        ResourceLocation resourceLocation6 = MiscUtilsKt.cobblemonResource("pokemon_store");
+        ResourceLocation resourceLocation6 = MiscUtils.cobblemonResource("pokemon_store");
         KClass kClass6 = Reflection.getOrCreateKotlinClass(PokemonStoreArgumentType.class);
         SingletonArgumentInfo singletonArgumentInfo6 = SingletonArgumentInfo.m_235451_(PokemonStoreArgumentType.Companion::pokemonStore);
         Intrinsics.checkNotNullExpressionValue((Object)singletonArgumentInfo6, (String)"of(PokemonStoreArgumentType::pokemonStore)");
         cobblemonImplementation6.registerCommandArgument(resourceLocation6, kClass6, (ArgumentTypeInfo)singletonArgumentInfo6);
         CobblemonImplementation cobblemonImplementation7 = this.getImplementation();
-        ResourceLocation resourceLocation7 = MiscUtilsKt.cobblemonResource("dialogue");
+        ResourceLocation resourceLocation7 = MiscUtils.cobblemonResource("dialogue");
         KClass kClass7 = Reflection.getOrCreateKotlinClass(DialogueArgumentType.class);
         SingletonArgumentInfo singletonArgumentInfo7 = SingletonArgumentInfo.m_235451_(DialogueArgumentType.Companion::dialogue);
         Intrinsics.checkNotNullExpressionValue((Object)singletonArgumentInfo7, (String)"of(DialogueArgumentType::dialogue)");

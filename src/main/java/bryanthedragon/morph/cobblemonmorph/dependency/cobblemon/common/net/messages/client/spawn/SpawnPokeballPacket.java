@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnExtraDataEntityPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +44,7 @@ extends SpawnExtraDataEntityPacket<SpawnPokeballPacket, EmptyPokeBallEntity> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("spawn_empty_pokeball_entity");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("spawn_empty_pokeball_entity");
 
     public SpawnPokeballPacket(@NotNull PokeBall pokeBall, @NotNull Set<String> aspects, @NotNull ClientboundAddEntityPacket vanillaSpawnPacket) {
         Intrinsics.checkNotNullParameter((Object)pokeBall, (String)"pokeBall");

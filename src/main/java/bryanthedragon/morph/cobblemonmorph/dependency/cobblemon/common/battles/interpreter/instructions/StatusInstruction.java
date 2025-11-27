@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.d
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattlePersistentStatusPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Map;
 import kotlin.Metadata;
 import kotlin.Pair;
@@ -106,7 +106,7 @@ implements InterpreterInstruction {
                     this.$battle.sendUpdate(new BattlePersistentStatusPacket(this.$pnx, (PersistentStatus)this.$status));
                 }
                 Object[] objectArray = new Object[]{this.$pokemon.getName()};
-                MutableComponent mutableComponent = MiscUtilsKt.asTranslated(this.$status.getApplyMessage(), objectArray);
+                MutableComponent mutableComponent = MiscUtils.asTranslated(this.$status.getApplyMessage(), objectArray);
                 Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"status.applyMessage.asTr\u2026slated(pokemon.getName())");
                 this.$battle.broadcastChatMessage((Component)mutableComponent);
                 BattleContext[] battleContextArray = new BattleContext[]{ShowdownInterpreter.INSTANCE.getContextFromAction(this.this$0.getMessage(), BattleContext.Type.STATUS, this.$battle)};

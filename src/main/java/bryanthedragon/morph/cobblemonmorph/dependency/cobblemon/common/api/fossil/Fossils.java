@@ -27,31 +27,35 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fossi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.fossil.FossilRegistrySyncPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.adapters.NbtItemPredicateAdapter;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.predicate.NbtItemPredicate;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IdentifierAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.ItemLikeConditionAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.PokemonPropertiesAdapterKt;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import kotlin.Metadata;
 import kotlin.collections.CollectionsKt;
 import kotlin.jvm.internal.Intrinsics;
 import kotlin.jvm.internal.SourceDebugExtension;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,30 +65,36 @@ public final class Fossils
 implements JsonDataRegistry<Fossil> {
     @NotNull
     public static final Fossils INSTANCE = new Fossils();
+
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("fossils");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("fossils");
+
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
+
     @NotNull
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private static final SimpleObservable<Fossils> observable = new SimpleObservable();
+
     private static final Gson gson;
+
     @NotNull
     private static final TypeToken<Fossil> typeToken;
+
     @NotNull
     private static final String resourcePath;
+
     @NotNull
     private static final HashMap<ResourceLocation, Fossil> fossils;
 
     private Fossils() {
     }
 
-    @Override
     @NotNull
     public ResourceLocation getId() {
         return id;
     }
 
-    @Override
     @NotNull
     public PackType getType() {
         return type;
@@ -95,24 +105,22 @@ implements JsonDataRegistry<Fossil> {
         return observable;
     }
 
-    @Override
     public Gson getGson() {
         return gson;
     }
 
-    @Override
     @NotNull
     public TypeToken<Fossil> getTypeToken() {
         return typeToken;
     }
 
-    @Override
     @NotNull
     public String getResourcePath() {
         return resourcePath;
     }
 
-    @Override
+
+    @SuppressWarnings("unchecked")
     public void reload(@NotNull Map<ResourceLocation, Fossil> data) {
         Intrinsics.checkNotNullParameter(data, (String)"data");
         fossils.clear();
@@ -138,12 +146,12 @@ implements JsonDataRegistry<Fossil> {
         this.getObservable().emit((Fossils[])fossilsArray);
     }
 
-    @Override
     public void sync(@NotNull ServerPlayer player) {
         Intrinsics.checkNotNullParameter((Object)player, (String)"player");
         new FossilRegistrySyncPacket(this.all()).sendToPlayer(player);
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @NotNull
     public final List<Fossil> all() {
         Collection<Fossil> collection = fossils.values();
@@ -195,6 +203,7 @@ implements JsonDataRegistry<Fossil> {
         return v0;
     }
 
+    @SuppressWarnings("rawtypes")
     public final boolean isFossilIngredient(@NotNull ItemStack itemStack) {
         boolean bl;
         block3: {
@@ -217,12 +226,12 @@ implements JsonDataRegistry<Fossil> {
         return bl;
     }
 
-    @Override
     public void reload(@NotNull ResourceManager manager) {
         JsonDataRegistry.DefaultImpls.reload(this, manager);
     }
 
-    static {
+    static public static HashMap<ResourceLocation, Fossil> getFossilsHashMap() 
+    {
         Type[] typeArray = new Type[]{Item.class};
         gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().registerTypeAdapter((Type)((Object)ResourceLocation.class), (Object)IdentifierAdapter.INSTANCE).registerTypeAdapter((Type)((Object)PokemonProperties.class), (Object)PokemonPropertiesAdapterKt.getPokemonPropertiesShortAdapter()).registerTypeAdapter(TypeToken.getParameterized((Type)((Type)((Object)RegistryLikeCondition.class)), (Type[])typeArray).getType(), (Object)ItemLikeConditionAdapter.INSTANCE).registerTypeAdapter((Type)((Object)NbtItemPredicate.class), (Object)NbtItemPredicateAdapter.INSTANCE).create();
         TypeToken typeToken = TypeToken.get(Fossil.class);

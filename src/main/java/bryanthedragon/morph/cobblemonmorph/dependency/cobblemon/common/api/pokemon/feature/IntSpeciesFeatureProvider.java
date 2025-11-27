@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.prope
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.featurerenderers.BarSummarySpeciesFeatureRenderer;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.featurerenderers.SummarySpeciesFeatureRenderer;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
@@ -263,15 +263,15 @@ CustomPokemonPropertyType<IntSpeciesFeature> {
             DisplayData it = displayData;
             boolean bl = false;
             String string = (String)CollectionsKt.first((List)this.getKeys());
-            MutableComponent mutableComponent = MiscUtilsKt.asTranslated(it.getName());
+            MutableComponent mutableComponent = MiscUtils.asTranslated(it.getName());
             Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"it.name.asTranslated()");
             Vec3 vec3 = it.getColour();
             ResourceLocation resourceLocation2 = it.getUnderlay();
             if (resourceLocation2 == null) {
-                resourceLocation2 = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_other_bar.png");
+                resourceLocation2 = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_other_bar.png");
             }
             if ((resourceLocation = it.getOverlay()) == null) {
-                resourceLocation = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_stats_generic_overlay.png");
+                resourceLocation = MiscUtils.cobblemonResource("textures/gui/summary/summary_stats_generic_overlay.png");
             }
             barSummarySpeciesFeatureRenderer = new BarSummarySpeciesFeatureRenderer(string, mutableComponent, this.min, this.max, vec3, resourceLocation2, resourceLocation, pokemon);
         } else {

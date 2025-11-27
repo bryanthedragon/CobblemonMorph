@@ -19,7 +19,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.layer;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import java.util.function.BiFunction;
@@ -76,7 +76,7 @@ public final class CobblemonRenderLayers {
     static {
         CobblemonRenderLayers $this$BERRY_LAYER_u24lambda_u240 = INSTANCE = new CobblemonRenderLayers();
         boolean bl = false;
-        RenderType.CompositeState multiPhaseParameters = RenderType.CompositeState.m_110628_().m_110671_(RenderStateShard.f_110152_).m_173292_(RenderStateShard.f_173107_).m_173290_((RenderStateShard.EmptyTextureStateShard)new RenderStateShard.TextureStateShard(MiscUtilsKt.cobblemonResource("textures/atlas/berries.png"), false, true)).m_110661_(RenderStateShard.f_110110_).m_110691_(true);
+        RenderType.CompositeState multiPhaseParameters = RenderType.CompositeState.m_110628_().m_110671_(RenderStateShard.f_110152_).m_173292_(RenderStateShard.f_173107_).m_173290_((RenderStateShard.EmptyTextureStateShard)new RenderStateShard.TextureStateShard(MiscUtils.cobblemonResource("textures/atlas/berries.png"), false, true)).m_110661_(RenderStateShard.f_110110_).m_110691_(true);
         BERRY_LAYER = RenderType.m_173215_((String)"berries", (VertexFormat)DefaultVertexFormat.f_85811_, (VertexFormat.Mode)VertexFormat.Mode.QUADS, (int)512, (boolean)true, (boolean)false, (RenderType.CompositeState)multiPhaseParameters);
         BiFunction biFunction = Util.m_143821_(CobblemonRenderLayers::ENTITY_TRANSLUCENT$lambda$1);
         Intrinsics.checkNotNullExpressionValue((Object)biFunction, (String)"memoize { texture: Ident\u2026arameters\n        )\n    }");

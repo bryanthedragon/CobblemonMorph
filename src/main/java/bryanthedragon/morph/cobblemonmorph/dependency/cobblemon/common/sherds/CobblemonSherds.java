@@ -16,7 +16,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.sherds;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItems;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.sherds.CobblemonSherd;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,17 +40,17 @@ public final class CobblemonSherds {
     @NotNull
     private static final Map<Item, ResourceKey<String>> sherdToPattern = new LinkedHashMap();
     @NotNull
-    private static final CobblemonSherd BYGONE_SHERD = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("bygone_pottery_pattern"), CobblemonItems.BYGONE_SHERD);
+    private static final CobblemonSherd BYGONE_SHERD = INSTANCE.addSherd(MiscUtils.cobblemonResource("bygone_pottery_pattern"), CobblemonItems.BYGONE_SHERD);
     @NotNull
-    private static final CobblemonSherd CAPTURE_SHERD = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("capture_pottery_pattern"), CobblemonItems.CAPTURE_SHERD);
+    private static final CobblemonSherd CAPTURE_SHERD = INSTANCE.addSherd(MiscUtils.cobblemonResource("capture_pottery_pattern"), CobblemonItems.CAPTURE_SHERD);
     @NotNull
-    private static final CobblemonSherd DOME_SHERD = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("dome_pottery_pattern"), CobblemonItems.DOME_SHERD);
+    private static final CobblemonSherd DOME_SHERD = INSTANCE.addSherd(MiscUtils.cobblemonResource("dome_pottery_pattern"), CobblemonItems.DOME_SHERD);
     @NotNull
-    private static final CobblemonSherd HELIX_SHERD = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("helix_pottery_pattern"), CobblemonItems.HELIX_SHERD);
+    private static final CobblemonSherd HELIX_SHERD = INSTANCE.addSherd(MiscUtils.cobblemonResource("helix_pottery_pattern"), CobblemonItems.HELIX_SHERD);
     @NotNull
-    private static final CobblemonSherd NOSTALGIC_SHERD = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("nostalgic_pottery_pattern"), CobblemonItems.NOSTALGIC_SHERD);
+    private static final CobblemonSherd NOSTALGIC_SHERD = INSTANCE.addSherd(MiscUtils.cobblemonResource("nostalgic_pottery_pattern"), CobblemonItems.NOSTALGIC_SHERD);
     @NotNull
-    private static final CobblemonSherd SUSPICIOUS_SHERD = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("suspicious_pottery_pattern"), CobblemonItems.SUSPICIOUS_SHERD);
+    private static final CobblemonSherd SUSPICIOUS_SHERD = INSTANCE.addSherd(MiscUtils.cobblemonResource("suspicious_pottery_pattern"), CobblemonItems.SUSPICIOUS_SHERD);
 
     private CobblemonSherds() {
     }

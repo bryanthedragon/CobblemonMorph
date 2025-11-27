@@ -50,8 +50,6 @@ import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Metadata(mv={1, 8, 0}, k=1, xi=48, d1={"\u0000\u009c\u0001\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u001c\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010 \n\u0002\b\u0007\n\u0002\u0010!\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0012\n\u0002\u0018\u0002\n\u0002\b\u0014\n\u0002\u0018\u0002\n\u0002\b\n\b&\u0018\u00002\u00020\u0001B\u001d\u0012\u0006\u0010h\u001a\u00020\u0014\u0012\f\u0010M\u001a\b\u0012\u0004\u0012\u00020\u000206\u00a2\u0006\u0004\bl\u0010mJ\u001f\u0010\u0007\u001a\u00020\u00062\u0006\u0010\u0003\u001a\u00020\u00022\u0006\u0010\u0005\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\b\u0007\u0010\bJ\r\u0010\n\u001a\u00020\t\u00a2\u0006\u0004\b\n\u0010\u000bJ\u0015\u0010\u000e\u001a\u00020\u00062\u0006\u0010\r\u001a\u00020\f\u00a2\u0006\u0004\b\u000e\u0010\u000fJ\u000f\u0010\u0011\u001a\u00020\u0010H&\u00a2\u0006\u0004\b\u0011\u0010\u0012J\u0015\u0010\u0015\u001a\b\u0012\u0004\u0012\u00020\u00140\u0013H\u0016\u00a2\u0006\u0004\b\u0015\u0010\u0016J\r\u0010\u0018\u001a\u00020\u0017\u00a2\u0006\u0004\b\u0018\u0010\u0019J\u0017\u0010\u001c\u001a\u00020\t2\u0006\u0010\u001b\u001a\u00020\u001aH\u0016\u00a2\u0006\u0004\b\u001c\u0010\u001dJ\u0017\u0010 \u001a\u00020\t2\u0006\u0010\u001f\u001a\u00020\u001eH\u0016\u00a2\u0006\u0004\b \u0010!J\u0017\u0010$\u001a\u00020\u00102\u0006\u0010#\u001a\u00020\"H&\u00a2\u0006\u0004\b$\u0010%J\u0017\u0010(\u001a\u00020\u00062\u0006\u0010'\u001a\u00020&H\u0016\u00a2\u0006\u0004\b(\u0010)J\u001b\u0010,\u001a\u00020\u00062\n\u0010+\u001a\u0006\u0012\u0002\b\u00030*H\u0016\u00a2\u0006\u0004\b,\u0010-J\u001b\u00100\u001a\u00020\u00062\f\u0010/\u001a\b\u0012\u0004\u0012\u00020\f0.\u00a2\u0006\u0004\b0\u00101J\r\u00102\u001a\u00020\u0006\u00a2\u0006\u0004\b2\u00103J\r\u00104\u001a\u00020\u0006\u00a2\u0006\u0004\b4\u00103J\r\u00105\u001a\u00020\u0006\u00a2\u0006\u0004\b5\u00103R\u001d\u00108\u001a\b\u0012\u0004\u0012\u000207068\u0006\u00a2\u0006\f\n\u0004\b8\u00109\u001a\u0004\b:\u0010;R\"\u0010=\u001a\u00020<8\u0006@\u0006X\u0086.\u00a2\u0006\u0012\n\u0004\b=\u0010>\u001a\u0004\b?\u0010@\"\u0004\bA\u0010BR\"\u0010C\u001a\u00020\t8\u0006@\u0006X\u0086\u000e\u00a2\u0006\u0012\n\u0004\bC\u0010D\u001a\u0004\bE\u0010\u000b\"\u0004\bF\u0010GR\u001d\u0010H\u001a\b\u0012\u0004\u0012\u00020\f068\u0006\u00a2\u0006\f\n\u0004\bH\u00109\u001a\u0004\bI\u0010;R\"\u0010J\u001a\u00020\t8\u0006@\u0006X\u0086\u000e\u00a2\u0006\u0012\n\u0004\bJ\u0010D\u001a\u0004\bK\u0010\u000b\"\u0004\bL\u0010GR\u001d\u0010M\u001a\b\u0012\u0004\u0012\u00020\u0002068\u0006\u00a2\u0006\f\n\u0004\bM\u00109\u001a\u0004\bN\u0010;R$\u0010P\u001a\u0004\u0018\u00010O8\u0006@\u0006X\u0086\u000e\u00a2\u0006\u0012\n\u0004\bP\u0010Q\u001a\u0004\bR\u0010S\"\u0004\bT\u0010UR(\u0010/\u001a\b\u0012\u0004\u0012\u00020\f068\u0006@\u0006X\u0086\u000e\u00a2\u0006\u0012\n\u0004\b/\u00109\u001a\u0004\bV\u0010;\"\u0004\bW\u00101R\"\u0010X\u001a\u00020\"8\u0006@\u0006X\u0086.\u00a2\u0006\u0012\n\u0004\bX\u0010Y\u001a\u0004\bZ\u0010[\"\u0004\b\\\u0010]R\"\u0010^\u001a\u00020\u00048\u0006@\u0006X\u0086\u000e\u00a2\u0006\u0012\n\u0004\b^\u0010_\u001a\u0004\b`\u0010a\"\u0004\bb\u0010cR\u0014\u0010g\u001a\u00020d8&X\u00a6\u0004\u00a2\u0006\u0006\u001a\u0004\be\u0010fR\u0017\u0010h\u001a\u00020\u00148\u0006\u00a2\u0006\f\n\u0004\bh\u0010i\u001a\u0004\bj\u0010k\u00a8\u0006n"}, d2={"Lcom/cobblemon/mod/common/api/battles/model/actor/BattleActor;", "", "Lcom/cobblemon/mod/common/battles/pokemon/BattlePokemon;", "battlePokemon", "", "experience", "", "awardExperience", "(Lcom/cobblemon/mod/common/battles/pokemon/BattlePokemon;I)V", "", "canFitForcedAction", "()Z", "Lcom/cobblemon/mod/common/battles/ShowdownActionResponse;", "response", "forceChoose", "(Lcom/cobblemon/mod/common/battles/ShowdownActionResponse;)V", "Lnet/minecraft/network/chat/MutableComponent;", "getName", "()Lnet/minecraft/network/chat/MutableComponent;", "", "Ljava/util/UUID;", "getPlayerUUIDs", "()Ljava/lang/Iterable;", "Lcom/cobblemon/mod/common/battles/BattleSide;", "getSide", "()Lcom/cobblemon/mod/common/battles/BattleSide;", "Lnet/minecraft/server/level/ServerPlayer;", "serverPlayerEntity", "isForPlayer", "(Lnet/minecraft/server/level/ServerPlayer;)Z", "Lcom/cobblemon/mod/common/entity/pokemon/PokemonEntity;", "pokemonEntity", "isForPokemon", "(Lcom/cobblemon/mod/common/entity/pokemon/PokemonEntity;)Z", "", "name", "nameOwned", "(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;", "Lnet/minecraft/network/chat/Component;", "component", "sendMessage", "(Lnet/minecraft/network/chat/Component;)V", "Lcom/cobblemon/mod/common/api/net/NetworkPacket;", "packet", "sendUpdate", "(Lcom/cobblemon/mod/common/api/net/NetworkPacket;)V", "", "responses", "setActionResponses", "(Ljava/util/List;)V", "turn", "()V", "upkeep", "writeShowdownResponse", "", "Lcom/cobblemon/mod/common/battles/ActiveBattlePokemon;", "activePokemon", "Ljava/util/List;", "getActivePokemon", "()Ljava/util/List;", "Lcom/cobblemon/mod/common/api/battles/model/PokemonBattle;", "battle", "Lcom/cobblemon/mod/common/api/battles/model/PokemonBattle;", "getBattle", "()Lcom/cobblemon/mod/common/api/battles/model/PokemonBattle;", "setBattle", "(Lcom/cobblemon/mod/common/api/battles/model/PokemonBattle;)V", "canDynamax", "Z", "getCanDynamax", "setCanDynamax", "(Z)V", "expectingPassActions", "getExpectingPassActions", "mustChoose", "getMustChoose", "setMustChoose", "pokemonList", "getPokemonList", "Lcom/cobblemon/mod/common/battles/ShowdownActionRequest;", "request", "Lcom/cobblemon/mod/common/battles/ShowdownActionRequest;", "getRequest", "()Lcom/cobblemon/mod/common/battles/ShowdownActionRequest;", "setRequest", "(Lcom/cobblemon/mod/common/battles/ShowdownActionRequest;)V", "getResponses", "setResponses", "showdownId", "Ljava/lang/String;", "getShowdownId", "()Ljava/lang/String;", "setShowdownId", "(Ljava/lang/String;)V", "stillSendingOutCount", "I", "getStillSendingOutCount", "()I", "setStillSendingOutCount", "(I)V", "Lcom/cobblemon/mod/common/api/battles/model/actor/ActorType;", "getType", "()Lcom/cobblemon/mod/common/api/battles/model/actor/ActorType;", "type", "uuid", "Ljava/util/UUID;", "getUuid", "()Ljava/util/UUID;", "<init>", "(Ljava/util/UUID;Ljava/util/List;)V", "common"})
-@SourceDebugExtension(value={"SMAP\nBattleActor.kt\nKotlin\n*S Kotlin\n*F\n+ 1 BattleActor.kt\ncom/cobblemon/mod/common/api/battles/model/actor/BattleActor\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,148:1\n1855#2,2:149\n1774#2,4:151\n1747#2,3:155\n1569#2,11:158\n1864#2,2:169\n1866#2:172\n1580#2:173\n1864#2,2:174\n1866#2:177\n1#3:171\n1#3:176\n*S KotlinDebug\n*F\n+ 1 BattleActor.kt\ncom/cobblemon/mod/common/api/battles/model/actor/BattleActor\n*L\n33#1:149,2\n53#1:151,4\n66#1:155,3\n84#1:158,11\n84#1:169,2\n84#1:172\n84#1:173\n96#1:174,2\n96#1:177\n84#1:171\n*E\n"})
 public abstract class BattleActor {
     @NotNull
     private final UUID uuid;
@@ -71,6 +69,7 @@ public abstract class BattleActor {
     private boolean mustChoose;
     private int stillSendingOutCount;
 
+    @SuppressWarnings({"unused", "rawtypes", "unchecked"})
     public BattleActor(@NotNull UUID uuid2, @NotNull List<BattlePokemon> pokemonList) {
         Intrinsics.checkNotNullParameter((Object)uuid2, (String)"uuid");
         Intrinsics.checkNotNullParameter(pokemonList, (String)"pokemonList");
@@ -189,6 +188,7 @@ public abstract class BattleActor {
      * Enabled force condition propagation
      * Lifted jumps to return sites
      */
+    @SuppressWarnings("rawtypes")
     public final boolean canFitForcedAction() {
         int n;
         void $this$count$iv;
@@ -284,8 +284,8 @@ public abstract class BattleActor {
     /*
      * WARNING - void declaration
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public final void upkeep() {
-        void $this$mapIndexedNotNullTo$iv$iv;
         ShowdownActionRequest showdownActionRequest = this.request;
         if (showdownActionRequest == null) {
             return;
@@ -296,13 +296,13 @@ public abstract class BattleActor {
         Iterable iterable = $this$mapIndexedNotNull$iv;
         Collection destination$iv$iv = new ArrayList();
         boolean $i$f$mapIndexedNotNullTo = false;
-        void $this$forEachIndexed$iv$iv$iv = $this$mapIndexedNotNullTo$iv$iv;
+        Iterable $this$forEachIndexed$iv$iv$iv = $this$mapIndexedNotNull$iv;
         boolean $i$f$forEachIndexed = false;
         int index$iv$iv$iv = 0;
         for (Object item$iv$iv$iv : $this$forEachIndexed$iv$iv$iv) {
             ActiveBattlePokemon it$iv$iv;
-            void b;
-            void element$iv$iv;
+            boolean b;
+            Object element$iv$iv;
             int n;
             if ((n = index$iv$iv$iv++) < 0) {
                 CollectionsKt.throwIndexOverflow();
@@ -329,6 +329,7 @@ public abstract class BattleActor {
     /*
      * WARNING - void declaration
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public final void setActionResponses(@NotNull List<? extends ShowdownActionResponse> responses) {
         Intrinsics.checkNotNullParameter(responses, (String)"responses");
         ShowdownActionRequest showdownActionRequest = this.request;
@@ -389,12 +390,14 @@ public abstract class BattleActor {
         this.getBattle().checkForInputDispatch();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public final void writeShowdownResponse() {
         List showdownMessages = new ArrayList();
         Ref.IntRef index = new Ref.IntRef();
         ShowdownActionRequest showdownActionRequest = this.request;
         Intrinsics.checkNotNull((Object)showdownActionRequest);
         showdownActionRequest.iterate(this.activePokemon, (Function3)new Function3<ActiveBattlePokemon, ShowdownMoveset, Boolean, Integer>((List<String>)showdownMessages, this, index){
+            super(3);
             final /* synthetic */ List<String> $showdownMessages;
             final /* synthetic */ BattleActor this$0;
             final /* synthetic */ Ref.IntRef $index;
@@ -402,7 +405,6 @@ public abstract class BattleActor {
                 this.$showdownMessages = $showdownMessages;
                 this.this$0 = $receiver;
                 this.$index = $index;
-                super(3);
             }
 
             @NotNull

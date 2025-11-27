@@ -50,7 +50,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatusContainer;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.Collection;
 import java.util.List;
@@ -105,21 +105,21 @@ extends Screen {
     public static final int PORTRAIT_SIZE = 66;
     public static final float SCALE = 0.5f;
     @NotNull
-    private static final ResourceLocation baseResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/pc_base.png");
+    private static final ResourceLocation baseResource = MiscUtils.cobblemonResource("textures/gui/pc/pc_base.png");
     @NotNull
-    private static final ResourceLocation portraitBackgroundResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/portrait_background.png");
+    private static final ResourceLocation portraitBackgroundResource = MiscUtils.cobblemonResource("textures/gui/pc/portrait_background.png");
     @NotNull
-    private static final ResourceLocation topSpacerResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/pc_spacer_top.png");
+    private static final ResourceLocation topSpacerResource = MiscUtils.cobblemonResource("textures/gui/pc/pc_spacer_top.png");
     @NotNull
-    private static final ResourceLocation bottomSpacerResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/pc_spacer_bottom.png");
+    private static final ResourceLocation bottomSpacerResource = MiscUtils.cobblemonResource("textures/gui/pc/pc_spacer_bottom.png");
     @NotNull
-    private static final ResourceLocation rightSpacerResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/pc_spacer_right.png");
+    private static final ResourceLocation rightSpacerResource = MiscUtils.cobblemonResource("textures/gui/pc/pc_spacer_right.png");
     @NotNull
-    private static final ResourceLocation typeSpacerResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/type_spacer.png");
+    private static final ResourceLocation typeSpacerResource = MiscUtils.cobblemonResource("textures/gui/pc/type_spacer.png");
     @NotNull
-    private static final ResourceLocation typeSpacerSingleResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/type_spacer_single.png");
+    private static final ResourceLocation typeSpacerSingleResource = MiscUtils.cobblemonResource("textures/gui/pc/type_spacer_single.png");
     @NotNull
-    private static final ResourceLocation typeSpacerDoubleResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/type_spacer_double.png");
+    private static final ResourceLocation typeSpacerDoubleResource = MiscUtils.cobblemonResource("textures/gui/pc/type_spacer_double.png");
 
     public PCGUI(@NotNull ClientPC pc, @NotNull ClientParty party, @NotNull PCGUIConfiguration configuration) {
         Intrinsics.checkNotNullParameter((Object)pc, (String)"pc");
@@ -253,8 +253,8 @@ extends Screen {
                     string = object != null ? ((Status)object).getShowdownName() : null;
                 }
                 String statusName = string;
-                GuiUtilsKt.blitk$default(matrices, MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_status_" + statusName + ".png"), x + 34, y + 1, 7, 39, 35, null, 74, null, null, null, null, null, null, false, 0.0f, 130688, null);
-                GuiUtilsKt.blitk$default(matrices, MiscUtilsKt.cobblemonResource("textures/gui/summary/status_trim.png"), x + 34, y + 2, 6, 3, null, null, null, null, null, null, null, null, null, false, 0.0f, 131008, null);
+                GuiUtilsKt.blitk$default(matrices, MiscUtils.cobblemonResource("textures/gui/battle/battle_status_" + statusName + ".png"), x + 34, y + 1, 7, 39, 35, null, 74, null, null, null, null, null, null, false, 0.0f, 130688, null);
+                GuiUtilsKt.blitk$default(matrices, MiscUtils.cobblemonResource("textures/gui/summary/status_trim.png"), x + 34, y + 2, 6, 3, null, null, null, null, null, null, null, null, null, false, 0.0f, 131008, null);
                 ResourceLocation resourceLocation3 = CobblemonResources.INSTANCE.getDEFAULT_LARGE();
                 MutableComponent mutableComponent4 = LocalizationUtilsKt.lang("ui.status." + statusName, new Object[0]);
                 Intrinsics.checkNotNullExpressionValue((Object)mutableComponent4, (String)"lang(\"ui.status.$statusName\")");
@@ -265,7 +265,7 @@ extends Screen {
             Intrinsics.checkNotNullExpressionValue((Object)mutableComponent5, (String)"lang(\"ui.lv\")");
             RenderHelperKt.drawScaledText$default(context, resourceLocation4, TextKt.bold(mutableComponent5), x + 6, (double)y + 1.5, 0.0f, null, 0, 0, false, true, null, null, 7136, null);
             RenderHelperKt.drawScaledText$default(context, CobblemonResources.INSTANCE.getDEFAULT_LARGE(), TextKt.bold(TextKt.text(String.valueOf(pokemon.getLevel()))), x + 19, (double)y + 1.5, 0.0f, null, 0, 0, false, true, null, null, 7136, null);
-            ResourceLocation ballResource22 = MiscUtilsKt.cobblemonResource("textures/item/poke_balls/" + pokemon.getCaughtBall().getName().m_135815_() + ".png");
+            ResourceLocation ballResource22 = MiscUtils.cobblemonResource("textures/item/poke_balls/" + pokemon.getCaughtBall().getName().m_135815_() + ".png");
             double d2 = ((double)x + 3.5) / (double)0.5f;
             float f = (float)(y + 12) / 0.5f;
             GuiUtilsKt.blitk$default(matrices, ballResource22, d2, Float.valueOf(f), 16, 16, null, null, null, null, null, null, null, null, null, false, 0.5f, 65472, null);
@@ -304,7 +304,7 @@ extends Screen {
             n4 = x + 39;
             int n5 = y + 137;
             RenderHelperKt.drawScaledText$default(context, null, natureText, n4, n5, 0.5f, null, 0, 0, true, true, mouseX, mouseY, 450, null);
-            MutableComponent mutableComponent7 = MiscUtilsKt.asTranslated(pokemon.getAbility().getDisplayName());
+            MutableComponent mutableComponent7 = MiscUtils.asTranslated(pokemon.getAbility().getDisplayName());
             n5 = x + 39;
             int n6 = y + 154;
             Intrinsics.checkNotNullExpressionValue((Object)mutableComponent7, (String)"asTranslated()");

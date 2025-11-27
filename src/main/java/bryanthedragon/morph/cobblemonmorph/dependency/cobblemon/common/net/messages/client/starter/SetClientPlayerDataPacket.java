@@ -19,7 +19,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.PlayerData;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -48,7 +48,7 @@ implements NetworkPacket<SetClientPlayerDataPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("set_client_playerdata");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("set_client_playerdata");
 
     public SetClientPlayerDataPacket(boolean promptStarter, boolean starterLocked, boolean starterSelected, @Nullable UUID starterUUID, @Nullable Boolean resetStarterPrompt) {
         this.promptStarter = promptStarter;

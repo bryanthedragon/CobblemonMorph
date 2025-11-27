@@ -32,6 +32,7 @@ implements Expression {
         return other instanceof BreakExpression;
     }
 
+    @SuppressWarnings("unused")
     public int hashCode() {
         boolean result = true;
         return 1;

@@ -24,7 +24,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.berry;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Berry;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.GrowthFactor;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.BerryBlock;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import kotlin.Metadata;
 import kotlin.collections.CollectionsKt;
@@ -52,7 +52,7 @@ implements GrowthFactor {
     @NotNull
     private final IntRange bonusYield;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("preferred_biome");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("preferred_biome");
 
     public PreferredBiomeGrowthFactor(@NotNull IntRange bonusYield) {
         Intrinsics.checkNotNullParameter((Object)bonusYield, (String)"bonusYield");

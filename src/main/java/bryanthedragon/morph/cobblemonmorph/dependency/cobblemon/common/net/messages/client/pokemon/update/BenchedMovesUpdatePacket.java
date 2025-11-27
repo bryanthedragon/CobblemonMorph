@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.SingleUpdatePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
@@ -37,7 +37,7 @@ extends SingleUpdatePacket<BenchedMoves, BenchedMovesUpdatePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("benched_moves_update");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("benched_moves_update");
 
     public BenchedMovesUpdatePacket(@NotNull Function0<? extends Pokemon> pokemon, @NotNull BenchedMoves value2) {
         Intrinsics.checkNotNullParameter(pokemon, (String)"pokemon");

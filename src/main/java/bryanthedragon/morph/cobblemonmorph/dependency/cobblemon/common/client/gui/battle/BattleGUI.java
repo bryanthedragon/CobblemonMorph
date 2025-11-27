@@ -43,7 +43,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ke
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.RemoveSpectatorPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -89,13 +89,13 @@ extends Screen {
     public static final int OPTION_ROOT_X = 12;
     public static final int OPTION_VERTICAL_OFFSET = 85;
     @NotNull
-    private static final ResourceLocation fightResource = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_menu_fight.png");
+    private static final ResourceLocation fightResource = MiscUtils.cobblemonResource("textures/gui/battle/battle_menu_fight.png");
     @NotNull
-    private static final ResourceLocation bagResource = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_menu_bag.png");
+    private static final ResourceLocation bagResource = MiscUtils.cobblemonResource("textures/gui/battle/battle_menu_bag.png");
     @NotNull
-    private static final ResourceLocation switchResource = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_menu_switch.png");
+    private static final ResourceLocation switchResource = MiscUtils.cobblemonResource("textures/gui/battle/battle_menu_switch.png");
     @NotNull
-    private static final ResourceLocation runResource = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_menu_run.png");
+    private static final ResourceLocation runResource = MiscUtils.cobblemonResource("textures/gui/battle/battle_menu_run.png");
 
     public BattleGUI() {
         super((Component)LocalizationUtilsKt.battleLang("gui.title", new Object[0]));

@@ -47,7 +47,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.FossilModelRepository;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.WaveFunctionKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -274,7 +274,7 @@ implements BlockEntityRenderer<RestorationTankBlockEntity> {
         Object[] objectArray = new BakedModel[]{CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_FLUID_CHUNKED_1().getModel(), CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_FLUID_CHUNKED_2().getModel(), CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_FLUID_CHUNKED_3().getModel(), CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_FLUID_CHUNKED_4().getModel(), CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_FLUID_CHUNKED_5().getModel(), CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_FLUID_CHUNKED_6().getModel(), CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_FLUID_CHUNKED_7().getModel(), CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_FLUID_CHUNKED_8().getModel(), CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_FLUID_BUBBLING().getModel()};
         FLUID_MODELS = CollectionsKt.listOf((Object[])objectArray);
         CONNECTOR_MODEL = CobblemonBakingOverrides.INSTANCE.getRESTORATION_TANK_CONNECTOR().getModel();
-        objectArray = new ResourceLocation[]{MiscUtilsKt.cobblemonResource("embryo_stage1"), MiscUtilsKt.cobblemonResource("embryo_stage2"), MiscUtilsKt.cobblemonResource("embryo_stage3")};
+        objectArray = new ResourceLocation[]{MiscUtils.cobblemonResource("embryo_stage1"), MiscUtils.cobblemonResource("embryo_stage2"), MiscUtils.cobblemonResource("embryo_stage3")};
         EMBRYO_IDENTIFIERS = CollectionsKt.listOf((Object[])objectArray);
         EMBRYO_CURVE_1 = WaveFunctionKt.timeDilate(WaveFunctionKt.rerange(WaveFunctionKt.parabolaFunction(0.5f, 1.0f), 0.0f, 0.8f), 2.5f);
         EMBRYO_CURVE_2 = WaveFunctionKt.timeDilate(WaveFunctionKt.rerange(WaveFunctionKt.parabolaFunction(0.9f, 1.0f), 0.2f, 1.2f), 2.5f);

@@ -21,7 +21,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -51,9 +51,9 @@ extends Button {
     private static final int OFFSET_Y_DOWN = 13;
     private static final float SCALE = 0.5f;
     @NotNull
-    private static final ResourceLocation moveReorderUpResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_move_reorder_up.png");
+    private static final ResourceLocation moveReorderUpResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_move_reorder_up.png");
     @NotNull
-    private static final ResourceLocation moveReorderDownResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_move_reorder_down.png");
+    private static final ResourceLocation moveReorderDownResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_move_reorder_down.png");
     private static boolean blocked;
 
     public ReorderMoveButton(int pX, int pY, boolean isUp, @NotNull Button.OnPress onPress) {

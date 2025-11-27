@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.interactive.MintItem;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Nature;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Map;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
@@ -29,7 +29,7 @@ public final class NatureInfoUtilsKt {
     public static final MutableComponent reformatNatureTextIfMinted(@NotNull Pokemon pokemon) {
         Intrinsics.checkNotNullParameter((Object)pokemon, (String)"pokemon");
         MutableComponent natureText = null;
-        natureText = MiscUtilsKt.asTranslated(pokemon.getNature().getDisplayName());
+        natureText = MiscUtils.asTranslated(pokemon.getNature().getDisplayName());
         if (pokemon.getMintedNature() != null) {
             Map<String, MintItem> map = CobblemonItems.INSTANCE.getMints();
             Nature nature = pokemon.getMintedNature();

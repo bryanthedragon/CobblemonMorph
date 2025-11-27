@@ -55,7 +55,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.List;
 import java.util.UUID;
@@ -129,23 +129,23 @@ extends Screen {
     public static final int READY_PROGRESS_LIMIT = 6;
     public static final float SCALE = 0.5f;
     @NotNull
-    private static final ResourceLocation baseResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_base.png");
+    private static final ResourceLocation baseResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_base.png");
     @NotNull
-    private static final ResourceLocation baseBackgroundResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_background.png");
+    private static final ResourceLocation baseBackgroundResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_background.png");
     @NotNull
-    private static final ResourceLocation typeSpacerResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/type_spacer.png");
+    private static final ResourceLocation typeSpacerResource = MiscUtils.cobblemonResource("textures/gui/trade/type_spacer.png");
     @NotNull
-    private static final ResourceLocation typeSpacerSingleResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/type_spacer_single.png");
+    private static final ResourceLocation typeSpacerSingleResource = MiscUtils.cobblemonResource("textures/gui/trade/type_spacer_single.png");
     @NotNull
-    private static final ResourceLocation typeSpacerDoubleResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/type_spacer_double.png");
+    private static final ResourceLocation typeSpacerDoubleResource = MiscUtils.cobblemonResource("textures/gui/trade/type_spacer_double.png");
     @NotNull
-    private static final ResourceLocation tradeReadyResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_ready.png");
+    private static final ResourceLocation tradeReadyResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_ready.png");
     @NotNull
-    private static final ResourceLocation tradeReadyTopResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_ready_top.png");
+    private static final ResourceLocation tradeReadyTopResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_ready_top.png");
     @NotNull
-    private static final ResourceLocation opposingTradeReadyResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_ready_opposing.png");
+    private static final ResourceLocation opposingTradeReadyResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_ready_opposing.png");
     @NotNull
-    private static final ResourceLocation opposingTradeReadyTopResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_ready_top_opposing.png");
+    private static final ResourceLocation opposingTradeReadyTopResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_ready_top_opposing.png");
 
     public TradeGUI(@NotNull ClientTrade trade2, @NotNull UUID traderId, @NotNull MutableComponent traderName, @NotNull List<TradeStartedPacket.TradeablePokemon> traderParty, @NotNull List<TradeStartedPacket.TradeablePokemon> party) {
         Intrinsics.checkNotNullParameter((Object)trade2, (String)"trade");
@@ -562,7 +562,7 @@ extends Screen {
             RenderHelperKt.drawScaledText$default(context, resourceLocation, TextKt.bold(mutableComponent), x + 76 + levelXOffset, (double)y + 1.5, 0.0f, null, 0, 0, false, true, null, null, 7136, null);
             RenderHelperKt.drawScaledText$default(context, CobblemonResources.INSTANCE.getDEFAULT_LARGE(), TextKt.bold(TextKt.text(String.valueOf(pokemon.getLevel()))), x + 89 + levelXOffset, (double)y + 1.5, 0.0f, null, 0, 0, false, true, null, null, 7136, null);
             int nameXOffset = isOpposing ? 75 : 0;
-            ResourceLocation ballResource = MiscUtilsKt.cobblemonResource("textures/item/poke_balls/" + pokemon.getCaughtBall().getName().m_135815_() + ".png");
+            ResourceLocation ballResource = MiscUtils.cobblemonResource("textures/item/poke_balls/" + pokemon.getCaughtBall().getName().m_135815_() + ".png");
             PoseStack poseStack = context.m_280168_();
             double d = ((double)x + 73.5 + (double)nameXOffset) / (double)0.5f;
             float f = (float)(y + 12) / 0.5f;
@@ -605,7 +605,7 @@ extends Screen {
             int n3 = x + 108 + labelXOffset;
             double d5 = (double)y + 146.5;
             RenderHelperKt.drawScaledText$default(context, null, natureText, n3, d5, 0.5f, null, 0, 0, true, true, mouseX, mouseY, 450, null);
-            MutableComponent mutableComponent2 = MiscUtilsKt.asTranslated(pokemon.getAbility().getDisplayName());
+            MutableComponent mutableComponent2 = MiscUtils.asTranslated(pokemon.getAbility().getDisplayName());
             int n4 = x + 108 + labelXOffset;
             double d6 = (double)y + 163.5;
             Intrinsics.checkNotNullExpressionValue((Object)mutableComponent2, (String)"asTranslated()");

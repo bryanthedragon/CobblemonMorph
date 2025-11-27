@@ -15,7 +15,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.predicate;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.predicate.AltitudePredicate;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.predicate.BiomePredicate;
 import com.mojang.serialization.Codec;
@@ -51,7 +51,7 @@ public final class CobblemonBlockPredicates {
     public final <P extends BlockPredicate> BlockPredicateType<P> register(@NotNull String id, @NotNull Codec<P> codec2) {
         Intrinsics.checkNotNullParameter((Object)id, (String)"id");
         Intrinsics.checkNotNullParameter(codec2, (String)"codec");
-        Object object = Registry.m_122965_((Registry)BuiltInRegistries.f_256906_, (ResourceLocation)MiscUtilsKt.cobblemonResource(id), () -> CobblemonBlockPredicates.register$lambda$0(codec2));
+        Object object = Registry.m_122965_((Registry)BuiltInRegistries.f_256906_, (ResourceLocation)MiscUtils.cobblemonResource(id), () -> CobblemonBlockPredicates.register$lambda$0(codec2));
         Intrinsics.checkNotNullExpressionValue((Object)object, (String)"register(Registries.BLOC\u2026kPredicateType { codec })");
         return (BlockPredicateType)object;
     }

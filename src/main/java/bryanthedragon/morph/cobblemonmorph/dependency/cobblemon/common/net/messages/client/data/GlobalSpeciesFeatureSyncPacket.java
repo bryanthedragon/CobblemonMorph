@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatureProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.SpeciesFeatureSyncPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.Map;
 import kotlin.Metadata;
@@ -37,7 +37,7 @@ extends SpeciesFeatureSyncPacket<GlobalSpeciesFeatureSyncPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("global_species_feature_sync");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("global_species_feature_sync");
 
     public GlobalSpeciesFeatureSyncPacket(@NotNull Map<String, ? extends SpeciesFeatureProvider<?>> speciesFeatures) {
         Intrinsics.checkNotNullParameter(speciesFeatures, (String)"speciesFeatures");

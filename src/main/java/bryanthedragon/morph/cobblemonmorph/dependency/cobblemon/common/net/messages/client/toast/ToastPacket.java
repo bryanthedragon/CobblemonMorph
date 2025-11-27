@@ -18,7 +18,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -55,7 +55,7 @@ implements NetworkPacket<ToastPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("toast");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("toast");
 
     public ToastPacket(@NotNull Component title, @NotNull Component description, @NotNull ItemStack icon, @NotNull ResourceLocation frameTexture, float progress2, int progressColor, @NotNull UUID uuid2, @NotNull Behaviour behaviour) {
         Intrinsics.checkNotNullParameter((Object)title, (String)"title");

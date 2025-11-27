@@ -48,7 +48,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.SpeciesAdditions;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.PropertiesCompletionProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DistributionUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -120,7 +120,7 @@ implements DataProvider {
         this.register((DataRegistry)Berries.INSTANCE);
         Observable.DefaultImpls.subscribe$default(PlatformEvents.SERVER_PLAYER_LOGOUT, null, registerDefaults.1.INSTANCE, 1, null);
         DistributionUtilsKt.ifClient(CobblemonDataProvider::registerDefaults$lambda$0);
-        Cobblemon.INSTANCE.getImplementation().registerResourceReloader(MiscUtilsKt.cobblemonResource("data_resources"), (PreparableReloadListener)new SimpleResourceReloader(PackType.SERVER_DATA), PackType.SERVER_DATA, CollectionsKt.emptyList());
+        Cobblemon.INSTANCE.getImplementation().registerResourceReloader(MiscUtils.cobblemonResource("data_resources"), (PreparableReloadListener)new SimpleResourceReloader(PackType.SERVER_DATA), PackType.SERVER_DATA, CollectionsKt.emptyList());
     }
 
     @Override
@@ -196,7 +196,7 @@ implements DataProvider {
     }
 
     private static final void registerDefaults$lambda$0() {
-        Cobblemon.INSTANCE.getImplementation().registerResourceReloader(MiscUtilsKt.cobblemonResource("client_resources"), (PreparableReloadListener)new SimpleResourceReloader(PackType.CLIENT_RESOURCES), PackType.CLIENT_RESOURCES, CollectionsKt.emptyList());
+        Cobblemon.INSTANCE.getImplementation().registerResourceReloader(MiscUtils.cobblemonResource("client_resources"), (PreparableReloadListener)new SimpleResourceReloader(PackType.CLIENT_RESOURCES), PackType.CLIENT_RESOURCES, CollectionsKt.emptyList());
     }
 
     private static final List doAfterSync$lambda$4(Function1 $tmp0, Object p0) {

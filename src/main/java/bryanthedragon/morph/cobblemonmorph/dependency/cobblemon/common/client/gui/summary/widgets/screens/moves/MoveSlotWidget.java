@@ -32,7 +32,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.widgets.screens.moves.ReorderMoveButton;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.widgets.screens.moves.SwapMoveButton;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.SimpleMathExtensionsKt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
@@ -64,11 +64,11 @@ extends SoundlessWidget {
     @NotNull
     private final SwapMoveButton switchMoveButton;
     @NotNull
-    private static final ResourceLocation moveResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_move.png");
+    private static final ResourceLocation moveResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_move.png");
     @NotNull
-    private static final ResourceLocation moveOverlayResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_move_overlay.png");
+    private static final ResourceLocation moveOverlayResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_move_overlay.png");
     @NotNull
-    private static final ResourceLocation moveSelectedOverlayResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_move_selected_overlay.png");
+    private static final ResourceLocation moveSelectedOverlayResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_move_selected_overlay.png");
     public static final int MOVE_WIDTH = 108;
     public static final int MOVE_HEIGHT = 22;
 

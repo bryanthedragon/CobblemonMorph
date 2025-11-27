@@ -47,7 +47,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.progress.UseMoveEvolutionProgress;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -504,7 +504,7 @@ CauserInstruction {
             }
 
             private static final Object invoke$lambda$12(MoParams it) {
-                return new StringValue(MiscUtilsKt.cobblemonResource("move").toString());
+                return new StringValue(MiscUtils.cobblemonResource("move").toString());
             }
 
             private static final Unit invoke$lambda$13(Function1 $tmp0, Object p0) {

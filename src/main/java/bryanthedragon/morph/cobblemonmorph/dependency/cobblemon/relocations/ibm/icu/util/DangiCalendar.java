@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.util;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
 
 import com.cobblemon.mod.relocations.ibm.icu.util.ChineseCalendar;
 import com.cobblemon.mod.relocations.ibm.icu.util.InitialTimeZoneRule;
@@ -13,6 +13,7 @@ import java.util.Date;
 public class DangiCalendar
 extends ChineseCalendar {
     private static final long serialVersionUID = 8156297445349501985L;
+    @SuppressWarnings("unused")
     private static final int DANGI_EPOCH_YEAR = -2332;
     private static final TimeZone KOREA_ZONE;
 

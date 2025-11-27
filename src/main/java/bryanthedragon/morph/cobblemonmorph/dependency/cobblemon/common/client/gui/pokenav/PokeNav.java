@@ -37,7 +37,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ke
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.keybinds.PokeNavigatorBinding;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -81,13 +81,13 @@ extends Screen {
     private static final int buttonHeight = 39;
     private static final int buttonWidth = 64;
     @NotNull
-    private static final ResourceLocation background = MiscUtilsKt.cobblemonResource("textures/gui/pokenav/pokenav_base.png");
+    private static final ResourceLocation background = MiscUtils.cobblemonResource("textures/gui/pokenav/pokenav_base.png");
     @NotNull
-    private static final ResourceLocation exit = MiscUtilsKt.cobblemonResource("textures/gui/pokenav/pokenav_exit.png");
+    private static final ResourceLocation exit = MiscUtils.cobblemonResource("textures/gui/pokenav/pokenav_exit.png");
     @NotNull
-    private static final ResourceLocation pokemon = MiscUtilsKt.cobblemonResource("textures/gui/pokenav/pokenav_pokemon.png");
+    private static final ResourceLocation pokemon = MiscUtils.cobblemonResource("textures/gui/pokenav/pokenav_pokemon.png");
     @NotNull
-    private static final ResourceLocation select = MiscUtilsKt.cobblemonResource("textures/gui/pokenav/pokenav_select.png");
+    private static final ResourceLocation select = MiscUtils.cobblemonResource("textures/gui/pokenav/pokenav_select.png");
 
     public PokeNav() {
         super((Component)Component.m_237115_((String)"cobblemon.ui.pokenav.title"));

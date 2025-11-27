@@ -12,7 +12,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.type
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.TeraType;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
 import net.minecraft.network.chat.Component;
@@ -34,7 +34,7 @@ implements TeraType {
         Intrinsics.checkNotNullParameter((Object)type, (String)"type");
         this.type = type;
         this.legalAsStatic = true;
-        this.id = MiscUtilsKt.cobblemonResource(this.type.getName());
+        this.id = MiscUtils.cobblemonResource(this.type.getName());
         this.displayName = (Component)this.type.getDisplayName();
     }
 

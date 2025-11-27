@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -46,7 +46,7 @@ implements NetworkPacket<BenchMovePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("bench_move");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("bench_move");
 
     public BenchMovePacket(boolean isParty, @NotNull UUID uuid2, @NotNull MoveTemplate oldMove, @NotNull MoveTemplate newMove) {
         Intrinsics.checkNotNullParameter((Object)uuid2, (String)"uuid");

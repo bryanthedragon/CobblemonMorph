@@ -25,7 +25,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.CobblemonEvolutionDisplay;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +48,7 @@ extends SingleUpdatePacket<EvolutionDisplay, AddEvolutionPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("add_evolution");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("add_evolution");
 
     public AddEvolutionPacket(@NotNull Function0<? extends Pokemon> pokemon, @NotNull EvolutionDisplay value2) {
         Intrinsics.checkNotNullParameter(pokemon, (String)"pokemon");

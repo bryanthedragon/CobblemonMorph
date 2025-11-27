@@ -30,7 +30,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.G
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.QuaternionUtilsKt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
@@ -60,15 +60,15 @@ extends Button {
     private final boolean isOpposing;
     public static final int SIZE = 25;
     @NotNull
-    private static final ResourceLocation hoverBackgroundResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_party_slot_hover.png");
+    private static final ResourceLocation hoverBackgroundResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_party_slot_hover.png");
     @NotNull
-    private static final ResourceLocation genderIconMale = MiscUtilsKt.cobblemonResource("textures/gui/pc/gender_icon_male.png");
+    private static final ResourceLocation genderIconMale = MiscUtils.cobblemonResource("textures/gui/pc/gender_icon_male.png");
     @NotNull
-    private static final ResourceLocation genderIconFemale = MiscUtilsKt.cobblemonResource("textures/gui/pc/gender_icon_female.png");
+    private static final ResourceLocation genderIconFemale = MiscUtils.cobblemonResource("textures/gui/pc/gender_icon_female.png");
     @NotNull
-    private static final ResourceLocation selectPointerResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/pc_pointer.png");
+    private static final ResourceLocation selectPointerResource = MiscUtils.cobblemonResource("textures/gui/pc/pc_pointer.png");
     @NotNull
-    private static final ResourceLocation untradeableResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_slot_icon_locked.png");
+    private static final ResourceLocation untradeableResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_slot_icon_locked.png");
 
     public PartySlot(int x, int y, @Nullable TradeStartedPacket.TradeablePokemon pokemon, @NotNull TradeGUI parent, boolean isOpposing, @NotNull Button.OnPress onPress) {
         Intrinsics.checkNotNullParameter((Object)((Object)parent), (String)"parent");

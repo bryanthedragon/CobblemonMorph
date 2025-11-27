@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.BerriesMechanic;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.PotionsMechanic;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.RemediesMechanic;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.ExpressionAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -48,7 +48,7 @@ implements DataRegistry {
     @NotNull
     public static final CobblemonMechanics INSTANCE = new CobblemonMechanics();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("mechanics");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("mechanics");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull
@@ -132,7 +132,7 @@ implements DataRegistry {
      * WARNING - Removed try catching itself - possible behaviour change.
      */
     private final <T> T loadMechanic(ResourceManager manager, String name, Class<T> clazz) {
-        Closeable closeable = manager.m_215593_(MiscUtilsKt.cobblemonResource("mechanics/" + name + ".json")).m_215507_();
+        Closeable closeable = manager.m_215593_(MiscUtils.cobblemonResource("mechanics/" + name + ".json")).m_215507_();
         Throwable throwable = null;
         try {
             InputStream it = (InputStream)closeable;

@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.data;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.data;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUData;
 import com.cobblemon.mod.relocations.ibm.icu.impl.PatternProps;

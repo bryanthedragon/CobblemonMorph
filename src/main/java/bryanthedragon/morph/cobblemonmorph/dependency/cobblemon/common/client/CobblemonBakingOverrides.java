@@ -11,7 +11,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.BakingOverride;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.List;
 import kotlin.Metadata;
@@ -27,25 +27,25 @@ public final class CobblemonBakingOverrides {
     @NotNull
     private static final List<BakingOverride> models = new ArrayList();
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_FLUID_BUBBLING = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_fluid_bubbling"), MiscUtilsKt.cobblemonModel("restoration_tank_fluid_bubbling", "none"));
+    private static final BakingOverride RESTORATION_TANK_FLUID_BUBBLING = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_fluid_bubbling"), MiscUtils.cobblemonModel("restoration_tank_fluid_bubbling", "none"));
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_1 = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_fluid_chunked_1"), MiscUtilsKt.cobblemonModel("restoration_tank_fluid_chunked", "1"));
+    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_1 = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_fluid_chunked_1"), MiscUtils.cobblemonModel("restoration_tank_fluid_chunked", "1"));
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_2 = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_fluid_chunked_2"), MiscUtilsKt.cobblemonModel("restoration_tank_fluid_chunked", "2"));
+    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_2 = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_fluid_chunked_2"), MiscUtils.cobblemonModel("restoration_tank_fluid_chunked", "2"));
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_3 = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_fluid_chunked_3"), MiscUtilsKt.cobblemonModel("restoration_tank_fluid_chunked", "3"));
+    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_3 = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_fluid_chunked_3"), MiscUtils.cobblemonModel("restoration_tank_fluid_chunked", "3"));
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_4 = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_fluid_chunked_4"), MiscUtilsKt.cobblemonModel("restoration_tank_fluid_chunked", "4"));
+    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_4 = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_fluid_chunked_4"), MiscUtils.cobblemonModel("restoration_tank_fluid_chunked", "4"));
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_5 = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_fluid_chunked_5"), MiscUtilsKt.cobblemonModel("restoration_tank_fluid_chunked", "5"));
+    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_5 = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_fluid_chunked_5"), MiscUtils.cobblemonModel("restoration_tank_fluid_chunked", "5"));
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_6 = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_fluid_chunked_6"), MiscUtilsKt.cobblemonModel("restoration_tank_fluid_chunked", "6"));
+    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_6 = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_fluid_chunked_6"), MiscUtils.cobblemonModel("restoration_tank_fluid_chunked", "6"));
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_7 = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_fluid_chunked_7"), MiscUtilsKt.cobblemonModel("restoration_tank_fluid_chunked", "7"));
+    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_7 = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_fluid_chunked_7"), MiscUtils.cobblemonModel("restoration_tank_fluid_chunked", "7"));
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_8 = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_fluid_chunked_8"), MiscUtilsKt.cobblemonModel("restoration_tank_fluid_chunked", "8"));
+    private static final BakingOverride RESTORATION_TANK_FLUID_CHUNKED_8 = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_fluid_chunked_8"), MiscUtils.cobblemonModel("restoration_tank_fluid_chunked", "8"));
     @NotNull
-    private static final BakingOverride RESTORATION_TANK_CONNECTOR = INSTANCE.registerOverride(MiscUtilsKt.cobblemonResource("block/restoration_tank_connector"), MiscUtilsKt.cobblemonModel("restoration_tank_connector", "none"));
+    private static final BakingOverride RESTORATION_TANK_CONNECTOR = INSTANCE.registerOverride(MiscUtils.cobblemonResource("block/restoration_tank_connector"), MiscUtils.cobblemonModel("restoration_tank_connector", "none"));
 
     private CobblemonBakingOverrides() {
     }

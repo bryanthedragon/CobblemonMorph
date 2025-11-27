@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
 
 import com.cobblemon.mod.relocations.ibm.icu.text.UnicodeSet;
 import com.cobblemon.mod.relocations.ibm.icu.util.OutputInt;
@@ -58,6 +58,7 @@ public final class BMPSet {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     public final int span(CharSequence s, int start2, UnicodeSet.SpanCondition spanCondition, OutputInt outCount) {
         int supplementary;
         int lead;

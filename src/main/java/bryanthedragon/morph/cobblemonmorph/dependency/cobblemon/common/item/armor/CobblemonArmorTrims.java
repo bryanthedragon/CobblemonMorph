@@ -8,7 +8,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.armor;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ public final class CobblemonArmorTrims {
     @NotNull
     public static final CobblemonArmorTrims INSTANCE = new CobblemonArmorTrims();
     @NotNull
-    private static final ResourceLocation AUTOMATON = MiscUtilsKt.cobblemonResource("automaton");
+    private static final ResourceLocation AUTOMATON = MiscUtils.cobblemonResource("automaton");
 
     private CobblemonArmorTrims() {
     }

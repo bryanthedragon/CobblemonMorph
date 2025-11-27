@@ -31,7 +31,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector.ExpressionSpawningContextSelector;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector.SpawnDetailSelector;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector.SpawningContextSelector;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.ExpressionAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.SpawnDetailSelectorAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.SpawnRuleComponentAdapter;
@@ -176,7 +176,7 @@ implements JsonDataRegistry<SpawnRule> {
         $i$f$register = false;
         ((SpawningContextSelector.Companion)this_$iv).getTypes().put(type$iv, ConditionalSpawningContextSelector.class);
         rules = new LinkedHashMap();
-        id = MiscUtilsKt.cobblemonResource("spawn_rules");
+        id = MiscUtils.cobblemonResource("spawn_rules");
         type = PackType.SERVER_DATA;
         observable = new SimpleObservable();
     }

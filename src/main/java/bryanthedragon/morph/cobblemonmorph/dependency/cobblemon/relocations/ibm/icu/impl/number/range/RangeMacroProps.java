@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.number.range;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number.range;
 
 import com.cobblemon.mod.relocations.ibm.icu.number.NumberRangeFormatter;
 import com.cobblemon.mod.relocations.ibm.icu.number.UnlocalizedNumberFormatter;

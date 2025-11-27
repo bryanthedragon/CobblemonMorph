@@ -17,7 +17,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.animation;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +46,7 @@ implements NetworkPacket<PlayPoseableAnimationPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("play_poseable_animation");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("play_poseable_animation");
 
     public PlayPoseableAnimationPacket(int entityId, @NotNull Set<String> animation, @NotNull Set<String> expressions) {
         Intrinsics.checkNotNullParameter(animation, (String)"animation");

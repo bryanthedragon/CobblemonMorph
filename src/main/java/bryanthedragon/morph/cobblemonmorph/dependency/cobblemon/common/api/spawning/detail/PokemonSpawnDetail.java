@@ -33,7 +33,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import com.google.gson.annotations.SerializedName;
 import java.util.Collection;
@@ -132,7 +132,7 @@ extends SpawnDetail {
         if (string != null) {
             String it = string;
             boolean bl = false;
-            MutableComponent mutableComponent = MiscUtilsKt.asTranslated(it);
+            MutableComponent mutableComponent = MiscUtils.asTranslated(it);
             Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"it.asTranslated()");
             return mutableComponent;
         }

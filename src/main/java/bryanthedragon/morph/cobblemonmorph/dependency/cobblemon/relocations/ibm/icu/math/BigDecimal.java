@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.math;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.math;
 
 import com.cobblemon.mod.relocations.ibm.icu.lang.UCharacter;
 import com.cobblemon.mod.relocations.ibm.icu.math.MathContext;

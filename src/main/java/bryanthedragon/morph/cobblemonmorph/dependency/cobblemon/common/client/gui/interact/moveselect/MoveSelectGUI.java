@@ -35,7 +35,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.moveselect.MoveSlotButton;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectCancelledPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectedPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.List;
 import java.util.UUID;
@@ -72,7 +72,7 @@ extends Screen {
     public static final int WIDTH = 122;
     public static final int HEIGHT = 133;
     @NotNull
-    private static final ResourceLocation baseBackgroundResource = MiscUtilsKt.cobblemonResource("textures/gui/interact/move_select.png");
+    private static final ResourceLocation baseBackgroundResource = MiscUtils.cobblemonResource("textures/gui/interact/move_select.png");
 
     public MoveSelectGUI(@NotNull MoveSelectConfiguration config) {
         Intrinsics.checkNotNullParameter((Object)config, (String)"config");

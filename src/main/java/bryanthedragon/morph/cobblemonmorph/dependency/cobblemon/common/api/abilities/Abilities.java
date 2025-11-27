@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.ShowdownService;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.AbilityRegistrySyncPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.abilities.HiddenAbilityType;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 
 import com.google.gson.JsonArray;
 
@@ -32,10 +32,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import kotlin.Metadata;
 import kotlin.collections.CollectionsKt;
 import kotlin.jvm.internal.Intrinsics;
-import kotlin.jvm.internal.SourceDebugExtension;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -46,21 +44,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
-@Metadata(mv={1, 8, 0}, k=1, xi=48, d1={"\u0000b\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\u0004\n\u0002\u0010\u000e\n\u0002\b\u0004\n\u0002\u0010\u001e\n\u0000\n\u0002\u0010\u0002\n\u0002\b\u0006\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0006\n\u0002\u0010%\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0007\b\u00c6\u0002\u0018\u00002\u00020\u0001B\t\b\u0002\u00a2\u0006\u0004\b6\u00107J\u0013\u0010\u0004\u001a\b\u0012\u0004\u0012\u00020\u00030\u0002\u00a2\u0006\u0004\b\u0004\u0010\u0005J\r\u0010\u0007\u001a\u00020\u0006\u00a2\u0006\u0004\b\u0007\u0010\bJ\r\u0010\t\u001a\u00020\u0003\u00a2\u0006\u0004\b\t\u0010\nJ\u0017\u0010\r\u001a\u0004\u0018\u00010\u00032\u0006\u0010\f\u001a\u00020\u000b\u00a2\u0006\u0004\b\r\u0010\u000eJ\u0015\u0010\u000f\u001a\u00020\u00032\u0006\u0010\f\u001a\u00020\u000b\u00a2\u0006\u0004\b\u000f\u0010\u000eJ\u001d\u0010\u0015\u001a\u00020\u00122\f\u0010\u0011\u001a\b\u0012\u0004\u0012\u00020\u00030\u0010H\u0000\u00a2\u0006\u0004\b\u0013\u0010\u0014J\u0015\u0010\u0017\u001a\u00020\u00032\u0006\u0010\u0016\u001a\u00020\u0003\u00a2\u0006\u0004\b\u0017\u0010\u0018J\u0017\u0010\u001b\u001a\u00020\u00122\u0006\u0010\u001a\u001a\u00020\u0019H\u0016\u00a2\u0006\u0004\b\u001b\u0010\u001cJ\u0017\u0010\u001f\u001a\u00020\u00122\u0006\u0010\u001e\u001a\u00020\u001dH\u0016\u00a2\u0006\u0004\b\u001f\u0010 R\u0017\u0010!\u001a\u00020\u00038\u0006\u00a2\u0006\f\n\u0004\b!\u0010\"\u001a\u0004\b#\u0010\nR \u0010%\u001a\u000e\u0012\u0004\u0012\u00020\u000b\u0012\u0004\u0012\u00020\u00030$8\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b%\u0010&R\u001a\u0010(\u001a\u00020'8\u0016X\u0096\u0004\u00a2\u0006\f\n\u0004\b(\u0010)\u001a\u0004\b*\u0010+R \u0010-\u001a\b\u0012\u0004\u0012\u00020\u00000,8\u0016X\u0096\u0004\u00a2\u0006\f\n\u0004\b-\u0010.\u001a\u0004\b/\u00100R\u001a\u00102\u001a\u0002018\u0016X\u0096\u0004\u00a2\u0006\f\n\u0004\b2\u00103\u001a\u0004\b4\u00105\u00a8\u00068"}, d2={"Lcom/cobblemon/mod/common/api/abilities/Abilities;", "Lcom/cobblemon/mod/common/api/data/DataRegistry;", "", "Lcom/cobblemon/mod/common/api/abilities/AbilityTemplate;", "all", "()Ljava/util/List;", "", "count", "()I", "first", "()Lcom/cobblemon/mod/common/api/abilities/AbilityTemplate;", "", "name", "get", "(Ljava/lang/String;)Lcom/cobblemon/mod/common/api/abilities/AbilityTemplate;", "getOrException", "", "abilities", "", "receiveSyncPacket$common", "(Ljava/util/Collection;)V", "receiveSyncPacket", "ability", "register", "(Lcom/cobblemon/mod/common/api/abilities/AbilityTemplate;)Lcom/cobblemon/mod/common/api/abilities/AbilityTemplate;", "Lnet/minecraft/server/packs/resources/ResourceManager;", "manager", "reload", "(Lnet/minecraft/server/packs/resources/ResourceManager;)V", "Lnet/minecraft/server/level/ServerPlayer;", "player", "sync", "(Lnet/minecraft/server/level/ServerPlayer;)V", "DUMMY", "Lcom/cobblemon/mod/common/api/abilities/AbilityTemplate;", "getDUMMY", "", "abilityMap", "Ljava/util/Map;", "Lnet/minecraft/resources/ResourceLocation;", "id", "Lnet/minecraft/resources/ResourceLocation;", "getId", "()Lnet/minecraft/resources/ResourceLocation;", "Lcom/cobblemon/mod/common/api/reactive/SimpleObservable;", "observable", "Lcom/cobblemon/mod/common/api/reactive/SimpleObservable;", "getObservable", "()Lcom/cobblemon/mod/common/api/reactive/SimpleObservable;", "Lnet/minecraft/server/packs/PackType;", "type", "Lnet/minecraft/server/packs/PackType;", "getType", "()Lnet/minecraft/server/packs/PackType;", "<init>", "()V", "common"})
-@SourceDebugExtension(value={"SMAP\nAbilities.kt\nKotlin\n*S Kotlin\n*F\n+ 1 Abilities.kt\ncom/cobblemon/mod/common/api/abilities/Abilities\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,70:1\n1855#2,2:71\n*S KotlinDebug\n*F\n+ 1 Abilities.kt\ncom/cobblemon/mod/common/api/abilities/Abilities\n*L\n67#1:71,2\n*E\n"})
-public final class Abilities
-implements DataRegistry {
+public final class Abilities implements DataRegistry {
     @NotNull
     public static final Abilities INSTANCE = new Abilities();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("abilities");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("abilities");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
+
     @NotNull
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static final SimpleObservable<Abilities> observable = new SimpleObservable();
+
     @NotNull
     private static final AbilityTemplate DUMMY = new AbilityTemplate("dummy", null, null, null, 14, null);
+
     @NotNull
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static final Map<String, AbilityTemplate> abilityMap = new LinkedHashMap();
 
     private Abilities() {
@@ -157,7 +157,7 @@ implements DataRegistry {
         return abilityMap.size();
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"rawtypes", "unused" })
     public final void receiveSyncPacket$common(@NotNull Collection<AbilityTemplate> abilities) {
         Intrinsics.checkNotNullParameter(abilities, (String)"abilities");
         abilityMap.clear();

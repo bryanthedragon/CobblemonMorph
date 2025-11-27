@@ -29,7 +29,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattlePersistentStatusPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -299,7 +299,7 @@ lbl57:
                             it = var4_9;
                             $i$a$-let-HealInstruction$invoke$1$1 = false;
                             var9_12 = new Object[]{var6_4.getName()};
-                            v10 = MiscUtilsKt.asTranslated(it, var9_12);
+                            v10 = MiscUtils.asTranslated(it, var9_12);
                             Intrinsics.checkNotNullExpressionValue((Object)v10, (String)"it.asTranslated(battlePokemon.getName())");
                             var5_3.broadcastChatMessage((Component)v10);
                         }

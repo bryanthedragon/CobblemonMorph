@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.TeraType;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.elemental.ElementalTypeTeraType;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.gimmick.StellarTeraType;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,41 +43,41 @@ public final class TeraTypes {
     @NotNull
     private static final HashMap<ResourceLocation, TeraType> types = new HashMap();
     @NotNull
-    private static final TeraType NORMAL = INSTANCE.create(MiscUtilsKt.cobblemonResource("normal"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getNORMAL()));
+    private static final TeraType NORMAL = INSTANCE.create(MiscUtils.cobblemonResource("normal"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getNORMAL()));
     @NotNull
-    private static final TeraType FIRE = INSTANCE.create(MiscUtilsKt.cobblemonResource("fire"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFIRE()));
+    private static final TeraType FIRE = INSTANCE.create(MiscUtils.cobblemonResource("fire"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFIRE()));
     @NotNull
-    private static final TeraType WATER = INSTANCE.create(MiscUtilsKt.cobblemonResource("water"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getWATER()));
+    private static final TeraType WATER = INSTANCE.create(MiscUtils.cobblemonResource("water"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getWATER()));
     @NotNull
-    private static final TeraType GRASS = INSTANCE.create(MiscUtilsKt.cobblemonResource("grass"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getGRASS()));
+    private static final TeraType GRASS = INSTANCE.create(MiscUtils.cobblemonResource("grass"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getGRASS()));
     @NotNull
-    private static final TeraType ELECTRIC = INSTANCE.create(MiscUtilsKt.cobblemonResource("electric"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getELECTRIC()));
+    private static final TeraType ELECTRIC = INSTANCE.create(MiscUtils.cobblemonResource("electric"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getELECTRIC()));
     @NotNull
-    private static final TeraType ICE = INSTANCE.create(MiscUtilsKt.cobblemonResource("ice"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getICE()));
+    private static final TeraType ICE = INSTANCE.create(MiscUtils.cobblemonResource("ice"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getICE()));
     @NotNull
-    private static final TeraType FIGHTING = INSTANCE.create(MiscUtilsKt.cobblemonResource("fighting"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFIGHTING()));
+    private static final TeraType FIGHTING = INSTANCE.create(MiscUtils.cobblemonResource("fighting"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFIGHTING()));
     @NotNull
-    private static final TeraType POISON = INSTANCE.create(MiscUtilsKt.cobblemonResource("poison"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getPOISON()));
+    private static final TeraType POISON = INSTANCE.create(MiscUtils.cobblemonResource("poison"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getPOISON()));
     @NotNull
-    private static final TeraType GROUND = INSTANCE.create(MiscUtilsKt.cobblemonResource("ground"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getGROUND()));
+    private static final TeraType GROUND = INSTANCE.create(MiscUtils.cobblemonResource("ground"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getGROUND()));
     @NotNull
-    private static final TeraType FLYING = INSTANCE.create(MiscUtilsKt.cobblemonResource("flying"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFLYING()));
+    private static final TeraType FLYING = INSTANCE.create(MiscUtils.cobblemonResource("flying"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFLYING()));
     @NotNull
-    private static final TeraType PSYCHIC = INSTANCE.create(MiscUtilsKt.cobblemonResource("psychic"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getPSYCHIC()));
+    private static final TeraType PSYCHIC = INSTANCE.create(MiscUtils.cobblemonResource("psychic"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getPSYCHIC()));
     @NotNull
-    private static final TeraType BUG = INSTANCE.create(MiscUtilsKt.cobblemonResource("bug"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getBUG()));
+    private static final TeraType BUG = INSTANCE.create(MiscUtils.cobblemonResource("bug"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getBUG()));
     @NotNull
-    private static final TeraType ROCK = INSTANCE.create(MiscUtilsKt.cobblemonResource("rock"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getROCK()));
+    private static final TeraType ROCK = INSTANCE.create(MiscUtils.cobblemonResource("rock"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getROCK()));
     @NotNull
-    private static final TeraType GHOST = INSTANCE.create(MiscUtilsKt.cobblemonResource("ghost"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getGHOST()));
+    private static final TeraType GHOST = INSTANCE.create(MiscUtils.cobblemonResource("ghost"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getGHOST()));
     @NotNull
-    private static final TeraType DRAGON = INSTANCE.create(MiscUtilsKt.cobblemonResource("dragon"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getDRAGON()));
+    private static final TeraType DRAGON = INSTANCE.create(MiscUtils.cobblemonResource("dragon"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getDRAGON()));
     @NotNull
-    private static final TeraType DARK = INSTANCE.create(MiscUtilsKt.cobblemonResource("dark"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getDARK()));
+    private static final TeraType DARK = INSTANCE.create(MiscUtils.cobblemonResource("dark"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getDARK()));
     @NotNull
-    private static final TeraType STEEL = INSTANCE.create(MiscUtilsKt.cobblemonResource("steel"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getSTEEL()));
+    private static final TeraType STEEL = INSTANCE.create(MiscUtils.cobblemonResource("steel"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getSTEEL()));
     @NotNull
-    private static final TeraType FAIRY = INSTANCE.create(MiscUtilsKt.cobblemonResource("fairy"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFAIRY()));
+    private static final TeraType FAIRY = INSTANCE.create(MiscUtils.cobblemonResource("fairy"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFAIRY()));
     @NotNull
     private static final TeraType STELLAR = INSTANCE.create(StellarTeraType.Companion.getID(), new StellarTeraType());
 
@@ -293,14 +293,14 @@ public final class TeraTypes {
     @Nullable
     public static final TeraType get(@NotNull String id) {
         Intrinsics.checkNotNullParameter((Object)id, (String)"id");
-        return TeraTypes.get(MiscUtilsKt.cobblemonResource(id));
+        return TeraTypes.get(MiscUtils.cobblemonResource(id));
     }
 
     @JvmStatic
     @NotNull
     public static final TeraType forElementalType(@NotNull ElementalType type) {
         Intrinsics.checkNotNullParameter((Object)type, (String)"type");
-        TeraType teraType = TeraTypes.get(MiscUtilsKt.cobblemonResource(type.getName()));
+        TeraType teraType = TeraTypes.get(MiscUtils.cobblemonResource(type.getName()));
         Intrinsics.checkNotNull((Object)teraType);
         return teraType;
     }

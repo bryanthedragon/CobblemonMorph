@@ -12,7 +12,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.ModelAssetVariation;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public final class ModelVariationSet {
 
     public /* synthetic */ ModelVariationSet(ResourceLocation resourceLocation, int n, List list, int n2, DefaultConstructorMarker defaultConstructorMarker) {
         if ((n2 & 1) != 0) {
-            resourceLocation = MiscUtilsKt.cobblemonResource("thing");
+            resourceLocation = MiscUtils.cobblemonResource("thing");
         }
         if ((n2 & 2) != 0) {
             n = 0;

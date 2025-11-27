@@ -35,7 +35,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -83,13 +83,13 @@ extends SoundlessWidget {
     public static final int HEIGHT = 113;
     private static final float SCALE = 0.5f;
     @NotNull
-    private static final ResourceLocation backgroundResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_party_background.png");
+    private static final ResourceLocation backgroundResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_party_background.png");
     @NotNull
-    private static final ResourceLocation swapButtonResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_party_swap.png");
+    private static final ResourceLocation swapButtonResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_party_swap.png");
     @NotNull
-    private static final ResourceLocation swapButtonActiveResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_party_swap_active.png");
+    private static final ResourceLocation swapButtonActiveResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_party_swap_active.png");
     @NotNull
-    private static final ResourceLocation swapButtonIconResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_party_swap_icon.png");
+    private static final ResourceLocation swapButtonIconResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_party_swap_icon.png");
 
     /*
      * WARNING - void declaration

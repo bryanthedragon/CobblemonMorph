@@ -14,11 +14,10 @@ public final class ArrayAccessExpression extends StringHolder implements Express
     private final Expression array;
     private final Expression index;
 
-    @SuppressWarnings("rawtypes")
     public MoValue evaluate(MoScope scope, MoLangEnvironment environment) {
-        ArrayList<Object> names = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
         if (this.array instanceof NameExpression) {
-            names = ((NameExpression)this.array).getNames();
+            names = new ArrayList<>(((NameExpression)this.array).getNames());
         } 
         else {
             Collections.addAll(names, this.array.evaluate(scope, environment).asString().split("\\."));
@@ -28,9 +27,9 @@ public final class ArrayAccessExpression extends StringHolder implements Express
     }
 
     public void assign(MoScope scope, MoLangEnvironment environment, MoValue value2) {
-        ArrayList<Object> names = new ArrayList();
+        ArrayList<String> names = new ArrayList<>();
         if (this.array instanceof NameExpression) {
-            names = ((NameExpression)this.array).getNames();
+            names = new ArrayList<>(((NameExpression)this.array).getNames());
         }
         else {
             Collections.addAll(names, this.array.evaluate(scope, environment).asString().split("\\."));

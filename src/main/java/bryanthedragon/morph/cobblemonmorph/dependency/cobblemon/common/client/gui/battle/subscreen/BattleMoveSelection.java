@@ -44,7 +44,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.subscreen.DynamaxButton;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.SimpleMathExtensionsKt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
@@ -90,9 +90,9 @@ extends BattleActionSelection {
     public static final float MOVE_VERTICAL_SPACING = 5.0f;
     public static final float MOVE_HORIZONTAL_SPACING = 13.0f;
     @NotNull
-    private static final ResourceLocation moveTexture = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_move.png");
+    private static final ResourceLocation moveTexture = MiscUtils.cobblemonResource("textures/gui/battle/battle_move.png");
     @NotNull
-    private static final ResourceLocation moveOverlayTexture = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_move_overlay.png");
+    private static final ResourceLocation moveOverlayTexture = MiscUtils.cobblemonResource("textures/gui/battle/battle_move_overlay.png");
 
     /*
      * WARNING - void declaration

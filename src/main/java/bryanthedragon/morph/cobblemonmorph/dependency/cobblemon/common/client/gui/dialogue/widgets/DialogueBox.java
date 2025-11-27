@@ -31,7 +31,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.dto.DialogueDTO;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.dto.DialogueInputDTO;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.dialogue.InputToDialoguePacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,7 +73,7 @@ extends ObjectSelectionList<DialogueLine> {
     public static final int LINE_HEIGHT = 10;
     public static final int LINE_WIDTH = 142;
     @NotNull
-    private static final ResourceLocation boxResource = MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_box.png");
+    private static final ResourceLocation boxResource = MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_box.png");
 
     /*
      * WARNING - void declaration

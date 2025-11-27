@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.G
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonResources;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
@@ -55,7 +55,7 @@ extends Button {
         Intrinsics.checkNotNullParameter((Object)context, (String)"context");
         PoseStack matrices = context.m_280168_();
         if (this.isActive) {
-            ResourceLocation resourceLocation = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_tab.png");
+            ResourceLocation resourceLocation = MiscUtils.cobblemonResource("textures/gui/summary/summary_tab.png");
             int n = this.m_252754_();
             int n2 = this.m_252907_();
             int n3 = this.f_93618_;

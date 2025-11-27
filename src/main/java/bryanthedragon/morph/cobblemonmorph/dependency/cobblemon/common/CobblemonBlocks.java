@@ -87,7 +87,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.inv
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.invoker.StairsBlockInvoker;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.invoker.TrapdoorBlockInvoker;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.PlatformRegistry;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import kotlin.Metadata;
@@ -984,7 +984,7 @@ extends PlatformRegistry<Registry<Block>, ResourceKey<Registry<Block>>, Block> {
     }
 
     private final BerryBlock berryBlock(String name) {
-        ResourceLocation identifier = MiscUtilsKt.cobblemonResource(name + "_berry");
+        ResourceLocation identifier = MiscUtils.cobblemonResource(name + "_berry");
         String string = identifier.m_135815_();
         Intrinsics.checkNotNullExpressionValue((Object)string, (String)"identifier.path");
         BlockBehaviour.Properties properties2 = BlockBehaviour.Properties.m_60926_((BlockBehaviour)((BlockBehaviour)Blocks.f_50092_)).m_60988_().m_60918_(CobblemonSounds.BERRY_BUSH_SOUNDS).m_60978_(0.2f);

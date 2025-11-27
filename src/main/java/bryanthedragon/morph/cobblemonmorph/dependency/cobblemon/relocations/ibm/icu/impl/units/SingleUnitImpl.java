@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.units;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.units;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.units.MeasureUnitImpl;
 import com.cobblemon.mod.relocations.ibm.icu.impl.units.UnitsData;

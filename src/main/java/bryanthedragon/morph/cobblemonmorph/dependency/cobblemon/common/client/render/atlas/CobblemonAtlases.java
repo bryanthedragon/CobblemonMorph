@@ -12,7 +12,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.atlas;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.atlas.CobblemonAtlas;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import kotlin.Metadata;
@@ -50,7 +50,7 @@ public final class CobblemonAtlases {
         Intrinsics.checkNotNullParameter((Object)sourcePath, (String)"sourcePath");
         TextureManager textureManager = Minecraft.m_91087_().m_91097_();
         Intrinsics.checkNotNullExpressionValue((Object)textureManager, (String)"getInstance().textureManager");
-        CobblemonAtlas atlas = new CobblemonAtlas(textureManager, MiscUtilsKt.cobblemonResource(atlasId), MiscUtilsKt.cobblemonResource(sourcePath));
+        CobblemonAtlas atlas = new CobblemonAtlas(textureManager, MiscUtils.cobblemonResource(atlasId), MiscUtils.cobblemonResource(sourcePath));
         atlases.add(atlas);
         return atlas;
     }

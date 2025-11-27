@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.UnpastureAllPokemonPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -53,7 +53,7 @@ extends SoundlessWidget {
     @NotNull
     private final PasturePokemonScrollList pastureScrollList;
     @NotNull
-    private static final ResourceLocation baseResource = MiscUtilsKt.cobblemonResource("textures/gui/pasture/pasture_panel.png");
+    private static final ResourceLocation baseResource = MiscUtils.cobblemonResource("textures/gui/pasture/pasture_panel.png");
 
     public PastureWidget(@NotNull StorageWidget storageWidget, @NotNull PasturePCGUIConfiguration pasturePCGUIConfiguration, int x, int y) {
         Intrinsics.checkNotNullParameter((Object)((Object)storageWidget), (String)"storageWidget");

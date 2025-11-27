@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.dialogue.DialogueScreen;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.dto.DialogueInputDTO;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.dialogue.InputToDialoguePacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.UUID;
 import kotlin.Metadata;
@@ -101,7 +101,7 @@ extends EditBox {
         int n2 = this.m_252907_();
         int n3 = this.f_93618_;
         int n4 = this.f_93619_;
-        ResourceLocation resourceLocation = MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_text_input.png");
+        ResourceLocation resourceLocation = MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_text_input.png");
         Intrinsics.checkNotNullExpressionValue((Object)poseStack, (String)"matrices");
         GuiUtilsKt.blitk$default(poseStack, resourceLocation, n, n2, n4, n3, null, null, null, null, null, null, null, null, null, false, 0.0f, 131008, null);
         Object object = this.m_93696_() ? this.m_94155_() + "|" : this.m_94155_();

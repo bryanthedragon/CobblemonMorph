@@ -10,9 +10,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.r
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.runtime.value.MoValue;
 import java.util.ArrayList;
 
-public final class ForEachExpression
-extends StringHolder
-implements Expression {
+public final class ForEachExpression extends StringHolder implements Expression {
     private final Expression variable;
     private final Expression array;
     private final Expression body;
@@ -84,6 +82,7 @@ implements Expression {
         return other instanceof ForEachExpression;
     }
 
+    @SuppressWarnings("unused")
     public int hashCode() {
         int PRIME = 59;
         int result = 1;

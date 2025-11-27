@@ -75,7 +75,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stora
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.GildedChestBlockEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.BlockPosExtensionsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt;
 import java.util.HashMap;
 import java.util.List;
@@ -522,14 +522,14 @@ implements SimpleWaterloggedBlock {
     extends Enum<Type> {
         @NotNull
         private final ResourceLocation poserId;
-        public static final /* enum */ Type RED = new Type(MiscUtilsKt.cobblemonResource("gilded_chest"));
-        public static final /* enum */ Type BLUE = new Type(MiscUtilsKt.cobblemonResource("blue_gilded_chest"));
-        public static final /* enum */ Type GREEN = new Type(MiscUtilsKt.cobblemonResource("green_gilded_chest"));
-        public static final /* enum */ Type PINK = new Type(MiscUtilsKt.cobblemonResource("pink_gilded_chest"));
-        public static final /* enum */ Type WHITE = new Type(MiscUtilsKt.cobblemonResource("white_gilded_chest"));
-        public static final /* enum */ Type BLACK = new Type(MiscUtilsKt.cobblemonResource("black_gilded_chest"));
-        public static final /* enum */ Type YELLOW = new Type(MiscUtilsKt.cobblemonResource("yellow_gilded_chest"));
-        public static final /* enum */ Type FAKE = new Type(MiscUtilsKt.cobblemonResource("gilded_chest"));
+        public static final /* enum */ Type RED = new Type(MiscUtils.cobblemonResource("gilded_chest"));
+        public static final /* enum */ Type BLUE = new Type(MiscUtils.cobblemonResource("blue_gilded_chest"));
+        public static final /* enum */ Type GREEN = new Type(MiscUtils.cobblemonResource("green_gilded_chest"));
+        public static final /* enum */ Type PINK = new Type(MiscUtils.cobblemonResource("pink_gilded_chest"));
+        public static final /* enum */ Type WHITE = new Type(MiscUtils.cobblemonResource("white_gilded_chest"));
+        public static final /* enum */ Type BLACK = new Type(MiscUtils.cobblemonResource("black_gilded_chest"));
+        public static final /* enum */ Type YELLOW = new Type(MiscUtils.cobblemonResource("yellow_gilded_chest"));
+        public static final /* enum */ Type FAKE = new Type(MiscUtils.cobblemonResource("gilded_chest"));
         private static final /* synthetic */ Type[] $VALUES;
 
         private Type(ResourceLocation poserId) {

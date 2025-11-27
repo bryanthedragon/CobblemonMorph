@@ -19,7 +19,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -46,7 +46,7 @@ GuiEventListener {
     @Nullable
     private final MutableComponent text;
     @NotNull
-    private static final ResourceLocation nameResource = MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_name.png");
+    private static final ResourceLocation nameResource = MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_name.png");
 
     public DialogueNameWidget(int x, int y, int width, int height, @Nullable MutableComponent text) {
         this.x = x;

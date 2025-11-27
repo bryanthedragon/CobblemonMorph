@@ -33,7 +33,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.storage.ClientParty;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.RequestMoveSwapPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -271,10 +271,10 @@ extends SoundlessWidget {
         boolean bl = false;
         it.setRoundingMode(RoundingMode.CEILING);
         MovesWidget.decimalFormat = decimalFormat;
-        movesBaseResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_moves_base.png");
-        movesPowerIconResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_moves_icon_power.png");
-        movesAccuracyIconResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_moves_icon_accuracy.png");
-        movesEffectIconResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_moves_icon_effect.png");
+        movesBaseResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_moves_base.png");
+        movesPowerIconResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_moves_icon_power.png");
+        movesAccuracyIconResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_moves_icon_accuracy.png");
+        movesEffectIconResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_moves_icon_effect.png");
     }
 
     @Metadata(mv={1, 8, 0}, k=1, xi=48, d1={"\u0000(\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0010\b\n\u0002\b\u0003\n\u0002\u0010\u0007\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\f\b\u0086\u0003\u0018\u00002\u00020\u0001B\t\b\u0002\u00a2\u0006\u0004\b\u0017\u0010\u0018R\u0014\u0010\u0003\u001a\u00020\u00028\u0002X\u0082T\u00a2\u0006\u0006\n\u0004\b\u0003\u0010\u0004R\u0014\u0010\u0005\u001a\u00020\u00028\u0006X\u0086T\u00a2\u0006\u0006\n\u0004\b\u0005\u0010\u0004R\u0014\u0010\u0007\u001a\u00020\u00068\u0006X\u0086T\u00a2\u0006\u0006\n\u0004\b\u0007\u0010\bR\u0014\u0010\t\u001a\u00020\u00028\u0002X\u0082T\u00a2\u0006\u0006\n\u0004\b\t\u0010\u0004R\u0014\u0010\u000b\u001a\u00020\n8\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\u000b\u0010\fR\u0017\u0010\u000e\u001a\u00020\r8\u0006\u00a2\u0006\f\n\u0004\b\u000e\u0010\u000f\u001a\u0004\b\u0010\u0010\u0011R\u0014\u0010\u0012\u001a\u00020\r8\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\u0012\u0010\u000fR\u0017\u0010\u0013\u001a\u00020\r8\u0006\u00a2\u0006\f\n\u0004\b\u0013\u0010\u000f\u001a\u0004\b\u0014\u0010\u0011R\u0017\u0010\u0015\u001a\u00020\r8\u0006\u00a2\u0006\f\n\u0004\b\u0015\u0010\u000f\u001a\u0004\b\u0016\u0010\u0011\u00a8\u0006\u0019"}, d2={"Lcom/cobblemon/mod/common/client/gui/summary/widgets/screens/moves/MovesWidget$Companion;", "", "", "HEIGHT", "I", "MOVE_ICON_SIZE", "", "SCALE", "F", "WIDTH", "Ljava/text/DecimalFormat;", "decimalFormat", "Ljava/text/DecimalFormat;", "Lnet/minecraft/resources/ResourceLocation;", "movesAccuracyIconResource", "Lnet/minecraft/resources/ResourceLocation;", "getMovesAccuracyIconResource", "()Lnet/minecraft/resources/ResourceLocation;", "movesBaseResource", "movesEffectIconResource", "getMovesEffectIconResource", "movesPowerIconResource", "getMovesPowerIconResource", "<init>", "()V", "common"})

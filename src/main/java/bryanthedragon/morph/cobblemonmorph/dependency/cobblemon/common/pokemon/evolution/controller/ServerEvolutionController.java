@@ -45,7 +45,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.JsonExtensionsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -391,7 +391,7 @@ implements EvolutionController<Evolution> {
             ServerPlayer serverPlayer = this.getPokemon().getOwnerPlayer();
             if (serverPlayer != null) {
                 Object[] objectArray = new Object[]{this.getPokemon().getDisplayName()};
-                MutableComponent mutableComponent = MiscUtilsKt.asTranslated("cobblemon.ui.evolve.hint", objectArray);
+                MutableComponent mutableComponent = MiscUtils.asTranslated("cobblemon.ui.evolve.hint", objectArray);
                 Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"cobblemon.ui.evolve.hint\u2026pokemon.getDisplayName())");
                 serverPlayer.m_213846_((Component)TextKt.green(mutableComponent));
             }

@@ -24,7 +24,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.trade.TradeGUI;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -48,11 +48,11 @@ extends Button {
     private static final int WIDTH = 53;
     private static final int HEIGHT = 14;
     @NotNull
-    private static final ResourceLocation buttonResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_button.png");
+    private static final ResourceLocation buttonResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_button.png");
     @NotNull
-    private static final ResourceLocation buttonDisabledResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_button_disabled.png");
+    private static final ResourceLocation buttonDisabledResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_button_disabled.png");
     @NotNull
-    private static final ResourceLocation buttonActiveResource = MiscUtilsKt.cobblemonResource("textures/gui/trade/trade_button_active.png");
+    private static final ResourceLocation buttonActiveResource = MiscUtils.cobblemonResource("textures/gui/trade/trade_button_active.png");
 
     public TradeButton(int x, int y, @NotNull TradeGUI parent, @NotNull Button.OnPress onPress) {
         Intrinsics.checkNotNullParameter((Object)((Object)parent), (String)"parent");

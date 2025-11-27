@@ -11,7 +11,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.List;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
@@ -36,7 +36,7 @@ public final class RenderableStarterCategory {
         this.name = name;
         this.displayName = displayName;
         this.pokemon = pokemon;
-        this.displayNameText = MiscUtilsKt.asTranslated(this.displayName);
+        this.displayNameText = MiscUtils.asTranslated(this.displayName);
     }
 
     @NotNull

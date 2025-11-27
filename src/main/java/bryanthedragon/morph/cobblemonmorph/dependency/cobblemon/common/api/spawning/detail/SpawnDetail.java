@@ -30,7 +30,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnAction;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.multiplier.WeightMultiplier;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -284,7 +284,7 @@ implements ModDependant {
     @NotNull
     public MutableComponent getName() {
         String string = this.displayName;
-        Object object = string != null ? MiscUtilsKt.asTranslated(string) : null;
+        Object object = string != null ? MiscUtils.asTranslated(string) : null;
         if (object == null) {
             object = TextKt.text(this.id);
         }

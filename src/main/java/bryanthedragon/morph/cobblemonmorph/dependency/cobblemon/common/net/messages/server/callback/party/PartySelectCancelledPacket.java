@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.party;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -39,7 +39,7 @@ implements NetworkPacket<PartySelectCancelledPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("party_select_cancelled");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("party_select_cancelled");
 
     public PartySelectCancelledPacket(@NotNull UUID uuid2) {
         Intrinsics.checkNotNullParameter((Object)uuid2, (String)"uuid");

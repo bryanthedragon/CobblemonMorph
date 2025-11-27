@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.DropEntry;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
 import net.minecraft.commands.CommandSourceStack;
@@ -84,7 +84,7 @@ implements DropEntry {
         if ((serverPlayer != null && (serverPlayer = serverPlayer.m_7755_()) != null ? serverPlayer.getString() : (string = null)) == null) {
             string = "";
         }
-        commands.m_230957_(commandSourceStack, MiscUtilsKt.substitute(MiscUtilsKt.substitute(MiscUtilsKt.substitute(MiscUtilsKt.substitute(MiscUtilsKt.substitute(this.command, "player", string), "world", world.m_46472_().m_135782_()), "x", pos.f_82479_), "y", pos.f_82480_), "z", pos.f_82481_));
+        commands.m_230957_(commandSourceStack, MiscUtils.substitute(MiscUtils.substitute(MiscUtils.substitute(MiscUtils.substitute(MiscUtils.substitute(this.command, "player", string), "world", world.m_46472_().m_135782_()), "x", pos.f_82479_), "y", pos.f_82480_), "z", pos.f_82481_));
     }
 }
 

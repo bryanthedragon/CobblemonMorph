@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.MoveCategoryIcon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.TypeIcon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.SimpleMathExtensionsKt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.function.Supplier;
@@ -55,9 +55,9 @@ extends Button {
     private final int ppMax;
     private final boolean enabled;
     @NotNull
-    private static final ResourceLocation moveResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_move.png");
+    private static final ResourceLocation moveResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_move.png");
     @NotNull
-    private static final ResourceLocation moveOverlayResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_move_overlay.png");
+    private static final ResourceLocation moveOverlayResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_move_overlay.png");
     public static final int WIDTH = 108;
     public static final int HEIGHT = 22;
 

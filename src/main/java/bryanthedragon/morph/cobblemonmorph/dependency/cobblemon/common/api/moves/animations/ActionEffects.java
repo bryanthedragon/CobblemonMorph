@@ -46,7 +46,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.adapters.CobblemonStatTypeAdapter;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.ActionEffectKeyframeAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.BoxAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.BoxCollectionAdapter;
@@ -164,7 +164,7 @@ implements JsonDataRegistry<ActionEffectTimeline> {
     static {
         ActionEffectKeyframe.Companion this_$iv;
         INSTANCE = new ActionEffects();
-        id = MiscUtilsKt.cobblemonResource("action_effects");
+        id = MiscUtils.cobblemonResource("action_effects");
         type = PackType.SERVER_DATA;
         observable = new SimpleObservable();
         Type[] typeArray = ActionEffectKeyframe.Companion;

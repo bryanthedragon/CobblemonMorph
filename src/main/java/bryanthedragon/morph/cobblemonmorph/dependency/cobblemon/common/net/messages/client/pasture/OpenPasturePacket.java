@@ -22,7 +22,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pasture.PasturePermissions;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt;
 import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ implements NetworkPacket<OpenPasturePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("open_pasture");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("open_pasture");
 
     public OpenPasturePacket(@NotNull UUID pcId, @NotNull UUID pastureId, int limit, @NotNull List<PasturePokemonDataDTO> tetheredPokemon, @NotNull PasturePermissions permissions) {
         Intrinsics.checkNotNullParameter((Object)pcId, (String)"pcId");

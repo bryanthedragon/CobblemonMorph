@@ -24,7 +24,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonPropertyType;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.featurerenderers.SummarySpeciesFeatureRenderer;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -161,7 +161,7 @@ AspectProvider {
     @NotNull
     public final String getAspect(@NotNull StringSpeciesFeature feature) {
         Intrinsics.checkNotNullParameter((Object)feature, (String)"feature");
-        return MiscUtilsKt.substitute(this.aspectFormat, "choice", feature.getValue());
+        return MiscUtils.substitute(this.aspectFormat, "choice", feature.getValue());
     }
 
     @Override
@@ -225,7 +225,7 @@ AspectProvider {
         for (Object element$iv : $this$forEach$iv) {
             String it = (String)element$iv;
             boolean bl = false;
-            aspects.set(this.choices.indexOf(it), MiscUtilsKt.substitute(this.aspectFormat, "choice", it));
+            aspects.set(this.choices.indexOf(it), MiscUtils.substitute(this.aspectFormat, "choice", it));
         }
         return aspects;
     }

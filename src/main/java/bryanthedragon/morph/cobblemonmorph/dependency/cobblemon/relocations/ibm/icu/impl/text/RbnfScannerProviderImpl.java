@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.text;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.text;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUDebug;
 import com.cobblemon.mod.relocations.ibm.icu.text.CollationElementIterator;

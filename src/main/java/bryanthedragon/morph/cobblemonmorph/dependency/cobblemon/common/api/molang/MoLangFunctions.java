@@ -47,7 +47,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.WaveFunctions;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -410,7 +410,7 @@ public final class MoLangFunctions {
         Intrinsics.checkNotNullParameter((Object)params, (String)"params");
         String string = params.get(0).asString();
         Intrinsics.checkNotNullExpressionValue((Object)string, (String)"params.get<MoValue>(0).asString()");
-        return new DoubleValue(MiscUtilsKt.isInt(string));
+        return new DoubleValue(MiscUtils.isInt(string));
     }
 
     private static final Object generalFunctions$lambda$1(MoParams params) {

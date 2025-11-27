@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -50,7 +50,7 @@ extends Button {
     @NotNull
     public static final Companion Companion = new Companion(null);
     @NotNull
-    private static final ResourceLocation buttonTexture = MiscUtilsKt.cobblemonResource("textures/gui/starterselection/starterselection_button.png");
+    private static final ResourceLocation buttonTexture = MiscUtils.cobblemonResource("textures/gui/starterselection/starterselection_button.png");
     public static final int BUTTON_WIDTH = 56;
     public static final int BUTTON_HEIGHT = 12;
     private static final float SCALE = 0.7f;

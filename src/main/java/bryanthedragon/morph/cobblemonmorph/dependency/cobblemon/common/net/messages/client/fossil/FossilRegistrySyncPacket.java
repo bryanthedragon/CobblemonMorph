@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fossi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fossil.Fossils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.DataRegistrySyncPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -45,7 +45,7 @@ extends DataRegistrySyncPacket<Fossil, FossilRegistrySyncPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("fossils");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("fossils");
 
     public FossilRegistrySyncPacket(@NotNull List<Fossil> fossils) {
         Intrinsics.checkNotNullParameter(fossils, (String)"fossils");

@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.function.Function;
 
-public class QueryStruct
-implements MoStruct {
+public class QueryStruct implements MoStruct {
     public final HashMap<String, Function<MoParams, Object>> functions;
 
     @SuppressWarnings("unused")
