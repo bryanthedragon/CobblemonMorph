@@ -14,7 +14,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -31,7 +31,7 @@ extends PokemonUpdatePacket<ClearEvolutionsPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("clear_evolutions");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("clear_evolutions");
 
     public ClearEvolutionsPacket(@NotNull Function0<? extends Pokemon> pokemon) {
         Intrinsics.checkNotNullParameter(pokemon, (String)"pokemon");

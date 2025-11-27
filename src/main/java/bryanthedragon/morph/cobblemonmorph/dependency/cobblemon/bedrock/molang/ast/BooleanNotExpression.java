@@ -46,6 +46,7 @@ implements Expression {
         return other instanceof BooleanNotExpression;
     }
 
+    @SuppressWarnings("unused")
     public int hashCode() {
         int PRIME = 59;
         int result = 1;

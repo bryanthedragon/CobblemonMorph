@@ -16,7 +16,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.SingleUpdatePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +37,7 @@ extends SingleUpdatePacket<Set<? extends String>, AspectsUpdatePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("aspects_update");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("aspects_update");
 
     public AspectsUpdatePacket(@NotNull Function0<? extends Pokemon> pokemon, @NotNull Set<String> value2) {
         Intrinsics.checkNotNullParameter(pokemon, (String)"pokemon");

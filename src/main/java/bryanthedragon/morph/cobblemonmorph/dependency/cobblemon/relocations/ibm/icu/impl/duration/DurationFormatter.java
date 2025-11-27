@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.duration;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration;
 
 import java.util.Date;
 import java.util.TimeZone;

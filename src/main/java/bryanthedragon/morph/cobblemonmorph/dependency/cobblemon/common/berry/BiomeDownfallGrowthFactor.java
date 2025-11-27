@@ -19,7 +19,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.berry;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.GrowthFactor;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
@@ -44,7 +44,7 @@ implements GrowthFactor {
     @NotNull
     private final IntRange bonusYield;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("biome_downfall");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("biome_downfall");
 
     public BiomeDownfallGrowthFactor(@NotNull MinMaxBounds.Doubles range, @NotNull IntRange bonusYield) {
         Intrinsics.checkNotNullParameter((Object)range, (String)"range");

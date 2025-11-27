@@ -15,7 +15,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.DataRegistrySyncPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.PropertiesCompletionProvider;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import kotlin.Metadata;
@@ -36,7 +36,7 @@ extends DataRegistrySyncPacket<PropertiesCompletionProvider.SuggestionHolder, Pr
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("properties_completion_sync");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("properties_completion_sync");
 
     public PropertiesCompletionRegistrySyncPacket(@NotNull Collection<PropertiesCompletionProvider.SuggestionHolder> suggestions) {
         Intrinsics.checkNotNullParameter(suggestions, (String)"suggestions");

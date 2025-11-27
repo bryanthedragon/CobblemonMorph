@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.ActivePokemonState;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.JsonObject;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
@@ -66,7 +66,7 @@ extends ActivePokemonState {
     @NotNull
     public ResourceLocation getIcon(@NotNull Pokemon pokemon) {
         Intrinsics.checkNotNullParameter((Object)pokemon, (String)"pokemon");
-        return MiscUtilsKt.cobblemonResource("textures/gui/party/party_icon_released.png");
+        return MiscUtils.cobblemonResource("textures/gui/party/party_icon_released.png");
     }
 
     @Nullable

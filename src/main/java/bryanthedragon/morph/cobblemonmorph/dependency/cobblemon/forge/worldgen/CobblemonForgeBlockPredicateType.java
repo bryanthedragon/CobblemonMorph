@@ -9,7 +9,7 @@
  *  net.minecraftforge.registries.RegisterEvent$RegisterHelper
  *  org.jetbrains.annotations.NotNull
  */
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.forge.worldgen;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.forge.worldgen;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.predicate.CobblemonBlockPredicates;
 import kotlin.Metadata;
@@ -31,6 +31,7 @@ public final class CobblemonForgeBlockPredicateType {
         event.register(Registries.f_256774_, CobblemonForgeBlockPredicateType::register$lambda$0);
     }
 
+    @SuppressWarnings({ "unused", "rawtypes" })
     private static final void register$lambda$0(RegisterEvent.RegisterHelper it) {
         CobblemonBlockPredicates.INSTANCE.touch();
     }

@@ -33,7 +33,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Bone;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.util.ClientDistributionUtilsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.IdentifierExtensionsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.Gson;
 import java.io.Closeable;
 import java.io.File;
@@ -178,7 +178,7 @@ public abstract class VaryingModelRepository<E extends Entity, M extends Poseabl
     public final void inbuilt(@NotNull String name, @NotNull Function1<? super ModelPart, ? extends M> model) {
         Intrinsics.checkNotNullParameter((Object)name, (String)"name");
         Intrinsics.checkNotNullParameter(model, (String)"model");
-        this.posers.put(MiscUtilsKt.cobblemonResource(name), new Function1<Bone, M>(model){
+        this.posers.put(MiscUtils.cobblemonResource(name), new Function1<Bone, M>(model){
             final /* synthetic */ Function1<ModelPart, M> $model;
             {
                 this.$model = $model;

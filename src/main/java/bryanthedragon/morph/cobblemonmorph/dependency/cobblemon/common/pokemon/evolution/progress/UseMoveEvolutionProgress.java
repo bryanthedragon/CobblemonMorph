@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.requirement.EvolutionRequirement;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.requirements.UseMoveRequirement;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.JsonObject;
 import java.util.Collection;
 import kotlin.Metadata;
@@ -41,7 +41,7 @@ implements EvolutionProgress<Progress> {
     @NotNull
     private Progress progress = new Progress(MoveTemplate.Companion.dummy(""), 0);
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("use_move");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("use_move");
     @NotNull
     private static final String MOVE = "move";
     @NotNull

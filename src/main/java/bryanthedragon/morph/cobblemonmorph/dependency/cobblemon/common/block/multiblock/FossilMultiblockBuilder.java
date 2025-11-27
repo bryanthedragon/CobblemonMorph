@@ -33,7 +33,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.multi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.multiblock.condition.BlockRelativeCondition;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.RestorationTankBlock;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.multiblock.FossilMultiblockStructure;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -135,7 +135,7 @@ implements MultiblockStructureBuilder {
             void $this$mapTo$iv$iv2;
             void $this$filterTo$iv$iv2;
             Intrinsics.checkNotNullParameter((Object)world, (String)"world");
-            List<BlockPos> blocks = MiscUtilsKt.blockPositionsAsList(this.getBoundingBox());
+            List<BlockPos> blocks = MiscUtils.blockPositionsAsList(this.getBoundingBox());
             Object[] objectArray = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
             dirsToCheck = CollectionsKt.listOf((Object[])objectArray);
             Iterable $this$filter$iv2 = blocks;

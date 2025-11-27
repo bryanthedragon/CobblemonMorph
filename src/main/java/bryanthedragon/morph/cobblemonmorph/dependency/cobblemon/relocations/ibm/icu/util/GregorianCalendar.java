@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.util;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
 
 import com.cobblemon.mod.relocations.ibm.icu.util.Calendar;
 import com.cobblemon.mod.relocations.ibm.icu.util.TimeZone;
@@ -7,11 +7,11 @@ import com.cobblemon.mod.relocations.ibm.icu.util.ULocale;
 import java.util.Date;
 import java.util.Locale;
 
-public class GregorianCalendar
-extends Calendar {
+public class GregorianCalendar extends Calendar {
     private static final long serialVersionUID = 9199388694351062137L;
     public static final int BC = 0;
     public static final int AD = 1;
+    @SuppressWarnings("unused")
     private static final int EPOCH_YEAR = 1970;
     private static final int[][] MONTH_COUNT = new int[][]{{31, 31, 0, 0}, {28, 29, 31, 31}, {31, 31, 59, 60}, {30, 30, 90, 91}, {31, 31, 120, 121}, {30, 30, 151, 152}, {31, 31, 181, 182}, {31, 31, 212, 213}, {30, 30, 243, 244}, {31, 31, 273, 274}, {30, 30, 304, 305}, {31, 31, 334, 335}};
     private static final int[][] LIMITS = new int[][]{{0, 0, 1, 1}, {1, 1, 5828963, 5838270}, {0, 0, 11, 11}, {1, 1, 52, 53}, new int[0], {1, 1, 28, 31}, {1, 1, 365, 366}, new int[0], {-1, -1, 4, 5}, new int[0], new int[0], new int[0], new int[0], new int[0], new int[0], new int[0], new int[0], {-5838270, -5838270, 5828964, 5838271}, new int[0], {-5838269, -5838269, 5828963, 5838270}, new int[0], new int[0], new int[0]};
@@ -34,10 +34,12 @@ extends Calendar {
         this(zone, ULocale.getDefault(ULocale.Category.FORMAT));
     }
 
+    @SuppressWarnings("deprecation")
     public GregorianCalendar(Locale aLocale) {
         this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
+    @SuppressWarnings("deprecation")
     public GregorianCalendar(ULocale locale) {
         this(TimeZone.forULocaleOrDefault(locale), locale);
     }

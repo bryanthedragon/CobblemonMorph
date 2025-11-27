@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.text;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
 
 class RBBIRuleParseTable {
     static final short doCheckVarDef = 1;

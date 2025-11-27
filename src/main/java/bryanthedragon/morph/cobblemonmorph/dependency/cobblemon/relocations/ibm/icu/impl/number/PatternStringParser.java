@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.number;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.number.AffixPatternProvider;
 import com.cobblemon.mod.relocations.ibm.icu.impl.number.AffixUtils;

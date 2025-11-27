@@ -24,7 +24,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.argument;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.Dialogues;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import com.mojang.brigadier.ImmutableStringReader;
 import com.mojang.brigadier.Message;
@@ -57,7 +57,7 @@ implements ArgumentType<ResourceLocation> {
     public static final Companion Companion = new Companion(null);
     @NotNull
     private static final List<String> EXAMPLES = CollectionsKt.listOf((Object)"cobblemon:example");
-    private static final MutableComponent INVALID_DIALOGUE = MiscUtilsKt.asTranslated("cobblemon.command.dialogue.invalid-dialogue");
+    private static final MutableComponent INVALID_DIALOGUE = MiscUtils.asTranslated("cobblemon.command.dialogue.invalid-dialogue");
 
     @NotNull
     public ResourceLocation parse(@NotNull StringReader reader) {

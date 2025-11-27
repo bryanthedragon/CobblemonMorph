@@ -97,7 +97,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.generic.GenericBedrockEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MoLangExtensionsKt;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -1162,7 +1162,7 @@ implements ModelFrame {
             if (transition == null && ((Pose)previousPose).getTransformTicks() > 0) {
                 PrimaryAnimation primaryAnimation2 = new PrimaryAnimation(new PoseTransitionAnimation((Pose)previousPose, desirablePose2, ((Pose)previousPose).getTransformTicks(), null, 8, null), moveToPose.primaryAnimation.1.INSTANCE, null, false, 12, null);
                 state.addPrimaryAnimation(primaryAnimation2);
-                primaryAnimation2.setAfterAction(MiscUtilsKt.plus(primaryAnimation2.getAfterAction(), (Function1)new Function1<Unit, Unit>(state, desirablePose2){
+                primaryAnimation2.setAfterAction(MiscUtils.plus(primaryAnimation2.getAfterAction(), (Function1)new Function1<Unit, Unit>(state, desirablePose2){
                     final /* synthetic */ PoseableEntityState<T> $state;
                     final /* synthetic */ Pose<T, ? extends ModelFrame> $desirablePose;
                     {
@@ -1179,7 +1179,7 @@ implements ModelFrame {
             } else if (transition != null) {
                 StatefulAnimation animation = (StatefulAnimation)transition.invoke(previousPose, desirablePose2);
                 PrimaryAnimation primaryAnimation3 = animation instanceof PrimaryAnimation ? (PrimaryAnimation)animation : new PrimaryAnimation(animation, moveToPose.primaryAnimation.2.INSTANCE, null, false, 12, null);
-                primaryAnimation3.setAfterAction(MiscUtilsKt.plus(primaryAnimation3.getAfterAction(), (Function1)new Function1<Unit, Unit>(state, desirablePose2){
+                primaryAnimation3.setAfterAction(MiscUtils.plus(primaryAnimation3.getAfterAction(), (Function1)new Function1<Unit, Unit>(state, desirablePose2){
                     final /* synthetic */ PoseableEntityState<T> $state;
                     final /* synthetic */ Pose<T, ? extends ModelFrame> $desirablePose;
                     {

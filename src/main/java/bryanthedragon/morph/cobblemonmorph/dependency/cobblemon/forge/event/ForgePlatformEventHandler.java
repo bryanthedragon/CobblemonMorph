@@ -30,7 +30,7 @@
  *  net.minecraftforge.server.ServerLifecycleHooks
  *  org.jetbrains.annotations.NotNull
  */
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.forge.event;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.forge.event;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.CancelableObservable;
@@ -287,6 +287,7 @@ public final class ForgePlatformEventHandler {
     /*
      * WARNING - void declaration
      */
+    @SuppressWarnings("rawtypes")
     @SubscribeEvent
     public final void onDeath(@NotNull LivingDeathEvent e) {
         void this_$iv$iv;
@@ -302,7 +303,7 @@ public final class ForgePlatformEventHandler {
         CancelableObservable<ServerPlayerEvent.Death> this_$iv = cancelableObservable;
         boolean $i$f$postThen = false;
         EventObservable eventObservable = this_$iv;
-        Cancelable[] cancelableArray = new Cancelable[]{object};
+        Cancelable[] cancelableArray = new Cancelable[]{(Cancelable) object};
         Cancelable[] events$iv$iv = cancelableArray;
         boolean $i$f$post = false;
         this_$iv$iv.emit(Arrays.copyOf(events$iv$iv, events$iv$iv.length));
@@ -328,6 +329,7 @@ public final class ForgePlatformEventHandler {
     /*
      * WARNING - void declaration
      */
+    @SuppressWarnings("rawtypes")
     @SubscribeEvent
     public final void onRightClickBlock(@NotNull PlayerInteractEvent.RightClickBlock e) {
         void this_$iv$iv;
@@ -376,6 +378,7 @@ public final class ForgePlatformEventHandler {
     /*
      * WARNING - void declaration
      */
+    @SuppressWarnings("rawtypes")
     @SubscribeEvent
     public final void onRightClickEntity(@NotNull PlayerInteractEvent.EntityInteract e) {
         void this_$iv$iv;

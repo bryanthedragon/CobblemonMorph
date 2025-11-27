@@ -34,7 +34,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonFloatingState;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.QuaternionUtilsKt;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -78,9 +78,9 @@ extends Button {
     @NotNull
     private final RenderablePokemon renderablePokemon;
     @NotNull
-    private static final ResourceLocation slotResource = MiscUtilsKt.cobblemonResource("textures/gui/interact/party_select_slot.png");
+    private static final ResourceLocation slotResource = MiscUtils.cobblemonResource("textures/gui/interact/party_select_slot.png");
     @NotNull
-    private static final ResourceLocation slotFaintedResource = MiscUtilsKt.cobblemonResource("textures/gui/interact/party_select_slot_fainted.png");
+    private static final ResourceLocation slotFaintedResource = MiscUtils.cobblemonResource("textures/gui/interact/party_select_slot_fainted.png");
     public static final int WIDTH = 69;
     public static final int HEIGHT = 27;
     public static final float SCALE = 0.5f;
@@ -182,7 +182,7 @@ extends Button {
         context.m_280168_().m_85849_();
         String string = this.pokemon.getPokeball();
         Intrinsics.checkNotNull((Object)string);
-        ResourceLocation ballIcon = MiscUtilsKt.cobblemonResource("textures/gui/ball/" + ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(string, null, 1, null).m_135815_() + ".png");
+        ResourceLocation ballIcon = MiscUtils.cobblemonResource("textures/gui/ball/" + ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(string, null, 1, null).m_135815_() + ".png");
         int ballHeight = 22;
         GuiUtilsKt.blitk$default(matrices, ballIcon, Float.valueOf((float)(this.m_252754_() - 2) / 0.5f), Float.valueOf((float)(this.m_252907_() - 3) / 0.5f), ballHeight, 18, null, null, null, ballHeight * 2, null, null, null, null, null, false, 0.5f, 64960, null);
         objectArray = new Object[1];
@@ -220,7 +220,7 @@ extends Button {
         RenderHelperKt.drawScaledText$default(context, null, TextKt.text(this.currentHealth + "/" + this.maxHealth), this.m_252754_() + 14, (double)this.m_252907_() + 22.5, 0.5f, null, 0, 0, true, false, null, null, 7618, null);
         String status = this.pokemon.getStatus();
         if (hpRatio > 0.0f && status != null) {
-            GuiUtilsKt.blitk$default(matrices, MiscUtilsKt.cobblemonResource("textures/gui/interact/party_select_status_" + status + ".png"), this.m_252754_() + 27, this.m_252907_() + 22, 5, 37, null, null, null, null, null, null, null, null, null, false, 0.0f, 131008, null);
+            GuiUtilsKt.blitk$default(matrices, MiscUtils.cobblemonResource("textures/gui/interact/party_select_status_" + status + ".png"), this.m_252754_() + 27, this.m_252907_() + 22, 5, 37, null, null, null, null, null, null, null, null, null, false, 0.0f, 131008, null);
             MutableComponent mutableComponent3 = LocalizationUtilsKt.lang("ui.status." + status, new Object[0]);
             Intrinsics.checkNotNullExpressionValue((Object)mutableComponent3, (String)"lang(\"ui.status.$status\")");
             MutableComponent mutableComponent4 = TextKt.bold(mutableComponent3);

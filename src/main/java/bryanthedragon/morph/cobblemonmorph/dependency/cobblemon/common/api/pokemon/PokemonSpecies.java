@@ -72,7 +72,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.adapters.CobblemonRequirementAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.adapters.NbtItemPredicateAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.predicate.NbtItemPredicate;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.AbilityPoolAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.AbilityTemplateAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.BiomeLikeConditionAdapter;
@@ -136,7 +136,7 @@ implements JsonDataRegistry<Species> {
     @NotNull
     public static final PokemonSpecies INSTANCE = new PokemonSpecies();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("species");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("species");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull
@@ -206,7 +206,7 @@ implements JsonDataRegistry<Species> {
     @Nullable
     public final Species getByName(@NotNull String name) {
         Intrinsics.checkNotNullParameter((Object)name, (String)"name");
-        return this.getByIdentifier(MiscUtilsKt.cobblemonResource(name));
+        return this.getByIdentifier(MiscUtils.cobblemonResource(name));
     }
 
     @Nullable

@@ -20,7 +20,7 @@
  *  net.minecraftforge.eventbus.api.SubscribeEvent
  *  org.jetbrains.annotations.NotNull
  */
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.forge.client;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.forge.client;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.EventObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ClientPlayerEvent;

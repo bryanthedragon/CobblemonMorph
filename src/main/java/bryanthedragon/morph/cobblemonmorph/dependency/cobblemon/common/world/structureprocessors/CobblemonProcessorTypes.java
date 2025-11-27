@@ -15,7 +15,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.structureprocessors;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.structureprocessors.CobblemonStructureProcessorLists;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.structureprocessors.RandomizedStructureMappedBlockStatePairProcessor;
 import com.mojang.serialization.Codec;
@@ -56,7 +56,7 @@ public final class CobblemonProcessorTypes {
     public final <T extends StructureProcessor> StructureProcessorType<T> register(@NotNull String id, @NotNull Codec<T> codec2) {
         Intrinsics.checkNotNullParameter((Object)id, (String)"id");
         Intrinsics.checkNotNullParameter(codec2, (String)"codec");
-        Object object = Registry.m_122965_(registry, (ResourceLocation)MiscUtilsKt.cobblemonResource(id), () -> CobblemonProcessorTypes.register$lambda$0(codec2));
+        Object object = Registry.m_122965_(registry, (ResourceLocation)MiscUtils.cobblemonResource(id), () -> CobblemonProcessorTypes.register$lambda$0(codec2));
         Intrinsics.checkNotNullExpressionValue((Object)object, (String)"register(registry, cobbl\u2026eProcessorType { codec })");
         return (StructureProcessorType)object;
     }

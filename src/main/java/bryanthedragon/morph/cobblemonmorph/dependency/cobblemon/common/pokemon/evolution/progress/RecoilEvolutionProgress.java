@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.requirement.EvolutionRequirement;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.requirements.RecoilRequirement;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.JsonObject;
 import java.util.Collection;
 import kotlin.Metadata;
@@ -40,7 +40,7 @@ implements EvolutionProgress<Progress> {
     @NotNull
     private Progress progress = new Progress(0);
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("recoil");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("recoil");
     @NotNull
     private static final String RECOIL = "recoil";
 

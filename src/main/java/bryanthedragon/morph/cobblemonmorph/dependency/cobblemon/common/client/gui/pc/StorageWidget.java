@@ -61,7 +61,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.SwapPCPokemonPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -130,9 +130,9 @@ extends SoundlessWidget {
     public static final int BOX_SLOT_PADDING = 2;
     public static final int PARTY_SLOT_PADDING = 6;
     @NotNull
-    private static final ResourceLocation partyPanelResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/party_panel.png");
+    private static final ResourceLocation partyPanelResource = MiscUtils.cobblemonResource("textures/gui/pc/party_panel.png");
     @NotNull
-    private static final ResourceLocation screenOverlayResource = MiscUtilsKt.cobblemonResource("textures/gui/pc/pc_screen_overlay.png");
+    private static final ResourceLocation screenOverlayResource = MiscUtils.cobblemonResource("textures/gui/pc/pc_screen_overlay.png");
 
     public StorageWidget(int pX, int pY, @NotNull PCGUI pcGui, @NotNull ClientPC pc, @NotNull ClientParty party) {
         Intrinsics.checkNotNullParameter((Object)((Object)pcGui), (String)"pcGui");

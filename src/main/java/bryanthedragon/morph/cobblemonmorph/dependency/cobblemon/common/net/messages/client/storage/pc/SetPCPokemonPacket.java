@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.N
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCPosition;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.PokemonDTO;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.Unit;
@@ -50,7 +50,7 @@ implements NetworkPacket<SetPCPokemonPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("set_pc_pokemon");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("set_pc_pokemon");
 
     public SetPCPokemonPacket(@NotNull UUID storeID, @NotNull PCPosition storePosition, @NotNull PokemonDTO pokemonDTO) {
         Intrinsics.checkNotNullParameter((Object)storeID, (String)"storeID");

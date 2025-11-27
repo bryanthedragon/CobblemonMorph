@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.util;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.locale.LSR;
 import com.cobblemon.mod.relocations.ibm.icu.impl.locale.LocaleDistance;

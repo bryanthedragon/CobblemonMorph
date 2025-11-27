@@ -12,7 +12,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.item;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.item.Berry;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.List;
 import kotlin.Metadata;
@@ -30,139 +30,139 @@ public final class Berries {
     @NotNull
     private static final List<Berry> allBerries = new ArrayList();
     @NotNull
-    private static final Berry CHERI = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("cheri"), 10, 0, 0, 0, 0));
+    private static final Berry CHERI = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("cheri"), 10, 0, 0, 0, 0));
     @NotNull
-    private static final Berry CHESTO = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("chesto"), 0, 10, 0, 0, 0));
+    private static final Berry CHESTO = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("chesto"), 0, 10, 0, 0, 0));
     @NotNull
-    private static final Berry PECHA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("pecha"), 0, 0, 10, 0, 0));
+    private static final Berry PECHA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("pecha"), 0, 0, 10, 0, 0));
     @NotNull
-    private static final Berry RAWST = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("rawst"), 0, 0, 0, 10, 0));
+    private static final Berry RAWST = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("rawst"), 0, 0, 0, 10, 0));
     @NotNull
-    private static final Berry ASPEAR = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("aspear"), 0, 0, 0, 0, 10));
+    private static final Berry ASPEAR = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("aspear"), 0, 0, 0, 0, 10));
     @NotNull
-    private static final Berry LEPPA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("leppa"), 10, 0, 10, 10, 10));
+    private static final Berry LEPPA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("leppa"), 10, 0, 10, 10, 10));
     @NotNull
-    private static final Berry ORAN = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("oran"), 10, 10, 0, 10, 10));
+    private static final Berry ORAN = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("oran"), 10, 10, 0, 10, 10));
     @NotNull
-    private static final Berry PERSIM = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("persim"), 10, 10, 10, 0, 10));
+    private static final Berry PERSIM = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("persim"), 10, 10, 10, 0, 10));
     @NotNull
-    private static final Berry LUM = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("lum"), 10, 10, 10, 10, 0));
+    private static final Berry LUM = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("lum"), 10, 10, 10, 10, 0));
     @NotNull
-    private static final Berry SITRUS = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("sitrus"), 0, 10, 10, 10, 10));
+    private static final Berry SITRUS = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("sitrus"), 0, 10, 10, 10, 10));
     @NotNull
-    private static final Berry FIGY = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("figy"), 15, 0, 0, 0, 0));
+    private static final Berry FIGY = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("figy"), 15, 0, 0, 0, 0));
     @NotNull
-    private static final Berry WIKI = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("wiki"), 0, 15, 0, 0, 0));
+    private static final Berry WIKI = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("wiki"), 0, 15, 0, 0, 0));
     @NotNull
-    private static final Berry MAGO = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("mago"), 0, 0, 15, 0, 0));
+    private static final Berry MAGO = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("mago"), 0, 0, 15, 0, 0));
     @NotNull
-    private static final Berry AGUAV = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("aguav"), 0, 0, 0, 15, 0));
+    private static final Berry AGUAV = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("aguav"), 0, 0, 0, 15, 0));
     @NotNull
-    private static final Berry IAPAPA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("iapapa"), 0, 0, 0, 0, 15));
+    private static final Berry IAPAPA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("iapapa"), 0, 0, 0, 0, 15));
     @NotNull
-    private static final Berry RAZZ = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("razz"), 10, 10, 0, 0, 0));
+    private static final Berry RAZZ = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("razz"), 10, 10, 0, 0, 0));
     @NotNull
-    private static final Berry BLUK = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("bluk"), 0, 10, 10, 0, 0));
+    private static final Berry BLUK = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("bluk"), 0, 10, 10, 0, 0));
     @NotNull
-    private static final Berry NANAB = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("nanab"), 0, 0, 10, 10, 0));
+    private static final Berry NANAB = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("nanab"), 0, 0, 10, 10, 0));
     @NotNull
-    private static final Berry WEPEAR = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("wepear"), 0, 0, 0, 10, 10));
+    private static final Berry WEPEAR = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("wepear"), 0, 0, 0, 10, 10));
     @NotNull
-    private static final Berry PINAP = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("pinap"), 10, 0, 0, 0, 10));
+    private static final Berry PINAP = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("pinap"), 10, 0, 0, 0, 10));
     @NotNull
-    private static final Berry POMEG = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("pomeg"), 10, 0, 10, 10, 0));
+    private static final Berry POMEG = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("pomeg"), 10, 0, 10, 10, 0));
     @NotNull
-    private static final Berry KELPSY = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("kelpsy"), 0, 10, 0, 10, 10));
+    private static final Berry KELPSY = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("kelpsy"), 0, 10, 0, 10, 10));
     @NotNull
-    private static final Berry QUALOT = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("qualot"), 10, 0, 10, 0, 10));
+    private static final Berry QUALOT = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("qualot"), 10, 0, 10, 0, 10));
     @NotNull
-    private static final Berry HONDEW = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("hondew"), 10, 10, 0, 10, 0));
+    private static final Berry HONDEW = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("hondew"), 10, 10, 0, 10, 0));
     @NotNull
-    private static final Berry GREPA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("grepa"), 0, 10, 10, 0, 10));
+    private static final Berry GREPA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("grepa"), 0, 10, 10, 0, 10));
     @NotNull
-    private static final Berry TAMATO = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("tamato"), 20, 10, 0, 0, 0));
+    private static final Berry TAMATO = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("tamato"), 20, 10, 0, 0, 0));
     @NotNull
-    private static final Berry CORNN = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("cornn"), 0, 20, 10, 0, 0));
+    private static final Berry CORNN = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("cornn"), 0, 20, 10, 0, 0));
     @NotNull
-    private static final Berry MAGOST = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("magost"), 0, 0, 20, 10, 0));
+    private static final Berry MAGOST = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("magost"), 0, 0, 20, 10, 0));
     @NotNull
-    private static final Berry RABUTA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("rabuta"), 0, 0, 0, 20, 10));
+    private static final Berry RABUTA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("rabuta"), 0, 0, 0, 20, 10));
     @NotNull
-    private static final Berry NOMEL = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("nomel"), 10, 0, 0, 0, 20));
+    private static final Berry NOMEL = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("nomel"), 10, 0, 0, 0, 20));
     @NotNull
-    private static final Berry SPELON = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("spelon"), 30, 10, 0, 0, 0));
+    private static final Berry SPELON = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("spelon"), 30, 10, 0, 0, 0));
     @NotNull
-    private static final Berry PAMTRE = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("pamtre"), 0, 30, 10, 0, 0));
+    private static final Berry PAMTRE = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("pamtre"), 0, 30, 10, 0, 0));
     @NotNull
-    private static final Berry WATMEL = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("watmel"), 0, 0, 30, 10, 0));
+    private static final Berry WATMEL = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("watmel"), 0, 0, 30, 10, 0));
     @NotNull
-    private static final Berry DURIN = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("durin"), 0, 0, 0, 30, 10));
+    private static final Berry DURIN = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("durin"), 0, 0, 0, 30, 10));
     @NotNull
-    private static final Berry BELUE = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("belue"), 10, 0, 0, 0, 30));
+    private static final Berry BELUE = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("belue"), 10, 0, 0, 0, 30));
     @NotNull
-    private static final Berry OCCA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("occa"), 15, 0, 10, 0, 0));
+    private static final Berry OCCA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("occa"), 15, 0, 10, 0, 0));
     @NotNull
-    private static final Berry PASSHO = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("passho"), 0, 15, 0, 10, 0));
+    private static final Berry PASSHO = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("passho"), 0, 15, 0, 10, 0));
     @NotNull
-    private static final Berry WACAN = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("wacan"), 0, 0, 15, 0, 10));
+    private static final Berry WACAN = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("wacan"), 0, 0, 15, 0, 10));
     @NotNull
-    private static final Berry RINDO = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("rindo"), 10, 0, 0, 15, 0));
+    private static final Berry RINDO = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("rindo"), 10, 0, 0, 15, 0));
     @NotNull
-    private static final Berry YACHE = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("yache"), 0, 10, 0, 0, 15));
+    private static final Berry YACHE = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("yache"), 0, 10, 0, 0, 15));
     @NotNull
-    private static final Berry CHOPLE = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("chople"), 15, 0, 0, 10, 0));
+    private static final Berry CHOPLE = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("chople"), 15, 0, 0, 10, 0));
     @NotNull
-    private static final Berry KEBIA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("kebia"), 0, 15, 0, 0, 10));
+    private static final Berry KEBIA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("kebia"), 0, 15, 0, 0, 10));
     @NotNull
-    private static final Berry SHUCA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("shuca"), 10, 0, 15, 0, 0));
+    private static final Berry SHUCA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("shuca"), 10, 0, 15, 0, 0));
     @NotNull
-    private static final Berry COBA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("coba"), 0, 10, 0, 15, 0));
+    private static final Berry COBA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("coba"), 0, 10, 0, 15, 0));
     @NotNull
-    private static final Berry PAYAPA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("payapa"), 0, 0, 10, 0, 15));
+    private static final Berry PAYAPA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("payapa"), 0, 0, 10, 0, 15));
     @NotNull
-    private static final Berry TANGA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("tanga"), 20, 0, 0, 0, 10));
+    private static final Berry TANGA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("tanga"), 20, 0, 0, 0, 10));
     @NotNull
-    private static final Berry CHARTI = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("charti"), 10, 20, 0, 0, 0));
+    private static final Berry CHARTI = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("charti"), 10, 20, 0, 0, 0));
     @NotNull
-    private static final Berry KASIB = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("kasib"), 0, 10, 20, 0, 0));
+    private static final Berry KASIB = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("kasib"), 0, 10, 20, 0, 0));
     @NotNull
-    private static final Berry HABAN = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("haban"), 0, 0, 10, 20, 0));
+    private static final Berry HABAN = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("haban"), 0, 0, 10, 20, 0));
     @NotNull
-    private static final Berry COLBUR = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("colbur"), 0, 0, 0, 10, 20));
+    private static final Berry COLBUR = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("colbur"), 0, 0, 0, 10, 20));
     @NotNull
-    private static final Berry BABIRI = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("babiri"), 25, 10, 0, 0, 0));
+    private static final Berry BABIRI = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("babiri"), 25, 10, 0, 0, 0));
     @NotNull
-    private static final Berry CHILAN = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("chilan"), 0, 25, 10, 0, 0));
+    private static final Berry CHILAN = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("chilan"), 0, 25, 10, 0, 0));
     @NotNull
-    private static final Berry LIECHI = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("liechi"), 30, 10, 30, 0, 0));
+    private static final Berry LIECHI = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("liechi"), 30, 10, 30, 0, 0));
     @NotNull
-    private static final Berry GANLON = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("ganlon"), 0, 30, 10, 30, 0));
+    private static final Berry GANLON = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("ganlon"), 0, 30, 10, 30, 0));
     @NotNull
-    private static final Berry SALAC = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("salac"), 0, 0, 30, 10, 30));
+    private static final Berry SALAC = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("salac"), 0, 0, 30, 10, 30));
     @NotNull
-    private static final Berry PETAYA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("petaya"), 30, 0, 0, 30, 10));
+    private static final Berry PETAYA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("petaya"), 30, 0, 0, 30, 10));
     @NotNull
-    private static final Berry APICOT = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("apicot"), 10, 30, 0, 0, 30));
+    private static final Berry APICOT = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("apicot"), 10, 30, 0, 0, 30));
     @NotNull
-    private static final Berry LANSAT = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("lansat"), 30, 10, 30, 10, 30));
+    private static final Berry LANSAT = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("lansat"), 30, 10, 30, 10, 30));
     @NotNull
-    private static final Berry STARF = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("starf"), 30, 10, 30, 10, 30));
+    private static final Berry STARF = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("starf"), 30, 10, 30, 10, 30));
     @NotNull
-    private static final Berry ENIGMA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("enigma"), 40, 10, 0, 0, 0));
+    private static final Berry ENIGMA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("enigma"), 40, 10, 0, 0, 0));
     @NotNull
-    private static final Berry MICLE = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("micle"), 0, 40, 10, 0, 0));
+    private static final Berry MICLE = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("micle"), 0, 40, 10, 0, 0));
     @NotNull
-    private static final Berry CUSTAP = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("custap"), 0, 0, 40, 10, 0));
+    private static final Berry CUSTAP = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("custap"), 0, 0, 40, 10, 0));
     @NotNull
-    private static final Berry JABOCA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("jaboca"), 0, 0, 0, 40, 10));
+    private static final Berry JABOCA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("jaboca"), 0, 0, 0, 40, 10));
     @NotNull
-    private static final Berry ROWAP = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("rowap"), 10, 0, 0, 0, 40));
+    private static final Berry ROWAP = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("rowap"), 10, 0, 0, 0, 40));
     @NotNull
-    private static final Berry ROSELI = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("roseli"), 0, 0, 25, 10, 0));
+    private static final Berry ROSELI = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("roseli"), 0, 0, 25, 10, 0));
     @NotNull
-    private static final Berry KEE = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("kee"), 30, 30, 10, 10, 10));
+    private static final Berry KEE = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("kee"), 30, 30, 10, 10, 10));
     @NotNull
-    private static final Berry MARANGA = INSTANCE.registerBerry(new Berry(MiscUtilsKt.cobblemonResource("maranga"), 10, 10, 30, 30, 10));
+    private static final Berry MARANGA = INSTANCE.registerBerry(new Berry(MiscUtils.cobblemonResource("maranga"), 10, 10, 30, 30, 10));
 
     private Berries() {
     }

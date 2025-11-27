@@ -30,7 +30,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.gro
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItems;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.group.CobblemonItemGroups;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -272,7 +272,7 @@ public final class CobblemonItemGroups {
     }
 
     private final ResourceKey<CreativeModeTab> create(String name, CreativeModeTab.DisplayItemsGenerator entryCollector, Function0<ItemStack> displayIconProvider) {
-        ResourceKey key = ResourceKey.m_135785_((ResourceKey)BuiltInRegistries.f_279662_.m_123023_(), (ResourceLocation)MiscUtilsKt.cobblemonResource(name));
+        ResourceKey key = ResourceKey.m_135785_((ResourceKey)BuiltInRegistries.f_279662_.m_123023_(), (ResourceLocation)MiscUtils.cobblemonResource(name));
         Collection collection = ALL;
         Intrinsics.checkNotNullExpressionValue((Object)key, (String)"key");
         collection.add(new ItemGroupHolder(key, displayIconProvider, entryCollector, null, 8, null));

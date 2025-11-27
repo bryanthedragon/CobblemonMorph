@@ -37,7 +37,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.i
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -83,7 +83,7 @@ CauserInstruction {
         Intrinsics.checkNotNullExpressionValue(completableFuture, (String)"completedFuture(Unit)");
         this.future = completableFuture;
         this.holds = new LinkedHashSet();
-        this.id = MiscUtilsKt.cobblemonResource("activate");
+        this.id = MiscUtils.cobblemonResource("activate");
     }
 
     @NotNull

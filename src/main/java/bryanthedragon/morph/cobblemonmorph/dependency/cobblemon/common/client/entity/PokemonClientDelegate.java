@@ -59,7 +59,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MovingSoundInstance;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.Locale;
@@ -411,7 +411,7 @@ implements PokemonSideDelegate {
                                     Intrinsics.checkNotNullExpressionValue((Object)string2, (String)"this as java.lang.String).toLowerCase(Locale.ROOT)");
                                     String ballType = StringsKt.replace$default((String)string2, (String)"_", (String)"", (boolean)false, (int)4, null);
                                     String mode = pokemonClientDelegate.getCurrentEntity().isBattling() ? "battle" : "casual";
-                                    BedrockParticleEffect bedrockParticleEffect = sendflash = BedrockParticleEffectRepository.INSTANCE.getEffect(MiscUtilsKt.cobblemonResource(ballType + "/" + mode + "/sendflash"));
+                                    BedrockParticleEffect bedrockParticleEffect = sendflash = BedrockParticleEffectRepository.INSTANCE.getEffect(MiscUtils.cobblemonResource(ballType + "/" + mode + "/sendflash"));
                                     if (bedrockParticleEffect != null) {
                                         BedrockParticleEffect effect = bedrockParticleEffect;
                                         boolean bl2 = false;
@@ -426,8 +426,8 @@ implements PokemonSideDelegate {
                                             Intrinsics.checkNotNullExpressionValue((Object)clientLevel, (String)"MinecraftClient.getInstance().world ?: return@let");
                                             ClientLevel world = clientLevel;
                                             new ParticleStorm(effect, wrapper, world, null, null, null, null, null, null, 504, null).spawn();
-                                            BedrockParticleEffect ballsparks = BedrockParticleEffectRepository.INSTANCE.getEffect(MiscUtilsKt.cobblemonResource(ballType + "/" + mode + "/ballsparks"));
-                                            BedrockParticleEffect ballsendsparkle = BedrockParticleEffectRepository.INSTANCE.getEffect(MiscUtilsKt.cobblemonResource(ballType + "/" + mode + "/ballsendsparkle"));
+                                            BedrockParticleEffect ballsparks = BedrockParticleEffectRepository.INSTANCE.getEffect(MiscUtils.cobblemonResource(ballType + "/" + mode + "/ballsparks"));
+                                            BedrockParticleEffect ballsendsparkle = BedrockParticleEffectRepository.INSTANCE.getEffect(MiscUtils.cobblemonResource(ballType + "/" + mode + "/ballsendsparkle"));
                                             SchedulingFunctionsKt.afterOnClient$default(0, 0.01667f, (Function0)new Function0<Unit>(ballsparks, ballsendsparkle, pokemonClientDelegate, wrapper, world, ballType){
                                                 final /* synthetic */ BedrockParticleEffect $ballsparks;
                                                 final /* synthetic */ BedrockParticleEffect $ballsendsparkle;
@@ -482,7 +482,7 @@ implements PokemonSideDelegate {
                                                         public final void invoke() {
                                                             block0: {
                                                                 BedrockParticleEffect ballsparkle;
-                                                                BedrockParticleEffect bedrockParticleEffect = ballsparkle = BedrockParticleEffectRepository.INSTANCE.getEffect(MiscUtilsKt.cobblemonResource(this.$ballType + "/ballsparkle"));
+                                                                BedrockParticleEffect bedrockParticleEffect = ballsparkle = BedrockParticleEffectRepository.INSTANCE.getEffect(MiscUtils.cobblemonResource(this.$ballType + "/ballsparkle"));
                                                                 if (bedrockParticleEffect == null) break block0;
                                                                 BedrockParticleEffect bedrockParticleEffect2 = bedrockParticleEffect;
                                                                 MatrixWrapper matrixWrapper = this.$wrapper;

@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.i
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattlePersistentStatusPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Map;
 import kotlin.Metadata;
 import kotlin.Pair;
@@ -126,7 +126,7 @@ implements InterpreterInstruction {
                     mutableComponent = LocalizationUtilsKt.battleLang("curestatus." + this.$effect.getId(), var5_4);
                 } else {
                     var5_4 = new Object[]{pokemonName};
-                    mutableComponent = MiscUtilsKt.asTranslated(this.$status.getRemoveMessage(), var5_4);
+                    mutableComponent = MiscUtils.asTranslated(this.$status.getRemoveMessage(), var5_4);
                 }
                 MutableComponent lang = mutableComponent;
                 Intrinsics.checkNotNullExpressionValue((Object)lang, (String)"lang");

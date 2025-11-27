@@ -8,7 +8,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.ranges.IntRange;
 
@@ -16,7 +16,7 @@ import kotlin.ranges.IntRange;
 public final class FrozenStatus
 extends PersistentStatus {
     public FrozenStatus() {
-        super(MiscUtilsKt.cobblemonResource("frozen"), "frz", "cobblemon.status.frozen.apply", "cobblemon.status.frozen.cure", new IntRange(180, 300));
+        super(MiscUtils.cobblemonResource("frozen"), "frz", "cobblemon.status.frozen.apply", "cobblemon.status.frozen.cure", new IntRange(180, 300));
     }
 }
 

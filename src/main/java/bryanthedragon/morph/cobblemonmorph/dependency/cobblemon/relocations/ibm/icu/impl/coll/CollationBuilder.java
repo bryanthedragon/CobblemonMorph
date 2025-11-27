@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.coll;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.coll;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.Norm2AllModes;
 import com.cobblemon.mod.relocations.ibm.icu.impl.Normalizer2Impl;

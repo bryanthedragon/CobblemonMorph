@@ -37,7 +37,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.RegisteredSpawningContext;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.PossibleHeldItem;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset.SpawnDetailPreset;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.BiomeLikeConditionAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.BlockLikeConditionAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.EitherIdentifierOrTagAdapter;
@@ -195,7 +195,7 @@ implements JsonDataRegistry<SpawnDetailPreset> {
         gson = gson2;
         typeToken = TypeToken.get(SpawnDetailPreset.class);
         resourcePath = "spawn_detail_presets";
-        id = MiscUtilsKt.cobblemonResource(INSTANCE.getResourcePath());
+        id = MiscUtils.cobblemonResource(INSTANCE.getResourcePath());
         SpawnDetailPresets.type = PackType.SERVER_DATA;
         observable = new SimpleObservable();
         presets = new LinkedHashMap();

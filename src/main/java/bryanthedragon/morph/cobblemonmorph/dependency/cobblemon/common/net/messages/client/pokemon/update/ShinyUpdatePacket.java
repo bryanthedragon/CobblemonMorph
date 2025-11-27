@@ -15,7 +15,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.BooleanUpdatePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function0;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -32,7 +32,7 @@ extends BooleanUpdatePacket<ShinyUpdatePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("shiny_update");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("shiny_update");
 
     public ShinyUpdatePacket(@NotNull Function0<? extends Pokemon> pokemon, boolean value2) {
         Intrinsics.checkNotNullParameter(pokemon, (String)"pokemon");

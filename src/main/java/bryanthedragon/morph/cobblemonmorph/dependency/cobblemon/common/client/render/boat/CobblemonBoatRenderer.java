@@ -32,7 +32,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.boat.CobblemonBoatEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.boat.CobblemonBoatType;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -141,7 +141,7 @@ extends EntityRenderer<CobblemonBoatEntity> {
             String string = type.name().toLowerCase(Locale.ROOT);
             Intrinsics.checkNotNullExpressionValue((Object)string, (String)"this as java.lang.String).toLowerCase(Locale.ROOT)");
             String path = "textures/entity/" + boatSubPath + "/" + string + ".png";
-            return MiscUtilsKt.cobblemonResource(path);
+            return MiscUtils.cobblemonResource(path);
         }
 
         private final BoatModel generateBoatModel(EntityRendererProvider.Context ctx, CobblemonBoatType type, boolean hasChest) {
@@ -157,7 +157,7 @@ extends EntityRenderer<CobblemonBoatEntity> {
             String string = type.name().toLowerCase(Locale.ROOT);
             Intrinsics.checkNotNullExpressionValue((Object)string, (String)"this as java.lang.String).toLowerCase(Locale.ROOT)");
             String path = boatSubPath + "/" + string;
-            return new ModelLayerLocation(MiscUtilsKt.cobblemonResource(path), "main");
+            return new ModelLayerLocation(MiscUtils.cobblemonResource(path), "main");
         }
 
         public /* synthetic */ Companion(DefaultConstructorMarker $constructor_marker) {

@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt;
 import io.netty.buffer.ByteBuf;
 import java.util.UUID;
@@ -44,7 +44,7 @@ implements NetworkPacket<PartyPokemonSelectedPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("party_pokemon_selected");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("party_pokemon_selected");
 
     public PartyPokemonSelectedPacket(@NotNull UUID uuid2, int index) {
         Intrinsics.checkNotNullParameter((Object)uuid2, (String)"uuid");

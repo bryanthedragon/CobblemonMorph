@@ -33,7 +33,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.i
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +69,7 @@ implements ActionEffectInstruction {
         Intrinsics.checkNotNullExpressionValue(completableFuture, (String)"completedFuture(Unit)");
         this.future = completableFuture;
         this.holds = new LinkedHashSet();
-        this.id = MiscUtilsKt.cobblemonResource("cant");
+        this.id = MiscUtils.cobblemonResource("cant");
     }
 
     @NotNull

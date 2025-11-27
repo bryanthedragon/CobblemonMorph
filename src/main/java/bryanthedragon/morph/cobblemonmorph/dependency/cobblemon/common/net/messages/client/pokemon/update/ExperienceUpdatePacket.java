@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.IntUpdatePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt;
 import io.netty.buffer.ByteBuf;
 import kotlin.Metadata;
@@ -36,7 +36,7 @@ extends IntUpdatePacket<ExperienceUpdatePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("experience_update");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("experience_update");
 
     public ExperienceUpdatePacket(@NotNull Function0<? extends Pokemon> pokemon, int value2) {
         Intrinsics.checkNotNullParameter(pokemon, (String)"pokemon");

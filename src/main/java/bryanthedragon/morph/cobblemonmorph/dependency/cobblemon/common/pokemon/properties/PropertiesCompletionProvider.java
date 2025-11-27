@@ -38,7 +38,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Nature;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
@@ -69,7 +69,7 @@ implements DataRegistry {
     @NotNull
     public static final PropertiesCompletionProvider INSTANCE = new PropertiesCompletionProvider();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("properties_tab_completion");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("properties_tab_completion");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull

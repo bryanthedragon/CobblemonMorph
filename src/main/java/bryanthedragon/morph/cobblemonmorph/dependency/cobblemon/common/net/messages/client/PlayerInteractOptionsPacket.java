@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.EnumSet;
 import java.util.UUID;
 import kotlin.Metadata;
@@ -45,7 +45,7 @@ implements NetworkPacket<PlayerInteractOptionsPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("player_interactions");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("player_interactions");
 
     public PlayerInteractOptionsPacket(@NotNull EnumSet<Options> options, @NotNull UUID targetId, int numericTargetId, @NotNull UUID selectedPokemonId) {
         Intrinsics.checkNotNullParameter(options, (String)"options");

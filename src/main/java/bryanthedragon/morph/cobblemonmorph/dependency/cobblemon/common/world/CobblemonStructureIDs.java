@@ -9,7 +9,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.JvmField;
 import net.minecraft.resources.ResourceLocation;
@@ -21,64 +21,64 @@ public final class CobblemonStructureIDs {
     public static final CobblemonStructureIDs INSTANCE = new CobblemonStructureIDs();
     @JvmField
     @NotNull
-    public static final ResourceLocation PLAINS_POKECENTER = MiscUtilsKt.cobblemonResource("village_plains/village_plains_pokecenter");
+    public static final ResourceLocation PLAINS_POKECENTER = MiscUtils.cobblemonResource("village_plains/village_plains_pokecenter");
     @JvmField
     @NotNull
-    public static final ResourceLocation DESERT_POKECENTER = MiscUtilsKt.cobblemonResource("village_desert/village_desert_pokecenter");
+    public static final ResourceLocation DESERT_POKECENTER = MiscUtils.cobblemonResource("village_desert/village_desert_pokecenter");
     @JvmField
     @NotNull
-    public static final ResourceLocation SAVANNA_POKECENTER = MiscUtilsKt.cobblemonResource("village_savanna/village_savanna_pokecenter");
+    public static final ResourceLocation SAVANNA_POKECENTER = MiscUtils.cobblemonResource("village_savanna/village_savanna_pokecenter");
     @JvmField
     @NotNull
-    public static final ResourceLocation SNOWY_POKECENTER = MiscUtilsKt.cobblemonResource("village_snowy/village_snowy_pokecenter");
+    public static final ResourceLocation SNOWY_POKECENTER = MiscUtils.cobblemonResource("village_snowy/village_snowy_pokecenter");
     @JvmField
     @NotNull
-    public static final ResourceLocation TAIGA_POKECENTER = MiscUtilsKt.cobblemonResource("village_taiga/village_taiga_pokecenter");
+    public static final ResourceLocation TAIGA_POKECENTER = MiscUtils.cobblemonResource("village_taiga/village_taiga_pokecenter");
     @JvmField
     @NotNull
-    public static final ResourceLocation PLAINS_LONG_PATH = MiscUtilsKt.cobblemonResource("village_plains/village_plains_long_path");
+    public static final ResourceLocation PLAINS_LONG_PATH = MiscUtils.cobblemonResource("village_plains/village_plains_long_path");
     @JvmField
     @NotNull
-    public static final ResourceLocation DESERT_LONG_PATH = MiscUtilsKt.cobblemonResource("village_desert/village_desert_long_path");
+    public static final ResourceLocation DESERT_LONG_PATH = MiscUtils.cobblemonResource("village_desert/village_desert_long_path");
     @JvmField
     @NotNull
-    public static final ResourceLocation SAVANNA_LONG_PATH = MiscUtilsKt.cobblemonResource("village_savanna/village_savanna_long_path");
+    public static final ResourceLocation SAVANNA_LONG_PATH = MiscUtils.cobblemonResource("village_savanna/village_savanna_long_path");
     @JvmField
     @NotNull
-    public static final ResourceLocation SNOWY_LONG_PATH = MiscUtilsKt.cobblemonResource("village_snowy/village_snowy_long_path");
+    public static final ResourceLocation SNOWY_LONG_PATH = MiscUtils.cobblemonResource("village_snowy/village_snowy_long_path");
     @JvmField
     @NotNull
-    public static final ResourceLocation TAIGA_LONG_PATH = MiscUtilsKt.cobblemonResource("village_taiga/village_taiga_long_path");
+    public static final ResourceLocation TAIGA_LONG_PATH = MiscUtils.cobblemonResource("village_taiga/village_taiga_long_path");
     @JvmField
     @NotNull
-    public static final ResourceLocation DESERT_BERRY_SMALL = MiscUtilsKt.cobblemonResource("village_desert/desert_berry_small");
+    public static final ResourceLocation DESERT_BERRY_SMALL = MiscUtils.cobblemonResource("village_desert/desert_berry_small");
     @JvmField
     @NotNull
-    public static final ResourceLocation DESERT_BERRY_LARGE = MiscUtilsKt.cobblemonResource("village_desert/desert_berry_large");
+    public static final ResourceLocation DESERT_BERRY_LARGE = MiscUtils.cobblemonResource("village_desert/desert_berry_large");
     @JvmField
     @NotNull
-    public static final ResourceLocation PLAINS_BERRY_SMALL = MiscUtilsKt.cobblemonResource("village_plains/plains_berry_small");
+    public static final ResourceLocation PLAINS_BERRY_SMALL = MiscUtils.cobblemonResource("village_plains/plains_berry_small");
     @JvmField
     @NotNull
-    public static final ResourceLocation PLAINS_BERRY_LARGE = MiscUtilsKt.cobblemonResource("village_plains/plains_berry_large");
+    public static final ResourceLocation PLAINS_BERRY_LARGE = MiscUtils.cobblemonResource("village_plains/plains_berry_large");
     @JvmField
     @NotNull
-    public static final ResourceLocation SAVANNA_BERRY_SMALL = MiscUtilsKt.cobblemonResource("village_savanna/savanna_berry_small");
+    public static final ResourceLocation SAVANNA_BERRY_SMALL = MiscUtils.cobblemonResource("village_savanna/savanna_berry_small");
     @JvmField
     @NotNull
-    public static final ResourceLocation SAVANNA_BERRY_LARGE = MiscUtilsKt.cobblemonResource("village_savanna/savanna_berry_large");
+    public static final ResourceLocation SAVANNA_BERRY_LARGE = MiscUtils.cobblemonResource("village_savanna/savanna_berry_large");
     @JvmField
     @NotNull
-    public static final ResourceLocation SNOWY_BERRY_SMALL = MiscUtilsKt.cobblemonResource("village_snowy/snowy_berry_small");
+    public static final ResourceLocation SNOWY_BERRY_SMALL = MiscUtils.cobblemonResource("village_snowy/snowy_berry_small");
     @JvmField
     @NotNull
-    public static final ResourceLocation SNOWY_BERRY_LARGE = MiscUtilsKt.cobblemonResource("village_snowy/snowy_berry_large");
+    public static final ResourceLocation SNOWY_BERRY_LARGE = MiscUtils.cobblemonResource("village_snowy/snowy_berry_large");
     @JvmField
     @NotNull
-    public static final ResourceLocation TAIGA_BERRY_SMALL = MiscUtilsKt.cobblemonResource("village_taiga/taiga_berry_small");
+    public static final ResourceLocation TAIGA_BERRY_SMALL = MiscUtils.cobblemonResource("village_taiga/taiga_berry_small");
     @JvmField
     @NotNull
-    public static final ResourceLocation TAIGA_BERRY_LARGE = MiscUtilsKt.cobblemonResource("village_taiga/taiga_berry_large");
+    public static final ResourceLocation TAIGA_BERRY_LARGE = MiscUtils.cobblemonResource("village_taiga/taiga_berry_large");
 
     private CobblemonStructureIDs() {
     }

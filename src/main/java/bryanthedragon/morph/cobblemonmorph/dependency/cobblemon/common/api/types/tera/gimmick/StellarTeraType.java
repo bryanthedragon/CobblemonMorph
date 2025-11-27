@@ -13,7 +13,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.gimmick;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.TeraType;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
@@ -33,7 +33,7 @@ implements TeraType {
     @NotNull
     private final Component displayName;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("stellar");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("stellar");
     private static final MutableComponent LANG = Component.m_237115_((String)"cobblemon.terra_type.stellar");
 
     public StellarTeraType() {

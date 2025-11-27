@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonResources;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.dialogue.DialogueScreen;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -44,7 +44,7 @@ GuiEventListener {
     private final int height;
     private float ratio;
     @NotNull
-    private static final ResourceLocation timerResource = MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_bar.png");
+    private static final ResourceLocation timerResource = MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_bar.png");
     @NotNull
     private static final Vec3i BG_COLOUR = new Vec3i(128, 128, 128);
 

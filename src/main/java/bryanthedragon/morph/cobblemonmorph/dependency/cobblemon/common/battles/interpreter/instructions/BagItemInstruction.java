@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battl
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
@@ -62,7 +62,7 @@ implements InterpreterInstruction {
                 Intrinsics.checkNotNull((Object)string);
                 String item = string;
                 MutableComponent ownerName = pokemon.getActor().getName();
-                MutableComponent itemName = MiscUtilsKt.asTranslated(item);
+                MutableComponent itemName = MiscUtils.asTranslated(item);
                 Object[] objectArray = new Object[3];
                 objectArray[0] = ownerName;
                 Intrinsics.checkNotNullExpressionValue((Object)itemName, (String)"itemName");

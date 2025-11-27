@@ -73,7 +73,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatusContainer;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -144,19 +144,19 @@ implements Schedulable {
     public static final int MOVE_SWAP = 1;
     public static final int EVOLVE = 2;
     @NotNull
-    private static final ResourceLocation baseResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_base.png");
+    private static final ResourceLocation baseResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_base.png");
     @NotNull
-    private static final ResourceLocation portraitBackgroundResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/portrait_background.png");
+    private static final ResourceLocation portraitBackgroundResource = MiscUtils.cobblemonResource("textures/gui/summary/portrait_background.png");
     @NotNull
-    private static final ResourceLocation typeSpacerResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/type_spacer.png");
+    private static final ResourceLocation typeSpacerResource = MiscUtils.cobblemonResource("textures/gui/summary/type_spacer.png");
     @NotNull
-    private static final ResourceLocation typeSpacerDoubleResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/type_spacer_double.png");
+    private static final ResourceLocation typeSpacerDoubleResource = MiscUtils.cobblemonResource("textures/gui/summary/type_spacer_double.png");
     @NotNull
-    private static final ResourceLocation sideSpacerResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_side_spacer.png");
+    private static final ResourceLocation sideSpacerResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_side_spacer.png");
     @NotNull
-    private static final ResourceLocation evolveButtonResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_evolve_button.png");
+    private static final ResourceLocation evolveButtonResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_evolve_button.png");
     @NotNull
-    private static final ResourceLocation iconShinyResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/icon_shiny.png");
+    private static final ResourceLocation iconShinyResource = MiscUtils.cobblemonResource("textures/gui/summary/icon_shiny.png");
 
     private Summary(Collection<? extends Pokemon> party, boolean editable, int selection) {
         super((Component)Component.m_237115_((String)"cobblemon.ui.summary.title"));
@@ -671,14 +671,14 @@ lbl64:
                 string = persistentStatus2 != null ? persistentStatus2.getShowdownName() : null;
             }
             String statusName = string;
-            GuiUtilsKt.blitk$default(matrices, MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_status_" + statusName + ".png"), x + 34, y + 4, 7, 39, 35, null, 74, null, null, null, null, null, null, false, 0.0f, 130688, null);
-            GuiUtilsKt.blitk$default(matrices, MiscUtilsKt.cobblemonResource("textures/gui/summary/status_trim.png"), x + 34, y + 5, 6, 3, null, null, null, null, null, null, null, null, null, false, 0.0f, 131008, null);
+            GuiUtilsKt.blitk$default(matrices, MiscUtils.cobblemonResource("textures/gui/battle/battle_status_" + statusName + ".png"), x + 34, y + 4, 7, 39, 35, null, 74, null, null, null, null, null, null, false, 0.0f, 130688, null);
+            GuiUtilsKt.blitk$default(matrices, MiscUtils.cobblemonResource("textures/gui/summary/status_trim.png"), x + 34, y + 5, 6, 3, null, null, null, null, null, null, null, null, null, false, 0.0f, 131008, null);
             ResourceLocation resourceLocation2 = CobblemonResources.INSTANCE.getDEFAULT_LARGE();
             MutableComponent mutableComponent = LocalizationUtilsKt.lang("ui.status." + statusName, new Object[0]);
             Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"lang(\"ui.status.$statusName\")");
             RenderHelperKt.drawScaledText$default(context, resourceLocation2, TextKt.bold(mutableComponent), x + 39, y + 3, 0.0f, null, 0, 0, false, false, null, null, 8160, null);
         }
-        ResourceLocation ballResource = MiscUtilsKt.cobblemonResource("textures/item/poke_balls/" + this.getSelectedPokemon$common().getCaughtBall().getName().m_135815_() + ".png");
+        ResourceLocation ballResource = MiscUtils.cobblemonResource("textures/item/poke_balls/" + this.getSelectedPokemon$common().getCaughtBall().getName().m_135815_() + ".png");
         double d = ((double)x + 3.5) / (double)0.5f;
         float f = (float)(y + 15) / 0.5f;
         GuiUtilsKt.blitk$default(matrices, ballResource, d, Float.valueOf(f), 16, 16, null, null, null, null, null, null, null, null, null, false, 0.5f, 65472, null);

@@ -13,7 +13,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
 import kotlin.random.Random;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public final class PoisonStatus
 extends PersistentStatus {
     public PoisonStatus() {
-        super(MiscUtilsKt.cobblemonResource("poison"), "psn", "cobblemon.status.poison.apply", "cobblemon.status.poison.cure", new IntRange(180, 300));
+        super(MiscUtils.cobblemonResource("poison"), "psn", "cobblemon.status.poison.apply", "cobblemon.status.poison.cure", new IntRange(180, 300));
     }
 
     @Override

@@ -13,7 +13,7 @@
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Redirect
  */
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.forge.mixin;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.forge.mixin;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -33,6 +33,7 @@ public class LootManagerMixin {
     @Unique
     private static final String LOAD_CONDITIONS = "cobblemon:forge_load_conditions";
 
+    @SuppressWarnings("null")
     @Redirect(method={"m_278660_"}, at=@At(value="INVOKE", target="Ljava/util/Map;forEach(Ljava/util/function/BiConsumer;)V"), remap=false)
     private static void cobblemon$supportICondition(Map<ResourceLocation, JsonElement> map, BiConsumer<ResourceLocation, JsonElement> consumer) {
         map.forEach((identifier, jsonElement) -> {

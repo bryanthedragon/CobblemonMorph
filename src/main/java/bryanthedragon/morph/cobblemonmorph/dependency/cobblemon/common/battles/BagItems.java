@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Observable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.battle.BagItemConvertible;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
@@ -63,7 +63,7 @@ implements DataRegistry {
     @NotNull
     public static final BagItems INSTANCE = new BagItems();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("bag_items");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("bag_items");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull

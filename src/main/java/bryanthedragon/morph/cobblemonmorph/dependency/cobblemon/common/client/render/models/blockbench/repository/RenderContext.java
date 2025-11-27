@@ -14,7 +14,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.reflect.TypeToken;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -81,37 +81,37 @@ public final class RenderContext {
     static {
         Companion this_$iv;
         Companion companion = Companion = new Companion(null);
-        ResourceLocation id$iv = MiscUtilsKt.asResource("entity");
+        ResourceLocation id$iv = MiscUtils.asResource("entity");
         boolean $i$f$key = false;
         TypeToken typeToken = TypeToken.get(Entity.class);
         Intrinsics.checkNotNullExpressionValue((Object)typeToken, (String)"get(T::class.java)");
         ENTITY = this_$iv.key(id$iv, typeToken);
         this_$iv = Companion;
-        id$iv = MiscUtilsKt.asResource("texture");
+        id$iv = MiscUtils.asResource("texture");
         $i$f$key = false;
         TypeToken typeToken2 = TypeToken.get(ResourceLocation.class);
         Intrinsics.checkNotNullExpressionValue((Object)typeToken2, (String)"get(T::class.java)");
         TEXTURE = this_$iv.key(id$iv, typeToken2);
         this_$iv = Companion;
-        id$iv = MiscUtilsKt.asResource("scale");
+        id$iv = MiscUtils.asResource("scale");
         $i$f$key = false;
         TypeToken typeToken3 = TypeToken.get(Float.class);
         Intrinsics.checkNotNullExpressionValue((Object)typeToken3, (String)"get(T::class.java)");
         SCALE = this_$iv.key(id$iv, typeToken3);
         this_$iv = Companion;
-        id$iv = MiscUtilsKt.asResource("species");
+        id$iv = MiscUtils.asResource("species");
         $i$f$key = false;
         TypeToken typeToken4 = TypeToken.get(ResourceLocation.class);
         Intrinsics.checkNotNullExpressionValue((Object)typeToken4, (String)"get(T::class.java)");
         SPECIES = this_$iv.key(id$iv, typeToken4);
         this_$iv = Companion;
-        id$iv = MiscUtilsKt.asResource("species");
+        id$iv = MiscUtils.asResource("species");
         $i$f$key = false;
         TypeToken typeToken5 = TypeToken.get(Set.class);
         Intrinsics.checkNotNullExpressionValue((Object)typeToken5, (String)"get(T::class.java)");
         ASPECTS = this_$iv.key(id$iv, typeToken5);
         this_$iv = Companion;
-        id$iv = MiscUtilsKt.asResource("state");
+        id$iv = MiscUtils.asResource("state");
         $i$f$key = false;
         TypeToken typeToken6 = TypeToken.get(RenderState.class);
         Intrinsics.checkNotNullExpressionValue((Object)typeToken6, (String)"get(T::class.java)");

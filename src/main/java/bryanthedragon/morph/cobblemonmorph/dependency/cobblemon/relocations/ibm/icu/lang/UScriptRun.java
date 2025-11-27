@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.lang;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.lang;
 
 import com.cobblemon.mod.relocations.ibm.icu.lang.UScript;
 import com.cobblemon.mod.relocations.ibm.icu.text.UTF16;

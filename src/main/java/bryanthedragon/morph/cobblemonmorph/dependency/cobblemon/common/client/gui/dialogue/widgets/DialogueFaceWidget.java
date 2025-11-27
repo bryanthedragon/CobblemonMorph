@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.dialogue.DialogueRenderableSpeaker;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.dialogue.DialogueScreen;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -44,9 +44,9 @@ GuiEventListener {
     private final int width;
     private final int height;
     @NotNull
-    private static final ResourceLocation frameResource = MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_face.png");
+    private static final ResourceLocation frameResource = MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_face.png");
     @NotNull
-    private static final ResourceLocation frameBackground = MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_face_background.png");
+    private static final ResourceLocation frameBackground = MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_face_background.png");
 
     public DialogueFaceWidget(@NotNull DialogueScreen dialogueScreen, int x, int y, int width, int height) {
         Intrinsics.checkNotNullParameter((Object)((Object)dialogueScreen), (String)"dialogueScreen");

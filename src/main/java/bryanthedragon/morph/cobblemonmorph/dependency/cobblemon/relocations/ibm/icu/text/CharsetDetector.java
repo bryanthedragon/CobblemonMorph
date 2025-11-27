@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.text;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
 
 import com.cobblemon.mod.relocations.ibm.icu.text.CharsetMatch;
 import com.cobblemon.mod.relocations.ibm.icu.text.CharsetRecog_2022;

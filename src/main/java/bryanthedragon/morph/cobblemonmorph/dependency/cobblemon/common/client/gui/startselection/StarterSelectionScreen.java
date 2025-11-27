@@ -50,7 +50,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.st
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.SelectStarterPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.SimpleMathExtensionsKt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.List;
@@ -95,19 +95,19 @@ extends Screen {
     private static final int BASE_WIDTH = 200;
     private static final int BASE_HEIGHT = 175;
     @NotNull
-    private static final ResourceLocation base = MiscUtilsKt.cobblemonResource("textures/gui/starterselection/starterselection_base.png");
+    private static final ResourceLocation base = MiscUtils.cobblemonResource("textures/gui/starterselection/starterselection_base.png");
     @NotNull
-    private static final ResourceLocation baseUnderlay = MiscUtilsKt.cobblemonResource("textures/gui/starterselection/starterselection_base_underlay.png");
+    private static final ResourceLocation baseUnderlay = MiscUtils.cobblemonResource("textures/gui/starterselection/starterselection_base_underlay.png");
     @NotNull
-    private static final ResourceLocation baseFrame = MiscUtilsKt.cobblemonResource("textures/gui/starterselection/starterselection_base_frame.png");
+    private static final ResourceLocation baseFrame = MiscUtils.cobblemonResource("textures/gui/starterselection/starterselection_base_frame.png");
     @NotNull
-    private static final ResourceLocation singleTypeBackground = MiscUtilsKt.cobblemonResource("textures/gui/starterselection/starterselection_type_slot1.png");
+    private static final ResourceLocation singleTypeBackground = MiscUtils.cobblemonResource("textures/gui/starterselection/starterselection_type_slot1.png");
     @NotNull
-    private static final ResourceLocation doubleTypeBackground = MiscUtilsKt.cobblemonResource("textures/gui/starterselection/starterselection_type_slot2.png");
+    private static final ResourceLocation doubleTypeBackground = MiscUtils.cobblemonResource("textures/gui/starterselection/starterselection_type_slot2.png");
 
     public StarterSelectionScreen(@NotNull List<RenderableStarterCategory> categories) {
         Intrinsics.checkNotNullParameter(categories, (String)"categories");
-        super((Component)MiscUtilsKt.asTranslated("cobblemon.ui.starter.title"));
+        super((Component)MiscUtils.asTranslated("cobblemon.ui.starter.title"));
         this.categories = categories;
     }
 
@@ -288,7 +288,7 @@ extends Screen {
                     Intrinsics.throwUninitializedPropertyAccessException((String)"currentPokemon");
                     renderablePokemon4 = null;
                 }
-                MutableComponent mutableComponent3 = MiscUtilsKt.asTranslated((String)CollectionsKt.first(renderablePokemon4.getForm().getPokedex()));
+                MutableComponent mutableComponent3 = MiscUtils.asTranslated((String)CollectionsKt.first(renderablePokemon4.getForm().getPokedex()));
                 Intrinsics.checkNotNullExpressionValue((Object)mutableComponent3, (String)"currentPokemon.form.pokedex.first().asTranslated()");
                 MultiLineLabelK.Companion.create((Component)mutableComponent3, 127, 4).renderLeftAligned(context, Float.valueOf((float)(x + 119) / scale2 + (float)4), (double)((float)(y + 18) / scale2) + 4.0, 8.0 / (double)scale2 - 1.25, 0xFFFFFF, false);
                 matrices.m_85849_();

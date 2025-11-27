@@ -101,7 +101,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.abilities.HiddenAbility;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.helditem.CobblemonHeldItemManager;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -1714,7 +1714,7 @@ extends PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>>, Item> {
         String finalName = name + "_berry";
         BerryItem item = this.create(finalName, new BerryItem(berryBlock));
         this.compostable((Item)item, 0.65f);
-        berries.put(MiscUtilsKt.cobblemonResource(finalName), item);
+        berries.put(MiscUtils.cobblemonResource(finalName), item);
         return item;
     }
 
@@ -1722,7 +1722,7 @@ extends PlatformRegistry<Registry<Item>, ResourceKey<Registry<Item>>, Item> {
         String finalName = name + "_berry";
         BerryItem item = this.create(finalName, berryItem);
         this.compostable((Item)item, 0.65f);
-        berries.put(MiscUtilsKt.cobblemonResource(finalName), item);
+        berries.put(MiscUtils.cobblemonResource(finalName), item);
         return item;
     }
 

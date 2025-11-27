@@ -20,7 +20,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.PokemonDTO;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -47,7 +47,7 @@ implements NetworkPacket<TradeUpdatedPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("trade_updated");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("trade_updated");
 
     public TradeUpdatedPacket(@NotNull UUID playerId, @Nullable Pokemon pokemon) {
         Intrinsics.checkNotNullParameter((Object)playerId, (String)"playerId");

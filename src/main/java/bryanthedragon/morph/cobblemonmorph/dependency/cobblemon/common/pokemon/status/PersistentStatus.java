@@ -19,7 +19,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Status;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.Pair;
 import kotlin.TuplesKt;
@@ -60,7 +60,7 @@ extends Status {
         Intrinsics.checkNotNullParameter((Object)pokemon, (String)"pokemon");
         Intrinsics.checkNotNullParameter((Object)random, (String)"random");
         Object[] objectArray = new Object[]{pokemon.getDisplayName()};
-        player.m_213846_((Component)MiscUtilsKt.asTranslated(this.getRemoveMessage(), objectArray));
+        player.m_213846_((Component)MiscUtils.asTranslated(this.getRemoveMessage(), objectArray));
     }
 
     public void onSecondPassed(@NotNull ServerPlayer player, @NotNull Pokemon pokemon, @NotNull Random random) {

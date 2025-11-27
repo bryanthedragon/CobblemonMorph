@@ -19,7 +19,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.callback.PartySelectPokemonDTO;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -50,7 +50,7 @@ implements NetworkPacket<OpenPartyCallbackPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("open_party_callback");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("open_party_callback");
 
     public OpenPartyCallbackPacket(@NotNull UUID uuid2, @NotNull MutableComponent title, @NotNull List<? extends PartySelectPokemonDTO> pokemon) {
         Intrinsics.checkNotNullParameter((Object)uuid2, (String)"uuid");

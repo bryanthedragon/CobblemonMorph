@@ -20,7 +20,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownActionResponse;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt;
 import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ implements NetworkPacket<BattleSelectActionsPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("battle_select_actions");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("battle_select_actions");
 
     public BattleSelectActionsPacket(@NotNull UUID battleId, @NotNull List<? extends ShowdownActionResponse> showdownActionResponses) {
         Intrinsics.checkNotNullParameter((Object)battleId, (String)"battleId");

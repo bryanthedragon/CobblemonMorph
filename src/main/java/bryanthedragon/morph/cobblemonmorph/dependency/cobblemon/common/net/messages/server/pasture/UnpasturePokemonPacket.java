@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -41,7 +41,7 @@ implements NetworkPacket<UnpasturePokemonPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("unpasture_pokemon");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("unpasture_pokemon");
 
     public UnpasturePokemonPacket(@NotNull UUID pastureId, @NotNull UUID pokemonId) {
         Intrinsics.checkNotNullParameter((Object)pastureId, (String)"pastureId");

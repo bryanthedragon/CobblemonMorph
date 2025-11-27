@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.breakiter;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.breakiter;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.breakiter.DictionaryMatcher;
 import com.cobblemon.mod.relocations.ibm.icu.text.UCharacterIterator;

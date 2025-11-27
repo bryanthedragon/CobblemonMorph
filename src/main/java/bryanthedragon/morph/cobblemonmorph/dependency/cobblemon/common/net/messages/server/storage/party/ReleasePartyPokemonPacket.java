@@ -17,7 +17,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyPosition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -42,7 +42,7 @@ implements NetworkPacket<ReleasePartyPokemonPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("release_party_pokemon");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("release_party_pokemon");
 
     public ReleasePartyPokemonPacket(@NotNull UUID pokemonID, @NotNull PartyPosition position) {
         Intrinsics.checkNotNullParameter((Object)pokemonID, (String)"pokemonID");

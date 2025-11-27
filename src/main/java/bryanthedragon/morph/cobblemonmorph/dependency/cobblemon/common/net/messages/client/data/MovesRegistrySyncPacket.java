@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalTypes;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.MoveTarget;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.DataRegistrySyncPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,7 +43,7 @@ extends DataRegistrySyncPacket<MoveTemplate, MovesRegistrySyncPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("moves_sync");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("moves_sync");
 
     public MovesRegistrySyncPacket(@NotNull List<? extends MoveTemplate> moves) {
         Intrinsics.checkNotNullParameter(moves, (String)"moves");

@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.multiblock.condition;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.multiblock.condition.MultiblockCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -81,7 +81,7 @@ implements MultiblockCondition {
         void $this$filterTo$iv$iv;
         Intrinsics.checkNotNullParameter((Object)world, (String)"world");
         Intrinsics.checkNotNullParameter((Object)box, (String)"box");
-        Iterable $this$filter$iv = MiscUtilsKt.blockPositionsAsList(box);
+        Iterable $this$filter$iv = MiscUtils.blockPositionsAsList(box);
         boolean $i$f$filter = false;
         Iterable iterable = $this$filter$iv;
         Collection destination$iv$iv = new ArrayList();

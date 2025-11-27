@@ -29,7 +29,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fossi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.fossil.NaturalMaterialRegistrySyncPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.registry.ItemTagCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IdentifierAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.ItemLikeConditionAdapter;
 import com.google.gson.Gson;
@@ -65,7 +65,7 @@ implements JsonDataRegistry<List<? extends NaturalMaterial>> {
     @NotNull
     public static final NaturalMaterials INSTANCE = new NaturalMaterials();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("natural_materials");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("natural_materials");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull

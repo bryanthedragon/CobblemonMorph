@@ -90,7 +90,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.bo
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.PokeBallItem;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ItemTooltipEvent;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.PlatformEvents;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -287,7 +287,7 @@ public final class CobblemonClient {
                     int n = offset = lines.size() > 1 ? 1 : 0;
                     if (language.m_6722_(key)) {
                         int n2 = lines.size() - offset;
-                        MutableComponent mutableComponent = MiscUtilsKt.asTranslated(key);
+                        MutableComponent mutableComponent = MiscUtils.asTranslated(key);
                         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"key.asTranslated()");
                         lines.add(n2, (Component)TextKt.gray(mutableComponent));
                     }
@@ -295,7 +295,7 @@ public final class CobblemonClient {
                     String listKey = key + "_" + i;
                     while (language.m_6722_(listKey)) {
                         int n3 = lines.size() - offset;
-                        MutableComponent mutableComponent = MiscUtilsKt.asTranslated(listKey);
+                        MutableComponent mutableComponent = MiscUtils.asTranslated(listKey);
                         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"listKey.asTranslated()");
                         lines.add(n3, (Component)TextKt.gray(mutableComponent));
                         listKey = key + "_" + ++i;

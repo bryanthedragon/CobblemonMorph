@@ -25,7 +25,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.G
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattleMessageQueue;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.Unit;
@@ -58,9 +58,9 @@ extends ObjectSelectionList<BattleMessageLine> {
     public static final int TEXT_BOX_HEIGHT = 46;
     public static final int EXPAND_TOGGLE_SIZE = 5;
     @NotNull
-    private static final ResourceLocation battleMessagePaneFrameResource = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_log.png");
+    private static final ResourceLocation battleMessagePaneFrameResource = MiscUtils.cobblemonResource("textures/gui/battle/battle_log.png");
     @NotNull
-    private static final ResourceLocation battleMessagePaneFrameExpandedResource = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_log_expanded.png");
+    private static final ResourceLocation battleMessagePaneFrameExpandedResource = MiscUtils.cobblemonResource("textures/gui/battle/battle_log_expanded.png");
     private static boolean expanded;
 
     public BattleMessagePane(@NotNull ClientBattleMessageQueue messageQueue) {

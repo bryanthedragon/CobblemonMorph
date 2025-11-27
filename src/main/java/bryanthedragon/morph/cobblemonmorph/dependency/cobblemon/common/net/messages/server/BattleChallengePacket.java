@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -40,7 +40,7 @@ implements NetworkPacket<BattleChallengePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("battle_challenge");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("battle_challenge");
 
     public BattleChallengePacket(int targetedEntityId, @NotNull UUID selectedPokemonId) {
         Intrinsics.checkNotNullParameter((Object)selectedPokemonId, (String)"selectedPokemonId");

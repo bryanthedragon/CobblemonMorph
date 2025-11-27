@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStore;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyStore;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
@@ -46,7 +46,7 @@ implements NetworkPacket<SwapClientPokemonPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("swap_client_pokemon");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("swap_client_pokemon");
 
     public SwapClientPokemonPacket(boolean storeIsParty, @NotNull UUID storeID, @NotNull UUID pokemonID1, @NotNull UUID pokemonID2) {
         Intrinsics.checkNotNullParameter((Object)storeID, (String)"storeID");

@@ -56,7 +56,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatusContainer;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.PoisonStatus;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +116,7 @@ implements ActionEffectInstruction {
         Intrinsics.checkNotNullExpressionValue(completableFuture, (String)"completedFuture(Unit)");
         this.future = completableFuture;
         this.holds = new LinkedHashSet();
-        this.id = MiscUtilsKt.cobblemonResource("damage");
+        this.id = MiscUtils.cobblemonResource("damage");
     }
 
     @NotNull

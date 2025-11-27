@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.SpeciesFeatureAssignmentSyncPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -50,7 +50,7 @@ implements JsonDataRegistry<SpeciesFeatureAssignment> {
     @NotNull
     public static final SpeciesFeatureAssignments INSTANCE = new SpeciesFeatureAssignments();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("species_feature_assignments");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("species_feature_assignments");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull

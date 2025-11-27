@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fossi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fossil.NaturalMaterials;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.DataRegistrySyncPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.registry.ItemTagCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import kotlin.Metadata;
@@ -45,7 +45,7 @@ extends DataRegistrySyncPacket<NaturalMaterial, NaturalMaterialRegistrySyncPacke
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("natural_materials");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("natural_materials");
 
     public NaturalMaterialRegistrySyncPacket(@NotNull List<NaturalMaterial> naturalMaterials) {
         Intrinsics.checkNotNullParameter(naturalMaterials, (String)"naturalMaterials");
@@ -78,7 +78,7 @@ extends DataRegistrySyncPacket<NaturalMaterial, NaturalMaterialRegistrySyncPacke
     @Override
     public void synchronizeDecoded(@NotNull Collection<NaturalMaterial> entries) {
         Intrinsics.checkNotNullParameter(entries, (String)"entries");
-        NaturalMaterials.INSTANCE.reload(MapsKt.mapOf((Pair)TuplesKt.to((Object)MiscUtilsKt.cobblemonResource("natural_materials"), (Object)CollectionsKt.toList((Iterable)entries))));
+        NaturalMaterials.INSTANCE.reload(MapsKt.mapOf((Pair)TuplesKt.to((Object)MiscUtils.cobblemonResource("natural_materials"), (Object)CollectionsKt.toList((Iterable)entries))));
     }
 
     private static final void encodeEntry$lambda$0(NaturalMaterial $entry, FriendlyByteBuf pb, ResourceLocation type) {

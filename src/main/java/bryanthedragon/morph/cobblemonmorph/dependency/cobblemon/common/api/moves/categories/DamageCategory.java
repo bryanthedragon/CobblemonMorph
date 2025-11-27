@@ -11,7 +11,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.categories;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
@@ -41,7 +41,7 @@ public final class DamageCategory {
 
     public /* synthetic */ DamageCategory(String string, Component component, int n, ResourceLocation resourceLocation, int n2, DefaultConstructorMarker defaultConstructorMarker) {
         if ((n2 & 8) != 0) {
-            resourceLocation = MiscUtilsKt.cobblemonResource("textures/gui/categories.png");
+            resourceLocation = MiscUtils.cobblemonResource("textures/gui/categories.png");
         }
         this(string, component, n, resourceLocation);
     }

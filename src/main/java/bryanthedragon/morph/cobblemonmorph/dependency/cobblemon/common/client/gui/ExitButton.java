@@ -17,7 +17,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -38,9 +38,9 @@ extends Button {
     private static final float HEIGHT = 13.0f;
     private static final float SCALE = 0.5f;
     @NotNull
-    private static final ResourceLocation buttonResource = MiscUtilsKt.cobblemonResource("textures/gui/common/back_button.png");
+    private static final ResourceLocation buttonResource = MiscUtils.cobblemonResource("textures/gui/common/back_button.png");
     @NotNull
-    private static final ResourceLocation iconResource = MiscUtilsKt.cobblemonResource("textures/gui/common/back_button_icon.png");
+    private static final ResourceLocation iconResource = MiscUtils.cobblemonResource("textures/gui/common/back_button_icon.png");
 
     public ExitButton(int pX, int pY, @NotNull Button.OnPress onPress) {
         Intrinsics.checkNotNullParameter((Object)onPress, (String)"onPress");

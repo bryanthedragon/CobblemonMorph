@@ -13,7 +13,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.JvmField;
 import net.minecraft.core.registries.Registries;
@@ -142,7 +142,7 @@ public final class CobblemonItemTags {
     }
 
     private final TagKey<Item> create(String path) {
-        return TagKey.m_203882_((ResourceKey)Registries.f_256913_, (ResourceLocation)MiscUtilsKt.cobblemonResource(path));
+        return TagKey.m_203882_((ResourceKey)Registries.f_256913_, (ResourceLocation)MiscUtils.cobblemonResource(path));
     }
 }
 

@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.PokemonModelRepository;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.VaryingModelRepository;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.List;
@@ -827,7 +827,7 @@ extends VaryingModelRepository<PokemonEntity, PokemonPoseableModel> {
         objectArray = new String[]{"bedrock/animations", "bedrock/" + INSTANCE.getType() + "/animations"};
         animationDirectories = CollectionsKt.listOf((Object[])objectArray);
         isForLivingEntityRenderer = true;
-        fallback = MiscUtilsKt.cobblemonResource("substitute");
+        fallback = MiscUtils.cobblemonResource("substitute");
     }
 }
 

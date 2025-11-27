@@ -15,7 +15,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.placementmodifier;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.placementmodifier.BeneathHeightmapPlacementModifier;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.placementmodifier.ConditionalCountPlacementModifier;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.placementmodifier.ConditionalRarityFilterPlacementModifier;
@@ -55,7 +55,7 @@ public final class CobblemonPlacementModifierTypes {
     public final <T extends PlacementModifier> PlacementModifierType<T> register(@NotNull String id, @NotNull Codec<T> codec2) {
         Intrinsics.checkNotNullParameter((Object)id, (String)"id");
         Intrinsics.checkNotNullParameter(codec2, (String)"codec");
-        Object object = Registry.m_122965_((Registry)BuiltInRegistries.f_256986_, (ResourceLocation)MiscUtilsKt.cobblemonResource(id), () -> CobblemonPlacementModifierTypes.register$lambda$0(codec2));
+        Object object = Registry.m_122965_((Registry)BuiltInRegistries.f_256986_, (ResourceLocation)MiscUtils.cobblemonResource(id), () -> CobblemonPlacementModifierTypes.register$lambda$0(codec2));
         Intrinsics.checkNotNullExpressionValue((Object)object, (String)"register(Registries.PLAC\u2026ntModifierType { codec })");
         return (PlacementModifierType)object;
     }

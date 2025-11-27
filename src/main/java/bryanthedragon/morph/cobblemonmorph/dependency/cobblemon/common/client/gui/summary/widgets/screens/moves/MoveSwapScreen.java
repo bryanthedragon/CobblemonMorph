@@ -34,7 +34,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.BenchMovePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.SimpleMathExtensionsKt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.UUID;
@@ -63,9 +63,9 @@ extends SummaryScrollList<MoveSlot> {
     public static final int SLOT_HEIGHT = 18;
     public static final int SLOT_SPACING = 3;
     @NotNull
-    private static final ResourceLocation moveResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_move_condensed.png");
+    private static final ResourceLocation moveResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_move_condensed.png");
     @NotNull
-    private static final ResourceLocation moveOverlayResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_move_overlay_condensed.png");
+    private static final ResourceLocation moveOverlayResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_move_overlay_condensed.png");
 
     public MoveSwapScreen(int x, int y, @NotNull MovesWidget movesWidget, @NotNull Move replacedMove) {
         Intrinsics.checkNotNullParameter((Object)((Object)movesWidget), (String)"movesWidget");

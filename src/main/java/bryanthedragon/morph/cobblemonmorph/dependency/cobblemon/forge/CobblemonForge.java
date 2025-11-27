@@ -105,7 +105,7 @@
  *  org.jetbrains.annotations.Nullable
  *  thedarkcolour.kotlinforforge.KotlinModLoadingContext
  */
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.forge;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.forge;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonActivities;
@@ -124,26 +124,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.ResourceP
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.JsonDataRegistry;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.group.CobblemonItemGroups;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.loot.LootInjector;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.particle.CobblemonParticles;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.sherds.CobblemonSherds;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.IdentifierExtensionsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.CobblemonStructures;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.feature.CobblemonFeatures;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.placementmodifier.CobblemonPlacementModifierTypes;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.predicate.CobblemonBlockPredicates;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.structureprocessors.CobblemonProcessorTypes;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.structureprocessors.CobblemonStructureProcessorListOverrides;
-import com.cobblemon.mod.forge.CobblemonForge;
-import com.cobblemon.mod.forge.brewing.CobblemonForgeBrewingRegistry;
-import com.cobblemon.mod.forge.client.CobblemonForgeClient;
-import com.cobblemon.mod.forge.event.ForgePlatformEventHandler;
-import com.cobblemon.mod.forge.net.CobblemonForgeNetworkManager;
-import com.cobblemon.mod.forge.permission.ForgePermissionValidator;
-import com.cobblemon.mod.forge.worldgen.CobblemonBiomeModifiers;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
+
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
@@ -162,6 +154,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+
 import kotlin.Metadata;
 import kotlin.Triple;
 import kotlin.Unit;
@@ -175,6 +168,7 @@ import kotlin.jvm.internal.Intrinsics;
 import kotlin.jvm.internal.SourceDebugExtension;
 import kotlin.reflect.KClass;
 import kotlin.text.Charsets;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.commands.CommandBuildContext;
@@ -219,6 +213,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.storage.loot.LootPool;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
@@ -249,9 +244,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.resource.PathPackResources;
 import net.minecraftforge.server.ServerLifecycleHooks;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import thedarkcolour.kotlinforforge.KotlinModLoadingContext;
 
 @Mod(value="cobblemon")
 @Metadata(mv={1, 8, 0}, k=1, xi=48, d1={"\u0000\u0084\u0003\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u000e\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u0007\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u001e\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\b\u0007\u0018\u00002\u00020\u0001B\b\u00a2\u0006\u0005\b\u00a0\u0001\u0010\u0012J\u0015\u0010\u0005\u001a\u00020\u00042\u0006\u0010\u0003\u001a\u00020\u0002\u00a2\u0006\u0004\b\u0005\u0010\u0006J5\u0010\u000f\u001a\u00020\u00042\f\u0010\t\u001a\b\u0012\u0004\u0012\u00020\b0\u00072\u0006\u0010\u000b\u001a\u00020\n2\u000e\u0010\u000e\u001a\n\u0012\u0004\u0012\u00020\r\u0018\u00010\fH\u0016\u00a2\u0006\u0004\b\u000f\u0010\u0010J\u000f\u0010\u0011\u001a\u00020\u0004H\u0002\u00a2\u0006\u0004\b\u0011\u0010\u0012J\u000f\u0010\u0014\u001a\u00020\u0013H\u0016\u00a2\u0006\u0004\b\u0014\u0010\u0015J\u0017\u0010\u0018\u001a\u00020\u00042\u0006\u0010\u0017\u001a\u00020\u0016H\u0002\u00a2\u0006\u0004\b\u0018\u0010\u0019J\u0015\u0010\u001b\u001a\u00020\u00042\u0006\u0010\u0003\u001a\u00020\u001a\u00a2\u0006\u0004\b\u001b\u0010\u001cJ\u0017\u0010 \u001a\u00020\u001f2\u0006\u0010\u001e\u001a\u00020\u001dH\u0016\u00a2\u0006\u0004\b \u0010!J\u0015\u0010#\u001a\u00020\u00042\u0006\u0010\u0003\u001a\u00020\"\u00a2\u0006\u0004\b#\u0010$J\u0015\u0010&\u001a\u00020\u00042\u0006\u0010\u0003\u001a\u00020%\u00a2\u0006\u0004\b&\u0010'J\u0015\u0010)\u001a\u00020\u00042\u0006\u0010\u0003\u001a\u00020(\u00a2\u0006\u0004\b)\u0010*J\u0015\u0010,\u001a\u00020\u00042\u0006\u0010\u0003\u001a\u00020+\u00a2\u0006\u0004\b,\u0010-J\u0015\u0010/\u001a\u00020\u00042\u0006\u0010\u0003\u001a\u00020.\u00a2\u0006\u0004\b/\u00100J\u0017\u00102\u001a\u00020\u00042\u0006\u0010\u0017\u001a\u000201H\u0002\u00a2\u0006\u0004\b2\u00103J\u0017\u00105\u001a\u00020\u00042\u0006\u0010\u0017\u001a\u000204H\u0002\u00a2\u0006\u0004\b5\u00106J\u0017\u00108\u001a\u00020\u00042\u0006\u0010\u0017\u001a\u000207H\u0002\u00a2\u0006\u0004\b8\u00109J\u0017\u0010;\u001a\u00020\u00042\u0006\u0010\u0017\u001a\u00020:H\u0002\u00a2\u0006\u0004\b;\u0010<J\u000f\u0010=\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\b=\u0010\u0012J\u000f\u0010>\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\b>\u0010\u0012J'\u0010D\u001a\u00020\u00042\u0006\u0010\u001e\u001a\u00020?2\u0006\u0010A\u001a\u00020@2\u0006\u0010C\u001a\u00020BH\u0016\u00a2\u0006\u0004\bD\u0010EJW\u0010O\u001a\u00020\u0004\"\f\b\u0000\u0010G*\u0006\u0012\u0002\b\u00030F\"\u000e\b\u0001\u0010I*\b\u0012\u0004\u0012\u00028\u00000H2\u0006\u0010J\u001a\u00020?2\f\u0010L\u001a\b\u0012\u0004\u0012\u00028\u00000K2\u0012\u0010N\u001a\u000e\u0012\u0004\u0012\u00028\u0000\u0012\u0004\u0012\u00028\u00010MH\u0016\u00a2\u0006\u0004\bO\u0010PJ\u0017\u0010R\u001a\u00020\u00042\u0006\u0010\u0017\u001a\u00020QH\u0002\u00a2\u0006\u0004\bR\u0010SJ\u001f\u0010X\u001a\u00020\u00042\u0006\u0010U\u001a\u00020T2\u0006\u0010W\u001a\u00020VH\u0016\u00a2\u0006\u0004\bX\u0010YJ%\u0010\\\u001a\u00028\u0000\"\f\b\u0000\u0010I*\u0006\u0012\u0002\b\u00030Z2\u0006\u0010[\u001a\u00028\u0000H\u0016\u00a2\u0006\u0004\b\\\u0010]J\u000f\u0010^\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\b^\u0010\u0012J\u000f\u0010_\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\b_\u0010\u0012JC\u0010g\u001a\b\u0012\u0004\u0012\u00028\u00000f\"\u000e\b\u0000\u0010I*\b\u0012\u0004\u0012\u00028\u00000`2\u0006\u0010a\u001a\u00020\u001d2\u0006\u0010c\u001a\u00020b2\f\u0010e\u001a\b\u0012\u0004\u0012\u00028\u00000dH\u0016\u00a2\u0006\u0004\bg\u0010hJ\u000f\u0010i\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\bi\u0010\u0012J\u000f\u0010j\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\bj\u0010\u0012J\u000f\u0010k\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\bk\u0010\u0012J5\u0010q\u001a\u00020\u00042\u0006\u0010J\u001a\u00020?2\u0006\u0010m\u001a\u00020l2\u0006\u0010e\u001a\u00020n2\f\u0010p\u001a\b\u0012\u0004\u0012\u00020?0oH\u0016\u00a2\u0006\u0004\bq\u0010rJ\u000f\u0010s\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\bs\u0010\u0012J\u000f\u0010t\u001a\u00020\u0004H\u0016\u00a2\u0006\u0004\bt\u0010\u0012J7\u0010z\u001a\u000e\u0012\u0004\u0012\u00020?\u0012\u0004\u0012\u00028\u00000y\"\u0004\b\u0000\u0010I2\f\u0010v\u001a\b\u0012\u0004\u0012\u00028\u00000u2\u0006\u0010x\u001a\u00020wH\u0016\u00a2\u0006\u0004\bz\u0010{J\u0011\u0010}\u001a\u0004\u0018\u00010|H\u0016\u00a2\u0006\u0004\b}\u0010~J\u0018\u0010\u0080\u0001\u001a\u00020\u00042\u0006\u0010\u0003\u001a\u00020\u007f\u00a2\u0006\u0006\b\u0080\u0001\u0010\u0081\u0001J\u0019\u0010\u0083\u0001\u001a\u00020\u00042\u0007\u0010\u0003\u001a\u00030\u0082\u0001\u00a2\u0006\u0006\b\u0083\u0001\u0010\u0084\u0001R`\u0010\u0087\u0001\u001aK\u0012\u001d\u0012\u001b\u0012\u0002\b\u0003\u0012\u0002\b\u0003 \u0086\u0001*\f\u0012\u0002\b\u0003\u0012\u0002\b\u0003\u0018\u00010M0M \u0086\u0001*$\u0012\u001d\u0012\u001b\u0012\u0002\b\u0003\u0012\u0002\b\u0003 \u0086\u0001*\f\u0012\u0002\b\u0003\u0012\u0002\b\u0003\u0018\u00010M0M\u0018\u00010\u0085\u00010\u0085\u00018\u0002X\u0082\u0004\u00a2\u0006\b\n\u0006\b\u0087\u0001\u0010\u0088\u0001R+\u0010\u008c\u0001\u001a\u0016\u0012\u0005\u0012\u00030\u008a\u00010\u0089\u0001j\n\u0012\u0005\u0012\u00030\u008a\u0001`\u008b\u00018\u0002X\u0082\u0004\u00a2\u0006\b\n\u0006\b\u008c\u0001\u0010\u008d\u0001R \u0010\u008f\u0001\u001a\u00030\u008e\u00018\u0016X\u0096\u0004\u00a2\u0006\u0010\n\u0006\b\u008f\u0001\u0010\u0090\u0001\u001a\u0006\b\u0091\u0001\u0010\u0092\u0001R \u0010\u0094\u0001\u001a\u00030\u0093\u00018\u0016X\u0096\u0004\u00a2\u0006\u0010\n\u0006\b\u0094\u0001\u0010\u0095\u0001\u001a\u0006\b\u0096\u0001\u0010\u0097\u0001RO\u0010\u009b\u0001\u001a:\u0012\u0017\u0012\u0015\u0012\u0004\u0012\u00020?\u0012\u0004\u0012\u00020@\u0012\u0004\u0012\u00020B0\u0099\u00010\u0098\u0001j\u001c\u0012\u0017\u0012\u0015\u0012\u0004\u0012\u00020?\u0012\u0004\u0012\u00020@\u0012\u0004\u0012\u00020B0\u0099\u0001`\u009a\u00018\u0002X\u0082\u0004\u00a2\u0006\b\n\u0006\b\u009b\u0001\u0010\u009c\u0001R7\u0010\u009e\u0001\u001a\"\u0012\u000b\u0012\t\u0012\u0004\u0012\u00020\u00040\u009d\u00010\u0098\u0001j\u0010\u0012\u000b\u0012\t\u0012\u0004\u0012\u00020\u00040\u009d\u0001`\u009a\u00018\u0002X\u0082\u0004\u00a2\u0006\b\n\u0006\b\u009e\u0001\u0010\u009c\u0001R)\u0010\u009f\u0001\u001a\u0014\u0012\u0004\u0012\u00020l0\u0098\u0001j\t\u0012\u0004\u0012\u00020l`\u009a\u00018\u0002X\u0082\u0004\u00a2\u0006\b\n\u0006\b\u009f\u0001\u0010\u009c\u0001\u00a8\u0006\u00a1\u0001"}, d2={"Lcom/cobblemon/mod/forge/CobblemonForge;", "Lcom/cobblemon/mod/common/CobblemonImplementation;", "Lnet/minecraftforge/event/server/ServerAboutToStartEvent;", "event", "", "addCobblemonStructures", "(Lnet/minecraftforge/event/server/ServerAboutToStartEvent;)V", "Lnet/minecraft/resources/ResourceKey;", "Lnet/minecraft/world/level/levelgen/placement/PlacedFeature;", "feature", "Lnet/minecraft/world/gen/GenerationStep$Feature;", "step", "Lnet/minecraft/tags/TagKey;", "Lnet/minecraft/world/level/biome/Biome;", "validTag", "addFeatureToWorldGen", "(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/levelgen/GenerationStep$Decoration;Lnet/minecraft/tags/TagKey;)V", "attemptModCompat", "()V", "Lcom/cobblemon/mod/common/Environment;", "environment", "()Lcom/cobblemon/mod/common/Environment;", "Lnet/minecraftforge/event/level/BlockEvent$BlockToolModificationEvent;", "e", "handleBlockStripping", "(Lnet/minecraftforge/event/level/BlockEvent$BlockToolModificationEvent;)V", "Lnet/minecraftforge/fml/event/lifecycle/FMLCommonSetupEvent;", "initialize", "(Lnet/minecraftforge/fml/event/lifecycle/FMLCommonSetupEvent;)V", "", "id", "", "isModInstalled", "(Ljava/lang/String;)Z", "Lnet/minecraftforge/registries/RegisterEvent;", "on", "(Lnet/minecraftforge/registries/RegisterEvent;)V", "Lnet/minecraftforge/event/AddPackFindersEvent;", "onAddPackFindersEvent", "(Lnet/minecraftforge/event/AddPackFindersEvent;)V", "Lnet/minecraftforge/event/OnDatapackSyncEvent;", "onDataPackSync", "(Lnet/minecraftforge/event/OnDatapackSyncEvent;)V", "Lnet/minecraftforge/event/entity/player/PlayerEvent$PlayerLoggedInEvent;", "onLogin", "(Lnet/minecraftforge/event/entity/player/PlayerEvent$PlayerLoggedInEvent;)V", "Lnet/minecraftforge/event/entity/player/PlayerEvent$PlayerLoggedOutEvent;", "onLogout", "(Lnet/minecraftforge/event/entity/player/PlayerEvent$PlayerLoggedOutEvent;)V", "Lnet/minecraftforge/event/LootTableLoadEvent;", "onLootTableLoad", "(Lnet/minecraftforge/event/LootTableLoadEvent;)V", "Lnet/minecraftforge/event/AddReloadListenerEvent;", "onReload", "(Lnet/minecraftforge/event/AddReloadListenerEvent;)V", "Lnet/minecraftforge/event/village/VillagerTradesEvent;", "onVillagerTradesRegistry", "(Lnet/minecraftforge/event/village/VillagerTradesEvent;)V", "Lnet/minecraftforge/event/village/WandererTradesEvent;", "onWanderingTraderRegistry", "(Lnet/minecraftforge/event/village/WandererTradesEvent;)V", "registerBlockEntityTypes", "registerBlocks", "Lnet/minecraft/resources/ResourceLocation;", "Lnet/minecraft/network/chat/Component;", "title", "Lcom/cobblemon/mod/common/ResourcePackActivationBehaviour;", "activationBehaviour", "registerBuiltinResourcePack", "(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/network/chat/Component;Lcom/cobblemon/mod/common/ResourcePackActivationBehaviour;)V", "Lcom/mojang/brigadier/arguments/ArgumentType;", "A", "Lnet/minecraft/command/argument/serialize/ArgumentSerializer$ArgumentTypeProperties;", "T", "identifier", "Lkotlin/reflect/KClass;", "argumentClass", "Lnet/minecraft/commands/synchronization/ArgumentTypeInfo;", "serializer", "registerCommandArgument", "(Lnet/minecraft/resources/ResourceLocation;Lkotlin/reflect/KClass;Lnet/minecraft/commands/synchronization/ArgumentTypeInfo;)V", "Lnet/minecraftforge/event/RegisterCommandsEvent;", "registerCommands", "(Lnet/minecraftforge/event/RegisterCommandsEvent;)V", "Lnet/minecraft/world/level/ItemLike;", "item", "", "chance", "registerCompostable", "(Lnet/minecraft/world/level/ItemLike;F)V", "Lnet/minecraft/advancements/CriterionTrigger;", "criteria", "registerCriteria", "(Lnet/minecraft/advancements/CriterionTrigger;)Lnet/minecraft/advancements/CriterionTrigger;", "registerEntityAttributes", "registerEntityTypes", "Lnet/minecraft/world/GameRules$Rule;", "name", "Lnet/minecraft/world/GameRules$Category;", "category", "Lnet/minecraft/world/GameRules$Type;", "type", "Lnet/minecraft/world/GameRules$Key;", "registerGameRule", "(Ljava/lang/String;Lnet/minecraft/world/level/GameRules$Category;Lnet/minecraft/world/level/GameRules$Type;)Lnet/minecraft/world/level/GameRules$Key;", "registerItems", "registerParticles", "registerPermissionValidator", "Lnet/minecraft/server/packs/resources/PreparableReloadListener;", "reloader", "Lnet/minecraft/server/packs/PackType;", "", "dependencies", "registerResourceReloader", "(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/server/packs/resources/PreparableReloadListener;Lnet/minecraft/server/packs/PackType;Ljava/util/Collection;)V", "registerSoundEvents", "registerWorldGenFeatures", "Lcom/cobblemon/mod/common/api/data/JsonDataRegistry;", "registry", "Lnet/minecraft/server/packs/resources/ResourceManager;", "manager", "Ljava/util/HashMap;", "reloadJsonRegistry", "(Lcom/cobblemon/mod/common/api/data/JsonDataRegistry;Lnet/minecraft/server/packs/resources/ResourceManager;)Ljava/util/HashMap;", "Lnet/minecraft/server/MinecraftServer;", "server", "()Lnet/minecraft/server/MinecraftServer;", "Lnet/minecraftforge/fml/event/lifecycle/FMLDedicatedServerSetupEvent;", "serverInit", "(Lnet/minecraftforge/fml/event/lifecycle/FMLDedicatedServerSetupEvent;)V", "Lnet/minecraftforge/event/entity/player/PlayerWakeUpEvent;", "wakeUp", "(Lnet/minecraftforge/event/entity/player/PlayerWakeUpEvent;)V", "Lnet/minecraftforge/registries/DeferredRegister;", "kotlin.jvm.PlatformType", "commandArgumentTypes", "Lnet/minecraftforge/registries/DeferredRegister;", "Ljava/util/HashSet;", "Ljava/util/UUID;", "Lkotlin/collections/HashSet;", "hasBeenSynced", "Ljava/util/HashSet;", "Lcom/cobblemon/mod/common/ModAPI;", "modAPI", "Lcom/cobblemon/mod/common/ModAPI;", "getModAPI", "()Lcom/cobblemon/mod/common/ModAPI;", "Lcom/cobblemon/mod/common/NetworkManager;", "networkManager", "Lcom/cobblemon/mod/common/NetworkManager;", "getNetworkManager", "()Lcom/cobblemon/mod/common/NetworkManager;", "Ljava/util/ArrayList;", "Lkotlin/Triple;", "Lkotlin/collections/ArrayList;", "queuedBuiltinResourcePacks", "Ljava/util/ArrayList;", "Lkotlin/Function0;", "queuedWork", "reloadableResources", "<init>", "forge"})
@@ -260,17 +255,27 @@ public final class CobblemonForge
 implements CobblemonImplementation {
     @NotNull
     private final ModAPI modAPI = ModAPI.FORGE;
+
     @NotNull
+    @SuppressWarnings({ "unchecked", "rawtypes" })  
     private final HashSet<UUID> hasBeenSynced = new HashSet();
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private final DeferredRegister<ArgumentTypeInfo<?, ?>> commandArgumentTypes = DeferredRegister.create((ResourceKey)Registries.f_256982_, (String)"cobblemon");
+
     @NotNull
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private final ArrayList<PreparableReloadListener> reloadableResources = new ArrayList();
+
     @NotNull
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private final ArrayList<Function0<Unit>> queuedWork = new ArrayList();
+
     @NotNull
     private final ArrayList<Triple<ResourceLocation, Component, ResourcePackActivationBehaviour>> queuedBuiltinResourcePacks = new ArrayList();
+
     @NotNull
-    private final NetworkManager networkManager = CobblemonForgeNetworkManager.INSTANCE;
+    private final CobblemonForgeNetworkManager networkManager = CobblemonForgeNetworkManager.INSTANCE;
 
     public CobblemonForge() {
         boolean $i$f$getMOD_BUS = false;
@@ -625,7 +630,7 @@ implements CobblemonImplementation {
             return;
         }
         if (this.isModInstalled("adorn")) {
-            ResourceLocation resourceLocation = MiscUtilsKt.cobblemonResource("adorncompatibility");
+            ResourceLocation resourceLocation = MiscUtils.cobblemonResource("adorncompatibility");
             MutableComponent mutableComponent = Component.m_237113_((String)"Adorn Compatibility");
             Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"literal(\"Adorn Compatibility\")");
             this.registerBuiltinResourcePack(resourceLocation, (Component)mutableComponent, ResourcePackActivationBehaviour.ALWAYS_ENABLED);
@@ -739,7 +744,7 @@ implements CobblemonImplementation {
             boolean bl = false;
             String string = it2.m_37998_();
             Intrinsics.checkNotNullExpressionValue((Object)string, (String)"it.id");
-            ForgeRegistries.ACTIVITIES.register(MiscUtilsKt.cobblemonResource(string), (Object)it2);
+            ForgeRegistries.ACTIVITIES.register(MiscUtils.cobblemonResource(string), (Object)it2);
         }
     }
 

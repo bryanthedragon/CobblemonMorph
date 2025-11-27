@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battl
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.ai.BattleAI;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.List;
 import java.util.UUID;
 import kotlin.Metadata;
@@ -47,7 +47,7 @@ extends AIBattleActor {
 
     @Override
     public MutableComponent getName() {
-        return MiscUtilsKt.asTranslated(this.trainerName);
+        return MiscUtils.asTranslated(this.trainerName);
     }
 
     @Override

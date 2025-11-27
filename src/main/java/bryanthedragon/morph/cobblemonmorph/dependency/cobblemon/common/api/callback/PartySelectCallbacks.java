@@ -26,13 +26,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.p
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.callback.OpenPartyCallbackPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import kotlin.Metadata;
+
 import kotlin.Unit;
 import kotlin.collections.CollectionsKt;
 import kotlin.jvm.JvmOverloads;
@@ -40,17 +41,18 @@ import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.internal.Intrinsics;
 import kotlin.jvm.internal.SourceDebugExtension;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
+
 import org.jetbrains.annotations.NotNull;
 
-@Metadata(mv={1, 8, 0}, k=1, xi=48, d1={"\u0000^\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0010\b\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\u0010\u000b\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0005\n\u0002\u0010%\n\u0002\u0018\u0002\n\u0002\b\u0007\b\u00c6\u0002\u0018\u00002\u00020\u0001B\t\b\u0002\u00a2\u0006\u0004\b'\u0010(Jn\u0010\u0012\u001a\u00020\n2\u0006\u0010\u0003\u001a\u00020\u00022\b\b\u0002\u0010\u0005\u001a\u00020\u00042\f\u0010\b\u001a\b\u0012\u0004\u0012\u00020\u00070\u00062\u0014\b\u0002\u0010\u000b\u001a\u000e\u0012\u0004\u0012\u00020\u0002\u0012\u0004\u0012\u00020\n0\t2'\u0010\u0011\u001a#\u0012\u0004\u0012\u00020\u0002\u0012\u0013\u0012\u00110\r\u00a2\u0006\f\b\u000e\u0012\b\b\u000f\u0012\u0004\b\b(\u0010\u0012\u0004\u0012\u00020\n0\fH\u0007\u00a2\u0006\u0004\b\u0012\u0010\u0013Jm\u0010\u0017\u001a\u00020\n2\u0006\u0010\u0003\u001a\u00020\u00022\b\b\u0002\u0010\u0005\u001a\u00020\u00042\f\u0010\b\u001a\b\u0012\u0004\u0012\u00020\u00140\u00062\u0012\u0010\u0016\u001a\u000e\u0012\u0004\u0012\u00020\u0014\u0012\u0004\u0012\u00020\u00150\t2\u0014\b\u0002\u0010\u000b\u001a\u000e\u0012\u0004\u0012\u00020\u0002\u0012\u0004\u0012\u00020\n0\t2\u0012\u0010\u0011\u001a\u000e\u0012\u0004\u0012\u00020\u0014\u0012\u0004\u0012\u00020\n0\tH\u0007\u00a2\u0006\u0004\b\u0017\u0010\u0018Jm\u0010\u001a\u001a\u00020\n2\u0006\u0010\u0003\u001a\u00020\u00022\b\b\u0002\u0010\u0005\u001a\u00020\u00042\f\u0010\b\u001a\b\u0012\u0004\u0012\u00020\u00190\u00062\u0012\u0010\u0016\u001a\u000e\u0012\u0004\u0012\u00020\u0019\u0012\u0004\u0012\u00020\u00150\t2\u0014\b\u0002\u0010\u000b\u001a\u000e\u0012\u0004\u0012\u00020\u0002\u0012\u0004\u0012\u00020\n0\t2\u0012\u0010\u0011\u001a\u000e\u0012\u0004\u0012\u00020\u0019\u0012\u0004\u0012\u00020\n0\tH\u0007\u00a2\u0006\u0004\b\u001a\u0010\u0018J%\u0010\u001d\u001a\u00020\n2\u0006\u0010\u0003\u001a\u00020\u00022\u0006\u0010\u001c\u001a\u00020\u001b2\u0006\u0010\u0010\u001a\u00020\r\u00a2\u0006\u0004\b\u001d\u0010\u001eJ\u001d\u0010\u001f\u001a\u00020\n2\u0006\u0010\u0003\u001a\u00020\u00022\u0006\u0010\u001c\u001a\u00020\u001b\u00a2\u0006\u0004\b\u001f\u0010 R#\u0010#\u001a\u000e\u0012\u0004\u0012\u00020\u001b\u0012\u0004\u0012\u00020\"0!8\u0006\u00a2\u0006\f\n\u0004\b#\u0010$\u001a\u0004\b%\u0010&\u00a8\u0006)"}, d2={"Lcom/cobblemon/mod/common/api/callback/PartySelectCallbacks;", "", "Lnet/minecraft/server/level/ServerPlayer;", "player", "Lnet/minecraft/network/chat/Component;", "title", "", "Lcom/cobblemon/mod/common/api/callback/PartySelectPokemonDTO;", "pokemon", "Lkotlin/Function1;", "", "cancel", "Lkotlin/Function2;", "", "Lkotlin/ParameterName;", "name", "index", "handler", "create", "(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/network/chat/Component;Ljava/util/List;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)V", "Lcom/cobblemon/mod/common/battles/pokemon/BattlePokemon;", "", "canSelect", "createBattleSelect", "(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/network/chat/Component;Ljava/util/List;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V", "Lcom/cobblemon/mod/common/pokemon/Pokemon;", "createFromPokemon", "Ljava/util/UUID;", "uuid", "handleCallback", "(Lnet/minecraft/server/level/ServerPlayer;Ljava/util/UUID;I)V", "handleCancelled", "(Lnet/minecraft/server/level/ServerPlayer;Ljava/util/UUID;)V", "", "Lcom/cobblemon/mod/common/api/callback/PartySelectCallback;", "callbacks", "Ljava/util/Map;", "getCallbacks", "()Ljava/util/Map;", "<init>", "()V", "common"})
-@SourceDebugExtension(value={"SMAP\nPartySelectCallback.kt\nKotlin\n*S Kotlin\n*F\n+ 1 PartySelectCallback.kt\ncom/cobblemon/mod/common/api/callback/PartySelectCallbacks\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,163:1\n1549#2:164\n1620#2,2:165\n1622#2:168\n1549#2:169\n1620#2,3:170\n1#3:167\n*S KotlinDebug\n*F\n+ 1 PartySelectCallback.kt\ncom/cobblemon/mod/common/api/callback/PartySelectCallbacks\n*L\n73#1:164\n73#1:165,2\n73#1:168\n88#1:169\n88#1:170,3\n*E\n"})
 public final class PartySelectCallbacks {
     @NotNull
     public static final PartySelectCallbacks INSTANCE = new PartySelectCallbacks();
     @NotNull
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static final Map<UUID, PartySelectCallback> callbacks = new LinkedHashMap();
 
     private PartySelectCallbacks() {
@@ -78,7 +80,7 @@ public final class PartySelectCallbacks {
         Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"title.copy()");
         CobblemonNetwork.INSTANCE.sendPacket(player, new OpenPartyCallbackPacket(uUID2, mutableComponent, pokemon));
     }
-
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static /* synthetic */ void create$default(PartySelectCallbacks partySelectCallbacks, ServerPlayer serverPlayer, Component component, List list, Function1 function1, Function2 function2, int n, Object object) {
         if ((n & 2) != 0) {
             MutableComponent mutableComponent = LocalizationUtilsKt.lang("ui.party", new Object[0]);
@@ -95,6 +97,7 @@ public final class PartySelectCallbacks {
      * WARNING - void declaration
      */
     @JvmOverloads
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public final void createBattleSelect(@NotNull ServerPlayer player, @NotNull Component title, @NotNull List<? extends BattlePokemon> pokemon, @NotNull Function1<? super BattlePokemon, Boolean> canSelect, @NotNull Function1<? super ServerPlayer, Unit> cancel2, @NotNull Function1<? super BattlePokemon, Unit> handler) {
         void $this$mapTo$iv$iv;
         Intrinsics.checkNotNullParameter((Object)player, (String)"player");
@@ -131,7 +134,7 @@ public final class PartySelectCallbacks {
 
             public final void invoke(@NotNull ServerPlayer serverPlayer, int index) {
                 Intrinsics.checkNotNullParameter((Object)serverPlayer, (String)"<anonymous parameter 0>");
-                this.$handler.invoke((Object)this.$pokemon.get(index));
+                this.$handler.invoke((BattlePokemon)this.$pokemon.get(index));
             }
         }));
     }
@@ -152,6 +155,7 @@ public final class PartySelectCallbacks {
      * WARNING - void declaration
      */
     @JvmOverloads
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public final void createFromPokemon(@NotNull ServerPlayer player, @NotNull Component title, @NotNull List<? extends Pokemon> pokemon, @NotNull Function1<? super Pokemon, Boolean> canSelect, @NotNull Function1<? super ServerPlayer, Unit> cancel2, @NotNull Function1<? super Pokemon, Unit> handler) {
         void $this$mapTo$iv$iv;
         Intrinsics.checkNotNullParameter((Object)player, (String)"player");
@@ -192,7 +196,7 @@ public final class PartySelectCallbacks {
             }
         }));
     }
-
+    @SuppressWarnings({ "rawtypes", "unchecked" }) 
     public static /* synthetic */ void createFromPokemon$default(PartySelectCallbacks partySelectCallbacks, ServerPlayer serverPlayer, Component component, List list, Function1 function1, Function1 function12, Function1 function13, int n, Object object) {
         if ((n & 2) != 0) {
             MutableComponent mutableComponent = LocalizationUtilsKt.lang("ui.party", new Object[0]);

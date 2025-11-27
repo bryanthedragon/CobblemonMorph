@@ -16,7 +16,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -36,7 +36,7 @@ implements NetworkPacket<CancelTradePacket> {
     @NotNull
     private final ResourceLocation id = ID;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("cancel_trade");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("cancel_trade");
 
     @Override
     @NotNull

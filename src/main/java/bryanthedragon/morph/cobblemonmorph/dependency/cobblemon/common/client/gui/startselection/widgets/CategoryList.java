@@ -28,7 +28,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.G
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.startselection.StarterSelectionScreen;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter.RenderableStarterCategory;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -72,7 +72,7 @@ extends ObjectSelectionList<Category> {
     private static final float CATEGORY_BUTTON_HEIGHT = 16.0f;
     private static final float ENTRY_X_OFFSET = 10.0f;
     @NotNull
-    private static final ResourceLocation categoryResource = MiscUtilsKt.cobblemonResource("textures/gui/starterselection/starterselection_slot.png");
+    private static final ResourceLocation categoryResource = MiscUtils.cobblemonResource("textures/gui/starterselection/starterselection_slot.png");
 
     public CategoryList(int paneWidth, int paneHeight, int topOffset, int bottomOffset, int entryWidth, int entryHeight, @NotNull List<RenderableStarterCategory> categories, int x, int y, @NotNull Minecraft minecraft, @NotNull StarterSelectionScreen starterSelectionScreen) {
         Intrinsics.checkNotNullParameter(categories, (String)"categories");

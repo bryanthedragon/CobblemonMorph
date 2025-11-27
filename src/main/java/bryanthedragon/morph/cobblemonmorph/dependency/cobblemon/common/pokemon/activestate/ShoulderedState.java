@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.ActivePokemonState;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.PokemonState;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.CompoundTagExtensionsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.WorldExtensionsKt;
 import com.google.gson.JsonObject;
@@ -127,7 +127,7 @@ extends ActivePokemonState {
     public ResourceLocation getIcon(@NotNull Pokemon pokemon) {
         Intrinsics.checkNotNullParameter((Object)pokemon, (String)"pokemon");
         String suffix = this.isLeftShoulder ? "left" : "right";
-        return MiscUtilsKt.cobblemonResource("textures/gui/party/party_icon_shoulder_" + suffix + ".png");
+        return MiscUtils.cobblemonResource("textures/gui/party/party_icon_shoulder_" + suffix + ".png");
     }
 
     @Override

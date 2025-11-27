@@ -12,7 +12,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.DialogueFaceProvider;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Set;
 import kotlin.Metadata;
 import kotlin.collections.SetsKt;
@@ -45,7 +45,7 @@ implements DialogueFaceProvider {
             string = "";
         }
         if ((n & 2) != 0) {
-            resourceLocation = MiscUtilsKt.cobblemonResource("bulbasaur");
+            resourceLocation = MiscUtils.cobblemonResource("bulbasaur");
         }
         if ((n & 4) != 0) {
             set2 = SetsKt.emptySet();

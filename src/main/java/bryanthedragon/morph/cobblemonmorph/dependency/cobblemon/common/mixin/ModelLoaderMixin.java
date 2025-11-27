@@ -49,7 +49,9 @@ public abstract class ModelLoaderMixin {
     @Shadow
     protected abstract void m_119306_(ModelResourceLocation var1);
 
+
     @Inject(method={"<init>"}, at={@At(value="TAIL")})
+    @SuppressWarnings("rawtypes")
     public void init(BlockColors blockColors, ProfilerFiller profiler, Map jsonUnbakedModels, Map blockStates, CallbackInfo ci) {
         CobblemonBakingOverrides.INSTANCE.getModels().forEach(bakingOverride -> {
             try {

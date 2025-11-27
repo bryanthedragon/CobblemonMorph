@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownSide;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.Targetable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt;
 import io.netty.buffer.ByteBuf;
@@ -259,10 +259,10 @@ public final class ShowdownActionRequest {
                     ShowdownMoveset.Gimmick gimmick = (ShowdownMoveset.Gimmick)((Object)element$iv2);
                     boolean bl2 = false;
                     if (PlayerExtensionsKt.hasKeyItem(player, triggerItem = (switch (WhenMappings.$EnumSwitchMapping$0[gimmick.ordinal()]) {
-                        case 1 -> MiscUtilsKt.cobblemonResource("key_stone");
-                        case 2 -> MiscUtilsKt.cobblemonResource("dynamax_band");
-                        case 3 -> MiscUtilsKt.cobblemonResource("tera_orb");
-                        default -> MiscUtilsKt.cobblemonResource("z_ring");
+                        case 1 -> MiscUtils.cobblemonResource("key_stone");
+                        case 2 -> MiscUtils.cobblemonResource("dynamax_band");
+                        case 3 -> MiscUtils.cobblemonResource("tera_orb");
+                        default -> MiscUtils.cobblemonResource("z_ring");
                     }))) continue;
                     moveset.blockGimmick(gimmick);
                 }

@@ -43,7 +43,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatusContainer;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt;
 import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ implements NetworkPacket<BattleInitializePacket> {
     public BattleSideDTO side1;
     public BattleSideDTO side2;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("battle_initialize");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("battle_initialize");
 
     public BattleInitializePacket() {
         this.id = ID;

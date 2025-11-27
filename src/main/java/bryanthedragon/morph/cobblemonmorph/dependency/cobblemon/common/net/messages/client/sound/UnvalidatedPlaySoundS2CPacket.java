@@ -17,7 +17,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.sound;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -47,7 +47,7 @@ implements NetworkPacket<UnvalidatedPlaySoundS2CPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("unvalidated_play_sound");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("unvalidated_play_sound");
 
     public UnvalidatedPlaySoundS2CPacket(@NotNull ResourceLocation sound2, @NotNull SoundSource category, double x, double y, double z, float volume, float pitch) {
         Intrinsics.checkNotNullParameter((Object)sound2, (String)"sound");

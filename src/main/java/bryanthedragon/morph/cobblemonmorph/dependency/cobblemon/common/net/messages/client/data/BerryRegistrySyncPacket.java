@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Berries;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Berry;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.DataRegistrySyncPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -42,7 +42,7 @@ extends DataRegistrySyncPacket<Berry, BerryRegistrySyncPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("berry_sync");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("berry_sync");
 
     public BerryRegistrySyncPacket(@NotNull Collection<Berry> berries) {
         Intrinsics.checkNotNullParameter(berries, (String)"berries");

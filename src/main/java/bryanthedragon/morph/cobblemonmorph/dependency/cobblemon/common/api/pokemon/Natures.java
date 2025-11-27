@@ -16,7 +16,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.poke
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Flavor;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Nature;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,55 +37,55 @@ public final class Natures {
     @NotNull
     private static final List<Nature> allNatures = new ArrayList();
     @NotNull
-    private static final Nature HARDY = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("hardy"), "cobblemon.nature.hardy", null, null, null, null));
+    private static final Nature HARDY = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("hardy"), "cobblemon.nature.hardy", null, null, null, null));
     @NotNull
-    private static final Nature LONELY = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("lonely"), "cobblemon.nature.lonely", Stats.ATTACK, Stats.DEFENCE, Flavor.SPICY, Flavor.SOUR));
+    private static final Nature LONELY = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("lonely"), "cobblemon.nature.lonely", Stats.ATTACK, Stats.DEFENCE, Flavor.SPICY, Flavor.SOUR));
     @NotNull
-    private static final Nature BRAVE = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("brave"), "cobblemon.nature.brave", Stats.ATTACK, Stats.SPEED, Flavor.SPICY, Flavor.SWEET));
+    private static final Nature BRAVE = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("brave"), "cobblemon.nature.brave", Stats.ATTACK, Stats.SPEED, Flavor.SPICY, Flavor.SWEET));
     @NotNull
-    private static final Nature ADAMANT = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("adamant"), "cobblemon.nature.adamant", Stats.ATTACK, Stats.SPECIAL_ATTACK, Flavor.SPICY, Flavor.DRY));
+    private static final Nature ADAMANT = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("adamant"), "cobblemon.nature.adamant", Stats.ATTACK, Stats.SPECIAL_ATTACK, Flavor.SPICY, Flavor.DRY));
     @NotNull
-    private static final Nature NAUGHTY = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("naughty"), "cobblemon.nature.naughty", Stats.ATTACK, Stats.SPECIAL_DEFENCE, Flavor.SPICY, Flavor.BITTER));
+    private static final Nature NAUGHTY = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("naughty"), "cobblemon.nature.naughty", Stats.ATTACK, Stats.SPECIAL_DEFENCE, Flavor.SPICY, Flavor.BITTER));
     @NotNull
-    private static final Nature BOLD = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("bold"), "cobblemon.nature.bold", Stats.DEFENCE, Stats.ATTACK, Flavor.SOUR, Flavor.SPICY));
+    private static final Nature BOLD = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("bold"), "cobblemon.nature.bold", Stats.DEFENCE, Stats.ATTACK, Flavor.SOUR, Flavor.SPICY));
     @NotNull
-    private static final Nature DOCILE = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("docile"), "cobblemon.nature.docile", null, null, null, null));
+    private static final Nature DOCILE = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("docile"), "cobblemon.nature.docile", null, null, null, null));
     @NotNull
-    private static final Nature RELAXED = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("relaxed"), "cobblemon.nature.relaxed", Stats.DEFENCE, Stats.SPEED, Flavor.SOUR, Flavor.SWEET));
+    private static final Nature RELAXED = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("relaxed"), "cobblemon.nature.relaxed", Stats.DEFENCE, Stats.SPEED, Flavor.SOUR, Flavor.SWEET));
     @NotNull
-    private static final Nature IMPISH = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("impish"), "cobblemon.nature.impish", Stats.DEFENCE, Stats.SPECIAL_ATTACK, Flavor.SOUR, Flavor.DRY));
+    private static final Nature IMPISH = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("impish"), "cobblemon.nature.impish", Stats.DEFENCE, Stats.SPECIAL_ATTACK, Flavor.SOUR, Flavor.DRY));
     @NotNull
-    private static final Nature LAX = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("lax"), "cobblemon.nature.lax", Stats.DEFENCE, Stats.SPECIAL_DEFENCE, Flavor.SOUR, Flavor.BITTER));
+    private static final Nature LAX = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("lax"), "cobblemon.nature.lax", Stats.DEFENCE, Stats.SPECIAL_DEFENCE, Flavor.SOUR, Flavor.BITTER));
     @NotNull
-    private static final Nature TIMID = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("timid"), "cobblemon.nature.timid", Stats.SPEED, Stats.ATTACK, Flavor.SWEET, Flavor.SPICY));
+    private static final Nature TIMID = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("timid"), "cobblemon.nature.timid", Stats.SPEED, Stats.ATTACK, Flavor.SWEET, Flavor.SPICY));
     @NotNull
-    private static final Nature HASTY = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("hasty"), "cobblemon.nature.hasty", Stats.SPEED, Stats.DEFENCE, Flavor.SWEET, Flavor.SOUR));
+    private static final Nature HASTY = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("hasty"), "cobblemon.nature.hasty", Stats.SPEED, Stats.DEFENCE, Flavor.SWEET, Flavor.SOUR));
     @NotNull
-    private static final Nature SERIOUS = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("serious"), "cobblemon.nature.serious", null, null, null, null));
+    private static final Nature SERIOUS = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("serious"), "cobblemon.nature.serious", null, null, null, null));
     @NotNull
-    private static final Nature JOLLY = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("jolly"), "cobblemon.nature.jolly", Stats.SPEED, Stats.SPECIAL_ATTACK, Flavor.SWEET, Flavor.DRY));
+    private static final Nature JOLLY = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("jolly"), "cobblemon.nature.jolly", Stats.SPEED, Stats.SPECIAL_ATTACK, Flavor.SWEET, Flavor.DRY));
     @NotNull
-    private static final Nature NAIVE = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("naive"), "cobblemon.nature.naive", Stats.SPEED, Stats.SPECIAL_DEFENCE, Flavor.SWEET, Flavor.BITTER));
+    private static final Nature NAIVE = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("naive"), "cobblemon.nature.naive", Stats.SPEED, Stats.SPECIAL_DEFENCE, Flavor.SWEET, Flavor.BITTER));
     @NotNull
-    private static final Nature MODEST = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("modest"), "cobblemon.nature.modest", Stats.SPECIAL_ATTACK, Stats.ATTACK, null, null));
+    private static final Nature MODEST = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("modest"), "cobblemon.nature.modest", Stats.SPECIAL_ATTACK, Stats.ATTACK, null, null));
     @NotNull
-    private static final Nature MILD = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("mild"), "cobblemon.nature.mild", Stats.SPECIAL_ATTACK, Stats.DEFENCE, Flavor.DRY, Flavor.SOUR));
+    private static final Nature MILD = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("mild"), "cobblemon.nature.mild", Stats.SPECIAL_ATTACK, Stats.DEFENCE, Flavor.DRY, Flavor.SOUR));
     @NotNull
-    private static final Nature QUIET = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("quiet"), "cobblemon.nature.quiet", Stats.SPECIAL_ATTACK, Stats.SPEED, Flavor.DRY, Flavor.SWEET));
+    private static final Nature QUIET = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("quiet"), "cobblemon.nature.quiet", Stats.SPECIAL_ATTACK, Stats.SPEED, Flavor.DRY, Flavor.SWEET));
     @NotNull
-    private static final Nature BASHFUL = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("bashful"), "cobblemon.nature.bashful", null, null, null, null));
+    private static final Nature BASHFUL = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("bashful"), "cobblemon.nature.bashful", null, null, null, null));
     @NotNull
-    private static final Nature RASH = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("rash"), "cobblemon.nature.rash", Stats.SPECIAL_ATTACK, Stats.SPECIAL_DEFENCE, Flavor.DRY, Flavor.BITTER));
+    private static final Nature RASH = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("rash"), "cobblemon.nature.rash", Stats.SPECIAL_ATTACK, Stats.SPECIAL_DEFENCE, Flavor.DRY, Flavor.BITTER));
     @NotNull
-    private static final Nature CALM = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("calm"), "cobblemon.nature.calm", Stats.SPECIAL_DEFENCE, Stats.ATTACK, Flavor.BITTER, Flavor.SPICY));
+    private static final Nature CALM = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("calm"), "cobblemon.nature.calm", Stats.SPECIAL_DEFENCE, Stats.ATTACK, Flavor.BITTER, Flavor.SPICY));
     @NotNull
-    private static final Nature GENTLE = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("gentle"), "cobblemon.nature.gentle", Stats.SPECIAL_DEFENCE, Stats.DEFENCE, Flavor.BITTER, Flavor.SOUR));
+    private static final Nature GENTLE = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("gentle"), "cobblemon.nature.gentle", Stats.SPECIAL_DEFENCE, Stats.DEFENCE, Flavor.BITTER, Flavor.SOUR));
     @NotNull
-    private static final Nature SASSY = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("sassy"), "cobblemon.nature.sassy", Stats.SPECIAL_DEFENCE, Stats.SPEED, Flavor.BITTER, Flavor.SWEET));
+    private static final Nature SASSY = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("sassy"), "cobblemon.nature.sassy", Stats.SPECIAL_DEFENCE, Stats.SPEED, Flavor.BITTER, Flavor.SWEET));
     @NotNull
-    private static final Nature CAREFUL = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("careful"), "cobblemon.nature.careful", Stats.SPECIAL_DEFENCE, Stats.SPECIAL_ATTACK, Flavor.BITTER, Flavor.DRY));
+    private static final Nature CAREFUL = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("careful"), "cobblemon.nature.careful", Stats.SPECIAL_DEFENCE, Stats.SPECIAL_ATTACK, Flavor.BITTER, Flavor.DRY));
     @NotNull
-    private static final Nature QUIRKY = INSTANCE.registerNature(new Nature(MiscUtilsKt.cobblemonResource("quirky"), "cobblemon.nature.quirky", null, null, null, null));
+    private static final Nature QUIRKY = INSTANCE.registerNature(new Nature(MiscUtils.cobblemonResource("quirky"), "cobblemon.nature.quirky", null, null, null, null));
 
     private Natures() {
     }
@@ -243,7 +243,7 @@ public final class Natures {
     @Nullable
     public final Nature getNature(@NotNull String identifier) {
         Intrinsics.checkNotNullParameter((Object)identifier, (String)"identifier");
-        Nature nature = this.getNature(MiscUtilsKt.cobblemonResource(identifier));
+        Nature nature = this.getNature(MiscUtils.cobblemonResource(identifier));
         if (nature != null) {
             return nature;
         }

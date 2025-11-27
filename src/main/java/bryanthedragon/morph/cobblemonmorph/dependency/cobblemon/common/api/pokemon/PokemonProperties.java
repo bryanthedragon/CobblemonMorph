@@ -72,7 +72,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatusContainer;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DistributionUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.StringExtensionsKt;
 import com.google.gson.JsonArray;
@@ -2120,7 +2120,7 @@ public class PokemonProperties {
             }
             Pair<String, String> matchingKeyPair = pair;
             String value2 = (String)matchingKeyPair.getSecond();
-            return value2 == null || !MiscUtilsKt.isInt(value2) ? null : Integer.valueOf(Integer.parseInt(value2));
+            return value2 == null || !MiscUtils.isInt(value2) ? null : Integer.valueOf(Integer.parseInt(value2));
         }
 
         private final String parseIdentifierOfRegistry(List<Pair<String, String>> keyPairs, List<String> validKeys, Function1<? super ResourceLocation, String> valueFetcher) {
@@ -2351,7 +2351,7 @@ lbl38:
             Intrinsics.checkNotNull((Object)object);
             String string = (String)object;
             int n = string.length();
-            return (3 <= n ? n < 17 : false) || string.length() == 36 && MiscUtilsKt.isUuid(string) ? string : null;
+            return (3 <= n ? n < 17 : false) || string.length() == 36 && MiscUtils.isUuid(string) ? string : null;
         }
 
         private final <T> T parsePropertyOfCollection(Iterable<? extends T> $this$parsePropertyOfCollection, List<Pair<String, String>> keyPairs, Iterable<String> labels, boolean labelsOptional, Function1<? super T, String> stringer) {

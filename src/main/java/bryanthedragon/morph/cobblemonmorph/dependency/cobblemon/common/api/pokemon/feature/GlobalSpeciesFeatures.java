@@ -38,7 +38,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.prope
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.GlobalSpeciesFeatureSyncPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IdentifierAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.SpeciesFeatureProviderAdapter;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.Vec3dAdapter;
@@ -79,7 +79,7 @@ implements JsonDataRegistry<SpeciesFeatureProvider<?>> {
     @NotNull
     public static final GlobalSpeciesFeatures INSTANCE = new GlobalSpeciesFeatures();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("global_species_features");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("global_species_features");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull

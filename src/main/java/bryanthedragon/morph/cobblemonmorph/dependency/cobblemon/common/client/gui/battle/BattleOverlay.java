@@ -68,7 +68,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -135,15 +135,15 @@ implements Schedulable {
     @NotNull
     private static final Function1<Float, Float> PROMPT_TEXT_OPACITY_CURVE = WaveFunctionKt.sineFunction$default(0.5f, 4.0f, 0.0f, 0.5f, 4, null);
     @NotNull
-    private static final ResourceLocation battleInfoBase = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_info_base.png");
+    private static final ResourceLocation battleInfoBase = MiscUtils.cobblemonResource("textures/gui/battle/battle_info_base.png");
     @NotNull
-    private static final ResourceLocation battleInfoBaseFlipped = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_info_base_flipped.png");
+    private static final ResourceLocation battleInfoBaseFlipped = MiscUtils.cobblemonResource("textures/gui/battle/battle_info_base_flipped.png");
     @NotNull
-    private static final ResourceLocation battleInfoRole = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_info_role.png");
+    private static final ResourceLocation battleInfoRole = MiscUtils.cobblemonResource("textures/gui/battle/battle_info_role.png");
     @NotNull
-    private static final ResourceLocation battleInfoRoleFlipped = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_info_role_flipped.png");
+    private static final ResourceLocation battleInfoRoleFlipped = MiscUtils.cobblemonResource("textures/gui/battle/battle_info_role_flipped.png");
     @NotNull
-    private static final ResourceLocation battleInfoUnderlay = MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_info_underlay.png");
+    private static final ResourceLocation battleInfoUnderlay = MiscUtils.cobblemonResource("textures/gui/battle/battle_info_underlay.png");
 
     public BattleOverlay() {
         super(Minecraft.m_91087_(), Minecraft.m_91087_().m_91291_());
@@ -373,7 +373,7 @@ implements Schedulable {
         }
         if (status != null) {
             int statusWidth = 37;
-            GuiUtilsKt.blitk$default(matrices, MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_status_" + status.getShowdownName() + ".png"), Float.valueOf(x + (float)(reversed ? 56 : 38)), Float.valueOf(y + (float)28), 7, statusWidth, reversed ? 0 : statusWidth, null, statusWidth * 2, null, null, null, null, null, Float.valueOf(opacity), false, 0.0f, 114304, null);
+            GuiUtilsKt.blitk$default(matrices, MiscUtils.cobblemonResource("textures/gui/battle/battle_status_" + status.getShowdownName() + ".png"), Float.valueOf(x + (float)(reversed ? 56 : 38)), Float.valueOf(y + (float)28), 7, statusWidth, reversed ? 0 : statusWidth, null, statusWidth * 2, null, null, null, null, null, Float.valueOf(opacity), false, 0.0f, 114304, null);
             ResourceLocation resourceLocation3 = CobblemonResources.INSTANCE.getDEFAULT_LARGE();
             MutableComponent mutableComponent = LocalizationUtilsKt.lang("ui.status." + status.getShowdownName(), new Object[0]);
             Intrinsics.checkNotNullExpressionValue((Object)mutableComponent, (String)"lang(\"ui.status.\" + status.showdownName)");

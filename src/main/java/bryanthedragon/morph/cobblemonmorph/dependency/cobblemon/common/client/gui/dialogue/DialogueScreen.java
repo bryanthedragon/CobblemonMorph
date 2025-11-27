@@ -53,7 +53,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.dto.DialogueOptionDTO;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.dto.DialogueSpeakerDTO;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.dialogue.EscapeDialoguePacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MoLangExtensionsKt;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -135,7 +135,7 @@ extends Screen {
                 void $this$mapNotNullTo$iv$iv;
                 void $this$mapNotNull$iv;
                 Intrinsics.checkNotNullParameter((Object)dialogueDTO, (String)"dialogueDTO");
-                super((Component)MiscUtilsKt.asTranslated("gui.dialogue"));
+                super((Component)MiscUtils.asTranslated("gui.dialogue"));
                 this.dialogueDTO = dialogueDTO;
                 DialogueScreen dialogueScreen = this;
                 map = this.dialogueDTO.getSpeakers();
@@ -438,7 +438,7 @@ extends Screen {
             boolean bl = false;
             float x = optionStartX + (float)(index * horizontalSpacing);
             float y = optionStartY + (float)(index * verticalSpacing);
-            object.add(new DialogueOptionWidget(this, option.getText(), option.getValue(), option.getSelectable(), (int)x - (vertical ? 81 : 46), (int)y, vertical ? 162 : 92, 24, vertical ? MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_button_wide.png") : MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_button_narrow.png"), vertical ? MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_button_wide_overlay.png") : MiscUtilsKt.cobblemonResource("textures/gui/dialogue/dialogue_button_narrow_overlay.png")));
+            object.add(new DialogueOptionWidget(this, option.getText(), option.getValue(), option.getSelectable(), (int)x - (vertical ? 81 : 46), (int)y, vertical ? 162 : 92, 24, vertical ? MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_button_wide.png") : MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_button_narrow.png"), vertical ? MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_button_wide_overlay.png") : MiscUtils.cobblemonResource("textures/gui/dialogue/dialogue_button_narrow_overlay.png")));
         }
         ((DialogueScreen)((Object)object2)).setDialogueOptionWidgets((List)destination$iv$iv3);
         this.m_169394_(this.getDialogueTimerWidget());

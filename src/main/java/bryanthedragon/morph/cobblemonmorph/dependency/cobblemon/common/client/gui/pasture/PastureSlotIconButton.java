@@ -17,7 +17,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pasture;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -39,7 +39,7 @@ extends Button {
     public static final int SIZE = 14;
     private static final float SCALE = 0.5f;
     @NotNull
-    private static final ResourceLocation baseResource = MiscUtilsKt.cobblemonResource("textures/gui/pasture/pasture_slot_icon_move.png");
+    private static final ResourceLocation baseResource = MiscUtils.cobblemonResource("textures/gui/pasture/pasture_slot_icon_move.png");
 
     public PastureSlotIconButton(int xPos, int yPos, @NotNull Button.OnPress onPress) {
         Intrinsics.checkNotNullParameter((Object)onPress, (String)"onPress");

@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnPool;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.AreaSpawner;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.SpawningArea;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt;
 import java.util.UUID;
 import kotlin.Metadata;
@@ -89,8 +89,8 @@ extends AreaSpawner {
         int sliceHeight = Cobblemon.INSTANCE.getConfig().getWorldSliceHeight();
         Random.Default rand = Random.Default;
         Vec3 center = player.m_20182_();
-        float r = MiscUtilsKt.nextBetween((Random)rand, Cobblemon.INSTANCE.getConfig().getMinimumSliceDistanceFromPlayer(), Cobblemon.INSTANCE.getConfig().getMaximumSliceDistanceFromPlayer());
-        double thetatemp = Math.atan(player.m_20184_().f_82481_ / player.m_20184_().f_82479_) + (double)MiscUtilsKt.nextBetween((Random)rand, -1.5707964f, 1.5707964f);
+        float r = MiscUtils.nextBetween((Random)rand, Cobblemon.INSTANCE.getConfig().getMinimumSliceDistanceFromPlayer(), Cobblemon.INSTANCE.getConfig().getMaximumSliceDistanceFromPlayer());
+        double thetatemp = Math.atan(player.m_20184_().f_82481_ / player.m_20184_().f_82479_) + (double)MiscUtils.nextBetween((Random)rand, -1.5707964f, 1.5707964f);
         double theta = player.m_20184_().m_165924_() < 0.1 ? rand.nextDouble() * (double)2 * (double)((float)Math.PI) : (player.m_20184_().f_82479_ < 0.0 ? (double)((float)Math.PI) - thetatemp : thetatemp);
         double x = center.f_82479_ + (double)r * Math.cos(theta);
         double z = center.f_82481_ + (double)r * Math.sin(theta);

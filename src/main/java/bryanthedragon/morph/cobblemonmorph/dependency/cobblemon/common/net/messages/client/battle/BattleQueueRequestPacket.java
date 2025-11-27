@@ -17,7 +17,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownActionRequest;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -39,7 +39,7 @@ implements NetworkPacket<BattleQueueRequestPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("battle_queue_request");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("battle_queue_request");
 
     public BattleQueueRequestPacket(@NotNull ShowdownActionRequest request) {
         Intrinsics.checkNotNullParameter((Object)request, (String)"request");

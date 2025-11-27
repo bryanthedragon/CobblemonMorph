@@ -42,7 +42,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.OpenPasturePacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.UnpasturePokemonPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.QuaternionUtilsKt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
@@ -88,9 +88,9 @@ extends ObjectSelectionList<PastureSlot> {
     public static final int SLOT_SPACING = 3;
     public static final float SCALE = 0.5f;
     @NotNull
-    private static final ResourceLocation scrollOverlayResource = MiscUtilsKt.cobblemonResource("textures/gui/pasture/pasture_scroll_overlay.png");
+    private static final ResourceLocation scrollOverlayResource = MiscUtils.cobblemonResource("textures/gui/pasture/pasture_scroll_overlay.png");
     @NotNull
-    private static final ResourceLocation slotResource = MiscUtilsKt.cobblemonResource("textures/gui/pasture/pasture_slot.png");
+    private static final ResourceLocation slotResource = MiscUtils.cobblemonResource("textures/gui/pasture/pasture_slot.png");
 
     public PasturePokemonScrollList(int x, int y, @NotNull PastureWidget parent) {
         Intrinsics.checkNotNullParameter((Object)((Object)parent), (String)"parent");

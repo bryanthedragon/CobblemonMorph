@@ -62,7 +62,7 @@
  *  org.jetbrains.annotations.Nullable
  *  thedarkcolour.kotlinforforge.KotlinModLoadingContext
  */
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.forge.client;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.forge.client;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonClientImplementation;
@@ -76,7 +76,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.grou
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.particle.CobblemonParticles;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.particle.SnowstormParticleType;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.cobblemon.mod.forge.client.ForgeClientPlatformEventHandler;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import java.util.ArrayList;
@@ -180,8 +180,8 @@ implements CobblemonClientImplementation {
     }
 
     private final void onShaderRegistration(RegisterShadersEvent event) {
-        event.registerShader(new ShaderInstance(event.getResourceProvider(), MiscUtilsKt.cobblemonResource("particle_add"), DefaultVertexFormat.f_85820_), CobblemonForgeClient::onShaderRegistration$lambda$5);
-        event.registerShader(new ShaderInstance(event.getResourceProvider(), MiscUtilsKt.cobblemonResource("particle_cutout"), DefaultVertexFormat.f_85820_), CobblemonForgeClient::onShaderRegistration$lambda$6);
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), MiscUtils.cobblemonResource("particle_add"), DefaultVertexFormat.f_85820_), CobblemonForgeClient::onShaderRegistration$lambda$5);
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), MiscUtils.cobblemonResource("particle_cutout"), DefaultVertexFormat.f_85820_), CobblemonForgeClient::onShaderRegistration$lambda$6);
     }
 
     @Override

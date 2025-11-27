@@ -17,7 +17,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BagItems;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.battle.BagItemConvertible;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +49,7 @@ public abstract class PlatformRegistry<R extends Registry<T>, K extends Resource
 
     public <E extends T> E create(@NotNull String name, E entry) {
         Intrinsics.checkNotNullParameter((Object)name, (String)"name");
-        ResourceLocation identifier = MiscUtilsKt.cobblemonResource(name);
+        ResourceLocation identifier = MiscUtils.cobblemonResource(name);
         ((Map)this.queue).put(identifier, entry);
         if (entry instanceof BagItemConvertible) {
             BagItems.INSTANCE.getBagItems().add(Priority.NORMAL, (BagItemConvertible)entry);

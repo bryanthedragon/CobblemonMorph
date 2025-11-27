@@ -20,7 +20,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyPosition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.UUID;
 import kotlin.Metadata;
 import kotlin.Pair;
@@ -46,7 +46,7 @@ implements NetworkPacket<UpdateTradeOfferPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("update_trade_offer");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("update_trade_offer");
 
     public UpdateTradeOfferPacket(@Nullable Pair<UUID, PartyPosition> newOffer) {
         this.newOffer = newOffer;

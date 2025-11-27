@@ -12,7 +12,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.perm
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission.Permission;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission.PermissionLevel;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +36,7 @@ implements Permission {
         Intrinsics.checkNotNullParameter((Object)((Object)level), (String)"level");
         this.node = node;
         this.level = level;
-        this.identifier = MiscUtilsKt.cobblemonResource(this.node);
+        this.identifier = MiscUtils.cobblemonResource(this.node);
         this.literal = "cobblemon." + this.node;
     }
 

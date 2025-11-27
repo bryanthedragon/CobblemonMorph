@@ -16,7 +16,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pokenav.PokeNavImageButton;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -36,7 +36,7 @@ extends PokeNavImageButton {
     public static final double BLUE = 0.3098;
     public static final double ALPHA = 0.9;
     @NotNull
-    private static final ResourceLocation FILLER = MiscUtilsKt.cobblemonResource("textures/gui/pokenav/pokenav_filler.png");
+    private static final ResourceLocation FILLER = MiscUtils.cobblemonResource("textures/gui/pokenav/pokenav_filler.png");
 
     public PokeNavFillerButton(int posX, int posY, int pX, int pY, int pWidth, int pHeight, int pXTexStart, int pYTexStart, int pYDiffText, int pTextureWidth, int pTextureHeight) {
         super(posX, posY, pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffText, FILLER, pTextureWidth, pTextureHeight, PokeNavFillerButton::_init_$lambda$0, TextKt.text(""), null, 16384, null);

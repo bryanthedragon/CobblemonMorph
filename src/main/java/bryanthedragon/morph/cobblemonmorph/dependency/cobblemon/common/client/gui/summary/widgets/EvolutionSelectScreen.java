@@ -38,7 +38,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.QuaternionUtilsKt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
@@ -76,9 +76,9 @@ extends SummaryScrollList<EvolveSlot> {
     public static final int SLOT_SPACING = 5;
     public static final int PORTRAIT_DIAMETER = 25;
     @NotNull
-    private static final ResourceLocation slotResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_evolve_slot.png");
+    private static final ResourceLocation slotResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_evolve_slot.png");
     @NotNull
-    private static final ResourceLocation buttonResource = MiscUtilsKt.cobblemonResource("textures/gui/summary/summary_evolve_select_button.png");
+    private static final ResourceLocation buttonResource = MiscUtils.cobblemonResource("textures/gui/summary/summary_evolve_select_button.png");
 
     public EvolutionSelectScreen(int x, int y, @NotNull Pokemon pokemon) {
         Intrinsics.checkNotNullParameter((Object)pokemon, (String)"pokemon");

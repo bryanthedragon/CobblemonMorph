@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.DataRegistrySyncPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,7 +45,7 @@ extends DataRegistrySyncPacket<Species, SpeciesRegistrySyncPacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("species_sync");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("species_sync");
 
     public SpeciesRegistrySyncPacket(@NotNull Collection<Species> species) {
         Intrinsics.checkNotNullParameter(species, (String)"species");

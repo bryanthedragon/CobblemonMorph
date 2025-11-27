@@ -15,7 +15,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.categories;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.categories.DamageCategory;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -75,7 +75,7 @@ public final class DamageCategories {
 
     public static /* synthetic */ DamageCategory register$default(DamageCategories damageCategories, String string, Component component, ResourceLocation resourceLocation, int n, int n2, Object object) {
         if ((n2 & 4) != 0) {
-            resourceLocation = MiscUtilsKt.cobblemonResource("textures/gui/categories.png");
+            resourceLocation = MiscUtils.cobblemonResource("textures/gui/categories.png");
         }
         return damageCategories.register(string, component, resourceLocation, n);
     }

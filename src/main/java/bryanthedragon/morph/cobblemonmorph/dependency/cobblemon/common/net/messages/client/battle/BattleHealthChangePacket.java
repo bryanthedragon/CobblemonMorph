@@ -17,7 +17,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -43,7 +43,7 @@ implements NetworkPacket<BattleHealthChangePacket> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("battle_health_change");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("battle_health_change");
 
     public BattleHealthChangePacket(@NotNull String pnx, float newHealth, @Nullable Float newMaxHealth) {
         Intrinsics.checkNotNullParameter((Object)pnx, (String)"pnx");

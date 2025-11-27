@@ -12,7 +12,7 @@
  */
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.structureprocessors;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import kotlin.Metadata;
 import kotlin.jvm.JvmField;
 import net.minecraft.core.registries.Registries;
@@ -26,7 +26,7 @@ public final class CobblemonStructureProcessorLists {
     @NotNull
     public static final CobblemonStructureProcessorLists INSTANCE = new CobblemonStructureProcessorLists();
     @JvmField
-    public static final ResourceKey<StructureProcessorList> CROP_TO_BERRY = ResourceKey.m_135785_((ResourceKey)Registries.f_257011_, (ResourceLocation)MiscUtilsKt.cobblemonResource("crop_to_berry"));
+    public static final ResourceKey<StructureProcessorList> CROP_TO_BERRY = ResourceKey.m_135785_((ResourceKey)Registries.f_257011_, (ResourceLocation)MiscUtils.cobblemonResource("crop_to_berry"));
 
     private CobblemonStructureProcessorLists() {
     }

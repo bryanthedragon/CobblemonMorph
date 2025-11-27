@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.generic.GenericBedrockEntity;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnExtraDataEntityPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt;
 import io.netty.buffer.ByteBuf;
 import java.util.Collection;
@@ -55,7 +55,7 @@ extends SpawnExtraDataEntityPacket<SpawnGenericBedrockPacket, GenericBedrockEnti
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("spawn_generic_bedrock_entity");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("spawn_generic_bedrock_entity");
 
     public SpawnGenericBedrockPacket(@NotNull ResourceLocation category, @NotNull Set<String> aspects, @NotNull PoseType poseType, float scale, float width, float height, int startAge, @NotNull ClientboundAddEntityPacket vanillaSpawnPacket) {
         Intrinsics.checkNotNullParameter((Object)category, (String)"category");

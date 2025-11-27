@@ -36,7 +36,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -77,7 +77,7 @@ implements JsonDataRegistry<AdditionParameter> {
     @NotNull
     public static final SpeciesAdditions INSTANCE = new SpeciesAdditions();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("species_additions");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("species_additions");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull

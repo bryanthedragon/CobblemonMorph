@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonResources;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.RenderHelperKt;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
@@ -43,7 +43,7 @@ extends Button {
     private static final int WIDTH = 70;
     private static final int HEIGHT = 17;
     @NotNull
-    private static final ResourceLocation buttonResource = MiscUtilsKt.cobblemonResource("textures/gui/pasture/pasture_button.png");
+    private static final ResourceLocation buttonResource = MiscUtils.cobblemonResource("textures/gui/pasture/pasture_button.png");
 
     public RecallButton(int x, int y, @NotNull Button.OnPress onPress) {
         Intrinsics.checkNotNullParameter((Object)onPress, (String)"onPress");

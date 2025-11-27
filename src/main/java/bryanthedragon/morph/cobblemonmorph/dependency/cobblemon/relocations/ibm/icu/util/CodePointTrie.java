@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.util;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUBinary;
 import com.cobblemon.mod.relocations.ibm.icu.impl.Normalizer2Impl;
@@ -13,33 +13,49 @@ import java.nio.ByteOrder;
 
 public abstract class CodePointTrie
 extends CodePointMap {
+    @SuppressWarnings("unused")
     private static final int MAX_UNICODE = 0x10FFFF;
+    @SuppressWarnings("unused")
     private static final int ASCII_LIMIT = 128;
     static final int FAST_SHIFT = 6;
     static final int FAST_DATA_BLOCK_LENGTH = 64;
+    @SuppressWarnings("unused")
     private static final int FAST_DATA_MASK = 63;
+    @SuppressWarnings("unused")
     private static final int SMALL_MAX = 4095;
+    @SuppressWarnings("unused")
     private static final int ERROR_VALUE_NEG_DATA_OFFSET = 1;
+    @SuppressWarnings("unused")
     private static final int HIGH_VALUE_NEG_DATA_OFFSET = 2;
+    @SuppressWarnings("unused")
     private static final int BMP_INDEX_LENGTH = 1024;
     static final int SMALL_LIMIT = 4096;
+    @SuppressWarnings("unused")
     private static final int SMALL_INDEX_LENGTH = 64;
     static final int SHIFT_3 = 4;
+    @SuppressWarnings("unused")
     private static final int SHIFT_2 = 9;
+    @SuppressWarnings("unused")
     private static final int SHIFT_1 = 14;
     static final int SHIFT_2_3 = 5;
     static final int SHIFT_1_2 = 5;
+    @SuppressWarnings("unused")
     private static final int OMITTED_BMP_INDEX_1_LENGTH = 4;
     static final int INDEX_2_BLOCK_LENGTH = 32;
     static final int INDEX_2_MASK = 31;
     static final int CP_PER_INDEX_2_ENTRY = 512;
     static final int INDEX_3_BLOCK_LENGTH = 32;
+    @SuppressWarnings("unused")
     private static final int INDEX_3_MASK = 31;
     static final int SMALL_DATA_BLOCK_LENGTH = 16;
     static final int SMALL_DATA_MASK = 15;
+    @SuppressWarnings("unused")
     private static final int OPTIONS_DATA_LENGTH_MASK = 61440;
+    @SuppressWarnings("unused")
     private static final int OPTIONS_DATA_NULL_OFFSET_MASK = 3840;
+    @SuppressWarnings("unused")
     private static final int OPTIONS_RESERVED_MASK = 56;
+    @SuppressWarnings("unused")
     private static final int OPTIONS_VALUE_BITS_MASK = 7;
     static final int NO_INDEX3_NULL_OFFSET = Short.MAX_VALUE;
     static final int NO_DATA_NULL_OFFSET = 1048575;
@@ -555,12 +571,13 @@ extends CodePointMap {
             return new SmallStringIterator(s, sIndex);
         }
 
-        private final class SmallStringIterator
-        extends CodePointMap.StringIterator {
+        private final class SmallStringIterator extends CodePointMap.StringIterator {
+            @SuppressWarnings("deprecation")
             private SmallStringIterator(CharSequence s, int sIndex) {
                 super(s, sIndex);
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public boolean next() {
                 char trail;
@@ -583,6 +600,7 @@ extends CodePointMap {
                 return true;
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public boolean previous() {
                 char lead;
@@ -647,10 +665,12 @@ extends CodePointMap {
 
         private final class FastStringIterator
         extends CodePointMap.StringIterator {
+            @SuppressWarnings("deprecation")
             private FastStringIterator(CharSequence s, int sIndex) {
                 super(s, sIndex);
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public boolean next() {
                 char trail;
@@ -673,6 +693,7 @@ extends CodePointMap {
                 return true;
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public boolean previous() {
                 char lead;

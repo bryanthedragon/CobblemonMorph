@@ -44,7 +44,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalTypes;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -75,7 +75,7 @@ implements JsonDataRegistry<PokeBall> {
     @NotNull
     public static final PokeBalls INSTANCE = new PokeBalls();
     @NotNull
-    private static final ResourceLocation id = MiscUtilsKt.cobblemonResource("pokeballs");
+    private static final ResourceLocation id = MiscUtils.cobblemonResource("pokeballs");
     @NotNull
     private static final PackType type = PackType.SERVER_DATA;
     @NotNull
@@ -408,7 +408,7 @@ implements JsonDataRegistry<PokeBall> {
     }
 
     private final PokeBall createDefault(String name, CatchRateModifier modifier, List<? extends CaptureEffect> effects, float waterDragValue, ResourceLocation model2d, ResourceLocation model3d, float throwPower, boolean ancient) {
-        ResourceLocation identifier = MiscUtilsKt.cobblemonResource(name);
+        ResourceLocation identifier = MiscUtils.cobblemonResource(name);
         PokeBall pokeball = new PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient);
         ((Map)defaults).put(identifier, pokeball);
         return pokeball;
@@ -425,10 +425,10 @@ implements JsonDataRegistry<PokeBall> {
             f = 0.8f;
         }
         if ((n & 0x10) != 0) {
-            resourceLocation = MiscUtilsKt.cobblemonResource(string);
+            resourceLocation = MiscUtils.cobblemonResource(string);
         }
         if ((n & 0x20) != 0) {
-            resourceLocation2 = MiscUtilsKt.cobblemonResource(string + "_model");
+            resourceLocation2 = MiscUtils.cobblemonResource(string + "_model");
         }
         if ((n & 0x40) != 0) {
             f2 = 1.25f;
@@ -440,7 +440,7 @@ implements JsonDataRegistry<PokeBall> {
     }
 
     private final PokeBall byName(String name) {
-        ResourceLocation identifier = MiscUtilsKt.cobblemonResource(name);
+        ResourceLocation identifier = MiscUtils.cobblemonResource(name);
         PokeBall pokeBall = custom.get(identifier);
         if (pokeBall == null) {
             PokeBall pokeBall2 = defaults.get(identifier);

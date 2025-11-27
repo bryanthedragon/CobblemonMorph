@@ -33,7 +33,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.wheel.InteractWheelOption;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.wheel.Orientation;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.startselection.widgets.preview.ArrowButton;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.common.collect.Multimap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ extends Screen {
     public static final int SIZE = 138;
     public static final int OPTION_SIZE = 69;
     @NotNull
-    private static final ResourceLocation backgroundResource = MiscUtilsKt.cobblemonResource("textures/gui/interact/interact_base.png");
+    private static final ResourceLocation backgroundResource = MiscUtils.cobblemonResource("textures/gui/interact/interact_base.png");
     @NotNull
     private static final Map<Orientation, ResourceLocation> buttonResources;
 
@@ -242,7 +242,7 @@ extends Screen {
     }
 
     static {
-        Pair[] pairArray = new Pair[]{TuplesKt.to((Object)((Object)Orientation.TOP_LEFT), (Object)MiscUtilsKt.cobblemonResource("textures/gui/interact/button_left_top.png")), TuplesKt.to((Object)((Object)Orientation.TOP_RIGHT), (Object)MiscUtilsKt.cobblemonResource("textures/gui/interact/button_right_top.png")), TuplesKt.to((Object)((Object)Orientation.BOTTOM_LEFT), (Object)MiscUtilsKt.cobblemonResource("textures/gui/interact/button_left_bottom.png")), TuplesKt.to((Object)((Object)Orientation.BOTTOM_RIGHT), (Object)MiscUtilsKt.cobblemonResource("textures/gui/interact/button_right_bottom.png"))};
+        Pair[] pairArray = new Pair[]{TuplesKt.to((Object)((Object)Orientation.TOP_LEFT), (Object)MiscUtils.cobblemonResource("textures/gui/interact/button_left_top.png")), TuplesKt.to((Object)((Object)Orientation.TOP_RIGHT), (Object)MiscUtils.cobblemonResource("textures/gui/interact/button_right_top.png")), TuplesKt.to((Object)((Object)Orientation.BOTTOM_LEFT), (Object)MiscUtils.cobblemonResource("textures/gui/interact/button_left_bottom.png")), TuplesKt.to((Object)((Object)Orientation.BOTTOM_RIGHT), (Object)MiscUtils.cobblemonResource("textures/gui/interact/button_right_bottom.png"))};
         buttonResources = MapsKt.mutableMapOf((Pair[])pairArray);
     }
 

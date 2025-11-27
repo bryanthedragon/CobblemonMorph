@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.impl.number.range;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number.range;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUResourceBundle;
 import com.cobblemon.mod.relocations.ibm.icu.impl.StandardPlural;

@@ -1,9 +1,6 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.parser;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.Expression;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.parser.InfixParselet;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.parser.Precedence;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.parser.PrefixParselet;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.parser.parselet.ArrayAccessParselet;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.parser.parselet.AssignParselet;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.parser.parselet.BooleanNotParselet;
@@ -107,7 +104,7 @@ public final class MoLangParser {
     }
 
     public String fixNameShortcut(String name) {
-        CharSequence[] splits = name.split("\\.");
+        String[] splits = name.split("\\.");
         switch (splits[0]) {
             case "q": {
                 splits[0] = "query";

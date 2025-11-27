@@ -28,7 +28,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -80,7 +80,7 @@ extends SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity> {
     @NotNull
     private final ResourceLocation id;
     @NotNull
-    private static final ResourceLocation ID = MiscUtilsKt.cobblemonResource("spawn_pokemon_entity");
+    private static final ResourceLocation ID = MiscUtils.cobblemonResource("spawn_pokemon_entity");
 
     public SpawnPokemonPacket(@Nullable UUID ownerId, float scaleModifier, @NotNull Species species, @NotNull FormData form2, @NotNull Set<String> aspects, @Nullable UUID battleId, int phasingTargetId, byte beamMode, @Nullable MutableComponent nickname, int labelLevel, @NotNull PoseType poseType, boolean unbattlable, boolean hideLabel, @NotNull ResourceLocation caughtBall, float spawnYaw, int friendship, @NotNull ClientboundAddEntityPacket vanillaSpawnPacket) {
         Intrinsics.checkNotNullParameter((Object)species, (String)"species");

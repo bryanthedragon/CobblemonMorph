@@ -1,5 +1,5 @@
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.relocations.ibm.icu.lang;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.lang;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.CaseMapImpl;
 import com.cobblemon.mod.relocations.ibm.icu.impl.EmojiProps;

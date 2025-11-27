@@ -27,13 +27,13 @@
  *  org.jetbrains.annotations.NotNull
  *  org.jetbrains.annotations.Nullable
  */
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.mod.forge.brewing;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.forge.brewing;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.brewing.BrewingRecipes;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.brewing.ingredient.CobblemonIngredient;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.brewing.ingredient.CobblemonItemIngredient;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.brewing.ingredient.CobblemonPotionIngredient;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.Collection;
@@ -75,7 +75,7 @@ public final class CobblemonForgeBrewingRegistry {
     }
 
     private final void registerIngredientTypes() {
-        CraftingHelper.register((ResourceLocation)MiscUtilsKt.cobblemonResource("potion"), (IIngredientSerializer)ForgePotionIngredientSerializer.INSTANCE);
+        CraftingHelper.register((ResourceLocation)MiscUtils.cobblemonResource("potion"), (IIngredientSerializer)ForgePotionIngredientSerializer.INSTANCE);
     }
 
     private final void registerRecipes() {
