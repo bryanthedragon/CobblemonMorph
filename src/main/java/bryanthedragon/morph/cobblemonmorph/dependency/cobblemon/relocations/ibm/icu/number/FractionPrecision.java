@@ -1,33 +1,30 @@
+package com.cobblemon.mod.relocations.ibm.icu.number;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.number;
+public abstract class FractionPrecision extends Precision {
+   FractionPrecision() {
+   }
 
-import com.cobblemon.mod.relocations.ibm.icu.number.NumberFormatter;
-import com.cobblemon.mod.relocations.ibm.icu.number.Precision;
+   public Precision withSignificantDigits(int minSignificantDigits, int maxSignificantDigits, NumberFormatter.RoundingPriority priority) {
+      if (maxSignificantDigits >= 1 && maxSignificantDigits >= minSignificantDigits && maxSignificantDigits <= 999) {
+         return constructFractionSignificant(this, minSignificantDigits, maxSignificantDigits, priority, false);
+      } else {
+         throw new IllegalArgumentException("Significant digits must be between 1 and 999 (inclusive)");
+      }
+   }
 
-public abstract class FractionPrecision
-extends Precision {
-    FractionPrecision() {
-    }
+   public Precision withMinDigits(int minSignificantDigits) {
+      if (minSignificantDigits >= 1 && minSignificantDigits <= 999) {
+         return constructFractionSignificant(this, 1, minSignificantDigits, NumberFormatter.RoundingPriority.RELAXED, true);
+      } else {
+         throw new IllegalArgumentException("Significant digits must be between 1 and 999 (inclusive)");
+      }
+   }
 
-    public Precision withSignificantDigits(int minSignificantDigits, int maxSignificantDigits, NumberFormatter.RoundingPriority priority) {
-        if (maxSignificantDigits >= 1 && maxSignificantDigits >= minSignificantDigits && maxSignificantDigits <= 999) {
-            return FractionPrecision.constructFractionSignificant(this, minSignificantDigits, maxSignificantDigits, priority, false);
-        }
-        throw new IllegalArgumentException("Significant digits must be between 1 and 999 (inclusive)");
-    }
-
-    public Precision withMinDigits(int minSignificantDigits) {
-        if (minSignificantDigits >= 1 && minSignificantDigits <= 999) {
-            return FractionPrecision.constructFractionSignificant(this, 1, minSignificantDigits, NumberFormatter.RoundingPriority.RELAXED, true);
-        }
-        throw new IllegalArgumentException("Significant digits must be between 1 and 999 (inclusive)");
-    }
-
-    public Precision withMaxDigits(int maxSignificantDigits) {
-        if (maxSignificantDigits >= 1 && maxSignificantDigits <= 999) {
-            return FractionPrecision.constructFractionSignificant(this, 1, maxSignificantDigits, NumberFormatter.RoundingPriority.STRICT, true);
-        }
-        throw new IllegalArgumentException("Significant digits must be between 1 and 999 (inclusive)");
-    }
+   public Precision withMaxDigits(int maxSignificantDigits) {
+      if (maxSignificantDigits >= 1 && maxSignificantDigits <= 999) {
+         return constructFractionSignificant(this, 1, maxSignificantDigits, NumberFormatter.RoundingPriority.STRICT, true);
+      } else {
+         throw new IllegalArgumentException("Significant digits must be between 1 and 999 (inclusive)");
+      }
+   }
 }
-

@@ -1,33 +1,31 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl.number;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.DecimalFormatProperties;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-public class Properties
-implements Serializable {
-    private static final long serialVersionUID = 4095518955889349243L;
-    private transient DecimalFormatProperties instance;
+public class Properties implements Serializable {
+   private static final long serialVersionUID = 4095518955889349243L;
+   private transient DecimalFormatProperties instance;
 
-    public DecimalFormatProperties getInstance() {
-        return this.instance;
-    }
+   public DecimalFormatProperties getInstance() {
+      return this.instance;
+   }
 
-    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-        if (this.instance == null) {
-            this.instance = new DecimalFormatProperties();
-        }
-        this.instance.readObjectImpl(ois);
-    }
+   private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+      if (this.instance == null) {
+         this.instance = new DecimalFormatProperties();
+      }
 
-    private void writeObject(ObjectOutputStream oos) throws IOException {
-        if (this.instance == null) {
-            this.instance = new DecimalFormatProperties();
-        }
-        this.instance.writeObjectImpl(oos);
-    }
+      this.instance.readObjectImpl(ois);
+   }
+
+   private void writeObject(ObjectOutputStream oos) throws IOException {
+      if (this.instance == null) {
+         this.instance = new DecimalFormatProperties();
+      }
+
+      this.instance.writeObjectImpl(oos);
+   }
 }
-

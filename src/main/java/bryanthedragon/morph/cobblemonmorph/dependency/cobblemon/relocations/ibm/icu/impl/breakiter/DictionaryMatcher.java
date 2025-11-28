@@ -1,18 +1,13 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.breakiter;
+package com.cobblemon.mod.relocations.ibm.icu.impl.breakiter;
 
 import java.text.CharacterIterator;
 
 abstract class DictionaryMatcher {
-    DictionaryMatcher() {
-    }
+   public abstract int matches(CharacterIterator var1, int var2, int[] var3, int[] var4, int var5, int[] var6);
 
-    public abstract int matches(CharacterIterator var1, int var2, int[] var3, int[] var4, int var5, int[] var6);
+   public int matches(CharacterIterator text, int maxLength, int[] lengths, int[] count, int limit) {
+      return this.matches(text, maxLength, lengths, count, limit, null);
+   }
 
-    public int matches(CharacterIterator text, int maxLength, int[] lengths, int[] count, int limit) {
-        return this.matches(text, maxLength, lengths, count, limit, null);
-    }
-
-    public abstract int getType();
+   public abstract int getType();
 }
-

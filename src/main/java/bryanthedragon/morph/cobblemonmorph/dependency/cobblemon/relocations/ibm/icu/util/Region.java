@@ -1,8 +1,6 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUResourceBundle;
-import com.cobblemon.mod.relocations.ibm.icu.util.UResourceBundle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,332 +11,366 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Region
-implements Comparable<Region> {
-    private String id;
-    private int code;
-    private RegionType type;
-    private Region containingRegion = null;
-    private Set<Region> containedRegions = new TreeSet<Region>();
-    private List<Region> preferredValues = null;
-    private static boolean regionDataIsLoaded = false;
-    private static Map<String, Region> regionIDMap = null;
-    private static Map<Integer, Region> numericCodeMap = null;
-    private static Map<String, Region> regionAliases = null;
-    private static ArrayList<Region> regions = null;
-    private static ArrayList<Set<Region>> availableRegions = null;
-    private static final String UNKNOWN_REGION_ID = "ZZ";
-    private static final String OUTLYING_OCEANIA_REGION_ID = "QO";
-    private static final String WORLD_ID = "001";
+public class Region implements Comparable<Region> {
+   private String id;
+   private int code;
+   private Region.RegionType type;
+   private Region containingRegion = null;
+   private Set<Region> containedRegions = new TreeSet<>();
+   private List<Region> preferredValues = null;
+   private static boolean regionDataIsLoaded = false;
+   private static Map<String, Region> regionIDMap = null;
+   private static Map<Integer, Region> numericCodeMap = null;
+   private static Map<String, Region> regionAliases = null;
+   private static ArrayList<Region> regions = null;
+   private static ArrayList<Set<Region>> availableRegions = null;
+   private static final String UNKNOWN_REGION_ID = "ZZ";
+   private static final String OUTLYING_OCEANIA_REGION_ID = "QO";
+   private static final String WORLD_ID = "001";
 
-    private Region() {
-    }
+   private Region() {
+   }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static synchronized void loadRegionData() {
-        Region childRegion;
-        String child;
-        String parent;
-        int i;
-        int i2;
-        if (regionDataIsLoaded) {
-            return;
-        }
-        regionAliases = new HashMap<String, Region>();
-        regionIDMap = new HashMap<String, Region>();
-        numericCodeMap = new HashMap<Integer, Region>();
-        availableRegions = new ArrayList(RegionType.values().length);
-        UResourceBundle metadataAlias = null;
-        UResourceBundle territoryAlias = null;
-        UResourceBundle codeMappings = null;
-        UResourceBundle idValidity = null;
-        UResourceBundle regionList = null;
-        UResourceBundle regionRegular = null;
-        UResourceBundle regionMacro = null;
-        UResourceBundle regionUnknown = null;
-        UResourceBundle worldContainment = null;
-        UResourceBundle territoryContainment = null;
-        UResourceBundle groupingContainment = null;
-        UResourceBundle metadata = UResourceBundle.getBundleInstance("com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "metadata", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        metadataAlias = metadata.get("alias");
-        territoryAlias = metadataAlias.get("territory");
-        UResourceBundle supplementalData = UResourceBundle.getBundleInstance("com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        codeMappings = supplementalData.get("codeMappings");
-        idValidity = supplementalData.get("idValidity");
-        regionList = idValidity.get("region");
-        regionRegular = regionList.get("regular");
-        regionMacro = regionList.get("macroregion");
-        regionUnknown = regionList.get("unknown");
-        territoryContainment = supplementalData.get("territoryContainment");
-        worldContainment = territoryContainment.get(WORLD_ID);
-        groupingContainment = territoryContainment.get("grouping");
-        String[] continentsArr = worldContainment.getStringArray();
-        List<String> continents = Arrays.asList(continentsArr);
-        Enumeration<String> groupings = groupingContainment.getKeys();
-        ArrayList<String> regionCodes = new ArrayList<String>();
-        ArrayList<String> allRegions = new ArrayList<String>();
-        allRegions.addAll(Arrays.asList(regionRegular.getStringArray()));
-        allRegions.addAll(Arrays.asList(regionMacro.getStringArray()));
-        allRegions.add(regionUnknown.getString());
-        for (String r : allRegions) {
+   private static synchronized void loadRegionData() {
+      if (!regionDataIsLoaded) {
+         regionAliases = new HashMap<>();
+         regionIDMap = new HashMap<>();
+         numericCodeMap = new HashMap<>();
+         availableRegions = new ArrayList<>(Region.RegionType.values().length);
+         UResourceBundle metadataAlias = null;
+         UResourceBundle territoryAlias = null;
+         UResourceBundle codeMappings = null;
+         UResourceBundle idValidity = null;
+         UResourceBundle regionList = null;
+         UResourceBundle regionRegular = null;
+         UResourceBundle regionMacro = null;
+         UResourceBundle regionUnknown = null;
+         UResourceBundle worldContainment = null;
+         UResourceBundle territoryContainment = null;
+         UResourceBundle groupingContainment = null;
+         UResourceBundle metadata = UResourceBundle.getBundleInstance(
+            "com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "metadata", ICUResourceBundle.ICU_DATA_CLASS_LOADER
+         );
+         metadataAlias = metadata.get("alias");
+         territoryAlias = metadataAlias.get("territory");
+         UResourceBundle supplementalData = UResourceBundle.getBundleInstance(
+            "com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER
+         );
+         codeMappings = supplementalData.get("codeMappings");
+         idValidity = supplementalData.get("idValidity");
+         regionList = idValidity.get("region");
+         regionRegular = regionList.get("regular");
+         regionMacro = regionList.get("macroregion");
+         regionUnknown = regionList.get("unknown");
+         territoryContainment = supplementalData.get("territoryContainment");
+         worldContainment = territoryContainment.get("001");
+         groupingContainment = territoryContainment.get("grouping");
+         String[] continentsArr = worldContainment.getStringArray();
+         List<String> continents = Arrays.asList(continentsArr);
+         Enumeration<String> groupings = groupingContainment.getKeys();
+         List<String> regionCodes = new ArrayList<>();
+         List<String> allRegions = new ArrayList<>();
+         allRegions.addAll(Arrays.asList(regionRegular.getStringArray()));
+         allRegions.addAll(Arrays.asList(regionMacro.getStringArray()));
+         allRegions.add(regionUnknown.getString());
+
+         for (String r : allRegions) {
             int rangeMarkerLocation = r.indexOf("~");
             if (rangeMarkerLocation > 0) {
-                StringBuilder regionName = new StringBuilder(r);
-                char endRange = regionName.charAt(rangeMarkerLocation + 1);
-                regionName.setLength(rangeMarkerLocation);
-                for (char lastChar = regionName.charAt(rangeMarkerLocation - 1); lastChar <= endRange; lastChar = (char)(lastChar + '\u0001')) {
-                    String newRegion = regionName.toString();
-                    regionCodes.add(newRegion);
-                    regionName.setCharAt(rangeMarkerLocation - 1, lastChar);
-                }
-                continue;
-            }
-            regionCodes.add(r);
-        }
-        regions = new ArrayList(regionCodes.size());
-        for (String id : regionCodes) {
-            Region r = new Region();
-            r.id = id;
-            r.type = RegionType.TERRITORY;
-            regionIDMap.put(id, r);
-            if (id.matches("[0-9]{3}")) {
-                r.code = Integer.valueOf(id);
-                numericCodeMap.put(r.code, r);
-                r.type = RegionType.SUBCONTINENT;
+               StringBuilder regionName = new StringBuilder(r);
+               char endRange = regionName.charAt(rangeMarkerLocation + 1);
+               regionName.setLength(rangeMarkerLocation);
+               char lastChar = regionName.charAt(rangeMarkerLocation - 1);
+
+               while (lastChar <= endRange) {
+                  String newRegion = regionName.toString();
+                  regionCodes.add(newRegion);
+                  lastChar++;
+                  regionName.setCharAt(rangeMarkerLocation - 1, lastChar);
+               }
             } else {
-                r.code = -1;
+               regionCodes.add(r);
             }
-            regions.add(r);
-        }
-        for (i2 = 0; i2 < territoryAlias.getSize(); ++i2) {
-            Region r;
-            UResourceBundle res = territoryAlias.get(i2);
+         }
+
+         regions = new ArrayList<>(regionCodes.size());
+
+         for (String id : regionCodes) {
+            Region rx = new Region();
+            rx.id = id;
+            rx.type = Region.RegionType.TERRITORY;
+            regionIDMap.put(id, rx);
+            if (id.matches("[0-9]{3}")) {
+               rx.code = Integer.valueOf(id);
+               numericCodeMap.put(rx.code, rx);
+               rx.type = Region.RegionType.SUBCONTINENT;
+            } else {
+               rx.code = -1;
+            }
+
+            regions.add(rx);
+         }
+
+         for (int i = 0; i < territoryAlias.getSize(); i++) {
+            UResourceBundle res = territoryAlias.get(i);
             String aliasFrom = res.getKey();
             String aliasTo = res.get("replacement").getString();
             if (regionIDMap.containsKey(aliasTo) && !regionIDMap.containsKey(aliasFrom)) {
-                regionAliases.put(aliasFrom, regionIDMap.get(aliasTo));
-                continue;
-            }
-            if (regionIDMap.containsKey(aliasFrom)) {
-                r = regionIDMap.get(aliasFrom);
+               regionAliases.put(aliasFrom, regionIDMap.get(aliasTo));
             } else {
-                r = new Region();
-                r.id = aliasFrom;
-                regionIDMap.put(aliasFrom, r);
-                if (aliasFrom.matches("[0-9]{3}")) {
-                    r.code = Integer.valueOf(aliasFrom);
-                    numericCodeMap.put(r.code, r);
-                } else {
-                    r.code = -1;
-                }
-                regions.add(r);
+               Region rx;
+               if (regionIDMap.containsKey(aliasFrom)) {
+                  rx = regionIDMap.get(aliasFrom);
+               } else {
+                  rx = new Region();
+                  rx.id = aliasFrom;
+                  regionIDMap.put(aliasFrom, rx);
+                  if (aliasFrom.matches("[0-9]{3}")) {
+                     rx.code = Integer.valueOf(aliasFrom);
+                     numericCodeMap.put(rx.code, rx);
+                  } else {
+                     rx.code = -1;
+                  }
+
+                  regions.add(rx);
+               }
+
+               rx.type = Region.RegionType.DEPRECATED;
+               List<String> aliasToRegionStrings = Arrays.asList(aliasTo.split(" "));
+               rx.preferredValues = new ArrayList<>();
+
+               for (String s : aliasToRegionStrings) {
+                  if (regionIDMap.containsKey(s)) {
+                     rx.preferredValues.add(regionIDMap.get(s));
+                  }
+               }
             }
-            r.type = RegionType.DEPRECATED;
-            List<String> aliasToRegionStrings = Arrays.asList(aliasTo.split(" "));
-            r.preferredValues = new ArrayList<Region>();
-            for (String s : aliasToRegionStrings) {
-                if (!regionIDMap.containsKey(s)) continue;
-                r.preferredValues.add(regionIDMap.get(s));
+         }
+
+         for (int ix = 0; ix < codeMappings.getSize(); ix++) {
+            UResourceBundle mapping = codeMappings.get(ix);
+            if (mapping.getType() == 8) {
+               String[] codeMappingStrings = mapping.getStringArray();
+               String codeMappingID = codeMappingStrings[0];
+               Integer codeMappingNumber = Integer.valueOf(codeMappingStrings[1]);
+               String codeMapping3Letter = codeMappingStrings[2];
+               if (regionIDMap.containsKey(codeMappingID)) {
+                  Region rx = regionIDMap.get(codeMappingID);
+                  rx.code = codeMappingNumber;
+                  numericCodeMap.put(rx.code, rx);
+                  regionAliases.put(codeMapping3Letter, rx);
+               }
             }
-        }
-        for (i2 = 0; i2 < codeMappings.getSize(); ++i2) {
-            UResourceBundle mapping = codeMappings.get(i2);
-            if (mapping.getType() != 8) continue;
-            String[] codeMappingStrings = mapping.getStringArray();
-            String codeMappingID = codeMappingStrings[0];
-            Integer codeMappingNumber = Integer.valueOf(codeMappingStrings[1]);
-            String codeMapping3Letter = codeMappingStrings[2];
-            if (!regionIDMap.containsKey(codeMappingID)) continue;
-            Region r = regionIDMap.get(codeMappingID);
-            r.code = codeMappingNumber;
-            numericCodeMap.put(r.code, r);
-            regionAliases.put(codeMapping3Letter, r);
-        }
-        if (regionIDMap.containsKey(WORLD_ID)) {
-            Region r = regionIDMap.get(WORLD_ID);
-            r.type = RegionType.WORLD;
-        }
-        if (regionIDMap.containsKey(UNKNOWN_REGION_ID)) {
-            Region r = regionIDMap.get(UNKNOWN_REGION_ID);
-            r.type = RegionType.UNKNOWN;
-        }
-        for (String continent : continents) {
-            if (!regionIDMap.containsKey(continent)) continue;
-            Region r = regionIDMap.get(continent);
-            r.type = RegionType.CONTINENT;
-        }
-        while (groupings.hasMoreElements()) {
+         }
+
+         if (regionIDMap.containsKey("001")) {
+            Region rx = regionIDMap.get("001");
+            rx.type = Region.RegionType.WORLD;
+         }
+
+         if (regionIDMap.containsKey("ZZ")) {
+            Region rx = regionIDMap.get("ZZ");
+            rx.type = Region.RegionType.UNKNOWN;
+         }
+
+         for (String continent : continents) {
+            if (regionIDMap.containsKey(continent)) {
+               Region rx = regionIDMap.get(continent);
+               rx.type = Region.RegionType.CONTINENT;
+            }
+         }
+
+         while (groupings.hasMoreElements()) {
             String grouping = groupings.nextElement();
-            if (!regionIDMap.containsKey(grouping)) continue;
-            Region r = regionIDMap.get(grouping);
-            r.type = RegionType.GROUPING;
-        }
-        if (regionIDMap.containsKey(OUTLYING_OCEANIA_REGION_ID)) {
-            Region r = regionIDMap.get(OUTLYING_OCEANIA_REGION_ID);
-            r.type = RegionType.SUBCONTINENT;
-        }
-        for (i = 0; i < territoryContainment.getSize(); ++i) {
-            UResourceBundle mapping = territoryContainment.get(i);
-            parent = mapping.getKey();
-            if (parent.equals("containedGroupings") || parent.equals("deprecated") || parent.equals("grouping")) continue;
-            Region parentRegion = regionIDMap.get(parent);
-            for (int j = 0; j < mapping.getSize(); ++j) {
-                child = mapping.getString(j);
-                childRegion = regionIDMap.get(child);
-                if (parentRegion == null || childRegion == null) continue;
-                parentRegion.containedRegions.add(childRegion);
-                if (parentRegion.getType() == RegionType.GROUPING) continue;
-                childRegion.containingRegion = parentRegion;
+            if (regionIDMap.containsKey(grouping)) {
+               Region rx = regionIDMap.get(grouping);
+               rx.type = Region.RegionType.GROUPING;
             }
-        }
-        for (i = 0; i < groupingContainment.getSize(); ++i) {
-            UResourceBundle mapping = groupingContainment.get(i);
-            parent = mapping.getKey();
-            Region parentRegion = regionIDMap.get(parent);
-            for (int j = 0; j < mapping.getSize(); ++j) {
-                child = mapping.getString(j);
-                childRegion = regionIDMap.get(child);
-                if (parentRegion == null || childRegion == null) continue;
-                parentRegion.containedRegions.add(childRegion);
+         }
+
+         if (regionIDMap.containsKey("QO")) {
+            Region rx = regionIDMap.get("QO");
+            rx.type = Region.RegionType.SUBCONTINENT;
+         }
+
+         for (int ixx = 0; ixx < territoryContainment.getSize(); ixx++) {
+            UResourceBundle mapping = territoryContainment.get(ixx);
+            String parent = mapping.getKey();
+            if (!parent.equals("containedGroupings") && !parent.equals("deprecated") && !parent.equals("grouping")) {
+               Region parentRegion = regionIDMap.get(parent);
+
+               for (int j = 0; j < mapping.getSize(); j++) {
+                  String child = mapping.getString(j);
+                  Region childRegion = regionIDMap.get(child);
+                  if (parentRegion != null && childRegion != null) {
+                     parentRegion.containedRegions.add(childRegion);
+                     if (parentRegion.getType() != Region.RegionType.GROUPING) {
+                        childRegion.containingRegion = parentRegion;
+                     }
+                  }
+               }
             }
-        }
-        for (i = 0; i < RegionType.values().length; ++i) {
-            availableRegions.add(new TreeSet());
-        }
-        for (Region ar : regions) {
+         }
+
+         for (int ixxx = 0; ixxx < groupingContainment.getSize(); ixxx++) {
+            UResourceBundle mapping = groupingContainment.get(ixxx);
+            String parent = mapping.getKey();
+            Region parentRegion = regionIDMap.get(parent);
+
+            for (int jx = 0; jx < mapping.getSize(); jx++) {
+               String child = mapping.getString(jx);
+               Region childRegion = regionIDMap.get(child);
+               if (parentRegion != null && childRegion != null) {
+                  parentRegion.containedRegions.add(childRegion);
+               }
+            }
+         }
+
+         for (int ixxx = 0; ixxx < Region.RegionType.values().length; ixxx++) {
+            availableRegions.add(new TreeSet<>());
+         }
+
+         for (Region ar : regions) {
             Set<Region> currentSet = availableRegions.get(ar.type.ordinal());
             currentSet.add(ar);
             availableRegions.set(ar.type.ordinal(), currentSet);
-        }
-        regionDataIsLoaded = true;
-    }
+         }
 
-    public static Region getInstance(String id) {
-        if (id == null) {
-            throw new NullPointerException();
-        }
-        Region.loadRegionData();
-        Region r = regionIDMap.get(id);
-        if (r == null) {
+         regionDataIsLoaded = true;
+      }
+   }
+
+   public static Region getInstance(String id) {
+      if (id == null) {
+         throw new NullPointerException();
+      } else {
+         loadRegionData();
+         Region r = regionIDMap.get(id);
+         if (r == null) {
             r = regionAliases.get(id);
-        }
-        if (r == null) {
+         }
+
+         if (r == null) {
             throw new IllegalArgumentException("Unknown region id: " + id);
-        }
-        if (r.type == RegionType.DEPRECATED && r.preferredValues.size() == 1) {
-            r = r.preferredValues.get(0);
-        }
-        return r;
-    }
-
-    public static Region getInstance(int code) {
-        Region.loadRegionData();
-        Region r = numericCodeMap.get(code);
-        if (r == null) {
-            String pad = "";
-            if (code < 10) {
-                pad = "00";
-            } else if (code < 100) {
-                pad = "0";
+         } else {
+            if (r.type == Region.RegionType.DEPRECATED && r.preferredValues.size() == 1) {
+               r = r.preferredValues.get(0);
             }
-            String id = pad + Integer.toString(code);
-            r = regionAliases.get(id);
-        }
-        if (r == null) {
-            throw new IllegalArgumentException("Unknown region code: " + code);
-        }
-        if (r.type == RegionType.DEPRECATED && r.preferredValues.size() == 1) {
+
+            return r;
+         }
+      }
+   }
+
+   public static Region getInstance(int code) {
+      loadRegionData();
+      Region r = numericCodeMap.get(code);
+      if (r == null) {
+         String pad = "";
+         if (code < 10) {
+            pad = "00";
+         } else if (code < 100) {
+            pad = "0";
+         }
+
+         String id = pad + Integer.toString(code);
+         r = regionAliases.get(id);
+      }
+
+      if (r == null) {
+         throw new IllegalArgumentException("Unknown region code: " + code);
+      } else {
+         if (r.type == Region.RegionType.DEPRECATED && r.preferredValues.size() == 1) {
             r = r.preferredValues.get(0);
-        }
-        return r;
-    }
+         }
 
-    public static Set<Region> getAvailable(RegionType type) {
-        Region.loadRegionData();
-        return Collections.unmodifiableSet(availableRegions.get(type.ordinal()));
-    }
+         return r;
+      }
+   }
 
-    public Region getContainingRegion() {
-        Region.loadRegionData();
-        return this.containingRegion;
-    }
+   public static Set<Region> getAvailable(Region.RegionType type) {
+      loadRegionData();
+      return Collections.unmodifiableSet(availableRegions.get(type.ordinal()));
+   }
 
-    public Region getContainingRegion(RegionType type) {
-        Region.loadRegionData();
-        if (this.containingRegion == null) {
-            return null;
-        }
-        if (this.containingRegion.type.equals((Object)type)) {
-            return this.containingRegion;
-        }
-        return this.containingRegion.getContainingRegion(type);
-    }
+   public Region getContainingRegion() {
+      loadRegionData();
+      return this.containingRegion;
+   }
 
-    public Set<Region> getContainedRegions() {
-        Region.loadRegionData();
-        return Collections.unmodifiableSet(this.containedRegions);
-    }
+   public Region getContainingRegion(Region.RegionType type) {
+      loadRegionData();
+      if (this.containingRegion == null) {
+         return null;
+      } else {
+         return this.containingRegion.type.equals(type) ? this.containingRegion : this.containingRegion.getContainingRegion(type);
+      }
+   }
 
-    public Set<Region> getContainedRegions(RegionType type) {
-        Region.loadRegionData();
-        TreeSet<Region> result = new TreeSet<Region>();
-        Set<Region> cr = this.getContainedRegions();
-        for (Region r : cr) {
-            if (r.getType() == type) {
-                result.add(r);
-                continue;
-            }
+   public Set<Region> getContainedRegions() {
+      loadRegionData();
+      return Collections.unmodifiableSet(this.containedRegions);
+   }
+
+   public Set<Region> getContainedRegions(Region.RegionType type) {
+      loadRegionData();
+      Set<Region> result = new TreeSet<>();
+
+      for (Region r : this.getContainedRegions()) {
+         if (r.getType() == type) {
+            result.add(r);
+         } else {
             result.addAll(r.getContainedRegions(type));
-        }
-        return Collections.unmodifiableSet(result);
-    }
+         }
+      }
 
-    public List<Region> getPreferredValues() {
-        Region.loadRegionData();
-        if (this.type == RegionType.DEPRECATED) {
-            return Collections.unmodifiableList(this.preferredValues);
-        }
-        return null;
-    }
+      return Collections.unmodifiableSet(result);
+   }
 
-    public boolean contains(Region other) {
-        Region.loadRegionData();
-        if (this.containedRegions.contains(other)) {
-            return true;
-        }
-        for (Region cr : this.containedRegions) {
-            if (!cr.contains(other)) continue;
-            return true;
-        }
-        return false;
-    }
+   public List<Region> getPreferredValues() {
+      loadRegionData();
+      return this.type == Region.RegionType.DEPRECATED ? Collections.unmodifiableList(this.preferredValues) : null;
+   }
 
-    public String toString() {
-        return this.id;
-    }
+   public boolean contains(Region other) {
+      loadRegionData();
+      if (this.containedRegions.contains(other)) {
+         return true;
+      } else {
+         for (Region cr : this.containedRegions) {
+            if (cr.contains(other)) {
+               return true;
+            }
+         }
 
-    public int getNumericCode() {
-        return this.code;
-    }
+         return false;
+      }
+   }
 
-    public RegionType getType() {
-        return this.type;
-    }
+   @Override
+   public String toString() {
+      return this.id;
+   }
 
-    @Override
-    public int compareTo(Region other) {
-        return this.id.compareTo(other.id);
-    }
+   public int getNumericCode() {
+      return this.code;
+   }
 
-    public static enum RegionType {
-        UNKNOWN,
-        TERRITORY,
-        WORLD,
-        CONTINENT,
-        SUBCONTINENT,
-        GROUPING,
-        DEPRECATED;
+   public Region.RegionType getType() {
+      return this.type;
+   }
 
-    }
+   public int compareTo(Region other) {
+      return this.id.compareTo(other.id);
+   }
+
+   public static enum RegionType {
+      UNKNOWN,
+      TERRITORY,
+      WORLD,
+      CONTINENT,
+      SUBCONTINENT,
+      GROUPING,
+      DEPRECATED;
+   }
 }
-

@@ -1,57 +1,58 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
+package com.cobblemon.mod.relocations.ibm.icu.impl;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 public class ClassLoaderUtil {
-    private static volatile ClassLoader BOOTSTRAP_CLASSLOADER;
+   private static volatile ClassLoader BOOTSTRAP_CLASSLOADER;
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     * Enabled force condition propagation
-     * Lifted jumps to return sites
-     */
-    private static ClassLoader getBootstrapClassLoader() {
-        if (BOOTSTRAP_CLASSLOADER != null) return BOOTSTRAP_CLASSLOADER;
-        Class<ClassLoaderUtil> clazz = ClassLoaderUtil.class;
-        synchronized (ClassLoaderUtil.class) {
-            if (BOOTSTRAP_CLASSLOADER != null) return BOOTSTRAP_CLASSLOADER;
-            ClassLoader cl = null;
-            cl = System.getSecurityManager() != null ? AccessController.doPrivileged(new PrivilegedAction<ClassLoader>(){
+   private static ClassLoader getBootstrapClassLoader() {
+      if (BOOTSTRAP_CLASSLOADER == null) {
+         synchronized (ClassLoaderUtil.class) {
+            if (BOOTSTRAP_CLASSLOADER == null) {
+               ClassLoader cl = null;
+               if (System.getSecurityManager() != null) {
+                  cl = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+                     public ClassLoaderUtil.BootstrapClassLoader run() {
+                        return new ClassLoaderUtil.BootstrapClassLoader();
+                     }
+                  });
+               } else {
+                  cl = new ClassLoaderUtil.BootstrapClassLoader();
+               }
 
-                @Override
-                public BootstrapClassLoader run() {
-                    return new BootstrapClassLoader();
-                }
-            }) : new BootstrapClassLoader();
-            BOOTSTRAP_CLASSLOADER = cl;
-            // ** MonitorExit[var0] (shouldn't be in output)
-            return BOOTSTRAP_CLASSLOADER;
-        }
-    }
+               BOOTSTRAP_CLASSLOADER = cl;
+            }
+         }
+      }
 
-    public static ClassLoader getClassLoader(Class<?> cls) {
-        ClassLoader cl = cls.getClassLoader();
-        if (cl == null) {
-            cl = ClassLoaderUtil.getClassLoader();
-        }
-        return cl;
-    }
+      return BOOTSTRAP_CLASSLOADER;
+   }
 
-    public static ClassLoader getClassLoader() {
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        if (cl == null && (cl = ClassLoader.getSystemClassLoader()) == null) {
-            cl = ClassLoaderUtil.getBootstrapClassLoader();
-        }
-        return cl;
-    }
+   public static ClassLoader getClassLoader(Class<?> cls) {
+      ClassLoader cl = cls.getClassLoader();
+      if (cl == null) {
+         cl = getClassLoader();
+      }
 
-    private static class BootstrapClassLoader
-    extends ClassLoader {
-        BootstrapClassLoader() {
-            super(Object.class.getClassLoader());
-        }
-    }
+      return cl;
+   }
+
+   public static ClassLoader getClassLoader() {
+      ClassLoader cl = Thread.currentThread().getContextClassLoader();
+      if (cl == null) {
+         cl = ClassLoader.getSystemClassLoader();
+         if (cl == null) {
+            cl = getBootstrapClassLoader();
+         }
+      }
+
+      return cl;
+   }
+
+   private static class BootstrapClassLoader extends ClassLoader {
+      BootstrapClassLoader() {
+         super(Object.class.getClassLoader());
+      }
+   }
 }
-

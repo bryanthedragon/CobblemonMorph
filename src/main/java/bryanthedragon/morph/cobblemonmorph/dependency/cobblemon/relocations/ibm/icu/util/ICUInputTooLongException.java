@@ -1,25 +1,20 @@
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+public class ICUInputTooLongException extends ICUException {
+   private static final long serialVersionUID = -2602876786689338226L;
 
-import com.cobblemon.mod.relocations.ibm.icu.util.ICUException;
+   public ICUInputTooLongException() {
+   }
 
-public class ICUInputTooLongException
-extends ICUException {
-    private static final long serialVersionUID = -2602876786689338226L;
+   public ICUInputTooLongException(String message) {
+      super(message);
+   }
 
-    public ICUInputTooLongException() {
-    }
+   public ICUInputTooLongException(Throwable cause) {
+      super(cause);
+   }
 
-    public ICUInputTooLongException(String message) {
-        super(message);
-    }
-
-    public ICUInputTooLongException(Throwable cause) {
-        super(cause);
-    }
-
-    public ICUInputTooLongException(String message, Throwable cause) {
-        super(message, cause);
-    }
+   public ICUInputTooLongException(String message, Throwable cause) {
+      super(message, cause);
+   }
 }
-

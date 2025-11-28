@@ -1,20 +1,15 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl.number.parse;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number.parse;
+public class RequireNumberValidator extends ValidationMatcher {
+   @Override
+   public void postProcess(ParsedNumber result) {
+      if (!result.seenNumber()) {
+         result.flags |= 256;
+      }
+   }
 
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.parse.ParsedNumber;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.parse.ValidationMatcher;
-
-public class RequireNumberValidator
-extends ValidationMatcher {
-    @Override
-    public void postProcess(ParsedNumber result) {
-        if (!result.seenNumber()) {
-            result.flags |= 0x100;
-        }
-    }
-
-    public String toString() {
-        return "<RequireNumber>";
-    }
+   @Override
+   public String toString() {
+      return "<RequireNumber>";
+   }
 }
-

@@ -1,5 +1,4 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.units;
+package com.cobblemon.mod.relocations.ibm.icu.impl.units;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUResourceBundle;
 import com.cobblemon.mod.relocations.ibm.icu.impl.UResource;
@@ -9,153 +8,169 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UnitPreferences {
-    private HashMap<String, HashMap<String, UnitPreference[]>> mapToUnitPreferences = new HashMap();
+   private HashMap<String, HashMap<String, UnitPreferences.UnitPreference[]>> mapToUnitPreferences = new HashMap<>();
 
-    public UnitPreferences() {
-        ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "units");
-        UnitPreferencesSink sink = new UnitPreferencesSink();
-        resource.getAllItemsWithFallback("unitPreferenceData", sink);
-        this.mapToUnitPreferences = sink.getMapToUnitPreferences();
-    }
+   public UnitPreferences() {
+      ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "units");
+      UnitPreferences.UnitPreferencesSink sink = new UnitPreferences.UnitPreferencesSink();
+      resource.getAllItemsWithFallback("unitPreferenceData", sink);
+      this.mapToUnitPreferences = sink.getMapToUnitPreferences();
+   }
 
-    public static String formMapKey(String category, String usage) {
-        return category + "++" + usage;
-    }
+   public static String formMapKey(String category, String usage) {
+      return category + "++" + usage;
+   }
 
-    private static String[] getAllUsages(String usage) {
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(usage);
-        for (int i = usage.length() - 1; i >= 0; --i) {
-            if (usage.charAt(i) != '-') continue;
+   private static String[] getAllUsages(String usage) {
+      ArrayList<String> result = new ArrayList<>();
+      result.add(usage);
+
+      for (int i = usage.length() - 1; i >= 0; i--) {
+         if (usage.charAt(i) == '-') {
             result.add(usage.substring(0, i));
-        }
-        if (!usage.equals("default")) {
-            result.add("default");
-        }
-        return result.toArray(new String[0]);
-    }
+         }
+      }
 
-    public UnitPreference[] getPreferencesFor(String category, String usage, String region) {
-        String subUsage;
-        String[] subUsages = UnitPreferences.getAllUsages(usage);
-        UnitPreference[] result = null;
-        String[] stringArray = subUsages;
-        int n = stringArray.length;
-        for (int i = 0; i < n && (result = this.getUnitPreferences(category, subUsage = stringArray[i], region)) == null; ++i) {
-        }
-        assert (result != null) : "At least the category must be exist";
-        return result;
-    }
+      if (!usage.equals("default")) {
+         result.add("default");
+      }
 
-    private UnitPreference[] getUnitPreferences(String category, String usage, String region) {
-        String key = UnitPreferences.formMapKey(category, usage);
-        if (this.mapToUnitPreferences.containsKey(key)) {
-            UnitPreference[] result;
-            HashMap<String, UnitPreference[]> unitPreferencesMap = this.mapToUnitPreferences.get(key);
-            UnitPreference[] unitPreferenceArray = result = unitPreferencesMap.containsKey(region) ? unitPreferencesMap.get(region) : unitPreferencesMap.get("001");
-            assert (result != null);
-            return result;
-        }
-        return null;
-    }
+      return result.toArray(new String[0]);
+   }
 
-    public static class UnitPreferencesSink
-    extends UResource.Sink {
-        private HashMap<String, HashMap<String, UnitPreference[]>> mapToUnitPreferences = new HashMap();
+   public UnitPreferences.UnitPreference[] getPreferencesFor(String category, String usage, String region) {
+      String[] subUsages = getAllUsages(usage);
+      UnitPreferences.UnitPreference[] result = null;
 
-        public HashMap<String, HashMap<String, UnitPreference[]>> getMapToUnitPreferences() {
-            return this.mapToUnitPreferences;
-        }
+      for (String subUsage : subUsages) {
+         result = this.getUnitPreferences(category, subUsage, region);
+         if (result != null) {
+            break;
+         }
+      }
 
-        @Override
-        public void put(UResource.Key key, UResource.Value value2, boolean noFallback) {
-            assert ("unitPreferenceData".equals(key.toString()));
-            UResource.Table categoryTable = value2.getTable();
-            int i = 0;
-            while (categoryTable.getKeyAndValue(i, key, value2)) {
-                assert (value2.getType() == 2);
-                String category = key.toString();
-                UResource.Table usageTable = value2.getTable();
-                int j = 0;
-                while (usageTable.getKeyAndValue(j, key, value2)) {
-                    assert (value2.getType() == 2);
-                    String usage = key.toString();
-                    UResource.Table regionTable = value2.getTable();
-                    int k = 0;
-                    while (regionTable.getKeyAndValue(k, key, value2)) {
-                        assert (value2.getType() == 8);
-                        String region = key.toString();
-                        UResource.Array preferencesTable = value2.getArray();
-                        ArrayList<UnitPreference> unitPreferences = new ArrayList<UnitPreference>();
-                        int l = 0;
-                        while (preferencesTable.getValue(l, value2)) {
-                            assert (value2.getType() == 2);
-                            UResource.Table singlePrefTable = value2.getTable();
-                            String unit = null;
-                            String geq = "1";
-                            String skeleton = "";
-                            int m = 0;
-                            while (singlePrefTable.getKeyAndValue(m, key, value2)) {
-                                assert (value2.getType() == 0);
-                                String keyString = key.toString();
-                                if ("unit".equals(keyString)) {
-                                    unit = value2.getString();
-                                } else if ("geq".equals(keyString)) {
-                                    geq = value2.getString();
-                                } else if ("skeleton".equals(keyString)) {
-                                    skeleton = value2.getString();
-                                } else assert (false) : "key must be unit, geq or skeleton";
-                                ++m;
-                            }
-                            assert (unit != null);
-                            unitPreferences.add(new UnitPreference(unit, geq, skeleton));
-                            ++l;
+      assert result != null : "At least the category must be exist";
+
+      return result;
+   }
+
+   private UnitPreferences.UnitPreference[] getUnitPreferences(String category, String usage, String region) {
+      String key = formMapKey(category, usage);
+      if (this.mapToUnitPreferences.containsKey(key)) {
+         HashMap<String, UnitPreferences.UnitPreference[]> unitPreferencesMap = this.mapToUnitPreferences.get(key);
+         UnitPreferences.UnitPreference[] result = unitPreferencesMap.containsKey(region) ? unitPreferencesMap.get(region) : unitPreferencesMap.get("001");
+
+         assert result != null;
+
+         return result;
+      } else {
+         return null;
+      }
+   }
+
+   public static class UnitPreference {
+      private final String unit;
+      private final BigDecimal geq;
+      private final String skeleton;
+
+      public UnitPreference(String unit, String geq, String skeleton) {
+         this.unit = unit;
+         this.geq = new BigDecimal(geq);
+         this.skeleton = skeleton;
+      }
+
+      public String getUnit() {
+         return this.unit;
+      }
+
+      public BigDecimal getGeq() {
+         return this.geq;
+      }
+
+      public String getSkeleton() {
+         return this.skeleton;
+      }
+   }
+
+   public static class UnitPreferencesSink extends UResource.Sink {
+      private HashMap<String, HashMap<String, UnitPreferences.UnitPreference[]>> mapToUnitPreferences = new HashMap<>();
+
+      public HashMap<String, HashMap<String, UnitPreferences.UnitPreference[]>> getMapToUnitPreferences() {
+         return this.mapToUnitPreferences;
+      }
+
+      @Override
+      public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+         assert "unitPreferenceData".equals(key.toString());
+
+         UResource.Table categoryTable = value.getTable();
+
+         for (int i = 0; categoryTable.getKeyAndValue(i, key, value); i++) {
+            assert value.getType() == 2;
+
+            String category = key.toString();
+            UResource.Table usageTable = value.getTable();
+
+            for (int j = 0; usageTable.getKeyAndValue(j, key, value); j++) {
+               assert value.getType() == 2;
+
+               String usage = key.toString();
+               UResource.Table regionTable = value.getTable();
+
+               for (int k = 0; regionTable.getKeyAndValue(k, key, value); k++) {
+                  assert value.getType() == 8;
+
+                  String region = key.toString();
+                  UResource.Array preferencesTable = value.getArray();
+                  ArrayList<UnitPreferences.UnitPreference> unitPreferences = new ArrayList<>();
+
+                  for (int l = 0; preferencesTable.getValue(l, value); l++) {
+                     assert value.getType() == 2;
+
+                     UResource.Table singlePrefTable = value.getTable();
+                     String unit = null;
+                     String geq = "1";
+                     String skeleton = "";
+
+                     for (int m = 0; singlePrefTable.getKeyAndValue(m, key, value); m++) {
+                        assert value.getType() == 0;
+
+                        String keyString = key.toString();
+                        if ("unit".equals(keyString)) {
+                           unit = value.getString();
+                        } else if ("geq".equals(keyString)) {
+                           geq = value.getString();
+                        } else if ("skeleton".equals(keyString)) {
+                           skeleton = value.getString();
+                        } else {
+                           assert false : "key must be unit, geq or skeleton";
                         }
-                        assert (!unitPreferences.isEmpty());
-                        this.insertUnitPreferences(category, usage, region, unitPreferences.toArray(new UnitPreference[0]));
-                        ++k;
-                    }
-                    ++j;
-                }
-                ++i;
+                     }
+
+                     assert unit != null;
+
+                     unitPreferences.add(new UnitPreferences.UnitPreference(unit, geq, skeleton));
+                  }
+
+                  assert !unitPreferences.isEmpty();
+
+                  this.insertUnitPreferences(category, usage, region, unitPreferences.toArray(new UnitPreferences.UnitPreference[0]));
+               }
             }
-        }
+         }
+      }
 
-        private void insertUnitPreferences(String category, String usage, String region, UnitPreference[] unitPreferences) {
-            HashMap<Object, Object> shouldInsert;
-            String key = UnitPreferences.formMapKey(category, usage);
-            if (this.mapToUnitPreferences.containsKey(key)) {
-                shouldInsert = this.mapToUnitPreferences.get(key);
-            } else {
-                shouldInsert = new HashMap();
-                this.mapToUnitPreferences.put(key, shouldInsert);
-            }
-            shouldInsert.put(region, unitPreferences);
-        }
-    }
+      private void insertUnitPreferences(String category, String usage, String region, UnitPreferences.UnitPreference[] unitPreferences) {
+         String key = UnitPreferences.formMapKey(category, usage);
+         HashMap<String, UnitPreferences.UnitPreference[]> shouldInsert;
+         if (this.mapToUnitPreferences.containsKey(key)) {
+            shouldInsert = this.mapToUnitPreferences.get(key);
+         } else {
+            shouldInsert = new HashMap<>();
+            this.mapToUnitPreferences.put(key, shouldInsert);
+         }
 
-    public static class UnitPreference {
-        private final String unit;
-        private final BigDecimal geq;
-        private final String skeleton;
-
-        public UnitPreference(String unit, String geq, String skeleton) {
-            this.unit = unit;
-            this.geq = new BigDecimal(geq);
-            this.skeleton = skeleton;
-        }
-
-        public String getUnit() {
-            return this.unit;
-        }
-
-        public BigDecimal getGeq() {
-            return this.geq;
-        }
-
-        public String getSkeleton() {
-            return this.skeleton;
-        }
-    }
+         shouldInsert.put(region, unitPreferences);
+      }
+   }
 }
-

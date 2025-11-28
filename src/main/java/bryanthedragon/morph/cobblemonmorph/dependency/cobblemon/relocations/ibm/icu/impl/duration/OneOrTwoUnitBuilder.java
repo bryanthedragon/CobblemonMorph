@@ -1,53 +1,48 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl.duration;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration;
+class OneOrTwoUnitBuilder extends PeriodBuilderImpl {
+   OneOrTwoUnitBuilder(BasicPeriodBuilderFactory.Settings settings) {
+      super(settings);
+   }
 
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.BasicPeriodBuilderFactory;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.Period;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.PeriodBuilder;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.PeriodBuilderImpl;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.TimeUnit;
+   public static OneOrTwoUnitBuilder get(BasicPeriodBuilderFactory.Settings settings) {
+      return settings == null ? null : new OneOrTwoUnitBuilder(settings);
+   }
 
-class OneOrTwoUnitBuilder
-extends PeriodBuilderImpl {
-    OneOrTwoUnitBuilder(BasicPeriodBuilderFactory.Settings settings) {
-        super(settings);
-    }
+   @Override
+   protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settingsToUse) {
+      return get(settingsToUse);
+   }
 
-    public static OneOrTwoUnitBuilder get(BasicPeriodBuilderFactory.Settings settings) {
-        if (settings == null) {
-            return null;
-        }
-        return new OneOrTwoUnitBuilder(settings);
-    }
+   @Override
+   protected Period handleCreate(long duration, long referenceDate, boolean inPast) {
+      Period period = null;
+      short uset = this.settings.effectiveSet();
 
-    @Override
-    protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settingsToUse) {
-        return OneOrTwoUnitBuilder.get(settingsToUse);
-    }
+      for (int i = 0; i < TimeUnit.units.length; i++) {
+         if (0 != (uset & 1 << i)) {
+            TimeUnit unit = TimeUnit.units[i];
+            long unitDuration = this.approximateDurationOf(unit);
+            if (duration >= unitDuration || period != null) {
+               double count = (double)duration / unitDuration;
+               if (period != null) {
+                  if (count >= 1.0) {
+                     period = period.and((float)count, unit);
+                  }
+                  break;
+               }
 
-    @Override
-    protected Period handleCreate(long duration, long referenceDate, boolean inPast) {
-        Period period = null;
-        short uset = this.settings.effectiveSet();
-        for (int i = 0; i < TimeUnit.units.length; ++i) {
-            TimeUnit unit;
-            long unitDuration;
-            if (0 == (uset & 1 << i) || duration < (unitDuration = this.approximateDurationOf(unit = TimeUnit.units[i])) && period == null) continue;
-            double count = (double)duration / (double)unitDuration;
-            if (period == null) {
-                if (count >= 2.0) {
-                    period = Period.at((float)count, unit);
-                    break;
-                }
-                period = Period.at(1.0f, unit).inPast(inPast);
-                duration -= unitDuration;
-                continue;
+               if (count >= 2.0) {
+                  period = Period.at((float)count, unit);
+                  break;
+               }
+
+               period = Period.at(1.0F, unit).inPast(inPast);
+               duration -= unitDuration;
             }
-            if (!(count >= 1.0)) break;
-            period = period.and((float)count, unit);
-            break;
-        }
-        return period;
-    }
-}
+         }
+      }
 
+      return period;
+   }
+}

@@ -1,36 +1,27 @@
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+public abstract class UnicodeFilter implements UnicodeMatcher {
+   public abstract boolean contains(int var1);
 
-import com.cobblemon.mod.relocations.ibm.icu.text.Replaceable;
-import com.cobblemon.mod.relocations.ibm.icu.text.UTF16;
-import com.cobblemon.mod.relocations.ibm.icu.text.UnicodeMatcher;
+   @Override
+   public int matches(Replaceable text, int[] offset, int limit, boolean incremental) {
+      int c;
+      if (offset[0] < limit && this.contains(c = text.char32At(offset[0]))) {
+         offset[0] += UTF16.getCharCount(c);
+         return 2;
+      } else if (offset[0] > limit && this.contains(text.char32At(offset[0]))) {
+         offset[0]--;
+         if (offset[0] >= 0) {
+            offset[0] -= UTF16.getCharCount(text.char32At(offset[0])) - 1;
+         }
 
-public abstract class UnicodeFilter
-implements UnicodeMatcher {
-    public abstract boolean contains(int var1);
+         return 2;
+      } else {
+         return incremental && offset[0] == limit ? 1 : 0;
+      }
+   }
 
-    @Override
-    public int matches(Replaceable text, int[] offset, int limit, boolean incremental) {
-        int c;
-        if (offset[0] < limit && this.contains(c = text.char32At(offset[0]))) {
-            offset[0] = offset[0] + UTF16.getCharCount(c);
-            return 2;
-        }
-        if (offset[0] > limit && this.contains(text.char32At(offset[0]))) {
-            offset[0] = offset[0] - 1;
-            if (offset[0] >= 0) {
-                offset[0] = offset[0] - (UTF16.getCharCount(text.char32At(offset[0])) - 1);
-            }
-            return 2;
-        }
-        if (incremental && offset[0] == limit) {
-            return 1;
-        }
-        return 0;
-    }
-
-    @Deprecated
-    protected UnicodeFilter() {
-    }
+   @Deprecated
+   protected UnicodeFilter() {
+   }
 }
-

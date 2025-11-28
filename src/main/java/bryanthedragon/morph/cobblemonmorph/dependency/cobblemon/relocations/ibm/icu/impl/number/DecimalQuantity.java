@@ -1,83 +1,79 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number;
+package com.cobblemon.mod.relocations.ibm.icu.impl.number;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.StandardPlural;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.Modifier;
 import com.cobblemon.mod.relocations.ibm.icu.text.PluralRules;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.FieldPosition;
 
-public interface DecimalQuantity
-extends PluralRules.IFixedDecimal {
-    public void setMinInteger(int var1);
+public interface DecimalQuantity extends PluralRules.IFixedDecimal {
+   void setMinInteger(int var1);
 
-    public void setMinFraction(int var1);
+   void setMinFraction(int var1);
 
-    public void applyMaxInteger(int var1);
+   void applyMaxInteger(int var1);
 
-    public void roundToIncrement(BigDecimal var1, MathContext var2);
+   void roundToIncrement(BigDecimal var1, MathContext var2);
 
-    public void roundToNickel(int var1, MathContext var2);
+   void roundToNickel(int var1, MathContext var2);
 
-    public void roundToMagnitude(int var1, MathContext var2);
+   void roundToMagnitude(int var1, MathContext var2);
 
-    public void roundToInfinity();
+   void roundToInfinity();
 
-    public void multiplyBy(BigDecimal var1);
+   void multiplyBy(BigDecimal var1);
 
-    public void negate();
+   void negate();
 
-    public void adjustMagnitude(int var1);
+   void adjustMagnitude(int var1);
 
-    public int getMagnitude() throws ArithmeticException;
+   int getMagnitude() throws ArithmeticException;
 
-    public int getExponent();
+   int getExponent();
 
-    public void adjustExponent(int var1);
+   void adjustExponent(int var1);
 
-    public void resetExponent();
+   void resetExponent();
 
-    public boolean isZeroish();
+   boolean isZeroish();
 
-    public boolean isNegative();
+   boolean isNegative();
 
-    public Modifier.Signum signum();
+   Modifier.Signum signum();
 
-    @Override
-    public boolean isInfinite();
+   @Override
+   boolean isInfinite();
 
-    @Override
-    public boolean isNaN();
+   @Override
+   boolean isNaN();
 
-    public double toDouble();
+   double toDouble();
 
-    public BigDecimal toBigDecimal();
+   BigDecimal toBigDecimal();
 
-    public long toLong(boolean var1);
+   long toLong(boolean var1);
 
-    public void setToBigDecimal(BigDecimal var1);
+   void setToBigDecimal(BigDecimal var1);
 
-    public int maxRepresentableDigits();
+   int maxRepresentableDigits();
 
-    public StandardPlural getStandardPlural(PluralRules var1);
+   StandardPlural getStandardPlural(PluralRules var1);
 
-    public byte getDigit(int var1);
+   byte getDigit(int var1);
 
-    public int getUpperDisplayMagnitude();
+   int getUpperDisplayMagnitude();
 
-    public int getLowerDisplayMagnitude();
+   int getLowerDisplayMagnitude();
 
-    public String toPlainString();
+   String toPlainString();
 
-    public String toExponentString();
+   String toExponentString();
 
-    public DecimalQuantity createCopy();
+   DecimalQuantity createCopy();
 
-    public void copyFrom(DecimalQuantity var1);
+   void copyFrom(DecimalQuantity var1);
 
-    public long getPositionFingerprint();
+   long getPositionFingerprint();
 
-    public void populateUFieldPosition(FieldPosition var1);
+   void populateUFieldPosition(FieldPosition var1);
 }
-

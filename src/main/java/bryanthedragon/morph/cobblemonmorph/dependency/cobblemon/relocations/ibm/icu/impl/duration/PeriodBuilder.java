@@ -1,16 +1,13 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl.duration;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.Period;
 import java.util.TimeZone;
 
 public interface PeriodBuilder {
-    public Period create(long var1);
+   Period create(long var1);
 
-    public Period createWithReferenceDate(long var1, long var3);
+   Period createWithReferenceDate(long var1, long var3);
 
-    public PeriodBuilder withLocale(String var1);
+   PeriodBuilder withLocale(String var1);
 
-    public PeriodBuilder withTimeZone(TimeZone var1);
+   PeriodBuilder withTimeZone(TimeZone var1);
 }
-

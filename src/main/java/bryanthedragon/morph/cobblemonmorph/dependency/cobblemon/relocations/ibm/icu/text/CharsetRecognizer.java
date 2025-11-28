@@ -1,19 +1,11 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
-
-import com.cobblemon.mod.relocations.ibm.icu.text.CharsetDetector;
-import com.cobblemon.mod.relocations.ibm.icu.text.CharsetMatch;
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
 abstract class CharsetRecognizer {
-    CharsetRecognizer() {
-    }
+   abstract String getName();
 
-    abstract String getName();
+   public String getLanguage() {
+      return null;
+   }
 
-    public String getLanguage() {
-        return null;
-    }
-
-    abstract CharsetMatch match(CharsetDetector var1);
+   abstract CharsetMatch match(CharsetDetector var1);
 }
-

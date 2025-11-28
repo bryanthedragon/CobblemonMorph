@@ -1,9 +1,5 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.MicroProps;
+package com.cobblemon.mod.relocations.ibm.icu.impl.number;
 
 public interface MicroPropsMutator<T> {
-    public void mutateMicros(MicroProps var1, T var2);
+   void mutateMicros(MicroProps var1, T var2);
 }
-

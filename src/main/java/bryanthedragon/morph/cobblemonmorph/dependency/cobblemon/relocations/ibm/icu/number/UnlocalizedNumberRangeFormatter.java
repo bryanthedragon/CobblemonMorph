@@ -1,32 +1,26 @@
+package com.cobblemon.mod.relocations.ibm.icu.number;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.number;
-
-import com.cobblemon.mod.relocations.ibm.icu.number.LocalizedNumberRangeFormatter;
-import com.cobblemon.mod.relocations.ibm.icu.number.NumberRangeFormatterSettings;
 import com.cobblemon.mod.relocations.ibm.icu.util.ULocale;
 import java.util.Locale;
 
-public class UnlocalizedNumberRangeFormatter
-extends NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter> {
-    UnlocalizedNumberRangeFormatter() {
-        super(null, 0, null);
-    }
+public class UnlocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter> {
+   UnlocalizedNumberRangeFormatter() {
+      super(null, 0, null);
+   }
 
-    UnlocalizedNumberRangeFormatter(NumberRangeFormatterSettings<?> parent, int key, Object value2) {
-        super(parent, key, value2);
-    }
+   UnlocalizedNumberRangeFormatter(NumberRangeFormatterSettings<?> parent, int key, Object value) {
+      super(parent, key, value);
+   }
 
-    public LocalizedNumberRangeFormatter locale(Locale locale) {
-        return new LocalizedNumberRangeFormatter(this, 1, ULocale.forLocale(locale));
-    }
+   public LocalizedNumberRangeFormatter locale(Locale locale) {
+      return new LocalizedNumberRangeFormatter(this, 1, ULocale.forLocale(locale));
+   }
 
-    public LocalizedNumberRangeFormatter locale(ULocale locale) {
-        return new LocalizedNumberRangeFormatter(this, 1, locale);
-    }
+   public LocalizedNumberRangeFormatter locale(ULocale locale) {
+      return new LocalizedNumberRangeFormatter(this, 1, locale);
+   }
 
-    @Override
-    UnlocalizedNumberRangeFormatter create(int key, Object value2) {
-        return new UnlocalizedNumberRangeFormatter(this, key, value2);
-    }
+   UnlocalizedNumberRangeFormatter create(int key, Object value) {
+      return new UnlocalizedNumberRangeFormatter(this, key, value);
+   }
 }
-

@@ -1,52 +1,43 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl.duration;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.BasicDurationFormatterFactory;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.BasicPeriodBuilderFactory;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.BasicPeriodFormatterFactory;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.DurationFormatterFactory;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.PeriodBuilderFactory;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.PeriodFormatterFactory;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.PeriodFormatterService;
 import com.cobblemon.mod.relocations.ibm.icu.impl.duration.impl.PeriodFormatterDataService;
 import com.cobblemon.mod.relocations.ibm.icu.impl.duration.impl.ResourceBasedPeriodFormatterDataService;
 import java.util.Collection;
 
-public class BasicPeriodFormatterService
-implements PeriodFormatterService {
-    private static BasicPeriodFormatterService instance;
-    private PeriodFormatterDataService ds;
+public class BasicPeriodFormatterService implements PeriodFormatterService {
+   private static BasicPeriodFormatterService instance;
+   private PeriodFormatterDataService ds;
 
-    public static BasicPeriodFormatterService getInstance() {
-        if (instance == null) {
-            ResourceBasedPeriodFormatterDataService ds = ResourceBasedPeriodFormatterDataService.getInstance();
-            instance = new BasicPeriodFormatterService(ds);
-        }
-        return instance;
-    }
+   public static BasicPeriodFormatterService getInstance() {
+      if (instance == null) {
+         PeriodFormatterDataService ds = ResourceBasedPeriodFormatterDataService.getInstance();
+         instance = new BasicPeriodFormatterService(ds);
+      }
 
-    public BasicPeriodFormatterService(PeriodFormatterDataService ds) {
-        this.ds = ds;
-    }
+      return instance;
+   }
 
-    @Override
-    public DurationFormatterFactory newDurationFormatterFactory() {
-        return new BasicDurationFormatterFactory(this);
-    }
+   public BasicPeriodFormatterService(PeriodFormatterDataService ds) {
+      this.ds = ds;
+   }
 
-    @Override
-    public PeriodFormatterFactory newPeriodFormatterFactory() {
-        return new BasicPeriodFormatterFactory(this.ds);
-    }
+   @Override
+   public DurationFormatterFactory newDurationFormatterFactory() {
+      return new BasicDurationFormatterFactory(this);
+   }
 
-    @Override
-    public PeriodBuilderFactory newPeriodBuilderFactory() {
-        return new BasicPeriodBuilderFactory(this.ds);
-    }
+   @Override
+   public PeriodFormatterFactory newPeriodFormatterFactory() {
+      return new BasicPeriodFormatterFactory(this.ds);
+   }
 
-    @Override
-    public Collection<String> getAvailableLocaleNames() {
-        return this.ds.getAvailableLocales();
-    }
+   @Override
+   public PeriodBuilderFactory newPeriodBuilderFactory() {
+      return new BasicPeriodBuilderFactory(this.ds);
+   }
+
+   @Override
+   public Collection<String> getAvailableLocaleNames() {
+      return this.ds.getAvailableLocales();
+   }
 }
-

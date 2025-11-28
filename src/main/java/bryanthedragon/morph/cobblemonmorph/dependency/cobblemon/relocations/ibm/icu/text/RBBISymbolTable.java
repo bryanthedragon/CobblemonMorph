@@ -1,129 +1,130 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
 import com.cobblemon.mod.relocations.ibm.icu.lang.UCharacter;
-import com.cobblemon.mod.relocations.ibm.icu.text.RBBINode;
-import com.cobblemon.mod.relocations.ibm.icu.text.RBBIRuleScanner;
-import com.cobblemon.mod.relocations.ibm.icu.text.SymbolTable;
-import com.cobblemon.mod.relocations.ibm.icu.text.UTF16;
-import com.cobblemon.mod.relocations.ibm.icu.text.UnicodeMatcher;
-import com.cobblemon.mod.relocations.ibm.icu.text.UnicodeSet;
 import java.text.ParsePosition;
 import java.util.HashMap;
 
-class RBBISymbolTable
-implements SymbolTable {
-    HashMap<String, RBBISymbolTableEntry> fHashTable;
-    RBBIRuleScanner fRuleScanner;
-    String ffffString;
-    UnicodeSet fCachedSetLookup;
+class RBBISymbolTable implements SymbolTable {
+   HashMap<String, RBBISymbolTable.RBBISymbolTableEntry> fHashTable;
+   RBBIRuleScanner fRuleScanner;
+   String ffffString;
+   UnicodeSet fCachedSetLookup;
 
-    RBBISymbolTable(RBBIRuleScanner rs) {
-        this.fRuleScanner = rs;
-        this.fHashTable = new HashMap();
-        this.ffffString = "\uffff";
-    }
+   RBBISymbolTable(RBBIRuleScanner rs) {
+      this.fRuleScanner = rs;
+      this.fHashTable = new HashMap<>();
+      this.ffffString = "\uffff";
+   }
 
-    @Override
-    public char[] lookup(String s) {
-        String retString;
-        RBBISymbolTableEntry el = this.fHashTable.get(s);
-        if (el == null) {
-            return null;
-        }
-        RBBINode varRefNode = el.val;
-        while (varRefNode.fLeftChild.fType == 2) {
+   @Override
+   public char[] lookup(String s) {
+      RBBISymbolTable.RBBISymbolTableEntry el = this.fHashTable.get(s);
+      if (el == null) {
+         return null;
+      } else {
+         RBBINode varRefNode = el.val;
+
+         while (varRefNode.fLeftChild.fType == 2) {
             varRefNode = varRefNode.fLeftChild;
-        }
-        RBBINode exprNode = varRefNode.fLeftChild;
-        if (exprNode.fType == 0) {
+         }
+
+         RBBINode exprNode = varRefNode.fLeftChild;
+         String retString;
+         if (exprNode.fType == 0) {
             RBBINode usetNode = exprNode.fLeftChild;
             this.fCachedSetLookup = usetNode.fInputSet;
             retString = this.ffffString;
-        } else {
+         } else {
             this.fRuleScanner.error(66063);
             retString = exprNode.fText;
             this.fCachedSetLookup = null;
-        }
-        return retString.toCharArray();
-    }
+         }
 
-    @Override
-    public UnicodeMatcher lookupMatcher(int ch) {
-        UnicodeSet retVal = null;
-        if (ch == 65535) {
-            retVal = this.fCachedSetLookup;
-            this.fCachedSetLookup = null;
-        }
-        return retVal;
-    }
+         return retString.toCharArray();
+      }
+   }
 
-    @Override
-    public String parseReference(String text, ParsePosition pos, int limit) {
-        int start2;
-        int i;
-        int c;
-        String result = "";
-        for (i = start2 = pos.getIndex(); i < limit; i += UTF16.getCharCount(c)) {
-            c = UTF16.charAt(text, i);
-            if (i == start2 && !UCharacter.isUnicodeIdentifierStart(c) || !UCharacter.isUnicodeIdentifierPart(c)) break;
-        }
-        if (i == start2) {
-            return result;
-        }
-        pos.setIndex(i);
-        result = text.substring(start2, i);
-        return result;
-    }
+   @Override
+   public UnicodeMatcher lookupMatcher(int ch) {
+      UnicodeSet retVal = null;
+      if (ch == 65535) {
+         retVal = this.fCachedSetLookup;
+         this.fCachedSetLookup = null;
+      }
 
-    RBBINode lookupNode(String key) {
-        RBBINode retNode = null;
-        RBBISymbolTableEntry el = this.fHashTable.get(key);
-        if (el != null) {
-            retNode = el.val;
-        }
-        return retNode;
-    }
+      return retVal;
+   }
 
-    void addEntry(String key, RBBINode val) {
-        RBBISymbolTableEntry e = this.fHashTable.get(key);
-        if (e != null) {
-            this.fRuleScanner.error(66055);
-            return;
-        }
-        e = new RBBISymbolTableEntry();
-        e.key = key;
-        e.val = val;
-        this.fHashTable.put(e.key, e);
-    }
+   @Override
+   public String parseReference(String text, ParsePosition pos, int limit) {
+      int start = pos.getIndex();
+      int i = start;
+      String result = "";
 
-    void rbbiSymtablePrint() {
-        RBBISymbolTableEntry s;
-        int i;
-        System.out.print("Variable Definitions\nName               Node Val     String Val\n----------------------------------------------------------------------\n");
-        RBBISymbolTableEntry[] syms = this.fHashTable.values().toArray(new RBBISymbolTableEntry[0]);
-        for (i = 0; i < syms.length; ++i) {
-            s = syms[i];
-            System.out.print("  " + s.key + "  ");
-            System.out.print("  " + s.val + "  ");
-            System.out.print(s.val.fLeftChild.fText);
-            System.out.print("\n");
-        }
-        System.out.println("\nParsed Variable Definitions\n");
-        for (i = 0; i < syms.length; ++i) {
-            s = syms[i];
-            System.out.print(s.key);
-            s.val.fLeftChild.printTree(true);
-            System.out.print("\n");
-        }
-    }
+      while (i < limit) {
+         int c = UTF16.charAt(text, i);
+         if (i == start && !UCharacter.isUnicodeIdentifierStart(c) || !UCharacter.isUnicodeIdentifierPart(c)) {
+            break;
+         }
 
-    static class RBBISymbolTableEntry {
-        String key;
-        RBBINode val;
+         i += UTF16.getCharCount(c);
+      }
 
-        RBBISymbolTableEntry() {
-        }
-    }
+      if (i == start) {
+         return result;
+      } else {
+         pos.setIndex(i);
+         return text.substring(start, i);
+      }
+   }
+
+   RBBINode lookupNode(String key) {
+      RBBINode retNode = null;
+      RBBISymbolTable.RBBISymbolTableEntry el = this.fHashTable.get(key);
+      if (el != null) {
+         retNode = el.val;
+      }
+
+      return retNode;
+   }
+
+   void addEntry(String key, RBBINode val) {
+      RBBISymbolTable.RBBISymbolTableEntry e = this.fHashTable.get(key);
+      if (e != null) {
+         this.fRuleScanner.error(66055);
+      } else {
+         e = new RBBISymbolTable.RBBISymbolTableEntry();
+         e.key = key;
+         e.val = val;
+         this.fHashTable.put(e.key, e);
+      }
+   }
+
+   void rbbiSymtablePrint() {
+      System.out
+         .print("Variable Definitions\nName               Node Val     String Val\n----------------------------------------------------------------------\n");
+      RBBISymbolTable.RBBISymbolTableEntry[] syms = this.fHashTable.values().toArray(new RBBISymbolTable.RBBISymbolTableEntry[0]);
+
+      for (int i = 0; i < syms.length; i++) {
+         RBBISymbolTable.RBBISymbolTableEntry s = syms[i];
+         System.out.print("  " + s.key + "  ");
+         System.out.print("  " + s.val + "  ");
+         System.out.print(s.val.fLeftChild.fText);
+         System.out.print("\n");
+      }
+
+      System.out.println("\nParsed Variable Definitions\n");
+
+      for (int i = 0; i < syms.length; i++) {
+         RBBISymbolTable.RBBISymbolTableEntry s = syms[i];
+         System.out.print(s.key);
+         s.val.fLeftChild.printTree(true);
+         System.out.print("\n");
+      }
+   }
+
+   static class RBBISymbolTableEntry {
+      String key;
+      RBBINode val;
+   }
 }
-

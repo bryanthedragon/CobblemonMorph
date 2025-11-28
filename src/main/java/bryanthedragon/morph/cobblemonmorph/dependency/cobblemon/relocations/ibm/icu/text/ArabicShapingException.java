@@ -1,12 +1,9 @@
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+public final class ArabicShapingException extends Exception {
+   static final long serialVersionUID = 5261531805497260490L;
 
-public final class ArabicShapingException
-extends Exception {
-    static final long serialVersionUID = 5261531805497260490L;
-
-    public ArabicShapingException(String message) {
-        super(message);
-    }
+   public ArabicShapingException(String message) {
+      super(message);
+   }
 }
-

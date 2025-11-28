@@ -1,10 +1,9 @@
-
 package org.graalvm.word;
 
 public interface WordBase {
-    public long rawValue();
+   long rawValue();
 
-    @Deprecated
-    public boolean equals(Object var1);
+   @Deprecated
+   @Override
+   boolean equals(Object o);
 }
-

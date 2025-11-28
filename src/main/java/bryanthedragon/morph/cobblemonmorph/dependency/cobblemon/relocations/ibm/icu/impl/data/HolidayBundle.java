@@ -1,15 +1,12 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.data;
+package com.cobblemon.mod.relocations.ibm.icu.impl.data;
 
 import java.util.ListResourceBundle;
 
-public class HolidayBundle
-extends ListResourceBundle {
-    private static final Object[][] fContents = new Object[][]{{"", ""}};
+public class HolidayBundle extends ListResourceBundle {
+   private static final Object[][] fContents = new Object[][]{{"", ""}};
 
-    @Override
-    public synchronized Object[][] getContents() {
-        return fContents;
-    }
+   @Override
+   public synchronized Object[][] getContents() {
+      return fContents;
+   }
 }
-

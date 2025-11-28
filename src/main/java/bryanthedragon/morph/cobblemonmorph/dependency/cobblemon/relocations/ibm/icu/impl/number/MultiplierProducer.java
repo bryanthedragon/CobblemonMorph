@@ -1,7 +1,5 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number;
+package com.cobblemon.mod.relocations.ibm.icu.impl.number;
 
 public interface MultiplierProducer {
-    public int getMultiplier(int var1);
+   int getMultiplier(int var1);
 }
-

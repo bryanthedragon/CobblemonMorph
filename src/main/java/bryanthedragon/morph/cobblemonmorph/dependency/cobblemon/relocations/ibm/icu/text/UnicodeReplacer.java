@@ -1,14 +1,9 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
-
-import com.cobblemon.mod.relocations.ibm.icu.text.Replaceable;
-import com.cobblemon.mod.relocations.ibm.icu.text.UnicodeSet;
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
 interface UnicodeReplacer {
-    public int replace(Replaceable var1, int var2, int var3, int[] var4);
+   int replace(Replaceable var1, int var2, int var3, int[] var4);
 
-    public String toReplacerPattern(boolean var1);
+   String toReplacerPattern(boolean var1);
 
-    public void addReplacementSetTo(UnicodeSet var1);
+   void addReplacementSetTo(UnicodeSet var1);
 }
-

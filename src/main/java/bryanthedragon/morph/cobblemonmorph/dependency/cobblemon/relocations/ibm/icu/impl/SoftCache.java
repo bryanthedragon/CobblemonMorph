@@ -1,42 +1,42 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.CacheBase;
-import com.cobblemon.mod.relocations.ibm.icu.impl.CacheValue;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class SoftCache<K, V, D>
-extends CacheBase<K, V, D> {
-    private ConcurrentHashMap<K, Object> map = new ConcurrentHashMap();
+public abstract class SoftCache<K, V, D> extends CacheBase<K, V, D> {
+   private ConcurrentHashMap<K, Object> map = new ConcurrentHashMap<>();
 
-    @Override
-    public final V getInstance(K key, D data) {
-        CacheValue mapValue = this.map.get(key);
-        if (mapValue != null) {
-            if (!(mapValue instanceof CacheValue)) {
-                return (V)mapValue;
-            }
-            CacheValue cv = mapValue;
-            if (cv.isNull()) {
-                return null;
-            }
-            Object value2 = cv.get();
-            if (value2 != null) {
-                return value2;
-            }
-            value2 = this.createInstance(key, data);
-            return cv.resetIfCleared(value2);
-        }
-        Object value3 = this.createInstance(key, data);
-        mapValue = value3 != null && CacheValue.futureInstancesWillBeStrong() ? value3 : CacheValue.getInstance(value3);
-        if ((mapValue = this.map.putIfAbsent(key, mapValue)) == null) {
-            return value3;
-        }
-        if (!(mapValue instanceof CacheValue)) {
+   @Override
+   public final V getInstance(K key, D data) {
+      Object mapValue = this.map.get(key);
+      if (mapValue != null) {
+         if (!(mapValue instanceof CacheValue)) {
             return (V)mapValue;
-        }
-        CacheValue cv = mapValue;
-        return cv.resetIfCleared(value3);
-    }
+         } else {
+            CacheValue<V> cv = (CacheValue<V>)mapValue;
+            if (cv.isNull()) {
+               return null;
+            } else {
+               V value = cv.get();
+               if (value != null) {
+                  return value;
+               } else {
+                  value = this.createInstance(key, data);
+                  return cv.resetIfCleared(value);
+               }
+            }
+         }
+      } else {
+         V value = this.createInstance(key, data);
+         mapValue = value != null && CacheValue.futureInstancesWillBeStrong() ? value : CacheValue.getInstance(value);
+         mapValue = this.map.putIfAbsent(key, mapValue);
+         if (mapValue == null) {
+            return value;
+         } else if (!(mapValue instanceof CacheValue)) {
+            return (V)mapValue;
+         } else {
+            CacheValue<V> cv = (CacheValue<V>)mapValue;
+            return cv.resetIfCleared(value);
+         }
+      }
+   }
 }
-

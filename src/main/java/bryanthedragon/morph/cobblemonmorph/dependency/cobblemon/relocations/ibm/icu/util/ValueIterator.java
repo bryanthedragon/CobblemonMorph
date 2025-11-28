@@ -1,16 +1,14 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
 public interface ValueIterator {
-    public boolean next(Element var1);
+   boolean next(ValueIterator.Element var1);
 
-    public void reset();
+   void reset();
 
-    public void setRange(int var1, int var2);
+   void setRange(int var1, int var2);
 
-    public static final class Element {
-        public int integer;
-        public Object value;
-    }
+   public static final class Element {
+      public int integer;
+      public Object value;
+   }
 }
-

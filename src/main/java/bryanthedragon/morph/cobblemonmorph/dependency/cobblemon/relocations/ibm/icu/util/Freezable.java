@@ -1,12 +1,9 @@
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+public interface Freezable<T> extends Cloneable {
+   boolean isFrozen();
 
-public interface Freezable<T>
-extends Cloneable {
-    public boolean isFrozen();
+   T freeze();
 
-    public T freeze();
-
-    public T cloneAsThawed();
+   T cloneAsThawed();
 }
-

@@ -1,152 +1,159 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.ICUBinary;
 import com.cobblemon.mod.relocations.ibm.icu.text.UTF16;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public abstract class Trie {
-    protected static final int LEAD_INDEX_OFFSET_ = 320;
-    protected static final int INDEX_STAGE_1_SHIFT_ = 5;
-    protected static final int INDEX_STAGE_2_SHIFT_ = 2;
-    protected static final int DATA_BLOCK_LENGTH = 32;
-    protected static final int INDEX_STAGE_3_MASK_ = 31;
-    protected static final int SURROGATE_BLOCK_BITS = 5;
-    protected static final int SURROGATE_BLOCK_COUNT = 32;
-    protected static final int BMP_INDEX_LENGTH = 2048;
-    protected static final int SURROGATE_MASK_ = 1023;
-    protected char[] m_index_;
-    protected DataManipulate m_dataManipulate_;
-    protected int m_dataOffset_;
-    protected int m_dataLength_;
-    protected static final int HEADER_LENGTH_ = 16;
-    protected static final int HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_ = 512;
-    protected static final int HEADER_SIGNATURE_ = 1416784229;
-    private static final int HEADER_OPTIONS_SHIFT_MASK_ = 15;
-    protected static final int HEADER_OPTIONS_INDEX_SHIFT_ = 4;
-    protected static final int HEADER_OPTIONS_DATA_IS_32_BIT_ = 256;
-    private boolean m_isLatin1Linear_;
-    private int m_options_;
+   protected static final int LEAD_INDEX_OFFSET_ = 320;
+   protected static final int INDEX_STAGE_1_SHIFT_ = 5;
+   protected static final int INDEX_STAGE_2_SHIFT_ = 2;
+   protected static final int DATA_BLOCK_LENGTH = 32;
+   protected static final int INDEX_STAGE_3_MASK_ = 31;
+   protected static final int SURROGATE_BLOCK_BITS = 5;
+   protected static final int SURROGATE_BLOCK_COUNT = 32;
+   protected static final int BMP_INDEX_LENGTH = 2048;
+   protected static final int SURROGATE_MASK_ = 1023;
+   protected char[] m_index_;
+   protected Trie.DataManipulate m_dataManipulate_;
+   protected int m_dataOffset_;
+   protected int m_dataLength_;
+   protected static final int HEADER_LENGTH_ = 16;
+   protected static final int HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_ = 512;
+   protected static final int HEADER_SIGNATURE_ = 1416784229;
+   private static final int HEADER_OPTIONS_SHIFT_MASK_ = 15;
+   protected static final int HEADER_OPTIONS_INDEX_SHIFT_ = 4;
+   protected static final int HEADER_OPTIONS_DATA_IS_32_BIT_ = 256;
+   private boolean m_isLatin1Linear_;
+   private int m_options_;
 
-    public final boolean isLatin1Linear() {
-        return this.m_isLatin1Linear_;
-    }
+   public final boolean isLatin1Linear() {
+      return this.m_isLatin1Linear_;
+   }
 
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (!(other instanceof Trie)) {
-            return false;
-        }
-        Trie othertrie = (Trie)other;
-        return this.m_isLatin1Linear_ == othertrie.m_isLatin1Linear_ && this.m_options_ == othertrie.m_options_ && this.m_dataLength_ == othertrie.m_dataLength_ && Arrays.equals(this.m_index_, othertrie.m_index_);
-    }
+   @Override
+   public boolean equals(Object other) {
+      if (other == this) {
+         return true;
+      } else if (!(other instanceof Trie)) {
+         return false;
+      } else {
+         Trie othertrie = (Trie)other;
+         return this.m_isLatin1Linear_ == othertrie.m_isLatin1Linear_
+            && this.m_options_ == othertrie.m_options_
+            && this.m_dataLength_ == othertrie.m_dataLength_
+            && Arrays.equals(this.m_index_, othertrie.m_index_);
+      }
+   }
 
-    public int hashCode() {
-        assert (false) : "hashCode not designed";
-        return 42;
-    }
+   @Override
+   public int hashCode() {
+      assert false : "hashCode not designed";
 
-    public int getSerializedDataSize() {
-        int result = 16;
-        result += this.m_dataOffset_ << 1;
-        if (this.isCharTrie()) {
-            result += this.m_dataLength_ << 1;
-        } else if (this.isIntTrie()) {
-            result += this.m_dataLength_ << 2;
-        }
-        return result;
-    }
+      return 42;
+   }
 
-    protected Trie(ByteBuffer bytes, DataManipulate dataManipulate) {
-        int signature = bytes.getInt();
-        this.m_options_ = bytes.getInt();
-        if (!this.checkHeader(signature)) {
-            throw new IllegalArgumentException("ICU data file error: Trie header authentication failed, please check if you have the most updated ICU data file");
-        }
-        this.m_dataManipulate_ = dataManipulate != null ? dataManipulate : new DefaultGetFoldingOffset();
-        this.m_isLatin1Linear_ = (this.m_options_ & 0x200) != 0;
-        this.m_dataOffset_ = bytes.getInt();
-        this.m_dataLength_ = bytes.getInt();
-        this.unserialize(bytes);
-    }
+   public int getSerializedDataSize() {
+      int result = 16;
+      result += this.m_dataOffset_ << 1;
+      if (this.isCharTrie()) {
+         result += this.m_dataLength_ << 1;
+      } else if (this.isIntTrie()) {
+         result += this.m_dataLength_ << 2;
+      }
 
-    protected Trie(char[] index, int options, DataManipulate dataManipulate) {
-        this.m_options_ = options;
-        this.m_dataManipulate_ = dataManipulate != null ? dataManipulate : new DefaultGetFoldingOffset();
-        this.m_isLatin1Linear_ = (this.m_options_ & 0x200) != 0;
-        this.m_index_ = index;
-        this.m_dataOffset_ = this.m_index_.length;
-    }
+      return result;
+   }
 
-    protected abstract int getSurrogateOffset(char var1, char var2);
+   protected Trie(ByteBuffer bytes, Trie.DataManipulate dataManipulate) {
+      int signature = bytes.getInt();
+      this.m_options_ = bytes.getInt();
+      if (!this.checkHeader(signature)) {
+         throw new IllegalArgumentException("ICU data file error: Trie header authentication failed, please check if you have the most updated ICU data file");
+      } else {
+         if (dataManipulate != null) {
+            this.m_dataManipulate_ = dataManipulate;
+         } else {
+            this.m_dataManipulate_ = new Trie.DefaultGetFoldingOffset();
+         }
 
-    protected abstract int getValue(int var1);
+         this.m_isLatin1Linear_ = (this.m_options_ & 512) != 0;
+         this.m_dataOffset_ = bytes.getInt();
+         this.m_dataLength_ = bytes.getInt();
+         this.unserialize(bytes);
+      }
+   }
 
-    protected abstract int getInitialValue();
+   protected Trie(char[] index, int options, Trie.DataManipulate dataManipulate) {
+      this.m_options_ = options;
+      if (dataManipulate != null) {
+         this.m_dataManipulate_ = dataManipulate;
+      } else {
+         this.m_dataManipulate_ = new Trie.DefaultGetFoldingOffset();
+      }
 
-    protected final int getRawOffset(int offset, char ch) {
-        return (this.m_index_[offset + (ch >> 5)] << 2) + (ch & 0x1F);
-    }
+      this.m_isLatin1Linear_ = (this.m_options_ & 512) != 0;
+      this.m_index_ = index;
+      this.m_dataOffset_ = this.m_index_.length;
+   }
 
-    protected final int getBMPOffset(char ch) {
-        return ch >= '\ud800' && ch <= '\udbff' ? this.getRawOffset(320, ch) : this.getRawOffset(0, ch);
-    }
+   protected abstract int getSurrogateOffset(char var1, char var2);
 
-    protected final int getLeadOffset(char ch) {
-        return this.getRawOffset(0, ch);
-    }
+   protected abstract int getValue(int var1);
 
-    protected final int getCodePointOffset(int ch) {
-        if (ch < 0) {
-            return -1;
-        }
-        if (ch < 55296) {
-            return this.getRawOffset(0, (char)ch);
-        }
-        if (ch < 65536) {
-            return this.getBMPOffset((char)ch);
-        }
-        if (ch <= 0x10FFFF) {
-            return this.getSurrogateOffset(UTF16.getLeadSurrogate(ch), (char)(ch & 0x3FF));
-        }
-        return -1;
-    }
+   protected abstract int getInitialValue();
 
-    protected void unserialize(ByteBuffer bytes) {
-        this.m_index_ = ICUBinary.getChars(bytes, this.m_dataOffset_, 0);
-    }
+   protected final int getRawOffset(int offset, char ch) {
+      return (this.m_index_[offset + (ch >> 5)] << 2) + (ch & 31);
+   }
 
-    protected final boolean isIntTrie() {
-        return (this.m_options_ & 0x100) != 0;
-    }
+   protected final int getBMPOffset(char ch) {
+      return ch >= 55296 && ch <= 56319 ? this.getRawOffset(320, ch) : this.getRawOffset(0, ch);
+   }
 
-    protected final boolean isCharTrie() {
-        return (this.m_options_ & 0x100) == 0;
-    }
+   protected final int getLeadOffset(char ch) {
+      return this.getRawOffset(0, ch);
+   }
 
-    private final boolean checkHeader(int signature) {
-        if (signature != 1416784229) {
-            return false;
-        }
-        return (this.m_options_ & 0xF) == 5 && (this.m_options_ >> 4 & 0xF) == 2;
-    }
+   protected final int getCodePointOffset(int ch) {
+      if (ch < 0) {
+         return -1;
+      } else if (ch < 55296) {
+         return this.getRawOffset(0, (char)ch);
+      } else if (ch < 65536) {
+         return this.getBMPOffset((char)ch);
+      } else {
+         return ch <= 1114111 ? this.getSurrogateOffset(UTF16.getLeadSurrogate(ch), (char)(ch & 1023)) : -1;
+      }
+   }
 
-    private static class DefaultGetFoldingOffset
-    implements DataManipulate {
-        private DefaultGetFoldingOffset() {
-        }
+   protected void unserialize(ByteBuffer bytes) {
+      this.m_index_ = ICUBinary.getChars(bytes, this.m_dataOffset_, 0);
+   }
 
-        @Override
-        public int getFoldingOffset(int value2) {
-            return value2;
-        }
-    }
+   protected final boolean isIntTrie() {
+      return (this.m_options_ & 256) != 0;
+   }
 
-    public static interface DataManipulate {
-        public int getFoldingOffset(int var1);
-    }
+   protected final boolean isCharTrie() {
+      return (this.m_options_ & 256) == 0;
+   }
+
+   private final boolean checkHeader(int signature) {
+      return signature != 1416784229 ? false : (this.m_options_ & 15) == 5 && (this.m_options_ >> 4 & 15) == 2;
+   }
+
+   public interface DataManipulate {
+      int getFoldingOffset(int var1);
+   }
+
+   private static class DefaultGetFoldingOffset implements Trie.DataManipulate {
+      private DefaultGetFoldingOffset() {
+      }
+
+      @Override
+      public int getFoldingOffset(int value) {
+         return value;
+      }
+   }
 }
-

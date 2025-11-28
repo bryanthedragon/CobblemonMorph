@@ -1,22 +1,19 @@
-
 package org.graalvm.shadowed.org.jcodings.transcode;
 
 public enum AsciiCompatibility {
-    CONVERTER,
-    DECODER,
-    ENCODER;
+   CONVERTER,
+   DECODER,
+   ENCODER;
 
+   public boolean isConverter() {
+      return this == CONVERTER;
+   }
 
-    public boolean isConverter() {
-        return this == CONVERTER;
-    }
+   public boolean isDecoder() {
+      return this == DECODER;
+   }
 
-    public boolean isDecoder() {
-        return this == DECODER;
-    }
-
-    public boolean isEncoder() {
-        return this == ENCODER;
-    }
+   public boolean isEncoder() {
+      return this == ENCODER;
+   }
 }
-

@@ -1,684 +1,805 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
+public class Trie2Writable extends Trie2 {
+   private static final int UTRIE2_MAX_INDEX_LENGTH = 65535;
+   private static final int UTRIE2_MAX_DATA_LENGTH = 262140;
+   private static final int UNEWTRIE2_INITIAL_DATA_LENGTH = 16384;
+   private static final int UNEWTRIE2_MEDIUM_DATA_LENGTH = 131072;
+   private static final int UNEWTRIE2_INDEX_2_NULL_OFFSET = 2656;
+   private static final int UNEWTRIE2_INDEX_2_START_OFFSET = 2720;
+   private static final int UNEWTRIE2_DATA_NULL_OFFSET = 192;
+   private static final int UNEWTRIE2_DATA_START_OFFSET = 256;
+   private static final int UNEWTRIE2_DATA_0800_OFFSET = 2176;
+   private int[] index1 = new int[544];
+   private int[] index2 = new int[35488];
+   private int[] data;
+   private int index2Length;
+   private int dataCapacity;
+   private int firstFreeBlock;
+   private int index2NullOffset;
+   private boolean isCompacted;
+   private int[] map = new int[34852];
+   private boolean UTRIE2_DEBUG = false;
 
-import com.cobblemon.mod.relocations.ibm.icu.impl.Trie2;
-import com.cobblemon.mod.relocations.ibm.icu.impl.Trie2_16;
-import com.cobblemon.mod.relocations.ibm.icu.impl.Trie2_32;
+   public Trie2Writable(int initialValueP, int errorValueP) {
+      this.init(initialValueP, errorValueP);
+   }
 
-public class Trie2Writable
-extends Trie2 {
-    private static final int UTRIE2_MAX_INDEX_LENGTH = 65535;
-    private static final int UTRIE2_MAX_DATA_LENGTH = 262140;
-    private static final int UNEWTRIE2_INITIAL_DATA_LENGTH = 16384;
-    private static final int UNEWTRIE2_MEDIUM_DATA_LENGTH = 131072;
-    private static final int UNEWTRIE2_INDEX_2_NULL_OFFSET = 2656;
-    private static final int UNEWTRIE2_INDEX_2_START_OFFSET = 2720;
-    private static final int UNEWTRIE2_DATA_NULL_OFFSET = 192;
-    private static final int UNEWTRIE2_DATA_START_OFFSET = 256;
-    private static final int UNEWTRIE2_DATA_0800_OFFSET = 2176;
-    private int[] index1 = new int[544];
-    private int[] index2 = new int[35488];
-    private int[] data;
-    private int index2Length;
-    private int dataCapacity;
-    private int firstFreeBlock;
-    private int index2NullOffset;
-    private boolean isCompacted;
-    private int[] map = new int[34852];
-    private boolean UTRIE2_DEBUG = false;
+   private void init(int initialValueP, int errorValueP) {
+      this.initialValue = initialValueP;
+      this.errorValue = errorValueP;
+      this.highStart = 1114112;
+      this.data = new int[16384];
+      this.dataCapacity = 16384;
+      this.initialValue = initialValueP;
+      this.errorValue = errorValueP;
+      this.highStart = 1114112;
+      this.firstFreeBlock = 0;
+      this.isCompacted = false;
 
-    public Trie2Writable(int initialValueP, int errorValueP) {
-        this.init(initialValueP, errorValueP);
-    }
+      int i;
+      for (i = 0; i < 128; i++) {
+         this.data[i] = this.initialValue;
+      }
 
-    private void init(int initialValueP, int errorValueP) {
-        int j;
-        int i;
-        this.initialValue = initialValueP;
-        this.errorValue = errorValueP;
-        this.highStart = 0x110000;
-        this.data = new int[16384];
-        this.dataCapacity = 16384;
-        this.initialValue = initialValueP;
-        this.errorValue = errorValueP;
-        this.highStart = 0x110000;
-        this.firstFreeBlock = 0;
-        this.isCompacted = false;
-        for (i = 0; i < 128; ++i) {
-            this.data[i] = this.initialValue;
-        }
-        while (i < 192) {
-            this.data[i] = this.errorValue;
-            ++i;
-        }
-        for (i = 192; i < 256; ++i) {
-            this.data[i] = this.initialValue;
-        }
-        this.dataNullOffset = 192;
-        this.dataLength = 256;
-        i = 0;
-        for (j = 0; j < 128; j += 32) {
-            this.index2[i] = j;
-            this.map[i] = 1;
-            ++i;
-        }
-        while (j < 192) {
-            this.map[i] = 0;
-            ++i;
-            j += 32;
-        }
-        this.map[i++] = 34845;
-        j += 32;
-        while (j < 256) {
-            this.map[i] = 0;
-            ++i;
-            j += 32;
-        }
-        for (i = 4; i < 2080; ++i) {
-            this.index2[i] = 192;
-        }
-        for (i = 0; i < 576; ++i) {
-            this.index2[2080 + i] = -1;
-        }
-        for (i = 0; i < 64; ++i) {
-            this.index2[2656 + i] = 192;
-        }
-        this.index2NullOffset = 2656;
-        this.index2Length = 2720;
-        i = 0;
-        j = 0;
-        while (i < 32) {
-            this.index1[i] = j;
-            ++i;
-            j += 64;
-        }
-        while (i < 544) {
-            this.index1[i] = 2656;
-            ++i;
-        }
-        for (i = 128; i < 2048; i += 32) {
-            this.set(i, this.initialValue);
-        }
-    }
+      while (i < 192) {
+         this.data[i] = this.errorValue;
+         i++;
+      }
 
-    public Trie2Writable(Trie2 source) {
-        this.init(source.initialValue, source.errorValue);
-        for (Trie2.Range r : source) {
-            this.setRange(r, true);
-        }
-    }
+      for (int var5 = 192; var5 < 256; var5++) {
+         this.data[var5] = this.initialValue;
+      }
 
-    private boolean isInNullBlock(int c, boolean forLSCP) {
-        int i2 = Character.isHighSurrogate((char)c) && forLSCP ? 320 + (c >> 5) : this.index1[c >> 11] + (c >> 5 & 0x3F);
-        int block = this.index2[i2];
-        return block == this.dataNullOffset;
-    }
+      this.dataNullOffset = 192;
+      this.dataLength = 256;
+      i = 0;
 
-    private int allocIndex2Block() {
-        int newBlock = this.index2Length;
-        int newTop = newBlock + 64;
-        if (newTop > this.index2.length) {
-            throw new IllegalStateException("Internal error in Trie2 creation.");
-        }
-        this.index2Length = newTop;
-        System.arraycopy(this.index2, this.index2NullOffset, this.index2, newBlock, 64);
-        return newBlock;
-    }
+      int j;
+      for (j = 0; j < 128; j += 32) {
+         this.index2[i] = j;
+         this.map[i] = 1;
+         i++;
+      }
 
-    private int getIndex2Block(int c, boolean forLSCP) {
-        if (c >= 55296 && c < 56320 && forLSCP) {
-            return 2048;
-        }
-        int i1 = c >> 11;
-        int i2 = this.index1[i1];
-        if (i2 == this.index2NullOffset) {
-            this.index1[i1] = i2 = this.allocIndex2Block();
-        }
-        return i2;
-    }
+      while (j < 192) {
+         this.map[i] = 0;
+         i++;
+         j += 32;
+      }
 
-    private int allocDataBlock(int copyBlock) {
-        int newBlock;
-        if (this.firstFreeBlock != 0) {
-            newBlock = this.firstFreeBlock;
-            this.firstFreeBlock = -this.map[newBlock >> 5];
-        } else {
-            newBlock = this.dataLength;
-            int newTop = newBlock + 32;
-            if (newTop > this.dataCapacity) {
-                int capacity;
-                if (this.dataCapacity < 131072) {
-                    capacity = 131072;
-                } else if (this.dataCapacity < 1115264) {
-                    capacity = 1115264;
-                } else {
-                    throw new IllegalStateException("Internal error in Trie2 creation.");
-                }
-                int[] newData = new int[capacity];
-                System.arraycopy(this.data, 0, newData, 0, this.dataLength);
-                this.data = newData;
-                this.dataCapacity = capacity;
-            }
-            this.dataLength = newTop;
-        }
-        System.arraycopy(this.data, copyBlock, this.data, newBlock, 32);
-        this.map[newBlock >> 5] = 0;
-        return newBlock;
-    }
+      this.map[i++] = 34845;
 
-    private void releaseDataBlock(int block) {
-        this.map[block >> 5] = -this.firstFreeBlock;
-        this.firstFreeBlock = block;
-    }
+      for (int var13 = j + 32; var13 < 256; var13 += 32) {
+         this.map[i] = 0;
+         i++;
+      }
 
-    private boolean isWritableBlock(int block) {
-        return block != this.dataNullOffset && 1 == this.map[block >> 5];
-    }
+      for (int var8 = 4; var8 < 2080; var8++) {
+         this.index2[var8] = 192;
+      }
 
-    private void setIndex2Entry(int i2, int block) {
-        int n = block >> 5;
-        this.map[n] = this.map[n] + 1;
-        int oldBlock = this.index2[i2];
-        int n2 = oldBlock >> 5;
-        this.map[n2] = this.map[n2] - 1;
-        if (0 == this.map[n2]) {
-            this.releaseDataBlock(oldBlock);
-        }
-        this.index2[i2] = block;
-    }
+      for (int var9 = 0; var9 < 576; var9++) {
+         this.index2[2080 + var9] = -1;
+      }
 
-    private int getDataBlock(int c, boolean forLSCP) {
-        int i2 = this.getIndex2Block(c, forLSCP);
-        int oldBlock = this.index2[i2 += c >> 5 & 0x3F];
-        if (this.isWritableBlock(oldBlock)) {
-            return oldBlock;
-        }
-        int newBlock = this.allocDataBlock(oldBlock);
-        this.setIndex2Entry(i2, newBlock);
-        return newBlock;
-    }
+      for (int var10 = 0; var10 < 64; var10++) {
+         this.index2[2656 + var10] = 192;
+      }
 
-    public Trie2Writable set(int c, int value2) {
-        if (c < 0 || c > 0x10FFFF) {
-            throw new IllegalArgumentException("Invalid code point.");
-        }
-        this.set(c, true, value2);
-        this.fHash = 0;
-        return this;
-    }
+      this.index2NullOffset = 2656;
+      this.index2Length = 2720;
+      i = 0;
 
-    private Trie2Writable set(int c, boolean forLSCP, int value2) {
-        if (this.isCompacted) {
-            this.uncompact();
-        }
-        int block = this.getDataBlock(c, forLSCP);
-        this.data[block + (c & 0x1F)] = value2;
-        return this;
-    }
+      for (int var14 = 0; i < 32; var14 += 64) {
+         this.index1[i] = var14;
+         i++;
+      }
 
-    private void uncompact() {
-        Trie2Writable tempTrie = new Trie2Writable(this);
-        this.index1 = tempTrie.index1;
-        this.index2 = tempTrie.index2;
-        this.data = tempTrie.data;
-        this.index2Length = tempTrie.index2Length;
-        this.dataCapacity = tempTrie.dataCapacity;
-        this.isCompacted = tempTrie.isCompacted;
-        this.header = tempTrie.header;
-        this.index = tempTrie.index;
-        this.data16 = tempTrie.data16;
-        this.data32 = tempTrie.data32;
-        this.indexLength = tempTrie.indexLength;
-        this.dataLength = tempTrie.dataLength;
-        this.index2NullOffset = tempTrie.index2NullOffset;
-        this.initialValue = tempTrie.initialValue;
-        this.errorValue = tempTrie.errorValue;
-        this.highStart = tempTrie.highStart;
-        this.highValueIndex = tempTrie.highValueIndex;
-        this.dataNullOffset = tempTrie.dataNullOffset;
-    }
+      while (i < 544) {
+         this.index1[i] = 2656;
+         i++;
+      }
 
-    private void writeBlock(int block, int value2) {
-        int limit = block + 32;
-        while (block < limit) {
-            this.data[block++] = value2;
-        }
-    }
+      for (int var12 = 128; var12 < 2048; var12 += 32) {
+         this.set(var12, this.initialValue);
+      }
+   }
 
-    private void fillBlock(int block, int start2, int limit, int value2, int initialValue, boolean overwrite) {
-        int pLimit = block + limit;
-        if (overwrite) {
-            for (int i = block + start2; i < pLimit; ++i) {
-                this.data[i] = value2;
-            }
-        } else {
-            for (int i = block + start2; i < pLimit; ++i) {
-                if (this.data[i] != initialValue) continue;
-                this.data[i] = value2;
-            }
-        }
-    }
+   public Trie2Writable(Trie2 source) {
+      this.init(source.initialValue, source.errorValue);
 
-    public Trie2Writable setRange(int start2, int end2, int value2, boolean overwrite) {
-        int block;
-        if (start2 > 0x10FFFF || start2 < 0 || end2 > 0x10FFFF || end2 < 0 || start2 > end2) {
-            throw new IllegalArgumentException("Invalid code point range.");
-        }
-        if (!overwrite && value2 == this.initialValue) {
-            return this;
-        }
-        this.fHash = 0;
-        if (this.isCompacted) {
-            this.uncompact();
-        }
-        int limit = end2 + 1;
-        if ((start2 & 0x1F) != 0) {
-            block = this.getDataBlock(start2, true);
-            int nextStart = start2 + 32 & 0xFFFFFFE0;
-            if (nextStart <= limit) {
-                this.fillBlock(block, start2 & 0x1F, 32, value2, this.initialValue, overwrite);
-                start2 = nextStart;
+      for (Trie2.Range r : source) {
+         this.setRange(r, true);
+      }
+   }
+
+   private boolean isInNullBlock(int c, boolean forLSCP) {
+      int i2;
+      if (Character.isHighSurrogate((char)c) && forLSCP) {
+         i2 = 320 + (c >> 5);
+      } else {
+         i2 = this.index1[c >> 11] + (c >> 5 & 63);
+      }
+
+      int block = this.index2[i2];
+      return block == this.dataNullOffset;
+   }
+
+   private int allocIndex2Block() {
+      int newBlock = this.index2Length;
+      int newTop = newBlock + 64;
+      if (newTop > this.index2.length) {
+         throw new IllegalStateException("Internal error in Trie2 creation.");
+      } else {
+         this.index2Length = newTop;
+         System.arraycopy(this.index2, this.index2NullOffset, this.index2, newBlock, 64);
+         return newBlock;
+      }
+   }
+
+   private int getIndex2Block(int c, boolean forLSCP) {
+      if (c >= 55296 && c < 56320 && forLSCP) {
+         return 2048;
+      } else {
+         int i1 = c >> 11;
+         int i2 = this.index1[i1];
+         if (i2 == this.index2NullOffset) {
+            i2 = this.allocIndex2Block();
+            this.index1[i1] = i2;
+         }
+
+         return i2;
+      }
+   }
+
+   private int allocDataBlock(int copyBlock) {
+      int newBlock;
+      if (this.firstFreeBlock != 0) {
+         newBlock = this.firstFreeBlock;
+         this.firstFreeBlock = -this.map[newBlock >> 5];
+      } else {
+         newBlock = this.dataLength;
+         int newTop = newBlock + 32;
+         if (newTop > this.dataCapacity) {
+            int capacity;
+            if (this.dataCapacity < 131072) {
+               capacity = 131072;
             } else {
-                this.fillBlock(block, start2 & 0x1F, limit & 0x1F, value2, this.initialValue, overwrite);
-                return this;
+               if (this.dataCapacity >= 1115264) {
+                  throw new IllegalStateException("Internal error in Trie2 creation.");
+               }
+
+               capacity = 1115264;
             }
-        }
-        int rest = limit & 0x1F;
-        limit &= 0xFFFFFFE0;
-        int repeatBlock = value2 == this.initialValue ? this.dataNullOffset : -1;
-        while (start2 < limit) {
-            boolean setRepeatBlock = false;
-            if (value2 == this.initialValue && this.isInNullBlock(start2, true)) {
-                start2 += 32;
-                continue;
+
+            int[] newData = new int[capacity];
+            System.arraycopy(this.data, 0, newData, 0, this.dataLength);
+            this.data = newData;
+            this.dataCapacity = capacity;
+         }
+
+         this.dataLength = newTop;
+      }
+
+      System.arraycopy(this.data, copyBlock, this.data, newBlock, 32);
+      this.map[newBlock >> 5] = 0;
+      return newBlock;
+   }
+
+   private void releaseDataBlock(int block) {
+      this.map[block >> 5] = -this.firstFreeBlock;
+      this.firstFreeBlock = block;
+   }
+
+   private boolean isWritableBlock(int block) {
+      return block != this.dataNullOffset && 1 == this.map[block >> 5];
+   }
+
+   private void setIndex2Entry(int i2, int block) {
+      this.map[block >> 5]++;
+      int oldBlock = this.index2[i2];
+      if (0 == --this.map[oldBlock >> 5]) {
+         this.releaseDataBlock(oldBlock);
+      }
+
+      this.index2[i2] = block;
+   }
+
+   private int getDataBlock(int c, boolean forLSCP) {
+      int i2 = this.getIndex2Block(c, forLSCP);
+      i2 += c >> 5 & 63;
+      int oldBlock = this.index2[i2];
+      if (this.isWritableBlock(oldBlock)) {
+         return oldBlock;
+      } else {
+         int newBlock = this.allocDataBlock(oldBlock);
+         this.setIndex2Entry(i2, newBlock);
+         return newBlock;
+      }
+   }
+
+   public Trie2Writable set(int c, int value) {
+      if (c >= 0 && c <= 1114111) {
+         this.set(c, true, value);
+         this.fHash = 0;
+         return this;
+      } else {
+         throw new IllegalArgumentException("Invalid code point.");
+      }
+   }
+
+   private Trie2Writable set(int c, boolean forLSCP, int value) {
+      if (this.isCompacted) {
+         this.uncompact();
+      }
+
+      int block = this.getDataBlock(c, forLSCP);
+      this.data[block + (c & 31)] = value;
+      return this;
+   }
+
+   private void uncompact() {
+      Trie2Writable tempTrie = new Trie2Writable(this);
+      this.index1 = tempTrie.index1;
+      this.index2 = tempTrie.index2;
+      this.data = tempTrie.data;
+      this.index2Length = tempTrie.index2Length;
+      this.dataCapacity = tempTrie.dataCapacity;
+      this.isCompacted = tempTrie.isCompacted;
+      this.header = tempTrie.header;
+      this.index = tempTrie.index;
+      this.data16 = tempTrie.data16;
+      this.data32 = tempTrie.data32;
+      this.indexLength = tempTrie.indexLength;
+      this.dataLength = tempTrie.dataLength;
+      this.index2NullOffset = tempTrie.index2NullOffset;
+      this.initialValue = tempTrie.initialValue;
+      this.errorValue = tempTrie.errorValue;
+      this.highStart = tempTrie.highStart;
+      this.highValueIndex = tempTrie.highValueIndex;
+      this.dataNullOffset = tempTrie.dataNullOffset;
+   }
+
+   private void writeBlock(int block, int value) {
+      int limit = block + 32;
+
+      while (block < limit) {
+         this.data[block++] = value;
+      }
+   }
+
+   private void fillBlock(int block, int start, int limit, int value, int initialValue, boolean overwrite) {
+      int pLimit = block + limit;
+      if (overwrite) {
+         for (int i = block + start; i < pLimit; i++) {
+            this.data[i] = value;
+         }
+      } else {
+         for (int i = block + start; i < pLimit; i++) {
+            if (this.data[i] == initialValue) {
+               this.data[i] = value;
             }
-            int i2 = this.getIndex2Block(start2, true);
-            block = this.index2[i2 += start2 >> 5 & 0x3F];
-            if (this.isWritableBlock(block)) {
-                if (overwrite && block >= 2176) {
-                    setRepeatBlock = true;
-                } else {
-                    this.fillBlock(block, 0, 32, value2, this.initialValue, overwrite);
-                }
-            } else if (this.data[block] != value2 && (overwrite || block == this.dataNullOffset)) {
-                setRepeatBlock = true;
+         }
+      }
+   }
+
+   public Trie2Writable setRange(int start, int end, int value, boolean overwrite) {
+      if (start <= 1114111 && start >= 0 && end <= 1114111 && end >= 0 && start <= end) {
+         if (!overwrite && value == this.initialValue) {
+            return this;
+         } else {
+            this.fHash = 0;
+            if (this.isCompacted) {
+               this.uncompact();
             }
-            if (setRepeatBlock) {
-                if (repeatBlock >= 0) {
-                    this.setIndex2Entry(i2, repeatBlock);
-                } else {
-                    repeatBlock = this.getDataBlock(start2, true);
-                    this.writeBlock(repeatBlock, value2);
-                }
+
+            int limit = end + 1;
+            if ((start & 31) != 0) {
+               int block = this.getDataBlock(start, true);
+               int nextStart = start + 32 & -32;
+               if (nextStart > limit) {
+                  this.fillBlock(block, start & 31, limit & 31, value, this.initialValue, overwrite);
+                  return this;
+               }
+
+               this.fillBlock(block, start & 31, 32, value, this.initialValue, overwrite);
+               start = nextStart;
             }
-            start2 += 32;
-        }
-        if (rest > 0) {
-            block = this.getDataBlock(start2, true);
-            this.fillBlock(block, 0, rest, value2, this.initialValue, overwrite);
-        }
-        return this;
-    }
 
-    public Trie2Writable setRange(Trie2.Range range, boolean overwrite) {
-        this.fHash = 0;
-        if (range.leadSurrogate) {
-            for (int c = range.startCodePoint; c <= range.endCodePoint; ++c) {
-                if (!overwrite && this.getFromU16SingleLead((char)c) != this.initialValue) continue;
-                this.setForLeadSurrogateCodeUnit((char)c, range.value);
+            int rest = limit & 31;
+            limit &= -32;
+            int repeatBlock;
+            if (value == this.initialValue) {
+               repeatBlock = this.dataNullOffset;
+            } else {
+               repeatBlock = -1;
             }
-        } else {
-            this.setRange(range.startCodePoint, range.endCodePoint, range.value, overwrite);
-        }
-        return this;
-    }
 
-    public Trie2Writable setForLeadSurrogateCodeUnit(char codeUnit, int value2) {
-        this.fHash = 0;
-        this.set(codeUnit, false, value2);
-        return this;
-    }
+            while (start < limit) {
+               boolean setRepeatBlock = false;
+               if (value == this.initialValue && this.isInNullBlock(start, true)) {
+                  start += 32;
+               } else {
+                  int i2 = this.getIndex2Block(start, true);
+                  i2 += start >> 5 & 63;
+                  int block = this.index2[i2];
+                  if (this.isWritableBlock(block)) {
+                     if (overwrite && block >= 2176) {
+                        setRepeatBlock = true;
+                     } else {
+                        this.fillBlock(block, 0, 32, value, this.initialValue, overwrite);
+                     }
+                  } else if (this.data[block] != value && (overwrite || block == this.dataNullOffset)) {
+                     setRepeatBlock = true;
+                  }
 
-    @Override
-    public int get(int codePoint) {
-        if (codePoint < 0 || codePoint > 0x10FFFF) {
-            return this.errorValue;
-        }
-        return this.get(codePoint, true);
-    }
+                  if (setRepeatBlock) {
+                     if (repeatBlock >= 0) {
+                        this.setIndex2Entry(i2, repeatBlock);
+                     } else {
+                        repeatBlock = this.getDataBlock(start, true);
+                        this.writeBlock(repeatBlock, value);
+                     }
+                  }
 
-    private int get(int c, boolean fromLSCP) {
-        if (c >= this.highStart && (c < 55296 || c >= 56320 || fromLSCP)) {
-            return this.data[this.dataLength - 4];
-        }
-        int i2 = c >= 55296 && c < 56320 && fromLSCP ? 320 + (c >> 5) : this.index1[c >> 11] + (c >> 5 & 0x3F);
-        int block = this.index2[i2];
-        return this.data[block + (c & 0x1F)];
-    }
+                  start += 32;
+               }
+            }
 
-    @Override
-    public int getFromU16SingleLead(char c) {
-        return this.get(c, false);
-    }
+            if (rest > 0) {
+               int blockx = this.getDataBlock(start, true);
+               this.fillBlock(blockx, 0, rest, value, this.initialValue, overwrite);
+            }
 
-    private boolean equal_int(int[] a, int s, int t, int length) {
-        for (int i = 0; i < length; ++i) {
-            if (a[s + i] == a[t + i]) continue;
+            return this;
+         }
+      } else {
+         throw new IllegalArgumentException("Invalid code point range.");
+      }
+   }
+
+   public Trie2Writable setRange(Trie2.Range range, boolean overwrite) {
+      this.fHash = 0;
+      if (range.leadSurrogate) {
+         for (int c = range.startCodePoint; c <= range.endCodePoint; c++) {
+            if (overwrite || this.getFromU16SingleLead((char)c) == this.initialValue) {
+               this.setForLeadSurrogateCodeUnit((char)c, range.value);
+            }
+         }
+      } else {
+         this.setRange(range.startCodePoint, range.endCodePoint, range.value, overwrite);
+      }
+
+      return this;
+   }
+
+   public Trie2Writable setForLeadSurrogateCodeUnit(char codeUnit, int value) {
+      this.fHash = 0;
+      this.set(codeUnit, false, value);
+      return this;
+   }
+
+   @Override
+   public int get(int codePoint) {
+      return codePoint >= 0 && codePoint <= 1114111 ? this.get(codePoint, true) : this.errorValue;
+   }
+
+   private int get(int c, boolean fromLSCP) {
+      if (c < this.highStart || c >= 55296 && c < 56320 && !fromLSCP) {
+         int i2;
+         if (c >= 55296 && c < 56320 && fromLSCP) {
+            i2 = 320 + (c >> 5);
+         } else {
+            i2 = this.index1[c >> 11] + (c >> 5 & 63);
+         }
+
+         int block = this.index2[i2];
+         return this.data[block + (c & 31)];
+      } else {
+         return this.data[this.dataLength - 4];
+      }
+   }
+
+   @Override
+   public int getFromU16SingleLead(char c) {
+      return this.get(c, false);
+   }
+
+   private boolean equal_int(int[] a, int s, int t, int length) {
+      for (int i = 0; i < length; i++) {
+         if (a[s + i] != a[t + i]) {
             return false;
-        }
-        return true;
-    }
+         }
+      }
 
-    private int findSameIndex2Block(int index2Length, int otherBlock) {
-        index2Length -= 64;
-        for (int block = 0; block <= index2Length; ++block) {
-            if (!this.equal_int(this.index2, block, otherBlock, 64)) continue;
+      return true;
+   }
+
+   private int findSameIndex2Block(int index2Length, int otherBlock) {
+      index2Length -= 64;
+
+      for (int block = 0; block <= index2Length; block++) {
+         if (this.equal_int(this.index2, block, otherBlock, 64)) {
             return block;
-        }
-        return -1;
-    }
+         }
+      }
 
-    private int findSameDataBlock(int dataLength, int otherBlock, int blockLength) {
-        dataLength -= blockLength;
-        for (int block = 0; block <= dataLength; block += 4) {
-            if (!this.equal_int(this.data, block, otherBlock, blockLength)) continue;
+      return -1;
+   }
+
+   private int findSameDataBlock(int dataLength, int otherBlock, int blockLength) {
+      dataLength -= blockLength;
+
+      for (int block = 0; block <= dataLength; block += 4) {
+         if (this.equal_int(this.data, block, otherBlock, blockLength)) {
             return block;
-        }
-        return -1;
-    }
+         }
+      }
 
-    private int findHighStart(int highValue) {
-        int prevBlock;
-        int prevI2Block;
-        if (highValue == this.initialValue) {
-            prevI2Block = this.index2NullOffset;
-            prevBlock = this.dataNullOffset;
-        } else {
-            prevI2Block = -1;
-            prevBlock = -1;
-        }
-        int prev = 0x110000;
-        int i1 = 544;
-        int c = prev;
-        while (c > 0) {
-            int i2Block;
-            if ((i2Block = this.index1[--i1]) == prevI2Block) {
-                c -= 2048;
-                continue;
-            }
+      return -1;
+   }
+
+   private int findHighStart(int highValue) {
+      int prevI2Block;
+      int prevBlock;
+      if (highValue == this.initialValue) {
+         prevI2Block = this.index2NullOffset;
+         prevBlock = this.dataNullOffset;
+      } else {
+         prevI2Block = -1;
+         prevBlock = -1;
+      }
+
+      int prev = 1114112;
+      int i1 = 544;
+      int c = prev;
+
+      while (c > 0) {
+         int i2Block = this.index1[--i1];
+         if (i2Block == prevI2Block) {
+            c -= 2048;
+         } else {
             prevI2Block = i2Block;
             if (i2Block == this.index2NullOffset) {
-                if (highValue != this.initialValue) {
-                    return c;
-                }
-                c -= 2048;
-                continue;
-            }
-            int i2 = 64;
-            while (i2 > 0) {
-                int block;
-                if ((block = this.index2[i2Block + --i2]) == prevBlock) {
-                    c -= 32;
-                    continue;
-                }
-                prevBlock = block;
-                if (block == this.dataNullOffset) {
-                    if (highValue != this.initialValue) {
-                        return c;
-                    }
-                    c -= 32;
-                    continue;
-                }
-                int j = 32;
-                while (j > 0) {
-                    int value2;
-                    if ((value2 = this.data[block + --j]) != highValue) {
-                        return c;
-                    }
-                    --c;
-                }
-            }
-        }
-        return 0;
-    }
+               if (highValue != this.initialValue) {
+                  return c;
+               }
 
-    private void compactData() {
-        int newStart = 192;
-        int start2 = 0;
-        int i = 0;
-        while (start2 < newStart) {
-            this.map[i] = start2;
-            start2 += 32;
-            ++i;
-        }
-        int blockLength = 64;
-        int blockCount = blockLength >> 5;
-        start2 = newStart;
-        while (start2 < this.dataLength) {
-            int overlap;
-            int mapIndex;
-            if (start2 == 2176) {
-                blockLength = 32;
-                blockCount = 1;
+               c -= 2048;
+            } else {
+               int i2 = 64;
+
+               while (i2 > 0) {
+                  int block = this.index2[i2Block + --i2];
+                  if (block == prevBlock) {
+                     c -= 32;
+                  } else {
+                     prevBlock = block;
+                     if (block == this.dataNullOffset) {
+                        if (highValue != this.initialValue) {
+                           return c;
+                        }
+
+                        c -= 32;
+                     } else {
+                        for (int j = 32; j > 0; c--) {
+                           int value = this.data[block + --j];
+                           if (value != highValue) {
+                              return c;
+                           }
+                        }
+                     }
+                  }
+               }
             }
-            if (this.map[start2 >> 5] <= 0) {
-                start2 += blockLength;
-                continue;
-            }
-            int movedStart = this.findSameDataBlock(newStart, start2, blockLength);
+         }
+      }
+
+      return 0;
+   }
+
+   private void compactData() {
+      int newStart = 192;
+      int start = 0;
+
+      for (int i = 0; start < newStart; i++) {
+         this.map[i] = start;
+         start += 32;
+      }
+
+      int blockLength = 64;
+      int blockCount = blockLength >> 5;
+      start = newStart;
+
+      while (start < this.dataLength) {
+         if (start == 2176) {
+            blockLength = 32;
+            blockCount = 1;
+         }
+
+         if (this.map[start >> 5] <= 0) {
+            start += blockLength;
+         } else {
+            int movedStart = this.findSameDataBlock(newStart, start, blockLength);
             if (movedStart >= 0) {
-                mapIndex = start2 >> 5;
-                for (i = blockCount; i > 0; --i) {
-                    this.map[mapIndex++] = movedStart;
-                    movedStart += 32;
-                }
-                start2 += blockLength;
-                continue;
-            }
-            for (overlap = blockLength - 4; overlap > 0 && !this.equal_int(this.data, newStart - overlap, start2, overlap); overlap -= 4) {
-            }
-            if (overlap > 0 || newStart < start2) {
-                movedStart = newStart - overlap;
-                mapIndex = start2 >> 5;
-                for (i = blockCount; i > 0; --i) {
-                    this.map[mapIndex++] = movedStart;
-                    movedStart += 32;
-                }
-                start2 += overlap;
-                for (i = blockLength - overlap; i > 0; --i) {
-                    this.data[newStart++] = this.data[start2++];
-                }
-                continue;
-            }
-            mapIndex = start2 >> 5;
-            for (i = blockCount; i > 0; --i) {
-                this.map[mapIndex++] = start2;
-                start2 += 32;
-            }
-            newStart = start2;
-        }
-        for (i = 0; i < this.index2Length; ++i) {
-            if (i == 2080) {
-                i += 576;
-            }
-            this.index2[i] = this.map[this.index2[i] >> 5];
-        }
-        this.dataNullOffset = this.map[this.dataNullOffset >> 5];
-        while ((newStart & 3) != 0) {
-            this.data[newStart++] = this.initialValue;
-        }
-        if (this.UTRIE2_DEBUG) {
-            System.out.printf("compacting UTrie2: count of 32-bit data words %d->%d%n", this.dataLength, newStart);
-        }
-        this.dataLength = newStart;
-    }
+               int var14 = blockCount;
 
-    private void compactIndex2() {
-        int newStart = 2080;
-        int start2 = 0;
-        int i = 0;
-        while (start2 < newStart) {
-            this.map[i] = start2;
-            start2 += 64;
-            ++i;
-        }
-        newStart += 32 + (this.highStart - 65536 >> 11);
-        start2 = 2656;
-        while (start2 < this.index2Length) {
-            int overlap;
-            int movedStart = this.findSameIndex2Block(newStart, start2);
-            if (movedStart >= 0) {
-                this.map[start2 >> 6] = movedStart;
-                start2 += 64;
-                continue;
+               for (int mapIndex = start >> 5; var14 > 0; var14--) {
+                  this.map[mapIndex++] = movedStart;
+                  movedStart += 32;
+               }
+
+               start += blockLength;
+            } else {
+               int overlap = blockLength - 4;
+
+               while (overlap > 0 && !this.equal_int(this.data, newStart - overlap, start, overlap)) {
+                  overlap -= 4;
+               }
+
+               if (overlap <= 0 && newStart >= start) {
+                  int var13 = blockCount;
+
+                  for (int mapIndex = start >> 5; var13 > 0; var13--) {
+                     this.map[mapIndex++] = start;
+                     start += 32;
+                  }
+
+                  newStart = start;
+               } else {
+                  movedStart = newStart - overlap;
+                  int var11 = blockCount;
+
+                  for (int mapIndex = start >> 5; var11 > 0; var11--) {
+                     this.map[mapIndex++] = movedStart;
+                     movedStart += 32;
+                  }
+
+                  start += overlap;
+
+                  for (int var12 = blockLength - overlap; var12 > 0; var12--) {
+                     this.data[newStart++] = this.data[start++];
+                  }
+               }
             }
-            for (overlap = 63; overlap > 0 && !this.equal_int(this.index2, newStart - overlap, start2, overlap); --overlap) {
+         }
+      }
+
+      for (int var15 = 0; var15 < this.index2Length; var15++) {
+         if (var15 == 2080) {
+            var15 += 576;
+         }
+
+         this.index2[var15] = this.map[this.index2[var15] >> 5];
+      }
+
+      this.dataNullOffset = this.map[this.dataNullOffset >> 5];
+
+      while ((newStart & 3) != 0) {
+         this.data[newStart++] = this.initialValue;
+      }
+
+      if (this.UTRIE2_DEBUG) {
+         System.out.printf("compacting UTrie2: count of 32-bit data words %d->%d%n", this.dataLength, newStart);
+      }
+
+      this.dataLength = newStart;
+   }
+
+   private void compactIndex2() {
+      int newStart = 2080;
+      int start = 0;
+
+      for (int i = 0; start < newStart; i++) {
+         this.map[i] = start;
+         start += 64;
+      }
+
+      newStart += 32 + (this.highStart - 65536 >> 11);
+      start = 2656;
+
+      while (start < this.index2Length) {
+         int movedStart;
+         if ((movedStart = this.findSameIndex2Block(newStart, start)) >= 0) {
+            this.map[start >> 6] = movedStart;
+            start += 64;
+         } else {
+            int overlap = 63;
+
+            while (overlap > 0 && !this.equal_int(this.index2, newStart - overlap, start, overlap)) {
+               overlap--;
             }
-            if (overlap > 0 || newStart < start2) {
-                this.map[start2 >> 6] = newStart - overlap;
-                start2 += overlap;
-                for (i = 64 - overlap; i > 0; --i) {
-                    this.index2[newStart++] = this.index2[start2++];
-                }
-                continue;
+
+            if (overlap <= 0 && newStart >= start) {
+               this.map[start >> 6] = start;
+               start += 64;
+               newStart = start;
+            } else {
+               this.map[start >> 6] = newStart - overlap;
+               start += overlap;
+
+               for (int var6 = 64 - overlap; var6 > 0; var6--) {
+                  this.index2[newStart++] = this.index2[start++];
+               }
             }
-            this.map[start2 >> 6] = start2;
-            newStart = start2 += 64;
-        }
-        for (i = 0; i < 544; ++i) {
-            this.index1[i] = this.map[this.index1[i] >> 6];
-        }
-        this.index2NullOffset = this.map[this.index2NullOffset >> 6];
-        while ((newStart & 3) != 0) {
-            this.index2[newStart++] = 262140;
-        }
-        if (this.UTRIE2_DEBUG) {
-            System.out.printf("compacting UTrie2: count of 16-bit index-2 words %d->%d%n", this.index2Length, newStart);
-        }
-        this.index2Length = newStart;
-    }
+         }
+      }
 
-    private void compactTrie() {
-        int highValue = this.get(0x10FFFF);
-        int localHighStart = this.findHighStart(highValue);
-        if ((localHighStart = localHighStart + 2047 & 0xFFFFF800) == 0x110000) {
-            highValue = this.errorValue;
-        }
-        this.highStart = localHighStart;
-        if (this.UTRIE2_DEBUG) {
-            System.out.printf("UTrie2: highStart U+%04x  highValue 0x%x  initialValue 0x%x%n", this.highStart, highValue, this.initialValue);
-        }
-        if (this.highStart < 0x110000) {
-            int suppHighStart = this.highStart <= 65536 ? 65536 : this.highStart;
-            this.setRange(suppHighStart, 0x10FFFF, this.initialValue, true);
-        }
-        this.compactData();
-        if (this.highStart > 65536) {
-            this.compactIndex2();
-        } else if (this.UTRIE2_DEBUG) {
-            System.out.printf("UTrie2: highStart U+%04x  count of 16-bit index-2 words %d->%d%n", this.highStart, this.index2Length, 2112);
-        }
-        this.data[this.dataLength++] = highValue;
-        while ((this.dataLength & 3) != 0) {
-            this.data[this.dataLength++] = this.initialValue;
-        }
-        this.isCompacted = true;
-    }
+      for (int var7 = 0; var7 < 544; var7++) {
+         this.index1[var7] = this.map[this.index1[var7] >> 6];
+      }
 
-    public Trie2_16 toTrie2_16() {
-        Trie2_16 frozenTrie = new Trie2_16();
-        this.freeze(frozenTrie, Trie2.ValueWidth.BITS_16);
-        return frozenTrie;
-    }
+      this.index2NullOffset = this.map[this.index2NullOffset >> 6];
 
-    public Trie2_32 toTrie2_32() {
-        Trie2_32 frozenTrie = new Trie2_32();
-        this.freeze(frozenTrie, Trie2.ValueWidth.BITS_32);
-        return frozenTrie;
-    }
+      while ((newStart & 3) != 0) {
+         this.index2[newStart++] = 262140;
+      }
 
-    private void freeze(Trie2 dest, Trie2.ValueWidth valueBits) {
-        int i;
-        if (!this.isCompacted) {
-            this.compactTrie();
-        }
-        int allIndexesLength = this.highStart <= 65536 ? 2112 : this.index2Length;
-        int dataMove = valueBits == Trie2.ValueWidth.BITS_16 ? allIndexesLength : 0;
-        if (allIndexesLength > 65535 || dataMove + this.dataNullOffset > 65535 || dataMove + 2176 > 65535 || dataMove + this.dataLength > 262140) {
-            throw new UnsupportedOperationException("Trie2 data is too large.");
-        }
-        int indexLength = allIndexesLength;
-        if (valueBits == Trie2.ValueWidth.BITS_16) {
-            indexLength += this.dataLength;
-        } else {
+      if (this.UTRIE2_DEBUG) {
+         System.out.printf("compacting UTrie2: count of 16-bit index-2 words %d->%d%n", this.index2Length, newStart);
+      }
+
+      this.index2Length = newStart;
+   }
+
+   private void compactTrie() {
+      int highValue = this.get(1114111);
+      int localHighStart = this.findHighStart(highValue);
+      localHighStart = localHighStart + 2047 & -2048;
+      if (localHighStart == 1114112) {
+         highValue = this.errorValue;
+      }
+
+      this.highStart = localHighStart;
+      if (this.UTRIE2_DEBUG) {
+         System.out.printf("UTrie2: highStart U+%04x  highValue 0x%x  initialValue 0x%x%n", this.highStart, highValue, this.initialValue);
+      }
+
+      if (this.highStart < 1114112) {
+         int suppHighStart = this.highStart <= 65536 ? 65536 : this.highStart;
+         this.setRange(suppHighStart, 1114111, this.initialValue, true);
+      }
+
+      this.compactData();
+      if (this.highStart > 65536) {
+         this.compactIndex2();
+      } else if (this.UTRIE2_DEBUG) {
+         System.out.printf("UTrie2: highStart U+%04x  count of 16-bit index-2 words %d->%d%n", this.highStart, this.index2Length, 2112);
+      }
+
+      this.data[this.dataLength++] = highValue;
+
+      while ((this.dataLength & 3) != 0) {
+         this.data[this.dataLength++] = this.initialValue;
+      }
+
+      this.isCompacted = true;
+   }
+
+   public Trie2_16 toTrie2_16() {
+      Trie2_16 frozenTrie = new Trie2_16();
+      this.freeze(frozenTrie, Trie2.ValueWidth.BITS_16);
+      return frozenTrie;
+   }
+
+   public Trie2_32 toTrie2_32() {
+      Trie2_32 frozenTrie = new Trie2_32();
+      this.freeze(frozenTrie, Trie2.ValueWidth.BITS_32);
+      return frozenTrie;
+   }
+
+   private void freeze(Trie2 dest, Trie2.ValueWidth valueBits) {
+      if (!this.isCompacted) {
+         this.compactTrie();
+      }
+
+      int allIndexesLength;
+      if (this.highStart <= 65536) {
+         allIndexesLength = 2112;
+      } else {
+         allIndexesLength = this.index2Length;
+      }
+
+      int dataMove;
+      if (valueBits == Trie2.ValueWidth.BITS_16) {
+         dataMove = allIndexesLength;
+      } else {
+         dataMove = 0;
+      }
+
+      if (allIndexesLength <= 65535 && dataMove + this.dataNullOffset <= 65535 && dataMove + 2176 <= 65535 && dataMove + this.dataLength <= 262140) {
+         int indexLength = allIndexesLength;
+         if (valueBits == Trie2.ValueWidth.BITS_16) {
+            indexLength = allIndexesLength + this.dataLength;
+         } else {
             dest.data32 = new int[this.dataLength];
-        }
-        dest.index = new char[indexLength];
-        dest.indexLength = allIndexesLength;
-        dest.dataLength = this.dataLength;
-        dest.index2NullOffset = this.highStart <= 65536 ? 65535 : 0 + this.index2NullOffset;
-        dest.initialValue = this.initialValue;
-        dest.errorValue = this.errorValue;
-        dest.highStart = this.highStart;
-        dest.highValueIndex = dataMove + this.dataLength - 4;
-        dest.dataNullOffset = dataMove + this.dataNullOffset;
-        dest.header = new Trie2.UTrie2Header();
-        dest.header.signature = 1416784178;
-        dest.header.options = valueBits == Trie2.ValueWidth.BITS_16 ? 0 : 1;
-        dest.header.indexLength = dest.indexLength;
-        dest.header.shiftedDataLength = dest.dataLength >> 2;
-        dest.header.index2NullOffset = dest.index2NullOffset;
-        dest.header.dataNullOffset = dest.dataNullOffset;
-        dest.header.shiftedHighStart = dest.highStart >> 11;
-        int destIdx = 0;
-        for (i = 0; i < 2080; ++i) {
+         }
+
+         dest.index = new char[indexLength];
+         dest.indexLength = allIndexesLength;
+         dest.dataLength = this.dataLength;
+         if (this.highStart <= 65536) {
+            dest.index2NullOffset = 65535;
+         } else {
+            dest.index2NullOffset = 0 + this.index2NullOffset;
+         }
+
+         dest.initialValue = this.initialValue;
+         dest.errorValue = this.errorValue;
+         dest.highStart = this.highStart;
+         dest.highValueIndex = dataMove + this.dataLength - 4;
+         dest.dataNullOffset = dataMove + this.dataNullOffset;
+         dest.header = new Trie2.UTrie2Header();
+         dest.header.signature = 1416784178;
+         dest.header.options = valueBits == Trie2.ValueWidth.BITS_16 ? 0 : 1;
+         dest.header.indexLength = dest.indexLength;
+         dest.header.shiftedDataLength = dest.dataLength >> 2;
+         dest.header.index2NullOffset = dest.index2NullOffset;
+         dest.header.dataNullOffset = dest.dataNullOffset;
+         dest.header.shiftedHighStart = dest.highStart >> 11;
+         int destIdx = 0;
+
+         for (int i = 0; i < 2080; i++) {
             dest.index[destIdx++] = (char)(this.index2[i] + dataMove >> 2);
-        }
-        if (this.UTRIE2_DEBUG) {
+         }
+
+         if (this.UTRIE2_DEBUG) {
             System.out.println("\n\nIndex2 for BMP limit is " + Integer.toHexString(destIdx));
-        }
-        for (i = 0; i < 2; ++i) {
+         }
+
+         int var10;
+         for (var10 = 0; var10 < 2; var10++) {
             dest.index[destIdx++] = (char)(dataMove + 128);
-        }
-        while (i < 32) {
-            dest.index[destIdx++] = (char)(dataMove + this.index2[i << 1]);
-            ++i;
-        }
-        if (this.UTRIE2_DEBUG) {
+         }
+
+         while (var10 < 32) {
+            dest.index[destIdx++] = (char)(dataMove + this.index2[var10 << 1]);
+            var10++;
+         }
+
+         if (this.UTRIE2_DEBUG) {
             System.out.println("Index2 for UTF-8 2byte values limit is " + Integer.toHexString(destIdx));
-        }
-        if (this.highStart > 65536) {
+         }
+
+         if (this.highStart > 65536) {
             int index1Length = this.highStart - 65536 >> 11;
             int index2Offset = 2112 + index1Length;
-            for (i = 0; i < index1Length; ++i) {
-                dest.index[destIdx++] = (char)(0 + this.index1[i + 32]);
-            }
-            if (this.UTRIE2_DEBUG) {
-                System.out.println("Index 1 for supplementals, limit is " + Integer.toHexString(destIdx));
-            }
-            for (i = 0; i < this.index2Length - index2Offset; ++i) {
-                dest.index[destIdx++] = (char)(dataMove + this.index2[index2Offset + i] >> 2);
-            }
-            if (this.UTRIE2_DEBUG) {
-                System.out.println("Index 2 for supplementals, limit is " + Integer.toHexString(destIdx));
-            }
-        }
-        switch (valueBits) {
-            case BITS_16: {
-                assert (destIdx == dataMove);
-                dest.data16 = destIdx;
-                for (i = 0; i < this.dataLength; ++i) {
-                    dest.index[destIdx++] = (char)this.data[i];
-                }
-                break;
-            }
-            case BITS_32: {
-                for (i = 0; i < this.dataLength; ++i) {
-                    dest.data32[i] = this.data[i];
-                }
-                break;
-            }
-        }
-    }
-}
 
+            for (int var11 = 0; var11 < index1Length; var11++) {
+               dest.index[destIdx++] = (char)(0 + this.index1[var11 + 32]);
+            }
+
+            if (this.UTRIE2_DEBUG) {
+               System.out.println("Index 1 for supplementals, limit is " + Integer.toHexString(destIdx));
+            }
+
+            for (int var12 = 0; var12 < this.index2Length - index2Offset; var12++) {
+               dest.index[destIdx++] = (char)(dataMove + this.index2[index2Offset + var12] >> 2);
+            }
+
+            if (this.UTRIE2_DEBUG) {
+               System.out.println("Index 2 for supplementals, limit is " + Integer.toHexString(destIdx));
+            }
+         }
+
+         switch (valueBits) {
+            case BITS_16:
+               assert destIdx == dataMove;
+
+               dest.data16 = destIdx;
+
+               for (int var14 = 0; var14 < this.dataLength; var14++) {
+                  dest.index[destIdx++] = (char)this.data[var14];
+               }
+               break;
+            case BITS_32:
+               for (int var13 = 0; var13 < this.dataLength; var13++) {
+                  dest.data32[var13] = this.data[var13];
+               }
+         }
+      } else {
+         throw new UnsupportedOperationException("Trie2 data is too large.");
+      }
+   }
+}

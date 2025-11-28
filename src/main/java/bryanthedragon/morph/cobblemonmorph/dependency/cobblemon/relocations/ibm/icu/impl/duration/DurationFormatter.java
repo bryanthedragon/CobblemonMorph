@@ -1,18 +1,16 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration;
+package com.cobblemon.mod.relocations.ibm.icu.impl.duration;
 
 import java.util.Date;
 import java.util.TimeZone;
 
 public interface DurationFormatter {
-    public String formatDurationFromNowTo(Date var1);
+   String formatDurationFromNowTo(Date var1);
 
-    public String formatDurationFromNow(long var1);
+   String formatDurationFromNow(long var1);
 
-    public String formatDurationFrom(long var1, long var3);
+   String formatDurationFrom(long var1, long var3);
 
-    public DurationFormatter withLocale(String var1);
+   DurationFormatter withLocale(String var1);
 
-    public DurationFormatter withTimeZone(TimeZone var1);
+   DurationFormatter withTimeZone(TimeZone var1);
 }
-

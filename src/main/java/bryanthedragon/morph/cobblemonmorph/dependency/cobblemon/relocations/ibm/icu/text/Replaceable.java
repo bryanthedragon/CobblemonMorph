@@ -1,21 +1,19 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
 public interface Replaceable {
-    public int length();
+   int length();
 
-    public char charAt(int var1);
+   char charAt(int var1);
 
-    public int char32At(int var1);
+   int char32At(int var1);
 
-    public void getChars(int var1, int var2, char[] var3, int var4);
+   void getChars(int var1, int var2, char[] var3, int var4);
 
-    public void replace(int var1, int var2, String var3);
+   void replace(int var1, int var2, String var3);
 
-    public void replace(int var1, int var2, char[] var3, int var4, int var5);
+   void replace(int var1, int var2, char[] var3, int var4, int var5);
 
-    public void copy(int var1, int var2, int var3);
+   void copy(int var1, int var2, int var3);
 
-    public boolean hasMetaData();
+   boolean hasMetaData();
 }
-

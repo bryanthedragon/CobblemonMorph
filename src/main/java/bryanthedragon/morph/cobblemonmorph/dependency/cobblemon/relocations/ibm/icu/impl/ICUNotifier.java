@@ -1,5 +1,4 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
+package com.cobblemon.mod.relocations.ibm.icu.impl;
 
 import java.util.ArrayList;
 import java.util.EventListener;
@@ -7,130 +6,107 @@ import java.util.Iterator;
 import java.util.List;
 
 public abstract class ICUNotifier {
-    private final Object notifyLock = new Object();
-    private NotifyThread notifyThread;
-    private List<EventListener> listeners;
+   private final Object notifyLock = new Object();
+   private ICUNotifier.NotifyThread notifyThread;
+   private List<EventListener> listeners;
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public void addListener(EventListener l) {
-        if (l == null) {
-            throw new NullPointerException();
-        }
-        if (this.acceptsListener(l)) {
-            Object object = this.notifyLock;
-            synchronized (object) {
-                if (this.listeners == null) {
-                    this.listeners = new ArrayList<EventListener>();
-                } else {
-                    for (EventListener ll : this.listeners) {
-                        if (ll != l) continue;
-                        return;
-                    }
-                }
-                this.listeners.add(l);
+   public void addListener(EventListener l) {
+      if (l == null) {
+         throw new NullPointerException();
+      } else if (this.acceptsListener(l)) {
+         synchronized (this.notifyLock) {
+            if (this.listeners == null) {
+               this.listeners = new ArrayList<>();
+            } else {
+               for (EventListener ll : this.listeners) {
+                  if (ll == l) {
+                     return;
+                  }
+               }
             }
-        } else {
-            throw new IllegalStateException("Listener invalid for this notifier.");
-        }
-    }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public void removeListener(EventListener l) {
-        if (l == null) {
-            throw new NullPointerException();
-        }
-        Object object = this.notifyLock;
-        synchronized (object) {
+            this.listeners.add(l);
+         }
+      } else {
+         throw new IllegalStateException("Listener invalid for this notifier.");
+      }
+   }
+
+   public void removeListener(EventListener l) {
+      if (l == null) {
+         throw new NullPointerException();
+      } else {
+         synchronized (this.notifyLock) {
             if (this.listeners != null) {
-                Iterator<EventListener> iter = this.listeners.iterator();
-                while (iter.hasNext()) {
-                    if (iter.next() != l) continue;
-                    iter.remove();
-                    if (this.listeners.size() == 0) {
+               Iterator<EventListener> iter = this.listeners.iterator();
+
+               while (iter.hasNext()) {
+                  if (iter.next() == l) {
+                     iter.remove();
+                     if (this.listeners.size() == 0) {
                         this.listeners = null;
-                    }
-                    return;
-                }
+                     }
+
+                     return;
+                  }
+               }
             }
-        }
-    }
+         }
+      }
+   }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
-    public void notifyChanged() {
-        Object object = this.notifyLock;
-        synchronized (object) {
-            if (this.listeners != null) {
-                if (this.notifyThread == null) {
-                    this.notifyThread = new NotifyThread(this);
-                    this.notifyThread.setDaemon(true);
-                    this.notifyThread.start();
-                }
-                this.notifyThread.queue(this.listeners.toArray(new EventListener[this.listeners.size()]));
+   public void notifyChanged() {
+      synchronized (this.notifyLock) {
+         if (this.listeners != null) {
+            if (this.notifyThread == null) {
+               this.notifyThread = new ICUNotifier.NotifyThread(this);
+               this.notifyThread.setDaemon(true);
+               this.notifyThread.start();
             }
-        }
-    }
 
-    protected abstract boolean acceptsListener(EventListener var1);
+            this.notifyThread.queue(this.listeners.toArray(new EventListener[this.listeners.size()]));
+         }
+      }
+   }
 
-    protected abstract void notifyListener(EventListener var1);
+   protected abstract boolean acceptsListener(EventListener var1);
 
-    private static class NotifyThread
-    extends Thread {
-        private final ICUNotifier notifier;
-        private final List<EventListener[]> queue = new ArrayList<EventListener[]>();
+   protected abstract void notifyListener(EventListener var1);
 
-        NotifyThread(ICUNotifier notifier) {
-            this.notifier = notifier;
-        }
+   private static class NotifyThread extends Thread {
+      private final ICUNotifier notifier;
+      private final List<EventListener[]> queue = new ArrayList<>();
 
-        /*
-         * WARNING - Removed try catching itself - possible behaviour change.
-         */
-        public void queue(EventListener[] list) {
-            NotifyThread notifyThread = this;
-            synchronized (notifyThread) {
-                this.queue.add(list);
-                this.notify();
+      NotifyThread(ICUNotifier notifier) {
+         this.notifier = notifier;
+      }
+
+      public void queue(EventListener[] list) {
+         synchronized (this) {
+            this.queue.add(list);
+            this.notify();
+         }
+      }
+
+      @Override
+      public void run() {
+         while (true) {
+            try {
+               EventListener[] list;
+               synchronized (this) {
+                  while (this.queue.isEmpty()) {
+                     this.wait();
+                  }
+
+                  list = this.queue.remove(0);
+               }
+
+               for (int i = 0; i < list.length; i++) {
+                  this.notifier.notifyListener(list[i]);
+               }
+            } catch (InterruptedException var5) {
             }
-        }
-
-        /*
-         * WARNING - Removed try catching itself - possible behaviour change.
-         */
-        @Override
-        public void run() {
-            while (true) {
-                try {
-                    block6: while (true) {
-                        EventListener[] list;
-                        NotifyThread notifyThread = this;
-                        synchronized (notifyThread) {
-                            while (this.queue.isEmpty()) {
-                                this.wait();
-                            }
-                            list = this.queue.remove(0);
-                        }
-                        int i = 0;
-                        while (true) {
-                            if (i >= list.length) continue block6;
-                            this.notifier.notifyListener(list[i]);
-                            ++i;
-                        }
-                        break;
-                    }
-                }
-                catch (InterruptedException interruptedException) {
-                    continue;
-                }
-                break;
-            }
-        }
-    }
+         }
+      }
+   }
 }
-

@@ -1,224 +1,207 @@
-
 package org.graalvm.word;
 
-import org.graalvm.word.LocationIdentity;
-import org.graalvm.word.PointerBase;
-import org.graalvm.word.UnsignedWord;
-import org.graalvm.word.WordBase;
+public interface Pointer extends UnsignedWord, PointerBase {
+   Object toObject();
 
-public interface Pointer
-extends UnsignedWord,
-PointerBase {
-    public Object toObject();
+   Object toObjectNonNull();
 
-    public Object toObjectNonNull();
+   byte readByte(WordBase offset, LocationIdentity locationIdentity);
 
-    public byte readByte(WordBase var1, LocationIdentity var2);
+   char readChar(WordBase offset, LocationIdentity locationIdentity);
 
-    public char readChar(WordBase var1, LocationIdentity var2);
+   short readShort(WordBase offset, LocationIdentity locationIdentity);
 
-    public short readShort(WordBase var1, LocationIdentity var2);
+   int readInt(WordBase offset, LocationIdentity locationIdentity);
 
-    public int readInt(WordBase var1, LocationIdentity var2);
+   long readLong(WordBase offset, LocationIdentity locationIdentity);
 
-    public long readLong(WordBase var1, LocationIdentity var2);
+   float readFloat(WordBase offset, LocationIdentity locationIdentity);
 
-    public float readFloat(WordBase var1, LocationIdentity var2);
+   double readDouble(WordBase offset, LocationIdentity locationIdentity);
 
-    public double readDouble(WordBase var1, LocationIdentity var2);
+   <T extends WordBase> T readWord(WordBase offset, LocationIdentity locationIdentity);
 
-    public <T extends WordBase> T readWord(WordBase var1, LocationIdentity var2);
+   Object readObject(WordBase offset, LocationIdentity locationIdentity);
 
-    public Object readObject(WordBase var1, LocationIdentity var2);
+   byte readByte(int offset, LocationIdentity locationIdentity);
 
-    public byte readByte(int var1, LocationIdentity var2);
+   char readChar(int offset, LocationIdentity locationIdentity);
 
-    public char readChar(int var1, LocationIdentity var2);
+   short readShort(int offset, LocationIdentity locationIdentity);
 
-    public short readShort(int var1, LocationIdentity var2);
+   int readInt(int offset, LocationIdentity locationIdentity);
 
-    public int readInt(int var1, LocationIdentity var2);
+   long readLong(int offset, LocationIdentity locationIdentity);
 
-    public long readLong(int var1, LocationIdentity var2);
+   float readFloat(int offset, LocationIdentity locationIdentity);
 
-    public float readFloat(int var1, LocationIdentity var2);
+   double readDouble(int offset, LocationIdentity locationIdentity);
 
-    public double readDouble(int var1, LocationIdentity var2);
+   <T extends WordBase> T readWord(int offset, LocationIdentity locationIdentity);
 
-    public <T extends WordBase> T readWord(int var1, LocationIdentity var2);
+   Object readObject(int offset, LocationIdentity locationIdentity);
 
-    public Object readObject(int var1, LocationIdentity var2);
+   <T extends WordBase> T readWordVolatile(int offset, LocationIdentity locationIdentity);
 
-    public <T extends WordBase> T readWordVolatile(int var1, LocationIdentity var2);
+   void writeByte(WordBase offset, byte val, LocationIdentity locationIdentity);
 
-    public void writeByte(WordBase var1, byte var2, LocationIdentity var3);
+   void writeChar(WordBase offset, char val, LocationIdentity locationIdentity);
 
-    public void writeChar(WordBase var1, char var2, LocationIdentity var3);
+   void writeShort(WordBase offset, short val, LocationIdentity locationIdentity);
 
-    public void writeShort(WordBase var1, short var2, LocationIdentity var3);
+   void writeInt(WordBase offset, int val, LocationIdentity locationIdentity);
 
-    public void writeInt(WordBase var1, int var2, LocationIdentity var3);
+   void writeLong(WordBase offset, long val, LocationIdentity locationIdentity);
 
-    public void writeLong(WordBase var1, long var2, LocationIdentity var4);
+   void writeFloat(WordBase offset, float val, LocationIdentity locationIdentity);
 
-    public void writeFloat(WordBase var1, float var2, LocationIdentity var3);
+   void writeDouble(WordBase offset, double val, LocationIdentity locationIdentity);
 
-    public void writeDouble(WordBase var1, double var2, LocationIdentity var4);
+   void writeWord(WordBase offset, WordBase val, LocationIdentity locationIdentity);
 
-    public void writeWord(WordBase var1, WordBase var2, LocationIdentity var3);
+   void initializeLong(WordBase offset, long val, LocationIdentity locationIdentity);
 
-    public void initializeLong(WordBase var1, long var2, LocationIdentity var4);
+   void writeObject(WordBase offset, Object val, LocationIdentity locationIdentity);
 
-    public void writeObject(WordBase var1, Object var2, LocationIdentity var3);
+   void writeByte(int offset, byte val, LocationIdentity locationIdentity);
 
-    public void writeByte(int var1, byte var2, LocationIdentity var3);
+   void writeChar(int offset, char val, LocationIdentity locationIdentity);
 
-    public void writeChar(int var1, char var2, LocationIdentity var3);
+   void writeShort(int offset, short val, LocationIdentity locationIdentity);
 
-    public void writeShort(int var1, short var2, LocationIdentity var3);
+   void writeInt(int offset, int val, LocationIdentity locationIdentity);
 
-    public void writeInt(int var1, int var2, LocationIdentity var3);
+   void writeLong(int offset, long val, LocationIdentity locationIdentity);
 
-    public void writeLong(int var1, long var2, LocationIdentity var4);
+   void writeFloat(int offset, float val, LocationIdentity locationIdentity);
 
-    public void writeFloat(int var1, float var2, LocationIdentity var3);
+   void writeDouble(int offset, double val, LocationIdentity locationIdentity);
 
-    public void writeDouble(int var1, double var2, LocationIdentity var4);
+   void writeWord(int offset, WordBase val, LocationIdentity locationIdentity);
 
-    public void writeWord(int var1, WordBase var2, LocationIdentity var3);
+   void initializeLong(int offset, long val, LocationIdentity locationIdentity);
 
-    public void initializeLong(int var1, long var2, LocationIdentity var4);
+   void writeObject(int offset, Object val, LocationIdentity locationIdentity);
 
-    public void writeObject(int var1, Object var2, LocationIdentity var3);
+   byte readByte(WordBase offset);
 
-    public byte readByte(WordBase var1);
+   char readChar(WordBase offset);
 
-    public char readChar(WordBase var1);
+   short readShort(WordBase offset);
 
-    public short readShort(WordBase var1);
+   int readInt(WordBase offset);
 
-    public int readInt(WordBase var1);
+   long readLong(WordBase offset);
 
-    public long readLong(WordBase var1);
+   float readFloat(WordBase offset);
 
-    public float readFloat(WordBase var1);
+   double readDouble(WordBase offset);
 
-    public double readDouble(WordBase var1);
+   <T extends WordBase> T readWord(WordBase offset);
 
-    public <T extends WordBase> T readWord(WordBase var1);
+   Object readObject(WordBase offset);
 
-    public Object readObject(WordBase var1);
+   byte readByte(int offset);
 
-    public byte readByte(int var1);
+   char readChar(int offset);
 
-    public char readChar(int var1);
+   short readShort(int offset);
 
-    public short readShort(int var1);
+   int readInt(int offset);
 
-    public int readInt(int var1);
+   long readLong(int offset);
 
-    public long readLong(int var1);
+   float readFloat(int offset);
 
-    public float readFloat(int var1);
+   double readDouble(int offset);
 
-    public double readDouble(int var1);
+   <T extends WordBase> T readWord(int offset);
 
-    public <T extends WordBase> T readWord(int var1);
+   Object readObject(int offset);
 
-    public Object readObject(int var1);
+   void writeByte(WordBase offset, byte val);
 
-    public void writeByte(WordBase var1, byte var2);
+   void writeChar(WordBase offset, char val);
 
-    public void writeChar(WordBase var1, char var2);
+   void writeShort(WordBase offset, short val);
 
-    public void writeShort(WordBase var1, short var2);
+   void writeInt(WordBase offset, int val);
 
-    public void writeInt(WordBase var1, int var2);
+   void writeLong(WordBase offset, long val);
 
-    public void writeLong(WordBase var1, long var2);
+   void writeFloat(WordBase offset, float val);
 
-    public void writeFloat(WordBase var1, float var2);
+   void writeDouble(WordBase offset, double val);
 
-    public void writeDouble(WordBase var1, double var2);
+   void writeWord(WordBase offset, WordBase val);
 
-    public void writeWord(WordBase var1, WordBase var2);
+   void writeObject(WordBase offset, Object val);
 
-    public void writeObject(WordBase var1, Object var2);
+   int compareAndSwapInt(WordBase offset, int expectedValue, int newValue, LocationIdentity locationIdentity);
 
-    public int compareAndSwapInt(WordBase var1, int var2, int var3, LocationIdentity var4);
+   long compareAndSwapLong(WordBase offset, long expectedValue, long newValue, LocationIdentity locationIdentity);
 
-    public long compareAndSwapLong(WordBase var1, long var2, long var4, LocationIdentity var6);
+   <T extends WordBase> T compareAndSwapWord(WordBase offset, T expectedValue, T newValue, LocationIdentity locationIdentity);
 
-    public <T extends WordBase> T compareAndSwapWord(WordBase var1, T var2, T var3, LocationIdentity var4);
+   Object compareAndSwapObject(WordBase offset, Object expectedValue, Object newValue, LocationIdentity locationIdentity);
 
-    public Object compareAndSwapObject(WordBase var1, Object var2, Object var3, LocationIdentity var4);
+   boolean logicCompareAndSwapInt(WordBase offset, int expectedValue, int newValue, LocationIdentity locationIdentity);
 
-    public boolean logicCompareAndSwapInt(WordBase var1, int var2, int var3, LocationIdentity var4);
+   boolean logicCompareAndSwapLong(WordBase offset, long expectedValue, long newValue, LocationIdentity locationIdentity);
 
-    public boolean logicCompareAndSwapLong(WordBase var1, long var2, long var4, LocationIdentity var6);
+   boolean logicCompareAndSwapWord(WordBase offset, WordBase expectedValue, WordBase newValue, LocationIdentity locationIdentity);
 
-    public boolean logicCompareAndSwapWord(WordBase var1, WordBase var2, WordBase var3, LocationIdentity var4);
+   boolean logicCompareAndSwapObject(WordBase offset, Object expectedValue, Object newValue, LocationIdentity locationIdentity);
 
-    public boolean logicCompareAndSwapObject(WordBase var1, Object var2, Object var3, LocationIdentity var4);
+   void writeByte(int offset, byte val);
 
-    public void writeByte(int var1, byte var2);
+   void writeChar(int offset, char val);
 
-    public void writeChar(int var1, char var2);
+   void writeShort(int offset, short val);
 
-    public void writeShort(int var1, short var2);
+   void writeInt(int offset, int val);
 
-    public void writeInt(int var1, int var2);
+   void writeLong(int offset, long val);
 
-    public void writeLong(int var1, long var2);
+   void writeFloat(int offset, float val);
 
-    public void writeFloat(int var1, float var2);
+   void writeDouble(int offset, double val);
 
-    public void writeDouble(int var1, double var2);
+   void writeWord(int offset, WordBase val);
 
-    public void writeWord(int var1, WordBase var2);
+   void writeObject(int offset, Object val);
 
-    public void writeObject(int var1, Object var2);
+   void writeWordVolatile(int offset, WordBase val);
 
-    public void writeWordVolatile(int var1, WordBase var2);
+   int compareAndSwapInt(int offset, int expectedValue, int newValue, LocationIdentity locationIdentity);
 
-    public int compareAndSwapInt(int var1, int var2, int var3, LocationIdentity var4);
+   long compareAndSwapLong(int offset, long expectedValue, long newValue, LocationIdentity locationIdentity);
 
-    public long compareAndSwapLong(int var1, long var2, long var4, LocationIdentity var6);
+   <T extends WordBase> T compareAndSwapWord(int offset, T expectedValue, T newValue, LocationIdentity locationIdentity);
 
-    public <T extends WordBase> T compareAndSwapWord(int var1, T var2, T var3, LocationIdentity var4);
+   Object compareAndSwapObject(int offset, Object expectedValue, Object newValue, LocationIdentity locationIdentity);
 
-    public Object compareAndSwapObject(int var1, Object var2, Object var3, LocationIdentity var4);
+   boolean logicCompareAndSwapInt(int offset, int expectedValue, int newValue, LocationIdentity locationIdentity);
 
-    public boolean logicCompareAndSwapInt(int var1, int var2, int var3, LocationIdentity var4);
+   boolean logicCompareAndSwapLong(int offset, long expectedValue, long newValue, LocationIdentity locationIdentity);
 
-    public boolean logicCompareAndSwapLong(int var1, long var2, long var4, LocationIdentity var6);
+   boolean logicCompareAndSwapWord(int offset, WordBase expectedValue, WordBase newValue, LocationIdentity locationIdentity);
 
-    public boolean logicCompareAndSwapWord(int var1, WordBase var2, WordBase var3, LocationIdentity var4);
+   boolean logicCompareAndSwapObject(int offset, Object expectedValue, Object newValue, LocationIdentity locationIdentity);
 
-    public boolean logicCompareAndSwapObject(int var1, Object var2, Object var3, LocationIdentity var4);
+   Pointer add(UnsignedWord val);
 
-    @Override
-    public Pointer add(UnsignedWord var1);
+   Pointer add(int val);
 
-    @Override
-    public Pointer add(int var1);
+   Pointer subtract(UnsignedWord val);
 
-    @Override
-    public Pointer subtract(UnsignedWord var1);
+   Pointer subtract(int val);
 
-    @Override
-    public Pointer subtract(int var1);
+   Pointer and(UnsignedWord val);
 
-    @Override
-    public Pointer and(UnsignedWord var1);
+   Pointer and(int val);
 
-    @Override
-    public Pointer and(int var1);
+   Pointer or(UnsignedWord val);
 
-    @Override
-    public Pointer or(UnsignedWord var1);
-
-    @Override
-    public Pointer or(int var1);
+   Pointer or(int val);
 }
-

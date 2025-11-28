@@ -1,5 +1,4 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.CollectionSet;
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUResourceBundle;
@@ -7,10 +6,6 @@ import com.cobblemon.mod.relocations.ibm.icu.impl.UResource;
 import com.cobblemon.mod.relocations.ibm.icu.impl.units.MeasureUnitImpl;
 import com.cobblemon.mod.relocations.ibm.icu.impl.units.SingleUnitImpl;
 import com.cobblemon.mod.relocations.ibm.icu.text.UnicodeSet;
-import com.cobblemon.mod.relocations.ibm.icu.util.Currency;
-import com.cobblemon.mod.relocations.ibm.icu.util.NoUnit;
-import com.cobblemon.mod.relocations.ibm.icu.util.TimeUnit;
-import com.cobblemon.mod.relocations.ibm.icu.util.UResourceBundle;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -25,583 +20,581 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class MeasureUnit
-implements Serializable {
-    private static final long serialVersionUID = -1839973855554750484L;
-    private static final Map<String, Map<String, MeasureUnit>> cache = new HashMap<String, Map<String, MeasureUnit>>();
-    private static boolean cacheIsPopulated = false;
-    @Deprecated
-    protected final String type;
-    @Deprecated
-    protected final String subType;
-    private MeasureUnitImpl measureUnitImpl;
-    static final UnicodeSet ASCII = new UnicodeSet(97, 122).freeze();
-    static final UnicodeSet ASCII_HYPHEN_DIGITS = new UnicodeSet(45, 45, 48, 57, 97, 122).freeze();
-    private static Factory UNIT_FACTORY = new Factory(){
+public class MeasureUnit implements Serializable {
+   private static final long serialVersionUID = -1839973855554750484L;
+   private static final Map<String, Map<String, MeasureUnit>> cache = new HashMap<>();
+   private static boolean cacheIsPopulated = false;
+   @Deprecated
+   protected final String type;
+   @Deprecated
+   protected final String subType;
+   private MeasureUnitImpl measureUnitImpl;
+   static final UnicodeSet ASCII = new UnicodeSet(97, 122).freeze();
+   static final UnicodeSet ASCII_HYPHEN_DIGITS = new UnicodeSet(45, 45, 48, 57, 97, 122).freeze();
+   private static MeasureUnit.Factory UNIT_FACTORY = new MeasureUnit.Factory() {
+      @Override
+      public MeasureUnit create(String type, String subType) {
+         return new MeasureUnit(type, subType);
+      }
+   };
+   static MeasureUnit.Factory CURRENCY_FACTORY = new MeasureUnit.Factory() {
+      @Override
+      public MeasureUnit create(String unusedType, String subType) {
+         return new Currency(subType);
+      }
+   };
+   static MeasureUnit.Factory TIMEUNIT_FACTORY = new MeasureUnit.Factory() {
+      @Override
+      public MeasureUnit create(String type, String subType) {
+         return new TimeUnit(type, subType);
+      }
+   };
+   public static final MeasureUnit G_FORCE = internalGetInstance("acceleration", "g-force");
+   public static final MeasureUnit METER_PER_SECOND_SQUARED = internalGetInstance("acceleration", "meter-per-square-second");
+   public static final MeasureUnit ARC_MINUTE = internalGetInstance("angle", "arc-minute");
+   public static final MeasureUnit ARC_SECOND = internalGetInstance("angle", "arc-second");
+   public static final MeasureUnit DEGREE = internalGetInstance("angle", "degree");
+   public static final MeasureUnit RADIAN = internalGetInstance("angle", "radian");
+   public static final MeasureUnit REVOLUTION_ANGLE = internalGetInstance("angle", "revolution");
+   public static final MeasureUnit ACRE = internalGetInstance("area", "acre");
+   public static final MeasureUnit DUNAM = internalGetInstance("area", "dunam");
+   public static final MeasureUnit HECTARE = internalGetInstance("area", "hectare");
+   public static final MeasureUnit SQUARE_CENTIMETER = internalGetInstance("area", "square-centimeter");
+   public static final MeasureUnit SQUARE_FOOT = internalGetInstance("area", "square-foot");
+   public static final MeasureUnit SQUARE_INCH = internalGetInstance("area", "square-inch");
+   public static final MeasureUnit SQUARE_KILOMETER = internalGetInstance("area", "square-kilometer");
+   public static final MeasureUnit SQUARE_METER = internalGetInstance("area", "square-meter");
+   public static final MeasureUnit SQUARE_MILE = internalGetInstance("area", "square-mile");
+   public static final MeasureUnit SQUARE_YARD = internalGetInstance("area", "square-yard");
+   public static final MeasureUnit ITEM = internalGetInstance("concentr", "item");
+   public static final MeasureUnit KARAT = internalGetInstance("concentr", "karat");
+   public static final MeasureUnit MILLIGRAM_OFGLUCOSE_PER_DECILITER = internalGetInstance("concentr", "milligram-ofglucose-per-deciliter");
+   public static final MeasureUnit MILLIGRAM_PER_DECILITER = internalGetInstance("concentr", "milligram-per-deciliter");
+   public static final MeasureUnit MILLIMOLE_PER_LITER = internalGetInstance("concentr", "millimole-per-liter");
+   public static final MeasureUnit MOLE = internalGetInstance("concentr", "mole");
+   public static final MeasureUnit PERCENT = internalGetInstance("concentr", "percent");
+   public static final MeasureUnit PERMILLE = internalGetInstance("concentr", "permille");
+   public static final MeasureUnit PART_PER_MILLION = internalGetInstance("concentr", "permillion");
+   public static final MeasureUnit PERMYRIAD = internalGetInstance("concentr", "permyriad");
+   public static final MeasureUnit LITER_PER_100KILOMETERS = internalGetInstance("consumption", "liter-per-100-kilometer");
+   public static final MeasureUnit LITER_PER_KILOMETER = internalGetInstance("consumption", "liter-per-kilometer");
+   public static final MeasureUnit MILE_PER_GALLON = internalGetInstance("consumption", "mile-per-gallon");
+   public static final MeasureUnit MILE_PER_GALLON_IMPERIAL = internalGetInstance("consumption", "mile-per-gallon-imperial");
+   public static final MeasureUnit BIT = internalGetInstance("digital", "bit");
+   public static final MeasureUnit BYTE = internalGetInstance("digital", "byte");
+   public static final MeasureUnit GIGABIT = internalGetInstance("digital", "gigabit");
+   public static final MeasureUnit GIGABYTE = internalGetInstance("digital", "gigabyte");
+   public static final MeasureUnit KILOBIT = internalGetInstance("digital", "kilobit");
+   public static final MeasureUnit KILOBYTE = internalGetInstance("digital", "kilobyte");
+   public static final MeasureUnit MEGABIT = internalGetInstance("digital", "megabit");
+   public static final MeasureUnit MEGABYTE = internalGetInstance("digital", "megabyte");
+   public static final MeasureUnit PETABYTE = internalGetInstance("digital", "petabyte");
+   public static final MeasureUnit TERABIT = internalGetInstance("digital", "terabit");
+   public static final MeasureUnit TERABYTE = internalGetInstance("digital", "terabyte");
+   public static final MeasureUnit CENTURY = internalGetInstance("duration", "century");
+   public static final TimeUnit DAY = (TimeUnit)internalGetInstance("duration", "day");
+   public static final MeasureUnit DAY_PERSON = internalGetInstance("duration", "day-person");
+   public static final MeasureUnit DECADE = internalGetInstance("duration", "decade");
+   public static final TimeUnit HOUR = (TimeUnit)internalGetInstance("duration", "hour");
+   public static final MeasureUnit MICROSECOND = internalGetInstance("duration", "microsecond");
+   public static final MeasureUnit MILLISECOND = internalGetInstance("duration", "millisecond");
+   public static final TimeUnit MINUTE = (TimeUnit)internalGetInstance("duration", "minute");
+   public static final TimeUnit MONTH = (TimeUnit)internalGetInstance("duration", "month");
+   public static final MeasureUnit MONTH_PERSON = internalGetInstance("duration", "month-person");
+   public static final MeasureUnit NANOSECOND = internalGetInstance("duration", "nanosecond");
+   public static final TimeUnit SECOND = (TimeUnit)internalGetInstance("duration", "second");
+   public static final TimeUnit WEEK = (TimeUnit)internalGetInstance("duration", "week");
+   public static final MeasureUnit WEEK_PERSON = internalGetInstance("duration", "week-person");
+   public static final TimeUnit YEAR = (TimeUnit)internalGetInstance("duration", "year");
+   public static final MeasureUnit YEAR_PERSON = internalGetInstance("duration", "year-person");
+   public static final MeasureUnit AMPERE = internalGetInstance("electric", "ampere");
+   public static final MeasureUnit MILLIAMPERE = internalGetInstance("electric", "milliampere");
+   public static final MeasureUnit OHM = internalGetInstance("electric", "ohm");
+   public static final MeasureUnit VOLT = internalGetInstance("electric", "volt");
+   public static final MeasureUnit BRITISH_THERMAL_UNIT = internalGetInstance("energy", "british-thermal-unit");
+   public static final MeasureUnit CALORIE = internalGetInstance("energy", "calorie");
+   public static final MeasureUnit ELECTRONVOLT = internalGetInstance("energy", "electronvolt");
+   public static final MeasureUnit FOODCALORIE = internalGetInstance("energy", "foodcalorie");
+   public static final MeasureUnit JOULE = internalGetInstance("energy", "joule");
+   public static final MeasureUnit KILOCALORIE = internalGetInstance("energy", "kilocalorie");
+   public static final MeasureUnit KILOJOULE = internalGetInstance("energy", "kilojoule");
+   public static final MeasureUnit KILOWATT_HOUR = internalGetInstance("energy", "kilowatt-hour");
+   public static final MeasureUnit THERM_US = internalGetInstance("energy", "therm-us");
+   public static final MeasureUnit KILOWATT_HOUR_PER_100_KILOMETER = internalGetInstance("force", "kilowatt-hour-per-100-kilometer");
+   public static final MeasureUnit NEWTON = internalGetInstance("force", "newton");
+   public static final MeasureUnit POUND_FORCE = internalGetInstance("force", "pound-force");
+   public static final MeasureUnit GIGAHERTZ = internalGetInstance("frequency", "gigahertz");
+   public static final MeasureUnit HERTZ = internalGetInstance("frequency", "hertz");
+   public static final MeasureUnit KILOHERTZ = internalGetInstance("frequency", "kilohertz");
+   public static final MeasureUnit MEGAHERTZ = internalGetInstance("frequency", "megahertz");
+   public static final MeasureUnit DOT = internalGetInstance("graphics", "dot");
+   public static final MeasureUnit DOT_PER_CENTIMETER = internalGetInstance("graphics", "dot-per-centimeter");
+   public static final MeasureUnit DOT_PER_INCH = internalGetInstance("graphics", "dot-per-inch");
+   public static final MeasureUnit EM = internalGetInstance("graphics", "em");
+   public static final MeasureUnit MEGAPIXEL = internalGetInstance("graphics", "megapixel");
+   public static final MeasureUnit PIXEL = internalGetInstance("graphics", "pixel");
+   public static final MeasureUnit PIXEL_PER_CENTIMETER = internalGetInstance("graphics", "pixel-per-centimeter");
+   public static final MeasureUnit PIXEL_PER_INCH = internalGetInstance("graphics", "pixel-per-inch");
+   public static final MeasureUnit ASTRONOMICAL_UNIT = internalGetInstance("length", "astronomical-unit");
+   public static final MeasureUnit CENTIMETER = internalGetInstance("length", "centimeter");
+   public static final MeasureUnit DECIMETER = internalGetInstance("length", "decimeter");
+   public static final MeasureUnit EARTH_RADIUS = internalGetInstance("length", "earth-radius");
+   public static final MeasureUnit FATHOM = internalGetInstance("length", "fathom");
+   public static final MeasureUnit FOOT = internalGetInstance("length", "foot");
+   public static final MeasureUnit FURLONG = internalGetInstance("length", "furlong");
+   public static final MeasureUnit INCH = internalGetInstance("length", "inch");
+   public static final MeasureUnit KILOMETER = internalGetInstance("length", "kilometer");
+   public static final MeasureUnit LIGHT_YEAR = internalGetInstance("length", "light-year");
+   public static final MeasureUnit METER = internalGetInstance("length", "meter");
+   public static final MeasureUnit MICROMETER = internalGetInstance("length", "micrometer");
+   public static final MeasureUnit MILE = internalGetInstance("length", "mile");
+   public static final MeasureUnit MILE_SCANDINAVIAN = internalGetInstance("length", "mile-scandinavian");
+   public static final MeasureUnit MILLIMETER = internalGetInstance("length", "millimeter");
+   public static final MeasureUnit NANOMETER = internalGetInstance("length", "nanometer");
+   public static final MeasureUnit NAUTICAL_MILE = internalGetInstance("length", "nautical-mile");
+   public static final MeasureUnit PARSEC = internalGetInstance("length", "parsec");
+   public static final MeasureUnit PICOMETER = internalGetInstance("length", "picometer");
+   public static final MeasureUnit POINT = internalGetInstance("length", "point");
+   public static final MeasureUnit SOLAR_RADIUS = internalGetInstance("length", "solar-radius");
+   public static final MeasureUnit YARD = internalGetInstance("length", "yard");
+   public static final MeasureUnit CANDELA = internalGetInstance("light", "candela");
+   public static final MeasureUnit LUMEN = internalGetInstance("light", "lumen");
+   public static final MeasureUnit LUX = internalGetInstance("light", "lux");
+   public static final MeasureUnit SOLAR_LUMINOSITY = internalGetInstance("light", "solar-luminosity");
+   public static final MeasureUnit CARAT = internalGetInstance("mass", "carat");
+   public static final MeasureUnit DALTON = internalGetInstance("mass", "dalton");
+   public static final MeasureUnit EARTH_MASS = internalGetInstance("mass", "earth-mass");
+   public static final MeasureUnit GRAIN = internalGetInstance("mass", "grain");
+   public static final MeasureUnit GRAM = internalGetInstance("mass", "gram");
+   public static final MeasureUnit KILOGRAM = internalGetInstance("mass", "kilogram");
+   public static final MeasureUnit METRIC_TON = internalGetInstance("mass", "metric-ton");
+   public static final MeasureUnit MICROGRAM = internalGetInstance("mass", "microgram");
+   public static final MeasureUnit MILLIGRAM = internalGetInstance("mass", "milligram");
+   public static final MeasureUnit OUNCE = internalGetInstance("mass", "ounce");
+   public static final MeasureUnit OUNCE_TROY = internalGetInstance("mass", "ounce-troy");
+   public static final MeasureUnit POUND = internalGetInstance("mass", "pound");
+   public static final MeasureUnit SOLAR_MASS = internalGetInstance("mass", "solar-mass");
+   public static final MeasureUnit STONE = internalGetInstance("mass", "stone");
+   public static final MeasureUnit TON = internalGetInstance("mass", "ton");
+   public static final MeasureUnit GIGAWATT = internalGetInstance("power", "gigawatt");
+   public static final MeasureUnit HORSEPOWER = internalGetInstance("power", "horsepower");
+   public static final MeasureUnit KILOWATT = internalGetInstance("power", "kilowatt");
+   public static final MeasureUnit MEGAWATT = internalGetInstance("power", "megawatt");
+   public static final MeasureUnit MILLIWATT = internalGetInstance("power", "milliwatt");
+   public static final MeasureUnit WATT = internalGetInstance("power", "watt");
+   public static final MeasureUnit ATMOSPHERE = internalGetInstance("pressure", "atmosphere");
+   public static final MeasureUnit BAR = internalGetInstance("pressure", "bar");
+   public static final MeasureUnit HECTOPASCAL = internalGetInstance("pressure", "hectopascal");
+   public static final MeasureUnit INCH_HG = internalGetInstance("pressure", "inch-ofhg");
+   public static final MeasureUnit KILOPASCAL = internalGetInstance("pressure", "kilopascal");
+   public static final MeasureUnit MEGAPASCAL = internalGetInstance("pressure", "megapascal");
+   public static final MeasureUnit MILLIBAR = internalGetInstance("pressure", "millibar");
+   public static final MeasureUnit MILLIMETER_OF_MERCURY = internalGetInstance("pressure", "millimeter-ofhg");
+   public static final MeasureUnit PASCAL = internalGetInstance("pressure", "pascal");
+   public static final MeasureUnit POUND_PER_SQUARE_INCH = internalGetInstance("pressure", "pound-force-per-square-inch");
+   public static final MeasureUnit KILOMETER_PER_HOUR = internalGetInstance("speed", "kilometer-per-hour");
+   public static final MeasureUnit KNOT = internalGetInstance("speed", "knot");
+   public static final MeasureUnit METER_PER_SECOND = internalGetInstance("speed", "meter-per-second");
+   public static final MeasureUnit MILE_PER_HOUR = internalGetInstance("speed", "mile-per-hour");
+   public static final MeasureUnit CELSIUS = internalGetInstance("temperature", "celsius");
+   public static final MeasureUnit FAHRENHEIT = internalGetInstance("temperature", "fahrenheit");
+   public static final MeasureUnit GENERIC_TEMPERATURE = internalGetInstance("temperature", "generic");
+   public static final MeasureUnit KELVIN = internalGetInstance("temperature", "kelvin");
+   public static final MeasureUnit NEWTON_METER = internalGetInstance("torque", "newton-meter");
+   public static final MeasureUnit POUND_FOOT = internalGetInstance("torque", "pound-force-foot");
+   public static final MeasureUnit ACRE_FOOT = internalGetInstance("volume", "acre-foot");
+   public static final MeasureUnit BARREL = internalGetInstance("volume", "barrel");
+   public static final MeasureUnit BUSHEL = internalGetInstance("volume", "bushel");
+   public static final MeasureUnit CENTILITER = internalGetInstance("volume", "centiliter");
+   public static final MeasureUnit CUBIC_CENTIMETER = internalGetInstance("volume", "cubic-centimeter");
+   public static final MeasureUnit CUBIC_FOOT = internalGetInstance("volume", "cubic-foot");
+   public static final MeasureUnit CUBIC_INCH = internalGetInstance("volume", "cubic-inch");
+   public static final MeasureUnit CUBIC_KILOMETER = internalGetInstance("volume", "cubic-kilometer");
+   public static final MeasureUnit CUBIC_METER = internalGetInstance("volume", "cubic-meter");
+   public static final MeasureUnit CUBIC_MILE = internalGetInstance("volume", "cubic-mile");
+   public static final MeasureUnit CUBIC_YARD = internalGetInstance("volume", "cubic-yard");
+   public static final MeasureUnit CUP = internalGetInstance("volume", "cup");
+   public static final MeasureUnit CUP_METRIC = internalGetInstance("volume", "cup-metric");
+   public static final MeasureUnit DECILITER = internalGetInstance("volume", "deciliter");
+   public static final MeasureUnit DESSERT_SPOON = internalGetInstance("volume", "dessert-spoon");
+   public static final MeasureUnit DESSERT_SPOON_IMPERIAL = internalGetInstance("volume", "dessert-spoon-imperial");
+   public static final MeasureUnit DRAM = internalGetInstance("volume", "dram");
+   public static final MeasureUnit DROP = internalGetInstance("volume", "drop");
+   public static final MeasureUnit FLUID_OUNCE = internalGetInstance("volume", "fluid-ounce");
+   public static final MeasureUnit FLUID_OUNCE_IMPERIAL = internalGetInstance("volume", "fluid-ounce-imperial");
+   public static final MeasureUnit GALLON = internalGetInstance("volume", "gallon");
+   public static final MeasureUnit GALLON_IMPERIAL = internalGetInstance("volume", "gallon-imperial");
+   public static final MeasureUnit HECTOLITER = internalGetInstance("volume", "hectoliter");
+   public static final MeasureUnit JIGGER = internalGetInstance("volume", "jigger");
+   public static final MeasureUnit LITER = internalGetInstance("volume", "liter");
+   public static final MeasureUnit MEGALITER = internalGetInstance("volume", "megaliter");
+   public static final MeasureUnit MILLILITER = internalGetInstance("volume", "milliliter");
+   public static final MeasureUnit PINCH = internalGetInstance("volume", "pinch");
+   public static final MeasureUnit PINT = internalGetInstance("volume", "pint");
+   public static final MeasureUnit PINT_METRIC = internalGetInstance("volume", "pint-metric");
+   public static final MeasureUnit QUART = internalGetInstance("volume", "quart");
+   public static final MeasureUnit QUART_IMPERIAL = internalGetInstance("volume", "quart-imperial");
+   public static final MeasureUnit TABLESPOON = internalGetInstance("volume", "tablespoon");
+   public static final MeasureUnit TEASPOON = internalGetInstance("volume", "teaspoon");
 
-        @Override
-        public MeasureUnit create(String type, String subType) {
-            return new MeasureUnit(type, subType);
-        }
-    };
-    static Factory CURRENCY_FACTORY = new Factory(){
+   @Deprecated
+   protected MeasureUnit(String type, String subType) {
+      this.type = type;
+      this.subType = subType;
+   }
 
-        @Override
-        public MeasureUnit create(String unusedType, String subType) {
-            return new Currency(subType);
-        }
-    };
-    static Factory TIMEUNIT_FACTORY = new Factory(){
+   public static MeasureUnit forIdentifier(String identifier) {
+      return identifier != null && !identifier.isEmpty() ? MeasureUnitImpl.forIdentifier(identifier).build() : NoUnit.BASE;
+   }
 
-        @Override
-        public MeasureUnit create(String type, String subType) {
-            return new TimeUnit(type, subType);
-        }
-    };
-    public static final MeasureUnit G_FORCE = MeasureUnit.internalGetInstance("acceleration", "g-force");
-    public static final MeasureUnit METER_PER_SECOND_SQUARED = MeasureUnit.internalGetInstance("acceleration", "meter-per-square-second");
-    public static final MeasureUnit ARC_MINUTE = MeasureUnit.internalGetInstance("angle", "arc-minute");
-    public static final MeasureUnit ARC_SECOND = MeasureUnit.internalGetInstance("angle", "arc-second");
-    public static final MeasureUnit DEGREE = MeasureUnit.internalGetInstance("angle", "degree");
-    public static final MeasureUnit RADIAN = MeasureUnit.internalGetInstance("angle", "radian");
-    public static final MeasureUnit REVOLUTION_ANGLE = MeasureUnit.internalGetInstance("angle", "revolution");
-    public static final MeasureUnit ACRE = MeasureUnit.internalGetInstance("area", "acre");
-    public static final MeasureUnit DUNAM = MeasureUnit.internalGetInstance("area", "dunam");
-    public static final MeasureUnit HECTARE = MeasureUnit.internalGetInstance("area", "hectare");
-    public static final MeasureUnit SQUARE_CENTIMETER = MeasureUnit.internalGetInstance("area", "square-centimeter");
-    public static final MeasureUnit SQUARE_FOOT = MeasureUnit.internalGetInstance("area", "square-foot");
-    public static final MeasureUnit SQUARE_INCH = MeasureUnit.internalGetInstance("area", "square-inch");
-    public static final MeasureUnit SQUARE_KILOMETER = MeasureUnit.internalGetInstance("area", "square-kilometer");
-    public static final MeasureUnit SQUARE_METER = MeasureUnit.internalGetInstance("area", "square-meter");
-    public static final MeasureUnit SQUARE_MILE = MeasureUnit.internalGetInstance("area", "square-mile");
-    public static final MeasureUnit SQUARE_YARD = MeasureUnit.internalGetInstance("area", "square-yard");
-    public static final MeasureUnit ITEM = MeasureUnit.internalGetInstance("concentr", "item");
-    public static final MeasureUnit KARAT = MeasureUnit.internalGetInstance("concentr", "karat");
-    public static final MeasureUnit MILLIGRAM_OFGLUCOSE_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-ofglucose-per-deciliter");
-    public static final MeasureUnit MILLIGRAM_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-per-deciliter");
-    public static final MeasureUnit MILLIMOLE_PER_LITER = MeasureUnit.internalGetInstance("concentr", "millimole-per-liter");
-    public static final MeasureUnit MOLE = MeasureUnit.internalGetInstance("concentr", "mole");
-    public static final MeasureUnit PERCENT = MeasureUnit.internalGetInstance("concentr", "percent");
-    public static final MeasureUnit PERMILLE = MeasureUnit.internalGetInstance("concentr", "permille");
-    public static final MeasureUnit PART_PER_MILLION = MeasureUnit.internalGetInstance("concentr", "permillion");
-    public static final MeasureUnit PERMYRIAD = MeasureUnit.internalGetInstance("concentr", "permyriad");
-    public static final MeasureUnit LITER_PER_100KILOMETERS = MeasureUnit.internalGetInstance("consumption", "liter-per-100-kilometer");
-    public static final MeasureUnit LITER_PER_KILOMETER = MeasureUnit.internalGetInstance("consumption", "liter-per-kilometer");
-    public static final MeasureUnit MILE_PER_GALLON = MeasureUnit.internalGetInstance("consumption", "mile-per-gallon");
-    public static final MeasureUnit MILE_PER_GALLON_IMPERIAL = MeasureUnit.internalGetInstance("consumption", "mile-per-gallon-imperial");
-    public static final MeasureUnit BIT = MeasureUnit.internalGetInstance("digital", "bit");
-    public static final MeasureUnit BYTE = MeasureUnit.internalGetInstance("digital", "byte");
-    public static final MeasureUnit GIGABIT = MeasureUnit.internalGetInstance("digital", "gigabit");
-    public static final MeasureUnit GIGABYTE = MeasureUnit.internalGetInstance("digital", "gigabyte");
-    public static final MeasureUnit KILOBIT = MeasureUnit.internalGetInstance("digital", "kilobit");
-    public static final MeasureUnit KILOBYTE = MeasureUnit.internalGetInstance("digital", "kilobyte");
-    public static final MeasureUnit MEGABIT = MeasureUnit.internalGetInstance("digital", "megabit");
-    public static final MeasureUnit MEGABYTE = MeasureUnit.internalGetInstance("digital", "megabyte");
-    public static final MeasureUnit PETABYTE = MeasureUnit.internalGetInstance("digital", "petabyte");
-    public static final MeasureUnit TERABIT = MeasureUnit.internalGetInstance("digital", "terabit");
-    public static final MeasureUnit TERABYTE = MeasureUnit.internalGetInstance("digital", "terabyte");
-    public static final MeasureUnit CENTURY = MeasureUnit.internalGetInstance("duration", "century");
-    public static final TimeUnit DAY = (TimeUnit)MeasureUnit.internalGetInstance("duration", "day");
-    public static final MeasureUnit DAY_PERSON = MeasureUnit.internalGetInstance("duration", "day-person");
-    public static final MeasureUnit DECADE = MeasureUnit.internalGetInstance("duration", "decade");
-    public static final TimeUnit HOUR = (TimeUnit)MeasureUnit.internalGetInstance("duration", "hour");
-    public static final MeasureUnit MICROSECOND = MeasureUnit.internalGetInstance("duration", "microsecond");
-    public static final MeasureUnit MILLISECOND = MeasureUnit.internalGetInstance("duration", "millisecond");
-    public static final TimeUnit MINUTE = (TimeUnit)MeasureUnit.internalGetInstance("duration", "minute");
-    public static final TimeUnit MONTH = (TimeUnit)MeasureUnit.internalGetInstance("duration", "month");
-    public static final MeasureUnit MONTH_PERSON = MeasureUnit.internalGetInstance("duration", "month-person");
-    public static final MeasureUnit NANOSECOND = MeasureUnit.internalGetInstance("duration", "nanosecond");
-    public static final TimeUnit SECOND = (TimeUnit)MeasureUnit.internalGetInstance("duration", "second");
-    public static final TimeUnit WEEK = (TimeUnit)MeasureUnit.internalGetInstance("duration", "week");
-    public static final MeasureUnit WEEK_PERSON = MeasureUnit.internalGetInstance("duration", "week-person");
-    public static final TimeUnit YEAR = (TimeUnit)MeasureUnit.internalGetInstance("duration", "year");
-    public static final MeasureUnit YEAR_PERSON = MeasureUnit.internalGetInstance("duration", "year-person");
-    public static final MeasureUnit AMPERE = MeasureUnit.internalGetInstance("electric", "ampere");
-    public static final MeasureUnit MILLIAMPERE = MeasureUnit.internalGetInstance("electric", "milliampere");
-    public static final MeasureUnit OHM = MeasureUnit.internalGetInstance("electric", "ohm");
-    public static final MeasureUnit VOLT = MeasureUnit.internalGetInstance("electric", "volt");
-    public static final MeasureUnit BRITISH_THERMAL_UNIT = MeasureUnit.internalGetInstance("energy", "british-thermal-unit");
-    public static final MeasureUnit CALORIE = MeasureUnit.internalGetInstance("energy", "calorie");
-    public static final MeasureUnit ELECTRONVOLT = MeasureUnit.internalGetInstance("energy", "electronvolt");
-    public static final MeasureUnit FOODCALORIE = MeasureUnit.internalGetInstance("energy", "foodcalorie");
-    public static final MeasureUnit JOULE = MeasureUnit.internalGetInstance("energy", "joule");
-    public static final MeasureUnit KILOCALORIE = MeasureUnit.internalGetInstance("energy", "kilocalorie");
-    public static final MeasureUnit KILOJOULE = MeasureUnit.internalGetInstance("energy", "kilojoule");
-    public static final MeasureUnit KILOWATT_HOUR = MeasureUnit.internalGetInstance("energy", "kilowatt-hour");
-    public static final MeasureUnit THERM_US = MeasureUnit.internalGetInstance("energy", "therm-us");
-    public static final MeasureUnit KILOWATT_HOUR_PER_100_KILOMETER = MeasureUnit.internalGetInstance("force", "kilowatt-hour-per-100-kilometer");
-    public static final MeasureUnit NEWTON = MeasureUnit.internalGetInstance("force", "newton");
-    public static final MeasureUnit POUND_FORCE = MeasureUnit.internalGetInstance("force", "pound-force");
-    public static final MeasureUnit GIGAHERTZ = MeasureUnit.internalGetInstance("frequency", "gigahertz");
-    public static final MeasureUnit HERTZ = MeasureUnit.internalGetInstance("frequency", "hertz");
-    public static final MeasureUnit KILOHERTZ = MeasureUnit.internalGetInstance("frequency", "kilohertz");
-    public static final MeasureUnit MEGAHERTZ = MeasureUnit.internalGetInstance("frequency", "megahertz");
-    public static final MeasureUnit DOT = MeasureUnit.internalGetInstance("graphics", "dot");
-    public static final MeasureUnit DOT_PER_CENTIMETER = MeasureUnit.internalGetInstance("graphics", "dot-per-centimeter");
-    public static final MeasureUnit DOT_PER_INCH = MeasureUnit.internalGetInstance("graphics", "dot-per-inch");
-    public static final MeasureUnit EM = MeasureUnit.internalGetInstance("graphics", "em");
-    public static final MeasureUnit MEGAPIXEL = MeasureUnit.internalGetInstance("graphics", "megapixel");
-    public static final MeasureUnit PIXEL = MeasureUnit.internalGetInstance("graphics", "pixel");
-    public static final MeasureUnit PIXEL_PER_CENTIMETER = MeasureUnit.internalGetInstance("graphics", "pixel-per-centimeter");
-    public static final MeasureUnit PIXEL_PER_INCH = MeasureUnit.internalGetInstance("graphics", "pixel-per-inch");
-    public static final MeasureUnit ASTRONOMICAL_UNIT = MeasureUnit.internalGetInstance("length", "astronomical-unit");
-    public static final MeasureUnit CENTIMETER = MeasureUnit.internalGetInstance("length", "centimeter");
-    public static final MeasureUnit DECIMETER = MeasureUnit.internalGetInstance("length", "decimeter");
-    public static final MeasureUnit EARTH_RADIUS = MeasureUnit.internalGetInstance("length", "earth-radius");
-    public static final MeasureUnit FATHOM = MeasureUnit.internalGetInstance("length", "fathom");
-    public static final MeasureUnit FOOT = MeasureUnit.internalGetInstance("length", "foot");
-    public static final MeasureUnit FURLONG = MeasureUnit.internalGetInstance("length", "furlong");
-    public static final MeasureUnit INCH = MeasureUnit.internalGetInstance("length", "inch");
-    public static final MeasureUnit KILOMETER = MeasureUnit.internalGetInstance("length", "kilometer");
-    public static final MeasureUnit LIGHT_YEAR = MeasureUnit.internalGetInstance("length", "light-year");
-    public static final MeasureUnit METER = MeasureUnit.internalGetInstance("length", "meter");
-    public static final MeasureUnit MICROMETER = MeasureUnit.internalGetInstance("length", "micrometer");
-    public static final MeasureUnit MILE = MeasureUnit.internalGetInstance("length", "mile");
-    public static final MeasureUnit MILE_SCANDINAVIAN = MeasureUnit.internalGetInstance("length", "mile-scandinavian");
-    public static final MeasureUnit MILLIMETER = MeasureUnit.internalGetInstance("length", "millimeter");
-    public static final MeasureUnit NANOMETER = MeasureUnit.internalGetInstance("length", "nanometer");
-    public static final MeasureUnit NAUTICAL_MILE = MeasureUnit.internalGetInstance("length", "nautical-mile");
-    public static final MeasureUnit PARSEC = MeasureUnit.internalGetInstance("length", "parsec");
-    public static final MeasureUnit PICOMETER = MeasureUnit.internalGetInstance("length", "picometer");
-    public static final MeasureUnit POINT = MeasureUnit.internalGetInstance("length", "point");
-    public static final MeasureUnit SOLAR_RADIUS = MeasureUnit.internalGetInstance("length", "solar-radius");
-    public static final MeasureUnit YARD = MeasureUnit.internalGetInstance("length", "yard");
-    public static final MeasureUnit CANDELA = MeasureUnit.internalGetInstance("light", "candela");
-    public static final MeasureUnit LUMEN = MeasureUnit.internalGetInstance("light", "lumen");
-    public static final MeasureUnit LUX = MeasureUnit.internalGetInstance("light", "lux");
-    public static final MeasureUnit SOLAR_LUMINOSITY = MeasureUnit.internalGetInstance("light", "solar-luminosity");
-    public static final MeasureUnit CARAT = MeasureUnit.internalGetInstance("mass", "carat");
-    public static final MeasureUnit DALTON = MeasureUnit.internalGetInstance("mass", "dalton");
-    public static final MeasureUnit EARTH_MASS = MeasureUnit.internalGetInstance("mass", "earth-mass");
-    public static final MeasureUnit GRAIN = MeasureUnit.internalGetInstance("mass", "grain");
-    public static final MeasureUnit GRAM = MeasureUnit.internalGetInstance("mass", "gram");
-    public static final MeasureUnit KILOGRAM = MeasureUnit.internalGetInstance("mass", "kilogram");
-    public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance("mass", "metric-ton");
-    public static final MeasureUnit MICROGRAM = MeasureUnit.internalGetInstance("mass", "microgram");
-    public static final MeasureUnit MILLIGRAM = MeasureUnit.internalGetInstance("mass", "milligram");
-    public static final MeasureUnit OUNCE = MeasureUnit.internalGetInstance("mass", "ounce");
-    public static final MeasureUnit OUNCE_TROY = MeasureUnit.internalGetInstance("mass", "ounce-troy");
-    public static final MeasureUnit POUND = MeasureUnit.internalGetInstance("mass", "pound");
-    public static final MeasureUnit SOLAR_MASS = MeasureUnit.internalGetInstance("mass", "solar-mass");
-    public static final MeasureUnit STONE = MeasureUnit.internalGetInstance("mass", "stone");
-    public static final MeasureUnit TON = MeasureUnit.internalGetInstance("mass", "ton");
-    public static final MeasureUnit GIGAWATT = MeasureUnit.internalGetInstance("power", "gigawatt");
-    public static final MeasureUnit HORSEPOWER = MeasureUnit.internalGetInstance("power", "horsepower");
-    public static final MeasureUnit KILOWATT = MeasureUnit.internalGetInstance("power", "kilowatt");
-    public static final MeasureUnit MEGAWATT = MeasureUnit.internalGetInstance("power", "megawatt");
-    public static final MeasureUnit MILLIWATT = MeasureUnit.internalGetInstance("power", "milliwatt");
-    public static final MeasureUnit WATT = MeasureUnit.internalGetInstance("power", "watt");
-    public static final MeasureUnit ATMOSPHERE = MeasureUnit.internalGetInstance("pressure", "atmosphere");
-    public static final MeasureUnit BAR = MeasureUnit.internalGetInstance("pressure", "bar");
-    public static final MeasureUnit HECTOPASCAL = MeasureUnit.internalGetInstance("pressure", "hectopascal");
-    public static final MeasureUnit INCH_HG = MeasureUnit.internalGetInstance("pressure", "inch-ofhg");
-    public static final MeasureUnit KILOPASCAL = MeasureUnit.internalGetInstance("pressure", "kilopascal");
-    public static final MeasureUnit MEGAPASCAL = MeasureUnit.internalGetInstance("pressure", "megapascal");
-    public static final MeasureUnit MILLIBAR = MeasureUnit.internalGetInstance("pressure", "millibar");
-    public static final MeasureUnit MILLIMETER_OF_MERCURY = MeasureUnit.internalGetInstance("pressure", "millimeter-ofhg");
-    public static final MeasureUnit PASCAL = MeasureUnit.internalGetInstance("pressure", "pascal");
-    public static final MeasureUnit POUND_PER_SQUARE_INCH = MeasureUnit.internalGetInstance("pressure", "pound-force-per-square-inch");
-    public static final MeasureUnit KILOMETER_PER_HOUR = MeasureUnit.internalGetInstance("speed", "kilometer-per-hour");
-    public static final MeasureUnit KNOT = MeasureUnit.internalGetInstance("speed", "knot");
-    public static final MeasureUnit METER_PER_SECOND = MeasureUnit.internalGetInstance("speed", "meter-per-second");
-    public static final MeasureUnit MILE_PER_HOUR = MeasureUnit.internalGetInstance("speed", "mile-per-hour");
-    public static final MeasureUnit CELSIUS = MeasureUnit.internalGetInstance("temperature", "celsius");
-    public static final MeasureUnit FAHRENHEIT = MeasureUnit.internalGetInstance("temperature", "fahrenheit");
-    public static final MeasureUnit GENERIC_TEMPERATURE = MeasureUnit.internalGetInstance("temperature", "generic");
-    public static final MeasureUnit KELVIN = MeasureUnit.internalGetInstance("temperature", "kelvin");
-    public static final MeasureUnit NEWTON_METER = MeasureUnit.internalGetInstance("torque", "newton-meter");
-    public static final MeasureUnit POUND_FOOT = MeasureUnit.internalGetInstance("torque", "pound-force-foot");
-    public static final MeasureUnit ACRE_FOOT = MeasureUnit.internalGetInstance("volume", "acre-foot");
-    public static final MeasureUnit BARREL = MeasureUnit.internalGetInstance("volume", "barrel");
-    public static final MeasureUnit BUSHEL = MeasureUnit.internalGetInstance("volume", "bushel");
-    public static final MeasureUnit CENTILITER = MeasureUnit.internalGetInstance("volume", "centiliter");
-    public static final MeasureUnit CUBIC_CENTIMETER = MeasureUnit.internalGetInstance("volume", "cubic-centimeter");
-    public static final MeasureUnit CUBIC_FOOT = MeasureUnit.internalGetInstance("volume", "cubic-foot");
-    public static final MeasureUnit CUBIC_INCH = MeasureUnit.internalGetInstance("volume", "cubic-inch");
-    public static final MeasureUnit CUBIC_KILOMETER = MeasureUnit.internalGetInstance("volume", "cubic-kilometer");
-    public static final MeasureUnit CUBIC_METER = MeasureUnit.internalGetInstance("volume", "cubic-meter");
-    public static final MeasureUnit CUBIC_MILE = MeasureUnit.internalGetInstance("volume", "cubic-mile");
-    public static final MeasureUnit CUBIC_YARD = MeasureUnit.internalGetInstance("volume", "cubic-yard");
-    public static final MeasureUnit CUP = MeasureUnit.internalGetInstance("volume", "cup");
-    public static final MeasureUnit CUP_METRIC = MeasureUnit.internalGetInstance("volume", "cup-metric");
-    public static final MeasureUnit DECILITER = MeasureUnit.internalGetInstance("volume", "deciliter");
-    public static final MeasureUnit DESSERT_SPOON = MeasureUnit.internalGetInstance("volume", "dessert-spoon");
-    public static final MeasureUnit DESSERT_SPOON_IMPERIAL = MeasureUnit.internalGetInstance("volume", "dessert-spoon-imperial");
-    public static final MeasureUnit DRAM = MeasureUnit.internalGetInstance("volume", "dram");
-    public static final MeasureUnit DROP = MeasureUnit.internalGetInstance("volume", "drop");
-    public static final MeasureUnit FLUID_OUNCE = MeasureUnit.internalGetInstance("volume", "fluid-ounce");
-    public static final MeasureUnit FLUID_OUNCE_IMPERIAL = MeasureUnit.internalGetInstance("volume", "fluid-ounce-imperial");
-    public static final MeasureUnit GALLON = MeasureUnit.internalGetInstance("volume", "gallon");
-    public static final MeasureUnit GALLON_IMPERIAL = MeasureUnit.internalGetInstance("volume", "gallon-imperial");
-    public static final MeasureUnit HECTOLITER = MeasureUnit.internalGetInstance("volume", "hectoliter");
-    public static final MeasureUnit JIGGER = MeasureUnit.internalGetInstance("volume", "jigger");
-    public static final MeasureUnit LITER = MeasureUnit.internalGetInstance("volume", "liter");
-    public static final MeasureUnit MEGALITER = MeasureUnit.internalGetInstance("volume", "megaliter");
-    public static final MeasureUnit MILLILITER = MeasureUnit.internalGetInstance("volume", "milliliter");
-    public static final MeasureUnit PINCH = MeasureUnit.internalGetInstance("volume", "pinch");
-    public static final MeasureUnit PINT = MeasureUnit.internalGetInstance("volume", "pint");
-    public static final MeasureUnit PINT_METRIC = MeasureUnit.internalGetInstance("volume", "pint-metric");
-    public static final MeasureUnit QUART = MeasureUnit.internalGetInstance("volume", "quart");
-    public static final MeasureUnit QUART_IMPERIAL = MeasureUnit.internalGetInstance("volume", "quart-imperial");
-    public static final MeasureUnit TABLESPOON = MeasureUnit.internalGetInstance("volume", "tablespoon");
-    public static final MeasureUnit TEASPOON = MeasureUnit.internalGetInstance("volume", "teaspoon");
+   @Deprecated
+   public static MeasureUnit fromMeasureUnitImpl(MeasureUnitImpl measureUnitImpl) {
+      measureUnitImpl.serialize();
+      String identifier = measureUnitImpl.getIdentifier();
+      MeasureUnit result = findBySubType(identifier);
+      return result != null ? result : new MeasureUnit(measureUnitImpl);
+   }
 
-    @Deprecated
-    protected MeasureUnit(String type, String subType) {
-        this.type = type;
-        this.subType = subType;
-    }
+   private MeasureUnit(MeasureUnitImpl measureUnitImpl) {
+      this.type = null;
+      this.subType = null;
+      this.measureUnitImpl = measureUnitImpl.copy();
+   }
 
-    public static MeasureUnit forIdentifier(String identifier) {
-        if (identifier == null || identifier.isEmpty()) {
-            return NoUnit.BASE;
-        }
-        return MeasureUnitImpl.forIdentifier(identifier).build();
-    }
+   public String getType() {
+      return this.type;
+   }
 
-    @Deprecated
-    public static MeasureUnit fromMeasureUnitImpl(MeasureUnitImpl measureUnitImpl) {
-        measureUnitImpl.serialize();
-        String identifier = measureUnitImpl.getIdentifier();
-        MeasureUnit result = MeasureUnit.findBySubType(identifier);
-        if (result != null) {
-            return result;
-        }
-        return new MeasureUnit(measureUnitImpl);
-    }
+   public String getSubtype() {
+      return this.subType;
+   }
 
-    private MeasureUnit(MeasureUnitImpl measureUnitImpl) {
-        this.type = null;
-        this.subType = null;
-        this.measureUnitImpl = measureUnitImpl.copy();
-    }
+   public String getIdentifier() {
+      String result = this.measureUnitImpl == null ? this.getSubtype() : this.measureUnitImpl.getIdentifier();
+      return result == null ? "" : result;
+   }
 
-    public String getType() {
-        return this.type;
-    }
+   public MeasureUnit.Complexity getComplexity() {
+      return this.measureUnitImpl == null ? MeasureUnitImpl.forIdentifier(this.getIdentifier()).getComplexity() : this.measureUnitImpl.getComplexity();
+   }
 
-    public String getSubtype() {
-        return this.subType;
-    }
+   public MeasureUnit withPrefix(MeasureUnit.MeasurePrefix prefix) {
+      SingleUnitImpl singleUnit = this.getSingleUnitImpl();
+      singleUnit.setPrefix(prefix);
+      return singleUnit.build();
+   }
 
-    public String getIdentifier() {
-        String result = this.measureUnitImpl == null ? this.getSubtype() : this.measureUnitImpl.getIdentifier();
-        return result == null ? "" : result;
-    }
+   public MeasureUnit.MeasurePrefix getPrefix() {
+      return this.getSingleUnitImpl().getPrefix();
+   }
 
-    public Complexity getComplexity() {
-        if (this.measureUnitImpl == null) {
-            return MeasureUnitImpl.forIdentifier(this.getIdentifier()).getComplexity();
-        }
-        return this.measureUnitImpl.getComplexity();
-    }
+   public int getDimensionality() {
+      return this.getSingleUnitImpl().getDimensionality();
+   }
 
-    public MeasureUnit withPrefix(MeasurePrefix prefix) {
-        SingleUnitImpl singleUnit = this.getSingleUnitImpl();
-        singleUnit.setPrefix(prefix);
-        return singleUnit.build();
-    }
+   public MeasureUnit withDimensionality(int dimensionality) {
+      SingleUnitImpl singleUnit = this.getSingleUnitImpl();
+      singleUnit.setDimensionality(dimensionality);
+      return singleUnit.build();
+   }
 
-    public MeasurePrefix getPrefix() {
-        return this.getSingleUnitImpl().getPrefix();
-    }
+   public MeasureUnit reciprocal() {
+      MeasureUnitImpl measureUnit = this.getCopyOfMeasureUnitImpl();
+      measureUnit.takeReciprocal();
+      return measureUnit.build();
+   }
 
-    public int getDimensionality() {
-        return this.getSingleUnitImpl().getDimensionality();
-    }
+   public MeasureUnit product(MeasureUnit other) {
+      MeasureUnitImpl implCopy = this.getCopyOfMeasureUnitImpl();
+      if (other == null) {
+         return implCopy.build();
+      } else {
+         MeasureUnitImpl otherImplRef = other.getMaybeReferenceOfMeasureUnitImpl();
+         if (implCopy.getComplexity() != MeasureUnit.Complexity.MIXED && otherImplRef.getComplexity() != MeasureUnit.Complexity.MIXED) {
+            for (SingleUnitImpl singleUnit : otherImplRef.getSingleUnits()) {
+               implCopy.appendSingleUnit(singleUnit);
+            }
 
-    public MeasureUnit withDimensionality(int dimensionality) {
-        SingleUnitImpl singleUnit = this.getSingleUnitImpl();
-        singleUnit.setDimensionality(dimensionality);
-        return singleUnit.build();
-    }
-
-    public MeasureUnit reciprocal() {
-        MeasureUnitImpl measureUnit = this.getCopyOfMeasureUnitImpl();
-        measureUnit.takeReciprocal();
-        return measureUnit.build();
-    }
-
-    public MeasureUnit product(MeasureUnit other) {
-        MeasureUnitImpl implCopy = this.getCopyOfMeasureUnitImpl();
-        if (other == null) {
             return implCopy.build();
-        }
-        MeasureUnitImpl otherImplRef = other.getMaybeReferenceOfMeasureUnitImpl();
-        if (implCopy.getComplexity() == Complexity.MIXED || otherImplRef.getComplexity() == Complexity.MIXED) {
+         } else {
             throw new UnsupportedOperationException();
-        }
-        for (SingleUnitImpl singleUnit : otherImplRef.getSingleUnits()) {
-            implCopy.appendSingleUnit(singleUnit);
-        }
-        return implCopy.build();
-    }
+         }
+      }
+   }
 
-    public List<MeasureUnit> splitToSingleUnits() {
-        ArrayList<SingleUnitImpl> singleUnits = this.getMaybeReferenceOfMeasureUnitImpl().getSingleUnits();
-        ArrayList<MeasureUnit> result = new ArrayList<MeasureUnit>(singleUnits.size());
-        for (SingleUnitImpl singleUnit : singleUnits) {
-            result.add(singleUnit.build());
-        }
-        return result;
-    }
+   public List<MeasureUnit> splitToSingleUnits() {
+      ArrayList<SingleUnitImpl> singleUnits = this.getMaybeReferenceOfMeasureUnitImpl().getSingleUnits();
+      List<MeasureUnit> result = new ArrayList<>(singleUnits.size());
 
-    public int hashCode() {
-        return 31 * this.type.hashCode() + this.subType.hashCode();
-    }
+      for (SingleUnitImpl singleUnit : singleUnits) {
+         result.add(singleUnit.build());
+      }
 
-    public boolean equals(Object rhs) {
-        if (rhs == this) {
-            return true;
-        }
-        if (!(rhs instanceof MeasureUnit)) {
-            return false;
-        }
-        return this.getIdentifier().equals(((MeasureUnit)rhs).getIdentifier());
-    }
+      return result;
+   }
 
-    public String toString() {
-        String result = this.measureUnitImpl == null ? this.type + "-" + this.subType : this.measureUnitImpl.getIdentifier();
-        return result == null ? "" : result;
-    }
+   @Override
+   public int hashCode() {
+      return 31 * this.type.hashCode() + this.subType.hashCode();
+   }
 
-    public static Set<String> getAvailableTypes() {
-        MeasureUnit.populateCache();
-        return Collections.unmodifiableSet(cache.keySet());
-    }
+   @Override
+   public boolean equals(Object rhs) {
+      if (rhs == this) {
+         return true;
+      } else {
+         return !(rhs instanceof MeasureUnit) ? false : this.getIdentifier().equals(((MeasureUnit)rhs).getIdentifier());
+      }
+   }
 
-    public static Set<MeasureUnit> getAvailable(String type) {
-        MeasureUnit.populateCache();
-        Map<String, MeasureUnit> units = cache.get(type);
-        return units == null ? Collections.emptySet() : Collections.unmodifiableSet(new CollectionSet<MeasureUnit>(units.values()));
-    }
+   @Override
+   public String toString() {
+      String result = this.measureUnitImpl == null ? this.type + "-" + this.subType : this.measureUnitImpl.getIdentifier();
+      return result == null ? "" : result;
+   }
 
-    public static synchronized Set<MeasureUnit> getAvailable() {
-        HashSet<MeasureUnit> result = new HashSet<MeasureUnit>();
-        for (String type : new HashSet<String>(MeasureUnit.getAvailableTypes())) {
-            for (MeasureUnit unit : MeasureUnit.getAvailable(type)) {
-                result.add(unit);
+   public static Set<String> getAvailableTypes() {
+      populateCache();
+      return Collections.unmodifiableSet(cache.keySet());
+   }
+
+   public static Set<MeasureUnit> getAvailable(String type) {
+      populateCache();
+      Map<String, MeasureUnit> units = cache.get(type);
+      return units == null ? Collections.emptySet() : Collections.unmodifiableSet(new CollectionSet<>(units.values()));
+   }
+
+   public static synchronized Set<MeasureUnit> getAvailable() {
+      Set<MeasureUnit> result = new HashSet<>();
+
+      for (String type : new HashSet<>(getAvailableTypes())) {
+         for (MeasureUnit unit : getAvailable(type)) {
+            result.add(unit);
+         }
+      }
+
+      return Collections.unmodifiableSet(result);
+   }
+
+   @Deprecated
+   public static MeasureUnit internalGetInstance(String type, String subType) {
+      if (type != null && subType != null) {
+         if ("currency".equals(type) || ASCII.containsAll(type) && ASCII_HYPHEN_DIGITS.containsAll(subType)) {
+            MeasureUnit.Factory factory;
+            if ("currency".equals(type)) {
+               factory = CURRENCY_FACTORY;
+            } else if ("duration".equals(type)) {
+               factory = TIMEUNIT_FACTORY;
+            } else {
+               factory = UNIT_FACTORY;
             }
-        }
-        return Collections.unmodifiableSet(result);
-    }
 
-    @Deprecated
-    public static MeasureUnit internalGetInstance(String type, String subType) {
-        if (type == null || subType == null) {
-            throw new NullPointerException("Type and subType must be non-null");
-        }
-        if (!("currency".equals(type) || ASCII.containsAll(type) && ASCII_HYPHEN_DIGITS.containsAll(subType))) {
+            return addUnit(type, subType, factory);
+         } else {
             throw new IllegalArgumentException("The type or subType are invalid.");
-        }
-        Factory factory = "currency".equals(type) ? CURRENCY_FACTORY : ("duration".equals(type) ? TIMEUNIT_FACTORY : UNIT_FACTORY);
-        return MeasureUnit.addUnit(type, subType, factory);
-    }
+         }
+      } else {
+         throw new NullPointerException("Type and subType must be non-null");
+      }
+   }
 
-    @Deprecated
-    public static MeasureUnit findBySubType(String subType) {
-        MeasureUnit.populateCache();
-        for (Map<String, MeasureUnit> unitsForType : cache.values()) {
-            if (!unitsForType.containsKey(subType)) continue;
+   @Deprecated
+   public static MeasureUnit findBySubType(String subType) {
+      populateCache();
+
+      for (Map<String, MeasureUnit> unitsForType : cache.values()) {
+         if (unitsForType.containsKey(subType)) {
             return unitsForType.get(subType);
-        }
-        return null;
-    }
+         }
+      }
 
-    private static synchronized void populateCache() {
-        if (cacheIsPopulated) {
-            return;
-        }
-        cacheIsPopulated = true;
-        ICUResourceBundle rb1 = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b/unit", "en");
-        rb1.getAllItemsWithFallback("units", new MeasureUnitSink());
-        ICUResourceBundle rb2 = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "currencyNumericCodes", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
-        rb2.getAllItemsWithFallback("codeMap", new CurrencyNumericCodeSink());
-    }
+      return null;
+   }
 
-    @Deprecated
-    protected static synchronized MeasureUnit addUnit(String type, String unitName, Factory factory) {
-        Map<String, MeasureUnit> tmp = cache.get(type);
-        if (tmp == null) {
-            tmp = new HashMap<String, MeasureUnit>();
-            cache.put(type, tmp);
-        } else {
-            type = tmp.entrySet().iterator().next().getValue().type;
-        }
-        MeasureUnit unit = tmp.get(unitName);
-        if (unit == null) {
-            unit = factory.create(type, unitName);
-            tmp.put(unitName, unit);
-        }
-        return unit;
-    }
+   private static synchronized void populateCache() {
+      if (!cacheIsPopulated) {
+         cacheIsPopulated = true;
+         ICUResourceBundle rb1 = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b/unit", "en");
+         rb1.getAllItemsWithFallback("units", new MeasureUnit.MeasureUnitSink());
+         ICUResourceBundle rb2 = (ICUResourceBundle)UResourceBundle.getBundleInstance(
+            "com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "currencyNumericCodes", ICUResourceBundle.ICU_DATA_CLASS_LOADER
+         );
+         rb2.getAllItemsWithFallback("codeMap", new MeasureUnit.CurrencyNumericCodeSink());
+      }
+   }
 
-    private Object writeReplace() throws ObjectStreamException {
-        return new MeasureUnitProxy(this.type, this.subType);
-    }
+   @Deprecated
+   protected static synchronized MeasureUnit addUnit(String type, String unitName, MeasureUnit.Factory factory) {
+      Map<String, MeasureUnit> tmp = cache.get(type);
+      if (tmp == null) {
+         cache.put(type, tmp = new HashMap<>());
+      } else {
+         type = tmp.entrySet().iterator().next().getValue().type;
+      }
 
-    private SingleUnitImpl getSingleUnitImpl() {
-        if (this.measureUnitImpl == null) {
-            return MeasureUnitImpl.forIdentifier(this.getIdentifier()).getSingleUnitImpl();
-        }
-        return this.measureUnitImpl.getSingleUnitImpl();
-    }
+      MeasureUnit unit = tmp.get(unitName);
+      if (unit == null) {
+         tmp.put(unitName, unit = factory.create(type, unitName));
+      }
 
-    @Deprecated
-    public MeasureUnitImpl getCopyOfMeasureUnitImpl() {
-        return this.measureUnitImpl == null ? MeasureUnitImpl.forIdentifier(this.getIdentifier()) : this.measureUnitImpl.copy();
-    }
+      return unit;
+   }
 
-    private MeasureUnitImpl getMaybeReferenceOfMeasureUnitImpl() {
-        return this.measureUnitImpl == null ? MeasureUnitImpl.forIdentifier(this.getIdentifier()) : this.measureUnitImpl;
-    }
+   private Object writeReplace() throws ObjectStreamException {
+      return new MeasureUnit.MeasureUnitProxy(this.type, this.subType);
+   }
 
-    static final class MeasureUnitProxy
-    implements Externalizable {
-        private static final long serialVersionUID = -3910681415330989598L;
-        private String type;
-        private String subType;
+   private SingleUnitImpl getSingleUnitImpl() {
+      return this.measureUnitImpl == null ? MeasureUnitImpl.forIdentifier(this.getIdentifier()).getSingleUnitImpl() : this.measureUnitImpl.getSingleUnitImpl();
+   }
 
-        public MeasureUnitProxy(String type, String subType) {
-            this.type = type;
-            this.subType = subType;
-        }
+   @Deprecated
+   public MeasureUnitImpl getCopyOfMeasureUnitImpl() {
+      return this.measureUnitImpl == null ? MeasureUnitImpl.forIdentifier(this.getIdentifier()) : this.measureUnitImpl.copy();
+   }
 
-        public MeasureUnitProxy() {
-        }
+   private MeasureUnitImpl getMaybeReferenceOfMeasureUnitImpl() {
+      return this.measureUnitImpl == null ? MeasureUnitImpl.forIdentifier(this.getIdentifier()) : this.measureUnitImpl;
+   }
 
-        @Override
-        public void writeExternal(ObjectOutput out) throws IOException {
-            out.writeByte(0);
-            out.writeUTF(this.type);
-            out.writeUTF(this.subType);
-            out.writeShort(0);
-        }
+   public static enum Complexity {
+      SINGLE,
+      COMPOUND,
+      MIXED;
+   }
 
-        @Override
-        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-            in.readByte();
-            this.type = in.readUTF();
-            this.subType = in.readUTF();
-            short extra = in.readShort();
-            if (extra > 0) {
-                byte[] extraBytes = new byte[extra];
-                in.read(extraBytes, 0, extra);
+   private static final class CurrencyNumericCodeSink extends UResource.Sink {
+      private CurrencyNumericCodeSink() {
+      }
+
+      @Override
+      public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+         UResource.Table codesTable = value.getTable();
+
+         for (int i1 = 0; codesTable.getKeyAndValue(i1, key, value); i1++) {
+            MeasureUnit.internalGetInstance("currency", key.toString());
+         }
+      }
+   }
+
+   @Deprecated
+   protected interface Factory {
+      @Deprecated
+      MeasureUnit create(String var1, String var2);
+   }
+
+   public static enum MeasurePrefix {
+      YOTTA(24, "yotta", 10),
+      ZETTA(21, "zetta", 10),
+      EXA(18, "exa", 10),
+      PETA(15, "peta", 10),
+      TERA(12, "tera", 10),
+      GIGA(9, "giga", 10),
+      MEGA(6, "mega", 10),
+      KILO(3, "kilo", 10),
+      HECTO(2, "hecto", 10),
+      DEKA(1, "deka", 10),
+      ONE(0, "", 10),
+      DECI(-1, "deci", 10),
+      CENTI(-2, "centi", 10),
+      MILLI(-3, "milli", 10),
+      MICRO(-6, "micro", 10),
+      NANO(-9, "nano", 10),
+      PICO(-12, "pico", 10),
+      FEMTO(-15, "femto", 10),
+      ATTO(-18, "atto", 10),
+      ZEPTO(-21, "zepto", 10),
+      YOCTO(-24, "yocto", 10),
+      KIBI(1, "kibi", 1024),
+      MEBI(2, "mebi", 1024),
+      GIBI(3, "gibi", 1024),
+      TEBI(4, "tebi", 1024),
+      PEBI(5, "pebi", 1024),
+      EXBI(6, "exbi", 1024),
+      ZEBI(7, "zebi", 1024),
+      YOBI(8, "yobi", 1024);
+
+      private final int base;
+      private final int power;
+      private final String identifier;
+
+      private MeasurePrefix(int power, String identifier, int base) {
+         this.base = base;
+         this.power = power;
+         this.identifier = identifier;
+      }
+
+      @Deprecated
+      public String getIdentifier() {
+         return this.identifier;
+      }
+
+      public int getBase() {
+         return this.base;
+      }
+
+      public int getPower() {
+         return this.power;
+      }
+   }
+
+   static final class MeasureUnitProxy implements Externalizable {
+      private static final long serialVersionUID = -3910681415330989598L;
+      private String type;
+      private String subType;
+
+      public MeasureUnitProxy(String type, String subType) {
+         this.type = type;
+         this.subType = subType;
+      }
+
+      public MeasureUnitProxy() {
+      }
+
+      @Override
+      public void writeExternal(ObjectOutput out) throws IOException {
+         out.writeByte(0);
+         out.writeUTF(this.type);
+         out.writeUTF(this.subType);
+         out.writeShort(0);
+      }
+
+      @Override
+      public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+         in.readByte();
+         this.type = in.readUTF();
+         this.subType = in.readUTF();
+         int extra = in.readShort();
+         if (extra > 0) {
+            byte[] extraBytes = new byte[extra];
+            in.read(extraBytes, 0, extra);
+         }
+      }
+
+      private Object readResolve() throws ObjectStreamException {
+         return MeasureUnit.internalGetInstance(this.type, this.subType);
+      }
+   }
+
+   private static final class MeasureUnitSink extends UResource.Sink {
+      private MeasureUnitSink() {
+      }
+
+      @Override
+      public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+         UResource.Table unitTypesTable = value.getTable();
+
+         for (int i2 = 0; unitTypesTable.getKeyAndValue(i2, key, value); i2++) {
+            if (!key.contentEquals("compound") && !key.contentEquals("coordinate")) {
+               String unitType = key.toString();
+               UResource.Table unitNamesTable = value.getTable();
+
+               for (int i3 = 0; unitNamesTable.getKeyAndValue(i3, key, value); i3++) {
+                  String unitName = key.toString();
+                  MeasureUnit.internalGetInstance(unitType, unitName);
+               }
             }
-        }
-
-        private Object readResolve() throws ObjectStreamException {
-            return MeasureUnit.internalGetInstance(this.type, this.subType);
-        }
-    }
-
-    private static final class CurrencyNumericCodeSink
-    extends UResource.Sink {
-        private CurrencyNumericCodeSink() {
-        }
-
-        @Override
-        public void put(UResource.Key key, UResource.Value value2, boolean noFallback) {
-            UResource.Table codesTable = value2.getTable();
-            int i1 = 0;
-            while (codesTable.getKeyAndValue(i1, key, value2)) {
-                MeasureUnit.internalGetInstance("currency", key.toString());
-                ++i1;
-            }
-        }
-    }
-
-    private static final class MeasureUnitSink
-    extends UResource.Sink {
-        private MeasureUnitSink() {
-        }
-
-        @Override
-        public void put(UResource.Key key, UResource.Value value2, boolean noFallback) {
-            UResource.Table unitTypesTable = value2.getTable();
-            int i2 = 0;
-            while (unitTypesTable.getKeyAndValue(i2, key, value2)) {
-                if (!key.contentEquals("compound") && !key.contentEquals("coordinate")) {
-                    String unitType = key.toString();
-                    UResource.Table unitNamesTable = value2.getTable();
-                    int i3 = 0;
-                    while (unitNamesTable.getKeyAndValue(i3, key, value2)) {
-                        String unitName = key.toString();
-                        MeasureUnit.internalGetInstance(unitType, unitName);
-                        ++i3;
-                    }
-                }
-                ++i2;
-            }
-        }
-    }
-
-    @Deprecated
-    protected static interface Factory {
-        @Deprecated
-        public MeasureUnit create(String var1, String var2);
-    }
-
-    public static enum MeasurePrefix {
-        YOTTA(24, "yotta", 10),
-        ZETTA(21, "zetta", 10),
-        EXA(18, "exa", 10),
-        PETA(15, "peta", 10),
-        TERA(12, "tera", 10),
-        GIGA(9, "giga", 10),
-        MEGA(6, "mega", 10),
-        KILO(3, "kilo", 10),
-        HECTO(2, "hecto", 10),
-        DEKA(1, "deka", 10),
-        ONE(0, "", 10),
-        DECI(-1, "deci", 10),
-        CENTI(-2, "centi", 10),
-        MILLI(-3, "milli", 10),
-        MICRO(-6, "micro", 10),
-        NANO(-9, "nano", 10),
-        PICO(-12, "pico", 10),
-        FEMTO(-15, "femto", 10),
-        ATTO(-18, "atto", 10),
-        ZEPTO(-21, "zepto", 10),
-        YOCTO(-24, "yocto", 10),
-        KIBI(1, "kibi", 1024),
-        MEBI(2, "mebi", 1024),
-        GIBI(3, "gibi", 1024),
-        TEBI(4, "tebi", 1024),
-        PEBI(5, "pebi", 1024),
-        EXBI(6, "exbi", 1024),
-        ZEBI(7, "zebi", 1024),
-        YOBI(8, "yobi", 1024);
-
-        private final int base;
-        private final int power;
-        private final String identifier;
-
-        private MeasurePrefix(int power, String identifier, int base) {
-            this.base = base;
-            this.power = power;
-            this.identifier = identifier;
-        }
-
-        @Deprecated
-        public String getIdentifier() {
-            return this.identifier;
-        }
-
-        public int getBase() {
-            return this.base;
-        }
-
-        public int getPower() {
-            return this.power;
-        }
-    }
-
-    public static enum Complexity {
-        SINGLE,
-        COMPOUND,
-        MIXED;
-
-    }
+         }
+      }
+   }
 }
-

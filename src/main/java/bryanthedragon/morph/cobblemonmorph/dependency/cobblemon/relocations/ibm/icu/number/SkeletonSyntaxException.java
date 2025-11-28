@@ -1,16 +1,13 @@
+package com.cobblemon.mod.relocations.ibm.icu.number;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.number;
+public class SkeletonSyntaxException extends IllegalArgumentException {
+   private static final long serialVersionUID = 7733971331648360554L;
 
-public class SkeletonSyntaxException
-extends IllegalArgumentException {
-    private static final long serialVersionUID = 7733971331648360554L;
+   public SkeletonSyntaxException(String message, CharSequence token) {
+      super("Syntax error in skeleton string: " + message + ": " + token);
+   }
 
-    public SkeletonSyntaxException(String message, CharSequence token) {
-        super("Syntax error in skeleton string: " + message + ": " + token);
-    }
-
-    public SkeletonSyntaxException(String message, CharSequence token, Throwable cause) {
-        super("Syntax error in skeleton string: " + message + ": " + token, cause);
-    }
+   public SkeletonSyntaxException(String message, CharSequence token, Throwable cause) {
+      super("Syntax error in skeleton string: " + message + ": " + token, cause);
+   }
 }
-

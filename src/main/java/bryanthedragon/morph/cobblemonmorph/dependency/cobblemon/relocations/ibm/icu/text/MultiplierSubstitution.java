@@ -1,61 +1,51 @@
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+class MultiplierSubstitution extends NFSubstitution {
+   long divisor;
 
-import com.cobblemon.mod.relocations.ibm.icu.text.NFRule;
-import com.cobblemon.mod.relocations.ibm.icu.text.NFRuleSet;
-import com.cobblemon.mod.relocations.ibm.icu.text.NFSubstitution;
+   MultiplierSubstitution(int pos, NFRule rule, NFRuleSet ruleSet, String description) {
+      super(pos, ruleSet, description);
+      this.divisor = rule.getDivisor();
+      if (this.divisor == 0L) {
+         throw new IllegalStateException("Substitution with divisor 0 " + description.substring(0, pos) + " | " + description.substring(pos));
+      }
+   }
 
-class MultiplierSubstitution
-extends NFSubstitution {
-    long divisor;
+   @Override
+   public void setDivisor(int radix, short exponent) {
+      this.divisor = NFRule.power(radix, exponent);
+      if (this.divisor == 0L) {
+         throw new IllegalStateException("Substitution with divisor 0");
+      }
+   }
 
-    MultiplierSubstitution(int pos, NFRule rule, NFRuleSet ruleSet, String description) {
-        super(pos, ruleSet, description);
-        this.divisor = rule.getDivisor();
-        if (this.divisor == 0L) {
-            throw new IllegalStateException("Substitution with divisor 0 " + description.substring(0, pos) + " | " + description.substring(pos));
-        }
-    }
+   @Override
+   public boolean equals(Object that) {
+      return super.equals(that) && this.divisor == ((MultiplierSubstitution)that).divisor;
+   }
 
-    @Override
-    public void setDivisor(int radix, short exponent) {
-        this.divisor = NFRule.power(radix, exponent);
-        if (this.divisor == 0L) {
-            throw new IllegalStateException("Substitution with divisor 0");
-        }
-    }
+   @Override
+   public long transformNumber(long number) {
+      return (long)Math.floor(number / this.divisor);
+   }
 
-    @Override
-    public boolean equals(Object that) {
-        return super.equals(that) && this.divisor == ((MultiplierSubstitution)that).divisor;
-    }
+   @Override
+   public double transformNumber(double number) {
+      return this.ruleSet == null ? number / this.divisor : Math.floor(number / this.divisor);
+   }
 
-    @Override
-    public long transformNumber(long number) {
-        return (long)Math.floor(number / this.divisor);
-    }
+   @Override
+   public double composeRuleValue(double newRuleValue, double oldRuleValue) {
+      return newRuleValue * this.divisor;
+   }
 
-    @Override
-    public double transformNumber(double number) {
-        if (this.ruleSet == null) {
-            return number / (double)this.divisor;
-        }
-        return Math.floor(number / (double)this.divisor);
-    }
+   @Override
+   public double calcUpperBound(double oldUpperBound) {
+      return this.divisor;
+   }
 
-    @Override
-    public double composeRuleValue(double newRuleValue, double oldRuleValue) {
-        return newRuleValue * (double)this.divisor;
-    }
-
-    @Override
-    public double calcUpperBound(double oldUpperBound) {
-        return this.divisor;
-    }
-
-    @Override
-    char tokenChar() {
-        return '<';
-    }
+   @Override
+   char tokenChar() {
+      return '<';
+   }
 }
-
