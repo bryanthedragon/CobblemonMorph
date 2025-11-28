@@ -1,5 +1,4 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUConfig;
 import com.cobblemon.mod.relocations.ibm.icu.impl.PatternProps;
@@ -8,839 +7,956 @@ import com.cobblemon.mod.relocations.ibm.icu.util.ICUCloneNotSupportedException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public final class MessagePattern
-implements Cloneable,
-Freezable<MessagePattern> {
-    public static final int ARG_NAME_NOT_NUMBER = -1;
-    public static final int ARG_NAME_NOT_VALID = -2;
-    public static final double NO_NUMERIC_VALUE = -1.23456789E8;
-    private static final int MAX_PREFIX_LENGTH = 24;
-    private ApostropheMode aposMode;
-    private String msg;
-    private ArrayList<Part> parts = new ArrayList();
-    private ArrayList<Double> numericValues;
-    private boolean hasArgNames;
-    private boolean hasArgNumbers;
-    private boolean needsAutoQuoting;
-    private volatile boolean frozen;
-    private static final ApostropheMode defaultAposMode = ApostropheMode.valueOf(ICUConfig.get("com.cobblemon.mod.relocations.ibm.icu.text.MessagePattern.ApostropheMode", "DOUBLE_OPTIONAL"));
-    private static final ArgType[] argTypes = ArgType.values();
+public final class MessagePattern implements Cloneable, Freezable<MessagePattern> {
+   public static final int ARG_NAME_NOT_NUMBER = -1;
+   public static final int ARG_NAME_NOT_VALID = -2;
+   public static final double NO_NUMERIC_VALUE = -1.23456789E8;
+   private static final int MAX_PREFIX_LENGTH = 24;
+   private MessagePattern.ApostropheMode aposMode;
+   private String msg;
+   private ArrayList<MessagePattern.Part> parts = new ArrayList<>();
+   private ArrayList<Double> numericValues;
+   private boolean hasArgNames;
+   private boolean hasArgNumbers;
+   private boolean needsAutoQuoting;
+   private volatile boolean frozen;
+   private static final MessagePattern.ApostropheMode defaultAposMode = MessagePattern.ApostropheMode.valueOf(
+      ICUConfig.get("com.cobblemon.mod.relocations.ibm.icu.text.MessagePattern.ApostropheMode", "DOUBLE_OPTIONAL")
+   );
+   private static final MessagePattern.ArgType[] argTypes = MessagePattern.ArgType.values();
 
-    public MessagePattern() {
-        this.aposMode = defaultAposMode;
-    }
+   public MessagePattern() {
+      this.aposMode = defaultAposMode;
+   }
 
-    public MessagePattern(ApostropheMode mode) {
-        this.aposMode = mode;
-    }
+   public MessagePattern(MessagePattern.ApostropheMode mode) {
+      this.aposMode = mode;
+   }
 
-    public MessagePattern(String pattern) {
-        this.aposMode = defaultAposMode;
-        this.parse(pattern);
-    }
+   public MessagePattern(String pattern) {
+      this.aposMode = defaultAposMode;
+      this.parse(pattern);
+   }
 
-    public MessagePattern parse(String pattern) {
-        this.preParse(pattern);
-        this.parseMessage(0, 0, 0, ArgType.NONE);
-        this.postParse();
-        return this;
-    }
+   public MessagePattern parse(String pattern) {
+      this.preParse(pattern);
+      this.parseMessage(0, 0, 0, MessagePattern.ArgType.NONE);
+      this.postParse();
+      return this;
+   }
 
-    public MessagePattern parseChoiceStyle(String pattern) {
-        this.preParse(pattern);
-        this.parseChoiceStyle(0, 0);
-        this.postParse();
-        return this;
-    }
+   public MessagePattern parseChoiceStyle(String pattern) {
+      this.preParse(pattern);
+      this.parseChoiceStyle(0, 0);
+      this.postParse();
+      return this;
+   }
 
-    public MessagePattern parsePluralStyle(String pattern) {
-        this.preParse(pattern);
-        this.parsePluralOrSelectStyle(ArgType.PLURAL, 0, 0);
-        this.postParse();
-        return this;
-    }
+   public MessagePattern parsePluralStyle(String pattern) {
+      this.preParse(pattern);
+      this.parsePluralOrSelectStyle(MessagePattern.ArgType.PLURAL, 0, 0);
+      this.postParse();
+      return this;
+   }
 
-    public MessagePattern parseSelectStyle(String pattern) {
-        this.preParse(pattern);
-        this.parsePluralOrSelectStyle(ArgType.SELECT, 0, 0);
-        this.postParse();
-        return this;
-    }
+   public MessagePattern parseSelectStyle(String pattern) {
+      this.preParse(pattern);
+      this.parsePluralOrSelectStyle(MessagePattern.ArgType.SELECT, 0, 0);
+      this.postParse();
+      return this;
+   }
 
-    public void clear() {
-        if (this.isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to clear() a frozen MessagePattern instance.");
-        }
-        this.msg = null;
-        this.hasArgNumbers = false;
-        this.hasArgNames = false;
-        this.needsAutoQuoting = false;
-        this.parts.clear();
-        if (this.numericValues != null) {
+   public void clear() {
+      if (this.isFrozen()) {
+         throw new UnsupportedOperationException("Attempt to clear() a frozen MessagePattern instance.");
+      } else {
+         this.msg = null;
+         this.hasArgNames = this.hasArgNumbers = false;
+         this.needsAutoQuoting = false;
+         this.parts.clear();
+         if (this.numericValues != null) {
             this.numericValues.clear();
-        }
-    }
+         }
+      }
+   }
 
-    public void clearPatternAndSetApostropheMode(ApostropheMode mode) {
-        this.clear();
-        this.aposMode = mode;
-    }
+   public void clearPatternAndSetApostropheMode(MessagePattern.ApostropheMode mode) {
+      this.clear();
+      this.aposMode = mode;
+   }
 
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (other == null || this.getClass() != other.getClass()) {
-            return false;
-        }
-        MessagePattern o = (MessagePattern)other;
-        return this.aposMode.equals((Object)o.aposMode) && (this.msg == null ? o.msg == null : this.msg.equals(o.msg)) && this.parts.equals(o.parts);
-    }
+   @Override
+   public boolean equals(Object other) {
+      if (this == other) {
+         return true;
+      } else if (other != null && this.getClass() == other.getClass()) {
+         MessagePattern o = (MessagePattern)other;
+         return this.aposMode.equals(o.aposMode) && (this.msg == null ? o.msg == null : this.msg.equals(o.msg)) && this.parts.equals(o.parts);
+      } else {
+         return false;
+      }
+   }
 
-    public int hashCode() {
-        return (this.aposMode.hashCode() * 37 + (this.msg != null ? this.msg.hashCode() : 0)) * 37 + this.parts.hashCode();
-    }
+   @Override
+   public int hashCode() {
+      return (this.aposMode.hashCode() * 37 + (this.msg != null ? this.msg.hashCode() : 0)) * 37 + this.parts.hashCode();
+   }
 
-    public ApostropheMode getApostropheMode() {
-        return this.aposMode;
-    }
+   public MessagePattern.ApostropheMode getApostropheMode() {
+      return this.aposMode;
+   }
 
-    boolean jdkAposMode() {
-        return this.aposMode == ApostropheMode.DOUBLE_REQUIRED;
-    }
+   boolean jdkAposMode() {
+      return this.aposMode == MessagePattern.ApostropheMode.DOUBLE_REQUIRED;
+   }
 
-    public String getPatternString() {
-        return this.msg;
-    }
+   public String getPatternString() {
+      return this.msg;
+   }
 
-    public boolean hasNamedArguments() {
-        return this.hasArgNames;
-    }
+   public boolean hasNamedArguments() {
+      return this.hasArgNames;
+   }
 
-    public boolean hasNumberedArguments() {
-        return this.hasArgNumbers;
-    }
+   public boolean hasNumberedArguments() {
+      return this.hasArgNumbers;
+   }
 
-    public String toString() {
-        return this.msg;
-    }
+   @Override
+   public String toString() {
+      return this.msg;
+   }
 
-    public static int validateArgumentName(String name) {
-        if (!PatternProps.isIdentifier(name)) {
-            return -2;
-        }
-        return MessagePattern.parseArgNumber(name, 0, name.length());
-    }
+   public static int validateArgumentName(String name) {
+      return !PatternProps.isIdentifier(name) ? -2 : parseArgNumber(name, 0, name.length());
+   }
 
-    public String autoQuoteApostropheDeep() {
-        int count;
-        if (!this.needsAutoQuoting) {
-            return this.msg;
-        }
-        StringBuilder modified = null;
-        int i = count = this.countParts();
-        while (i > 0) {
-            Part part;
-            if ((part = this.getPart(--i)).getType() != Part.Type.INSERT_CHAR) continue;
-            if (modified == null) {
-                modified = new StringBuilder(this.msg.length() + 10).append(this.msg);
+   public String autoQuoteApostropheDeep() {
+      if (!this.needsAutoQuoting) {
+         return this.msg;
+      } else {
+         StringBuilder modified = null;
+         int count = this.countParts();
+         int i = count;
+
+         while (i > 0) {
+            MessagePattern.Part part;
+            if ((part = this.getPart(--i)).getType() == MessagePattern.Part.Type.INSERT_CHAR) {
+               if (modified == null) {
+                  modified = new StringBuilder(this.msg.length() + 10).append(this.msg);
+               }
+
+               modified.insert(part.index, (char)part.value);
             }
-            modified.insert(part.index, (char)part.value);
-        }
-        if (modified == null) {
-            return this.msg;
-        }
-        return modified.toString();
-    }
+         }
 
-    public int countParts() {
-        return this.parts.size();
-    }
+         return modified == null ? this.msg : modified.toString();
+      }
+   }
 
-    public Part getPart(int i) {
-        return this.parts.get(i);
-    }
+   public int countParts() {
+      return this.parts.size();
+   }
 
-    public Part.Type getPartType(int i) {
-        return this.parts.get(i).type;
-    }
+   public MessagePattern.Part getPart(int i) {
+      return this.parts.get(i);
+   }
 
-    public int getPatternIndex(int partIndex) {
-        return this.parts.get(partIndex).index;
-    }
+   public MessagePattern.Part.Type getPartType(int i) {
+      return this.parts.get(i).type;
+   }
 
-    public String getSubstring(Part part) {
-        int index = part.index;
-        return this.msg.substring(index, index + part.length);
-    }
+   public int getPatternIndex(int partIndex) {
+      return this.parts.get(partIndex).index;
+   }
 
-    public boolean partSubstringMatches(Part part, String s) {
-        return part.length == s.length() && this.msg.regionMatches(part.index, s, 0, part.length);
-    }
+   public String getSubstring(MessagePattern.Part part) {
+      int index = part.index;
+      return this.msg.substring(index, index + part.length);
+   }
 
-    public double getNumericValue(Part part) {
-        Part.Type type = part.type;
-        if (type == Part.Type.ARG_INT) {
-            return part.value;
-        }
-        if (type == Part.Type.ARG_DOUBLE) {
-            return this.numericValues.get(part.value);
-        }
-        return -1.23456789E8;
-    }
+   public boolean partSubstringMatches(MessagePattern.Part part, String s) {
+      return part.length == s.length() && this.msg.regionMatches(part.index, s, 0, part.length);
+   }
 
-    public double getPluralOffset(int pluralStart) {
-        Part part = this.parts.get(pluralStart);
-        if (part.type.hasNumericValue()) {
-            return this.getNumericValue(part);
-        }
-        return 0.0;
-    }
+   public double getNumericValue(MessagePattern.Part part) {
+      MessagePattern.Part.Type type = part.type;
+      if (type == MessagePattern.Part.Type.ARG_INT) {
+         return part.value;
+      } else {
+         return type == MessagePattern.Part.Type.ARG_DOUBLE ? this.numericValues.get(part.value) : -1.23456789E8;
+      }
+   }
 
-    public int getLimitPartIndex(int start2) {
-        int limit = this.parts.get(start2).limitPartIndex;
-        if (limit < start2) {
-            return start2;
-        }
-        return limit;
-    }
+   public double getPluralOffset(int pluralStart) {
+      MessagePattern.Part part = this.parts.get(pluralStart);
+      return part.type.hasNumericValue() ? this.getNumericValue(part) : 0.0;
+   }
 
-    public Object clone() {
-        if (this.isFrozen()) {
-            return this;
-        }
-        return this.cloneAsThawed();
-    }
+   public int getLimitPartIndex(int start) {
+      int limit = this.parts.get(start).limitPartIndex;
+      return limit < start ? start : limit;
+   }
 
-    @Override
-    public MessagePattern cloneAsThawed() {
-        MessagePattern newMsg;
-        try {
-            newMsg = (MessagePattern)super.clone();
-        }
-        catch (CloneNotSupportedException e) {
-            throw new ICUCloneNotSupportedException(e);
-        }
-        newMsg.parts = (ArrayList)this.parts.clone();
-        if (this.numericValues != null) {
-            newMsg.numericValues = (ArrayList)this.numericValues.clone();
-        }
-        newMsg.frozen = false;
-        return newMsg;
-    }
+   @Override
+   public Object clone() {
+      return this.isFrozen() ? this : this.cloneAsThawed();
+   }
 
-    @Override
-    public MessagePattern freeze() {
-        this.frozen = true;
-        return this;
-    }
+   public MessagePattern cloneAsThawed() {
+      MessagePattern newMsg;
+      try {
+         newMsg = (MessagePattern)super.clone();
+      } catch (CloneNotSupportedException var3) {
+         throw new ICUCloneNotSupportedException(var3);
+      }
 
-    @Override
-    public boolean isFrozen() {
-        return this.frozen;
-    }
+      newMsg.parts = (ArrayList<MessagePattern.Part>)this.parts.clone();
+      if (this.numericValues != null) {
+         newMsg.numericValues = (ArrayList<Double>)this.numericValues.clone();
+      }
 
-    private void preParse(String pattern) {
-        if (this.isFrozen()) {
-            throw new UnsupportedOperationException("Attempt to parse(" + MessagePattern.prefix(pattern) + ") on frozen MessagePattern instance.");
-        }
-        this.msg = pattern;
-        this.hasArgNumbers = false;
-        this.hasArgNames = false;
-        this.needsAutoQuoting = false;
-        this.parts.clear();
-        if (this.numericValues != null) {
+      newMsg.frozen = false;
+      return newMsg;
+   }
+
+   public MessagePattern freeze() {
+      this.frozen = true;
+      return this;
+   }
+
+   @Override
+   public boolean isFrozen() {
+      return this.frozen;
+   }
+
+   private void preParse(String pattern) {
+      if (this.isFrozen()) {
+         throw new UnsupportedOperationException("Attempt to parse(" + prefix(pattern) + ") on frozen MessagePattern instance.");
+      } else {
+         this.msg = pattern;
+         this.hasArgNames = this.hasArgNumbers = false;
+         this.needsAutoQuoting = false;
+         this.parts.clear();
+         if (this.numericValues != null) {
             this.numericValues.clear();
-        }
-    }
+         }
+      }
+   }
 
-    private void postParse() {
-    }
+   private void postParse() {
+   }
 
-    private int parseMessage(int index, int msgStartLength, int nestingLevel, ArgType parentType) {
-        if (nestingLevel > Short.MAX_VALUE) {
-            throw new IndexOutOfBoundsException();
-        }
-        int msgStart = this.parts.size();
-        this.addPart(Part.Type.MSG_START, index, msgStartLength, nestingLevel);
-        index += msgStartLength;
-        block0: while (index < this.msg.length()) {
-            char c;
-            if ((c = this.msg.charAt(index++)) == '\'') {
-                if (index == this.msg.length()) {
-                    this.addPart(Part.Type.INSERT_CHAR, index, 0, 39);
-                    this.needsAutoQuoting = true;
-                    continue;
-                }
-                c = this.msg.charAt(index);
-                if (c == '\'') {
-                    this.addPart(Part.Type.SKIP_SYNTAX, index++, 1, 0);
-                    continue;
-                }
-                if (this.aposMode == ApostropheMode.DOUBLE_REQUIRED || c == '{' || c == '}' || parentType == ArgType.CHOICE && c == '|' || parentType.hasPluralStyle() && c == '#') {
-                    this.addPart(Part.Type.SKIP_SYNTAX, index - 1, 1, 0);
-                    while ((index = this.msg.indexOf(39, index + 1)) >= 0) {
-                        if (index + 1 < this.msg.length() && this.msg.charAt(index + 1) == '\'') {
-                            this.addPart(Part.Type.SKIP_SYNTAX, ++index, 1, 0);
-                            continue;
-                        }
-                        this.addPart(Part.Type.SKIP_SYNTAX, index++, 1, 0);
-                        continue block0;
-                    }
-                    index = this.msg.length();
-                    this.addPart(Part.Type.INSERT_CHAR, index, 0, 39);
-                    this.needsAutoQuoting = true;
-                    continue;
-                }
-                this.addPart(Part.Type.INSERT_CHAR, index, 0, 39);
-                this.needsAutoQuoting = true;
-                continue;
+   private int parseMessage(int index, int msgStartLength, int nestingLevel, MessagePattern.ArgType parentType) {
+      if (nestingLevel > 32767) {
+         throw new IndexOutOfBoundsException();
+      } else {
+         int msgStart = this.parts.size();
+         this.addPart(MessagePattern.Part.Type.MSG_START, index, msgStartLength, nestingLevel);
+         index += msgStartLength;
+
+         while (index < this.msg.length()) {
+            char c = this.msg.charAt(index++);
+            if (c != '\'') {
+               if (parentType.hasPluralStyle() && c == '#') {
+                  this.addPart(MessagePattern.Part.Type.REPLACE_NUMBER, index - 1, 1, 0);
+               } else if (c != '{') {
+                  if (nestingLevel > 0 && c == '}' || parentType == MessagePattern.ArgType.CHOICE && c == '|') {
+                     int limitLength = parentType == MessagePattern.ArgType.CHOICE && c == '}' ? 0 : 1;
+                     this.addLimitPart(msgStart, MessagePattern.Part.Type.MSG_LIMIT, index - 1, limitLength, nestingLevel);
+                     return parentType == MessagePattern.ArgType.CHOICE ? index - 1 : index;
+                  }
+               } else {
+                  index = this.parseArg(index - 1, 1, nestingLevel);
+               }
+            } else if (index == this.msg.length()) {
+               this.addPart(MessagePattern.Part.Type.INSERT_CHAR, index, 0, 39);
+               this.needsAutoQuoting = true;
+            } else {
+               c = this.msg.charAt(index);
+               if (c == '\'') {
+                  this.addPart(MessagePattern.Part.Type.SKIP_SYNTAX, index++, 1, 0);
+               } else if (this.aposMode == MessagePattern.ApostropheMode.DOUBLE_REQUIRED
+                  || c == '{'
+                  || c == '}'
+                  || parentType == MessagePattern.ArgType.CHOICE && c == '|'
+                  || parentType.hasPluralStyle() && c == '#') {
+                  this.addPart(MessagePattern.Part.Type.SKIP_SYNTAX, index - 1, 1, 0);
+
+                  while (true) {
+                     index = this.msg.indexOf(39, index + 1);
+                     if (index < 0) {
+                        index = this.msg.length();
+                        this.addPart(MessagePattern.Part.Type.INSERT_CHAR, index, 0, 39);
+                        this.needsAutoQuoting = true;
+                        break;
+                     }
+
+                     if (index + 1 >= this.msg.length() || this.msg.charAt(index + 1) != '\'') {
+                        this.addPart(MessagePattern.Part.Type.SKIP_SYNTAX, index++, 1, 0);
+                        break;
+                     }
+
+                     this.addPart(MessagePattern.Part.Type.SKIP_SYNTAX, ++index, 1, 0);
+                  }
+               } else {
+                  this.addPart(MessagePattern.Part.Type.INSERT_CHAR, index, 0, 39);
+                  this.needsAutoQuoting = true;
+               }
             }
-            if (parentType.hasPluralStyle() && c == '#') {
-                this.addPart(Part.Type.REPLACE_NUMBER, index - 1, 1, 0);
-                continue;
-            }
-            if (c == '{') {
-                index = this.parseArg(index - 1, 1, nestingLevel);
-                continue;
-            }
-            if ((nestingLevel <= 0 || c != '}') && (parentType != ArgType.CHOICE || c != '|')) continue;
-            int limitLength = parentType == ArgType.CHOICE && c == '}' ? 0 : 1;
-            this.addLimitPart(msgStart, Part.Type.MSG_LIMIT, index - 1, limitLength, nestingLevel);
-            if (parentType == ArgType.CHOICE) {
-                return index - 1;
-            }
+         }
+
+         if (nestingLevel > 0 && !this.inTopLevelChoiceMessage(nestingLevel, parentType)) {
+            throw new IllegalArgumentException("Unmatched '{' braces in message " + this.prefix());
+         } else {
+            this.addLimitPart(msgStart, MessagePattern.Part.Type.MSG_LIMIT, index, 0, nestingLevel);
             return index;
-        }
-        if (nestingLevel > 0 && !this.inTopLevelChoiceMessage(nestingLevel, parentType)) {
-            throw new IllegalArgumentException("Unmatched '{' braces in message " + this.prefix());
-        }
-        this.addLimitPart(msgStart, Part.Type.MSG_LIMIT, index, 0, nestingLevel);
-        return index;
-    }
+         }
+      }
+   }
 
-    private int parseArg(int index, int argStartLength, int nestingLevel) {
-        int length;
-        int argStart = this.parts.size();
-        ArgType argType = ArgType.NONE;
-        this.addPart(Part.Type.ARG_START, index, argStartLength, argType.ordinal());
-        int nameIndex = index = this.skipWhiteSpace(index + argStartLength);
-        if (index == this.msg.length()) {
-            throw new IllegalArgumentException("Unmatched '{' braces in message " + this.prefix());
-        }
-        int number = this.parseArgNumber(nameIndex, index = this.skipIdentifier(index));
-        if (number >= 0) {
-            length = index - nameIndex;
-            if (length > 65535 || number > Short.MAX_VALUE) {
-                throw new IndexOutOfBoundsException("Argument number too large: " + this.prefix(nameIndex));
+   private int parseArg(int index, int argStartLength, int nestingLevel) {
+      int argStart = this.parts.size();
+      MessagePattern.ArgType argType = MessagePattern.ArgType.NONE;
+      this.addPart(MessagePattern.Part.Type.ARG_START, index, argStartLength, argType.ordinal());
+      int var11;
+      int nameIndex = var11 = this.skipWhiteSpace(index + argStartLength);
+      if (var11 == this.msg.length()) {
+         throw new IllegalArgumentException("Unmatched '{' braces in message " + this.prefix());
+      } else {
+         index = this.skipIdentifier(var11);
+         int number = this.parseArgNumber(nameIndex, index);
+         if (number >= 0) {
+            int length = index - nameIndex;
+            if (length > 65535 || number > 32767) {
+               throw new IndexOutOfBoundsException("Argument number too large: " + this.prefix(nameIndex));
             }
+
             this.hasArgNumbers = true;
-            this.addPart(Part.Type.ARG_NUMBER, nameIndex, length, number);
-        } else if (number == -1) {
-            length = index - nameIndex;
-            if (length > 65535) {
-                throw new IndexOutOfBoundsException("Argument name too long: " + this.prefix(nameIndex));
+            this.addPart(MessagePattern.Part.Type.ARG_NUMBER, nameIndex, length, number);
+         } else {
+            if (number != -1) {
+               throw new IllegalArgumentException("Bad argument syntax: " + this.prefix(nameIndex));
             }
+
+            int length = index - nameIndex;
+            if (length > 65535) {
+               throw new IndexOutOfBoundsException("Argument name too long: " + this.prefix(nameIndex));
+            }
+
             this.hasArgNames = true;
-            this.addPart(Part.Type.ARG_NAME, nameIndex, length, 0);
-        } else {
-            throw new IllegalArgumentException("Bad argument syntax: " + this.prefix(nameIndex));
-        }
-        index = this.skipWhiteSpace(index);
-        if (index == this.msg.length()) {
+            this.addPart(MessagePattern.Part.Type.ARG_NAME, nameIndex, length, 0);
+         }
+
+         index = this.skipWhiteSpace(index);
+         if (index == this.msg.length()) {
             throw new IllegalArgumentException("Unmatched '{' braces in message " + this.prefix());
-        }
-        char c = this.msg.charAt(index);
-        if (c != '}') {
-            if (c != ',') {
-                throw new IllegalArgumentException("Bad argument syntax: " + this.prefix(nameIndex));
-            }
-            int typeIndex = index = this.skipWhiteSpace(index + 1);
-            while (index < this.msg.length() && MessagePattern.isArgTypeChar(this.msg.charAt(index))) {
-                ++index;
-            }
-            int length2 = index - typeIndex;
-            if ((index = this.skipWhiteSpace(index)) == this.msg.length()) {
-                throw new IllegalArgumentException("Unmatched '{' braces in message " + this.prefix());
-            }
-            if (length2 == 0 || (c = this.msg.charAt(index)) != ',' && c != '}') {
-                throw new IllegalArgumentException("Bad argument syntax: " + this.prefix(nameIndex));
-            }
-            if (length2 > 65535) {
-                throw new IndexOutOfBoundsException("Argument type name too long: " + this.prefix(nameIndex));
-            }
-            argType = ArgType.SIMPLE;
-            if (length2 == 6) {
-                if (this.isChoice(typeIndex)) {
-                    argType = ArgType.CHOICE;
-                } else if (this.isPlural(typeIndex)) {
-                    argType = ArgType.PLURAL;
-                } else if (this.isSelect(typeIndex)) {
-                    argType = ArgType.SELECT;
-                }
-            } else if (length2 == 13 && this.isSelect(typeIndex) && this.isOrdinal(typeIndex + 6)) {
-                argType = ArgType.SELECTORDINAL;
-            }
-            this.parts.get(argStart).value = (short)argType.ordinal();
-            if (argType == ArgType.SIMPLE) {
-                this.addPart(Part.Type.ARG_TYPE, typeIndex, length2, 0);
-            }
-            if (c == '}') {
-                if (argType != ArgType.SIMPLE) {
-                    throw new IllegalArgumentException("No style field for complex argument: " + this.prefix(nameIndex));
-                }
-            } else {
-                ++index;
-                index = argType == ArgType.SIMPLE ? this.parseSimpleStyle(index) : (argType == ArgType.CHOICE ? this.parseChoiceStyle(index, nestingLevel) : this.parsePluralOrSelectStyle(argType, index, nestingLevel));
-            }
-        }
-        this.addLimitPart(argStart, Part.Type.ARG_LIMIT, index, 1, argType.ordinal());
-        return index + 1;
-    }
-
-    private int parseSimpleStyle(int index) {
-        int start2 = index;
-        int nestedBraces = 0;
-        while (index < this.msg.length()) {
-            int length;
-            char c;
-            if ((c = this.msg.charAt(index++)) == '\'') {
-                if ((index = this.msg.indexOf(39, index)) < 0) {
-                    throw new IllegalArgumentException("Quoted literal argument style text reaches to the end of the message: " + this.prefix(start2));
-                }
-                ++index;
-                continue;
-            }
-            if (c == '{') {
-                ++nestedBraces;
-                continue;
-            }
-            if (c != '}') continue;
-            if (nestedBraces > 0) {
-                --nestedBraces;
-                continue;
-            }
-            if ((length = --index - start2) > 65535) {
-                throw new IndexOutOfBoundsException("Argument style text too long: " + this.prefix(start2));
-            }
-            this.addPart(Part.Type.ARG_STYLE, start2, length, 0);
-            return index;
-        }
-        throw new IllegalArgumentException("Unmatched '{' braces in message " + this.prefix());
-    }
-
-    private int parseChoiceStyle(int index, int nestingLevel) {
-        int start2 = index;
-        if ((index = this.skipWhiteSpace(index)) == this.msg.length() || this.msg.charAt(index) == '}') {
-            throw new IllegalArgumentException("Missing choice argument pattern in " + this.prefix());
-        }
-        while (true) {
-            int numberIndex = index;
-            int length = (index = this.skipDouble(index)) - numberIndex;
-            if (length == 0) {
-                throw new IllegalArgumentException("Bad choice pattern syntax: " + this.prefix(start2));
-            }
-            if (length > 65535) {
-                throw new IndexOutOfBoundsException("Choice number too long: " + this.prefix(numberIndex));
-            }
-            this.parseDouble(numberIndex, index, true);
-            index = this.skipWhiteSpace(index);
-            if (index == this.msg.length()) {
-                throw new IllegalArgumentException("Bad choice pattern syntax: " + this.prefix(start2));
-            }
+         } else {
             char c = this.msg.charAt(index);
-            if (c != '#' && c != '<' && c != '\u2264') {
-                throw new IllegalArgumentException("Expected choice separator (#<\u2264) instead of '" + c + "' in choice pattern " + this.prefix(start2));
+            if (c != '}') {
+               if (c != ',') {
+                  throw new IllegalArgumentException("Bad argument syntax: " + this.prefix(nameIndex));
+               }
+
+               int var14;
+               int typeIndex = var14 = this.skipWhiteSpace(index + 1);
+
+               while (var14 < this.msg.length() && isArgTypeChar(this.msg.charAt(var14))) {
+                  var14++;
+               }
+
+               int length = var14 - typeIndex;
+               index = this.skipWhiteSpace(var14);
+               if (index == this.msg.length()) {
+                  throw new IllegalArgumentException("Unmatched '{' braces in message " + this.prefix());
+               }
+
+               if (length == 0 || (c = this.msg.charAt(index)) != ',' && c != '}') {
+                  throw new IllegalArgumentException("Bad argument syntax: " + this.prefix(nameIndex));
+               }
+
+               if (length > 65535) {
+                  throw new IndexOutOfBoundsException("Argument type name too long: " + this.prefix(nameIndex));
+               }
+
+               argType = MessagePattern.ArgType.SIMPLE;
+               if (length == 6) {
+                  if (this.isChoice(typeIndex)) {
+                     argType = MessagePattern.ArgType.CHOICE;
+                  } else if (this.isPlural(typeIndex)) {
+                     argType = MessagePattern.ArgType.PLURAL;
+                  } else if (this.isSelect(typeIndex)) {
+                     argType = MessagePattern.ArgType.SELECT;
+                  }
+               } else if (length == 13 && this.isSelect(typeIndex) && this.isOrdinal(typeIndex + 6)) {
+                  argType = MessagePattern.ArgType.SELECTORDINAL;
+               }
+
+               this.parts.get(argStart).value = (short)argType.ordinal();
+               if (argType == MessagePattern.ArgType.SIMPLE) {
+                  this.addPart(MessagePattern.Part.Type.ARG_TYPE, typeIndex, length, 0);
+               }
+
+               if (c == '}') {
+                  if (argType != MessagePattern.ArgType.SIMPLE) {
+                     throw new IllegalArgumentException("No style field for complex argument: " + this.prefix(nameIndex));
+                  }
+               } else {
+                  index++;
+                  if (argType == MessagePattern.ArgType.SIMPLE) {
+                     index = this.parseSimpleStyle(index);
+                  } else if (argType == MessagePattern.ArgType.CHOICE) {
+                     index = this.parseChoiceStyle(index, nestingLevel);
+                  } else {
+                     index = this.parsePluralOrSelectStyle(argType, index, nestingLevel);
+                  }
+               }
             }
-            this.addPart(Part.Type.ARG_SELECTOR, index, 1, 0);
-            ++index;
-            index = this.parseMessage(index, 0, nestingLevel + 1, ArgType.CHOICE);
+
+            this.addLimitPart(argStart, MessagePattern.Part.Type.ARG_LIMIT, index, 1, argType.ordinal());
+            return index + 1;
+         }
+      }
+   }
+
+   private int parseSimpleStyle(int index) {
+      int start = index;
+      int nestedBraces = 0;
+
+      while (index < this.msg.length()) {
+         char c = this.msg.charAt(index++);
+         if (c == '\'') {
+            index = this.msg.indexOf(39, index);
+            if (index < 0) {
+               throw new IllegalArgumentException("Quoted literal argument style text reaches to the end of the message: " + this.prefix(start));
+            }
+
+            index++;
+         } else if (c == '{') {
+            nestedBraces++;
+         } else if (c == '}') {
+            if (nestedBraces <= 0) {
+               index--;
+               int length = index - start;
+               if (length > 65535) {
+                  throw new IndexOutOfBoundsException("Argument style text too long: " + this.prefix(start));
+               }
+
+               this.addPart(MessagePattern.Part.Type.ARG_STYLE, start, length, 0);
+               return index;
+            }
+
+            nestedBraces--;
+         }
+      }
+
+      throw new IllegalArgumentException("Unmatched '{' braces in message " + this.prefix());
+   }
+
+   private int parseChoiceStyle(int index, int nestingLevel) {
+      index = this.skipWhiteSpace(index);
+      if (index != this.msg.length() && this.msg.charAt(index) != '}') {
+         while (true) {
+            int var8 = this.skipDouble(index);
+            int length = var8 - index;
+            if (length == 0) {
+               throw new IllegalArgumentException("Bad choice pattern syntax: " + this.prefix(index));
+            }
+
+            if (length > 65535) {
+               throw new IndexOutOfBoundsException("Choice number too long: " + this.prefix(index));
+            }
+
+            this.parseDouble(index, var8, true);
+            index = this.skipWhiteSpace(var8);
             if (index == this.msg.length()) {
-                return index;
+               throw new IllegalArgumentException("Bad choice pattern syntax: " + this.prefix(index));
             }
+
+            char c = this.msg.charAt(index);
+            if (c != '#' && c != '<' && c != 8804) {
+               throw new IllegalArgumentException("Expected choice separator (#<≤) instead of '" + c + "' in choice pattern " + this.prefix(index));
+            }
+
+            this.addPart(MessagePattern.Part.Type.ARG_SELECTOR, index, 1, 0);
+            index = this.parseMessage(++index, 0, nestingLevel + 1, MessagePattern.ArgType.CHOICE);
+            if (index == this.msg.length()) {
+               return index;
+            }
+
             if (this.msg.charAt(index) == '}') {
-                if (!this.inMessageFormatPattern(nestingLevel)) {
-                    throw new IllegalArgumentException("Bad choice pattern syntax: " + this.prefix(start2));
-                }
-                return index;
+               if (!this.inMessageFormatPattern(nestingLevel)) {
+                  throw new IllegalArgumentException("Bad choice pattern syntax: " + this.prefix(index));
+               }
+
+               return index;
             }
+
             index = this.skipWhiteSpace(index + 1);
-        }
-    }
+         }
+      } else {
+         throw new IllegalArgumentException("Missing choice argument pattern in " + this.prefix());
+      }
+   }
 
-    private int parsePluralOrSelectStyle(ArgType argType, int index, int nestingLevel) {
-        int start2 = index;
-        boolean isEmpty = true;
-        boolean hasOther = false;
-        while (true) {
-            int length;
-            boolean eos;
-            boolean bl = eos = (index = this.skipWhiteSpace(index)) == this.msg.length();
-            if (eos || this.msg.charAt(index) == '}') {
-                if (eos == this.inMessageFormatPattern(nestingLevel)) {
-                    throw new IllegalArgumentException("Bad " + argType.toString().toLowerCase(Locale.ENGLISH) + " pattern syntax: " + this.prefix(start2));
-                }
-                if (!hasOther) {
-                    throw new IllegalArgumentException("Missing 'other' keyword in " + argType.toString().toLowerCase(Locale.ENGLISH) + " pattern in " + this.prefix());
-                }
-                return index;
-            }
-            int selectorIndex = index;
-            if (argType.hasPluralStyle() && this.msg.charAt(selectorIndex) == '=') {
-                length = (index = this.skipDouble(index + 1)) - selectorIndex;
-                if (length == 1) {
-                    throw new IllegalArgumentException("Bad " + argType.toString().toLowerCase(Locale.ENGLISH) + " pattern syntax: " + this.prefix(start2));
-                }
-                if (length > 65535) {
-                    throw new IndexOutOfBoundsException("Argument selector too long: " + this.prefix(selectorIndex));
-                }
-                this.addPart(Part.Type.ARG_SELECTOR, selectorIndex, length, 0);
-                this.parseDouble(selectorIndex + 1, index, false);
+   private int parsePluralOrSelectStyle(MessagePattern.ArgType argType, int index, int nestingLevel) {
+      int start = index;
+      boolean isEmpty = true;
+      boolean hasOther = false;
+
+      while (true) {
+         index = this.skipWhiteSpace(index);
+         boolean eos = index == this.msg.length();
+         if (!eos && this.msg.charAt(index) != '}') {
+            if (argType.hasPluralStyle() && this.msg.charAt(index) == '=') {
+               index = this.skipDouble(index + 1);
+               int length = index - index;
+               if (length == 1) {
+                  throw new IllegalArgumentException("Bad " + argType.toString().toLowerCase(Locale.ENGLISH) + " pattern syntax: " + this.prefix(start));
+               }
+
+               if (length > 65535) {
+                  throw new IndexOutOfBoundsException("Argument selector too long: " + this.prefix(index));
+               }
+
+               this.addPart(MessagePattern.Part.Type.ARG_SELECTOR, index, length, 0);
+               this.parseDouble(index + 1, index, false);
             } else {
-                length = (index = this.skipIdentifier(index)) - selectorIndex;
-                if (length == 0) {
-                    throw new IllegalArgumentException("Bad " + argType.toString().toLowerCase(Locale.ENGLISH) + " pattern syntax: " + this.prefix(start2));
-                }
-                if (argType.hasPluralStyle() && length == 6 && index < this.msg.length() && this.msg.regionMatches(selectorIndex, "offset:", 0, 7)) {
-                    if (!isEmpty) {
-                        throw new IllegalArgumentException("Plural argument 'offset:' (if present) must precede key-message pairs: " + this.prefix(start2));
-                    }
-                    int valueIndex = this.skipWhiteSpace(index + 1);
-                    if ((index = this.skipDouble(valueIndex)) == valueIndex) {
-                        throw new IllegalArgumentException("Missing value for plural 'offset:' " + this.prefix(start2));
-                    }
-                    if (index - valueIndex > 65535) {
-                        throw new IndexOutOfBoundsException("Plural offset value too long: " + this.prefix(valueIndex));
-                    }
-                    this.parseDouble(valueIndex, index, false);
-                    isEmpty = false;
-                    continue;
-                }
-                if (length > 65535) {
-                    throw new IndexOutOfBoundsException("Argument selector too long: " + this.prefix(selectorIndex));
-                }
-                this.addPart(Part.Type.ARG_SELECTOR, selectorIndex, length, 0);
-                if (this.msg.regionMatches(selectorIndex, "other", 0, length)) {
-                    hasOther = true;
-                }
-            }
-            index = this.skipWhiteSpace(index);
-            if (index == this.msg.length() || this.msg.charAt(index) != '{') {
-                throw new IllegalArgumentException("No message fragment after " + argType.toString().toLowerCase(Locale.ENGLISH) + " selector: " + this.prefix(selectorIndex));
-            }
-            index = this.parseMessage(index, 1, nestingLevel + 1, argType);
-            isEmpty = false;
-        }
-    }
+               index = this.skipIdentifier(index);
+               int lengthx = index - index;
+               if (lengthx == 0) {
+                  throw new IllegalArgumentException("Bad " + argType.toString().toLowerCase(Locale.ENGLISH) + " pattern syntax: " + this.prefix(start));
+               }
 
-    private static int parseArgNumber(CharSequence s, int start2, int limit) {
-        boolean badNumber;
-        int number;
-        char c;
-        if (start2 >= limit) {
-            return -2;
-        }
-        if ((c = s.charAt(start2++)) == '0') {
-            if (start2 == limit) {
-                return 0;
+               if (argType.hasPluralStyle() && lengthx == 6 && index < this.msg.length() && this.msg.regionMatches(index, "offset:", 0, 7)) {
+                  if (!isEmpty) {
+                     throw new IllegalArgumentException("Plural argument 'offset:' (if present) must precede key-message pairs: " + this.prefix(start));
+                  }
+
+                  int valueIndex = this.skipWhiteSpace(index + 1);
+                  index = this.skipDouble(valueIndex);
+                  if (index == valueIndex) {
+                     throw new IllegalArgumentException("Missing value for plural 'offset:' " + this.prefix(start));
+                  }
+
+                  if (index - valueIndex > 65535) {
+                     throw new IndexOutOfBoundsException("Plural offset value too long: " + this.prefix(valueIndex));
+                  }
+
+                  this.parseDouble(valueIndex, index, false);
+                  isEmpty = false;
+                  continue;
+               }
+
+               if (lengthx > 65535) {
+                  throw new IndexOutOfBoundsException("Argument selector too long: " + this.prefix(index));
+               }
+
+               this.addPart(MessagePattern.Part.Type.ARG_SELECTOR, index, lengthx, 0);
+               if (this.msg.regionMatches(index, "other", 0, lengthx)) {
+                  hasOther = true;
+               }
             }
+
+            index = this.skipWhiteSpace(index);
+            if (index != this.msg.length() && this.msg.charAt(index) == '{') {
+               index = this.parseMessage(index, 1, nestingLevel + 1, argType);
+               isEmpty = false;
+               continue;
+            }
+
+            throw new IllegalArgumentException(
+               "No message fragment after " + argType.toString().toLowerCase(Locale.ENGLISH) + " selector: " + this.prefix(index)
+            );
+         }
+
+         if (eos == this.inMessageFormatPattern(nestingLevel)) {
+            throw new IllegalArgumentException("Bad " + argType.toString().toLowerCase(Locale.ENGLISH) + " pattern syntax: " + this.prefix(start));
+         }
+
+         if (!hasOther) {
+            throw new IllegalArgumentException("Missing 'other' keyword in " + argType.toString().toLowerCase(Locale.ENGLISH) + " pattern in " + this.prefix());
+         }
+
+         return index;
+      }
+   }
+
+   private static int parseArgNumber(CharSequence s, int start, int limit) {
+      if (start >= limit) {
+         return -2;
+      } else {
+         char c = s.charAt(start++);
+         int number;
+         boolean badNumber;
+         if (c == '0') {
+            if (start == limit) {
+               return 0;
+            }
+
             number = 0;
             badNumber = true;
-        } else if ('1' <= c && c <= '9') {
-            number = c - 48;
+         } else {
+            if ('1' > c || c > '9') {
+               return -1;
+            }
+
+            number = c - '0';
             badNumber = false;
-        } else {
-            return -1;
-        }
-        while (start2 < limit) {
-            if ('0' <= (c = s.charAt(start2++)) && c <= '9') {
-                if (number >= 0xCCCCCCC) {
-                    badNumber = true;
-                }
-                number = number * 10 + (c - 48);
-                continue;
+         }
+
+         while (start < limit) {
+            c = s.charAt(start++);
+            if ('0' > c || c > '9') {
+               return -1;
             }
-            return -1;
-        }
-        if (badNumber) {
-            return -2;
-        }
-        return number;
-    }
 
-    private int parseArgNumber(int start2, int limit) {
-        return MessagePattern.parseArgNumber(this.msg, start2, limit);
-    }
-
-    private void parseDouble(int start2, int limit, boolean allowInfinity) {
-        block10: {
-            char c;
-            int index;
-            int isNegative;
-            int value2;
-            block11: {
-                block9: {
-                    assert (start2 < limit);
-                    value2 = 0;
-                    isNegative = 0;
-                    index = start2;
-                    if ((c = this.msg.charAt(index++)) != '-') break block9;
-                    isNegative = 1;
-                    if (index == limit) break block10;
-                    c = this.msg.charAt(index++);
-                    break block11;
-                }
-                if (c != '+') break block11;
-                if (index == limit) break block10;
-                c = this.msg.charAt(index++);
+            if (number >= 214748364) {
+               badNumber = true;
             }
-            if (c == '\u221e') {
-                if (allowInfinity && index == limit) {
-                    this.addArgDoublePart(isNegative != 0 ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY, start2, limit - start2);
-                    return;
-                }
-            } else {
-                while ('0' <= c && c <= '9' && (value2 = value2 * 10 + (c - 48)) <= Short.MAX_VALUE + isNegative) {
-                    if (index == limit) {
-                        this.addPart(Part.Type.ARG_INT, start2, limit - start2, isNegative != 0 ? -value2 : value2);
-                        return;
-                    }
-                    c = this.msg.charAt(index++);
-                }
-                double numericValue = Double.parseDouble(this.msg.substring(start2, limit));
-                this.addArgDoublePart(numericValue, start2, limit - start2);
-                return;
+
+            number = number * 10 + (c - '0');
+         }
+
+         return badNumber ? -2 : number;
+      }
+   }
+
+   private int parseArgNumber(int start, int limit) {
+      return parseArgNumber(this.msg, start, limit);
+   }
+
+   private void parseDouble(int start, int limit, boolean allowInfinity) {
+      assert start < limit;
+
+      int value = 0;
+      int isNegative = 0;
+      int index = start + 1;
+      char c = this.msg.charAt(start);
+      if (c == '-') {
+         isNegative = 1;
+         if (index == limit) {
+            throw new NumberFormatException("Bad syntax for numeric value: " + this.msg.substring(start, limit));
+         }
+
+         c = this.msg.charAt(index++);
+      } else if (c == '+') {
+         if (index == limit) {
+            throw new NumberFormatException("Bad syntax for numeric value: " + this.msg.substring(start, limit));
+         }
+
+         c = this.msg.charAt(index++);
+      }
+
+      if (c != 8734) {
+         while ('0' <= c && c <= '9') {
+            value = value * 10 + (c - '0');
+            if (value > 32767 + isNegative) {
+               break;
             }
-        }
-        throw new NumberFormatException("Bad syntax for numeric value: " + this.msg.substring(start2, limit));
-    }
 
-    static void appendReducedApostrophes(String s, int start2, int limit, StringBuilder sb) {
-        int doubleApos = -1;
-        while (true) {
-            int i;
-            if ((i = s.indexOf(39, start2)) < 0 || i >= limit) break;
-            if (i == doubleApos) {
-                sb.append('\'');
-                ++start2;
-                doubleApos = -1;
-                continue;
+            if (index == limit) {
+               this.addPart(MessagePattern.Part.Type.ARG_INT, start, limit - start, isNegative != 0 ? -value : value);
+               return;
             }
-            sb.append(s, start2, i);
-            doubleApos = start2 = i + 1;
-        }
-        sb.append(s, start2, limit);
-    }
 
-    private int skipWhiteSpace(int index) {
-        return PatternProps.skipWhiteSpace(this.msg, index);
-    }
+            c = this.msg.charAt(index++);
+         }
 
-    private int skipIdentifier(int index) {
-        return PatternProps.skipIdentifier(this.msg, index);
-    }
+         double numericValue = Double.parseDouble(this.msg.substring(start, limit));
+         this.addArgDoublePart(numericValue, start, limit - start);
+      } else if (allowInfinity && index == limit) {
+         this.addArgDoublePart(isNegative != 0 ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY, start, limit - start);
+      } else {
+         throw new NumberFormatException("Bad syntax for numeric value: " + this.msg.substring(start, limit));
+      }
+   }
 
-    private int skipDouble(int index) {
-        char c;
-        while (!(index >= this.msg.length() || (c = this.msg.charAt(index)) < '0' && "+-.".indexOf(c) < 0 || c > '9' && c != 'e' && c != 'E' && c != '\u221e')) {
-            ++index;
-        }
-        return index;
-    }
+   static void appendReducedApostrophes(String s, int start, int limit, StringBuilder sb) {
+      int doubleApos = -1;
 
-    private static boolean isArgTypeChar(int c) {
-        return 97 <= c && c <= 122 || 65 <= c && c <= 90;
-    }
+      while (true) {
+         int i = s.indexOf(39, start);
+         if (i < 0 || i >= limit) {
+            sb.append(s, start, limit);
+            return;
+         }
 
-    private boolean isChoice(int index) {
-        char c;
-        return !((c = this.msg.charAt(index++)) != 'c' && c != 'C' || (c = this.msg.charAt(index++)) != 'h' && c != 'H' || (c = this.msg.charAt(index++)) != 'o' && c != 'O' || (c = this.msg.charAt(index++)) != 'i' && c != 'I' || (c = this.msg.charAt(index++)) != 'c' && c != 'C' || (c = this.msg.charAt(index)) != 'e' && c != 'E');
-    }
+         if (i == doubleApos) {
+            sb.append('\'');
+            start++;
+            doubleApos = -1;
+         } else {
+            sb.append(s, start, i);
+            doubleApos = start = i + 1;
+         }
+      }
+   }
 
-    private boolean isPlural(int index) {
-        char c;
-        return !((c = this.msg.charAt(index++)) != 'p' && c != 'P' || (c = this.msg.charAt(index++)) != 'l' && c != 'L' || (c = this.msg.charAt(index++)) != 'u' && c != 'U' || (c = this.msg.charAt(index++)) != 'r' && c != 'R' || (c = this.msg.charAt(index++)) != 'a' && c != 'A' || (c = this.msg.charAt(index)) != 'l' && c != 'L');
-    }
+   private int skipWhiteSpace(int index) {
+      return PatternProps.skipWhiteSpace(this.msg, index);
+   }
 
-    private boolean isSelect(int index) {
-        char c;
-        return !((c = this.msg.charAt(index++)) != 's' && c != 'S' || (c = this.msg.charAt(index++)) != 'e' && c != 'E' || (c = this.msg.charAt(index++)) != 'l' && c != 'L' || (c = this.msg.charAt(index++)) != 'e' && c != 'E' || (c = this.msg.charAt(index++)) != 'c' && c != 'C' || (c = this.msg.charAt(index)) != 't' && c != 'T');
-    }
+   private int skipIdentifier(int index) {
+      return PatternProps.skipIdentifier(this.msg, index);
+   }
 
-    private boolean isOrdinal(int index) {
-        char c;
-        return !((c = this.msg.charAt(index++)) != 'o' && c != 'O' || (c = this.msg.charAt(index++)) != 'r' && c != 'R' || (c = this.msg.charAt(index++)) != 'd' && c != 'D' || (c = this.msg.charAt(index++)) != 'i' && c != 'I' || (c = this.msg.charAt(index++)) != 'n' && c != 'N' || (c = this.msg.charAt(index++)) != 'a' && c != 'A' || (c = this.msg.charAt(index)) != 'l' && c != 'L');
-    }
+   private int skipDouble(int index) {
+      while (index < this.msg.length()) {
+         char c = this.msg.charAt(index);
+         if ((c >= '0' || "+-.".indexOf(c) >= 0) && (c <= '9' || c == 'e' || c == 'E' || c == 8734)) {
+            index++;
+            continue;
+         }
+         break;
+      }
 
-    private boolean inMessageFormatPattern(int nestingLevel) {
-        return nestingLevel > 0 || this.parts.get(0).type == Part.Type.MSG_START;
-    }
+      return index;
+   }
 
-    private boolean inTopLevelChoiceMessage(int nestingLevel, ArgType parentType) {
-        return nestingLevel == 1 && parentType == ArgType.CHOICE && this.parts.get(0).type != Part.Type.MSG_START;
-    }
+   private static boolean isArgTypeChar(int c) {
+      return 97 <= c && c <= 122 || 65 <= c && c <= 90;
+   }
 
-    private void addPart(Part.Type type, int index, int length, int value2) {
-        this.parts.add(new Part(type, index, length, value2));
-    }
+   private boolean isChoice(int index) {
+      char c;
+      char var8;
+      char var9;
+      char var10;
+      char var11;
+      char var12;
+      return ((c = this.msg.charAt(index++)) == 'c' || c == 'C')
+         && ((var8 = this.msg.charAt(index++)) == 'h' || var8 == 'H')
+         && ((var9 = this.msg.charAt(index++)) == 'o' || var9 == 'O')
+         && ((var10 = this.msg.charAt(index++)) == 'i' || var10 == 'I')
+         && ((var11 = this.msg.charAt(index++)) == 'c' || var11 == 'C')
+         && ((var12 = this.msg.charAt(index)) == 'e' || var12 == 'E');
+   }
 
-    private void addLimitPart(int start2, Part.Type type, int index, int length, int value2) {
-        this.parts.get(start2).limitPartIndex = this.parts.size();
-        this.addPart(type, index, length, value2);
-    }
+   private boolean isPlural(int index) {
+      char c;
+      char var8;
+      char var9;
+      char var10;
+      char var11;
+      char var12;
+      return ((c = this.msg.charAt(index++)) == 'p' || c == 'P')
+         && ((var8 = this.msg.charAt(index++)) == 'l' || var8 == 'L')
+         && ((var9 = this.msg.charAt(index++)) == 'u' || var9 == 'U')
+         && ((var10 = this.msg.charAt(index++)) == 'r' || var10 == 'R')
+         && ((var11 = this.msg.charAt(index++)) == 'a' || var11 == 'A')
+         && ((var12 = this.msg.charAt(index)) == 'l' || var12 == 'L');
+   }
 
-    private void addArgDoublePart(double numericValue, int start2, int length) {
-        int numericIndex;
-        if (this.numericValues == null) {
-            this.numericValues = new ArrayList();
-            numericIndex = 0;
-        } else {
-            numericIndex = this.numericValues.size();
-            if (numericIndex > Short.MAX_VALUE) {
-                throw new IndexOutOfBoundsException("Too many numeric values");
-            }
-        }
-        this.numericValues.add(numericValue);
-        this.addPart(Part.Type.ARG_DOUBLE, start2, length, numericIndex);
-    }
+   private boolean isSelect(int index) {
+      char c;
+      char var8;
+      char var9;
+      char var10;
+      char var11;
+      char var12;
+      return ((c = this.msg.charAt(index++)) == 's' || c == 'S')
+         && ((var8 = this.msg.charAt(index++)) == 'e' || var8 == 'E')
+         && ((var9 = this.msg.charAt(index++)) == 'l' || var9 == 'L')
+         && ((var10 = this.msg.charAt(index++)) == 'e' || var10 == 'E')
+         && ((var11 = this.msg.charAt(index++)) == 'c' || var11 == 'C')
+         && ((var12 = this.msg.charAt(index)) == 't' || var12 == 'T');
+   }
 
-    private static String prefix(String s, int start2) {
-        StringBuilder prefix = new StringBuilder(44);
-        if (start2 == 0) {
-            prefix.append("\"");
-        } else {
-            prefix.append("[at pattern index ").append(start2).append("] \"");
-        }
-        int substringLength = s.length() - start2;
-        if (substringLength <= 24) {
-            prefix.append(start2 == 0 ? s : s.substring(start2));
-        } else {
-            int limit = start2 + 24 - 4;
-            if (Character.isHighSurrogate(s.charAt(limit - 1))) {
-                --limit;
-            }
-            prefix.append(s, start2, limit).append(" ...");
-        }
-        return prefix.append("\"").toString();
-    }
+   private boolean isOrdinal(int index) {
+      char c;
+      char var9;
+      char var10;
+      char var11;
+      char var12;
+      char var13;
+      char var14;
+      return ((c = this.msg.charAt(index++)) == 'o' || c == 'O')
+         && ((var9 = this.msg.charAt(index++)) == 'r' || var9 == 'R')
+         && ((var10 = this.msg.charAt(index++)) == 'd' || var10 == 'D')
+         && ((var11 = this.msg.charAt(index++)) == 'i' || var11 == 'I')
+         && ((var12 = this.msg.charAt(index++)) == 'n' || var12 == 'N')
+         && ((var13 = this.msg.charAt(index++)) == 'a' || var13 == 'A')
+         && ((var14 = this.msg.charAt(index)) == 'l' || var14 == 'L');
+   }
 
-    private static String prefix(String s) {
-        return MessagePattern.prefix(s, 0);
-    }
+   private boolean inMessageFormatPattern(int nestingLevel) {
+      return nestingLevel > 0 || this.parts.get(0).type == MessagePattern.Part.Type.MSG_START;
+   }
 
-    private String prefix(int start2) {
-        return MessagePattern.prefix(this.msg, start2);
-    }
+   private boolean inTopLevelChoiceMessage(int nestingLevel, MessagePattern.ArgType parentType) {
+      return nestingLevel == 1 && parentType == MessagePattern.ArgType.CHOICE && this.parts.get(0).type != MessagePattern.Part.Type.MSG_START;
+   }
 
-    private String prefix() {
-        return MessagePattern.prefix(this.msg, 0);
-    }
+   private void addPart(MessagePattern.Part.Type type, int index, int length, int value) {
+      this.parts.add(new MessagePattern.Part(type, index, length, value));
+   }
 
-    public static enum ArgType {
-        NONE,
-        SIMPLE,
-        CHOICE,
-        PLURAL,
-        SELECT,
-        SELECTORDINAL;
+   private void addLimitPart(int start, MessagePattern.Part.Type type, int index, int length, int value) {
+      this.parts.get(start).limitPartIndex = this.parts.size();
+      this.addPart(type, index, length, value);
+   }
 
+   private void addArgDoublePart(double numericValue, int start, int length) {
+      int numericIndex;
+      if (this.numericValues == null) {
+         this.numericValues = new ArrayList<>();
+         numericIndex = 0;
+      } else {
+         numericIndex = this.numericValues.size();
+         if (numericIndex > 32767) {
+            throw new IndexOutOfBoundsException("Too many numeric values");
+         }
+      }
 
-        public boolean hasPluralStyle() {
-            return this == PLURAL || this == SELECTORDINAL;
-        }
-    }
+      this.numericValues.add(numericValue);
+      this.addPart(MessagePattern.Part.Type.ARG_DOUBLE, start, length, numericIndex);
+   }
 
-    public static final class Part {
-        private static final int MAX_LENGTH = 65535;
-        private static final int MAX_VALUE = Short.MAX_VALUE;
-        private final Type type;
-        private final int index;
-        private final char length;
-        private short value;
-        private int limitPartIndex;
+   private static String prefix(String s, int start) {
+      StringBuilder prefix = new StringBuilder(44);
+      if (start == 0) {
+         prefix.append("\"");
+      } else {
+         prefix.append("[at pattern index ").append(start).append("] \"");
+      }
 
-        private Part(Type t, int i, int l, int v) {
-            this.type = t;
-            this.index = i;
-            this.length = (char)l;
-            this.value = (short)v;
-        }
+      int substringLength = s.length() - start;
+      if (substringLength <= 24) {
+         prefix.append(start == 0 ? s : s.substring(start));
+      } else {
+         int limit = start + 24 - 4;
+         if (Character.isHighSurrogate(s.charAt(limit - 1))) {
+            limit--;
+         }
 
-        public Type getType() {
-            return this.type;
-        }
+         prefix.append(s, start, limit).append(" ...");
+      }
 
-        public int getIndex() {
-            return this.index;
-        }
+      return prefix.append("\"").toString();
+   }
 
-        public int getLength() {
-            return this.length;
-        }
+   private static String prefix(String s) {
+      return prefix(s, 0);
+   }
 
-        public int getLimit() {
-            return this.index + this.length;
-        }
+   private String prefix(int start) {
+      return prefix(this.msg, start);
+   }
 
-        public int getValue() {
-            return this.value;
-        }
+   private String prefix() {
+      return prefix(this.msg, 0);
+   }
 
-        public ArgType getArgType() {
-            Type type = this.getType();
-            if (type == Type.ARG_START || type == Type.ARG_LIMIT) {
-                return argTypes[this.value];
-            }
-            return ArgType.NONE;
-        }
+   public static enum ApostropheMode {
+      DOUBLE_OPTIONAL,
+      DOUBLE_REQUIRED;
+   }
 
-        public String toString() {
-            String valueString = this.type == Type.ARG_START || this.type == Type.ARG_LIMIT ? this.getArgType().name() : Integer.toString(this.value);
-            return this.type.name() + "(" + valueString + ")@" + this.index;
-        }
+   public static enum ArgType {
+      NONE,
+      SIMPLE,
+      CHOICE,
+      PLURAL,
+      SELECT,
+      SELECTORDINAL;
 
-        public boolean equals(Object other) {
-            if (this == other) {
-                return true;
-            }
-            if (other == null || this.getClass() != other.getClass()) {
-                return false;
-            }
-            Part o = (Part)other;
-            return this.type.equals((Object)o.type) && this.index == o.index && this.length == o.length && this.value == o.value && this.limitPartIndex == o.limitPartIndex;
-        }
+      public boolean hasPluralStyle() {
+         return this == PLURAL || this == SELECTORDINAL;
+      }
+   }
 
-        public int hashCode() {
-            return ((this.type.hashCode() * 37 + this.index) * 37 + this.length) * 37 + this.value;
-        }
+   public static final class Part {
+      private static final int MAX_LENGTH = 65535;
+      private static final int MAX_VALUE = 32767;
+      private final MessagePattern.Part.Type type;
+      private final int index;
+      private final char length;
+      private short value;
+      private int limitPartIndex;
 
-        public static enum Type {
-            MSG_START,
-            MSG_LIMIT,
-            SKIP_SYNTAX,
-            INSERT_CHAR,
-            REPLACE_NUMBER,
-            ARG_START,
-            ARG_LIMIT,
-            ARG_NUMBER,
-            ARG_NAME,
-            ARG_TYPE,
-            ARG_STYLE,
-            ARG_SELECTOR,
-            ARG_INT,
-            ARG_DOUBLE;
+      private Part(MessagePattern.Part.Type t, int i, int l, int v) {
+         this.type = t;
+         this.index = i;
+         this.length = (char)l;
+         this.value = (short)v;
+      }
 
+      public MessagePattern.Part.Type getType() {
+         return this.type;
+      }
 
-            public boolean hasNumericValue() {
-                return this == ARG_INT || this == ARG_DOUBLE;
-            }
-        }
-    }
+      public int getIndex() {
+         return this.index;
+      }
 
-    public static enum ApostropheMode {
-        DOUBLE_OPTIONAL,
-        DOUBLE_REQUIRED;
+      public int getLength() {
+         return this.length;
+      }
 
-    }
+      public int getLimit() {
+         return this.index + this.length;
+      }
+
+      public int getValue() {
+         return this.value;
+      }
+
+      public MessagePattern.ArgType getArgType() {
+         MessagePattern.Part.Type type = this.getType();
+         return type != MessagePattern.Part.Type.ARG_START && type != MessagePattern.Part.Type.ARG_LIMIT
+            ? MessagePattern.ArgType.NONE
+            : MessagePattern.argTypes[this.value];
+      }
+
+      @Override
+      public String toString() {
+         String valueString = this.type != MessagePattern.Part.Type.ARG_START && this.type != MessagePattern.Part.Type.ARG_LIMIT
+            ? Integer.toString(this.value)
+            : this.getArgType().name();
+         return this.type.name() + "(" + valueString + ")@" + this.index;
+      }
+
+      @Override
+      public boolean equals(Object other) {
+         if (this == other) {
+            return true;
+         } else if (other != null && this.getClass() == other.getClass()) {
+            MessagePattern.Part o = (MessagePattern.Part)other;
+            return this.type.equals(o.type)
+               && this.index == o.index
+               && this.length == o.length
+               && this.value == o.value
+               && this.limitPartIndex == o.limitPartIndex;
+         } else {
+            return false;
+         }
+      }
+
+      @Override
+      public int hashCode() {
+         return ((this.type.hashCode() * 37 + this.index) * 37 + this.length) * 37 + this.value;
+      }
+
+      public static enum Type {
+         MSG_START,
+         MSG_LIMIT,
+         SKIP_SYNTAX,
+         INSERT_CHAR,
+         REPLACE_NUMBER,
+         ARG_START,
+         ARG_LIMIT,
+         ARG_NUMBER,
+         ARG_NAME,
+         ARG_TYPE,
+         ARG_STYLE,
+         ARG_SELECTOR,
+         ARG_INT,
+         ARG_DOUBLE;
+
+         public boolean hasNumericValue() {
+            return this == ARG_INT || this == ARG_DOUBLE;
+         }
+      }
+   }
 }
-

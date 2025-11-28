@@ -1,78 +1,72 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number;
+package com.cobblemon.mod.relocations.ibm.icu.impl.number;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.StandardPlural;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.AffixPatternProvider;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.DecimalFormatProperties;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.PatternStringParser;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.PropertiesAffixPatternProvider;
 import com.cobblemon.mod.relocations.ibm.icu.text.CurrencyPluralInfo;
 
-public class CurrencyPluralInfoAffixProvider
-implements AffixPatternProvider {
-    private final PropertiesAffixPatternProvider[] affixesByPlural = new PropertiesAffixPatternProvider[StandardPlural.COUNT];
+public class CurrencyPluralInfoAffixProvider implements AffixPatternProvider {
+   private final PropertiesAffixPatternProvider[] affixesByPlural = new PropertiesAffixPatternProvider[StandardPlural.COUNT];
 
-    public CurrencyPluralInfoAffixProvider(CurrencyPluralInfo cpi, DecimalFormatProperties properties2) {
-        DecimalFormatProperties pluralProperties = new DecimalFormatProperties();
-        pluralProperties.copyFrom(properties2);
-        for (StandardPlural plural : StandardPlural.VALUES) {
-            String pattern = cpi.getCurrencyPluralPattern(plural.getKeyword());
-            PatternStringParser.parseToExistingProperties(pattern, pluralProperties);
-            this.affixesByPlural[plural.ordinal()] = new PropertiesAffixPatternProvider(pluralProperties);
-        }
-    }
+   public CurrencyPluralInfoAffixProvider(CurrencyPluralInfo cpi, DecimalFormatProperties properties) {
+      DecimalFormatProperties pluralProperties = new DecimalFormatProperties();
+      pluralProperties.copyFrom(properties);
 
-    @Override
-    public char charAt(int flags, int i) {
-        int pluralOrdinal = flags & 0xFF;
-        return this.affixesByPlural[pluralOrdinal].charAt(flags, i);
-    }
+      for (StandardPlural plural : StandardPlural.VALUES) {
+         String pattern = cpi.getCurrencyPluralPattern(plural.getKeyword());
+         PatternStringParser.parseToExistingProperties(pattern, pluralProperties);
+         this.affixesByPlural[plural.ordinal()] = new PropertiesAffixPatternProvider(pluralProperties);
+      }
+   }
 
-    @Override
-    public int length(int flags) {
-        int pluralOrdinal = flags & 0xFF;
-        return this.affixesByPlural[pluralOrdinal].length(flags);
-    }
+   @Override
+   public char charAt(int flags, int i) {
+      int pluralOrdinal = flags & 0xFF;
+      return this.affixesByPlural[pluralOrdinal].charAt(flags, i);
+   }
 
-    @Override
-    public String getString(int flags) {
-        int pluralOrdinal = flags & 0xFF;
-        return this.affixesByPlural[pluralOrdinal].getString(flags);
-    }
+   @Override
+   public int length(int flags) {
+      int pluralOrdinal = flags & 0xFF;
+      return this.affixesByPlural[pluralOrdinal].length(flags);
+   }
 
-    @Override
-    public boolean positiveHasPlusSign() {
-        return this.affixesByPlural[StandardPlural.OTHER.ordinal()].positiveHasPlusSign();
-    }
+   @Override
+   public String getString(int flags) {
+      int pluralOrdinal = flags & 0xFF;
+      return this.affixesByPlural[pluralOrdinal].getString(flags);
+   }
 
-    @Override
-    public boolean hasNegativeSubpattern() {
-        return this.affixesByPlural[StandardPlural.OTHER.ordinal()].hasNegativeSubpattern();
-    }
+   @Override
+   public boolean positiveHasPlusSign() {
+      return this.affixesByPlural[StandardPlural.OTHER.ordinal()].positiveHasPlusSign();
+   }
 
-    @Override
-    public boolean negativeHasMinusSign() {
-        return this.affixesByPlural[StandardPlural.OTHER.ordinal()].negativeHasMinusSign();
-    }
+   @Override
+   public boolean hasNegativeSubpattern() {
+      return this.affixesByPlural[StandardPlural.OTHER.ordinal()].hasNegativeSubpattern();
+   }
 
-    @Override
-    public boolean hasCurrencySign() {
-        return this.affixesByPlural[StandardPlural.OTHER.ordinal()].hasCurrencySign();
-    }
+   @Override
+   public boolean negativeHasMinusSign() {
+      return this.affixesByPlural[StandardPlural.OTHER.ordinal()].negativeHasMinusSign();
+   }
 
-    @Override
-    public boolean containsSymbolType(int type) {
-        return this.affixesByPlural[StandardPlural.OTHER.ordinal()].containsSymbolType(type);
-    }
+   @Override
+   public boolean hasCurrencySign() {
+      return this.affixesByPlural[StandardPlural.OTHER.ordinal()].hasCurrencySign();
+   }
 
-    @Override
-    public boolean hasBody() {
-        return this.affixesByPlural[StandardPlural.OTHER.ordinal()].hasBody();
-    }
+   @Override
+   public boolean containsSymbolType(int type) {
+      return this.affixesByPlural[StandardPlural.OTHER.ordinal()].containsSymbolType(type);
+   }
 
-    @Override
-    public boolean currencyAsDecimal() {
-        return this.affixesByPlural[StandardPlural.OTHER.ordinal()].currencyAsDecimal();
-    }
+   @Override
+   public boolean hasBody() {
+      return this.affixesByPlural[StandardPlural.OTHER.ordinal()].hasBody();
+   }
+
+   @Override
+   public boolean currencyAsDecimal() {
+      return this.affixesByPlural[StandardPlural.OTHER.ordinal()].currencyAsDecimal();
+   }
 }
-

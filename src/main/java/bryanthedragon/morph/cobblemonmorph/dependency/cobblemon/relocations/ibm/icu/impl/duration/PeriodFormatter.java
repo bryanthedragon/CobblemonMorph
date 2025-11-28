@@ -1,11 +1,7 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.Period;
+package com.cobblemon.mod.relocations.ibm.icu.impl.duration;
 
 public interface PeriodFormatter {
-    public String format(Period var1);
+   String format(Period var1);
 
-    public PeriodFormatter withLocale(String var1);
+   PeriodFormatter withLocale(String var1);
 }
-

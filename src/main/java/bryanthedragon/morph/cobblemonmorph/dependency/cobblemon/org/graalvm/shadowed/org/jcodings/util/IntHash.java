@@ -1,93 +1,92 @@
-
 package org.graalvm.shadowed.org.jcodings.util;
 
-import org.graalvm.shadowed.org.jcodings.util.Hash;
+public class IntHash<V> extends Hash<V> {
+   public IntHash() {
+   }
 
-public class IntHash<V>
-extends Hash<V> {
-    public IntHash() {
-    }
+   public IntHash(int size) {
+      super(size);
+   }
 
-    public IntHash(int size) {
-        super(size);
-    }
+   @Override
+   protected void init() {
+      this.head = new IntHash.IntHashEntry<>();
+   }
 
-    @Override
-    protected void init() {
-        this.head = new IntHashEntry();
-    }
+   public V put(int key, V value) {
+      this.checkResize();
+      int hash = hashValue(key);
+      int i = bucketIndex(hash, this.table.length);
 
-    public V put(int key, V value2) {
-        this.checkResize();
-        int hash = IntHash.hashValue(key);
-        int i = IntHash.bucketIndex(hash, this.table.length);
-        IntHashEntry entry = (IntHashEntry)this.table[i];
-        while (entry != null) {
-            if (entry.hash == hash) {
-                entry.value = value2;
-                return value2;
-            }
-            entry = (IntHashEntry)entry.next;
-        }
-        this.table[i] = new IntHashEntry<V>(hash, this.table[i], value2, this.head);
-        ++this.size;
-        return null;
-    }
+      for (IntHash.IntHashEntry<V> entry = (IntHash.IntHashEntry<V>)this.table[i]; entry != null; entry = (IntHash.IntHashEntry<V>)entry.next) {
+         if (entry.hash == hash) {
+            entry.value = value;
+            return value;
+         }
+      }
 
-    public void putDirect(int key, V value2) {
-        this.checkResize();
-        int hash = IntHash.hashValue(key);
-        int i = IntHash.bucketIndex(hash, this.table.length);
-        this.table[i] = new IntHashEntry<V>(hash, this.table[i], value2, this.head);
-        ++this.size;
-    }
+      this.table[i] = new IntHash.IntHashEntry<>(hash, this.table[i], value, this.head);
+      this.size++;
+      return null;
+   }
 
-    public V get(int key) {
-        int hash = IntHash.hashValue(key);
-        IntHashEntry entry = (IntHashEntry)this.table[IntHash.bucketIndex(hash, this.table.length)];
-        while (entry != null) {
-            if (entry.hash == hash) {
-                return (V)entry.value;
-            }
-            entry = (IntHashEntry)entry.next;
-        }
-        return null;
-    }
+   public void putDirect(int key, V value) {
+      this.checkResize();
+      int hash = hashValue(key);
+      int i = bucketIndex(hash, this.table.length);
+      this.table[i] = new IntHash.IntHashEntry<>(hash, this.table[i], value, this.head);
+      this.size++;
+   }
 
-    public V delete(int key) {
-        int hash = IntHash.hashValue(key);
-        int i = IntHash.bucketIndex(hash, this.table.length);
-        IntHashEntry entry = (IntHashEntry)this.table[i];
-        if (entry == null) {
-            return null;
-        }
-        if (entry.hash == hash) {
-            this.table[i] = entry.next;
-            --this.size;
-            entry.remove();
-            return (V)entry.value;
-        }
-        while (entry.next != null) {
-            Hash.HashEntry tmp = entry.next;
+   public V get(int key) {
+      int hash = hashValue(key);
+
+      for (IntHash.IntHashEntry<V> entry = (IntHash.IntHashEntry<V>)this.table[bucketIndex(hash, this.table.length)];
+         entry != null;
+         entry = (IntHash.IntHashEntry<V>)entry.next
+      ) {
+         if (entry.hash == hash) {
+            return entry.value;
+         }
+      }
+
+      return null;
+   }
+
+   public V delete(int key) {
+      int hash = hashValue(key);
+      int i = bucketIndex(hash, this.table.length);
+      IntHash.IntHashEntry<V> entry = (IntHash.IntHashEntry<V>)this.table[i];
+      if (entry == null) {
+         return null;
+      } else if (entry.hash == hash) {
+         this.table[i] = entry.next;
+         this.size--;
+         entry.remove();
+         return entry.value;
+      } else {
+         while (entry.next != null) {
+            Hash.HashEntry<V> tmp = entry.next;
             if (tmp.hash == hash && entry.equals(key)) {
-                entry.next = entry.next.next;
-                --this.size;
-                tmp.remove();
-                return tmp.value;
+               entry.next = entry.next.next;
+               this.size--;
+               tmp.remove();
+               return tmp.value;
             }
-            entry = (IntHashEntry)entry.next;
-        }
-        return null;
-    }
 
-    public static final class IntHashEntry<V>
-    extends Hash.HashEntry<V> {
-        public IntHashEntry(int hash, Hash.HashEntry<V> next, V value2, Hash.HashEntry<V> head5) {
-            super(hash, next, value2, head5);
-        }
+            entry = (IntHash.IntHashEntry<V>)entry.next;
+         }
 
-        public IntHashEntry() {
-        }
-    }
+         return null;
+      }
+   }
+
+   public static final class IntHashEntry<V> extends Hash.HashEntry<V> {
+      public IntHashEntry(int hash, Hash.HashEntry<V> next, V value, Hash.HashEntry<V> head) {
+         super(hash, next, value, head);
+      }
+
+      public IntHashEntry() {
+      }
+   }
 }
-

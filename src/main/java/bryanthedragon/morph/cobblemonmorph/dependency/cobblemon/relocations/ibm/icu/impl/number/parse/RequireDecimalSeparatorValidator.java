@@ -1,34 +1,28 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl.number.parse;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number.parse;
+public class RequireDecimalSeparatorValidator extends ValidationMatcher {
+   private static final RequireDecimalSeparatorValidator A = new RequireDecimalSeparatorValidator(true);
+   private static final RequireDecimalSeparatorValidator B = new RequireDecimalSeparatorValidator(false);
+   private final boolean patternHasDecimalSeparator;
 
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.parse.ParsedNumber;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.parse.ValidationMatcher;
+   public static RequireDecimalSeparatorValidator getInstance(boolean patternHasDecimalSeparator) {
+      return patternHasDecimalSeparator ? A : B;
+   }
 
-public class RequireDecimalSeparatorValidator
-extends ValidationMatcher {
-    private static final RequireDecimalSeparatorValidator A = new RequireDecimalSeparatorValidator(true);
-    private static final RequireDecimalSeparatorValidator B = new RequireDecimalSeparatorValidator(false);
-    private final boolean patternHasDecimalSeparator;
+   private RequireDecimalSeparatorValidator(boolean patternHasDecimalSeparator) {
+      this.patternHasDecimalSeparator = patternHasDecimalSeparator;
+   }
 
-    public static RequireDecimalSeparatorValidator getInstance(boolean patternHasDecimalSeparator) {
-        return patternHasDecimalSeparator ? A : B;
-    }
+   @Override
+   public void postProcess(ParsedNumber result) {
+      boolean parseHasDecimalSeparator = 0 != (result.flags & 32);
+      if (parseHasDecimalSeparator != this.patternHasDecimalSeparator) {
+         result.flags |= 256;
+      }
+   }
 
-    private RequireDecimalSeparatorValidator(boolean patternHasDecimalSeparator) {
-        this.patternHasDecimalSeparator = patternHasDecimalSeparator;
-    }
-
-    @Override
-    public void postProcess(ParsedNumber result) {
-        boolean parseHasDecimalSeparator;
-        boolean bl = parseHasDecimalSeparator = 0 != (result.flags & 0x20);
-        if (parseHasDecimalSeparator != this.patternHasDecimalSeparator) {
-            result.flags |= 0x100;
-        }
-    }
-
-    public String toString() {
-        return "<RequireDecimalSeparator>";
-    }
+   @Override
+   public String toString() {
+      return "<RequireDecimalSeparator>";
+   }
 }
-

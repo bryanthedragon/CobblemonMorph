@@ -1,10 +1,7 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.coll;
+package com.cobblemon.mod.relocations.ibm.icu.impl.coll;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.IllegalIcuArgumentException;
 import com.cobblemon.mod.relocations.ibm.icu.impl.PatternProps;
-import com.cobblemon.mod.relocations.ibm.icu.impl.coll.CollationData;
-import com.cobblemon.mod.relocations.ibm.icu.impl.coll.CollationSettings;
 import com.cobblemon.mod.relocations.ibm.icu.lang.UCharacter;
 import com.cobblemon.mod.relocations.ibm.icu.text.Normalizer2;
 import com.cobblemon.mod.relocations.ibm.icu.text.UTF16;
@@ -14,772 +11,873 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 public final class CollationRuleParser {
-    static final Position[] POSITION_VALUES = Position.values();
-    static final char POS_LEAD = '\ufffe';
-    static final char POS_BASE = '\u2800';
-    private static final int UCOL_DEFAULT = -1;
-    private static final int UCOL_OFF = 0;
-    private static final int UCOL_ON = 1;
-    private static final int STRENGTH_MASK = 15;
-    private static final int STARRED_FLAG = 16;
-    private static final int OFFSET_SHIFT = 8;
-    private static final String BEFORE = "[before";
-    private final StringBuilder rawBuilder = new StringBuilder();
-    private static final String[] positions = new String[]{"first tertiary ignorable", "last tertiary ignorable", "first secondary ignorable", "last secondary ignorable", "first primary ignorable", "last primary ignorable", "first variable", "last variable", "first regular", "last regular", "first implicit", "last implicit", "first trailing", "last trailing"};
-    private static final String[] gSpecialReorderCodes = new String[]{"space", "punct", "symbol", "currency", "digit"};
-    private static final int U_PARSE_CONTEXT_LEN = 16;
-    private Normalizer2 nfd = Normalizer2.getNFDInstance();
-    private Normalizer2 nfc = Normalizer2.getNFCInstance();
-    private String rules;
-    private final CollationData baseData;
-    private CollationSettings settings;
-    private Sink sink;
-    private Importer importer;
-    private int ruleIndex;
+   static final CollationRuleParser.Position[] POSITION_VALUES = CollationRuleParser.Position.values();
+   static final char POS_LEAD = '\ufffe';
+   static final char POS_BASE = '⠀';
+   private static final int UCOL_DEFAULT = -1;
+   private static final int UCOL_OFF = 0;
+   private static final int UCOL_ON = 1;
+   private static final int STRENGTH_MASK = 15;
+   private static final int STARRED_FLAG = 16;
+   private static final int OFFSET_SHIFT = 8;
+   private static final String BEFORE = "[before";
+   private final StringBuilder rawBuilder = new StringBuilder();
+   private static final String[] positions = new String[]{
+      "first tertiary ignorable",
+      "last tertiary ignorable",
+      "first secondary ignorable",
+      "last secondary ignorable",
+      "first primary ignorable",
+      "last primary ignorable",
+      "first variable",
+      "last variable",
+      "first regular",
+      "last regular",
+      "first implicit",
+      "last implicit",
+      "first trailing",
+      "last trailing"
+   };
+   private static final String[] gSpecialReorderCodes = new String[]{"space", "punct", "symbol", "currency", "digit"};
+   private static final int U_PARSE_CONTEXT_LEN = 16;
+   private Normalizer2 nfd = Normalizer2.getNFDInstance();
+   private Normalizer2 nfc = Normalizer2.getNFCInstance();
+   private String rules;
+   private final CollationData baseData;
+   private CollationSettings settings;
+   private CollationRuleParser.Sink sink;
+   private CollationRuleParser.Importer importer;
+   private int ruleIndex;
 
-    CollationRuleParser(CollationData base) {
-        this.baseData = base;
-    }
+   CollationRuleParser(CollationData base) {
+      this.baseData = base;
+   }
 
-    void setSink(Sink sinkAlias) {
-        this.sink = sinkAlias;
-    }
+   void setSink(CollationRuleParser.Sink sinkAlias) {
+      this.sink = sinkAlias;
+   }
 
-    void setImporter(Importer importerAlias) {
-        this.importer = importerAlias;
-    }
+   void setImporter(CollationRuleParser.Importer importerAlias) {
+      this.importer = importerAlias;
+   }
 
-    void parse(String ruleString, CollationSettings outSettings) throws ParseException {
-        this.settings = outSettings;
-        this.parse(ruleString);
-    }
+   void parse(String ruleString, CollationSettings outSettings) throws ParseException {
+      this.settings = outSettings;
+      this.parse(ruleString);
+   }
 
-    private void parse(String ruleString) throws ParseException {
-        this.rules = ruleString;
-        this.ruleIndex = 0;
-        block7: while (this.ruleIndex < this.rules.length()) {
-            char c = this.rules.charAt(this.ruleIndex);
-            if (PatternProps.isWhiteSpace(c)) {
-                ++this.ruleIndex;
-                continue;
-            }
+   private void parse(String ruleString) throws ParseException {
+      this.rules = ruleString;
+      this.ruleIndex = 0;
+
+      while (this.ruleIndex < this.rules.length()) {
+         char c = this.rules.charAt(this.ruleIndex);
+         if (PatternProps.isWhiteSpace(c)) {
+            this.ruleIndex++;
+         } else {
             switch (c) {
-                case '&': {
-                    this.parseRuleChain();
-                    continue block7;
-                }
-                case '[': {
-                    this.parseSetting();
-                    continue block7;
-                }
-                case '#': {
-                    this.ruleIndex = this.skipComment(this.ruleIndex + 1);
-                    continue block7;
-                }
-                case '@': {
-                    this.settings.setFlag(2048, true);
-                    ++this.ruleIndex;
-                    continue block7;
-                }
-                case '!': {
-                    ++this.ruleIndex;
-                    continue block7;
-                }
+               case '!':
+                  this.ruleIndex++;
+                  break;
+               case '#':
+                  this.ruleIndex = this.skipComment(this.ruleIndex + 1);
+                  break;
+               case '&':
+                  this.parseRuleChain();
+                  break;
+               case '@':
+                  this.settings.setFlag(2048, true);
+                  this.ruleIndex++;
+                  break;
+               case '[':
+                  this.parseSetting();
+                  break;
+               default:
+                  this.setParseError("expected a reset or setting or comment");
             }
-            this.setParseError("expected a reset or setting or comment");
-        }
-    }
+         }
+      }
+   }
 
-    private void parseRuleChain() throws ParseException {
-        int resetStrength = this.parseResetAndPosition();
-        boolean isFirstRelation = true;
-        while (true) {
-            int result;
-            if ((result = this.parseRelationOperator()) < 0) {
-                if (this.ruleIndex < this.rules.length() && this.rules.charAt(this.ruleIndex) == '#') {
-                    this.ruleIndex = this.skipComment(this.ruleIndex + 1);
-                    continue;
-                }
-                if (isFirstRelation) {
-                    this.setParseError("reset not followed by a relation");
-                }
-                return;
+   private void parseRuleChain() throws ParseException {
+      int resetStrength = this.parseResetAndPosition();
+      boolean isFirstRelation = true;
+
+      while (true) {
+         int result = this.parseRelationOperator();
+         if (result < 0) {
+            if (this.ruleIndex >= this.rules.length() || this.rules.charAt(this.ruleIndex) != '#') {
+               if (isFirstRelation) {
+                  this.setParseError("reset not followed by a relation");
+               }
+
+               return;
             }
-            int strength = result & 0xF;
+
+            this.ruleIndex = this.skipComment(this.ruleIndex + 1);
+         } else {
+            int strength = result & 15;
             if (resetStrength < 15) {
-                if (isFirstRelation) {
-                    if (strength != resetStrength) {
-                        this.setParseError("reset-before strength differs from its first relation");
-                        return;
-                    }
-                } else if (strength < resetStrength) {
-                    this.setParseError("reset-before strength followed by a stronger relation");
-                    return;
-                }
+               if (isFirstRelation) {
+                  if (strength != resetStrength) {
+                     this.setParseError("reset-before strength differs from its first relation");
+                     return;
+                  }
+               } else if (strength < resetStrength) {
+                  this.setParseError("reset-before strength followed by a stronger relation");
+                  return;
+               }
             }
+
             int i = this.ruleIndex + (result >> 8);
-            if ((result & 0x10) == 0) {
-                this.parseRelationStrings(strength, i);
+            if ((result & 16) == 0) {
+               this.parseRelationStrings(strength, i);
             } else {
-                this.parseStarredCharacters(strength, i);
+               this.parseStarredCharacters(strength, i);
             }
+
             isFirstRelation = false;
-        }
-    }
+         }
+      }
+   }
 
-    private int parseResetAndPosition() throws ParseException {
-        int resetStrength;
-        char c;
-        int j;
-        int i = this.skipWhiteSpace(this.ruleIndex + 1);
-        if (this.rules.regionMatches(i, BEFORE, 0, BEFORE.length()) && (j = i + BEFORE.length()) < this.rules.length() && PatternProps.isWhiteSpace(this.rules.charAt(j)) && (j = this.skipWhiteSpace(j + 1)) + 1 < this.rules.length() && '1' <= (c = this.rules.charAt(j)) && c <= '3' && this.rules.charAt(j + 1) == ']') {
-            resetStrength = 0 + (c - 49);
-            i = this.skipWhiteSpace(j + 2);
-        } else {
-            resetStrength = 15;
-        }
-        if (i >= this.rules.length()) {
-            this.setParseError("reset without position");
-            return -1;
-        }
-        i = this.rules.charAt(i) == '[' ? this.parseSpecialPosition(i, this.rawBuilder) : this.parseTailoringString(i, this.rawBuilder);
-        try {
+   private int parseResetAndPosition() throws ParseException {
+      int i = this.skipWhiteSpace(this.ruleIndex + 1);
+      int j;
+      char c;
+      int resetStrength;
+      if (this.rules.regionMatches(i, "[before", 0, "[before".length())
+         && (j = i + "[before".length()) < this.rules.length()
+         && PatternProps.isWhiteSpace(this.rules.charAt(j))
+         && (j = this.skipWhiteSpace(j + 1)) + 1 < this.rules.length()
+         && '1' <= (c = this.rules.charAt(j))
+         && c <= '3'
+         && this.rules.charAt(j + 1) == ']') {
+         resetStrength = 0 + (c - '1');
+         i = this.skipWhiteSpace(j + 2);
+      } else {
+         resetStrength = 15;
+      }
+
+      if (i >= this.rules.length()) {
+         this.setParseError("reset without position");
+         return -1;
+      } else {
+         if (this.rules.charAt(i) == '[') {
+            i = this.parseSpecialPosition(i, this.rawBuilder);
+         } else {
+            i = this.parseTailoringString(i, this.rawBuilder);
+         }
+
+         try {
             this.sink.addReset(resetStrength, this.rawBuilder);
-        }
-        catch (Exception e) {
-            this.setParseError("adding reset failed", e);
+         } catch (Exception var6) {
+            this.setParseError("adding reset failed", var6);
             return -1;
-        }
-        this.ruleIndex = i;
-        return resetStrength;
-    }
+         }
 
-    private int parseRelationOperator() {
-        int strength;
-        this.ruleIndex = this.skipWhiteSpace(this.ruleIndex);
-        if (this.ruleIndex >= this.rules.length()) {
-            return -1;
-        }
-        int i = this.ruleIndex;
-        char c = this.rules.charAt(i++);
-        switch (c) {
-            case '<': {
-                if (i < this.rules.length() && this.rules.charAt(i) == '<') {
-                    if (++i < this.rules.length() && this.rules.charAt(i) == '<') {
-                        if (++i < this.rules.length() && this.rules.charAt(i) == '<') {
-                            ++i;
-                            strength = 3;
-                        } else {
-                            strength = 2;
-                        }
-                    } else {
-                        strength = 1;
-                    }
-                } else {
-                    strength = 0;
-                }
-                if (i >= this.rules.length() || this.rules.charAt(i) != '*') break;
-                ++i;
-                strength |= 0x10;
-                break;
-            }
-            case ';': {
-                strength = 1;
-                break;
-            }
-            case ',': {
-                strength = 2;
-                break;
-            }
-            case '=': {
-                strength = 15;
-                if (i >= this.rules.length() || this.rules.charAt(i) != '*') break;
-                ++i;
-                strength |= 0x10;
-                break;
-            }
-            default: {
-                return -1;
-            }
-        }
-        return i - this.ruleIndex << 8 | strength;
-    }
+         this.ruleIndex = i;
+         return resetStrength;
+      }
+   }
 
-    private void parseRelationStrings(int strength, int i) throws ParseException {
-        char next;
-        String prefix = "";
-        CharSequence extension = "";
-        char c = next = (i = this.parseTailoringString(i, this.rawBuilder)) < this.rules.length() ? this.rules.charAt(i) : (char)'\u0000';
-        if (next == '|') {
-            prefix = this.rawBuilder.toString();
-            char c2 = next = (i = this.parseTailoringString(i + 1, this.rawBuilder)) < this.rules.length() ? this.rules.charAt(i) : (char)'\u0000';
-        }
-        if (next == '/') {
-            StringBuilder extBuilder = new StringBuilder();
-            i = this.parseTailoringString(i + 1, extBuilder);
-            extension = extBuilder;
-        }
-        if (prefix.length() != 0) {
-            int prefix0 = prefix.codePointAt(0);
-            int c3 = this.rawBuilder.codePointAt(0);
-            if (!this.nfc.hasBoundaryBefore(prefix0) || !this.nfc.hasBoundaryBefore(c3)) {
-                this.setParseError("in 'prefix|str', prefix and str must each start with an NFC boundary");
-                return;
-            }
-        }
-        try {
-            this.sink.addRelation(strength, prefix, this.rawBuilder, extension);
-        }
-        catch (Exception e) {
-            this.setParseError("adding relation failed", e);
+   private int parseRelationOperator() {
+      this.ruleIndex = this.skipWhiteSpace(this.ruleIndex);
+      if (this.ruleIndex >= this.rules.length()) {
+         return -1;
+      } else {
+         int i = this.ruleIndex;
+         char c = this.rules.charAt(i++);
+         int strength;
+         switch (c) {
+            case ',':
+               strength = 2;
+               break;
+            case ';':
+               strength = 1;
+               break;
+            case '<':
+               if (i < this.rules.length() && this.rules.charAt(i) == '<') {
+                  i++;
+                  if (i < this.rules.length() && this.rules.charAt(i) == '<') {
+                     i++;
+                     if (i < this.rules.length() && this.rules.charAt(i) == '<') {
+                        i++;
+                        strength = 3;
+                     } else {
+                        strength = 2;
+                     }
+                  } else {
+                     strength = 1;
+                  }
+               } else {
+                  strength = 0;
+               }
+
+               if (i < this.rules.length() && this.rules.charAt(i) == '*') {
+                  i++;
+                  strength |= 16;
+               }
+               break;
+            case '=':
+               strength = 15;
+               if (i < this.rules.length() && this.rules.charAt(i) == '*') {
+                  i++;
+                  strength |= 16;
+               }
+               break;
+            default:
+               return -1;
+         }
+
+         return i - this.ruleIndex << 8 | strength;
+      }
+   }
+
+   private void parseRelationStrings(int strength, int i) throws ParseException {
+      String prefix = "";
+      CharSequence extension = "";
+      i = this.parseTailoringString(i, this.rawBuilder);
+      char next = i < this.rules.length() ? this.rules.charAt(i) : 0;
+      if (next == '|') {
+         prefix = this.rawBuilder.toString();
+         i = this.parseTailoringString(i + 1, this.rawBuilder);
+         next = i < this.rules.length() ? this.rules.charAt(i) : 0;
+      }
+
+      if (next == '/') {
+         StringBuilder extBuilder = new StringBuilder();
+         i = this.parseTailoringString(i + 1, extBuilder);
+         extension = extBuilder;
+      }
+
+      if (prefix.length() != 0) {
+         int prefix0 = prefix.codePointAt(0);
+         int c = this.rawBuilder.codePointAt(0);
+         if (!this.nfc.hasBoundaryBefore(prefix0) || !this.nfc.hasBoundaryBefore(c)) {
+            this.setParseError("in 'prefix|str', prefix and str must each start with an NFC boundary");
             return;
-        }
-        this.ruleIndex = i;
-    }
+         }
+      }
 
-    private void parseStarredCharacters(int strength, int i) throws ParseException {
-        String empty = "";
-        i = this.parseString(this.skipWhiteSpace(i), this.rawBuilder);
-        if (this.rawBuilder.length() == 0) {
-            this.setParseError("missing starred-relation string");
-            return;
-        }
-        int prev = -1;
-        int j = 0;
-        while (true) {
-            int c;
-            if (j < this.rawBuilder.length()) {
-                c = this.rawBuilder.codePointAt(j);
-                if (!this.nfd.isInert(c)) {
-                    this.setParseError("starred-relation string is not all NFD-inert");
-                    return;
-                }
-                try {
-                    this.sink.addRelation(strength, empty, UTF16.valueOf(c), empty);
-                }
-                catch (Exception e) {
-                    this.setParseError("adding relation failed", e);
-                    return;
-                }
-                j += Character.charCount(c);
-                prev = c;
-                continue;
+      try {
+         this.sink.addRelation(strength, prefix, this.rawBuilder, extension);
+      } catch (Exception var8) {
+         this.setParseError("adding relation failed", var8);
+         return;
+      }
+
+      this.ruleIndex = i;
+   }
+
+   private void parseStarredCharacters(int strength, int i) throws ParseException {
+      String empty = "";
+      i = this.parseString(this.skipWhiteSpace(i), this.rawBuilder);
+      if (this.rawBuilder.length() == 0) {
+         this.setParseError("missing starred-relation string");
+      } else {
+         int prev = -1;
+         int j = 0;
+
+         while (true) {
+            while (j < this.rawBuilder.length()) {
+               int c = this.rawBuilder.codePointAt(j);
+               if (!this.nfd.isInert(c)) {
+                  this.setParseError("starred-relation string is not all NFD-inert");
+                  return;
+               }
+
+               try {
+                  this.sink.addRelation(strength, empty, UTF16.valueOf(c), empty);
+               } catch (Exception var9) {
+                  this.setParseError("adding relation failed", var9);
+                  return;
+               }
+
+               j += Character.charCount(c);
+               prev = c;
             }
-            if (i >= this.rules.length() || this.rules.charAt(i) != '-') break;
+
+            if (i >= this.rules.length() || this.rules.charAt(i) != '-') {
+               this.ruleIndex = this.skipWhiteSpace(i);
+               return;
+            }
+
             if (prev < 0) {
-                this.setParseError("range without start in starred-relation string");
-                return;
+               this.setParseError("range without start in starred-relation string");
+               return;
             }
+
             i = this.parseString(i + 1, this.rawBuilder);
             if (this.rawBuilder.length() == 0) {
-                this.setParseError("range without end in starred-relation string");
-                return;
+               this.setParseError("range without end in starred-relation string");
+               return;
             }
-            c = this.rawBuilder.codePointAt(0);
+
+            int c = this.rawBuilder.codePointAt(0);
             if (c < prev) {
-                this.setParseError("range start greater than end in starred-relation string");
-                return;
+               this.setParseError("range start greater than end in starred-relation string");
+               return;
             }
+
             while (++prev <= c) {
-                if (!this.nfd.isInert(prev)) {
-                    this.setParseError("starred-relation string range is not all NFD-inert");
-                    return;
-                }
-                if (CollationRuleParser.isSurrogate(prev)) {
-                    this.setParseError("starred-relation string range contains a surrogate");
-                    return;
-                }
-                if (65533 <= prev && prev <= 65535) {
-                    this.setParseError("starred-relation string range contains U+FFFD, U+FFFE or U+FFFF");
-                    return;
-                }
-                try {
-                    this.sink.addRelation(strength, empty, UTF16.valueOf(prev), empty);
-                }
-                catch (Exception e) {
-                    this.setParseError("adding relation failed", e);
-                    return;
-                }
+               if (!this.nfd.isInert(prev)) {
+                  this.setParseError("starred-relation string range is not all NFD-inert");
+                  return;
+               }
+
+               if (isSurrogate(prev)) {
+                  this.setParseError("starred-relation string range contains a surrogate");
+                  return;
+               }
+
+               if (65533 <= prev && prev <= 65535) {
+                  this.setParseError("starred-relation string range contains U+FFFD, U+FFFE or U+FFFF");
+                  return;
+               }
+
+               try {
+                  this.sink.addRelation(strength, empty, UTF16.valueOf(prev), empty);
+               } catch (Exception var8) {
+                  this.setParseError("adding relation failed", var8);
+                  return;
+               }
             }
+
             prev = -1;
             j = Character.charCount(c);
-        }
-        this.ruleIndex = this.skipWhiteSpace(i);
-    }
+         }
+      }
+   }
 
-    private int parseTailoringString(int i, StringBuilder raw) throws ParseException {
-        i = this.parseString(this.skipWhiteSpace(i), raw);
-        if (raw.length() == 0) {
-            this.setParseError("missing relation string");
-        }
-        return this.skipWhiteSpace(i);
-    }
+   private int parseTailoringString(int i, StringBuilder raw) throws ParseException {
+      i = this.parseString(this.skipWhiteSpace(i), raw);
+      if (raw.length() == 0) {
+         this.setParseError("missing relation string");
+      }
 
-    private int parseString(int i, StringBuilder raw) throws ParseException {
-        int c;
-        raw.setLength(0);
-        block0: while (i < this.rules.length()) {
-            char c2;
-            if (CollationRuleParser.isSyntaxChar(c2 = this.rules.charAt(i++))) {
-                if (c2 == '\'') {
-                    if (i < this.rules.length() && this.rules.charAt(i) == '\'') {
-                        raw.append('\'');
-                        ++i;
-                        continue;
-                    }
-                    while (true) {
-                        if (i == this.rules.length()) {
-                            this.setParseError("quoted literal text missing terminating apostrophe");
-                            return i;
+      return this.skipWhiteSpace(i);
+   }
+
+   private int parseString(int i, StringBuilder raw) throws ParseException {
+      raw.setLength(0);
+
+      label70:
+      while (i < this.rules.length()) {
+         char c = this.rules.charAt(i++);
+         if (isSyntaxChar(c)) {
+            if (c == '\'') {
+               if (i < this.rules.length() && this.rules.charAt(i) == '\'') {
+                  raw.append('\'');
+                  i++;
+               } else {
+                  while (i != this.rules.length()) {
+                     c = this.rules.charAt(i++);
+                     if (c == '\'') {
+                        if (i >= this.rules.length() || this.rules.charAt(i) != '\'') {
+                           continue label70;
                         }
-                        if ((c2 = this.rules.charAt(i++)) == '\'') {
-                            if (i >= this.rules.length() || this.rules.charAt(i) != '\'') continue block0;
-                            ++i;
-                        }
-                        raw.append(c2);
-                    }
-                }
-                if (c2 == '\\') {
-                    if (i == this.rules.length()) {
-                        this.setParseError("backslash escape at the end of the rule string");
-                        return i;
-                    }
-                    int cp = this.rules.codePointAt(i);
-                    raw.appendCodePoint(cp);
-                    i += Character.charCount(cp);
-                    continue;
-                }
-                --i;
-                break;
+
+                        i++;
+                     }
+
+                     raw.append(c);
+                  }
+
+                  this.setParseError("quoted literal text missing terminating apostrophe");
+                  return i;
+               }
+            } else {
+               if (c != '\\') {
+                  i--;
+                  break;
+               }
+
+               if (i == this.rules.length()) {
+                  this.setParseError("backslash escape at the end of the rule string");
+                  return i;
+               }
+
+               int cp = this.rules.codePointAt(i);
+               raw.appendCodePoint(cp);
+               i += Character.charCount(cp);
             }
-            if (PatternProps.isWhiteSpace(c2)) {
-                --i;
-                break;
+         } else {
+            if (PatternProps.isWhiteSpace(c)) {
+               i--;
+               break;
             }
-            raw.append(c2);
-        }
-        for (int j = 0; j < raw.length(); j += Character.charCount(c)) {
-            c = raw.codePointAt(j);
-            if (CollationRuleParser.isSurrogate(c)) {
-                this.setParseError("string contains an unpaired surrogate");
-                return i;
-            }
-            if (65533 > c || c > 65535) continue;
+
+            raw.append(c);
+         }
+      }
+
+      int j = 0;
+
+      while (j < raw.length()) {
+         int c = raw.codePointAt(j);
+         if (isSurrogate(c)) {
+            this.setParseError("string contains an unpaired surrogate");
+            return i;
+         }
+
+         if (65533 <= c && c <= 65535) {
             this.setParseError("string contains U+FFFD, U+FFFE or U+FFFF");
             return i;
-        }
-        return i;
-    }
+         }
 
-    private static final boolean isSurrogate(int c) {
-        return (c & 0xFFFFF800) == 55296;
-    }
+         j += Character.charCount(c);
+      }
 
-    private int parseSpecialPosition(int i, StringBuilder str) throws ParseException {
-        int j = this.readWords(i + 1, this.rawBuilder);
-        if (j > i && this.rules.charAt(j) == ']' && this.rawBuilder.length() != 0) {
-            ++j;
-            String raw = this.rawBuilder.toString();
-            str.setLength(0);
-            for (int pos = 0; pos < positions.length; ++pos) {
-                if (!raw.equals(positions[pos])) continue;
-                str.append('\ufffe').append((char)(10240 + pos));
-                return j;
-            }
-            if (raw.equals("top")) {
-                str.append('\ufffe').append((char)(10240 + Position.LAST_REGULAR.ordinal()));
-                return j;
-            }
-            if (raw.equals("variable top")) {
-                str.append('\ufffe').append((char)(10240 + Position.LAST_VARIABLE.ordinal()));
-                return j;
-            }
-        }
-        this.setParseError("not a valid special reset position");
-        return i;
-    }
+      return i;
+   }
 
-    private void parseSetting() throws ParseException {
-        int i = this.ruleIndex + 1;
-        int j = this.readWords(i, this.rawBuilder);
-        if (j <= i || this.rawBuilder.length() == 0) {
-            this.setParseError("expected a setting/option at '['");
-        }
-        String raw = this.rawBuilder.toString();
-        if (this.rules.charAt(j) == ']') {
-            String v;
-            ++j;
-            if (raw.startsWith("reorder") && (raw.length() == 7 || raw.charAt(7) == ' ')) {
-                this.parseReordering(raw);
-                this.ruleIndex = j;
-                return;
-            }
-            if (raw.equals("backwards 2")) {
-                this.settings.setFlag(2048, true);
-                this.ruleIndex = j;
-                return;
-            }
-            int valueIndex = raw.lastIndexOf(32);
-            if (valueIndex >= 0) {
-                v = raw.substring(valueIndex + 1);
-                raw = raw.substring(0, valueIndex);
-            } else {
-                v = "";
-            }
-            if (raw.equals("strength") && v.length() == 1) {
-                int value2 = -1;
-                char c = v.charAt(0);
-                if ('1' <= c && c <= '4') {
-                    value2 = 0 + (c - 49);
-                } else if (c == 'I') {
-                    value2 = 15;
-                }
-                if (value2 != -1) {
-                    this.settings.setStrength(value2);
-                    this.ruleIndex = j;
-                    return;
-                }
-            } else if (raw.equals("alternate")) {
-                int value3 = -1;
-                if (v.equals("non-ignorable")) {
-                    value3 = 0;
-                } else if (v.equals("shifted")) {
-                    value3 = 1;
-                }
-                if (value3 != -1) {
-                    this.settings.setAlternateHandlingShifted(value3 > 0);
-                    this.ruleIndex = j;
-                    return;
-                }
-            } else if (raw.equals("maxVariable")) {
-                int value4 = -1;
-                if (v.equals("space")) {
-                    value4 = 0;
-                } else if (v.equals("punct")) {
-                    value4 = 1;
-                } else if (v.equals("symbol")) {
-                    value4 = 2;
-                } else if (v.equals("currency")) {
-                    value4 = 3;
-                }
-                if (value4 != -1) {
-                    this.settings.setMaxVariable(value4, 0);
-                    this.settings.variableTop = this.baseData.getLastPrimaryForGroup(4096 + value4);
-                    assert (this.settings.variableTop != 0L);
-                    this.ruleIndex = j;
-                    return;
-                }
-            } else if (raw.equals("caseFirst")) {
-                int value5 = -1;
-                if (v.equals("off")) {
-                    value5 = 0;
-                } else if (v.equals("lower")) {
-                    value5 = 512;
-                } else if (v.equals("upper")) {
-                    value5 = 768;
-                }
-                if (value5 != -1) {
-                    this.settings.setCaseFirst(value5);
-                    this.ruleIndex = j;
-                    return;
-                }
-            } else if (raw.equals("caseLevel")) {
-                int value6 = CollationRuleParser.getOnOffValue(v);
-                if (value6 != -1) {
-                    this.settings.setFlag(1024, value6 > 0);
-                    this.ruleIndex = j;
-                    return;
-                }
-            } else if (raw.equals("normalization")) {
-                int value7 = CollationRuleParser.getOnOffValue(v);
-                if (value7 != -1) {
-                    this.settings.setFlag(1, value7 > 0);
-                    this.ruleIndex = j;
-                    return;
-                }
-            } else if (raw.equals("numericOrdering")) {
-                int value8 = CollationRuleParser.getOnOffValue(v);
-                if (value8 != -1) {
-                    this.settings.setFlag(2, value8 > 0);
-                    this.ruleIndex = j;
-                    return;
-                }
-            } else if (raw.equals("hiraganaQ")) {
-                int value9 = CollationRuleParser.getOnOffValue(v);
-                if (value9 != -1) {
-                    if (value9 == 1) {
-                        this.setParseError("[hiraganaQ on] is not supported");
-                    }
-                    this.ruleIndex = j;
-                    return;
-                }
-            } else if (raw.equals("import")) {
-                ULocale localeID;
-                try {
-                    localeID = new ULocale.Builder().setLanguageTag(v).build();
-                }
-                catch (Exception e) {
-                    this.setParseError("expected language tag in [import langTag]", e);
-                    return;
-                }
-                String baseID = localeID.getBaseName();
-                String collationType = localeID.getKeywordValue("collation");
-                if (this.importer == null) {
-                    this.setParseError("[import langTag] is not supported");
-                } else {
-                    String importedRules;
-                    try {
-                        importedRules = this.importer.getRules(baseID, collationType != null ? collationType : "standard");
-                    }
-                    catch (Exception e) {
-                        this.setParseError("[import langTag] failed", e);
-                        return;
-                    }
-                    String outerRules = this.rules;
-                    int outerRuleIndex = this.ruleIndex;
-                    try {
-                        this.parse(importedRules);
-                    }
-                    catch (Exception e) {
-                        this.ruleIndex = outerRuleIndex;
-                        this.setParseError("parsing imported rules failed", e);
-                    }
-                    this.rules = outerRules;
-                    this.ruleIndex = j;
-                }
-                return;
-            }
-        } else if (this.rules.charAt(j) == '[') {
-            UnicodeSet set2 = new UnicodeSet();
-            j = this.parseUnicodeSet(j, set2);
-            if (raw.equals("optimize")) {
-                try {
-                    this.sink.optimize(set2);
-                }
-                catch (Exception e) {
-                    this.setParseError("[optimize set] failed", e);
-                }
-                this.ruleIndex = j;
-                return;
-            }
-            if (raw.equals("suppressContractions")) {
-                try {
-                    this.sink.suppressContractions(set2);
-                }
-                catch (Exception e) {
-                    this.setParseError("[suppressContractions set] failed", e);
-                }
-                this.ruleIndex = j;
-                return;
-            }
-        }
-        this.setParseError("not a valid setting/option");
-    }
+   private static final boolean isSurrogate(int c) {
+      return (c & -2048) == 55296;
+   }
 
-    private void parseReordering(CharSequence raw) throws ParseException {
-        int i = 7;
-        if (i == raw.length()) {
-            this.settings.resetReordering();
+   private int parseSpecialPosition(int i, StringBuilder str) throws ParseException {
+      int j = this.readWords(i + 1, this.rawBuilder);
+      if (j > i && this.rules.charAt(j) == ']' && this.rawBuilder.length() != 0) {
+         j++;
+         String raw = this.rawBuilder.toString();
+         str.setLength(0);
+
+         for (int pos = 0; pos < positions.length; pos++) {
+            if (raw.equals(positions[pos])) {
+               str.append('\ufffe').append((char)(10240 + pos));
+               return j;
+            }
+         }
+
+         if (raw.equals("top")) {
+            str.append('\ufffe').append((char)(10240 + CollationRuleParser.Position.LAST_REGULAR.ordinal()));
+            return j;
+         }
+
+         if (raw.equals("variable top")) {
+            str.append('\ufffe').append((char)(10240 + CollationRuleParser.Position.LAST_VARIABLE.ordinal()));
+            return j;
+         }
+      }
+
+      this.setParseError("not a valid special reset position");
+      return i;
+   }
+
+   private void parseSetting() throws ParseException {
+      int i = this.ruleIndex + 1;
+      int j = this.readWords(i, this.rawBuilder);
+      if (j <= i || this.rawBuilder.length() == 0) {
+         this.setParseError("expected a setting/option at '['");
+      }
+
+      String raw = this.rawBuilder.toString();
+      if (this.rules.charAt(j) == ']') {
+         j++;
+         if (raw.startsWith("reorder") && (raw.length() == 7 || raw.charAt(7) == ' ')) {
+            this.parseReordering(raw);
+            this.ruleIndex = j;
             return;
-        }
-        ArrayList<Integer> reorderCodes = new ArrayList<Integer>();
-        while (i < raw.length()) {
-            int limit;
-            for (limit = ++i; limit < raw.length() && raw.charAt(limit) != ' '; ++limit) {
+         }
+
+         if (raw.equals("backwards 2")) {
+            this.settings.setFlag(2048, true);
+            this.ruleIndex = j;
+            return;
+         }
+
+         int valueIndex = raw.lastIndexOf(32);
+         String v;
+         if (valueIndex >= 0) {
+            v = raw.substring(valueIndex + 1);
+            raw = raw.substring(0, valueIndex);
+         } else {
+            v = "";
+         }
+
+         if (raw.equals("strength") && v.length() == 1) {
+            int value = -1;
+            char c = v.charAt(0);
+            if ('1' <= c && c <= '4') {
+               value = 0 + (c - '1');
+            } else if (c == 'I') {
+               value = 15;
             }
+
+            if (value != -1) {
+               this.settings.setStrength(value);
+               this.ruleIndex = j;
+               return;
+            }
+         } else if (raw.equals("alternate")) {
+            int valuex = -1;
+            if (v.equals("non-ignorable")) {
+               valuex = 0;
+            } else if (v.equals("shifted")) {
+               valuex = 1;
+            }
+
+            if (valuex != -1) {
+               this.settings.setAlternateHandlingShifted(valuex > 0);
+               this.ruleIndex = j;
+               return;
+            }
+         } else if (raw.equals("maxVariable")) {
+            int valuexx = -1;
+            if (v.equals("space")) {
+               valuexx = 0;
+            } else if (v.equals("punct")) {
+               valuexx = 1;
+            } else if (v.equals("symbol")) {
+               valuexx = 2;
+            } else if (v.equals("currency")) {
+               valuexx = 3;
+            }
+
+            if (valuexx != -1) {
+               this.settings.setMaxVariable(valuexx, 0);
+               this.settings.variableTop = this.baseData.getLastPrimaryForGroup(4096 + valuexx);
+
+               assert this.settings.variableTop != 0L;
+
+               this.ruleIndex = j;
+               return;
+            }
+         } else if (raw.equals("caseFirst")) {
+            int valuexxx = -1;
+            if (v.equals("off")) {
+               valuexxx = 0;
+            } else if (v.equals("lower")) {
+               valuexxx = 512;
+            } else if (v.equals("upper")) {
+               valuexxx = 768;
+            }
+
+            if (valuexxx != -1) {
+               this.settings.setCaseFirst(valuexxx);
+               this.ruleIndex = j;
+               return;
+            }
+         } else if (raw.equals("caseLevel")) {
+            int valuexxxx = getOnOffValue(v);
+            if (valuexxxx != -1) {
+               this.settings.setFlag(1024, valuexxxx > 0);
+               this.ruleIndex = j;
+               return;
+            }
+         } else if (raw.equals("normalization")) {
+            int valuexxxx = getOnOffValue(v);
+            if (valuexxxx != -1) {
+               this.settings.setFlag(1, valuexxxx > 0);
+               this.ruleIndex = j;
+               return;
+            }
+         } else if (raw.equals("numericOrdering")) {
+            int valuexxxx = getOnOffValue(v);
+            if (valuexxxx != -1) {
+               this.settings.setFlag(2, valuexxxx > 0);
+               this.ruleIndex = j;
+               return;
+            }
+         } else if (raw.equals("hiraganaQ")) {
+            int valuexxxx = getOnOffValue(v);
+            if (valuexxxx != -1) {
+               if (valuexxxx == 1) {
+                  this.setParseError("[hiraganaQ on] is not supported");
+               }
+
+               this.ruleIndex = j;
+               return;
+            }
+         } else if (raw.equals("import")) {
+            ULocale localeID;
+            try {
+               localeID = new ULocale.Builder().setLanguageTag(v).build();
+            } catch (Exception var15) {
+               this.setParseError("expected language tag in [import langTag]", var15);
+               return;
+            }
+
+            String baseID = localeID.getBaseName();
+            String collationType = localeID.getKeywordValue("collation");
+            if (this.importer == null) {
+               this.setParseError("[import langTag] is not supported");
+            } else {
+               String importedRules;
+               try {
+                  importedRules = this.importer.getRules(baseID, collationType != null ? collationType : "standard");
+               } catch (Exception var14) {
+                  this.setParseError("[import langTag] failed", var14);
+                  return;
+               }
+
+               String outerRules = this.rules;
+               int outerRuleIndex = this.ruleIndex;
+
+               try {
+                  this.parse(importedRules);
+               } catch (Exception var13) {
+                  this.ruleIndex = outerRuleIndex;
+                  this.setParseError("parsing imported rules failed", var13);
+               }
+
+               this.rules = outerRules;
+               this.ruleIndex = j;
+            }
+
+            return;
+         }
+      } else if (this.rules.charAt(j) == '[') {
+         UnicodeSet set = new UnicodeSet();
+         j = this.parseUnicodeSet(j, set);
+         if (raw.equals("optimize")) {
+            try {
+               this.sink.optimize(set);
+            } catch (Exception var16) {
+               this.setParseError("[optimize set] failed", var16);
+            }
+
+            this.ruleIndex = j;
+            return;
+         }
+
+         if (raw.equals("suppressContractions")) {
+            try {
+               this.sink.suppressContractions(set);
+            } catch (Exception var17) {
+               this.setParseError("[suppressContractions set] failed", var17);
+            }
+
+            this.ruleIndex = j;
+            return;
+         }
+      }
+
+      this.setParseError("not a valid setting/option");
+   }
+
+   private void parseReordering(CharSequence raw) throws ParseException {
+      int i = 7;
+      if (i == raw.length()) {
+         this.settings.resetReordering();
+      } else {
+         ArrayList<Integer> reorderCodes = new ArrayList<>();
+
+         while (i < raw.length()) {
+            int limit = ++i;
+
+            while (limit < raw.length() && raw.charAt(limit) != ' ') {
+               limit++;
+            }
+
             String word = raw.subSequence(i, limit).toString();
-            int code = CollationRuleParser.getReorderCode(word);
+            int code = getReorderCode(word);
             if (code < 0) {
-                this.setParseError("unknown script or reorder code");
-                return;
+               this.setParseError("unknown script or reorder code");
+               return;
             }
+
             reorderCodes.add(code);
             i = limit;
-        }
-        if (reorderCodes.isEmpty()) {
+         }
+
+         if (reorderCodes.isEmpty()) {
             this.settings.resetReordering();
-        } else {
+         } else {
             int[] codes = new int[reorderCodes.size()];
             int j = 0;
+
             for (Integer code : reorderCodes) {
-                codes[j++] = code;
+               codes[j++] = code;
             }
+
             this.settings.setReordering(this.baseData, codes);
-        }
-    }
+         }
+      }
+   }
 
-    public static int getReorderCode(String word) {
-        for (int i = 0; i < gSpecialReorderCodes.length; ++i) {
-            if (!word.equalsIgnoreCase(gSpecialReorderCodes[i])) continue;
+   public static int getReorderCode(String word) {
+      for (int i = 0; i < gSpecialReorderCodes.length; i++) {
+         if (word.equalsIgnoreCase(gSpecialReorderCodes[i])) {
             return 4096 + i;
-        }
-        try {
-            int script = UCharacter.getPropertyValueEnum(4106, word);
-            if (script >= 0) {
-                return script;
-            }
-        }
-        catch (IllegalIcuArgumentException illegalIcuArgumentException) {
-            // empty catch block
-        }
-        if (word.equalsIgnoreCase("others")) {
-            return 103;
-        }
-        return -1;
-    }
+         }
+      }
 
-    private static int getOnOffValue(String s) {
-        if (s.equals("on")) {
-            return 1;
-        }
-        if (s.equals("off")) {
-            return 0;
-        }
-        return -1;
-    }
+      try {
+         int script = UCharacter.getPropertyValueEnum(4106, word);
+         if (script >= 0) {
+            return script;
+         }
+      } catch (IllegalIcuArgumentException var2) {
+      }
 
-    private int parseUnicodeSet(int i, UnicodeSet set2) throws ParseException {
-        int level = 0;
-        int j = i;
-        while (true) {
-            char c;
-            if (j == this.rules.length()) {
-                this.setParseError("unbalanced UnicodeSet pattern brackets");
-                return j;
-            }
-            if ((c = this.rules.charAt(j++)) == '[') {
-                ++level;
-                continue;
-            }
-            if (c == ']' && --level == 0) break;
-        }
-        try {
-            set2.applyPattern(this.rules.substring(i, j));
-        }
-        catch (Exception e) {
-            this.setParseError("not a valid UnicodeSet pattern: " + e.getMessage());
-        }
-        j = this.skipWhiteSpace(j);
-        if (j == this.rules.length() || this.rules.charAt(j) != ']') {
-            this.setParseError("missing option-terminating ']' after UnicodeSet pattern");
-            return j;
-        }
-        return ++j;
-    }
+      return word.equalsIgnoreCase("others") ? 103 : -1;
+   }
 
-    private int readWords(int i, StringBuilder raw) {
-        raw.setLength(0);
-        i = this.skipWhiteSpace(i);
-        while (i < this.rules.length()) {
-            char c = this.rules.charAt(i);
-            if (CollationRuleParser.isSyntaxChar(c) && c != '-' && c != '_') {
-                if (raw.length() == 0) {
-                    return i;
-                }
-                int lastIndex = raw.length() - 1;
-                if (raw.charAt(lastIndex) == ' ') {
-                    raw.setLength(lastIndex);
-                }
-                return i;
+   private static int getOnOffValue(String s) {
+      if (s.equals("on")) {
+         return 1;
+      } else {
+         return s.equals("off") ? 0 : -1;
+      }
+   }
+
+   private int parseUnicodeSet(int i, UnicodeSet set) throws ParseException {
+      int level = 0;
+      int j = i;
+
+      while (j != this.rules.length()) {
+         char c = this.rules.charAt(j++);
+         if (c == '[') {
+            level++;
+         } else if (c == ']') {
+            if (--level == 0) {
+               try {
+                  set.applyPattern(this.rules.substring(i, j));
+               } catch (Exception var6) {
+                  this.setParseError("not a valid UnicodeSet pattern: " + var6.getMessage());
+               }
+
+               j = this.skipWhiteSpace(j);
+               if (j != this.rules.length() && this.rules.charAt(j) == ']') {
+                  return j + 1;
+               }
+
+               this.setParseError("missing option-terminating ']' after UnicodeSet pattern");
+               return j;
             }
-            if (PatternProps.isWhiteSpace(c)) {
-                raw.append(' ');
-                i = this.skipWhiteSpace(i + 1);
-                continue;
+         }
+      }
+
+      this.setParseError("unbalanced UnicodeSet pattern brackets");
+      return j;
+   }
+
+   private int readWords(int i, StringBuilder raw) {
+      raw.setLength(0);
+      i = this.skipWhiteSpace(i);
+
+      while (i < this.rules.length()) {
+         char c = this.rules.charAt(i);
+         if (isSyntaxChar(c) && c != '-' && c != '_') {
+            if (raw.length() == 0) {
+               return i;
             }
+
+            int lastIndex = raw.length() - 1;
+            if (raw.charAt(lastIndex) == ' ') {
+               raw.setLength(lastIndex);
+            }
+
+            return i;
+         }
+
+         if (PatternProps.isWhiteSpace(c)) {
+            raw.append(' ');
+            i = this.skipWhiteSpace(i + 1);
+         } else {
             raw.append(c);
-            ++i;
-        }
-        return 0;
-    }
+            i++;
+         }
+      }
 
-    private int skipComment(int i) {
-        char c;
-        while (i < this.rules.length() && (c = this.rules.charAt(i++)) != '\n' && c != '\f' && c != '\r' && c != '\u0085' && c != '\u2028' && c != '\u2029') {
-        }
-        return i;
-    }
+      return 0;
+   }
 
-    private void setParseError(String reason) throws ParseException {
-        throw this.makeParseException(reason);
-    }
+   private int skipComment(int i) {
+      while (i < this.rules.length()) {
+         char c = this.rules.charAt(i++);
+         if (c != '\n' && c != '\f' && c != '\r' && c != 133 && c != 8232 && c != 8233) {
+            continue;
+         }
+         break;
+      }
 
-    private void setParseError(String reason, Exception e) throws ParseException {
-        ParseException newExc = this.makeParseException(reason + ": " + e.getMessage());
-        newExc.initCause(e);
-        throw newExc;
-    }
+      return i;
+   }
 
-    private ParseException makeParseException(String reason) {
-        return new ParseException(this.appendErrorContext(reason), this.ruleIndex);
-    }
+   private void setParseError(String reason) throws ParseException {
+      throw this.makeParseException(reason);
+   }
 
-    private String appendErrorContext(String reason) {
-        StringBuilder msg = new StringBuilder(reason);
-        msg.append(" at index ").append(this.ruleIndex);
-        msg.append(" near \"");
-        int start2 = this.ruleIndex - 15;
-        if (start2 < 0) {
-            start2 = 0;
-        } else if (start2 > 0 && Character.isLowSurrogate(this.rules.charAt(start2))) {
-            ++start2;
-        }
-        msg.append(this.rules, start2, this.ruleIndex);
-        msg.append('!');
-        int length = this.rules.length() - this.ruleIndex;
-        if (length >= 16 && Character.isHighSurrogate(this.rules.charAt(this.ruleIndex + (length = 15) - 1))) {
-            --length;
-        }
-        msg.append(this.rules, this.ruleIndex, this.ruleIndex + length);
-        return msg.append('\"').toString();
-    }
+   private void setParseError(String reason, Exception e) throws ParseException {
+      ParseException newExc = this.makeParseException(reason + ": " + e.getMessage());
+      newExc.initCause(e);
+      throw newExc;
+   }
 
-    private static boolean isSyntaxChar(int c) {
-        return 33 <= c && c <= 126 && (c <= 47 || 58 <= c && c <= 64 || 91 <= c && c <= 96 || 123 <= c);
-    }
+   private ParseException makeParseException(String reason) {
+      return new ParseException(this.appendErrorContext(reason), this.ruleIndex);
+   }
 
-    private int skipWhiteSpace(int i) {
-        while (i < this.rules.length() && PatternProps.isWhiteSpace(this.rules.charAt(i))) {
-            ++i;
-        }
-        return i;
-    }
+   private String appendErrorContext(String reason) {
+      StringBuilder msg = new StringBuilder(reason);
+      msg.append(" at index ").append(this.ruleIndex);
+      msg.append(" near \"");
+      int start = this.ruleIndex - 15;
+      if (start < 0) {
+         start = 0;
+      } else if (start > 0 && Character.isLowSurrogate(this.rules.charAt(start))) {
+         start++;
+      }
 
-    static interface Importer {
-        public String getRules(String var1, String var2);
-    }
+      msg.append(this.rules, start, this.ruleIndex);
+      msg.append('!');
+      int length = this.rules.length() - this.ruleIndex;
+      if (length >= 16) {
+         length = 15;
+         if (Character.isHighSurrogate(this.rules.charAt(this.ruleIndex + length - 1))) {
+            length--;
+         }
+      }
 
-    static abstract class Sink {
-        Sink() {
-        }
+      msg.append(this.rules, this.ruleIndex, this.ruleIndex + length);
+      return msg.append('"').toString();
+   }
 
-        abstract void addReset(int var1, CharSequence var2);
+   private static boolean isSyntaxChar(int c) {
+      return 33 <= c && c <= 126 && (c <= 47 || 58 <= c && c <= 64 || 91 <= c && c <= 96 || 123 <= c);
+   }
 
-        abstract void addRelation(int var1, CharSequence var2, CharSequence var3, CharSequence var4);
+   private int skipWhiteSpace(int i) {
+      while (i < this.rules.length() && PatternProps.isWhiteSpace(this.rules.charAt(i))) {
+         i++;
+      }
 
-        void suppressContractions(UnicodeSet set2) {
-        }
+      return i;
+   }
 
-        void optimize(UnicodeSet set2) {
-        }
-    }
+   interface Importer {
+      String getRules(String var1, String var2);
+   }
 
-    static enum Position {
-        FIRST_TERTIARY_IGNORABLE,
-        LAST_TERTIARY_IGNORABLE,
-        FIRST_SECONDARY_IGNORABLE,
-        LAST_SECONDARY_IGNORABLE,
-        FIRST_PRIMARY_IGNORABLE,
-        LAST_PRIMARY_IGNORABLE,
-        FIRST_VARIABLE,
-        LAST_VARIABLE,
-        FIRST_REGULAR,
-        LAST_REGULAR,
-        FIRST_IMPLICIT,
-        LAST_IMPLICIT,
-        FIRST_TRAILING,
-        LAST_TRAILING;
+   static enum Position {
+      FIRST_TERTIARY_IGNORABLE,
+      LAST_TERTIARY_IGNORABLE,
+      FIRST_SECONDARY_IGNORABLE,
+      LAST_SECONDARY_IGNORABLE,
+      FIRST_PRIMARY_IGNORABLE,
+      LAST_PRIMARY_IGNORABLE,
+      FIRST_VARIABLE,
+      LAST_VARIABLE,
+      FIRST_REGULAR,
+      LAST_REGULAR,
+      FIRST_IMPLICIT,
+      LAST_IMPLICIT,
+      FIRST_TRAILING,
+      LAST_TRAILING;
+   }
 
-    }
+   abstract static class Sink {
+      abstract void addReset(int var1, CharSequence var2);
+
+      abstract void addRelation(int var1, CharSequence var2, CharSequence var3, CharSequence var4);
+
+      void suppressContractions(UnicodeSet set) {
+      }
+
+      void optimize(UnicodeSet set) {
+      }
+   }
 }
-

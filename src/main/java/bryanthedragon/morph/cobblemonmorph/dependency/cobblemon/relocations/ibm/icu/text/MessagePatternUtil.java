@@ -1,398 +1,411 @@
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
-
-import com.cobblemon.mod.relocations.ibm.icu.text.MessagePattern;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public final class MessagePatternUtil {
-    private MessagePatternUtil() {
-    }
+   private MessagePatternUtil() {
+   }
 
-    public static MessageNode buildMessageNode(String patternString) {
-        return MessagePatternUtil.buildMessageNode(new MessagePattern(patternString));
-    }
+   public static MessagePatternUtil.MessageNode buildMessageNode(String patternString) {
+      return buildMessageNode(new MessagePattern(patternString));
+   }
 
-    public static MessageNode buildMessageNode(MessagePattern pattern) {
-        int limit = pattern.countParts() - 1;
-        if (limit < 0) {
-            throw new IllegalArgumentException("The MessagePattern is empty");
-        }
-        if (pattern.getPartType(0) != MessagePattern.Part.Type.MSG_START) {
-            throw new IllegalArgumentException("The MessagePattern does not represent a MessageFormat pattern");
-        }
-        return MessagePatternUtil.buildMessageNode(pattern, 0, limit);
-    }
+   public static MessagePatternUtil.MessageNode buildMessageNode(MessagePattern pattern) {
+      int limit = pattern.countParts() - 1;
+      if (limit < 0) {
+         throw new IllegalArgumentException("The MessagePattern is empty");
+      } else if (pattern.getPartType(0) != MessagePattern.Part.Type.MSG_START) {
+         throw new IllegalArgumentException("The MessagePattern does not represent a MessageFormat pattern");
+      } else {
+         return buildMessageNode(pattern, 0, limit);
+      }
+   }
 
-    private static MessageNode buildMessageNode(MessagePattern pattern, int start2, int limit) {
-        int prevPatternIndex = pattern.getPart(start2).getLimit();
-        MessageNode node = new MessageNode();
-        int i = start2 + 1;
-        while (true) {
-            MessagePattern.Part part;
-            int patternIndex;
-            if (prevPatternIndex < (patternIndex = (part = pattern.getPart(i)).getIndex())) {
-                node.addContentsNode(new TextNode(pattern.getPatternString().substring(prevPatternIndex, patternIndex)));
+   private static MessagePatternUtil.MessageNode buildMessageNode(MessagePattern pattern, int start, int limit) {
+      int prevPatternIndex = pattern.getPart(start).getLimit();
+      MessagePatternUtil.MessageNode node = new MessagePatternUtil.MessageNode();
+      int i = start + 1;
+
+      while (true) {
+         MessagePattern.Part part = pattern.getPart(i);
+         int patternIndex = part.getIndex();
+         if (prevPatternIndex < patternIndex) {
+            node.addContentsNode(new MessagePatternUtil.TextNode(pattern.getPatternString().substring(prevPatternIndex, patternIndex)));
+         }
+
+         if (i == limit) {
+            return node.freeze();
+         }
+
+         MessagePattern.Part.Type partType = part.getType();
+         if (partType == MessagePattern.Part.Type.ARG_START) {
+            int argLimit = pattern.getLimitPartIndex(i);
+            node.addContentsNode(buildArgNode(pattern, i, argLimit));
+            i = argLimit;
+            part = pattern.getPart(argLimit);
+         } else if (partType == MessagePattern.Part.Type.REPLACE_NUMBER) {
+            node.addContentsNode(MessagePatternUtil.MessageContentsNode.createReplaceNumberNode());
+         }
+
+         prevPatternIndex = part.getLimit();
+         i++;
+      }
+   }
+
+   private static MessagePatternUtil.ArgNode buildArgNode(MessagePattern pattern, int start, int limit) {
+      MessagePatternUtil.ArgNode node = MessagePatternUtil.ArgNode.createArgNode();
+      MessagePattern.Part part = pattern.getPart(start);
+      MessagePattern.ArgType argType = node.argType = part.getArgType();
+      part = pattern.getPart(++start);
+      node.name = pattern.getSubstring(part);
+      if (part.getType() == MessagePattern.Part.Type.ARG_NUMBER) {
+         node.number = part.getValue();
+      }
+
+      start++;
+      switch (argType) {
+         case SIMPLE:
+            node.typeName = pattern.getSubstring(pattern.getPart(start++));
+            if (start < limit) {
+               node.style = pattern.getSubstring(pattern.getPart(start));
             }
-            if (i == limit) break;
-            MessagePattern.Part.Type partType = part.getType();
-            if (partType == MessagePattern.Part.Type.ARG_START) {
-                int argLimit = pattern.getLimitPartIndex(i);
-                node.addContentsNode(MessagePatternUtil.buildArgNode(pattern, i, argLimit));
-                i = argLimit;
-                part = pattern.getPart(i);
-            } else if (partType == MessagePattern.Part.Type.REPLACE_NUMBER) {
-                node.addContentsNode(MessageContentsNode.createReplaceNumberNode());
-            }
-            prevPatternIndex = part.getLimit();
-            ++i;
-        }
-        return node.freeze();
-    }
+            break;
+         case CHOICE:
+            node.typeName = "choice";
+            node.complexStyle = buildChoiceStyleNode(pattern, start, limit);
+            break;
+         case PLURAL:
+            node.typeName = "plural";
+            node.complexStyle = buildPluralStyleNode(pattern, start, limit, argType);
+            break;
+         case SELECT:
+            node.typeName = "select";
+            node.complexStyle = buildSelectStyleNode(pattern, start, limit);
+            break;
+         case SELECTORDINAL:
+            node.typeName = "selectordinal";
+            node.complexStyle = buildPluralStyleNode(pattern, start, limit, argType);
+      }
 
-    private static ArgNode buildArgNode(MessagePattern pattern, int start2, int limit) {
-        ArgNode node = ArgNode.createArgNode();
-        MessagePattern.Part part = pattern.getPart(start2);
-        MessagePattern.ArgType argType = node.argType = part.getArgType();
-        part = pattern.getPart(++start2);
-        node.name = pattern.getSubstring(part);
-        if (part.getType() == MessagePattern.Part.Type.ARG_NUMBER) {
-            node.number = part.getValue();
-        }
-        ++start2;
-        switch (argType) {
-            case SIMPLE: {
-                node.typeName = pattern.getSubstring(pattern.getPart(start2++));
-                if (start2 >= limit) break;
-                node.style = pattern.getSubstring(pattern.getPart(start2));
-                break;
-            }
-            case CHOICE: {
-                node.typeName = "choice";
-                node.complexStyle = MessagePatternUtil.buildChoiceStyleNode(pattern, start2, limit);
-                break;
-            }
-            case PLURAL: {
-                node.typeName = "plural";
-                node.complexStyle = MessagePatternUtil.buildPluralStyleNode(pattern, start2, limit, argType);
-                break;
-            }
-            case SELECT: {
-                node.typeName = "select";
-                node.complexStyle = MessagePatternUtil.buildSelectStyleNode(pattern, start2, limit);
-                break;
-            }
-            case SELECTORDINAL: {
-                node.typeName = "selectordinal";
-                node.complexStyle = MessagePatternUtil.buildPluralStyleNode(pattern, start2, limit, argType);
-                break;
-            }
-        }
-        return node;
-    }
+      return node;
+   }
 
-    private static ComplexArgStyleNode buildChoiceStyleNode(MessagePattern pattern, int start2, int limit) {
-        ComplexArgStyleNode node = new ComplexArgStyleNode(MessagePattern.ArgType.CHOICE);
-        while (start2 < limit) {
-            int valueIndex = start2;
-            MessagePattern.Part part = pattern.getPart(start2);
-            double value2 = pattern.getNumericValue(part);
-            int msgLimit = pattern.getLimitPartIndex(start2 += 2);
-            VariantNode variant = new VariantNode();
-            variant.selector = pattern.getSubstring(pattern.getPart(valueIndex + 1));
-            variant.numericValue = value2;
-            variant.msgNode = MessagePatternUtil.buildMessageNode(pattern, start2, msgLimit);
-            node.addVariant(variant);
-            start2 = msgLimit + 1;
-        }
-        return node.freeze();
-    }
+   private static MessagePatternUtil.ComplexArgStyleNode buildChoiceStyleNode(MessagePattern pattern, int start, int limit) {
+      MessagePatternUtil.ComplexArgStyleNode node = new MessagePatternUtil.ComplexArgStyleNode(MessagePattern.ArgType.CHOICE);
 
-    private static ComplexArgStyleNode buildPluralStyleNode(MessagePattern pattern, int start2, int limit, MessagePattern.ArgType argType) {
-        ComplexArgStyleNode node = new ComplexArgStyleNode(argType);
-        MessagePattern.Part offset = pattern.getPart(start2);
-        if (offset.getType().hasNumericValue()) {
-            node.explicitOffset = true;
-            node.offset = pattern.getNumericValue(offset);
-            ++start2;
-        }
-        while (start2 < limit) {
-            MessagePattern.Part selector2 = pattern.getPart(start2++);
-            double value2 = -1.23456789E8;
-            MessagePattern.Part part = pattern.getPart(start2);
-            if (part.getType().hasNumericValue()) {
-                value2 = pattern.getNumericValue(part);
-                ++start2;
-            }
-            int msgLimit = pattern.getLimitPartIndex(start2);
-            VariantNode variant = new VariantNode();
-            variant.selector = pattern.getSubstring(selector2);
-            variant.numericValue = value2;
-            variant.msgNode = MessagePatternUtil.buildMessageNode(pattern, start2, msgLimit);
-            node.addVariant(variant);
-            start2 = msgLimit + 1;
-        }
-        return node.freeze();
-    }
+      while (start < limit) {
+         MessagePattern.Part part = pattern.getPart(start);
+         double value = pattern.getNumericValue(part);
+         int var10 = start + 2;
+         int msgLimit = pattern.getLimitPartIndex(var10);
+         MessagePatternUtil.VariantNode variant = new MessagePatternUtil.VariantNode();
+         variant.selector = pattern.getSubstring(pattern.getPart(start + 1));
+         variant.numericValue = value;
+         variant.msgNode = buildMessageNode(pattern, var10, msgLimit);
+         node.addVariant(variant);
+         start = msgLimit + 1;
+      }
 
-    private static ComplexArgStyleNode buildSelectStyleNode(MessagePattern pattern, int start2, int limit) {
-        ComplexArgStyleNode node = new ComplexArgStyleNode(MessagePattern.ArgType.SELECT);
-        while (start2 < limit) {
-            MessagePattern.Part selector2 = pattern.getPart(start2++);
-            int msgLimit = pattern.getLimitPartIndex(start2);
-            VariantNode variant = new VariantNode();
-            variant.selector = pattern.getSubstring(selector2);
-            variant.msgNode = MessagePatternUtil.buildMessageNode(pattern, start2, msgLimit);
-            node.addVariant(variant);
-            start2 = msgLimit + 1;
-        }
-        return node.freeze();
-    }
+      return node.freeze();
+   }
 
-    public static class VariantNode
-    extends Node {
-        private String selector;
-        private double numericValue = -1.23456789E8;
-        private MessageNode msgNode;
+   private static MessagePatternUtil.ComplexArgStyleNode buildPluralStyleNode(MessagePattern pattern, int start, int limit, MessagePattern.ArgType argType) {
+      MessagePatternUtil.ComplexArgStyleNode node = new MessagePatternUtil.ComplexArgStyleNode(argType);
+      MessagePattern.Part offset = pattern.getPart(start);
+      if (offset.getType().hasNumericValue()) {
+         node.explicitOffset = true;
+         node.offset = pattern.getNumericValue(offset);
+         start++;
+      }
 
-        public String getSelector() {
-            return this.selector;
-        }
+      while (start < limit) {
+         MessagePattern.Part selector = pattern.getPart(start++);
+         double value = -1.23456789E8;
+         MessagePattern.Part part = pattern.getPart(start);
+         if (part.getType().hasNumericValue()) {
+            value = pattern.getNumericValue(part);
+            start++;
+         }
 
-        public boolean isSelectorNumeric() {
-            return this.numericValue != -1.23456789E8;
-        }
+         int msgLimit = pattern.getLimitPartIndex(start);
+         MessagePatternUtil.VariantNode variant = new MessagePatternUtil.VariantNode();
+         variant.selector = pattern.getSubstring(selector);
+         variant.numericValue = value;
+         variant.msgNode = buildMessageNode(pattern, start, msgLimit);
+         node.addVariant(variant);
+         start = msgLimit + 1;
+      }
 
-        public double getSelectorValue() {
-            return this.numericValue;
-        }
+      return node.freeze();
+   }
 
-        public MessageNode getMessage() {
-            return this.msgNode;
-        }
+   private static MessagePatternUtil.ComplexArgStyleNode buildSelectStyleNode(MessagePattern pattern, int start, int limit) {
+      MessagePatternUtil.ComplexArgStyleNode node = new MessagePatternUtil.ComplexArgStyleNode(MessagePattern.ArgType.SELECT);
 
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            if (this.isSelectorNumeric()) {
-                sb.append(this.numericValue).append(" (").append(this.selector).append(") {");
+      while (start < limit) {
+         MessagePattern.Part selector = pattern.getPart(start++);
+         int msgLimit = pattern.getLimitPartIndex(start);
+         MessagePatternUtil.VariantNode variant = new MessagePatternUtil.VariantNode();
+         variant.selector = pattern.getSubstring(selector);
+         variant.msgNode = buildMessageNode(pattern, start, msgLimit);
+         node.addVariant(variant);
+         start = msgLimit + 1;
+      }
+
+      return node.freeze();
+   }
+
+   public static class ArgNode extends MessagePatternUtil.MessageContentsNode {
+      private MessagePattern.ArgType argType;
+      private String name;
+      private int number = -1;
+      private String typeName;
+      private String style;
+      private MessagePatternUtil.ComplexArgStyleNode complexStyle;
+
+      public MessagePattern.ArgType getArgType() {
+         return this.argType;
+      }
+
+      public String getName() {
+         return this.name;
+      }
+
+      public int getNumber() {
+         return this.number;
+      }
+
+      public String getTypeName() {
+         return this.typeName;
+      }
+
+      public String getSimpleStyle() {
+         return this.style;
+      }
+
+      public MessagePatternUtil.ComplexArgStyleNode getComplexStyle() {
+         return this.complexStyle;
+      }
+
+      @Override
+      public String toString() {
+         StringBuilder sb = new StringBuilder();
+         sb.append('{').append(this.name);
+         if (this.argType != MessagePattern.ArgType.NONE) {
+            sb.append(',').append(this.typeName);
+            if (this.argType == MessagePattern.ArgType.SIMPLE) {
+               if (this.style != null) {
+                  sb.append(',').append(this.style);
+               }
             } else {
-                sb.append(this.selector).append(" {");
+               sb.append(',').append(this.complexStyle.toString());
             }
-            return sb.append(this.msgNode.toString()).append('}').toString();
-        }
+         }
 
-        private VariantNode() {
-        }
-    }
+         return sb.append('}').toString();
+      }
 
-    public static class ComplexArgStyleNode
-    extends Node {
-        private MessagePattern.ArgType argType;
-        private double offset;
-        private boolean explicitOffset;
-        private volatile List<VariantNode> list = new ArrayList<VariantNode>();
+      private ArgNode() {
+         super(MessagePatternUtil.MessageContentsNode.Type.ARG);
+      }
 
-        public MessagePattern.ArgType getArgType() {
-            return this.argType;
-        }
+      private static MessagePatternUtil.ArgNode createArgNode() {
+         return new MessagePatternUtil.ArgNode();
+      }
+   }
 
-        public boolean hasExplicitOffset() {
-            return this.explicitOffset;
-        }
+   public static class ComplexArgStyleNode extends MessagePatternUtil.Node {
+      private MessagePattern.ArgType argType;
+      private double offset;
+      private boolean explicitOffset;
+      private volatile List<MessagePatternUtil.VariantNode> list = new ArrayList<>();
 
-        public double getOffset() {
-            return this.offset;
-        }
+      public MessagePattern.ArgType getArgType() {
+         return this.argType;
+      }
 
-        public List<VariantNode> getVariants() {
-            return this.list;
-        }
+      public boolean hasExplicitOffset() {
+         return this.explicitOffset;
+      }
 
-        public VariantNode getVariantsByType(List<VariantNode> numericVariants, List<VariantNode> keywordVariants) {
-            if (numericVariants != null) {
-                numericVariants.clear();
+      public double getOffset() {
+         return this.offset;
+      }
+
+      public List<MessagePatternUtil.VariantNode> getVariants() {
+         return this.list;
+      }
+
+      public MessagePatternUtil.VariantNode getVariantsByType(
+         List<MessagePatternUtil.VariantNode> numericVariants, List<MessagePatternUtil.VariantNode> keywordVariants
+      ) {
+         if (numericVariants != null) {
+            numericVariants.clear();
+         }
+
+         keywordVariants.clear();
+         MessagePatternUtil.VariantNode other = null;
+
+         for (MessagePatternUtil.VariantNode variant : this.list) {
+            if (variant.isSelectorNumeric()) {
+               numericVariants.add(variant);
+            } else if ("other".equals(variant.getSelector())) {
+               if (other == null) {
+                  other = variant;
+               }
+            } else {
+               keywordVariants.add(variant);
             }
-            keywordVariants.clear();
-            VariantNode other = null;
-            for (VariantNode variant : this.list) {
-                if (variant.isSelectorNumeric()) {
-                    numericVariants.add(variant);
-                    continue;
-                }
-                if ("other".equals(variant.getSelector())) {
-                    if (other != null) continue;
-                    other = variant;
-                    continue;
-                }
-                keywordVariants.add(variant);
+         }
+
+         return other;
+      }
+
+      @Override
+      public String toString() {
+         StringBuilder sb = new StringBuilder();
+         sb.append('(').append(this.argType.toString()).append(" style) ");
+         if (this.hasExplicitOffset()) {
+            sb.append("offset:").append(this.offset).append(' ');
+         }
+
+         return sb.append(this.list.toString()).toString();
+      }
+
+      private ComplexArgStyleNode(MessagePattern.ArgType argType) {
+         this.argType = argType;
+      }
+
+      private void addVariant(MessagePatternUtil.VariantNode variant) {
+         this.list.add(variant);
+      }
+
+      private MessagePatternUtil.ComplexArgStyleNode freeze() {
+         this.list = Collections.unmodifiableList(this.list);
+         return this;
+      }
+   }
+
+   public static class MessageContentsNode extends MessagePatternUtil.Node {
+      private MessagePatternUtil.MessageContentsNode.Type type;
+
+      public MessagePatternUtil.MessageContentsNode.Type getType() {
+         return this.type;
+      }
+
+      @Override
+      public String toString() {
+         return "{REPLACE_NUMBER}";
+      }
+
+      private MessageContentsNode(MessagePatternUtil.MessageContentsNode.Type type) {
+         this.type = type;
+      }
+
+      private static MessagePatternUtil.MessageContentsNode createReplaceNumberNode() {
+         return new MessagePatternUtil.MessageContentsNode(MessagePatternUtil.MessageContentsNode.Type.REPLACE_NUMBER);
+      }
+
+      public static enum Type {
+         TEXT,
+         ARG,
+         REPLACE_NUMBER;
+      }
+   }
+
+   public static class MessageNode extends MessagePatternUtil.Node {
+      private volatile List<MessagePatternUtil.MessageContentsNode> list = new ArrayList<>();
+
+      public List<MessagePatternUtil.MessageContentsNode> getContents() {
+         return this.list;
+      }
+
+      @Override
+      public String toString() {
+         return this.list.toString();
+      }
+
+      private MessageNode() {
+      }
+
+      private void addContentsNode(MessagePatternUtil.MessageContentsNode node) {
+         if (node instanceof MessagePatternUtil.TextNode && !this.list.isEmpty()) {
+            MessagePatternUtil.MessageContentsNode lastNode = this.list.get(this.list.size() - 1);
+            if (lastNode instanceof MessagePatternUtil.TextNode) {
+               MessagePatternUtil.TextNode textNode = (MessagePatternUtil.TextNode)lastNode;
+               textNode.text = textNode.text + ((MessagePatternUtil.TextNode)node).text;
+               return;
             }
-            return other;
-        }
+         }
 
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append('(').append(this.argType.toString()).append(" style) ");
-            if (this.hasExplicitOffset()) {
-                sb.append("offset:").append(this.offset).append(' ');
-            }
-            return sb.append(this.list.toString()).toString();
-        }
+         this.list.add(node);
+      }
 
-        private ComplexArgStyleNode(MessagePattern.ArgType argType) {
-            this.argType = argType;
-        }
+      private MessagePatternUtil.MessageNode freeze() {
+         this.list = Collections.unmodifiableList(this.list);
+         return this;
+      }
+   }
 
-        private void addVariant(VariantNode variant) {
-            this.list.add(variant);
-        }
+   public static class Node {
+      private Node() {
+      }
+   }
 
-        private ComplexArgStyleNode freeze() {
-            this.list = Collections.unmodifiableList(this.list);
-            return this;
-        }
-    }
+   public static class TextNode extends MessagePatternUtil.MessageContentsNode {
+      private String text;
 
-    public static class ArgNode
-    extends MessageContentsNode {
-        private MessagePattern.ArgType argType;
-        private String name;
-        private int number = -1;
-        private String typeName;
-        private String style;
-        private ComplexArgStyleNode complexStyle;
+      public String getText() {
+         return this.text;
+      }
 
-        public MessagePattern.ArgType getArgType() {
-            return this.argType;
-        }
+      @Override
+      public String toString() {
+         return "«" + this.text + "»";
+      }
 
-        public String getName() {
-            return this.name;
-        }
+      private TextNode(String text) {
+         super(MessagePatternUtil.MessageContentsNode.Type.TEXT);
+         this.text = text;
+      }
+   }
 
-        public int getNumber() {
-            return this.number;
-        }
+   public static class VariantNode extends MessagePatternUtil.Node {
+      private String selector;
+      private double numericValue = -1.23456789E8;
+      private MessagePatternUtil.MessageNode msgNode;
 
-        public String getTypeName() {
-            return this.typeName;
-        }
+      public String getSelector() {
+         return this.selector;
+      }
 
-        public String getSimpleStyle() {
-            return this.style;
-        }
+      public boolean isSelectorNumeric() {
+         return this.numericValue != -1.23456789E8;
+      }
 
-        public ComplexArgStyleNode getComplexStyle() {
-            return this.complexStyle;
-        }
+      public double getSelectorValue() {
+         return this.numericValue;
+      }
 
-        @Override
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append('{').append(this.name);
-            if (this.argType != MessagePattern.ArgType.NONE) {
-                sb.append(',').append(this.typeName);
-                if (this.argType == MessagePattern.ArgType.SIMPLE) {
-                    if (this.style != null) {
-                        sb.append(',').append(this.style);
-                    }
-                } else {
-                    sb.append(',').append(this.complexStyle.toString());
-                }
-            }
-            return sb.append('}').toString();
-        }
+      public MessagePatternUtil.MessageNode getMessage() {
+         return this.msgNode;
+      }
 
-        private ArgNode() {
-            super(MessageContentsNode.Type.ARG);
-        }
+      @Override
+      public String toString() {
+         StringBuilder sb = new StringBuilder();
+         if (this.isSelectorNumeric()) {
+            sb.append(this.numericValue).append(" (").append(this.selector).append(") {");
+         } else {
+            sb.append(this.selector).append(" {");
+         }
 
-        private static ArgNode createArgNode() {
-            return new ArgNode();
-        }
-    }
+         return sb.append(this.msgNode.toString()).append('}').toString();
+      }
 
-    public static class TextNode
-    extends MessageContentsNode {
-        private String text;
-
-        public String getText() {
-            return this.text;
-        }
-
-        @Override
-        public String toString() {
-            return "\u00ab" + this.text + "\u00bb";
-        }
-
-        private TextNode(String text) {
-            super(MessageContentsNode.Type.TEXT);
-            this.text = text;
-        }
-    }
-
-    public static class MessageContentsNode
-    extends Node {
-        private Type type;
-
-        public Type getType() {
-            return this.type;
-        }
-
-        public String toString() {
-            return "{REPLACE_NUMBER}";
-        }
-
-        private MessageContentsNode(Type type) {
-            this.type = type;
-        }
-
-        private static MessageContentsNode createReplaceNumberNode() {
-            return new MessageContentsNode(Type.REPLACE_NUMBER);
-        }
-
-        public static enum Type {
-            TEXT,
-            ARG,
-            REPLACE_NUMBER;
-
-        }
-    }
-
-    public static class MessageNode
-    extends Node {
-        private volatile List<MessageContentsNode> list = new ArrayList<MessageContentsNode>();
-
-        public List<MessageContentsNode> getContents() {
-            return this.list;
-        }
-
-        public String toString() {
-            return this.list.toString();
-        }
-
-        private MessageNode() {
-        }
-
-        private void addContentsNode(MessageContentsNode node) {
-            MessageContentsNode lastNode;
-            if (node instanceof TextNode && !this.list.isEmpty() && (lastNode = this.list.get(this.list.size() - 1)) instanceof TextNode) {
-                TextNode textNode = (TextNode)lastNode;
-                textNode.text = textNode.text + ((TextNode)node).text;
-                return;
-            }
-            this.list.add(node);
-        }
-
-        private MessageNode freeze() {
-            this.list = Collections.unmodifiableList(this.list);
-            return this;
-        }
-    }
-
-    public static class Node {
-        private Node() {
-        }
-    }
+      private VariantNode() {
+      }
+   }
 }
-

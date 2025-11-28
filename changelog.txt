@@ -142,7 +142,7 @@
  - 49.0.10 Bump SecureModules, Closes #9820
  - 49.0.9  Support pack overlay system. Closes #9818
  - 49.0.8  Fix Server bundle
- - 49.0.7  Optimize ForgeConfigSpec and make Range public (#9810)
+ - 49.0.7  Optimise ForgeConfigSpec and make Range public (#9810)
  - 49.0.6  Add `clientSideOnly` feature to mods.toml (#9804)
  - 49.0.5  Add impl. of `IModFileInfo#showAsDataPack` (#9802)
  - 49.0.4  Get rid of LibraryFinder

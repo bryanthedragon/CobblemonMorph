@@ -1,9 +1,6 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.CurrencyData;
-import com.cobblemon.mod.relocations.ibm.icu.text.NumberFormat;
-import com.cobblemon.mod.relocations.ibm.icu.text.PluralRules;
 import com.cobblemon.mod.relocations.ibm.icu.util.ICUCloneNotSupportedException;
 import com.cobblemon.mod.relocations.ibm.icu.util.ULocale;
 import java.io.Serializable;
@@ -11,152 +8,159 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
-public class CurrencyPluralInfo
-implements Cloneable,
-Serializable {
-    private static final long serialVersionUID = 1L;
-    private static final char[] tripleCurrencySign = new char[]{'\u00a4', '\u00a4', '\u00a4'};
-    private static final String tripleCurrencyStr = new String(tripleCurrencySign);
-    private static final char[] defaultCurrencyPluralPatternChar = new char[]{'\u0000', '.', '#', '#', ' ', '\u00a4', '\u00a4', '\u00a4'};
-    private static final String defaultCurrencyPluralPattern = new String(defaultCurrencyPluralPatternChar);
-    private Map<String, String> pluralCountToCurrencyUnitPattern = null;
-    private PluralRules pluralRules = null;
-    private ULocale ulocale = null;
+public class CurrencyPluralInfo implements Cloneable, Serializable {
+   private static final long serialVersionUID = 1L;
+   private static final char[] tripleCurrencySign = new char[]{'¤', '¤', '¤'};
+   private static final String tripleCurrencyStr = new String(tripleCurrencySign);
+   private static final char[] defaultCurrencyPluralPatternChar = new char[]{'\u0000', '.', '#', '#', ' ', '¤', '¤', '¤'};
+   private static final String defaultCurrencyPluralPattern = new String(defaultCurrencyPluralPatternChar);
+   private Map<String, String> pluralCountToCurrencyUnitPattern = null;
+   private PluralRules pluralRules = null;
+   private ULocale ulocale = null;
 
-    public CurrencyPluralInfo() {
-        this.initialize(ULocale.getDefault(ULocale.Category.FORMAT));
-    }
+   public CurrencyPluralInfo() {
+      this.initialize(ULocale.getDefault(ULocale.Category.FORMAT));
+   }
 
-    public CurrencyPluralInfo(Locale locale) {
-        this.initialize(ULocale.forLocale(locale));
-    }
+   public CurrencyPluralInfo(Locale locale) {
+      this.initialize(ULocale.forLocale(locale));
+   }
 
-    public CurrencyPluralInfo(ULocale locale) {
-        this.initialize(locale);
-    }
+   public CurrencyPluralInfo(ULocale locale) {
+      this.initialize(locale);
+   }
 
-    public static CurrencyPluralInfo getInstance() {
-        return new CurrencyPluralInfo();
-    }
+   public static CurrencyPluralInfo getInstance() {
+      return new CurrencyPluralInfo();
+   }
 
-    public static CurrencyPluralInfo getInstance(Locale locale) {
-        return new CurrencyPluralInfo(locale);
-    }
+   public static CurrencyPluralInfo getInstance(Locale locale) {
+      return new CurrencyPluralInfo(locale);
+   }
 
-    public static CurrencyPluralInfo getInstance(ULocale locale) {
-        return new CurrencyPluralInfo(locale);
-    }
+   public static CurrencyPluralInfo getInstance(ULocale locale) {
+      return new CurrencyPluralInfo(locale);
+   }
 
-    public PluralRules getPluralRules() {
-        return this.pluralRules;
-    }
+   public PluralRules getPluralRules() {
+      return this.pluralRules;
+   }
 
-    public String getCurrencyPluralPattern(String pluralCount) {
-        String currencyPluralPattern = this.pluralCountToCurrencyUnitPattern.get(pluralCount);
-        if (currencyPluralPattern == null) {
-            if (!pluralCount.equals("other")) {
-                currencyPluralPattern = this.pluralCountToCurrencyUnitPattern.get("other");
-            }
-            if (currencyPluralPattern == null) {
-                currencyPluralPattern = defaultCurrencyPluralPattern;
-            }
-        }
-        return currencyPluralPattern;
-    }
+   public String getCurrencyPluralPattern(String pluralCount) {
+      String currencyPluralPattern = this.pluralCountToCurrencyUnitPattern.get(pluralCount);
+      if (currencyPluralPattern == null) {
+         if (!pluralCount.equals("other")) {
+            currencyPluralPattern = this.pluralCountToCurrencyUnitPattern.get("other");
+         }
 
-    public ULocale getLocale() {
-        return this.ulocale;
-    }
+         if (currencyPluralPattern == null) {
+            currencyPluralPattern = defaultCurrencyPluralPattern;
+         }
+      }
 
-    public void setPluralRules(String ruleDescription) {
-        this.pluralRules = PluralRules.createRules(ruleDescription);
-    }
+      return currencyPluralPattern;
+   }
 
-    public void setCurrencyPluralPattern(String pluralCount, String pattern) {
-        this.pluralCountToCurrencyUnitPattern.put(pluralCount, pattern);
-    }
+   public ULocale getLocale() {
+      return this.ulocale;
+   }
 
-    public void setLocale(ULocale loc) {
-        this.ulocale = loc;
-        this.initialize(loc);
-    }
+   public void setPluralRules(String ruleDescription) {
+      this.pluralRules = PluralRules.createRules(ruleDescription);
+   }
 
-    public Object clone() {
-        try {
-            CurrencyPluralInfo other = (CurrencyPluralInfo)super.clone();
-            other.ulocale = (ULocale)this.ulocale.clone();
-            other.pluralCountToCurrencyUnitPattern = new HashMap<String, String>();
-            for (String pluralCount : this.pluralCountToCurrencyUnitPattern.keySet()) {
-                String currencyPattern = this.pluralCountToCurrencyUnitPattern.get(pluralCount);
-                other.pluralCountToCurrencyUnitPattern.put(pluralCount, currencyPattern);
-            }
-            return other;
-        }
-        catch (CloneNotSupportedException e) {
-            throw new ICUCloneNotSupportedException(e);
-        }
-    }
+   public void setCurrencyPluralPattern(String pluralCount, String pattern) {
+      this.pluralCountToCurrencyUnitPattern.put(pluralCount, pattern);
+   }
 
-    public boolean equals(Object a) {
-        if (a instanceof CurrencyPluralInfo) {
-            CurrencyPluralInfo other = (CurrencyPluralInfo)a;
-            return this.pluralRules.equals(other.pluralRules) && this.pluralCountToCurrencyUnitPattern.equals(other.pluralCountToCurrencyUnitPattern);
-        }
-        return false;
-    }
+   public void setLocale(ULocale loc) {
+      this.ulocale = loc;
+      this.initialize(loc);
+   }
 
-    public int hashCode() {
-        return this.pluralCountToCurrencyUnitPattern.hashCode() ^ this.pluralRules.hashCode() ^ this.ulocale.hashCode();
-    }
+   @Override
+   public Object clone() {
+      try {
+         CurrencyPluralInfo other = (CurrencyPluralInfo)super.clone();
+         other.ulocale = (ULocale)this.ulocale.clone();
+         other.pluralCountToCurrencyUnitPattern = new HashMap<>();
 
-    @Deprecated
-    String select(double number) {
-        return this.pluralRules.select(number);
-    }
+         for (String pluralCount : this.pluralCountToCurrencyUnitPattern.keySet()) {
+            String currencyPattern = this.pluralCountToCurrencyUnitPattern.get(pluralCount);
+            other.pluralCountToCurrencyUnitPattern.put(pluralCount, currencyPattern);
+         }
 
-    @Deprecated
-    public String select(PluralRules.FixedDecimal numberInfo) {
-        return this.pluralRules.select(numberInfo);
-    }
+         return other;
+      } catch (CloneNotSupportedException var5) {
+         throw new ICUCloneNotSupportedException(var5);
+      }
+   }
 
-    @Deprecated
-    public Iterator<String> pluralPatternIterator() {
-        return this.pluralCountToCurrencyUnitPattern.keySet().iterator();
-    }
+   @Override
+   public boolean equals(Object a) {
+      if (!(a instanceof CurrencyPluralInfo)) {
+         return false;
+      } else {
+         CurrencyPluralInfo other = (CurrencyPluralInfo)a;
+         return this.pluralRules.equals(other.pluralRules) && this.pluralCountToCurrencyUnitPattern.equals(other.pluralCountToCurrencyUnitPattern);
+      }
+   }
 
-    private void initialize(ULocale uloc) {
-        this.ulocale = uloc;
-        this.pluralRules = PluralRules.forLocale(uloc);
-        this.setupCurrencyPluralPattern(uloc);
-    }
+   @Override
+   public int hashCode() {
+      return this.pluralCountToCurrencyUnitPattern.hashCode() ^ this.pluralRules.hashCode() ^ this.ulocale.hashCode();
+   }
 
-    private void setupCurrencyPluralPattern(ULocale uloc) {
-        this.pluralCountToCurrencyUnitPattern = new HashMap<String, String>();
-        String numberStylePattern = NumberFormat.getPattern(uloc, 0);
-        int separatorIndex = numberStylePattern.indexOf(";");
-        String negNumberPattern = null;
-        if (separatorIndex != -1) {
-            negNumberPattern = numberStylePattern.substring(separatorIndex + 1);
-            numberStylePattern = numberStylePattern.substring(0, separatorIndex);
-        }
-        Map<String, String> map = CurrencyData.provider.getInstance(uloc, true).getUnitPatterns();
-        for (Map.Entry<String, String> e : map.entrySet()) {
-            String pluralCount = e.getKey();
-            String pattern = e.getValue();
-            String patternWithNumber = pattern.replace("{0}", numberStylePattern);
-            String patternWithCurrencySign = patternWithNumber.replace("{1}", tripleCurrencyStr);
-            if (separatorIndex != -1) {
-                String negPattern = pattern;
-                String negWithNumber = negPattern.replace("{0}", negNumberPattern);
-                String negWithCurrSign = negWithNumber.replace("{1}", tripleCurrencyStr);
-                StringBuilder posNegPatterns = new StringBuilder(patternWithCurrencySign);
-                posNegPatterns.append(";");
-                posNegPatterns.append(negWithCurrSign);
-                patternWithCurrencySign = posNegPatterns.toString();
-            }
-            this.pluralCountToCurrencyUnitPattern.put(pluralCount, patternWithCurrencySign);
-        }
-    }
+   @Deprecated
+   String select(double number) {
+      return this.pluralRules.select(number);
+   }
+
+   @Deprecated
+   public String select(PluralRules.FixedDecimal numberInfo) {
+      return this.pluralRules.select(numberInfo);
+   }
+
+   @Deprecated
+   public Iterator<String> pluralPatternIterator() {
+      return this.pluralCountToCurrencyUnitPattern.keySet().iterator();
+   }
+
+   private void initialize(ULocale uloc) {
+      this.ulocale = uloc;
+      this.pluralRules = PluralRules.forLocale(uloc);
+      this.setupCurrencyPluralPattern(uloc);
+   }
+
+   private void setupCurrencyPluralPattern(ULocale uloc) {
+      this.pluralCountToCurrencyUnitPattern = new HashMap<>();
+      String numberStylePattern = NumberFormat.getPattern(uloc, 0);
+      int separatorIndex = numberStylePattern.indexOf(";");
+      String negNumberPattern = null;
+      if (separatorIndex != -1) {
+         negNumberPattern = numberStylePattern.substring(separatorIndex + 1);
+         numberStylePattern = numberStylePattern.substring(0, separatorIndex);
+      }
+
+      Map<String, String> map = CurrencyData.provider.getInstance(uloc, true).getUnitPatterns();
+
+      for (Entry<String, String> e : map.entrySet()) {
+         String pluralCount = e.getKey();
+         String pattern = e.getValue();
+         String patternWithNumber = pattern.replace("{0}", numberStylePattern);
+         String patternWithCurrencySign = patternWithNumber.replace("{1}", tripleCurrencyStr);
+         if (separatorIndex != -1) {
+            String negWithNumber = pattern.replace("{0}", negNumberPattern);
+            String negWithCurrSign = negWithNumber.replace("{1}", tripleCurrencyStr);
+            StringBuilder posNegPatterns = new StringBuilder(patternWithCurrencySign);
+            posNegPatterns.append(";");
+            posNegPatterns.append(negWithCurrSign);
+            patternWithCurrencySign = posNegPatterns.toString();
+         }
+
+         this.pluralCountToCurrencyUnitPattern.put(pluralCount, patternWithCurrencySign);
+      }
+   }
 }
-

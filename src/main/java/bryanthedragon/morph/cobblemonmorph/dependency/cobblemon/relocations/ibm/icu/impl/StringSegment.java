@@ -1,142 +1,151 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.Utility;
 import com.cobblemon.mod.relocations.ibm.icu.lang.UCharacter;
 import com.cobblemon.mod.relocations.ibm.icu.text.UnicodeSet;
 
-public class StringSegment
-implements CharSequence {
-    private final String str;
-    private int start;
-    private int end;
-    private boolean foldCase;
+public class StringSegment implements CharSequence {
+   private final String str;
+   private int start;
+   private int end;
+   private boolean foldCase;
 
-    public StringSegment(String str, boolean foldCase) {
-        this.str = str;
-        this.start = 0;
-        this.end = str.length();
-        this.foldCase = foldCase;
-    }
+   public StringSegment(String str, boolean foldCase) {
+      this.str = str;
+      this.start = 0;
+      this.end = str.length();
+      this.foldCase = foldCase;
+   }
 
-    public int getOffset() {
-        return this.start;
-    }
+   public int getOffset() {
+      return this.start;
+   }
 
-    public void setOffset(int start2) {
-        assert (start2 <= this.end);
-        this.start = start2;
-    }
+   public void setOffset(int start) {
+      assert start <= this.end;
 
-    public void adjustOffset(int delta) {
-        assert (this.start + delta >= 0);
-        assert (this.start + delta <= this.end);
-        this.start += delta;
-    }
+      this.start = start;
+   }
 
-    public void adjustOffsetByCodePoint() {
-        this.start += Character.charCount(this.getCodePoint());
-    }
+   public void adjustOffset(int delta) {
+      assert this.start + delta >= 0;
 
-    public void setLength(int length) {
-        assert (length >= 0);
-        assert (this.start + length <= this.str.length());
-        this.end = this.start + length;
-    }
+      assert this.start + delta <= this.end;
 
-    public void resetLength() {
-        this.end = this.str.length();
-    }
+      this.start += delta;
+   }
 
-    @Override
-    public int length() {
-        return this.end - this.start;
-    }
+   public void adjustOffsetByCodePoint() {
+      this.start = this.start + Character.charCount(this.getCodePoint());
+   }
 
-    @Override
-    public char charAt(int index) {
-        return this.str.charAt(index + this.start);
-    }
+   public void setLength(int length) {
+      assert length >= 0;
 
-    @Override
-    public CharSequence subSequence(int start2, int end2) {
-        return this.str.subSequence(start2 + this.start, end2 + this.start);
-    }
+      assert this.start + length <= this.str.length();
 
-    public int getCodePoint() {
-        char trail;
-        assert (this.start < this.end);
-        char lead = this.str.charAt(this.start);
-        if (Character.isHighSurrogate(lead) && this.start + 1 < this.end && Character.isLowSurrogate(trail = this.str.charAt(this.start + 1))) {
-            return Character.toCodePoint(lead, trail);
-        }
-        return lead;
-    }
+      this.end = this.start + length;
+   }
 
-    public int codePointAt(int index) {
-        return this.str.codePointAt(this.start + index);
-    }
+   public void resetLength() {
+      this.end = this.str.length();
+   }
 
-    public boolean startsWith(int otherCp) {
-        return StringSegment.codePointsEqual(this.getCodePoint(), otherCp, this.foldCase);
-    }
+   @Override
+   public int length() {
+      return this.end - this.start;
+   }
 
-    public boolean startsWith(UnicodeSet uniset) {
-        int cp = this.getCodePoint();
-        if (cp == -1) {
-            return false;
-        }
-        return uniset.contains(cp);
-    }
+   @Override
+   public char charAt(int index) {
+      return this.str.charAt(index + this.start);
+   }
 
-    public boolean startsWith(CharSequence other) {
-        if (other == null || other.length() == 0 || this.length() == 0) {
-            return false;
-        }
-        int cp1 = Character.codePointAt(this, 0);
-        int cp2 = Character.codePointAt(other, 0);
-        return StringSegment.codePointsEqual(cp1, cp2, this.foldCase);
-    }
+   @Override
+   public CharSequence subSequence(int start, int end) {
+      return this.str.subSequence(start + this.start, end + this.start);
+   }
 
-    public int getCommonPrefixLength(CharSequence other) {
-        return this.getPrefixLengthInternal(other, this.foldCase);
-    }
+   public int getCodePoint() {
+      assert this.start < this.end;
 
-    public int getCaseSensitivePrefixLength(CharSequence other) {
-        return this.getPrefixLengthInternal(other, false);
-    }
+      char lead = this.str.charAt(this.start);
+      char trail;
+      return Character.isHighSurrogate(lead) && this.start + 1 < this.end && Character.isLowSurrogate(trail = this.str.charAt(this.start + 1))
+         ? Character.toCodePoint(lead, trail)
+         : lead;
+   }
 
-    private int getPrefixLengthInternal(CharSequence other, boolean foldCase) {
-        int cp2;
-        int offset;
-        int cp1;
-        assert (other.length() != 0);
-        for (offset = 0; offset < Math.min(this.length(), other.length()) && StringSegment.codePointsEqual(cp1 = Character.codePointAt(this, offset), cp2 = Character.codePointAt(other, offset), foldCase); offset += Character.charCount(cp1)) {
-        }
-        return offset;
-    }
+   public int codePointAt(int index) {
+      return this.str.codePointAt(this.start + index);
+   }
 
-    private static final boolean codePointsEqual(int cp1, int cp2, boolean foldCase) {
-        if (cp1 == cp2) {
-            return true;
-        }
-        if (!foldCase) {
-            return false;
-        }
-        return (cp1 = UCharacter.foldCase(cp1, true)) == (cp2 = UCharacter.foldCase(cp2, true));
-    }
+   public boolean startsWith(int otherCp) {
+      return codePointsEqual(this.getCodePoint(), otherCp, this.foldCase);
+   }
 
-    public boolean contentEquals(CharSequence other) {
-        return Utility.charSequenceEquals(this, other);
-    }
+   public boolean startsWith(UnicodeSet uniset) {
+      int cp = this.getCodePoint();
+      return cp == -1 ? false : uniset.contains(cp);
+   }
 
-    @Override
-    public String toString() {
-        return this.str.substring(0, this.start) + "[" + this.str.substring(this.start, this.end) + "]" + this.str.substring(this.end);
-    }
+   public boolean startsWith(CharSequence other) {
+      if (other != null && other.length() != 0 && this.length() != 0) {
+         int cp1 = Character.codePointAt(this, 0);
+         int cp2 = Character.codePointAt(other, 0);
+         return codePointsEqual(cp1, cp2, this.foldCase);
+      } else {
+         return false;
+      }
+   }
 
-    public String asString() {
-        return this.str.substring(this.start, this.end);
-    }
+   public int getCommonPrefixLength(CharSequence other) {
+      return this.getPrefixLengthInternal(other, this.foldCase);
+   }
+
+   public int getCaseSensitivePrefixLength(CharSequence other) {
+      return this.getPrefixLengthInternal(other, false);
+   }
+
+   private int getPrefixLengthInternal(CharSequence other, boolean foldCase) {
+      assert other.length() != 0;
+
+      int offset = 0;
+
+      while (offset < Math.min(this.length(), other.length())) {
+         int cp1 = Character.codePointAt(this, offset);
+         int cp2 = Character.codePointAt(other, offset);
+         if (!codePointsEqual(cp1, cp2, foldCase)) {
+            break;
+         }
+
+         offset += Character.charCount(cp1);
+      }
+
+      return offset;
+   }
+
+   private static final boolean codePointsEqual(int cp1, int cp2, boolean foldCase) {
+      if (cp1 == cp2) {
+         return true;
+      } else if (!foldCase) {
+         return false;
+      } else {
+         cp1 = UCharacter.foldCase(cp1, true);
+         cp2 = UCharacter.foldCase(cp2, true);
+         return cp1 == cp2;
+      }
+   }
+
+   public boolean contentEquals(CharSequence other) {
+      return Utility.charSequenceEquals(this, other);
+   }
+
+   @Override
+   public String toString() {
+      return this.str.substring(0, this.start) + "[" + this.str.substring(this.start, this.end) + "]" + this.str.substring(this.end);
+   }
+
+   public String asString() {
+      return this.str.substring(this.start, this.end);
+   }
 }
-

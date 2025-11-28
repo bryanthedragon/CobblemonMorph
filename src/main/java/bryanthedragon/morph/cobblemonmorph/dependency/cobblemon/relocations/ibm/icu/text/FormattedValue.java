@@ -1,18 +1,14 @@
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
-
-import com.cobblemon.mod.relocations.ibm.icu.text.ConstrainedFieldPosition;
 import java.text.AttributedCharacterIterator;
 
-public interface FormattedValue
-extends CharSequence {
-    @Override
-    public String toString();
+public interface FormattedValue extends CharSequence {
+   @Override
+   String toString();
 
-    public <A extends Appendable> A appendTo(A var1);
+   <A extends Appendable> A appendTo(A var1);
 
-    public boolean nextPosition(ConstrainedFieldPosition var1);
+   boolean nextPosition(ConstrainedFieldPosition var1);
 
-    public AttributedCharacterIterator toCharacterIterator();
+   AttributedCharacterIterator toCharacterIterator();
 }
-

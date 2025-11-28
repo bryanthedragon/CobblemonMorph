@@ -1,12 +1,7 @@
-
 package org.graalvm.word;
 
-import org.graalvm.word.ComparableWord;
+public interface PointerBase extends ComparableWord {
+   boolean isNull();
 
-public interface PointerBase
-extends ComparableWord {
-    public boolean isNull();
-
-    public boolean isNonNull();
+   boolean isNonNull();
 }
-

@@ -1,25 +1,20 @@
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+public class ICUCloneNotSupportedException extends ICUException {
+   private static final long serialVersionUID = -4824446458488194964L;
 
-import com.cobblemon.mod.relocations.ibm.icu.util.ICUException;
+   public ICUCloneNotSupportedException() {
+   }
 
-public class ICUCloneNotSupportedException
-extends ICUException {
-    private static final long serialVersionUID = -4824446458488194964L;
+   public ICUCloneNotSupportedException(String message) {
+      super(message);
+   }
 
-    public ICUCloneNotSupportedException() {
-    }
+   public ICUCloneNotSupportedException(Throwable cause) {
+      super(cause);
+   }
 
-    public ICUCloneNotSupportedException(String message) {
-        super(message);
-    }
-
-    public ICUCloneNotSupportedException(Throwable cause) {
-        super(cause);
-    }
-
-    public ICUCloneNotSupportedException(String message, Throwable cause) {
-        super(message, cause);
-    }
+   public ICUCloneNotSupportedException(String message, Throwable cause) {
+      super(message, cause);
+   }
 }
-

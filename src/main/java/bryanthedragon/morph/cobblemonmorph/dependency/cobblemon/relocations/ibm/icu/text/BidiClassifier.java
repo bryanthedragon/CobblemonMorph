@@ -1,23 +1,21 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
 public class BidiClassifier {
-    protected Object context;
+   protected Object context;
 
-    public BidiClassifier(Object context) {
-        this.context = context;
-    }
+   public BidiClassifier(Object context) {
+      this.context = context;
+   }
 
-    public void setContext(Object context) {
-        this.context = context;
-    }
+   public void setContext(Object context) {
+      this.context = context;
+   }
 
-    public Object getContext() {
-        return this.context;
-    }
+   public Object getContext() {
+      return this.context;
+   }
 
-    public int classify(int c) {
-        return 23;
-    }
+   public int classify(int c) {
+      return 23;
+   }
 }
-

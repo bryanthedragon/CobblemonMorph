@@ -1,74 +1,69 @@
-
 package org.graalvm.word;
 
-import org.graalvm.word.ComparableWord;
+public interface UnsignedWord extends ComparableWord {
+   UnsignedWord add(UnsignedWord val);
 
-public interface UnsignedWord
-extends ComparableWord {
-    public UnsignedWord add(UnsignedWord var1);
+   UnsignedWord subtract(UnsignedWord val);
 
-    public UnsignedWord subtract(UnsignedWord var1);
+   UnsignedWord multiply(UnsignedWord val);
 
-    public UnsignedWord multiply(UnsignedWord var1);
+   UnsignedWord unsignedDivide(UnsignedWord val);
 
-    public UnsignedWord unsignedDivide(UnsignedWord var1);
+   UnsignedWord unsignedRemainder(UnsignedWord val);
 
-    public UnsignedWord unsignedRemainder(UnsignedWord var1);
+   UnsignedWord shiftLeft(UnsignedWord n);
 
-    public UnsignedWord shiftLeft(UnsignedWord var1);
+   UnsignedWord unsignedShiftRight(UnsignedWord n);
 
-    public UnsignedWord unsignedShiftRight(UnsignedWord var1);
+   UnsignedWord and(UnsignedWord val);
 
-    public UnsignedWord and(UnsignedWord var1);
+   UnsignedWord or(UnsignedWord val);
 
-    public UnsignedWord or(UnsignedWord var1);
+   UnsignedWord xor(UnsignedWord val);
 
-    public UnsignedWord xor(UnsignedWord var1);
+   UnsignedWord not();
 
-    public UnsignedWord not();
+   boolean equal(UnsignedWord val);
 
-    public boolean equal(UnsignedWord var1);
+   boolean notEqual(UnsignedWord val);
 
-    public boolean notEqual(UnsignedWord var1);
+   boolean belowThan(UnsignedWord val);
 
-    public boolean belowThan(UnsignedWord var1);
+   boolean belowOrEqual(UnsignedWord val);
 
-    public boolean belowOrEqual(UnsignedWord var1);
+   boolean aboveThan(UnsignedWord val);
 
-    public boolean aboveThan(UnsignedWord var1);
+   boolean aboveOrEqual(UnsignedWord val);
 
-    public boolean aboveOrEqual(UnsignedWord var1);
+   UnsignedWord add(int val);
 
-    public UnsignedWord add(int var1);
+   UnsignedWord subtract(int val);
 
-    public UnsignedWord subtract(int var1);
+   UnsignedWord multiply(int val);
 
-    public UnsignedWord multiply(int var1);
+   UnsignedWord unsignedDivide(int val);
 
-    public UnsignedWord unsignedDivide(int var1);
+   UnsignedWord unsignedRemainder(int val);
 
-    public UnsignedWord unsignedRemainder(int var1);
+   UnsignedWord shiftLeft(int n);
 
-    public UnsignedWord shiftLeft(int var1);
+   UnsignedWord unsignedShiftRight(int n);
 
-    public UnsignedWord unsignedShiftRight(int var1);
+   UnsignedWord and(int val);
 
-    public UnsignedWord and(int var1);
+   UnsignedWord or(int val);
 
-    public UnsignedWord or(int var1);
+   UnsignedWord xor(int val);
 
-    public UnsignedWord xor(int var1);
+   boolean equal(int val);
 
-    public boolean equal(int var1);
+   boolean notEqual(int val);
 
-    public boolean notEqual(int var1);
+   boolean belowThan(int val);
 
-    public boolean belowThan(int var1);
+   boolean belowOrEqual(int val);
 
-    public boolean belowOrEqual(int var1);
+   boolean aboveThan(int val);
 
-    public boolean aboveThan(int var1);
-
-    public boolean aboveOrEqual(int var1);
+   boolean aboveOrEqual(int val);
 }
-

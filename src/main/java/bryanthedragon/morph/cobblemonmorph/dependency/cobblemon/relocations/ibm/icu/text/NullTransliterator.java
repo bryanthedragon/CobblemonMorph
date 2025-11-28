@@ -1,26 +1,19 @@
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+class NullTransliterator extends Transliterator {
+   static final String SHORT_ID = "Null";
+   static final String _ID = "Any-Null";
 
-import com.cobblemon.mod.relocations.ibm.icu.text.Replaceable;
-import com.cobblemon.mod.relocations.ibm.icu.text.Transliterator;
-import com.cobblemon.mod.relocations.ibm.icu.text.UnicodeSet;
+   public NullTransliterator() {
+      super("Any-Null", null);
+   }
 
-class NullTransliterator
-extends Transliterator {
-    static final String SHORT_ID = "Null";
-    static final String _ID = "Any-Null";
+   @Override
+   protected void handleTransliterate(Replaceable text, Transliterator.Position offsets, boolean incremental) {
+      offsets.start = offsets.limit;
+   }
 
-    public NullTransliterator() {
-        super(_ID, null);
-    }
-
-    @Override
-    protected void handleTransliterate(Replaceable text, Transliterator.Position offsets, boolean incremental) {
-        offsets.start = offsets.limit;
-    }
-
-    @Override
-    public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
-    }
+   @Override
+   public void addSourceTargetSet(UnicodeSet inputFilter, UnicodeSet sourceSet, UnicodeSet targetSet) {
+   }
 }
-

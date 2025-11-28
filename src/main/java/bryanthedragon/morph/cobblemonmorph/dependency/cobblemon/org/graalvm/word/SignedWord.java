@@ -1,75 +1,69 @@
-
 package org.graalvm.word;
 
-import org.graalvm.word.ComparableWord;
-import org.graalvm.word.UnsignedWord;
+public interface SignedWord extends ComparableWord {
+   SignedWord add(SignedWord val);
 
-public interface SignedWord
-extends ComparableWord {
-    public SignedWord add(SignedWord var1);
+   SignedWord subtract(SignedWord val);
 
-    public SignedWord subtract(SignedWord var1);
+   SignedWord multiply(SignedWord val);
 
-    public SignedWord multiply(SignedWord var1);
+   SignedWord signedDivide(SignedWord val);
 
-    public SignedWord signedDivide(SignedWord var1);
+   SignedWord signedRemainder(SignedWord val);
 
-    public SignedWord signedRemainder(SignedWord var1);
+   SignedWord shiftLeft(UnsignedWord n);
 
-    public SignedWord shiftLeft(UnsignedWord var1);
+   SignedWord signedShiftRight(UnsignedWord n);
 
-    public SignedWord signedShiftRight(UnsignedWord var1);
+   SignedWord and(SignedWord val);
 
-    public SignedWord and(SignedWord var1);
+   SignedWord or(SignedWord val);
 
-    public SignedWord or(SignedWord var1);
+   SignedWord xor(SignedWord val);
 
-    public SignedWord xor(SignedWord var1);
+   SignedWord not();
 
-    public SignedWord not();
+   boolean equal(SignedWord val);
 
-    public boolean equal(SignedWord var1);
+   boolean notEqual(SignedWord val);
 
-    public boolean notEqual(SignedWord var1);
+   boolean lessThan(SignedWord val);
 
-    public boolean lessThan(SignedWord var1);
+   boolean lessOrEqual(SignedWord val);
 
-    public boolean lessOrEqual(SignedWord var1);
+   boolean greaterThan(SignedWord val);
 
-    public boolean greaterThan(SignedWord var1);
+   boolean greaterOrEqual(SignedWord val);
 
-    public boolean greaterOrEqual(SignedWord var1);
+   SignedWord add(int val);
 
-    public SignedWord add(int var1);
+   SignedWord subtract(int val);
 
-    public SignedWord subtract(int var1);
+   SignedWord multiply(int val);
 
-    public SignedWord multiply(int var1);
+   SignedWord signedDivide(int val);
 
-    public SignedWord signedDivide(int var1);
+   SignedWord signedRemainder(int val);
 
-    public SignedWord signedRemainder(int var1);
+   SignedWord shiftLeft(int n);
 
-    public SignedWord shiftLeft(int var1);
+   SignedWord signedShiftRight(int n);
 
-    public SignedWord signedShiftRight(int var1);
+   SignedWord and(int val);
 
-    public SignedWord and(int var1);
+   SignedWord or(int val);
 
-    public SignedWord or(int var1);
+   SignedWord xor(int val);
 
-    public SignedWord xor(int var1);
+   boolean equal(int val);
 
-    public boolean equal(int var1);
+   boolean notEqual(int val);
 
-    public boolean notEqual(int var1);
+   boolean lessThan(int val);
 
-    public boolean lessThan(int var1);
+   boolean lessOrEqual(int val);
 
-    public boolean lessOrEqual(int var1);
+   boolean greaterThan(int val);
 
-    public boolean greaterThan(int var1);
-
-    public boolean greaterOrEqual(int var1);
+   boolean greaterOrEqual(int val);
 }
-

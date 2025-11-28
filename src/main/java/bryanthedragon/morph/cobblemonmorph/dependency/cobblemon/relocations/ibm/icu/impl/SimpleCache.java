@@ -1,7 +1,5 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.ICUCache;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
@@ -9,57 +7,67 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleCache<K, V>
-implements ICUCache<K, V> {
-    private static final int DEFAULT_CAPACITY = 16;
-    private volatile Reference<Map<K, V>> cacheRef = null;
-    private int type = 0;
-    private int capacity = 16;
+public class SimpleCache<K, V> implements ICUCache<K, V> {
+   private static final int DEFAULT_CAPACITY = 16;
+   private volatile Reference<Map<K, V>> cacheRef = null;
+   private int type = 0;
+   private int capacity = 16;
 
-    public SimpleCache() {
-    }
+   public SimpleCache() {
+   }
 
-    public SimpleCache(int cacheType) {
-        this(cacheType, 16);
-    }
+   public SimpleCache(int cacheType) {
+      this(cacheType, 16);
+   }
 
-    public SimpleCache(int cacheType, int initialCapacity) {
-        if (cacheType == 1) {
-            this.type = cacheType;
-        }
-        if (initialCapacity > 0) {
-            this.capacity = initialCapacity;
-        }
-    }
+   public SimpleCache(int cacheType, int initialCapacity) {
+      if (cacheType == 1) {
+         this.type = cacheType;
+      }
 
-    @Override
-    public V get(Object key) {
-        Map<K, V> map;
-        Reference<Map<K, V>> ref = this.cacheRef;
-        if (ref != null && (map = ref.get()) != null) {
+      if (initialCapacity > 0) {
+         this.capacity = initialCapacity;
+      }
+   }
+
+   @Override
+   public V get(Object key) {
+      Reference<Map<K, V>> ref = this.cacheRef;
+      if (ref != null) {
+         Map<K, V> map = ref.get();
+         if (map != null) {
             return map.get(key);
-        }
-        return null;
-    }
+         }
+      }
 
-    @Override
-    public void put(K key, V value2) {
-        Reference ref = this.cacheRef;
-        Map<K, V> map = null;
-        if (ref != null) {
-            map = ref.get();
-        }
-        if (map == null) {
-            map = Collections.synchronizedMap(new HashMap(this.capacity));
-            ref = this.type == 1 ? new WeakReference<Map<K, V>>(map) : new SoftReference<Map<K, V>>(map);
-            this.cacheRef = ref;
-        }
-        map.put(key, value2);
-    }
+      return null;
+   }
 
-    @Override
-    public void clear() {
-        this.cacheRef = null;
-    }
+   @Override
+   public void put(K key, V value) {
+      Reference<Map<K, V>> ref = this.cacheRef;
+      Map<K, V> map = null;
+      if (ref != null) {
+         map = ref.get();
+      }
+
+      if (map == null) {
+         map = Collections.synchronizedMap(new HashMap<>(this.capacity));
+         Object var5;
+         if (this.type == 1) {
+            var5 = new WeakReference<>(map);
+         } else {
+            var5 = new SoftReference<>(map);
+         }
+
+         this.cacheRef = (Reference<Map<K, V>>)var5;
+      }
+
+      map.put(key, value);
+   }
+
+   @Override
+   public void clear() {
+      this.cacheRef = null;
+   }
 }
-

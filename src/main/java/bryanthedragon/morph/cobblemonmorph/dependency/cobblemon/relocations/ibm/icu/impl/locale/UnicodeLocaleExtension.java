@@ -1,107 +1,110 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl.locale;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.locale;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.locale.AsciiUtil;
-import com.cobblemon.mod.relocations.ibm.icu.impl.locale.Extension;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
-public class UnicodeLocaleExtension
-extends Extension {
-    public static final char SINGLETON = 'u';
-    private static final SortedSet<String> EMPTY_SORTED_SET = new TreeSet<String>();
-    private static final SortedMap<String, String> EMPTY_SORTED_MAP = new TreeMap<String, String>();
-    private SortedSet<String> _attributes = EMPTY_SORTED_SET;
-    private SortedMap<String, String> _keywords = EMPTY_SORTED_MAP;
-    public static final UnicodeLocaleExtension CA_JAPANESE = new UnicodeLocaleExtension();
-    public static final UnicodeLocaleExtension NU_THAI;
+public class UnicodeLocaleExtension extends Extension {
+   public static final char SINGLETON = 'u';
+   private static final SortedSet<String> EMPTY_SORTED_SET = new TreeSet<>();
+   private static final SortedMap<String, String> EMPTY_SORTED_MAP = new TreeMap<>();
+   private SortedSet<String> _attributes = EMPTY_SORTED_SET;
+   private SortedMap<String, String> _keywords = EMPTY_SORTED_MAP;
+   public static final UnicodeLocaleExtension CA_JAPANESE = new UnicodeLocaleExtension();
+   public static final UnicodeLocaleExtension NU_THAI = new UnicodeLocaleExtension();
 
-    private UnicodeLocaleExtension() {
-        super('u');
-    }
+   private UnicodeLocaleExtension() {
+      super('u');
+   }
 
-    UnicodeLocaleExtension(SortedSet<String> attributes, SortedMap<String, String> keywords) {
-        this();
-        if (attributes != null && attributes.size() > 0) {
-            this._attributes = attributes;
-        }
-        if (keywords != null && keywords.size() > 0) {
-            this._keywords = keywords;
-        }
-        if (this._attributes.size() > 0 || this._keywords.size() > 0) {
-            StringBuilder sb = new StringBuilder();
-            for (String string : this._attributes) {
-                sb.append("-").append(string);
+   UnicodeLocaleExtension(SortedSet<String> attributes, SortedMap<String, String> keywords) {
+      this();
+      if (attributes != null && attributes.size() > 0) {
+         this._attributes = attributes;
+      }
+
+      if (keywords != null && keywords.size() > 0) {
+         this._keywords = keywords;
+      }
+
+      if (this._attributes.size() > 0 || this._keywords.size() > 0) {
+         StringBuilder sb = new StringBuilder();
+
+         for (String attribute : this._attributes) {
+            sb.append("-").append(attribute);
+         }
+
+         for (Entry<String, String> keyword : this._keywords.entrySet()) {
+            String key = keyword.getKey();
+            String value = keyword.getValue();
+            sb.append("-").append(key);
+            if (value.length() > 0) {
+               sb.append("-").append(value);
             }
-            for (Map.Entry entry : this._keywords.entrySet()) {
-                String key = (String)entry.getKey();
-                String value2 = (String)entry.getValue();
-                sb.append("-").append(key);
-                if (value2.length() <= 0) continue;
-                sb.append("-").append(value2);
-            }
-            this._value = sb.substring(1);
-        }
-    }
+         }
 
-    public Set<String> getUnicodeLocaleAttributes() {
-        return Collections.unmodifiableSet(this._attributes);
-    }
+         this._value = sb.substring(1);
+      }
+   }
 
-    public Set<String> getUnicodeLocaleKeys() {
-        return Collections.unmodifiableSet(this._keywords.keySet());
-    }
+   public Set<String> getUnicodeLocaleAttributes() {
+      return Collections.unmodifiableSet(this._attributes);
+   }
 
-    public String getUnicodeLocaleType(String unicodeLocaleKey) {
-        return (String)this._keywords.get(unicodeLocaleKey);
-    }
+   public Set<String> getUnicodeLocaleKeys() {
+      return Collections.unmodifiableSet(this._keywords.keySet());
+   }
 
-    public static boolean isSingletonChar(char c) {
-        return 'u' == AsciiUtil.toLower(c);
-    }
+   public String getUnicodeLocaleType(String unicodeLocaleKey) {
+      return this._keywords.get(unicodeLocaleKey);
+   }
 
-    public static boolean isAttribute(String s) {
-        return s.length() >= 3 && s.length() <= 8 && AsciiUtil.isAlphaNumericString(s);
-    }
+   public static boolean isSingletonChar(char c) {
+      return 'u' == AsciiUtil.toLower(c);
+   }
 
-    public static boolean isKey(String s) {
-        return s.length() == 2 && AsciiUtil.isAlphaNumeric(s.charAt(0)) && AsciiUtil.isAlpha(s.charAt(1));
-    }
+   public static boolean isAttribute(String s) {
+      return s.length() >= 3 && s.length() <= 8 && AsciiUtil.isAlphaNumericString(s);
+   }
 
-    public static boolean isTypeSubtag(String s) {
-        return s.length() >= 3 && s.length() <= 8 && AsciiUtil.isAlphaNumericString(s);
-    }
+   public static boolean isKey(String s) {
+      return s.length() == 2 && AsciiUtil.isAlphaNumeric(s.charAt(0)) && AsciiUtil.isAlpha(s.charAt(1));
+   }
 
-    public static boolean isType(String s) {
-        int startIdx = 0;
-        boolean sawSubtag = false;
-        while (true) {
-            int idx;
-            String subtag;
-            String string = subtag = (idx = s.indexOf("-", startIdx)) < 0 ? s.substring(startIdx) : s.substring(startIdx, idx);
-            if (!UnicodeLocaleExtension.isTypeSubtag(subtag)) {
-                return false;
-            }
-            sawSubtag = true;
-            if (idx < 0) break;
-            startIdx = idx + 1;
-        }
-        return sawSubtag && startIdx < s.length();
-    }
+   public static boolean isTypeSubtag(String s) {
+      return s.length() >= 3 && s.length() <= 8 && AsciiUtil.isAlphaNumericString(s);
+   }
 
-    static {
-        UnicodeLocaleExtension.CA_JAPANESE._keywords = new TreeMap<String, String>();
-        UnicodeLocaleExtension.CA_JAPANESE._keywords.put("ca", "japanese");
-        UnicodeLocaleExtension.CA_JAPANESE._value = "ca-japanese";
-        NU_THAI = new UnicodeLocaleExtension();
-        UnicodeLocaleExtension.NU_THAI._keywords = new TreeMap<String, String>();
-        UnicodeLocaleExtension.NU_THAI._keywords.put("nu", "thai");
-        UnicodeLocaleExtension.NU_THAI._value = "nu-thai";
-    }
+   public static boolean isType(String s) {
+      int startIdx = 0;
+      boolean sawSubtag = false;
+
+      while (true) {
+         int idx = s.indexOf("-", startIdx);
+         String subtag = idx < 0 ? s.substring(startIdx) : s.substring(startIdx, idx);
+         if (!isTypeSubtag(subtag)) {
+            return false;
+         }
+
+         sawSubtag = true;
+         if (idx < 0) {
+            return sawSubtag && startIdx < s.length();
+         }
+
+         startIdx = idx + 1;
+      }
+   }
+
+   static {
+      CA_JAPANESE._keywords = new TreeMap<>();
+      CA_JAPANESE._keywords.put("ca", "japanese");
+      CA_JAPANESE._value = "ca-japanese";
+      NU_THAI._keywords = new TreeMap<>();
+      NU_THAI._keywords.put("nu", "thai");
+      NU_THAI._value = "nu-thai";
+   }
 }
-

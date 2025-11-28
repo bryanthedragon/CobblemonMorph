@@ -1,40 +1,33 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl.duration;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration;
+class SingleUnitBuilder extends PeriodBuilderImpl {
+   SingleUnitBuilder(BasicPeriodBuilderFactory.Settings settings) {
+      super(settings);
+   }
 
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.BasicPeriodBuilderFactory;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.Period;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.PeriodBuilder;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.PeriodBuilderImpl;
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.TimeUnit;
+   public static SingleUnitBuilder get(BasicPeriodBuilderFactory.Settings settings) {
+      return settings == null ? null : new SingleUnitBuilder(settings);
+   }
 
-class SingleUnitBuilder
-extends PeriodBuilderImpl {
-    SingleUnitBuilder(BasicPeriodBuilderFactory.Settings settings) {
-        super(settings);
-    }
+   @Override
+   protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settingsToUse) {
+      return get(settingsToUse);
+   }
 
-    public static SingleUnitBuilder get(BasicPeriodBuilderFactory.Settings settings) {
-        if (settings == null) {
-            return null;
-        }
-        return new SingleUnitBuilder(settings);
-    }
+   @Override
+   protected Period handleCreate(long duration, long referenceDate, boolean inPast) {
+      short uset = this.settings.effectiveSet();
 
-    @Override
-    protected PeriodBuilder withSettings(BasicPeriodBuilderFactory.Settings settingsToUse) {
-        return SingleUnitBuilder.get(settingsToUse);
-    }
+      for (int i = 0; i < TimeUnit.units.length; i++) {
+         if (0 != (uset & 1 << i)) {
+            TimeUnit unit = TimeUnit.units[i];
+            long unitDuration = this.approximateDurationOf(unit);
+            if (duration >= unitDuration) {
+               return Period.at((float)((double)duration / unitDuration), unit).inPast(inPast);
+            }
+         }
+      }
 
-    @Override
-    protected Period handleCreate(long duration, long referenceDate, boolean inPast) {
-        short uset = this.settings.effectiveSet();
-        for (int i = 0; i < TimeUnit.units.length; ++i) {
-            TimeUnit unit;
-            long unitDuration;
-            if (0 == (uset & 1 << i) || duration < (unitDuration = this.approximateDurationOf(unit = TimeUnit.units[i]))) continue;
-            return Period.at((float)((double)duration / (double)unitDuration), unit).inPast(inPast);
-        }
-        return null;
-    }
+      return null;
+   }
 }
-

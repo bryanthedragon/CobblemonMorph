@@ -1,11 +1,9 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
 public interface UForwardCharacterIterator {
-    public static final int DONE = -1;
+   int DONE = -1;
 
-    public int next();
+   int next();
 
-    public int nextCodePoint();
+   int nextCodePoint();
 }
-

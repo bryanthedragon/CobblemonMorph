@@ -1,8 +1,6 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.locale;
+package com.cobblemon.mod.relocations.ibm.icu.impl.locale;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.ICUResourceBundle;
-import com.cobblemon.mod.relocations.ibm.icu.impl.locale.AsciiUtil;
 import com.cobblemon.mod.relocations.ibm.icu.util.Output;
 import com.cobblemon.mod.relocations.ibm.icu.util.UResourceBundle;
 import com.cobblemon.mod.relocations.ibm.icu.util.UResourceBundleIterator;
@@ -18,585 +16,606 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 public class KeyTypeData {
-    static Set<String> DEPRECATED_KEYS = Collections.emptySet();
-    static Map<String, ValueType> VALUE_TYPES = Collections.emptyMap();
-    static Map<String, Set<String>> DEPRECATED_KEY_TYPES = Collections.emptyMap();
-    private static final Object[][] KEY_DATA = new Object[0][];
-    private static final Map<String, KeyData> KEYMAP = new HashMap<String, KeyData>();
-    private static Map<String, Set<String>> BCP47_KEYS;
+   static Set<String> DEPRECATED_KEYS = Collections.emptySet();
+   static Map<String, KeyTypeData.ValueType> VALUE_TYPES = Collections.emptyMap();
+   static Map<String, Set<String>> DEPRECATED_KEY_TYPES = Collections.emptyMap();
+   private static final Object[][] KEY_DATA = new Object[0][];
+   private static final Map<String, KeyTypeData.KeyData> KEYMAP = new HashMap<>();
+   private static Map<String, Set<String>> BCP47_KEYS;
 
-    public static String toBcpKey(String key) {
-        KeyData keyData = KEYMAP.get(key = AsciiUtil.toLowerString(key));
-        if (keyData != null) {
-            return keyData.bcpId;
-        }
-        return null;
-    }
+   public static String toBcpKey(String key) {
+      key = AsciiUtil.toLowerString(key);
+      KeyTypeData.KeyData keyData = KEYMAP.get(key);
+      return keyData != null ? keyData.bcpId : null;
+   }
 
-    public static String toLegacyKey(String key) {
-        KeyData keyData = KEYMAP.get(key = AsciiUtil.toLowerString(key));
-        if (keyData != null) {
-            return keyData.legacyId;
-        }
-        return null;
-    }
+   public static String toLegacyKey(String key) {
+      key = AsciiUtil.toLowerString(key);
+      KeyTypeData.KeyData keyData = KEYMAP.get(key);
+      return keyData != null ? keyData.legacyId : null;
+   }
 
-    public static String toBcpType(String key, String type, Output<Boolean> isKnownKey, Output<Boolean> isSpecialType) {
-        if (isKnownKey != null) {
-            isKnownKey.value = false;
-        }
-        if (isSpecialType != null) {
-            isSpecialType.value = false;
-        }
-        key = AsciiUtil.toLowerString(key);
-        type = AsciiUtil.toLowerString(type);
-        KeyData keyData = KEYMAP.get(key);
-        if (keyData != null) {
-            Type t;
-            if (isKnownKey != null) {
-                isKnownKey.value = Boolean.TRUE;
-            }
-            if ((t = keyData.typeMap.get(type)) != null) {
-                return t.bcpId;
-            }
-            if (keyData.specialTypes != null) {
-                for (SpecialType st : keyData.specialTypes) {
-                    if (!st.handler.isWellFormed(type)) continue;
-                    if (isSpecialType != null) {
-                        isSpecialType.value = true;
-                    }
-                    return st.handler.canonicalize(type);
-                }
-            }
-        }
-        return null;
-    }
+   public static String toBcpType(String key, String type, Output<Boolean> isKnownKey, Output<Boolean> isSpecialType) {
+      if (isKnownKey != null) {
+         isKnownKey.value = false;
+      }
 
-    public static String toLegacyType(String key, String type, Output<Boolean> isKnownKey, Output<Boolean> isSpecialType) {
-        if (isKnownKey != null) {
-            isKnownKey.value = false;
-        }
-        if (isSpecialType != null) {
-            isSpecialType.value = false;
-        }
-        key = AsciiUtil.toLowerString(key);
-        type = AsciiUtil.toLowerString(type);
-        KeyData keyData = KEYMAP.get(key);
-        if (keyData != null) {
-            Type t;
-            if (isKnownKey != null) {
-                isKnownKey.value = Boolean.TRUE;
-            }
-            if ((t = keyData.typeMap.get(type)) != null) {
-                return t.legacyId;
-            }
-            if (keyData.specialTypes != null) {
-                for (SpecialType st : keyData.specialTypes) {
-                    if (!st.handler.isWellFormed(type)) continue;
-                    if (isSpecialType != null) {
-                        isSpecialType.value = true;
-                    }
-                    return st.handler.canonicalize(type);
-                }
-            }
-        }
-        return null;
-    }
+      if (isSpecialType != null) {
+         isSpecialType.value = false;
+      }
 
-    private static void initFromResourceBundle() {
-        ICUResourceBundle keyTypeDataRes = ICUResourceBundle.getBundleInstance("com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER, ICUResourceBundle.OpenType.DIRECT);
-        KeyTypeData.getKeyInfo(keyTypeDataRes.get("keyInfo"));
-        KeyTypeData.getTypeInfo(keyTypeDataRes.get("typeInfo"));
-        UResourceBundle keyMapRes = keyTypeDataRes.get("keyMap");
-        UResourceBundle typeMapRes = keyTypeDataRes.get("typeMap");
-        UResourceBundle typeAliasRes = null;
-        UResourceBundle bcpTypeAliasRes = null;
-        try {
-            typeAliasRes = keyTypeDataRes.get("typeAlias");
-        }
-        catch (MissingResourceException missingResourceException) {
-            // empty catch block
-        }
-        try {
-            bcpTypeAliasRes = keyTypeDataRes.get("bcpTypeAlias");
-        }
-        catch (MissingResourceException missingResourceException) {
-            // empty catch block
-        }
-        UResourceBundleIterator keyMapItr = keyMapRes.getIterator();
-        LinkedHashMap _Bcp47Keys = new LinkedHashMap();
-        while (keyMapItr.hasNext()) {
-            UResourceBundle typeMapResByKey;
-            EnumSet<SpecialType> specialTypeSet;
-            HashMap<String, Type> typeDataMap;
-            HashMap<String, HashSet<String>> bcpTypeAliasMap;
-            HashMap<String, HashSet<String>> typeAliasMap;
-            boolean isTZ;
-            LinkedHashSet<String> _bcp47Types;
-            boolean hasSameKey;
-            String bcpKeyId;
-            String legacyKeyId;
-            block31: {
-                UResourceBundle keyMapEntry = keyMapItr.next();
-                legacyKeyId = keyMapEntry.getKey();
-                bcpKeyId = keyMapEntry.getString();
-                hasSameKey = false;
-                if (bcpKeyId.length() == 0) {
-                    bcpKeyId = legacyKeyId;
-                    hasSameKey = true;
-                }
-                _bcp47Types = new LinkedHashSet<String>();
-                _Bcp47Keys.put(bcpKeyId, Collections.unmodifiableSet(_bcp47Types));
-                isTZ = legacyKeyId.equals("timezone");
-                typeAliasMap = null;
-                if (typeAliasRes != null) {
-                    UResourceBundle typeAliasResByKey = null;
-                    try {
-                        typeAliasResByKey = typeAliasRes.get(legacyKeyId);
-                    }
-                    catch (MissingResourceException missingResourceException) {
-                        // empty catch block
-                    }
-                    if (typeAliasResByKey != null) {
-                        typeAliasMap = new HashMap<String, HashSet<String>>();
-                        UResourceBundleIterator typeAliasResItr = typeAliasResByKey.getIterator();
-                        while (typeAliasResItr.hasNext()) {
-                            HashSet<String> aliasSet;
-                            UResourceBundle typeAliasDataEntry = typeAliasResItr.next();
-                            String from = typeAliasDataEntry.getKey();
-                            String to = typeAliasDataEntry.getString();
-                            if (isTZ) {
-                                from = from.replace(':', '/');
-                            }
-                            if ((aliasSet = (HashSet<String>)typeAliasMap.get(to)) == null) {
-                                aliasSet = new HashSet<String>();
-                                typeAliasMap.put(to, aliasSet);
-                            }
-                            aliasSet.add(from);
-                        }
-                    }
-                }
-                bcpTypeAliasMap = null;
-                if (bcpTypeAliasRes != null) {
-                    UResourceBundle bcpTypeAliasResByKey = null;
-                    try {
-                        bcpTypeAliasResByKey = bcpTypeAliasRes.get(bcpKeyId);
-                    }
-                    catch (MissingResourceException typeAliasDataEntry) {
-                        // empty catch block
-                    }
-                    if (bcpTypeAliasResByKey != null) {
-                        bcpTypeAliasMap = new HashMap<String, HashSet<String>>();
-                        UResourceBundleIterator bcpTypeAliasResItr = bcpTypeAliasResByKey.getIterator();
-                        while (bcpTypeAliasResItr.hasNext()) {
-                            UResourceBundle bcpTypeAliasDataEntry = bcpTypeAliasResItr.next();
-                            String from = bcpTypeAliasDataEntry.getKey();
-                            String to = bcpTypeAliasDataEntry.getString();
-                            HashSet<String> aliasSet = (HashSet<String>)bcpTypeAliasMap.get(to);
-                            if (aliasSet == null) {
-                                aliasSet = new HashSet<String>();
-                                bcpTypeAliasMap.put(to, aliasSet);
-                            }
-                            aliasSet.add(from);
-                        }
-                    }
-                }
-                typeDataMap = new HashMap<String, Type>();
-                specialTypeSet = null;
-                typeMapResByKey = null;
-                try {
-                    typeMapResByKey = typeMapRes.get(legacyKeyId);
-                }
-                catch (MissingResourceException e) {
-                    if ($assertionsDisabled) break block31;
-                    throw new AssertionError();
-                }
+      key = AsciiUtil.toLowerString(key);
+      type = AsciiUtil.toLowerString(type);
+      KeyTypeData.KeyData keyData = KEYMAP.get(key);
+      if (keyData != null) {
+         if (isKnownKey != null) {
+            isKnownKey.value = Boolean.TRUE;
+         }
+
+         KeyTypeData.Type t = keyData.typeMap.get(type);
+         if (t != null) {
+            return t.bcpId;
+         }
+
+         if (keyData.specialTypes != null) {
+            for (KeyTypeData.SpecialType st : keyData.specialTypes) {
+               if (st.handler.isWellFormed(type)) {
+                  if (isSpecialType != null) {
+                     isSpecialType.value = true;
+                  }
+
+                  return st.handler.canonicalize(type);
+               }
             }
-            if (typeMapResByKey != null) {
-                UResourceBundleIterator typeMapResByKeyItr = typeMapResByKey.getIterator();
-                while (typeMapResByKeyItr.hasNext()) {
-                    Set bcpTypeAliasSet;
-                    Set typeAliasSet;
-                    boolean isSpecialType;
-                    UResourceBundle typeMapEntry = typeMapResByKeyItr.next();
-                    String legacyTypeId = typeMapEntry.getKey();
-                    String bcpTypeId = typeMapEntry.getString();
-                    char first = legacyTypeId.charAt(0);
-                    boolean bl = isSpecialType = '9' < first && first < 'a' && bcpTypeId.length() == 0;
-                    if (isSpecialType) {
-                        if (specialTypeSet == null) {
-                            specialTypeSet = EnumSet.noneOf(SpecialType.class);
-                        }
-                        specialTypeSet.add(SpecialType.valueOf(legacyTypeId));
-                        _bcp47Types.add(legacyTypeId);
-                        continue;
-                    }
-                    if (isTZ) {
-                        legacyTypeId = legacyTypeId.replace(':', '/');
-                    }
-                    boolean hasSameType = false;
-                    if (bcpTypeId.length() == 0) {
-                        bcpTypeId = legacyTypeId;
-                        hasSameType = true;
-                    }
-                    _bcp47Types.add(bcpTypeId);
-                    Type t = new Type(legacyTypeId, bcpTypeId);
-                    typeDataMap.put(AsciiUtil.toLowerString(legacyTypeId), t);
-                    if (!hasSameType) {
-                        typeDataMap.put(AsciiUtil.toLowerString(bcpTypeId), t);
-                    }
-                    if (typeAliasMap != null && (typeAliasSet = (Set)typeAliasMap.get(legacyTypeId)) != null) {
+         }
+      }
+
+      return null;
+   }
+
+   public static String toLegacyType(String key, String type, Output<Boolean> isKnownKey, Output<Boolean> isSpecialType) {
+      if (isKnownKey != null) {
+         isKnownKey.value = false;
+      }
+
+      if (isSpecialType != null) {
+         isSpecialType.value = false;
+      }
+
+      key = AsciiUtil.toLowerString(key);
+      type = AsciiUtil.toLowerString(type);
+      KeyTypeData.KeyData keyData = KEYMAP.get(key);
+      if (keyData != null) {
+         if (isKnownKey != null) {
+            isKnownKey.value = Boolean.TRUE;
+         }
+
+         KeyTypeData.Type t = keyData.typeMap.get(type);
+         if (t != null) {
+            return t.legacyId;
+         }
+
+         if (keyData.specialTypes != null) {
+            for (KeyTypeData.SpecialType st : keyData.specialTypes) {
+               if (st.handler.isWellFormed(type)) {
+                  if (isSpecialType != null) {
+                     isSpecialType.value = true;
+                  }
+
+                  return st.handler.canonicalize(type);
+               }
+            }
+         }
+      }
+
+      return null;
+   }
+
+   private static void initFromResourceBundle() {
+      UResourceBundle keyTypeDataRes = ICUResourceBundle.getBundleInstance(
+         "com/cobblemon/mod/relocations/ibm/icu/impl/data/icudt71b", "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER, ICUResourceBundle.OpenType.DIRECT
+      );
+      getKeyInfo(keyTypeDataRes.get("keyInfo"));
+      getTypeInfo(keyTypeDataRes.get("typeInfo"));
+      UResourceBundle keyMapRes = keyTypeDataRes.get("keyMap");
+      UResourceBundle typeMapRes = keyTypeDataRes.get("typeMap");
+      UResourceBundle typeAliasRes = null;
+      UResourceBundle bcpTypeAliasRes = null;
+
+      try {
+         typeAliasRes = keyTypeDataRes.get("typeAlias");
+      } catch (MissingResourceException var32) {
+      }
+
+      try {
+         bcpTypeAliasRes = keyTypeDataRes.get("bcpTypeAlias");
+      } catch (MissingResourceException var31) {
+      }
+
+      UResourceBundleIterator keyMapItr = keyMapRes.getIterator();
+      Map<String, Set<String>> _Bcp47Keys = new LinkedHashMap<>();
+
+      while (keyMapItr.hasNext()) {
+         UResourceBundle keyMapEntry = keyMapItr.next();
+         String legacyKeyId = keyMapEntry.getKey();
+         String bcpKeyId = keyMapEntry.getString();
+         boolean hasSameKey = false;
+         if (bcpKeyId.length() == 0) {
+            bcpKeyId = legacyKeyId;
+            hasSameKey = true;
+         }
+
+         LinkedHashSet<String> _bcp47Types = new LinkedHashSet<>();
+         _Bcp47Keys.put(bcpKeyId, Collections.unmodifiableSet(_bcp47Types));
+         boolean isTZ = legacyKeyId.equals("timezone");
+         Map<String, Set<String>> typeAliasMap = null;
+         if (typeAliasRes != null) {
+            UResourceBundle typeAliasResByKey = null;
+
+            try {
+               typeAliasResByKey = typeAliasRes.get(legacyKeyId);
+            } catch (MissingResourceException var29) {
+            }
+
+            if (typeAliasResByKey != null) {
+               typeAliasMap = new HashMap<>();
+               UResourceBundleIterator typeAliasResItr = typeAliasResByKey.getIterator();
+
+               while (typeAliasResItr.hasNext()) {
+                  UResourceBundle typeAliasDataEntry = typeAliasResItr.next();
+                  String from = typeAliasDataEntry.getKey();
+                  String to = typeAliasDataEntry.getString();
+                  if (isTZ) {
+                     from = from.replace(':', '/');
+                  }
+
+                  Set<String> aliasSet = typeAliasMap.get(to);
+                  if (aliasSet == null) {
+                     aliasSet = new HashSet<>();
+                     typeAliasMap.put(to, aliasSet);
+                  }
+
+                  aliasSet.add(from);
+               }
+            }
+         }
+
+         Map<String, Set<String>> bcpTypeAliasMap = null;
+         if (bcpTypeAliasRes != null) {
+            UResourceBundle bcpTypeAliasResByKey = null;
+
+            try {
+               bcpTypeAliasResByKey = bcpTypeAliasRes.get(bcpKeyId);
+            } catch (MissingResourceException var30) {
+            }
+
+            if (bcpTypeAliasResByKey != null) {
+               bcpTypeAliasMap = new HashMap<>();
+               UResourceBundleIterator bcpTypeAliasResItr = bcpTypeAliasResByKey.getIterator();
+
+               while (bcpTypeAliasResItr.hasNext()) {
+                  UResourceBundle bcpTypeAliasDataEntry = bcpTypeAliasResItr.next();
+                  String fromx = bcpTypeAliasDataEntry.getKey();
+                  String tox = bcpTypeAliasDataEntry.getString();
+                  Set<String> aliasSet = bcpTypeAliasMap.get(tox);
+                  if (aliasSet == null) {
+                     aliasSet = new HashSet<>();
+                     bcpTypeAliasMap.put(tox, aliasSet);
+                  }
+
+                  aliasSet.add(fromx);
+               }
+            }
+         }
+
+         Map<String, KeyTypeData.Type> typeDataMap = new HashMap<>();
+         EnumSet<KeyTypeData.SpecialType> specialTypeSet = null;
+         UResourceBundle typeMapResByKey = null;
+
+         try {
+            typeMapResByKey = typeMapRes.get(legacyKeyId);
+         } catch (MissingResourceException var33) {
+            assert false;
+         }
+
+         if (typeMapResByKey != null) {
+            UResourceBundleIterator typeMapResByKeyItr = typeMapResByKey.getIterator();
+
+            while (typeMapResByKeyItr.hasNext()) {
+               UResourceBundle typeMapEntry = typeMapResByKeyItr.next();
+               String legacyTypeId = typeMapEntry.getKey();
+               String bcpTypeId = typeMapEntry.getString();
+               char first = legacyTypeId.charAt(0);
+               boolean isSpecialType = '9' < first && first < 'a' && bcpTypeId.length() == 0;
+               if (isSpecialType) {
+                  if (specialTypeSet == null) {
+                     specialTypeSet = EnumSet.noneOf(KeyTypeData.SpecialType.class);
+                  }
+
+                  specialTypeSet.add(KeyTypeData.SpecialType.valueOf(legacyTypeId));
+                  _bcp47Types.add(legacyTypeId);
+               } else {
+                  if (isTZ) {
+                     legacyTypeId = legacyTypeId.replace(':', '/');
+                  }
+
+                  boolean hasSameType = false;
+                  if (bcpTypeId.length() == 0) {
+                     bcpTypeId = legacyTypeId;
+                     hasSameType = true;
+                  }
+
+                  _bcp47Types.add(bcpTypeId);
+                  KeyTypeData.Type t = new KeyTypeData.Type(legacyTypeId, bcpTypeId);
+                  typeDataMap.put(AsciiUtil.toLowerString(legacyTypeId), t);
+                  if (!hasSameType) {
+                     typeDataMap.put(AsciiUtil.toLowerString(bcpTypeId), t);
+                  }
+
+                  if (typeAliasMap != null) {
+                     Set<String> typeAliasSet = typeAliasMap.get(legacyTypeId);
+                     if (typeAliasSet != null) {
                         for (String alias : typeAliasSet) {
-                            typeDataMap.put(AsciiUtil.toLowerString(alias), t);
+                           typeDataMap.put(AsciiUtil.toLowerString(alias), t);
                         }
-                    }
-                    if (bcpTypeAliasMap == null || (bcpTypeAliasSet = (Set)bcpTypeAliasMap.get(bcpTypeId)) == null) continue;
-                    for (String alias : bcpTypeAliasSet) {
-                        typeDataMap.put(AsciiUtil.toLowerString(alias), t);
-                    }
-                }
-            }
-            KeyData keyData = new KeyData(legacyKeyId, bcpKeyId, typeDataMap, specialTypeSet);
-            KEYMAP.put(AsciiUtil.toLowerString(legacyKeyId), keyData);
-            if (hasSameKey) continue;
-            KEYMAP.put(AsciiUtil.toLowerString(bcpKeyId), keyData);
-        }
-        BCP47_KEYS = Collections.unmodifiableMap(_Bcp47Keys);
-    }
+                     }
+                  }
 
-    private static void getKeyInfo(UResourceBundle keyInfoRes) {
-        LinkedHashSet<String> _deprecatedKeys = new LinkedHashSet<String>();
-        LinkedHashMap<String, ValueType> _valueTypes = new LinkedHashMap<String, ValueType>();
-        UResourceBundleIterator keyInfoIt = keyInfoRes.getIterator();
-        while (keyInfoIt.hasNext()) {
-            UResourceBundle keyInfoEntry = keyInfoIt.next();
-            String key = keyInfoEntry.getKey();
-            KeyInfoType keyInfo = KeyInfoType.valueOf(key);
-            UResourceBundleIterator keyInfoIt2 = keyInfoEntry.getIterator();
-            while (keyInfoIt2.hasNext()) {
-                UResourceBundle keyInfoEntry2 = keyInfoIt2.next();
-                String key2 = keyInfoEntry2.getKey();
-                String value2 = keyInfoEntry2.getString();
-                switch (keyInfo) {
-                    case deprecated: {
-                        _deprecatedKeys.add(key2);
-                        break;
-                    }
-                    case valueType: {
-                        _valueTypes.put(key2, ValueType.valueOf(value2));
-                    }
-                }
-            }
-        }
-        DEPRECATED_KEYS = Collections.unmodifiableSet(_deprecatedKeys);
-        VALUE_TYPES = Collections.unmodifiableMap(_valueTypes);
-    }
-
-    private static void getTypeInfo(UResourceBundle typeInfoRes) {
-        LinkedHashMap _deprecatedKeyTypes = new LinkedHashMap();
-        UResourceBundleIterator keyInfoIt = typeInfoRes.getIterator();
-        while (keyInfoIt.hasNext()) {
-            UResourceBundle keyInfoEntry = keyInfoIt.next();
-            String key = keyInfoEntry.getKey();
-            TypeInfoType typeInfo = TypeInfoType.valueOf(key);
-            UResourceBundleIterator keyInfoIt2 = keyInfoEntry.getIterator();
-            while (keyInfoIt2.hasNext()) {
-                UResourceBundle keyInfoEntry2 = keyInfoIt2.next();
-                String key2 = keyInfoEntry2.getKey();
-                LinkedHashSet<String> _deprecatedTypes = new LinkedHashSet<String>();
-                UResourceBundleIterator keyInfoIt3 = keyInfoEntry2.getIterator();
-                while (keyInfoIt3.hasNext()) {
-                    UResourceBundle keyInfoEntry3 = keyInfoIt3.next();
-                    String key3 = keyInfoEntry3.getKey();
-                    switch (typeInfo) {
-                        case deprecated: {
-                            _deprecatedTypes.add(key3);
+                  if (bcpTypeAliasMap != null) {
+                     Set<String> bcpTypeAliasSet = bcpTypeAliasMap.get(bcpTypeId);
+                     if (bcpTypeAliasSet != null) {
+                        for (String alias : bcpTypeAliasSet) {
+                           typeDataMap.put(AsciiUtil.toLowerString(alias), t);
                         }
-                    }
-                }
-                _deprecatedKeyTypes.put(key2, Collections.unmodifiableSet(_deprecatedTypes));
+                     }
+                  }
+               }
             }
-        }
-        DEPRECATED_KEY_TYPES = Collections.unmodifiableMap(_deprecatedKeyTypes);
-    }
+         }
 
-    /*
-     * WARNING - void declaration
-     */
-    private static void initFromTables() {
-        for (Object[] keyDataEntry : KEY_DATA) {
-            void var14_17;
-            String legacyKeyId = (String)keyDataEntry[0];
-            String bcpKeyId = (String)keyDataEntry[1];
-            String[][] typeData = (String[][])keyDataEntry[2];
-            String[][] typeAliasData = (String[][])keyDataEntry[3];
-            String[][] bcpTypeAliasData = (String[][])keyDataEntry[4];
-            boolean hasSameKey = false;
-            if (bcpKeyId == null) {
-                bcpKeyId = legacyKeyId;
-                hasSameKey = true;
-            }
-            HashMap<String, HashSet<String>> typeAliasMap = null;
-            if (typeAliasData != null) {
-                typeAliasMap = new HashMap<String, HashSet<String>>();
-                for (String[] stringArray : typeAliasData) {
-                    String from = stringArray[0];
-                    String to = stringArray[1];
-                    HashSet<String> aliasSet = (HashSet<String>)typeAliasMap.get(to);
-                    if (aliasSet == null) {
-                        aliasSet = new HashSet<String>();
-                        typeAliasMap.put(to, aliasSet);
-                    }
-                    aliasSet.add(from);
-                }
-            }
-            HashMap<String, HashSet<String>> bcpTypeAliasMap = null;
-            if (bcpTypeAliasData != null) {
-                void var14_21;
-                bcpTypeAliasMap = new HashMap<String, HashSet<String>>();
-                String[][] stringArray = bcpTypeAliasData;
-                int n = stringArray.length;
-                boolean bl = false;
-                while (var14_21 < n) {
-                    String[] bcpTypeAliasDataEntry = stringArray[var14_21];
-                    String from = bcpTypeAliasDataEntry[0];
-                    String to = bcpTypeAliasDataEntry[1];
-                    HashSet<String> aliasSet = (HashSet<String>)bcpTypeAliasMap.get(to);
-                    if (aliasSet == null) {
-                        aliasSet = new HashSet<String>();
-                        bcpTypeAliasMap.put(to, aliasSet);
-                    }
-                    aliasSet.add(from);
-                    ++var14_21;
-                }
-            }
-            assert (typeData != null);
-            HashMap<String, Type> typeDataMap = new HashMap<String, Type>();
-            HashSet<SpecialType> specialTypeSet = null;
-            for (String[] typeDataEntry : typeData) {
-                Set bcpTypeAliasSet;
-                Set typeAliasSet;
-                String legacyTypeId = typeDataEntry[0];
-                String bcpTypeId = typeDataEntry[1];
-                boolean isSpecialType = false;
-                for (Object st : SpecialType.values()) {
-                    if (!legacyTypeId.equals(st.toString())) continue;
-                    isSpecialType = true;
-                    if (specialTypeSet == null) {
-                        specialTypeSet = new HashSet<SpecialType>();
-                    }
-                    specialTypeSet.add((SpecialType)((Object)st));
-                    break;
-                }
-                if (isSpecialType) continue;
-                boolean hasSameType = false;
-                if (bcpTypeId == null) {
-                    bcpTypeId = legacyTypeId;
-                    hasSameType = true;
-                }
-                Type t = new Type(legacyTypeId, bcpTypeId);
-                typeDataMap.put(AsciiUtil.toLowerString(legacyTypeId), t);
-                if (!hasSameType) {
-                    typeDataMap.put(AsciiUtil.toLowerString(bcpTypeId), t);
-                }
-                if ((typeAliasSet = (Set)typeAliasMap.get(legacyTypeId)) != null) {
-                    Object st;
-                    st = typeAliasSet.iterator();
-                    while (st.hasNext()) {
-                        String alias = (String)st.next();
-                        typeDataMap.put(AsciiUtil.toLowerString(alias), t);
-                    }
-                }
-                if ((bcpTypeAliasSet = (Set)bcpTypeAliasMap.get(bcpTypeId)) == null) continue;
-                for (String alias : bcpTypeAliasSet) {
-                    typeDataMap.put(AsciiUtil.toLowerString(alias), t);
-                }
-            }
-            Object var14_23 = null;
-            if (specialTypeSet != null) {
-                EnumSet enumSet = EnumSet.copyOf(specialTypeSet);
-            }
-            KeyData keyData = new KeyData(legacyKeyId, bcpKeyId, typeDataMap, (EnumSet<SpecialType>)var14_17);
-            KEYMAP.put(AsciiUtil.toLowerString(legacyKeyId), keyData);
-            if (hasSameKey) continue;
+         KeyTypeData.KeyData keyData = new KeyTypeData.KeyData(legacyKeyId, bcpKeyId, typeDataMap, specialTypeSet);
+         KEYMAP.put(AsciiUtil.toLowerString(legacyKeyId), keyData);
+         if (!hasSameKey) {
             KEYMAP.put(AsciiUtil.toLowerString(bcpKeyId), keyData);
-        }
-    }
+         }
+      }
 
-    public static Set<String> getBcp47Keys() {
-        return BCP47_KEYS.keySet();
-    }
+      BCP47_KEYS = Collections.unmodifiableMap(_Bcp47Keys);
+   }
 
-    public static Set<String> getBcp47KeyTypes(String key) {
-        return BCP47_KEYS.get(key);
-    }
+   private static void getKeyInfo(UResourceBundle keyInfoRes) {
+      Set<String> _deprecatedKeys = new LinkedHashSet<>();
+      Map<String, KeyTypeData.ValueType> _valueTypes = new LinkedHashMap<>();
+      UResourceBundleIterator keyInfoIt = keyInfoRes.getIterator();
 
-    public static boolean isDeprecated(String key) {
-        return DEPRECATED_KEYS.contains(key);
-    }
+      while (keyInfoIt.hasNext()) {
+         UResourceBundle keyInfoEntry = keyInfoIt.next();
+         String key = keyInfoEntry.getKey();
+         KeyTypeData.KeyInfoType keyInfo = KeyTypeData.KeyInfoType.valueOf(key);
+         UResourceBundleIterator keyInfoIt2 = keyInfoEntry.getIterator();
 
-    public static boolean isDeprecated(String key, String type) {
-        Set<String> deprecatedTypes = DEPRECATED_KEY_TYPES.get(key);
-        if (deprecatedTypes == null) {
-            return false;
-        }
-        return deprecatedTypes.contains(type);
-    }
+         while (keyInfoIt2.hasNext()) {
+            UResourceBundle keyInfoEntry2 = keyInfoIt2.next();
+            String key2 = keyInfoEntry2.getKey();
+            String value2 = keyInfoEntry2.getString();
+            switch (keyInfo) {
+               case deprecated:
+                  _deprecatedKeys.add(key2);
+                  break;
+               case valueType:
+                  _valueTypes.put(key2, KeyTypeData.ValueType.valueOf(value2));
+            }
+         }
+      }
 
-    public static ValueType getValueType(String key) {
-        ValueType type = VALUE_TYPES.get(key);
-        return type == null ? ValueType.single : type;
-    }
+      DEPRECATED_KEYS = Collections.unmodifiableSet(_deprecatedKeys);
+      VALUE_TYPES = Collections.unmodifiableMap(_valueTypes);
+   }
 
-    static {
-        KeyTypeData.initFromResourceBundle();
-    }
+   private static void getTypeInfo(UResourceBundle typeInfoRes) {
+      Map<String, Set<String>> _deprecatedKeyTypes = new LinkedHashMap<>();
+      UResourceBundleIterator keyInfoIt = typeInfoRes.getIterator();
 
-    private static enum TypeInfoType {
-        deprecated;
+      while (keyInfoIt.hasNext()) {
+         UResourceBundle keyInfoEntry = keyInfoIt.next();
+         String key = keyInfoEntry.getKey();
+         KeyTypeData.TypeInfoType typeInfo = KeyTypeData.TypeInfoType.valueOf(key);
+         UResourceBundleIterator keyInfoIt2 = keyInfoEntry.getIterator();
 
-    }
+         while (keyInfoIt2.hasNext()) {
+            UResourceBundle keyInfoEntry2 = keyInfoIt2.next();
+            String key2 = keyInfoEntry2.getKey();
+            Set<String> _deprecatedTypes = new LinkedHashSet<>();
+            UResourceBundleIterator keyInfoIt3 = keyInfoEntry2.getIterator();
 
-    private static enum KeyInfoType {
-        deprecated,
-        valueType;
+            while (keyInfoIt3.hasNext()) {
+               UResourceBundle keyInfoEntry3 = keyInfoIt3.next();
+               String key3 = keyInfoEntry3.getKey();
+               switch (typeInfo) {
+                  case deprecated:
+                     _deprecatedTypes.add(key3);
+               }
+            }
 
-    }
+            _deprecatedKeyTypes.put(key2, Collections.unmodifiableSet(_deprecatedTypes));
+         }
+      }
 
-    private static class Type {
-        String legacyId;
-        String bcpId;
+      DEPRECATED_KEY_TYPES = Collections.unmodifiableMap(_deprecatedKeyTypes);
+   }
 
-        Type(String legacyId, String bcpId) {
-            this.legacyId = legacyId;
-            this.bcpId = bcpId;
-        }
-    }
+   private static void initFromTables() {
+      for (Object[] keyDataEntry : KEY_DATA) {
+         String legacyKeyId = (String)keyDataEntry[0];
+         String bcpKeyId = (String)keyDataEntry[1];
+         String[][] typeData = (String[][])keyDataEntry[2];
+         String[][] typeAliasData = (String[][])keyDataEntry[3];
+         String[][] bcpTypeAliasData = (String[][])keyDataEntry[4];
+         boolean hasSameKey = false;
+         if (bcpKeyId == null) {
+            bcpKeyId = legacyKeyId;
+            hasSameKey = true;
+         }
 
-    private static class KeyData {
-        String legacyId;
-        String bcpId;
-        Map<String, Type> typeMap;
-        EnumSet<SpecialType> specialTypes;
+         Map<String, Set<String>> typeAliasMap = null;
+         if (typeAliasData != null) {
+            typeAliasMap = new HashMap<>();
 
-        KeyData(String legacyId, String bcpId, Map<String, Type> typeMap, EnumSet<SpecialType> specialTypes) {
-            this.legacyId = legacyId;
-            this.bcpId = bcpId;
-            this.typeMap = typeMap;
-            this.specialTypes = specialTypes;
-        }
-    }
+            for (String[] typeAliasDataEntry : typeAliasData) {
+               String from = typeAliasDataEntry[0];
+               String to = typeAliasDataEntry[1];
+               Set<String> aliasSet = typeAliasMap.get(to);
+               if (aliasSet == null) {
+                  aliasSet = new HashSet<>();
+                  typeAliasMap.put(to, aliasSet);
+               }
 
-    private static enum SpecialType {
-        CODEPOINTS(new CodepointsTypeHandler()),
-        REORDER_CODE(new ReorderCodeTypeHandler()),
-        RG_KEY_VALUE(new RgKeyValueTypeHandler()),
-        SCRIPT_CODE(new ScriptCodeTypeHandler()),
-        SUBDIVISION_CODE(new SubdivisionKeyValueTypeHandler()),
-        PRIVATE_USE(new PrivateUseKeyValueTypeHandler());
+               aliasSet.add(from);
+            }
+         }
 
-        SpecialTypeHandler handler;
+         Map<String, Set<String>> bcpTypeAliasMap = null;
+         if (bcpTypeAliasData != null) {
+            bcpTypeAliasMap = new HashMap<>();
 
-        private SpecialType(SpecialTypeHandler handler) {
-            this.handler = handler;
-        }
-    }
+            for (String[] bcpTypeAliasDataEntry : bcpTypeAliasData) {
+               String from = bcpTypeAliasDataEntry[0];
+               String to = bcpTypeAliasDataEntry[1];
+               Set<String> aliasSet = bcpTypeAliasMap.get(to);
+               if (aliasSet == null) {
+                  aliasSet = new HashSet<>();
+                  bcpTypeAliasMap.put(to, aliasSet);
+               }
 
-    private static class PrivateUseKeyValueTypeHandler
-    extends SpecialTypeHandler {
-        private static final Pattern pat = Pattern.compile("[a-zA-Z0-9]{3,8}(-[a-zA-Z0-9]{3,8})*");
+               aliasSet.add(from);
+            }
+         }
 
-        private PrivateUseKeyValueTypeHandler() {
-        }
+         assert typeData != null;
 
-        @Override
-        boolean isWellFormed(String value2) {
-            return pat.matcher(value2).matches();
-        }
-    }
+         Map<String, KeyTypeData.Type> typeDataMap = new HashMap<>();
+         Set<KeyTypeData.SpecialType> specialTypeSet = null;
 
-    private static class SubdivisionKeyValueTypeHandler
-    extends SpecialTypeHandler {
-        private static final Pattern pat = Pattern.compile("([a-zA-Z]{2}|[0-9]{3})");
+         for (String[] typeDataEntry : typeData) {
+            String legacyTypeId = typeDataEntry[0];
+            String bcpTypeId = typeDataEntry[1];
+            boolean isSpecialType = false;
 
-        private SubdivisionKeyValueTypeHandler() {
-        }
+            for (KeyTypeData.SpecialType st : KeyTypeData.SpecialType.values()) {
+               if (legacyTypeId.equals(st.toString())) {
+                  isSpecialType = true;
+                  if (specialTypeSet == null) {
+                     specialTypeSet = new HashSet<>();
+                  }
 
-        @Override
-        boolean isWellFormed(String value2) {
-            return pat.matcher(value2).matches();
-        }
-    }
+                  specialTypeSet.add(st);
+                  break;
+               }
+            }
 
-    private static class ScriptCodeTypeHandler
-    extends SpecialTypeHandler {
-        private static final Pattern pat = Pattern.compile("[a-zA-Z]{4}(-[a-zA-Z]{4})*");
+            if (!isSpecialType) {
+               boolean hasSameType = false;
+               if (bcpTypeId == null) {
+                  bcpTypeId = legacyTypeId;
+                  hasSameType = true;
+               }
 
-        private ScriptCodeTypeHandler() {
-        }
+               KeyTypeData.Type t = new KeyTypeData.Type(legacyTypeId, bcpTypeId);
+               typeDataMap.put(AsciiUtil.toLowerString(legacyTypeId), t);
+               if (!hasSameType) {
+                  typeDataMap.put(AsciiUtil.toLowerString(bcpTypeId), t);
+               }
 
-        @Override
-        boolean isWellFormed(String value2) {
-            return pat.matcher(value2).matches();
-        }
-    }
+               Set<String> typeAliasSet = typeAliasMap.get(legacyTypeId);
+               if (typeAliasSet != null) {
+                  for (String alias : typeAliasSet) {
+                     typeDataMap.put(AsciiUtil.toLowerString(alias), t);
+                  }
+               }
 
-    private static class RgKeyValueTypeHandler
-    extends SpecialTypeHandler {
-        private static final Pattern pat = Pattern.compile("([a-zA-Z]{2}|[0-9]{3})[zZ]{4}");
+               Set<String> bcpTypeAliasSet = bcpTypeAliasMap.get(bcpTypeId);
+               if (bcpTypeAliasSet != null) {
+                  for (String alias : bcpTypeAliasSet) {
+                     typeDataMap.put(AsciiUtil.toLowerString(alias), t);
+                  }
+               }
+            }
+         }
 
-        private RgKeyValueTypeHandler() {
-        }
+         EnumSet<KeyTypeData.SpecialType> specialTypes = null;
+         if (specialTypeSet != null) {
+            specialTypes = EnumSet.copyOf(specialTypeSet);
+         }
 
-        @Override
-        boolean isWellFormed(String value2) {
-            return pat.matcher(value2).matches();
-        }
-    }
+         KeyTypeData.KeyData keyData = new KeyTypeData.KeyData(legacyKeyId, bcpKeyId, typeDataMap, specialTypes);
+         KEYMAP.put(AsciiUtil.toLowerString(legacyKeyId), keyData);
+         if (!hasSameKey) {
+            KEYMAP.put(AsciiUtil.toLowerString(bcpKeyId), keyData);
+         }
+      }
+   }
 
-    private static class ReorderCodeTypeHandler
-    extends SpecialTypeHandler {
-        private static final Pattern pat = Pattern.compile("[a-zA-Z]{3,8}(-[a-zA-Z]{3,8})*");
+   public static Set<String> getBcp47Keys() {
+      return BCP47_KEYS.keySet();
+   }
 
-        private ReorderCodeTypeHandler() {
-        }
+   public static Set<String> getBcp47KeyTypes(String key) {
+      return BCP47_KEYS.get(key);
+   }
 
-        @Override
-        boolean isWellFormed(String value2) {
-            return pat.matcher(value2).matches();
-        }
-    }
+   public static boolean isDeprecated(String key) {
+      return DEPRECATED_KEYS.contains(key);
+   }
 
-    private static class CodepointsTypeHandler
-    extends SpecialTypeHandler {
-        private static final Pattern pat = Pattern.compile("[0-9a-fA-F]{4,6}(-[0-9a-fA-F]{4,6})*");
+   public static boolean isDeprecated(String key, String type) {
+      Set<String> deprecatedTypes = DEPRECATED_KEY_TYPES.get(key);
+      return deprecatedTypes == null ? false : deprecatedTypes.contains(type);
+   }
 
-        private CodepointsTypeHandler() {
-        }
+   public static KeyTypeData.ValueType getValueType(String key) {
+      KeyTypeData.ValueType type = VALUE_TYPES.get(key);
+      return type == null ? KeyTypeData.ValueType.single : type;
+   }
 
-        @Override
-        boolean isWellFormed(String value2) {
-            return pat.matcher(value2).matches();
-        }
-    }
+   static {
+      initFromResourceBundle();
+   }
 
-    private static abstract class SpecialTypeHandler {
-        private SpecialTypeHandler() {
-        }
+   private static class CodepointsTypeHandler extends KeyTypeData.SpecialTypeHandler {
+      private static final Pattern pat = Pattern.compile("[0-9a-fA-F]{4,6}(-[0-9a-fA-F]{4,6})*");
 
-        abstract boolean isWellFormed(String var1);
+      private CodepointsTypeHandler() {
+      }
 
-        String canonicalize(String value2) {
-            return AsciiUtil.toLowerString(value2);
-        }
-    }
+      @Override
+      boolean isWellFormed(String value) {
+         return pat.matcher(value).matches();
+      }
+   }
 
-    public static enum ValueType {
-        single,
-        multiple,
-        incremental,
-        any;
+   private static class KeyData {
+      String legacyId;
+      String bcpId;
+      Map<String, KeyTypeData.Type> typeMap;
+      EnumSet<KeyTypeData.SpecialType> specialTypes;
 
-    }
+      KeyData(String legacyId, String bcpId, Map<String, KeyTypeData.Type> typeMap, EnumSet<KeyTypeData.SpecialType> specialTypes) {
+         this.legacyId = legacyId;
+         this.bcpId = bcpId;
+         this.typeMap = typeMap;
+         this.specialTypes = specialTypes;
+      }
+   }
+
+   private static enum KeyInfoType {
+      deprecated,
+      valueType;
+   }
+
+   private static class PrivateUseKeyValueTypeHandler extends KeyTypeData.SpecialTypeHandler {
+      private static final Pattern pat = Pattern.compile("[a-zA-Z0-9]{3,8}(-[a-zA-Z0-9]{3,8})*");
+
+      private PrivateUseKeyValueTypeHandler() {
+      }
+
+      @Override
+      boolean isWellFormed(String value) {
+         return pat.matcher(value).matches();
+      }
+   }
+
+   private static class ReorderCodeTypeHandler extends KeyTypeData.SpecialTypeHandler {
+      private static final Pattern pat = Pattern.compile("[a-zA-Z]{3,8}(-[a-zA-Z]{3,8})*");
+
+      private ReorderCodeTypeHandler() {
+      }
+
+      @Override
+      boolean isWellFormed(String value) {
+         return pat.matcher(value).matches();
+      }
+   }
+
+   private static class RgKeyValueTypeHandler extends KeyTypeData.SpecialTypeHandler {
+      private static final Pattern pat = Pattern.compile("([a-zA-Z]{2}|[0-9]{3})[zZ]{4}");
+
+      private RgKeyValueTypeHandler() {
+      }
+
+      @Override
+      boolean isWellFormed(String value) {
+         return pat.matcher(value).matches();
+      }
+   }
+
+   private static class ScriptCodeTypeHandler extends KeyTypeData.SpecialTypeHandler {
+      private static final Pattern pat = Pattern.compile("[a-zA-Z]{4}(-[a-zA-Z]{4})*");
+
+      private ScriptCodeTypeHandler() {
+      }
+
+      @Override
+      boolean isWellFormed(String value) {
+         return pat.matcher(value).matches();
+      }
+   }
+
+   private static enum SpecialType {
+      CODEPOINTS(new KeyTypeData.CodepointsTypeHandler()),
+      REORDER_CODE(new KeyTypeData.ReorderCodeTypeHandler()),
+      RG_KEY_VALUE(new KeyTypeData.RgKeyValueTypeHandler()),
+      SCRIPT_CODE(new KeyTypeData.ScriptCodeTypeHandler()),
+      SUBDIVISION_CODE(new KeyTypeData.SubdivisionKeyValueTypeHandler()),
+      PRIVATE_USE(new KeyTypeData.PrivateUseKeyValueTypeHandler());
+
+      KeyTypeData.SpecialTypeHandler handler;
+
+      private SpecialType(KeyTypeData.SpecialTypeHandler handler) {
+         this.handler = handler;
+      }
+   }
+
+   private abstract static class SpecialTypeHandler {
+      private SpecialTypeHandler() {
+      }
+
+      abstract boolean isWellFormed(String var1);
+
+      String canonicalize(String value) {
+         return AsciiUtil.toLowerString(value);
+      }
+   }
+
+   private static class SubdivisionKeyValueTypeHandler extends KeyTypeData.SpecialTypeHandler {
+      private static final Pattern pat = Pattern.compile("([a-zA-Z]{2}|[0-9]{3})");
+
+      private SubdivisionKeyValueTypeHandler() {
+      }
+
+      @Override
+      boolean isWellFormed(String value) {
+         return pat.matcher(value).matches();
+      }
+   }
+
+   private static class Type {
+      String legacyId;
+      String bcpId;
+
+      Type(String legacyId, String bcpId) {
+         this.legacyId = legacyId;
+         this.bcpId = bcpId;
+      }
+   }
+
+   private static enum TypeInfoType {
+      deprecated;
+   }
+
+   public static enum ValueType {
+      single,
+      multiple,
+      incremental,
+      any;
+   }
 }
-

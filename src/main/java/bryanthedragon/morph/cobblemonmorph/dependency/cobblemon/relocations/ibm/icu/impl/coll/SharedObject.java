@@ -1,92 +1,91 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.coll;
+package com.cobblemon.mod.relocations.ibm.icu.impl.coll;
 
 import com.cobblemon.mod.relocations.ibm.icu.util.ICUCloneNotSupportedException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SharedObject
-implements Cloneable {
-    private AtomicInteger refCount = new AtomicInteger();
+public class SharedObject implements Cloneable {
+   private AtomicInteger refCount = new AtomicInteger();
 
-    public SharedObject clone() {
-        SharedObject c;
-        try {
-            c = (SharedObject)super.clone();
-        }
-        catch (CloneNotSupportedException e) {
-            throw new ICUCloneNotSupportedException(e);
-        }
-        c.refCount = new AtomicInteger();
-        return c;
-    }
+   public SharedObject clone() {
+      SharedObject c;
+      try {
+         c = (SharedObject)super.clone();
+      } catch (CloneNotSupportedException var3) {
+         throw new ICUCloneNotSupportedException(var3);
+      }
 
-    public final void addRef() {
-        this.refCount.incrementAndGet();
-    }
+      c.refCount = new AtomicInteger();
+      return c;
+   }
 
-    public final void removeRef() {
-        this.refCount.decrementAndGet();
-    }
+   public final void addRef() {
+      this.refCount.incrementAndGet();
+   }
 
-    public final int getRefCount() {
-        return this.refCount.get();
-    }
+   public final void removeRef() {
+      this.refCount.decrementAndGet();
+   }
 
-    public final void deleteIfZeroRefCount() {
-    }
+   public final int getRefCount() {
+      return this.refCount.get();
+   }
 
-    public static final class Reference<T extends SharedObject>
-    implements Cloneable {
-        private T ref;
+   public final void deleteIfZeroRefCount() {
+   }
 
-        public Reference(T r) {
-            this.ref = r;
-            if (r != null) {
-                ((SharedObject)r).addRef();
-            }
-        }
+   public static final class Reference<T extends SharedObject> implements Cloneable {
+      private T ref;
 
-        public Reference<T> clone() {
-            Reference c;
-            try {
-                c = (Reference)super.clone();
-            }
-            catch (CloneNotSupportedException e) {
-                throw new ICUCloneNotSupportedException(e);
-            }
-            if (this.ref != null) {
-                ((SharedObject)this.ref).addRef();
-            }
-            return c;
-        }
+      public Reference(T r) {
+         this.ref = r;
+         if (r != null) {
+            r.addRef();
+         }
+      }
 
-        public T readOnly() {
-            return this.ref;
-        }
+      public SharedObject.Reference<T> clone() {
+         SharedObject.Reference<T> c;
+         try {
+            c = (SharedObject.Reference<T>)super.clone();
+         } catch (CloneNotSupportedException var3) {
+            throw new ICUCloneNotSupportedException(var3);
+         }
 
-        public T copyOnWrite() {
-            T r = this.ref;
-            if (((SharedObject)r).getRefCount() <= 1) {
-                return r;
-            }
-            SharedObject r2 = ((SharedObject)r).clone();
-            ((SharedObject)r).removeRef();
+         if (this.ref != null) {
+            this.ref.addRef();
+         }
+
+         return c;
+      }
+
+      public T readOnly() {
+         return this.ref;
+      }
+
+      public T copyOnWrite() {
+         T r = this.ref;
+         if (r.getRefCount() <= 1) {
+            return r;
+         } else {
+            T r2 = (T)r.clone();
+            r.removeRef();
             this.ref = r2;
             r2.addRef();
-            return (T)r2;
-        }
+            return r2;
+         }
+      }
 
-        public void clear() {
-            if (this.ref != null) {
-                ((SharedObject)this.ref).removeRef();
-                this.ref = null;
-            }
-        }
+      public void clear() {
+         if (this.ref != null) {
+            this.ref.removeRef();
+            this.ref = null;
+         }
+      }
 
-        protected void finalize() throws Throwable {
-            super.finalize();
-            this.clear();
-        }
-    }
+      @Override
+      protected void finalize() throws Throwable {
+         super.finalize();
+         this.clear();
+      }
+   }
 }
-

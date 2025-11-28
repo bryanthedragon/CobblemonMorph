@@ -1,18 +1,17 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
 public class Output<T> {
-    public T value;
+   public T value;
 
-    public String toString() {
-        return this.value == null ? "null" : this.value.toString();
-    }
+   @Override
+   public String toString() {
+      return this.value == null ? "null" : this.value.toString();
+   }
 
-    public Output() {
-    }
+   public Output() {
+   }
 
-    public Output(T value2) {
-        this.value = value2;
-    }
+   public Output(T value) {
+      this.value = value;
+   }
 }
-

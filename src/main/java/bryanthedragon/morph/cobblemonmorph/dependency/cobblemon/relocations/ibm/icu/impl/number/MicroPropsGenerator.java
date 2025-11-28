@@ -1,10 +1,5 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.DecimalQuantity;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.MicroProps;
+package com.cobblemon.mod.relocations.ibm.icu.impl.number;
 
 public interface MicroPropsGenerator {
-    public MicroProps processQuantity(DecimalQuantity var1);
+   MicroProps processQuantity(DecimalQuantity var1);
 }
-

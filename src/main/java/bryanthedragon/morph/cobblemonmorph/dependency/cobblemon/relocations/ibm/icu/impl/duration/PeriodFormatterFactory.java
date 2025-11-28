@@ -1,21 +1,17 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.duration.PeriodFormatter;
+package com.cobblemon.mod.relocations.ibm.icu.impl.duration;
 
 public interface PeriodFormatterFactory {
-    public PeriodFormatterFactory setLocale(String var1);
+   PeriodFormatterFactory setLocale(String var1);
 
-    public PeriodFormatterFactory setDisplayLimit(boolean var1);
+   PeriodFormatterFactory setDisplayLimit(boolean var1);
 
-    public PeriodFormatterFactory setDisplayPastFuture(boolean var1);
+   PeriodFormatterFactory setDisplayPastFuture(boolean var1);
 
-    public PeriodFormatterFactory setSeparatorVariant(int var1);
+   PeriodFormatterFactory setSeparatorVariant(int var1);
 
-    public PeriodFormatterFactory setUnitVariant(int var1);
+   PeriodFormatterFactory setUnitVariant(int var1);
 
-    public PeriodFormatterFactory setCountVariant(int var1);
+   PeriodFormatterFactory setCountVariant(int var1);
 
-    public PeriodFormatter getFormatter();
+   PeriodFormatter getFormatter();
 }
-

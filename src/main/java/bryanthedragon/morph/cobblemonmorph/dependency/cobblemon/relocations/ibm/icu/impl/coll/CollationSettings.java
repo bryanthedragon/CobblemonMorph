@@ -1,343 +1,378 @@
+package com.cobblemon.mod.relocations.ibm.icu.impl.coll;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.coll;
-
-import com.cobblemon.mod.relocations.ibm.icu.impl.coll.CollationData;
-import com.cobblemon.mod.relocations.ibm.icu.impl.coll.SharedObject;
-import com.cobblemon.mod.relocations.ibm.icu.impl.coll.UVector32;
 import java.util.Arrays;
 
-public final class CollationSettings
-extends SharedObject {
-    public static final int CHECK_FCD = 1;
-    public static final int NUMERIC = 2;
-    static final int SHIFTED = 4;
-    static final int ALTERNATE_MASK = 12;
-    static final int MAX_VARIABLE_SHIFT = 4;
-    static final int MAX_VARIABLE_MASK = 112;
-    static final int UPPER_FIRST = 256;
-    public static final int CASE_FIRST = 512;
-    public static final int CASE_FIRST_AND_UPPER_MASK = 768;
-    public static final int CASE_LEVEL = 1024;
-    public static final int BACKWARD_SECONDARY = 2048;
-    static final int STRENGTH_SHIFT = 12;
-    static final int STRENGTH_MASK = 61440;
-    static final int MAX_VAR_SPACE = 0;
-    static final int MAX_VAR_PUNCT = 1;
-    static final int MAX_VAR_SYMBOL = 2;
-    static final int MAX_VAR_CURRENCY = 3;
-    public int options = 8208;
-    public long variableTop;
-    public byte[] reorderTable;
-    long minHighNoReorder;
-    long[] reorderRanges;
-    public int[] reorderCodes = EMPTY_INT_ARRAY;
-    private static final int[] EMPTY_INT_ARRAY = new int[0];
-    public int fastLatinOptions = -1;
-    public char[] fastLatinPrimaries = new char[384];
+public final class CollationSettings extends SharedObject {
+   public static final int CHECK_FCD = 1;
+   public static final int NUMERIC = 2;
+   static final int SHIFTED = 4;
+   static final int ALTERNATE_MASK = 12;
+   static final int MAX_VARIABLE_SHIFT = 4;
+   static final int MAX_VARIABLE_MASK = 112;
+   static final int UPPER_FIRST = 256;
+   public static final int CASE_FIRST = 512;
+   public static final int CASE_FIRST_AND_UPPER_MASK = 768;
+   public static final int CASE_LEVEL = 1024;
+   public static final int BACKWARD_SECONDARY = 2048;
+   static final int STRENGTH_SHIFT = 12;
+   static final int STRENGTH_MASK = 61440;
+   static final int MAX_VAR_SPACE = 0;
+   static final int MAX_VAR_PUNCT = 1;
+   static final int MAX_VAR_SYMBOL = 2;
+   static final int MAX_VAR_CURRENCY = 3;
+   public int options = 8208;
+   public long variableTop;
+   public byte[] reorderTable;
+   long minHighNoReorder;
+   long[] reorderRanges;
+   public int[] reorderCodes;
+   private static final int[] EMPTY_INT_ARRAY = new int[0];
+   public int fastLatinOptions;
+   public char[] fastLatinPrimaries;
 
-    CollationSettings() {
-    }
+   CollationSettings() {
+      this.reorderCodes = EMPTY_INT_ARRAY;
+      this.fastLatinOptions = -1;
+      this.fastLatinPrimaries = new char[384];
+   }
 
-    @Override
-    public CollationSettings clone() {
-        CollationSettings newSettings = (CollationSettings)super.clone();
-        newSettings.fastLatinPrimaries = (char[])this.fastLatinPrimaries.clone();
-        return newSettings;
-    }
+   public CollationSettings clone() {
+      CollationSettings newSettings = (CollationSettings)super.clone();
+      newSettings.fastLatinPrimaries = (char[])this.fastLatinPrimaries.clone();
+      return newSettings;
+   }
 
-    public boolean equals(Object other) {
-        if (other == null) {
+   @Override
+   public boolean equals(Object other) {
+      if (other == null) {
+         return false;
+      } else if (!this.getClass().equals(other.getClass())) {
+         return false;
+      } else {
+         CollationSettings o = (CollationSettings)other;
+         if (this.options != o.options) {
             return false;
-        }
-        if (!this.getClass().equals(other.getClass())) {
-            return false;
-        }
-        CollationSettings o = (CollationSettings)other;
-        if (this.options != o.options) {
-            return false;
-        }
-        if ((this.options & 0xC) != 0 && this.variableTop != o.variableTop) {
-            return false;
-        }
-        return Arrays.equals(this.reorderCodes, o.reorderCodes);
-    }
+         } else {
+            return (this.options & 12) != 0 && this.variableTop != o.variableTop ? false : Arrays.equals(this.reorderCodes, o.reorderCodes);
+         }
+      }
+   }
 
-    public int hashCode() {
-        int h = this.options << 8;
-        if ((this.options & 0xC) != 0) {
-            h = (int)((long)h ^ this.variableTop);
-        }
-        h ^= this.reorderCodes.length;
-        for (int i = 0; i < this.reorderCodes.length; ++i) {
-            h ^= this.reorderCodes[i] << i;
-        }
-        return h;
-    }
+   @Override
+   public int hashCode() {
+      int h = this.options << 8;
+      if ((this.options & 12) != 0) {
+         h = (int)(h ^ this.variableTop);
+      }
 
-    public void resetReordering() {
-        this.reorderTable = null;
-        this.minHighNoReorder = 0L;
-        this.reorderRanges = null;
-        this.reorderCodes = EMPTY_INT_ARRAY;
-    }
+      h ^= this.reorderCodes.length;
 
-    void aliasReordering(CollationData data, int[] codesAndRanges, int codesLength, byte[] table) {
-        int[] codes = codesLength == codesAndRanges.length ? codesAndRanges : Arrays.copyOf(codesAndRanges, codesLength);
-        int rangesStart = codesLength;
-        int rangesLimit = codesAndRanges.length;
-        int rangesLength = rangesLimit - rangesStart;
-        if (table != null && (rangesLength == 0 ? !CollationSettings.reorderTableHasSplitBytes(table) : rangesLength >= 2 && (codesAndRanges[rangesStart] & 0xFFFF) == 0 && (codesAndRanges[rangesLimit - 1] & 0xFFFF) != 0)) {
-            int firstSplitByteRangeIndex;
-            this.reorderTable = table;
-            this.reorderCodes = codes;
-            for (firstSplitByteRangeIndex = rangesStart; firstSplitByteRangeIndex < rangesLimit && (codesAndRanges[firstSplitByteRangeIndex] & 0xFF0000) == 0; ++firstSplitByteRangeIndex) {
-            }
-            if (firstSplitByteRangeIndex == rangesLimit) {
-                assert (!CollationSettings.reorderTableHasSplitBytes(table));
-                this.minHighNoReorder = 0L;
-                this.reorderRanges = null;
-            } else {
-                assert (table[codesAndRanges[firstSplitByteRangeIndex] >>> 24] == 0);
-                this.minHighNoReorder = (long)codesAndRanges[rangesLimit - 1] & 0xFFFF0000L;
-                this.setReorderRanges(codesAndRanges, firstSplitByteRangeIndex, rangesLimit - firstSplitByteRangeIndex);
-            }
-            return;
-        }
-        this.setReordering(data, codes);
-    }
+      for (int i = 0; i < this.reorderCodes.length; i++) {
+         h ^= this.reorderCodes[i] << i;
+      }
 
-    public void setReordering(CollationData data, int[] codes) {
-        int rangesStart;
-        if (codes.length == 0 || codes.length == 1 && codes[0] == 103) {
-            this.resetReordering();
-            return;
-        }
-        UVector32 rangesList = new UVector32();
-        data.makeReorderRanges(codes, rangesList);
-        int rangesLength = rangesList.size();
-        if (rangesLength == 0) {
-            this.resetReordering();
-            return;
-        }
-        int[] ranges = rangesList.getBuffer();
-        assert (rangesLength >= 2);
-        assert ((ranges[0] & 0xFFFF) == 0 && (ranges[rangesLength - 1] & 0xFFFF) != 0);
-        this.minHighNoReorder = (long)ranges[rangesLength - 1] & 0xFFFF0000L;
-        byte[] table = new byte[256];
-        int b = 0;
-        int firstSplitByteRangeIndex = -1;
-        for (int i = 0; i < rangesLength; ++i) {
-            int pair = ranges[i];
-            int limit1 = pair >>> 24;
-            while (b < limit1) {
-                table[b] = (byte)(b + pair);
-                ++b;
-            }
-            if ((pair & 0xFF0000) == 0) continue;
-            table[limit1] = 0;
-            b = limit1 + 1;
-            if (firstSplitByteRangeIndex >= 0) continue;
-            firstSplitByteRangeIndex = i;
-        }
-        while (b <= 255) {
-            table[b] = (byte)b;
-            ++b;
-        }
-        if (firstSplitByteRangeIndex < 0) {
-            rangesLength = 0;
-            rangesStart = 0;
-        } else {
-            rangesStart = firstSplitByteRangeIndex;
-            rangesLength -= firstSplitByteRangeIndex;
-        }
-        this.setReorderArrays(codes, ranges, rangesStart, rangesLength, table);
-    }
+      return h;
+   }
 
-    private void setReorderArrays(int[] codes, int[] ranges, int rangesStart, int rangesLength, byte[] table) {
-        if (codes == null) {
-            codes = EMPTY_INT_ARRAY;
-        }
-        assert (codes.length == 0 == (table == null));
-        this.reorderTable = table;
-        this.reorderCodes = codes;
-        this.setReorderRanges(ranges, rangesStart, rangesLength);
-    }
+   public void resetReordering() {
+      this.reorderTable = null;
+      this.minHighNoReorder = 0L;
+      this.reorderRanges = null;
+      this.reorderCodes = EMPTY_INT_ARRAY;
+   }
 
-    private void setReorderRanges(int[] ranges, int rangesStart, int rangesLength) {
-        if (rangesLength == 0) {
+   void aliasReordering(CollationData data, int[] codesAndRanges, int codesLength, byte[] table) {
+      int[] codes;
+      if (codesLength == codesAndRanges.length) {
+         codes = codesAndRanges;
+      } else {
+         codes = Arrays.copyOf(codesAndRanges, codesLength);
+      }
+
+      int rangesLimit = codesAndRanges.length;
+      int rangesLength = rangesLimit - codesLength;
+      if (table != null
+         && (
+            rangesLength == 0
+               ? !reorderTableHasSplitBytes(table)
+               : rangesLength >= 2 && (codesAndRanges[codesLength] & 65535) == 0 && (codesAndRanges[rangesLimit - 1] & 65535) != 0
+         )) {
+         this.reorderTable = table;
+         this.reorderCodes = codes;
+         int firstSplitByteRangeIndex = codesLength;
+
+         while (firstSplitByteRangeIndex < rangesLimit && (codesAndRanges[firstSplitByteRangeIndex] & 0xFF0000) == 0) {
+            firstSplitByteRangeIndex++;
+         }
+
+         if (firstSplitByteRangeIndex == rangesLimit) {
+            assert !reorderTableHasSplitBytes(table);
+
+            this.minHighNoReorder = 0L;
             this.reorderRanges = null;
-        } else {
-            this.reorderRanges = new long[rangesLength];
-            int i = 0;
-            do {
-                this.reorderRanges[i++] = (long)ranges[rangesStart++] & 0xFFFFFFFFL;
-            } while (i < rangesLength);
-        }
-    }
+         } else {
+            assert table[codesAndRanges[firstSplitByteRangeIndex] >>> 24] == 0;
 
-    public void copyReorderingFrom(CollationSettings other) {
-        if (!other.hasReordering()) {
+            this.minHighNoReorder = codesAndRanges[rangesLimit - 1] & 4294901760L;
+            this.setReorderRanges(codesAndRanges, firstSplitByteRangeIndex, rangesLimit - firstSplitByteRangeIndex);
+         }
+      } else {
+         this.setReordering(data, codes);
+      }
+   }
+
+   public void setReordering(CollationData data, int[] codes) {
+      if (codes.length != 0 && (codes.length != 1 || codes[0] != 103)) {
+         UVector32 rangesList = new UVector32();
+         data.makeReorderRanges(codes, rangesList);
+         int rangesLength = rangesList.size();
+         if (rangesLength == 0) {
             this.resetReordering();
-            return;
-        }
-        this.minHighNoReorder = other.minHighNoReorder;
-        this.reorderTable = other.reorderTable;
-        this.reorderRanges = other.reorderRanges;
-        this.reorderCodes = other.reorderCodes;
-    }
+         } else {
+            int[] ranges = rangesList.getBuffer();
 
-    public boolean hasReordering() {
-        return this.reorderTable != null;
-    }
+            assert rangesLength >= 2;
 
-    private static boolean reorderTableHasSplitBytes(byte[] table) {
-        assert (table[0] == 0);
-        for (int i = 1; i < 256; ++i) {
-            if (table[i] != 0) continue;
+            assert (ranges[0] & 65535) == 0 && (ranges[rangesLength - 1] & 65535) != 0;
+
+            this.minHighNoReorder = ranges[rangesLength - 1] & 4294901760L;
+            byte[] table = new byte[256];
+            int b = 0;
+            int firstSplitByteRangeIndex = -1;
+
+            for (int i = 0; i < rangesLength; i++) {
+               int pair = ranges[i];
+
+               int limit1;
+               for (limit1 = pair >>> 24; b < limit1; b++) {
+                  table[b] = (byte)(b + pair);
+               }
+
+               if ((pair & 0xFF0000) != 0) {
+                  table[limit1] = 0;
+                  b = limit1 + 1;
+                  if (firstSplitByteRangeIndex < 0) {
+                     firstSplitByteRangeIndex = i;
+                  }
+               }
+            }
+
+            while (b <= 255) {
+               table[b] = (byte)b;
+               b++;
+            }
+
+            int rangesStart;
+            if (firstSplitByteRangeIndex < 0) {
+               rangesLength = 0;
+               rangesStart = 0;
+            } else {
+               rangesStart = firstSplitByteRangeIndex;
+               rangesLength -= firstSplitByteRangeIndex;
+            }
+
+            this.setReorderArrays(codes, ranges, rangesStart, rangesLength, table);
+         }
+      } else {
+         this.resetReordering();
+      }
+   }
+
+   private void setReorderArrays(int[] codes, int[] ranges, int rangesStart, int rangesLength, byte[] table) {
+      if (codes == null) {
+         codes = EMPTY_INT_ARRAY;
+      }
+
+      assert codes.length == 0 == (table == null);
+
+      this.reorderTable = table;
+      this.reorderCodes = codes;
+      this.setReorderRanges(ranges, rangesStart, rangesLength);
+   }
+
+   private void setReorderRanges(int[] ranges, int rangesStart, int rangesLength) {
+      if (rangesLength == 0) {
+         this.reorderRanges = null;
+      } else {
+         this.reorderRanges = new long[rangesLength];
+         int i = 0;
+
+         do {
+            this.reorderRanges[i++] = ranges[rangesStart++] & 4294967295L;
+         } while (i < rangesLength);
+      }
+   }
+
+   public void copyReorderingFrom(CollationSettings other) {
+      if (!other.hasReordering()) {
+         this.resetReordering();
+      } else {
+         this.minHighNoReorder = other.minHighNoReorder;
+         this.reorderTable = other.reorderTable;
+         this.reorderRanges = other.reorderRanges;
+         this.reorderCodes = other.reorderCodes;
+      }
+   }
+
+   public boolean hasReordering() {
+      return this.reorderTable != null;
+   }
+
+   private static boolean reorderTableHasSplitBytes(byte[] table) {
+      assert table[0] == 0;
+
+      for (int i = 1; i < 256; i++) {
+         if (table[i] == 0) {
             return true;
-        }
-        return false;
-    }
+         }
+      }
 
-    public long reorder(long p) {
-        byte b = this.reorderTable[(int)p >>> 24];
-        if (b != 0 || p <= 1L) {
-            return ((long)b & 0xFFL) << 24 | p & 0xFFFFFFL;
-        }
-        return this.reorderEx(p);
-    }
+      return false;
+   }
 
-    private long reorderEx(long p) {
-        long r;
-        assert (this.minHighNoReorder > 0L);
-        if (p >= this.minHighNoReorder) {
-            return p;
-        }
-        long q = p | 0xFFFFL;
-        int i = 0;
-        while (q >= (r = this.reorderRanges[i])) {
-            ++i;
-        }
-        return p + ((long)((short)r) << 24);
-    }
+   public long reorder(long p) {
+      byte b = this.reorderTable[(int)p >>> 24];
+      return b == 0 && p > 1L ? this.reorderEx(p) : (b & 255L) << 24 | p & 16777215L;
+   }
 
-    public void setStrength(int value2) {
-        int noStrength = this.options & 0xFFFF0FFF;
-        switch (value2) {
-            case 0: 
-            case 1: 
-            case 2: 
-            case 3: 
-            case 15: {
-                this.options = noStrength | value2 << 12;
-                break;
-            }
-            default: {
-                throw new IllegalArgumentException("illegal strength value " + value2);
-            }
-        }
-    }
+   private long reorderEx(long p) {
+      assert this.minHighNoReorder > 0L;
 
-    public void setStrengthDefault(int defaultOptions) {
-        int noStrength = this.options & 0xFFFF0FFF;
-        this.options = noStrength | defaultOptions & 0xF000;
-    }
+      if (p >= this.minHighNoReorder) {
+         return p;
+      } else {
+         long q = p | 65535L;
+         int i = 0;
 
-    static int getStrength(int options) {
-        return options >> 12;
-    }
+         long r;
+         while (q >= (r = this.reorderRanges[i])) {
+            i++;
+         }
 
-    public int getStrength() {
-        return CollationSettings.getStrength(this.options);
-    }
+         return p + ((long)((short)r) << 24);
+      }
+   }
 
-    public void setFlag(int bit, boolean value2) {
-        this.options = value2 ? (this.options |= bit) : (this.options &= ~bit);
-    }
+   public void setStrength(int value) {
+      int noStrength = this.options & -61441;
+      switch (value) {
+         case 0:
+         case 1:
+         case 2:
+         case 3:
+         case 15:
+            this.options = noStrength | value << 12;
+            return;
+         default:
+            throw new IllegalArgumentException("illegal strength value " + value);
+      }
+   }
 
-    public void setFlagDefault(int bit, int defaultOptions) {
-        this.options = this.options & ~bit | defaultOptions & bit;
-    }
+   public void setStrengthDefault(int defaultOptions) {
+      int noStrength = this.options & -61441;
+      this.options = noStrength | defaultOptions & 61440;
+   }
 
-    public boolean getFlag(int bit) {
-        return (this.options & bit) != 0;
-    }
+   static int getStrength(int options) {
+      return options >> 12;
+   }
 
-    public void setCaseFirst(int value2) {
-        assert (value2 == 0 || value2 == 512 || value2 == 768);
-        int noCaseFirst = this.options & 0xFFFFFCFF;
-        this.options = noCaseFirst | value2;
-    }
+   public int getStrength() {
+      return getStrength(this.options);
+   }
 
-    public void setCaseFirstDefault(int defaultOptions) {
-        int noCaseFirst = this.options & 0xFFFFFCFF;
-        this.options = noCaseFirst | defaultOptions & 0x300;
-    }
+   public void setFlag(int bit, boolean value) {
+      if (value) {
+         this.options |= bit;
+      } else {
+         this.options &= ~bit;
+      }
+   }
 
-    public int getCaseFirst() {
-        return this.options & 0x300;
-    }
+   public void setFlagDefault(int bit, int defaultOptions) {
+      this.options = this.options & ~bit | defaultOptions & bit;
+   }
 
-    public void setAlternateHandlingShifted(boolean value2) {
-        int noAlternate = this.options & 0xFFFFFFF3;
-        this.options = value2 ? noAlternate | 4 : noAlternate;
-    }
+   public boolean getFlag(int bit) {
+      return (this.options & bit) != 0;
+   }
 
-    public void setAlternateHandlingDefault(int defaultOptions) {
-        int noAlternate = this.options & 0xFFFFFFF3;
-        this.options = noAlternate | defaultOptions & 0xC;
-    }
+   public void setCaseFirst(int value) {
+      assert value == 0 || value == 512 || value == 768;
 
-    public boolean getAlternateHandling() {
-        return (this.options & 0xC) != 0;
-    }
+      int noCaseFirst = this.options & -769;
+      this.options = noCaseFirst | value;
+   }
 
-    public void setMaxVariable(int value2, int defaultOptions) {
-        int noMax = this.options & 0xFFFFFF8F;
-        switch (value2) {
-            case 0: 
-            case 1: 
-            case 2: 
-            case 3: {
-                this.options = noMax | value2 << 4;
-                break;
-            }
-            case -1: {
-                this.options = noMax | defaultOptions & 0x70;
-                break;
-            }
-            default: {
-                throw new IllegalArgumentException("illegal maxVariable value " + value2);
-            }
-        }
-    }
+   public void setCaseFirstDefault(int defaultOptions) {
+      int noCaseFirst = this.options & -769;
+      this.options = noCaseFirst | defaultOptions & 768;
+   }
 
-    public int getMaxVariable() {
-        return (this.options & 0x70) >> 4;
-    }
+   public int getCaseFirst() {
+      return this.options & 768;
+   }
 
-    static boolean isTertiaryWithCaseBits(int options) {
-        return (options & 0x600) == 512;
-    }
+   public void setAlternateHandlingShifted(boolean value) {
+      int noAlternate = this.options & -13;
+      if (value) {
+         this.options = noAlternate | 4;
+      } else {
+         this.options = noAlternate;
+      }
+   }
 
-    static int getTertiaryMask(int options) {
-        return CollationSettings.isTertiaryWithCaseBits(options) ? 65343 : 16191;
-    }
+   public void setAlternateHandlingDefault(int defaultOptions) {
+      int noAlternate = this.options & -13;
+      this.options = noAlternate | defaultOptions & 12;
+   }
 
-    static boolean sortsTertiaryUpperCaseFirst(int options) {
-        return (options & 0x700) == 768;
-    }
+   public boolean getAlternateHandling() {
+      return (this.options & 12) != 0;
+   }
 
-    public boolean dontCheckFCD() {
-        return (this.options & 1) == 0;
-    }
+   public void setMaxVariable(int value, int defaultOptions) {
+      int noMax = this.options & -113;
+      switch (value) {
+         case -1:
+            this.options = noMax | defaultOptions & 112;
+            break;
+         case 0:
+         case 1:
+         case 2:
+         case 3:
+            this.options = noMax | value << 4;
+            break;
+         default:
+            throw new IllegalArgumentException("illegal maxVariable value " + value);
+      }
+   }
 
-    boolean hasBackwardSecondary() {
-        return (this.options & 0x800) != 0;
-    }
+   public int getMaxVariable() {
+      return (this.options & 112) >> 4;
+   }
 
-    public boolean isNumeric() {
-        return (this.options & 2) != 0;
-    }
+   static boolean isTertiaryWithCaseBits(int options) {
+      return (options & 1536) == 512;
+   }
+
+   static int getTertiaryMask(int options) {
+      return isTertiaryWithCaseBits(options) ? 65343 : 16191;
+   }
+
+   static boolean sortsTertiaryUpperCaseFirst(int options) {
+      return (options & 1792) == 768;
+   }
+
+   public boolean dontCheckFCD() {
+      return (this.options & 1) == 0;
+   }
+
+   boolean hasBackwardSecondary() {
+      return (this.options & 2048) != 0;
+   }
+
+   public boolean isNumeric() {
+      return (this.options & 2) != 0;
+   }
 }
-

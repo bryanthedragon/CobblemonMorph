@@ -1,49 +1,46 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
 import java.text.FieldPosition;
-import java.text.Format;
+import java.text.Format.Field;
 
 @Deprecated
-public class UFieldPosition
-extends FieldPosition {
-    private int countVisibleFractionDigits = -1;
-    private long fractionDigits = 0L;
+public class UFieldPosition extends FieldPosition {
+   private int countVisibleFractionDigits = -1;
+   private long fractionDigits = 0L;
 
-    @Deprecated
-    public UFieldPosition() {
-        super(-1);
-    }
+   @Deprecated
+   public UFieldPosition() {
+      super(-1);
+   }
 
-    @Deprecated
-    public UFieldPosition(int field) {
-        super(field);
-    }
+   @Deprecated
+   public UFieldPosition(int field) {
+      super(field);
+   }
 
-    @Deprecated
-    public UFieldPosition(Format.Field attribute, int fieldID) {
-        super(attribute, fieldID);
-    }
+   @Deprecated
+   public UFieldPosition(Field attribute, int fieldID) {
+      super(attribute, fieldID);
+   }
 
-    @Deprecated
-    public UFieldPosition(Format.Field attribute) {
-        super(attribute);
-    }
+   @Deprecated
+   public UFieldPosition(Field attribute) {
+      super(attribute);
+   }
 
-    @Deprecated
-    public void setFractionDigits(int countVisibleFractionDigits, long fractionDigits) {
-        this.countVisibleFractionDigits = countVisibleFractionDigits;
-        this.fractionDigits = fractionDigits;
-    }
+   @Deprecated
+   public void setFractionDigits(int countVisibleFractionDigits, long fractionDigits) {
+      this.countVisibleFractionDigits = countVisibleFractionDigits;
+      this.fractionDigits = fractionDigits;
+   }
 
-    @Deprecated
-    public int getCountVisibleFractionDigits() {
-        return this.countVisibleFractionDigits;
-    }
+   @Deprecated
+   public int getCountVisibleFractionDigits() {
+      return this.countVisibleFractionDigits;
+   }
 
-    @Deprecated
-    public long getFractionDigits() {
-        return this.fractionDigits;
-    }
+   @Deprecated
+   public long getFractionDigits() {
+      return this.fractionDigits;
+   }
 }
-

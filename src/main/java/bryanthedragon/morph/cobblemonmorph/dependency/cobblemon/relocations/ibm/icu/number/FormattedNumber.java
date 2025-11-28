@@ -1,5 +1,4 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.number;
+package com.cobblemon.mod.relocations.ibm.icu.number;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.FormattedStringBuilder;
 import com.cobblemon.mod.relocations.ibm.icu.impl.FormattedValueStringBuilderImpl;
@@ -14,102 +13,91 @@ import com.cobblemon.mod.relocations.ibm.icu.util.UResourceTypeMismatchException
 import java.math.BigDecimal;
 import java.text.AttributedCharacterIterator;
 
-public class FormattedNumber
-implements FormattedValue {
-    final FormattedStringBuilder string;
-    final DecimalQuantity fq;
-    final MeasureUnit outputUnit;
-    final String gender;
+public class FormattedNumber implements FormattedValue {
+   final FormattedStringBuilder string;
+   final DecimalQuantity fq;
+   final MeasureUnit outputUnit;
+   final String gender;
 
-    FormattedNumber(FormattedStringBuilder nsb, DecimalQuantity fq, MeasureUnit outputUnit, String gender) {
-        this.string = nsb;
-        this.fq = fq;
-        this.outputUnit = outputUnit;
-        this.gender = gender;
-    }
+   FormattedNumber(FormattedStringBuilder nsb, DecimalQuantity fq, MeasureUnit outputUnit, String gender) {
+      this.string = nsb;
+      this.fq = fq;
+      this.outputUnit = outputUnit;
+      this.gender = gender;
+   }
 
-    @Override
-    public String toString() {
-        return this.string.toString();
-    }
+   @Override
+   public String toString() {
+      return this.string.toString();
+   }
 
-    @Override
-    public int length() {
-        return this.string.length();
-    }
+   @Override
+   public int length() {
+      return this.string.length();
+   }
 
-    @Override
-    public char charAt(int index) {
-        return this.string.charAt(index);
-    }
+   @Override
+   public char charAt(int index) {
+      return this.string.charAt(index);
+   }
 
-    @Override
-    public CharSequence subSequence(int start2, int end2) {
-        return this.string.subString(start2, end2);
-    }
+   @Override
+   public CharSequence subSequence(int start, int end) {
+      return this.string.subString(start, end);
+   }
 
-    @Override
-    public <A extends Appendable> A appendTo(A appendable) {
-        return Utility.appendTo(this.string, appendable);
-    }
+   @Override
+   public <A extends Appendable> A appendTo(A appendable) {
+      return Utility.appendTo(this.string, appendable);
+   }
 
-    @Override
-    public boolean nextPosition(ConstrainedFieldPosition cfpos) {
-        return FormattedValueStringBuilderImpl.nextPosition(this.string, cfpos, null);
-    }
+   @Override
+   public boolean nextPosition(ConstrainedFieldPosition cfpos) {
+      return FormattedValueStringBuilderImpl.nextPosition(this.string, cfpos, null);
+   }
 
-    @Override
-    public AttributedCharacterIterator toCharacterIterator() {
-        return FormattedValueStringBuilderImpl.toCharacterIterator(this.string, null);
-    }
+   @Override
+   public AttributedCharacterIterator toCharacterIterator() {
+      return FormattedValueStringBuilderImpl.toCharacterIterator(this.string, null);
+   }
 
-    public BigDecimal toBigDecimal() {
-        return this.fq.toBigDecimal();
-    }
+   public BigDecimal toBigDecimal() {
+      return this.fq.toBigDecimal();
+   }
 
-    public MeasureUnit getOutputUnit() {
-        return this.outputUnit;
-    }
+   public MeasureUnit getOutputUnit() {
+      return this.outputUnit;
+   }
 
-    public NounClass getNounClass() {
-        if (this.gender == null || this.gender.isEmpty()) {
-            return NounClass.OTHER;
-        }
-        if (this.gender.equals("neuter")) {
-            return NounClass.NEUTER;
-        }
-        if (this.gender.equals("feminine")) {
-            return NounClass.FEMININE;
-        }
-        if (this.gender.equals("masculine")) {
-            return NounClass.MASCULINE;
-        }
-        if (this.gender.equals("animate")) {
-            return NounClass.ANIMATE;
-        }
-        if (this.gender.equals("inanimate")) {
-            return NounClass.INANIMATE;
-        }
-        if (this.gender.equals("personal")) {
-            return NounClass.PERSONAL;
-        }
-        if (this.gender.equals("common")) {
-            return NounClass.COMMON;
-        }
-        throw new UResourceTypeMismatchException("there are noun classes that are not supported yet");
-    }
+   public NounClass getNounClass() {
+      if (this.gender == null || this.gender.isEmpty()) {
+         return NounClass.OTHER;
+      } else if (this.gender.equals("neuter")) {
+         return NounClass.NEUTER;
+      } else if (this.gender.equals("feminine")) {
+         return NounClass.FEMININE;
+      } else if (this.gender.equals("masculine")) {
+         return NounClass.MASCULINE;
+      } else if (this.gender.equals("animate")) {
+         return NounClass.ANIMATE;
+      } else if (this.gender.equals("inanimate")) {
+         return NounClass.INANIMATE;
+      } else if (this.gender.equals("personal")) {
+         return NounClass.PERSONAL;
+      } else if (this.gender.equals("common")) {
+         return NounClass.COMMON;
+      } else {
+         throw new UResourceTypeMismatchException("there are noun classes that are not supported yet");
+      }
+   }
 
-    @Deprecated
-    public String getGender() {
-        if (this.gender == null) {
-            return "";
-        }
-        return this.gender;
-    }
+   @Deprecated
+   public String getGender() {
+      return this.gender == null ? "" : this.gender;
+   }
 
-    @Deprecated
-    public PluralRules.IFixedDecimal getFixedDecimal() {
-        return this.fq;
-    }
+   @Deprecated
+   public PluralRules.IFixedDecimal getFixedDecimal() {
+      return this.fq;
+   }
 }
-

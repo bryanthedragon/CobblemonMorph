@@ -1,21 +1,15 @@
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+public class TimeUnitAmount extends Measure {
+   public TimeUnitAmount(Number number, TimeUnit unit) {
+      super(number, unit);
+   }
 
-import com.cobblemon.mod.relocations.ibm.icu.util.Measure;
-import com.cobblemon.mod.relocations.ibm.icu.util.TimeUnit;
+   public TimeUnitAmount(double number, TimeUnit unit) {
+      super(new Double(number), unit);
+   }
 
-public class TimeUnitAmount
-extends Measure {
-    public TimeUnitAmount(Number number, TimeUnit unit) {
-        super(number, unit);
-    }
-
-    public TimeUnitAmount(double number, TimeUnit unit) {
-        super(new Double(number), unit);
-    }
-
-    public TimeUnit getTimeUnit() {
-        return (TimeUnit)this.getUnit();
-    }
+   public TimeUnit getTimeUnit() {
+      return (TimeUnit)this.getUnit();
+   }
 }
-

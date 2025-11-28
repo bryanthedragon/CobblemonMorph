@@ -1,123 +1,113 @@
+package com.cobblemon.mod.relocations.ibm.icu.text;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.text;
+final class RBNFChinesePostProcessor implements RBNFPostProcessor {
+   private boolean longForm;
+   private int format;
+   private static final String[] rulesetNames = new String[]{"%traditional", "%simplified", "%accounting", "%time"};
 
-import com.cobblemon.mod.relocations.ibm.icu.text.NFRuleSet;
-import com.cobblemon.mod.relocations.ibm.icu.text.RBNFPostProcessor;
-import com.cobblemon.mod.relocations.ibm.icu.text.RuleBasedNumberFormat;
+   @Override
+   public void init(RuleBasedNumberFormat formatter, String rules) {
+   }
 
-final class RBNFChinesePostProcessor
-implements RBNFPostProcessor {
-    private boolean longForm;
-    private int format;
-    private static final String[] rulesetNames = new String[]{"%traditional", "%simplified", "%accounting", "%time"};
+   @Override
+   public void process(StringBuilder buf, NFRuleSet ruleSet) {
+      String name = ruleSet.getName();
 
-    RBNFChinesePostProcessor() {
-    }
-
-    @Override
-    public void init(RuleBasedNumberFormat formatter, String rules) {
-    }
-
-    @Override
-    public void process(StringBuilder buf, NFRuleSet ruleSet) {
-        int n;
-        int i;
-        String name = ruleSet.getName();
-        for (i = 0; i < rulesetNames.length; ++i) {
-            if (!rulesetNames[i].equals(name)) continue;
+      for (int i = 0; i < rulesetNames.length; i++) {
+         if (rulesetNames[i].equals(name)) {
             this.format = i;
             this.longForm = i == 1 || i == 3;
             break;
-        }
-        if (this.longForm) {
-            i = buf.indexOf("*");
-            while (i != -1) {
-                buf.delete(i, i + 1);
-                i = buf.indexOf("*", i);
+         }
+      }
+
+      if (this.longForm) {
+         for (int ix = buf.indexOf("*"); ix != -1; ix = buf.indexOf("*", ix)) {
+            buf.delete(ix, ix + 1);
+         }
+      } else {
+         String DIAN = "點";
+         String[][] markers = new String[][]{{"萬", "億", "兆", "〇"}, {"万", "亿", "兆", "〇"}, {"萬", "億", "兆", "零"}};
+         String[] m = markers[this.format];
+
+         for (int ix = 0; ix < m.length - 1; ix++) {
+            int n = buf.indexOf(m[ix]);
+            if (n != -1) {
+               buf.insert(n + m[ix].length(), '|');
             }
-            return;
-        }
-        String DIAN = "\u9ede";
-        String[][] markers = new String[][]{{"\u842c", "\u5104", "\u5146", "\u3007"}, {"\u4e07", "\u4ebf", "\u5146", "\u3007"}, {"\u842c", "\u5104", "\u5146", "\u96f6"}};
-        String[] m = markers[this.format];
-        for (int i2 = 0; i2 < m.length - 1; ++i2) {
-            n = buf.indexOf(m[i2]);
-            if (n == -1) continue;
-            buf.insert(n + m[i2].length(), '|');
-        }
-        int x = buf.indexOf("\u9ede");
-        if (x == -1) {
+         }
+
+         int x = buf.indexOf("點");
+         if (x == -1) {
             x = buf.length();
-        }
-        int s = 0;
-        n = -1;
-        String ling = markers[this.format][3];
-        block14: while (x >= 0) {
-            int m2 = buf.lastIndexOf("|", x);
+         }
+
+         int s = 0;
+         int n = -1;
+         String ling = markers[this.format][3];
+
+         while (x >= 0) {
+            int mx = buf.lastIndexOf("|", x);
             int nn = buf.lastIndexOf(ling, x);
             int ns = 0;
-            if (nn > m2) {
-                ns = nn > 0 && buf.charAt(nn - 1) != '*' ? 2 : 1;
+            if (nn > mx) {
+               ns = nn > 0 && buf.charAt(nn - 1) != '*' ? 2 : 1;
             }
-            x = m2 - 1;
-            switch (s * 3 + ns) {
-                case 0: {
-                    s = ns;
-                    n = -1;
-                    continue block14;
-                }
-                case 1: {
-                    s = ns;
-                    n = nn;
-                    continue block14;
-                }
-                case 2: {
-                    s = ns;
-                    n = -1;
-                    continue block14;
-                }
-                case 3: {
-                    s = ns;
-                    n = -1;
-                    continue block14;
-                }
-                case 4: {
-                    buf.delete(nn - 1, nn + ling.length());
-                    s = 0;
-                    n = -1;
-                    continue block14;
-                }
-                case 5: {
-                    buf.delete(n - 1, n + ling.length());
-                    s = ns;
-                    n = -1;
-                    continue block14;
-                }
-                case 6: {
-                    s = ns;
-                    n = -1;
-                    continue block14;
-                }
-                case 7: {
-                    buf.delete(nn - 1, nn + ling.length());
-                    s = 0;
-                    n = -1;
-                    continue block14;
-                }
-                case 8: {
-                    s = ns;
-                    n = -1;
-                    continue block14;
-                }
-            }
-            throw new IllegalStateException();
-        }
-        int i3 = buf.length();
-        while (--i3 >= 0) {
-            char c = buf.charAt(i3);
-            if (c != '*' && c != '|') continue;
-            buf.delete(i3, i3 + 1);
-        }
-    }
-}
 
+            x = mx - 1;
+            switch (s * 3 + ns) {
+               case 0:
+                  s = ns;
+                  n = -1;
+                  break;
+               case 1:
+                  s = ns;
+                  n = nn;
+                  break;
+               case 2:
+                  s = ns;
+                  n = -1;
+                  break;
+               case 3:
+                  s = ns;
+                  n = -1;
+                  break;
+               case 4:
+                  buf.delete(nn - 1, nn + ling.length());
+                  s = 0;
+                  n = -1;
+                  break;
+               case 5:
+                  buf.delete(n - 1, n + ling.length());
+                  s = ns;
+                  n = -1;
+                  break;
+               case 6:
+                  s = ns;
+                  n = -1;
+                  break;
+               case 7:
+                  buf.delete(nn - 1, nn + ling.length());
+                  s = 0;
+                  n = -1;
+                  break;
+               case 8:
+                  s = ns;
+                  n = -1;
+                  break;
+               default:
+                  throw new IllegalStateException();
+            }
+         }
+
+         int ixx = buf.length();
+
+         while (--ixx >= 0) {
+            char c = buf.charAt(ixx);
+            if (c == '*' || c == '|') {
+               buf.delete(ixx, ixx + 1);
+            }
+         }
+      }
+   }
+}

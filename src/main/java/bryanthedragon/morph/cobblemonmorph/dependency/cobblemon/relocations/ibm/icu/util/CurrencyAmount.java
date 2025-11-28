@@ -1,29 +1,23 @@
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+public class CurrencyAmount extends Measure {
+   public CurrencyAmount(Number number, Currency currency) {
+      super(number, currency);
+   }
 
-import com.cobblemon.mod.relocations.ibm.icu.util.Currency;
-import com.cobblemon.mod.relocations.ibm.icu.util.Measure;
+   public CurrencyAmount(double number, Currency currency) {
+      super(new Double(number), currency);
+   }
 
-public class CurrencyAmount
-extends Measure {
-    public CurrencyAmount(Number number, Currency currency) {
-        super(number, currency);
-    }
+   public CurrencyAmount(Number number, java.util.Currency currency) {
+      this(number, Currency.fromJavaCurrency(currency));
+   }
 
-    public CurrencyAmount(double number, Currency currency) {
-        super(new Double(number), currency);
-    }
+   public CurrencyAmount(double number, java.util.Currency currency) {
+      this(number, Currency.fromJavaCurrency(currency));
+   }
 
-    public CurrencyAmount(Number number, java.util.Currency currency) {
-        this(number, Currency.fromJavaCurrency(currency));
-    }
-
-    public CurrencyAmount(double number, java.util.Currency currency) {
-        this(number, Currency.fromJavaCurrency(currency));
-    }
-
-    public Currency getCurrency() {
-        return (Currency)this.getUnit();
-    }
+   public Currency getCurrency() {
+      return (Currency)this.getUnit();
+   }
 }
-

@@ -1,41 +1,34 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.number.parse;
+package com.cobblemon.mod.relocations.ibm.icu.impl.number.parse;
 
 import com.cobblemon.mod.relocations.ibm.icu.impl.StringSegment;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.parse.ParsedNumber;
-import com.cobblemon.mod.relocations.ibm.icu.impl.number.parse.SymbolMatcher;
 import com.cobblemon.mod.relocations.ibm.icu.text.DecimalFormatSymbols;
 import com.cobblemon.mod.relocations.ibm.icu.text.UnicodeSet;
 
-public class NanMatcher
-extends SymbolMatcher {
-    private static final NanMatcher DEFAULT = new NanMatcher("NaN");
+public class NanMatcher extends SymbolMatcher {
+   private static final NanMatcher DEFAULT = new NanMatcher("NaN");
 
-    public static NanMatcher getInstance(DecimalFormatSymbols symbols, int parseFlags) {
-        String symbolString = symbols.getNaN();
-        if (NanMatcher.DEFAULT.string.equals(symbolString)) {
-            return DEFAULT;
-        }
-        return new NanMatcher(symbolString);
-    }
+   public static NanMatcher getInstance(DecimalFormatSymbols symbols, int parseFlags) {
+      String symbolString = symbols.getNaN();
+      return DEFAULT.string.equals(symbolString) ? DEFAULT : new NanMatcher(symbolString);
+   }
 
-    private NanMatcher(String symbolString) {
-        super(symbolString, UnicodeSet.EMPTY);
-    }
+   private NanMatcher(String symbolString) {
+      super(symbolString, UnicodeSet.EMPTY);
+   }
 
-    @Override
-    protected boolean isDisabled(ParsedNumber result) {
-        return result.seenNumber();
-    }
+   @Override
+   protected boolean isDisabled(ParsedNumber result) {
+      return result.seenNumber();
+   }
 
-    @Override
-    protected void accept(StringSegment segment, ParsedNumber result) {
-        result.flags |= 0x40;
-        result.setCharsConsumed(segment);
-    }
+   @Override
+   protected void accept(StringSegment segment, ParsedNumber result) {
+      result.flags |= 64;
+      result.setCharsConsumed(segment);
+   }
 
-    public String toString() {
-        return "<NanMatcher>";
-    }
+   @Override
+   public String toString() {
+      return "<NanMatcher>";
+   }
 }
-

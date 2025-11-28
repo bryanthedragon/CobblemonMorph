@@ -1,16 +1,14 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl.duration;
+package com.cobblemon.mod.relocations.ibm.icu.impl.duration;
 
 import java.util.Date;
 import java.util.TimeZone;
 
 public interface DateFormatter {
-    public String format(Date var1);
+   String format(Date var1);
 
-    public String format(long var1);
+   String format(long var1);
 
-    public DateFormatter withLocale(String var1);
+   DateFormatter withLocale(String var1);
 
-    public DateFormatter withTimeZone(TimeZone var1);
+   DateFormatter withTimeZone(TimeZone var1);
 }
-

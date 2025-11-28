@@ -1,15 +1,12 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.util;
+package com.cobblemon.mod.relocations.ibm.icu.util;
 
 public enum NounClass {
-    OTHER,
-    NEUTER,
-    FEMININE,
-    MASCULINE,
-    ANIMATE,
-    INANIMATE,
-    PERSONAL,
-    COMMON;
-
+   OTHER,
+   NEUTER,
+   FEMININE,
+   MASCULINE,
+   ANIMATE,
+   INANIMATE,
+   PERSONAL,
+   COMMON;
 }
-

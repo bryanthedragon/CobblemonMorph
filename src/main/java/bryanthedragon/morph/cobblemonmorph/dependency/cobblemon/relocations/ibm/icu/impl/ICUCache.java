@@ -1,15 +1,13 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
+package com.cobblemon.mod.relocations.ibm.icu.impl;
 
 public interface ICUCache<K, V> {
-    public static final int SOFT = 0;
-    public static final int WEAK = 1;
-    public static final Object NULL = new Object();
+   int SOFT = 0;
+   int WEAK = 1;
+   Object NULL = new Object();
 
-    public void clear();
+   void clear();
 
-    public void put(K var1, V var2);
+   void put(K var1, V var2);
 
-    public V get(Object var1);
+   V get(Object var1);
 }
-

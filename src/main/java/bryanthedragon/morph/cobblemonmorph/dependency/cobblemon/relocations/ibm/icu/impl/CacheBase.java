@@ -1,9 +1,7 @@
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.relocations.ibm.icu.impl;
+package com.cobblemon.mod.relocations.ibm.icu.impl;
 
 public abstract class CacheBase<K, V, D> {
-    public abstract V getInstance(K var1, D var2);
+   public abstract V getInstance(K var1, D var2);
 
-    protected abstract V createInstance(K var1, D var2);
+   protected abstract V createInstance(K var1, D var2);
 }
-
