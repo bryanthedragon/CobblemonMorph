@@ -1,0 +1,41 @@
+package org.graalvm.shadowed.org.jcodings;
+
+public interface Config {
+   int ENC_CODE_TO_MBC_MAXLEN = 7;
+   int ENC_MBC_CASE_FOLD_MAXLEN = 18;
+   int ENC_MAX_COMP_CASE_FOLD_CODE_LEN = 3;
+   int ENC_GET_CASE_FOLD_CODES_MAX_NUM = 13;
+   boolean USE_UNICODE_CASE_FOLD_TURKISH_AZERI = false;
+   boolean USE_UNICODE_ALL_LINE_TERMINATORS = false;
+   boolean USE_CRNL_AS_LINE_TERMINATOR = false;
+   boolean USE_UNICODE_PROPERTIES = true;
+   int CodePointMaskWidth = 3;
+   int CodePointMask = 7;
+   int SpecialIndexShift = 3;
+   int SpecialIndexWidth = 10;
+   int SpecialIndexMask = 8184;
+   int SpecialsLengthOffset = 25;
+   int CASE_UPCASE = 8192;
+   int CASE_DOWNCASE = 16384;
+   int CASE_TITLECASE = 32768;
+   int CASE_SPECIAL_OFFSET = 3;
+   int CASE_UP_SPECIAL = 65536;
+   int CASE_DOWN_SPECIAL = 131072;
+   int CASE_MODIFIED = 262144;
+   int CASE_FOLD = 524288;
+   int CASE_FOLD_TURKISH_AZERI = 1048576;
+   int CASE_FOLD_LITHUANIAN = 2097152;
+   int CASE_ASCII_ONLY = 4194304;
+   int CASE_IS_TITLECASE = 8388608;
+   int CASE_SPECIALS = 8617984;
+   int INTERNAL_ENC_CASE_FOLD_MULTI_CHAR = 1073741824;
+   int ENC_CASE_FOLD_MIN = 1073741824;
+   int ENC_CASE_FOLD_DEFAULT = 1073741824;
+   String UNICODE_VERSION_STRING = "12.1.0";
+   int UNICODE_VERSION_MAJOR = 12;
+   int UNICODE_VERSION_MINOR = 1;
+   int UNICODE_VERSION_TEENY = 0;
+   String UNICODE_EMOJI_VERSION_STRING = "12.0";
+   int UNICODE_EMOJI_VERSION_MAJOR = 12;
+   int UNICODE_EMOJI_VERSION_MINOR = 0;
+}
