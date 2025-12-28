@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.adapter.database
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStore
@@ -8,93 +16,93 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stora
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.adapter.flatfile.NBTStoreAdapter
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PlayerPartyStore
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DistributionUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
 import com.google.gson.Gson
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.mongodb.client.MongoClient
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.ReplaceOptions
-import java.io.File
-import java.util.Date
-import java.util.UUID
-import net.minecraft.server.MinecraftServer
+import java.util.*
+import net.minecraft.core.RegistryAccess
 import net.minecraft.world.level.storage.LevelResource
 import org.bson.Document
-import org.bson.conversions.Bson
 
-public open class MongoDBStoreAdapter(mongoClient: MongoClient, databaseName: String) : CobblemonAdapterParent<JsonObject>, FileStoreAdapter<JsonObject> {
-   protected final val databaseName: String
-   protected final val gson: Gson
-   protected final val mongoClient: MongoClient
+/**
+ * A [FileStoreAdapter] for MongoDB. This allows a [PokemonStore] to be serialized to a MongoDB database.
+ *
+ * @author Pebbles
+ * @since August 23rd, 2023
+ */
+@Suppress("MemberVisibilityCanBePrivate")
+open class MongoDBStoreAdapter(
+    protected val mongoClient: MongoClient,
+    protected val databaseName: String,
+) : CobblemonAdapterParent<JsonObject>(), FileStoreAdapter<JsonObject> {
 
-   init {
-      this.mongoClient = mongoClient;
-      this.databaseName = databaseName;
-      this.gson = this.createGson();
-   }
+    protected val gson: Gson = this.createGson()
 
-   public open fun <E : StorePosition, T : PokemonStore<Any>> serialize(store: Any): JsonObject {
-      return store.saveToJSON(new JsonObject());
-   }
+    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess): JsonObject = store.saveToJSON(JsonObject(), registryAccess)
 
-   public open fun save(storeClass: Class<out PokemonStore<*>>, uuid: UUID, serialized: JsonObject) {
-      val document: Document = Document.parse(this.gson.toJson(serialized as JsonElement));
-      (document as java.util.Map).put("uuid", uuid.toString());
-      (document as java.util.Map).put("lastUpdated", new Date());
-      this.getCollection(storeClass).replaceOne((new Document("uuid", uuid.toString())) as Bson, document, new ReplaceOptions().upsert(true));
-   }
+    override fun save(storeClass: Class<out PokemonStore<*>>, uuid: UUID, serialized: JsonObject) {
+        val document = Document.parse(this.gson.toJson(serialized))
+        document["uuid"] = uuid.toString()
+        document["lastUpdated"] = Date()
+        val collection = getCollection(storeClass)
+        val filter = Document("uuid", uuid.toString())
+        collection.replaceOne(filter, document, ReplaceOptions().upsert(true))
+    }
 
-   public override fun <E : StorePosition, T : PokemonStore<Any>> provide(storeClass: Class<Any>, uuid: UUID): Any? {
-      val var10000: MinecraftServer = DistributionUtilsKt.server();
-      val pokemonStoreRoot: File = var10000.m_129843_(LevelResource.f_78182_).resolve("pokemon").toFile();
-      var var10002: java.lang.String = pokemonStoreRoot.getAbsolutePath();
-      val jsonAdapter: JSONStoreAdapter = new JSONStoreAdapter(var10002, true, true, null, 8, null);
-      var10002 = pokemonStoreRoot.getAbsolutePath();
-      val nbtAdapter: NBTStoreAdapter = new NBTStoreAdapter(var10002, true, true);
-      val document: Document = this.getCollection(storeClass).find((new Document("uuid", uuid.toString())) as Bson).first() as Document;
-      if (document != null) {
-         val var16: JsonObject = this.gson.fromJson(document.toJson(), JsonObject.class) as JsonObject;
+    override fun <E : StorePosition, T : PokemonStore<E>> provide(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+        val server = server()!!
+        val pokemonStoreRoot = server.getWorldPath(LevelResource.ROOT).resolve("pokemon").toFile()
+        val jsonAdapter = JSONStoreAdapter(
+            pokemonStoreRoot.absolutePath,
+            useNestedFolders = true,
+            folderPerClass = true
+        )
+        val nbtAdapter = NBTStoreAdapter(pokemonStoreRoot.absolutePath, useNestedFolders = true, folderPerClass = true)
 
-         var var12: PokemonStore;
-         try {
-            var12 = storeClass.getConstructor(UUID.class, UUID.class).newInstance(uuid, uuid) as PokemonStore;
-         } catch (var15: NoSuchMethodException) {
-            var12 = storeClass.getConstructor(UUID.class).newInstance(uuid) as PokemonStore;
-         }
+        // 1. Check if data exists in MongoDB
+        val collection = getCollection(storeClass)
+        val filter = Document("uuid", uuid.toString())
+        val document = collection.find(filter).first()
 
-         var12.loadFromJSON(var16);
-         return (T)var12;
-      } else {
-         val nbtStore: PokemonStore = nbtAdapter.provide(storeClass, uuid);
-         if (nbtStore != null) {
-            this.save(storeClass, uuid, this.serialize(nbtStore));
-            return (T)nbtStore;
-         } else {
-            val jsonStore: PokemonStore = jsonAdapter.provide(storeClass, uuid);
-            if (jsonStore != null) {
-               this.save(storeClass, uuid, this.serialize(jsonStore));
-               return (T)jsonStore;
-            } else {
-               return null;
+        if (document != null) {
+            val json = this.gson.fromJson(document.toJson(), JsonObject::class.java)
+            val store = try {
+                storeClass.getConstructor(UUID::class.java, UUID::class.java).newInstance(uuid, uuid)
+            } catch (exception: NoSuchMethodException) {
+                storeClass.getConstructor(UUID::class.java).newInstance(uuid)
             }
-         }
-      }
-   }
+            store.loadFromJSON(json, registryAccess)
+            return store
+        }
 
-   protected open fun createGson(): Gson {
-      return new Gson();
-   }
+        // 2. Fallback to checking JSON and NBT
+        val nbtStore = nbtAdapter.provide(storeClass, uuid, registryAccess)
+        if (nbtStore != null) {
+            save(storeClass, uuid, serialize(nbtStore, registryAccess))
+            return nbtStore
+        }
 
-   protected open fun getCollection(storeClass: Class<out PokemonStore<*>>): MongoCollection<Document> {
-      val var10000: MongoCollection = this.mongoClient
-         .getDatabase(this.databaseName)
-         .getCollection(
-            if (storeClass == PlayerPartyStore::class.java)
-               "PlayerPartyCollection"
-               else
-               (if (storeClass == PCStore::class.java) "PCCollection" else "OtherCollection")
-         );
-      return var10000;
-   }
+        val jsonStore = jsonAdapter.provide(storeClass, uuid, registryAccess)
+        if (jsonStore != null) {
+            save(storeClass, uuid, serialize(jsonStore, registryAccess))
+            return jsonStore
+        }
+
+        return null
+    }
+
+    protected open fun createGson(): Gson = Gson()
+
+    protected open fun getCollection(storeClass: Class<out PokemonStore<*>>): MongoCollection<Document> {
+        val collectionName = when (storeClass) {
+            PlayerPartyStore::class.java -> "PlayerPartyCollection"
+            PCStore::class.java -> "PCCollection"
+            else -> "OtherCollection"
+        }
+        return this.mongoClient.getDatabase(this.databaseName).getCollection(collectionName)
+    }
+
 }

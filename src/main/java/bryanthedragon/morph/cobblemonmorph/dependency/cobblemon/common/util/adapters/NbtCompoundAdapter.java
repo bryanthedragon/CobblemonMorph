@@ -1,24 +1,27 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
-import java.lang.reflect.Type
-import java.util.ArrayList;
+import com.google.gson.*
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.nbt.SnbtPrinterTagVisitor
-import net.minecraft.nbt.Tag
+import java.lang.reflect.Type
 
-public object NbtCompoundAdapter : JsonDeserializer<CompoundTag>, JsonSerializer<CompoundTag> {
-   public open fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): CompoundTag {
-      return NbtUtils.m_178024_(json.getAsString());
-   }
-
-   public open fun serialize(nbt: CompoundTag, type: Type, ctx: JsonSerializationContext): JsonElement {
-      return (new JsonPrimitive(new SnbtPrinterTagVisitor("", 0, new ArrayList()).m_178141_(nbt as Tag))) as JsonElement;
-   }
+/**
+ * An adapter that handles an [CompoundTag] using string conversion.
+ *
+ * @author Hiroku
+ * @since July 25th, 2022
+ */final class NbtCompoundAdapter : JsonDeserializer<CompoundTag>, JsonSerializer<CompoundTag> {
+    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = NbtUtils.snbtToStructure(json.asString)
+    override fun serialize(nbt: CompoundTag, type: Type, ctx: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(SnbtPrinterTagVisitor("", 0, mutableListOf()).visit(nbt))
+    }
 }

@@ -1,142 +1,181 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asResource
 import com.google.gson.reflect.TypeToken
-import java.util.LinkedHashMap
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
+import net.minecraft.resources.ResourceLocation
 
-@SourceDebugExtension(["SMAP\nRenderContext.kt\nKotlin\n*S Kotlin\n*F\n+ 1 RenderContext.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/repository/RenderContext\n+ 2 RenderContext.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/repository/RenderContext$Companion\n*L\n1#1,159:1\n155#2:160\n155#2:161\n155#2:162\n155#2:163\n155#2:164\n155#2:165\n*S KotlinDebug\n*F\n+ 1 RenderContext.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/repository/RenderContext\n*L\n108#1:160\n113#1:161\n118#1:162\n123#1:163\n128#1:164\n133#1:165\n*E\n"])
-public class RenderContext {
-   private final val context: MutableMap<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<*>, Any?> =
-      (new LinkedHashMap()) as java.util.Map
 
-   public fun <T : Any> request(key: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<Any>): Any? {
-      return (T)this.context.get(key);
-   }
+/**
+ * The RenderContext class manages a context for rendering operations by associating data values with specific keys.
+ *
+ * @author Waterpicker
+ * @since 1.4.0
+ */
+class RenderContext {
+    // A map to store data values associated with keys
+    private val context: MutableMap<Key<*>, Any?> = mutableMapOf()
 
-   public fun <T : Any> requires(key: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<Any>): Any {
-      val var10000: Any = this.request(key);
-      if (var10000 == null) {
-         throw new NullPointerException("Required value not found in context for key: $key");
-      } else {
-         return (T)var10000;
-      }
-   }
-
-   public fun <T : Any> put(key: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<Any>, value: Any?) {
-      this.context.put(key, value);
-   }
-
-   public fun pop() {
-      this.context.clear();
-   }
-
-   public fun <T : Any> pop(key: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<Any>) {
-      this.context.remove(key);
-   }
-
-   @JvmStatic
-   fun {
-      var `this_$iv`: RenderContext.Companion = Companion;
-      var `id$iv`: ResourceLocation = MiscUtilsKt.asResource("entity");
-      var var10002: TypeToken = TypeToken.get(Entity.class);
-      ENTITY = `this_$iv`.key(`id$iv`, var10002);
-      `this_$iv` = Companion;
-      `id$iv` = MiscUtilsKt.asResource("texture");
-      var10002 = TypeToken.get(ResourceLocation.class);
-      TEXTURE = `this_$iv`.key(`id$iv`, var10002);
-      `this_$iv` = Companion;
-      `id$iv` = MiscUtilsKt.asResource("scale");
-      var10002 = TypeToken.get(java.lang.Float.class);
-      SCALE = `this_$iv`.key(`id$iv`, var10002);
-      `this_$iv` = Companion;
-      `id$iv` = MiscUtilsKt.asResource("species");
-      var10002 = TypeToken.get(ResourceLocation.class);
-      SPECIES = `this_$iv`.key(`id$iv`, var10002);
-      `this_$iv` = Companion;
-      `id$iv` = MiscUtilsKt.asResource("species");
-      var10002 = TypeToken.get(java.util.Set.class);
-      ASPECTS = `this_$iv`.key(`id$iv`, var10002);
-      `this_$iv` = Companion;
-      `id$iv` = MiscUtilsKt.asResource("state");
-      var10002 = TypeToken.get(RenderContext.RenderState.class);
-      RENDER_STATE = `this_$iv`.key(`id$iv`, var10002);
-   }
-
-   public companion object {
-      public final val ASPECTS: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<Set<String>>
-      public final val ENTITY: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<Entity>
-      public final val RENDER_STATE: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<
-         bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.RenderState
-      >
-      public final val SCALE: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<Float>
-      public final val SPECIES: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<ResourceLocation>
-      public final val TEXTURE: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<ResourceLocation>
-
-      public fun <T : Any> key(id: ResourceLocation, token: TypeToken<Any>): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<
-            Any
-         > {
-         return new RenderContext.Key(id, token);
-      }
-   }
-
-   public data Key<T>(key: ResourceLocation, token: TypeToken<Any>) {
-      public final val key: ResourceLocation
-      public final val token: TypeToken<Any>
-
-      init {
-         this.key = key;
-         this.token = token;
-      }
-
-      public operator fun component1(): ResourceLocation {
-         return this.key;
-      }
-
-      public operator fun component2(): TypeToken<Any> {
-         return this.token;
-      }
-
-      public fun copy(key: ResourceLocation = this.key, token: TypeToken<Any> = this.token): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext.Key<
-            Any
-         > {
-         return new RenderContext.Key<>(key, token);
-      }
-
-      public override fun toString(): String {
-         return "Key(key=${this.key}, token=${this.token})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.key.hashCode() * 31 + this.token.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is RenderContext.Key) {
-            return false;
-         } else {
-            val var2: RenderContext.Key = other as RenderContext.Key;
-            if (!(this.key == (other as RenderContext.Key).key)) {
-               return false;
+    var entity: Entity?
+        get() = this.request(ENTITY)
+        set(value) {
+            if (value == null) {
+                this.pop(ENTITY)
             } else {
-               return this.token == var2.token;
+                this.put(ENTITY, value)
             }
-         }
-      }
-   }
+        }
 
-   public enum RenderState(isGuiBased: Boolean) {
-      WORLD(false),
-      PORTRAIT(true),
-      PROFILE(true)
-      public final val isGuiBased: Boolean
+    /**
+     * Retrieves a value from the context associated with the provided key.
+     *
+     * @param key The key associated with the desired value.
+     * @return The value associated with the key, or null if not found.
+     *
+     * @since 1.4.0
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <T : Any> request(key: Key<T>): T? = this.context[key] as? T?
 
-      init {
-         this.isGuiBased = isGuiBased;
-      }
-   }
+    /**
+     * Retrieves a value from the context associated with the provided key, assuming the value exists.
+     *
+     * @param key The key associated with the desired value.
+     * @return The value associated with the key.
+     * @throws NullPointerException If the value is not present in the context.
+     *
+     * @since 1.4.0
+     */
+    fun <T : Any> requires(key: Key<T>): T = this.request(key) ?: throw NullPointerException("Required value not found in context for key: $key")
+
+    /**
+     * Stores a value in the context associated with the provided key.
+     *
+     * @param key   The key associated with the value.
+     * @param value The value to be stored in the context.
+     *
+     * @since 1.4.0
+     */
+    fun <T : Any> put(key: Key<T>, value: T?) {
+        this.context[key] = value
+    }
+
+    /**
+     * Resets the context back to its initial state. In other words, this would represent an empty context set.
+     *
+     * @since 1.4.0
+     */
+    fun pop() = this.context.clear()
+
+    fun <T : Any> pop(key: Key<T>) {
+        this.context.remove(key)
+    }
+
+    /**
+     * Represents a key used for accessing values in the context.
+     *
+     * @param key   The identifier associated with the key.
+     * @param token The TypeToken representing the value's type.
+     *
+     * @since 1.4.0
+     */
+    record Key<T : Any>(val key: ResourceLocation, val token: TypeToken<T>)
+
+    /**
+     * Represents different rendering states or modes.
+     *
+     * @since 1.4.0
+     */
+    enum class RenderState(
+        /**
+         * Indicates whether the mode is GUI-based.
+         */
+        val isGuiBased: Boolean
+    ) {
+        //World rendering mode.
+        WORLD(false),
+
+        //Portrait rendering mode (GUI-based).
+        PORTRAIT(true),
+
+        //Profile rendering mode (GUI-based).
+        PROFILE(true),
+        RESURRECTION_MACHINE(false),
+        BLOCK(false)
+    }
+
+    // Predefined keys for common data types
+    companion object {
+        /**
+         * Key to access the currently rendered entity.
+         */
+        val ENTITY: Key<Entity> = key("entity".asResource())
+
+        /**
+         * Key to access the identifier of the texture being rendered.
+         */
+        val TEXTURE: Key<ResourceLocation> = key("texture".asResource())
+
+        /**
+         * Key to access the base scaling factor of the current species.
+         */
+        val SCALE: Key<Float> = key("scale".asResource())
+
+        /**
+         * Key to access the identifier of the current species.
+         */
+        val SPECIES: Key<ResourceLocation> = key("species".asResource())
+
+        /**
+         * Key to access the aspects of the current entity.
+         */
+        val ASPECTS: Key<Set<String>> = key("species".asResource())
+
+        /**
+         * Key to access whether or not quirks are enabled for this context. It is implied as true when it's null
+         */
+        val DO_QUIRKS: Key<Boolean> = key("do_quirks".asResource())
+
+        /**
+         * Key to access the rendering state, indicating the active rendering mode.
+         */
+        val RENDER_STATE: Key<RenderState> = key("state".asResource())
+
+        /**
+         * Key to access the posable state of the thing being drawn.
+         */
+        val POSABLE_STATE: Key<PosableState> = key("posable_state".asResource())
+
+        /**
+         * Creates a new Key instance with the provided identifier and TypeToken.
+         *
+         * @param id    The identifier associated with the key.
+         * @param token The TypeToken representing the value's type.
+         * @return A new Key instance.
+         *
+         * @since 1.4.0
+         */
+        fun <T : Any> key(id: ResourceLocation, token: TypeToken<T>): Key<T> = Key(id, token)
+
+        /**
+         * Creates a new Key instance with the provided identifier and class type.
+         *
+         * @param id    The identifier associated with the key.
+         * @param clazz The class type representing the value's type.
+         * @return A new Key instance.
+         *
+         * @since 1.4.0
+         */
+        inline fun <reified T : Any> key(id: ResourceLocation): Key<T> = key(id, TypeToken.get(T::class.java))
+    }
 }
+

@@ -1,29 +1,28 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.pipes
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Transform
 
-public class IgnoreFirstTransform<T>(amount: Int = 1) : Transform<T, T> {
-   public final var amount: Int
-
-   init {
-      this.amount = amount;
-   }
-
-   public override operator fun invoke(input: Any): Any {
-      if (this.amount > 0) {
-         this.amount += -1;
-         this.noTransform(false);
-         throw new KotlinNothingValueException();
-      } else {
-         return (T)input;
-      }
-   }
-
-   override fun noTransform(terminate: Boolean): Void {
-      return Transform.DefaultImpls.noTransform(this, terminate);
-   }
-
-   fun IgnoreFirstTransform() {
-      this(0, 1, null);
-   }
+/**
+ * A transform that will ignore some number of initial emissions before it will continue as usual.
+ *
+ * @author Hiroku
+ * @since November 27th, 2021
+ */
+class IgnoreFirstTransform<T>(var amount: Int = 1) : Transform<T, T> {
+    override fun invoke(input: T): T {
+        if (amount > 0) {
+            amount--
+            noTransform(terminate = false)
+        } else {
+            return input
+        }
+    }
 }

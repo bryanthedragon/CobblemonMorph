@@ -1,39 +1,71 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.selection
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SpawningContext
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnBucket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnAction
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.Spawner
-import java.util.LinkedHashMap
-import java.util.Map.Entry
-import kotlin.jvm.internal.SourceDebugExtension
 
-public interface SpawningSelector {
-   public abstract fun select(spawner: Spawner, contexts: List<SpawningContext>): Pair<SpawningContext, SpawnDetail>? {
-   }
 
-   public open fun getProbabilities(spawner: Spawner, contexts: List<SpawningContext>): Map<SpawnDetail, Float> {
-   }
+/**
+ * Interface responsible for taking all the potential spawns across many positions, and applying some kind of
+ * selection process to make some [SpawnAction]s. It is also responsible for generating a name to percentage
+ * probability for the given spawn information for checking possible spawns under specific conditions.
+ *
+ * @author Hiroku
+ * @since January 31st, 2022
+ */
+interface SpawningSelector<T : SpawnSelectionData> {
+    companion object {
+        @JvmField
+        val DEFAULT = FlatSpawnablePositionWeightedSelector()
+    }
 
-   public abstract fun getTotalWeights(spawner: Spawner, contexts: List<SpawningContext>): Map<SpawnDetail, Float> {
-   }
+    fun getSelectionData(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): T
 
-   // $VF: Class flags could not be determined
-   @SourceDebugExtension(["SMAP\nSpawningSelector.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SpawningSelector.kt\ncom/cobblemon/mod/common/api/spawning/selection/SpawningSelector$DefaultImpls\n+ 2 _Maps.kt\nkotlin/collections/MapsKt___MapsKt\n*L\n1#1,36:1\n215#2,2:37\n*S KotlinDebug\n*F\n+ 1 SpawningSelector.kt\ncom/cobblemon/mod/common/api/spawning/selection/SpawningSelector$DefaultImpls\n*L\n30#1:37,2\n*E\n"])
-   internal class DefaultImpls {
-      @JvmStatic
-      fun getProbabilities(`$this`: SpawningSelector, spawner: Spawner, contexts: MutableList<SpawningContext>): MutableMap<SpawnDetail, java.lang.Float> {
-         val weights: java.util.Map = `$this`.getTotalWeights(spawner, contexts);
-         val totalWeight: Float = CollectionsKt.sumOfFloat(weights.values());
-         val percentages: java.util.Map = new LinkedHashMap();
+    fun selectSpawnAction(
+        spawner: Spawner,
+        bucket: SpawnBucket,
+        selectionData: T
+    ): SpawnAction<*>?
 
-         for (Entry element$iv : weights.entrySet()) {
-            percentages.put(
-               `element$iv`.getKey() as SpawnDetail,
-               RangesKt.coerceIn((`element$iv`.getValue() as java.lang.Number).floatValue() / totalWeight * 100.0F, RangesKt.rangeTo(0.0F, 100.0F))
-            );
-         }
+    fun select(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>, maxSpawns: Int): List<SpawnAction<*>> {
+        val selectionData = getSelectionData(spawner, bucket, spawnablePositions)
 
-         return percentages;
-      }
-   }
+        val spawnActions = selectionData.spawnActions
+
+        while (spawnActions.size < maxSpawns) {
+            val spawnAction = selectSpawnAction(
+                spawner = spawner,
+                bucket = bucket,
+                selectionData = selectionData
+            )
+
+            if (spawnAction == null) {
+                break
+            }
+
+            spawnActions.add(spawnAction)
+        }
+
+        return spawnActions
+    }
+
+    fun getProbabilities(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): Map<SpawnDetail, Float> {
+        val weights = getTotalWeights(spawner, bucket, spawnablePositions)
+        val totalWeight = weights.values.sum()
+        val percentages = mutableMapOf<SpawnDetail, Float>()
+        weights.forEach { (spawnDetail, weight) -> percentages[spawnDetail] = (weight / totalWeight * 100F).coerceIn(0F..100F) }
+        return percentages
+    }
+
+    fun getTotalWeights(spawner: Spawner, bucket: SpawnBucket, spawnablePositions: List<SpawnablePosition>): Map<SpawnDetail, Float>
 }

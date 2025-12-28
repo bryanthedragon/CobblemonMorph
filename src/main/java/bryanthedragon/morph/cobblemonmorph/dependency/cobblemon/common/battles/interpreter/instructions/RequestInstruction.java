@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
@@ -8,61 +16,37 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMakeChoicePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleQueueRequestPacket
-import kotlin.jvm.functions.Function0
 
-public class RequestInstruction(battleActor: BattleActor, message: BattleMessage) : InterpreterInstruction {
-   public final val battleActor: BattleActor
-   public final val message: BattleMessage
+/**
+ * Format: |request|REQUEST
+ *
+ * It's time for the actor to make a decision.
+ * @author Deltric
+ * @since January 22nd, 2022
+ */
+class RequestInstruction(val battleActor: BattleActor, val message: BattleMessage): InterpreterInstruction {
+    override fun invoke(battle: PokemonBattle) {
+        battle.log("Request Instruction")
 
-   init {
-      this.battleActor = battleActor;
-      this.message = message;
-   }
+        if (message.rawMessage.contains("teamPreview")) // TODO probably change when we're allowing team preview
+            return
 
-   public override operator fun invoke(battle: PokemonBattle) {
-      battle.log("Request Instruction");
-      if (!StringsKt.contains$default(this.message.getRawMessage(), "teamPreview", false, 2, null)) {
-         val request: ShowdownActionRequest = BattleRegistry.INSTANCE
-            .getGson()
-            .fromJson(
-               StringsKt.split$default(this.message.getRawMessage(), new java.lang.String[]{"|request|"}, false, 0, 6, null).get(1) as java.lang.String,
-               ShowdownActionRequest.class
-            ) as ShowdownActionRequest;
-         request.sanitize(battle, this.battleActor);
-         if (battle.getStarted()) {
-            battle.dispatchGo((new Function0<Unit>(this, request, battle) {
-               {
-                  super(0);
-                  this.this$0 = `$receiver`;
-                  this.$request = `$request`;
-                  this.$battle = `$battle`;
-               }
+        // Parse Json message and update state info for actor
+        val request = BattleRegistry.gson.fromJson(message.rawMessage.split("|request|")[1], ShowdownActionRequest::class.java)
+        request.sanitize(battle, battleActor)
+        battle.dispatchGo {
+            // This request won't be acted on until the start of next turn
+            battleActor.sendUpdate(BattleQueueRequestPacket(request))
+            battleActor.request = request
+            battleActor.responses.clear()
+            // We need to send this out because 'upkeep' isn't received until the request is handled since the turn won't swap
+            if (request.forceSwitch.contains(true)) {
+                battle.doWhenClear {
+                    battleActor.mustChoose = true
+                    battleActor.sendUpdate(BattleMakeChoicePacket())
+                }
+            }
+        }
+    }
 
-               public final void invoke() {
-                  val var10000: BattleActor = this.this$0.getBattleActor();
-                  val var10003: ShowdownActionRequest = this.$request;
-                  var10000.sendUpdate(new BattleQueueRequestPacket(var10003));
-                  this.this$0.getBattleActor().setRequest(this.$request);
-                  this.this$0.getBattleActor().getResponses().clear();
-                  if (this.$request.getForceSwitch().contains(true)) {
-                     this.$battle.doWhenClear((new Function0<Unit>(this.this$0) {
-                        {
-                           super(0);
-                           this.this$0 = `$receiver`;
-                        }
-
-                        public final void invoke() {
-                           this.this$0.getBattleActor().setMustChoose(true);
-                           this.this$0.getBattleActor().sendUpdate(new BattleMakeChoicePacket());
-                        }
-                     }) as () -> Unit);
-                  }
-               }
-            }) as () -> Unit);
-         } else {
-            this.battleActor.setRequest(request);
-            this.battleActor.getResponses().clear();
-         }
-      }
-   }
 }

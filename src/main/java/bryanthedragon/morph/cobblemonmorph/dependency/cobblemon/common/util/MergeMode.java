@@ -1,87 +1,65 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
 
-import java.util.ArrayList;
+/**
+ * A way of combining two collections of items together.
+ *
+ * @author Hiroku
+ * @since July 8th, 2022
+ */
+enum class MergeMode : Merger {
+    /** Replaces the base list with the other list if the other list is non-null. */
+    REPLACE {
+        override fun <T> merge(base: MutableCollection<T>?, other: MutableCollection<T>?): MutableCollection<T>? {
+            return other?.toMutableList() ?: base
+        }
 
-public enum MergeMode : Merger {
-   REPLACE,
-   INSERT,
-   KEEP
-   public class INSERT : MergeMode {
-      fun INSERT(`$enum$name`: java.lang.String, `$enum$ordinal`: Int) {
-         super(null);
-      }
-
-      public override fun <T> merge(base: MutableCollection<Any>?, other: MutableCollection<Any>?): MutableCollection<Any>? {
-         var var10000: java.util.Collection;
-         if (other == null) {
-            var10000 = base;
-         } else {
-            var10000 = base;
-            if (base == null) {
-               var10000 = new ArrayList();
+        override fun <T> mergeSingle(base: T?, other: T?): T? {
+            return other ?: base
+        }
+    },
+    /** Inserts the other list's contents into the base list, creating a new base list if the current is blank.*/
+    INSERT {
+        override fun <T> merge(base: MutableCollection<T>?, other: MutableCollection<T>?): MutableCollection<T>? {
+            return if (other == null) {
+                base
+            } else {
+                val list = base ?: mutableListOf()
+                list.addAll(other)
+                list
             }
+        }
 
-            var10000.addAll(other);
-            var10000 = var10000;
-         }
+        override fun <T> mergeSingle(base: T?, other: T?): T? {
+            return KEEP.mergeSingle(base, other)
+        }
+    },
+    KEEP {
+        override fun <T> merge(base: MutableCollection<T>?, other: MutableCollection<T>?): MutableCollection<T>? {
+            return base?.toMutableList() ?: other
+        }
 
-         return var10000;
-      }
+        override fun <T> mergeSingle(base: T?, other: T?): T? {
+            return base ?: other
+        }
+    }
+}
 
-      public override fun <T> mergeSingle(base: Any?, other: Any?): Any? {
-         return (T)MergeMode.KEEP.mergeSingle(base, other);
-      }
-   }
-
-   public class KEEP : MergeMode {
-      fun KEEP(`$enum$name`: java.lang.String, `$enum$ordinal`: Int) {
-         super(null);
-      }
-
-      public override fun <T> merge(base: MutableCollection<Any>?, other: MutableCollection<Any>?): MutableCollection<Any>? {
-         if (base != null) {
-            val var10000: java.util.List = CollectionsKt.toMutableList(base);
-            if (var10000 != null) {
-               return var10000;
-            }
-         }
-
-         return other;
-      }
-
-      public override fun <T> mergeSingle(base: Any?, other: Any?): Any? {
-         var var10000: Any = base;
-         if (base == null) {
-            var10000 = other;
-         }
-
-         return (T)var10000;
-      }
-   }
-
-   public class REPLACE : MergeMode {
-      fun REPLACE(`$enum$name`: java.lang.String, `$enum$ordinal`: Int) {
-         super(null);
-      }
-
-      public override fun <T> merge(base: MutableCollection<Any>?, other: MutableCollection<Any>?): MutableCollection<Any>? {
-         if (other != null) {
-            val var10000: java.util.List = CollectionsKt.toMutableList(other);
-            if (var10000 != null) {
-               return var10000;
-            }
-         }
-
-         return base;
-      }
-
-      public override fun <T> mergeSingle(base: Any?, other: Any?): Any? {
-         var var10000: Any = other;
-         if (other == null) {
-            var10000 = base;
-         }
-
-         return (T)var10000;
-      }
-   }
+/**
+ * Interface representing the merging function used for [MergeMode]s. This is really just some Kotlin trickery to get
+ * generic type functionality inside an enum.
+ *
+ * @author Hiroku
+ * @since July 8th, 2022
+ */
+interface Merger {
+    fun <T> merge(base: MutableCollection<T>?, other: MutableCollection<T>?): MutableCollection<T>?
+    fun <T> mergeSingle(base: T?, other: T?): T?
 }

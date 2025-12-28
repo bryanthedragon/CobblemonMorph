@@ -1,47 +1,45 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.Effect
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InstructionSet
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import kotlin.jvm.functions.Function0
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
 
-public class EndItemInstruction(message: BattleMessage) : InterpreterInstruction {
-   public final val message: BattleMessage
+/**
+ * Format: |-enditem|POKEMON|ITEM|(from)EFFECT
+ *
+ * ITEM held by POKEMON has been destroyed by a move or ability EFFECT, and it now holds no item.
+ *
+ * Alt format: |-enditem|POKEMON|ITEM
+ *
+ * POKEMON's ITEM has destroyed itself (consumed or used).
+ * @author Licious
+ * @since December 30th, 2022
+ */
+class EndItemInstruction(val message: BattleMessage): InterpreterInstruction {
 
-   init {
-      this.message = message;
-   }
-
-   public override operator fun invoke(battle: PokemonBattle) {
-      battle.dispatchGo((new Function0<Unit>(this, battle) {
-         {
-            super(0);
-            this.this$0 = `$receiver`;
-            this.$battle = `$battle`;
-         }
-
-         public final void invoke() {
-            val var10000: BattlePokemon = this.this$0.getMessage().battlePokemon(0, this.$battle);
-            if (var10000 != null) {
-               val var3: Effect = this.this$0.getMessage().effectAt(1);
-               if (var3 != null) {
-                  var10000.getHeldItemManager().handleEndInstruction(var10000, this.$battle, this.this$0.getMessage());
-                  this.$battle.getMinorBattleActions().put(var10000.getUuid(), this.this$0.getMessage());
-                  var10000.getContextManager().remove(var3.getId(), BattleContext.Type.ITEM);
-                  if (this.this$0.getMessage().hasOptionalArgument("eat")) {
-                     val var4: PokemonEntity = var10000.getEntity();
-                     if (var4 != null) {
-                        var4.m_5496_(CobblemonSounds.BERRY_EAT, 1.0F, 1.0F);
-                     }
-                  }
-               }
+    override fun invoke(battle: PokemonBattle) {
+        battle.dispatchWaiting(1.5F) {
+            // All logic regarding broadcasting battle messages is handled in CobblemonHeldItemManager
+            val battlePokemon = message.battlePokemon(0, battle) ?: return@dispatchWaiting
+            val itemEffect = message.effectAt(1) ?: return@dispatchWaiting
+            battlePokemon.heldItemManager.handleEndInstruction(battlePokemon, battle, message)
+            battle.minorBattleActions[battlePokemon.uuid] = message
+            battlePokemon.contextManager.remove(itemEffect.id, BattleContext.Type.ITEM)
+            if (message.hasOptionalArgument("eat")) {
+                battlePokemon.entity?.playSound(CobblemonSounds.BERRY_EAT, 1F, 1F)
             }
-         }
-      }) as () -> Unit);
-   }
+        }
+    }
 }

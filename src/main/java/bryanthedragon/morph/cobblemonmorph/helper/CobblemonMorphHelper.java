@@ -23,26 +23,32 @@ public class CobblemonMorphHelper extends CobblemonMorph
     {
         return cobblemonmorphclienthelper;
     }
+
     public static CobblemonMorphDependencyHelper getCobblemonMorphDependencyHelper() 
     {
         return cobblemonmorphdependencyhelper;
     }
+
     public static CobblemonMorphLoggerHelper getCobblemonMorphLoggerHelper() 
     {
         return cobblemonmorphloggerHelper;
     }
+
     public static CobblemonMorphItemHelper getCobblemonMorphItemHelper() 
     {
         return cobblemonmorphitemhelper;
     }
+
     public static CobblemonMorphModTabHelper getCobblemonMorphModTabHelper() 
     {
         return cobblemonmorphmodtabhelper;
     }
+
     public static CobblemonMorphMixinsHelper getCobblemonMorphMixinsHelper() 
     {
         return cobblemonmorphmixinshelper;
     }
+
     public CobblemonMorphHelper(FMLJavaModLoadingContext context) 
     {
         super(context);

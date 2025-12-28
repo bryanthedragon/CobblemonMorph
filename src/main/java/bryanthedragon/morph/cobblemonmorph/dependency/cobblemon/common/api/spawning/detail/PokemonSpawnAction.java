@@ -1,85 +1,76 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.DropTable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SpawningContext
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnBucket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.feature.SeasonFeatureHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.CollectionUtilsKt
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension
-import kotlin.random.Random
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.LevelAccessor
 
-@SourceDebugExtension(["SMAP\nPokemonSpawnAction.kt\nKotlin\n*S Kotlin\n*F\n+ 1 PokemonSpawnAction.kt\ncom/cobblemon/mod/common/api/spawning/detail/PokemonSpawnAction\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,58:1\n1#2:59\n*E\n"])
-public class PokemonSpawnAction(ctx: SpawningContext, detail: PokemonSpawnDetail, props: PokemonProperties = detail.getPokemon().copy()) : SingleEntitySpawnAction(
-      ctx, detail
-   ) {
-   public open val detail: PokemonSpawnDetail
-   public final var props: PokemonProperties
+/**
+ * A [SpawnAction] that will spawn a single [PokemonEntity].
+ *
+ * @author Hiroku
+ * @since February 13th, 2022
+ */
+class PokemonSpawnAction(
+    spawnablePosition: SpawnablePosition,
+    bucket: SpawnBucket,
+    override val detail: SpawnDetail,
+    /**
+     * The [PokemonProperties] that are about to be used. When using it, a copy will be taken.
+     * Don't modify the contents of this, what you want to do is [updatePokemon] with a copy.
+     */
+    var props: PokemonProperties,
+    var heldItem: ItemStack?,
+    var drops: DropTable? = null,
+    var levelRange: IntRange
+) : SingleEntitySpawnAction<PokemonEntity>(spawnablePosition, bucket, detail) {
+    override fun createEntity(): PokemonEntity {
+        val props = props.copy()
+        props.level = levelRange.random()
 
-   init {
-      this.detail = detail;
-      this.props = props;
-   }
+        val sourcePlayer = spawnablePosition.cause.entity as? ServerPlayer
+        val entity = props.createEntity(spawnablePosition.world, sourcePlayer)
+        entity.spawnCause = spawnablePosition.cause
+        entity.pokemon.setFriendship(entity.pokemon.form.baseFriendship)
 
-   public open fun createEntity(): PokemonEntity {
-      if (this.props.getSpecies() == null) {
-         Cobblemon.INSTANCE.getLOGGER().error("PokemonSpawnAction run with null species - Spawn detail: ${this.getDetail().getId()}");
-      }
+        SeasonFeatureHandler.updateSeason(entity.pokemon, Cobblemon.seasonResolver(spawnablePosition.world, spawnablePosition.position))
+        val heldItem = heldItem
+        if (heldItem != ItemStack.EMPTY && heldItem != null) {
+            entity.pokemon.swapHeldItem(heldItem)
+        }
+        entity.drops = drops
+        // Useful debug code in situations where you want to find spawns
+//        val fireworkRocketEntity = FireworkRocketEntity(spawnablePosition.world, spawnablePosition.position.x.toDouble(), spawnablePosition.position.y.toDouble() + 2, spawnablePosition.position.z.toDouble(), ItemStack(Items.FIREWORK_ROCKET))
+//        spawnablePosition.world.spawnEntity(fireworkRocketEntity)
+        return entity
+    }
 
-      if (this.props.getLevel() == null) {
-         this.props.setLevel(RangesKt.random(this.getDetail().getDerivedLevelRange(), Random.Default as Random));
-      }
+    fun updatePokemon(props: PokemonProperties) {
+        this.props = props
+    }
 
-      var var23: java.util.List;
-      label63: {
-         var23 = this.getDetail().getHeldItems();
-         if (var23 != null) {
-            var23 = if (!var23.isEmpty()) var23 else null;
-            if (var23 != null) {
-               var23 = CollectionsKt.toMutableList(var23);
-               if (var23 != null) {
-                  break label63;
-               }
-            }
-         }
+    fun updateHeldItem(heldItem: ItemStack) {
+        this.heldItem = heldItem
+    }
 
-         var23 = new ArrayList();
-      }
+    fun updateDrops(drops: DropTable) {
+        this.drops = drops
+    }
 
-      val var25: PossibleHeldItem;
-      if (!var23.isEmpty()) {
-         val var24: Double = 1;
-         val var21: java.lang.Iterable = var23;
-         var var7: Double = 0.0;
-
-         for (Object var10 : var21) {
-            var7 += (var10 as PossibleHeldItem).getPercentage() / 100;
-         }
-
-         var25 = if (var24 - var7 > 0.0 && this.getCtx().getWorld().f_46441_.m_188500_() < var24 - var7)
-            null
-            else
-            CollectionUtilsKt.weightedSelection(var23, <unrepresentable>.INSTANCE);
-      } else {
-         var25 = null;
-      }
-
-      val heldItem: ItemStack = if (var25 != null) var25.createStack(this.getCtx()) else null;
-      val var19: PokemonEntity = this.props.createEntity(this.getCtx().getWorld() as Level);
-      SeasonFeatureHandler.INSTANCE
-         .updateSeason(
-            var19.getPokemon(), Cobblemon.INSTANCE.getSeasonResolver().invoke(this.getCtx().getWorld() as LevelAccessor, this.getCtx().getPosition())
-         );
-      if (heldItem != null) {
-         Pokemon.swapHeldItem$default(var19.getPokemon(), heldItem, false, 2, null);
-      }
-
-      var19.setDrops(this.getDetail().getDrops());
-      return var19;
-   }
+    fun updateLevelRange(levelRange: IntRange) {
+        this.levelRange = levelRange
+    }
 }

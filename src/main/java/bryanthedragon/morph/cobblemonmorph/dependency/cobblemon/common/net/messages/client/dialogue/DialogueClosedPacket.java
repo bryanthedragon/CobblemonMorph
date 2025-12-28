@@ -1,71 +1,35 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeNullable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeUUID
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class DialogueClosedPacket(dialogueId: UUID? = null) : NetworkPacket<DialogueClosedPacket> {
-   public final val dialogueId: UUID?
-   public open val id: ResourceLocation
+/**
+ * Packet sent to the client to close the active dialogue.
+ *
+ * @param dialogueId The ID of the dialogue to close. If null, closes the active dialogue.
+ * @author Hiroku
+ * @since December 27th, 2023
+ */
+class DialogueClosedPacket(val dialogueId: UUID? = null) : NetworkPacket<DialogueClosedPacket> {
+    companion object {
+        val ID = cobblemonResource("dialogue_closed")
+        fun decode(buffer: RegistryFriendlyByteBuf) = DialogueClosedPacket(buffer.readNullable { it.readUUID() })
+    }
 
-   init {
-      this.dialogueId = dialogueId;
-      this.id = ID;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_236821_(this.dialogueId, DialogueClosedPacket::encode$lambda$0);
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$0`(buff: FriendlyByteBuf, value: UUID) {
-      buff.m_130077_(value);
-   }
-
-   fun DialogueClosedPacket() {
-      this(null, 1, null);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): DialogueClosedPacket {
-         return new DialogueClosedPacket(buffer.m_236868_(DialogueClosedPacket.Companion::decode$lambda$0) as UUID);
-      }
-
-      @JvmStatic
-      fun `decode$lambda$0`(it: FriendlyByteBuf): UUID {
-         return it.m_130259_();
-      }
-   }
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeNullable(dialogueId) { buff, value -> buff.writeUUID(value) }
+    }
 }

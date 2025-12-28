@@ -1,78 +1,82 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.BedrockParticleCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.ChangeScaleAndSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.ChangeWalkSpeed
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.CheckSpawnsCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.ClearPCCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.ClearPartyCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.ClickTextCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.CobblemonInfoCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.FriendshipCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.GetNBT
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.GiveAllPokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.GivePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.HealPokemonCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.HeldItemCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.LevelUp
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.OpenDialogueCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.OpenStarterScreenCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.PcCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.PokeboxCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.PokemonEditCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.PokemonRestartCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.QueryLearnsetCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.ReloadShowdownCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.SpawnAllPokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.SpawnPokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.SpawnPokemonFromPool
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.StopBattleCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.TakePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.TeachCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.TestCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.TestPartySlotCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.TestPcSlotCommand
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.TestStoreCommand
 
-import com.mojang.brigadier.CommandDispatcher
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.*;
 
-import net.minecraft.commands.CommandBuildContext
-import net.minecraft.commands.CommandSourceStack
-import net.minecraft.server.command.CommandManager.RegistrationEnvironment
+import com.mojang.brigadier.CommandDispatcher;
 
-public object CobblemonCommands {
-   public fun register(dispatcher: CommandDispatcher<CommandSourceStack>, registry: CommandBuildContext, selection: RegistrationEnvironment) {
-      SpawnPokemon.INSTANCE.register(dispatcher);
-      GivePokemon.INSTANCE.register(dispatcher);
-      TakePokemon.INSTANCE.register(dispatcher);
-      ChangeScaleAndSize.INSTANCE.register(dispatcher);
-      ChangeWalkSpeed.INSTANCE.register(dispatcher);
-      TestCommand.INSTANCE.register(dispatcher);
-      ReloadShowdownCommand.INSTANCE.register(dispatcher);
-      ClickTextCommand.INSTANCE.register(dispatcher);
-      PokemonEditCommand.INSTANCE.register(dispatcher);
-      TeachCommand.INSTANCE.register(dispatcher);
-      LevelUp.INSTANCE.register(dispatcher);
-      HealPokemonCommand.INSTANCE.register(dispatcher);
-      StopBattleCommand.INSTANCE.register(dispatcher);
-      CheckSpawnsCommand.INSTANCE.register(dispatcher);
-      GetNBT.INSTANCE.register(dispatcher);
-      OpenStarterScreenCommand.INSTANCE.register(dispatcher);
-      SpawnAllPokemon.INSTANCE.register(dispatcher);
-      FriendshipCommand.INSTANCE.register(dispatcher);
-      GiveAllPokemon.INSTANCE.register(dispatcher);
-      HeldItemCommand.INSTANCE.register(dispatcher, registry);
-      PcCommand.INSTANCE.register(dispatcher);
-      SpawnPokemonFromPool.INSTANCE.register(dispatcher);
-      PokeboxCommand.INSTANCE.register(dispatcher);
-      TestStoreCommand.INSTANCE.register(dispatcher);
-      QueryLearnsetCommand.INSTANCE.register(dispatcher);
-      TestPcSlotCommand.INSTANCE.register(dispatcher);
-      TestPartySlotCommand.INSTANCE.register(dispatcher);
-      ClearPartyCommand.INSTANCE.register(dispatcher);
-      ClearPCCommand.INSTANCE.register(dispatcher);
-      PokemonRestartCommand.INSTANCE.register(dispatcher);
-      BedrockParticleCommand.INSTANCE.register(dispatcher);
-      OpenDialogueCommand.INSTANCE.register(dispatcher);
-      CobblemonInfoCommand.INSTANCE.register(dispatcher);
-   }
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+
+final class CobblemonCommands {
+    fun register(dispatcher: CommandDispatcher<CommandSourceStack>, registry: CommandBuildContext, selection: Commands.CommandSelection) {
+        SpawnPokemon.register(dispatcher);
+        SpawnNPCCommand.register(dispatcher);
+        GivePokemon.register(dispatcher);
+        TakePokemon.register(dispatcher);
+        ChangeEyeHeight.register(dispatcher);
+        ChangeScaleAndSize.register(dispatcher);
+        ChangeWalkSpeed.register(dispatcher);
+        TransformModelPartCommand.register(dispatcher);
+        TestCommand.register(dispatcher);
+        ReloadShowdownCommand.register(dispatcher);
+        ClickTextCommand.register(dispatcher);
+        PokemonEditCommand.register(dispatcher);
+        TeachCommand.register(dispatcher);
+        LevelUp.register(dispatcher);
+        HealPokemonCommand.register(dispatcher);
+        StopBattleCommand.register(dispatcher);
+        CheckSpawnsCommand.register(dispatcher);
+        GetNBT.register(dispatcher);
+        OpenStarterScreenCommand.register(dispatcher);
+        SpawnAllPokemon.register(dispatcher);
+        FriendshipCommand.register(dispatcher);
+        GiveAllPokemon.register(dispatcher);
+        HeldItemCommand.register(dispatcher, registry)
+        PcCommand.register(dispatcher);
+        SpawnPokemonFromPool.register(dispatcher);
+        PokeboxCommand.register(dispatcher);
+        PokedexCommand.register(dispatcher);
+        TestStoreCommand.register(dispatcher);
+        QueryLearnsetCommand.register(dispatcher);
+        TestPcSlotCommand.register(dispatcher);
+        TestPartySlotCommand.register(dispatcher);
+        ClearPartyCommand.register(dispatcher);
+        ClearPCCommand.register(dispatcher);
+        PokemonRestartCommand.register(dispatcher);
+        BedrockParticleCommand.register(dispatcher);
+        OpenDialogueCommand.register(dispatcher);
+        NPCEditCommand.register(dispatcher);
+        NPCDeleteCommand.register(dispatcher);
+        AbandonMultiTeam.register(dispatcher);
+        FreezePokemonCommand.register(dispatcher);
+        ApplyPlayerTextureCommand.register(dispatcher);
+        RenameBoxCommand.register(dispatcher);
+        ChangeBoxWallpaperCommand.register(dispatcher);
+        RunMolangCommand.register(dispatcher);
+        RunMolangScriptCommand.register(dispatcher);
+        SpectateBattleCommand.register(dispatcher);
+        CobblemonConfigCommand.register(dispatcher);
+        UnlockPCBoxWallpaperCommand.register(dispatcher);
+        BehaviourEditCommand.register(dispatcher);
+        ChangePCBoxesCommand.register(dispatcher);
+        MarkGiveCommand.register(dispatcher);
+        MarkTakeCommand.register(dispatcher);
+        MarkGiveAllCommand.register(dispatcher);
+        PcSearchCommand.register(dispatcher);
+        PcTakeCommand.register(dispatcher);
+
+        // Possibly lock down registration if and only if under dev environment or running in an environment
+        // with a certain system environment variable set
+        CobblemonInfoCommand.register(dispatcher);
+        CalculateSeatPositionCommand.register(dispatcher);
+    }
 }

@@ -1,38 +1,40 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InstructionSet
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
 
-public class SuperEffectiveInstruction(message: BattleMessage) : InterpreterInstruction {
-   public final val message: BattleMessage
+/**
+ * Format: |-supereffective|POKEMON
+ *
+ * A move was super effective against POKEMON.
+ * @author Hunter
+ * @since August 18th, 2022
+ */
+class SuperEffectiveInstruction(val message: BattleMessage,val instructionSet: InstructionSet,
+): InterpreterInstruction {
 
-   init {
-      this.message = message;
-   }
-
-   public override operator fun invoke(battle: PokemonBattle) {
-      battle.dispatchGo((new Function0<Unit>(this, battle) {
-         {
-            super(0);
-            this.this$0 = `$receiver`;
-            this.$battle = `$battle`;
-         }
-
-         public final void invoke() {
-            val var10000: BattlePokemon = this.this$0.getMessage().battlePokemon(0, this.$battle);
-            if (var10000 != null) {
-               val var2: PokemonBattle = this.$battle;
-               val var10001: MutableComponent = LocalizationUtilsKt.battleLang("superEffective");
-               var2.broadcastChatMessage(var10001 as Component);
-               this.$battle.getMinorBattleActions().put(var10000.getUuid(), this.this$0.getMessage());
+    override fun invoke(battle: PokemonBattle) {
+        val lastCauser = instructionSet.getMostRecentCauser(comparedTo = this)
+        battle.dispatchGo {
+            val pokemon = message.battlePokemon(0, battle) ?: return@dispatchGo
+            if (lastCauser is MoveInstruction && lastCauser.spreadTargets.isNotEmpty()) {
+                val pokemonName = pokemon.getName()
+                battle.broadcastChatMessage(battleLang("superEffective_spread", pokemonName))
+            } else {
+                battle.broadcastChatMessage(battleLang("superEffective"))
             }
-         }
-      }) as () -> Unit);
-   }
+            battle.minorBattleActions[pokemon.uuid] = message
+        }
+    }
 }

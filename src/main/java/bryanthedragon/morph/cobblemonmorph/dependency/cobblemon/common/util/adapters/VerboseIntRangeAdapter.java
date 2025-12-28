@@ -1,26 +1,35 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
+import com.google.gson.*
 import java.lang.reflect.Type
 
-public object VerboseIntRangeAdapter : JsonDeserializer<IntRange>, JsonSerializer<IntRange> {
-   private const val MAX: String = "max"
-   private const val MIN: String = "min"
+/**
+ * A verbose [IntRange] adapter used to be more consistent with Minecraft when used alongside their conditional ranges in datapack data.
+ *
+ * @author Licious
+ * @since December 2nd, 2022
+ */final class VerboseIntRangeAdapter : JsonDeserializer<IntRange>, JsonSerializer<IntRange> {
 
-   public open fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): IntRange {
-      val json: JsonObject = jElement.getAsJsonObject();
-      return new IntRange(json.get("min").getAsInt(), json.get("max").getAsInt());
-   }
+    private const val MIN = "min"
+    private const val MAX = "max"
 
-   public open fun serialize(range: IntRange, type: Type, context: JsonSerializationContext): JsonObject {
-      val var4: JsonObject = new JsonObject();
-      var4.addProperty("min", range.getFirst());
-      var4.addProperty("max", range.getLast());
-      return var4;
-   }
+    override fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): IntRange {
+        val json = jElement.asJsonObject
+        val min = json.get(MIN).asInt
+        val max = json.get(MAX).asInt
+        return IntRange(min, max)
+    }
+
+    override fun serialize(range: IntRange, type: Type, context: JsonSerializationContext) = JsonObject().apply {
+        addProperty(MIN, range.first)
+        addProperty(MAX, range.last)
+    }
 }

@@ -1,35 +1,29 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.conditional
 
 import com.google.gson.JsonElement
-import kotlin.jvm.functions.Function1
-import net.minecraft.core.Registry
+import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceLocation
-import org.jetbrains.annotations.NotNull
 
-public open class RegistryLikeIdentifierCondition<T>(identifier: ResourceLocation) : RegistryLikeCondition<T> {
-   public final val identifier: ResourceLocation
+/**
+ * A condition for some registry type which asserts that the entry must have the given [ResourceLocation].
+ *
+ * @author Hiroku
+ * @since July 16th, 2022
+ */
+open class RegistryLikeIdentifierCondition<T : Any>(val identifier: ResourceLocation) : RegistryLikeCondition<T> {
+    companion object {
+        fun <T: Any> resolver(
+            constructor: (ResourceLocation) -> RegistryLikeIdentifierCondition<T>
+        ): (JsonElement) -> RegistryLikeIdentifierCondition<T>? = { constructor(ResourceLocation.parse(it.asString)) }
+    }
 
-   init {
-      this.identifier = identifier;
-   }
-
-   public override fun fits(t: Any, registry: Registry<Any>): Boolean {
-      return registry.m_7981_(t) == this.identifier;
-   }
-
-   public companion object {
-      public fun <T> resolver(constructor: (ResourceLocation) -> RegistryLikeIdentifierCondition<Any>): (JsonElement) -> RegistryLikeIdentifierCondition<Any>? {
-         return (new Function1<JsonElement, RegistryLikeIdentifierCondition<T>>(constructor) {
-            {
-               super(1);
-               this.$constructor = `$constructor`;
-            }
-
-            @NotNull
-            public final RegistryLikeIdentifierCondition<T> invoke(@NotNull JsonElement it) {
-               return this.$constructor.invoke(new ResourceLocation(it.getAsString())) as RegistryLikeIdentifierCondition<T>;
-            }
-         }) as (JsonElement?) -> RegistryLikeIdentifierCondition<T>;
-      }
-   }
+    override fun fits(t: Holder<T>) = t.`is`(identifier)
 }

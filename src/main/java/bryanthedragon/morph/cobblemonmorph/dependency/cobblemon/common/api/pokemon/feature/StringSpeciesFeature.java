@@ -1,107 +1,73 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonProperty
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import com.google.gson.JsonElement
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import com.google.gson.JsonObject
-import java.util.Locale
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-@SourceDebugExtension(["SMAP\nStringSpeciesFeature.kt\nKotlin\n*S Kotlin\n*F\n+ 1 StringSpeciesFeature.kt\ncom/cobblemon/mod/common/api/pokemon/feature/StringSpeciesFeature\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,71:1\n1#2:72\n*E\n"])
-public class StringSpeciesFeature(name: String, value: String) : SynchronizedSpeciesFeature, CustomPokemonProperty {
-   public open val name: String
-   public final var value: String
+/**
+ * A species feature value that is a string value.
+ *
+ * @author Hiroku
+ * @since December 30th, 2022
+ */
+class StringSpeciesFeature(
+    override val name: String,
+    var value: String
+) : SynchronizedSpeciesFeature, CustomPokemonProperty {
+    override fun saveToNBT(pokemonNBT: CompoundTag): CompoundTag {
+        pokemonNBT.putString(name, value)
+        return pokemonNBT
+    }
 
-   init {
-      this.name = name;
-      this.value = value;
-   }
+    override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature {
+        value = pokemonNBT.getString(name)?.takeIf { it.isNotBlank() }?.lowercase() ?: return this
+        return this
+    }
 
-   public override fun saveToNBT(pokemonNBT: CompoundTag): CompoundTag {
-      pokemonNBT.m_128359_(this.getName(), this.value);
-      return pokemonNBT;
-   }
+    override fun saveToJSON(pokemonJSON: JsonObject): JsonObject {
+        pokemonJSON.addProperty(name, value)
+        return pokemonJSON
+    }
 
-   public override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature {
-      var var10001: java.lang.String = pokemonNBT.m_128461_(this.getName());
-      if (var10001 != null) {
-         val var6: Boolean = !StringsKt.isBlank(var10001);
-         var10001 = if (var6) var10001 else null;
-         if ((if (var6) var10001 else null) != null) {
-            var10001 = var10001.toLowerCase(Locale.ROOT);
-            if (var10001 != null) {
-               this.value = var10001;
-               return this;
-            }
-         }
-      }
+    override fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature {
+        value = pokemonJSON.get(name)?.asString?.lowercase() ?: return this
+        return this
+    }
 
-      return this;
-   }
+    override fun saveToBuffer(buffer: RegistryFriendlyByteBuf, toClient: Boolean) {
+        buffer.writeString(value)
+    }
 
-   public override fun saveToJSON(pokemonJSON: JsonObject): JsonObject {
-      pokemonJSON.addProperty(this.getName(), this.value);
-      return pokemonJSON;
-   }
+    override fun loadFromBuffer(buffer: RegistryFriendlyByteBuf) {
+        value = buffer.readString()
+    }
 
-   public override fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature {
-      val var10001: JsonElement = pokemonJSON.get(this.getName());
-      if (var10001 != null) {
-         val var2: java.lang.String = var10001.getAsString();
-         if (var2 != null) {
-            val var3: java.lang.String = var2.toLowerCase(Locale.ROOT);
-            if (var3 != null) {
-               this.value = var3;
-               return this;
-            }
-         }
-      }
+    override fun asString() = "$name=$value"
 
-      return this;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130070_(this.value);
-   }
-
-   public override fun decode(buffer: FriendlyByteBuf) {
-      val var10001: java.lang.String = buffer.m_130277_();
-      this.value = var10001;
-   }
-
-   public override fun asString(): String {
-      return "${this.getName()}=${this.value}";
-   }
-
-   public override fun apply(pokemon: Pokemon) {
-      val var10000: SpeciesFeatureProvider = SpeciesFeatures.INSTANCE.getFeature(this.getName());
-      if (var10000 != null) {
-         if (SpeciesFeatures.INSTANCE.getFeaturesFor(pokemon.getSpecies()).contains(var10000)) {
-            val existingFeature: StringSpeciesFeature = pokemon.getFeature(this.getName());
+    override fun apply(pokemon: Pokemon) {
+        val featureProvider = SpeciesFeatures.getFeature(name) ?: return
+        if (featureProvider in SpeciesFeatures.getFeaturesFor(pokemon.species)) {
+            val existingFeature = pokemon.getFeature<StringSpeciesFeature>(name)
             if (existingFeature != null) {
-               existingFeature.value = this.value;
+                existingFeature.value = value
             } else {
-               pokemon.getFeatures().add(new StringSpeciesFeature(this.getName(), this.value));
+                pokemon.features.add(StringSpeciesFeature(name, value))
             }
+            pokemon.updateAspects()
+        }
+    }
 
-            pokemon.updateAspects();
-         }
-      }
-   }
-
-   public override fun matches(pokemon: Pokemon): Boolean {
-      val var10000: StringSpeciesFeature = pokemon.getFeature(this.getName());
-      return (if (var10000 != null) var10000.value else null) == this.value;
-   }
-
-   override fun apply(pokemonEntity: PokemonEntity) {
-      CustomPokemonProperty.DefaultImpls.apply(this, pokemonEntity);
-   }
-
-   override fun matches(pokemonEntity: PokemonEntity): Boolean {
-      return CustomPokemonProperty.DefaultImpls.matches(this, pokemonEntity);
-   }
+    override fun matches(pokemon: Pokemon) = pokemon.getFeature<StringSpeciesFeature>(name)?.value == value
 }

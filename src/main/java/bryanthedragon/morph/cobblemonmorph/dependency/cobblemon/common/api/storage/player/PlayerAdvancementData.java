@@ -1,189 +1,128 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion.AspectCriterionCondition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap
-import java.util.LinkedHashSet
-
-import net.minecraft.advancements.Advancement
-import net.minecraft.advancements.Criterion
-import net.minecraft.advancements.CriterionTriggerInstance
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.resources.ResourceLocation
 
-public class PlayerAdvancementData {
-   public final var aspectsCollected: MutableMap<ResourceLocation, MutableSet<String>> = (new LinkedHashMap()) as java.util.Map
-      private set
+class PlayerAdvancementData {
 
-   public final var totalBattleVictoryCount: Int
-      private set
+    var totalCaptureCount: Int = 0
+        private set
+    var totalEggsCollected: Int = 0
+        private set
+    var totalEggsHatched: Int = 0
+        private set
+    var totalEvolvedCount: Int = 0
+        private set
+    var totalBattleVictoryCount: Int = 0
+        private set
+    var totalPvPBattleVictoryCount: Int = 0
+        private set
+    var totalPvWBattleVictoryCount: Int = 0
+        private set
+    var totalPvNBattleVictoryCount: Int = 0
+        private set
+    var totalShinyCaptureCount: Int = 0
+        private set
+    var totalTradedCount: Int = 0
+        private set
 
-   public final var totalCaptureCount: Int
-      private set
+    private var totalTypeCaptureCounts = mutableMapOf<String, Int>()
+    private var totalDefeatedCounts = mutableMapOf<ResourceLocation, Int>()
+    var aspectsCollected = mutableMapOf<ResourceLocation, MutableSet<String>>()
+        private set
 
-   private final var totalDefeatedCounts: MutableMap<ResourceLocation, Int> = (new LinkedHashMap()) as java.util.Map
+    fun updateTotalCaptureCount() {
+        totalCaptureCount++
+    }
 
-   public final var totalEggsHatched: Int
-      private set
+    fun updateTotalEggsCollected() {
+        totalEggsCollected++
+    }
 
-   public final var totalEvolvedCount: Int
-      private set
+    fun updateTotalEggsHatched() {
+        totalEggsHatched++
+    }
 
-   public final var totalPvNBattleVictoryCount: Int
-      private set
+    fun updateTotalEvolvedCount() {
+        totalEvolvedCount++
+    }
 
-   public final var totalPvPBattleVictoryCount: Int
-      private set
+    fun updateTotalBattleVictoryCount() {
+        totalBattleVictoryCount++
+    }
 
-   public final var totalPvWBattleVictoryCount: Int
-      private set
+    fun updateTotalPvPBattleVictoryCount() {
+        totalPvPBattleVictoryCount++
+    }
 
-   public final var totalShinyCaptureCount: Int
-      private set
+    fun updateTotalPvWBattleVictoryCount() {
+        totalPvWBattleVictoryCount++
+    }
 
-   public final var totalTradedCount: Int
-      private set
+    fun updateTotalPvNBattleVictoryCount() {
+        totalPvNBattleVictoryCount++
+    }
 
-   private final var totalTypeCaptureCounts: MutableMap<String, Int> = (new LinkedHashMap()) as java.util.Map
+    fun updateTotalShinyCaptureCount() {
+        totalShinyCaptureCount++
+    }
 
-   public fun updateTotalCaptureCount() {
-      val var1: Int = this.totalCaptureCount++;
-   }
+    fun updateTotalTradedCount() {
+        totalTradedCount++
+    }
 
-   public fun updateTotalEggsHatched() {
-      val var1: Int = this.totalEggsHatched++;
-   }
+    fun getTotalTypeCaptureCount(type: ElementalType): Int {
+        if (!totalTypeCaptureCounts.containsKey(key = type.showdownId)) {
+            totalTypeCaptureCounts[type.showdownId] = 0
+        }
+        return totalTypeCaptureCounts.get(key = type.showdownId) ?: 0
+    }
 
-   public fun updateTotalEvolvedCount() {
-      val var1: Int = this.totalEvolvedCount++;
-   }
+    fun updateTotalTypeCaptureCount(type: ElementalType) {
+        val count = totalTypeCaptureCounts[type.showdownId] ?: 0
+        if (count == 0) {
+            totalTypeCaptureCounts[type.showdownId] = 1
+        } else {
+            totalTypeCaptureCounts.replace(type.showdownId, count + 1)
+        }
+    }
 
-   public fun updateTotalBattleVictoryCount() {
-      val var1: Int = this.totalBattleVictoryCount++;
-   }
+    fun updateTotalDefeatedCount(pokemon: Pokemon) {
+        val count = totalDefeatedCounts[pokemon.species.resourceIdentifier] ?: 0
+        if (count == 0) {
+            totalDefeatedCounts[pokemon.species.resourceIdentifier] = 1
+        } else {
+            totalDefeatedCounts.replace(pokemon.species.resourceIdentifier, count + 1)
+        }
+    }
 
-   public fun updateTotalPvPBattleVictoryCount() {
-      val var1: Int = this.totalPvPBattleVictoryCount++;
-   }
+    fun updateAspectsCollected(player: ServerPlayer, pokemon: Pokemon) {
+        //TODO: take another look at using the Advancement progress
+        /*val aspectConditions = player.advancements.progress.keys
+            .flatMap { it.value.criteria.values }
+            .mapNotNull { it.trigger }
+            .filterIsInstance<AspectCriterion>()
 
-   public fun updateTotalPvWBattleVictoryCount() {
-      val var1: Int = this.totalPvWBattleVictoryCount++;
-   }
+        val trackedAspects = aspectConditions
+            .filter { it.pokemon == pokemon.species.resourceIdentifier }
+            .flatMap { it.aspects }
 
-   public fun updateTotalPvNBattleVictoryCount() {
-      val var1: Int = this.totalPvNBattleVictoryCount++;
-   }
+        if (trackedAspects.isNotEmpty()) {
+            val collectedAspects = aspectsCollected.getOrPut(pokemon.species.resourceIdentifier) { mutableSetOf() }
+            pokemon.aspects.filter(trackedAspects::contains).forEach(collectedAspects::add)
+        }*/
 
-   public fun updateTotalShinyCaptureCount() {
-      val var1: Int = this.totalShinyCaptureCount++;
-   }
-
-   public fun updateTotalTradedCount() {
-      val var1: Int = this.totalTradedCount++;
-   }
-
-   public fun getTotalTypeCaptureCount(type: ElementalType): Int {
-      if (!this.totalTypeCaptureCounts.containsKey(type.getName())) {
-         this.totalTypeCaptureCounts.put(type.getName(), 0);
-      }
-
-      val var10000: Int = this.totalTypeCaptureCounts.get(type.getName());
-      return var10000 ?: 0;
-   }
-
-   public fun updateTotalTypeCaptureCount(type: ElementalType) {
-      val var10000: Int = this.totalTypeCaptureCounts.get(type.getName());
-      val count: Int = (int)(var10000 ?: 0);
-      if (count == 0) {
-         this.totalTypeCaptureCounts.put(type.getName(), 1);
-      } else {
-         this.totalTypeCaptureCounts.replace(type.getName(), count + 1);
-      }
-   }
-
-   public fun updateTotalDefeatedCount(pokemon: Pokemon) {
-      val var10000: Int = this.totalDefeatedCounts.get(pokemon.getSpecies().getResourceIdentifier());
-      val count: Int = (int)(var10000 ?: 0);
-      if (count == 0) {
-         this.totalDefeatedCounts.put(pokemon.getSpecies().getResourceIdentifier(), 1);
-      } else {
-         this.totalDefeatedCounts.replace(pokemon.getSpecies().getResourceIdentifier(), count + 1);
-      }
-   }
-
-   public fun updateAspectsCollected(player: ServerPlayer, pokemon: Pokemon) {
-      var trackedAspects: java.lang.Iterable = player.m_8960_().f_263740_.keySet();
-      var `$i$f$forEach`: java.util.Collection = new ArrayList();
-
-      for (Object element$iv$iv : trackedAspects) {
-         CollectionsKt.addAll(`$i$f$forEach`, (p0 as Advancement).m_138325_().values());
-      }
-
-      trackedAspects = `$i$f$forEach` as java.util.List;
-      `$i$f$forEach` = new ArrayList();
-
-      for (Object element$iv$iv$iv : trackedAspects) {
-         val var10000: CriterionTriggerInstance = (var62 as Criterion).m_11416_();
-         if (var10000 != null) {
-            `$i$f$forEach`.add(var10000);
-         }
-      }
-
-      trackedAspects = `$i$f$forEach` as java.util.List;
-      `$i$f$forEach` = new ArrayList();
-
-      for (Object element$iv$iv : trackedAspects) {
-         if (var49 is AspectCriterionCondition) {
-            `$i$f$forEach`.add(var49);
-         }
-      }
-
-      var var24: java.lang.Iterable = `$i$f$forEach` as java.util.List;
-      var `destination$iv$ivx`: java.util.Collection = new ArrayList();
-
-      for (Object element$iv$ivx : var24) {
-         if ((`element$iv$ivx` as AspectCriterionCondition).getPokemon() == pokemon.getSpecies().getResourceIdentifier()) {
-            `destination$iv$ivx`.add(`element$iv$ivx`);
-         }
-      }
-
-      var24 = `destination$iv$ivx` as java.util.List;
-      `destination$iv$ivx` = new ArrayList();
-
-      for (Object element$iv$ivxx : var24) {
-         CollectionsKt.addAll(`destination$iv$ivx`, (`element$iv$ivxx` as AspectCriterionCondition).getAspects());
-      }
-
-      val var21: java.util.List = `destination$iv$ivx` as java.util.List;
-      if (!(`destination$iv$ivx` as java.util.List).isEmpty()) {
-         val var28: java.util.Map = this.aspectsCollected;
-         `$i$f$forEach` = pokemon.getSpecies().getResourceIdentifier();
-         var var45: Any = var28.get(`$i$f$forEach`);
-         val var70: Any;
-         if (var45 == null) {
-            val var53: Any = new LinkedHashSet();
-            var28.put(`$i$f$forEach`, var53);
-            var70 = var53;
-         } else {
-            var70 = var45;
-         }
-
-         val var26: java.util.Set = var70 as java.util.Set;
-         val var29: java.lang.Iterable = pokemon.getAspects();
-         var45 = new ArrayList();
-
-         for (Object element$iv$ivxx : $this$filter$iv) {
-            if (var21.contains(`element$iv$ivxx` as java.lang.String)) {
-               var45.add(`element$iv$ivxx`);
-            }
-         }
-
-         for (Object element$iv : var30) {
-            var26.add(var47 as java.lang.String);
-         }
-      }
-   }
+        val collectedAspects = aspectsCollected.getOrPut(pokemon.species.resourceIdentifier) { mutableSetOf() }
+        pokemon.aspects.forEach(collectedAspects::add)
+    }
 }

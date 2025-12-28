@@ -1,95 +1,118 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnBucket;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset
 
-import com.google.gson.Gson;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.BestSpawner
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnBucket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePositionType
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.RegisteredSpawnablePositionAdapter
+import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
+import java.io.File
+import java.io.FileOutputStream
+import java.io.FileReader
+import java.io.InputStreamReader
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+/**
+ * The config class for everything related to the [BestSpawner]. This is loaded immediately after the
+ * main mod config.
+ *
+ * @author Hiroku
+ * @since July 8th, 2022
+ */
+class BestSpawnerConfig {
+    val version = 0
+    /** Whether an external config will be replaced by an internal one once [version] is higher on the internal. */
+    val replaceWithNewVersion = true
+    @SerializedName("spawnablePositionTypeWeights", alternate = ["contextWeights"])
+    val spawnablePositionTypeWeights = mutableMapOf(
+        "grounded" to 1F,
+        "submerged" to 0.99F,
+        "surface" to 0.01F,
+        "seafloor" to 1F
+    )
+    val buckets = mutableListOf(
+        SpawnBucket("common", 94.3F),
+        SpawnBucket("uncommon", 5F),
+        SpawnBucket("rare", 0.5F),
+        SpawnBucket("ultra-rare", 0.2F)
+    )
 
-public class BestSpawnerConfig {
-   public final val buckets: MutableList<SpawnBucket> =
-      CollectionsKt.mutableListOf(
-         new SpawnBucket[]{
-            new SpawnBucket("common", 93.8F), new SpawnBucket("uncommon", 5.0F), new SpawnBucket("rare", 1.0F), new SpawnBucket("ultra-rare", 0.2F)
-         }
-      )
-      public final val contextWeights: MutableMap<String, Float> =
-      MapsKt.mutableMapOf(new Pair[]{TuplesKt.to("grounded", 1.0F), TuplesKt.to("submerged", 0.99F), TuplesKt.to("surface", 0.01F)})
-      public final val replaceWithNewVersion: Boolean = true
-   public final val version: Int
+    companion object {
+        val GSON = GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
+            .setLenient()
+            .disableHtmlEscaping()
+            .create()
 
-   public companion object {
-      public const val CONFIG_NAME: String
-      public final val GSON: Gson
+        const val CONFIG_NAME = "best-spawner-config"
+        const val INTERNAL_PATH = "/data/${Cobblemon.MODID}/spawning/$CONFIG_NAME.json"
+        const val EXTERNAL_PATH = "config/${Cobblemon.MODID}/spawning/$CONFIG_NAME.json"
 
-      public fun load(): BestSpawnerConfig {
-         val internal: BestSpawnerConfig = this.loadInternal();
-         if (!Cobblemon.INSTANCE.getConfig().getExportSpawnConfig()) {
-            return internal;
-         } else {
-            val external: BestSpawnerConfig = this.loadExternal();
-            val var10000: BestSpawnerConfig;
-            if (external == null) {
-               this.saveExternal();
-               var10000 = internal;
-            } else if (external.getReplaceWithNewVersion() && internal.getVersion() > external.getVersion()) {
-               this.saveExternal();
-               var10000 = internal;
+        fun load(): BestSpawnerConfig {
+            val internal = loadInternal()
+            if (Cobblemon.config.exportSpawnConfig) {
+                val external = loadExternal()
+                return if (external == null) {
+                    saveExternal()
+                    internal
+                } else {
+                    if (external.replaceWithNewVersion && internal.version > external.version) {
+                        saveExternal()
+                        internal
+                    } else {
+                        external
+                    }
+                }
             } else {
-               var10000 = external;
+                return internal
             }
+        }
 
-            return var10000;
-         }
-      }
+        private fun loadInternal(): BestSpawnerConfig {
+            val reader = InputStreamReader(Cobblemon::class.java.getResourceAsStream(INTERNAL_PATH)!!)
+            val config = GSON.fromJson(reader, BestSpawnerConfig::class.java)
+            reader.close()
+            return config
+        }
 
-      private fun loadInternal(): BestSpawnerConfig {
-         val var10002: InputStream = Cobblemon.class.getResourceAsStream("/assets/cobblemon/spawning/best-spawner-config.json");
-         val reader: InputStreamReader = new InputStreamReader(var10002);
-         val config: BestSpawnerConfig = this.getGSON().fromJson(reader, BestSpawnerConfig.class) as BestSpawnerConfig;
-         reader.close();
-         return config;
-      }
-
-      private fun loadExternal(): BestSpawnerConfig? {
-         val configFile: File = new File("config/cobblemon/spawning/best-spawner-config.json");
-         configFile.getParentFile().mkdirs();
-         val var10000: BestSpawnerConfig;
-         if (configFile.exists()) {
-            var reader: BestSpawnerConfig;
-            try {
-               val var5: FileReader = new FileReader(configFile);
-               val e: BestSpawnerConfig = this.getGSON().fromJson(var5, BestSpawnerConfig.class) as BestSpawnerConfig;
-               var5.close();
-               reader = e;
-            } catch (var4: Exception) {
-               Cobblemon.INSTANCE.getLOGGER().error("Unable to load external Best Spawner configuration", var4);
-               reader = null;
+        private fun loadExternal(): BestSpawnerConfig? {
+            val configFile = File(EXTERNAL_PATH)
+            configFile.parentFile.mkdirs()
+            return if (configFile.exists()) {
+                try {
+                    val reader = FileReader(configFile)
+                    val config = GSON.fromJson(reader, BestSpawnerConfig::class.java)
+                    reader.close()
+                    config
+                } catch (e: Exception) {
+                    LOGGER.error("Unable to load external Best Spawner configuration", e)
+                    null
+                }
+            } else {
+                null
             }
+        }
 
-            var10000 = reader;
-         } else {
-            var10000 = null;
-         }
-
-         return var10000;
-      }
-
-      public fun saveExternal() {
-         val var10000: InputStream = Cobblemon.class.getResourceAsStream("/assets/cobblemon/spawning/best-spawner-config.json");
-         val bytes: ByteArray = var10000.readAllBytes();
-         var10000.close();
-         val configFile: File = new File("config/cobblemon/spawning/best-spawner-config.json");
-         configFile.getParentFile().mkdirs();
-         configFile.createNewFile();
-         val outputStream: FileOutputStream = new FileOutputStream(configFile);
-         outputStream.write(bytes);
-         outputStream.close();
-      }
-   }
+        fun saveExternal() {
+            val stream = Cobblemon::class.java.getResourceAsStream(INTERNAL_PATH)!!
+            val bytes = stream.readAllBytes()
+            stream.close()
+            val configFile = File(EXTERNAL_PATH)
+            configFile.parentFile.mkdirs()
+            configFile.createNewFile()
+            val outputStream = FileOutputStream(configFile)
+            outputStream.write(bytes)
+            outputStream.close()
+        }
+    }
 }

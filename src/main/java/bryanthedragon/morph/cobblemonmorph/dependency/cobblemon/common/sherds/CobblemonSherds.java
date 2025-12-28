@@ -1,42 +1,63 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.sherds
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItems
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import java.util.ArrayList;
-import java.util.LinkedHashMap
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
+import net.minecraft.world.item.Item
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.entity.DecoratedPotPattern
 
-public object CobblemonSherds {
-   public final val BYGONE_SHERD: CobblemonSherd = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("bygone_pottery_pattern"), CobblemonItems.BYGONE_SHERD)
-   public final val CAPTURE_SHERD: CobblemonSherd = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("capture_pottery_pattern"), CobblemonItems.CAPTURE_SHERD)
-   public final val DOME_SHERD: CobblemonSherd = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("dome_pottery_pattern"), CobblemonItems.DOME_SHERD)
-   public final val HELIX_SHERD: CobblemonSherd = INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("helix_pottery_pattern"), CobblemonItems.HELIX_SHERD)
-   public final val NOSTALGIC_SHERD: CobblemonSherd =
-      INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("nostalgic_pottery_pattern"), CobblemonItems.NOSTALGIC_SHERD)
-      public final val SUSPICIOUS_SHERD: CobblemonSherd =
-      INSTANCE.addSherd(MiscUtilsKt.cobblemonResource("suspicious_pottery_pattern"), CobblemonItems.SUSPICIOUS_SHERD)
-      public final val allSherds: MutableList<CobblemonSherd> = (new ArrayList()) as java.util.List
-   public final val sherdToPattern: MutableMap<Item, ResourceKey<String>> = (new LinkedHashMap()) as java.util.Map
+@Suppress("Unused")final class CobblemonSherds {
+    val allSherds = mutableListOf<CobblemonSherd>()
+    val sherdToPattern = mutableMapOf<Item, ResourceKey<DecoratedPotPattern>>()
 
-   public fun addSherd(patternId: ResourceLocation, item: Item): CobblemonSherd {
-      val sherd: CobblemonSherd = new CobblemonSherd(patternId, item);
-      val registryKey: ResourceKey = ResourceKey.m_135785_(Registries.f_271200_, patternId);
-      val var10000: java.util.Map = sherdToPattern;
-      var10000.put(item, registryKey);
-      allSherds.add(sherd);
-      return sherd;
-   }
+    @JvmField
+    val BYGONE_SHERD = addSherd(cobblemonResource("bygone_pottery_pattern"), CobblemonItems.BYGONE_SHERD)
 
-   public fun registerSherds() {
-      val registry: Registry = BuiltInRegistries.f_271353_;
+    @JvmField
+    val CAPTURE_SHERD = addSherd(cobblemonResource("capture_pottery_pattern"), CobblemonItems.CAPTURE_SHERD)
 
-      for (CobblemonSherd sherd : allSherds) {
-         Registry.m_194579_(registry, ResourceKey.m_135785_(Registries.f_271200_, sherd.getPatternId()), sherd.getPatternId().m_135815_());
-      }
-   }
+    @JvmField
+    val DOME_SHERD = addSherd(cobblemonResource("dome_pottery_pattern"), CobblemonItems.DOME_SHERD)
+
+    @JvmField
+    val HELIX_SHERD = addSherd(cobblemonResource("helix_pottery_pattern"), CobblemonItems.HELIX_SHERD)
+
+    @JvmField
+    val NOSTALGIC_SHERD = addSherd(cobblemonResource("nostalgic_pottery_pattern"), CobblemonItems.NOSTALGIC_SHERD)
+
+    @JvmField
+    val SUSPICIOUS_SHERD = addSherd(cobblemonResource("suspicious_pottery_pattern"), CobblemonItems.SUSPICIOUS_SHERD)
+
+    fun addSherd(patternId: ResourceLocation, item: Item): CobblemonSherd {
+        val sherd = CobblemonSherd(patternId, item)
+        val resourceKey = ResourceKey.create(Registries.DECORATED_POT_PATTERN, patternId)
+        sherdToPattern[item] = resourceKey
+        allSherds.add(sherd)
+        return sherd
+    }
+
+    fun registerSherds() {
+        val registry = BuiltInRegistries.DECORATED_POT_PATTERN
+        for (sherd in allSherds) {
+            val regKey = ResourceKey.create(Registries.DECORATED_POT_PATTERN, sherd.patternId)
+            Registry.register(
+                registry,
+                regKey,
+                DecoratedPotPattern(sherd.patternId) // TODO check me
+            )
+        }
+    }
+
 }

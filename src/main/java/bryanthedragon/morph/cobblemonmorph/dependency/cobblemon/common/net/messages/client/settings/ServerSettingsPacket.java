@@ -1,61 +1,43 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.settings
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class ServerSettingsPacket internal constructor(preventCompletePartyDeposit: Boolean, displayEntityLevelLabel: Boolean) :
-   NetworkPacket<ServerSettingsPacket> {
-   public final val displayEntityLevelLabel: Boolean
-   public open val id: ResourceLocation
-   public final val preventCompletePartyDeposit: Boolean
-
-   init {
-      this.preventCompletePartyDeposit = preventCompletePartyDeposit;
-      this.displayEntityLevelLabel = displayEntityLevelLabel;
-      this.id = ID;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.writeBoolean(Cobblemon.INSTANCE.getConfig().getPreventCompletePartyDeposit());
-      buffer.writeBoolean(Cobblemon.INSTANCE.getConfig().getDisplayEntityLevelLabel());
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): ServerSettingsPacket {
-         return new ServerSettingsPacket(buffer.readBoolean(), buffer.readBoolean());
-      }
-   }
+/**
+ * A packet that will sync simple config settings to the client that shouldn't require to be data pack powered.
+ *
+ * @author Licious
+ * @since September 25th, 2022
+ */
+class ServerSettingsPacket internal constructor(
+    val preventCompletePartyDeposit: Boolean,
+    val displayEntityLevelLabel: Boolean,
+    val displayEntityNameLabel: Boolean,
+    val maxPokemonLevel: Int,
+    val maxPokemonFriendship: Int,
+    val maxDynamaxLevel: Int
+) : NetworkPacket<ServerSettingsPacket> {
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeBoolean(Cobblemon.config.preventCompletePartyDeposit)
+        buffer.writeBoolean(Cobblemon.config.displayEntityLevelLabel)
+        buffer.writeBoolean(Cobblemon.config.displayEntityNameLabel)
+        buffer.writeInt(Cobblemon.config.maxPokemonLevel)
+        buffer.writeInt(Cobblemon.config.maxPokemonFriendship)
+        buffer.writeInt(Cobblemon.config.maxDynamaxLevel)
+    }
+    companion object {
+        val ID = cobblemonResource("server_settings")
+        fun decode(buffer: RegistryFriendlyByteBuf) = ServerSettingsPacket(buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean(), buffer.readInt(), buffer.readInt(), buffer.readInt())
+    }
 }

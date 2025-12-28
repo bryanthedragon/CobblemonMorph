@@ -1,64 +1,68 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.bedrock.molang.Expression;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.DataRegistry;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.BerriesMechanic;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.PotionsMechanic;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.RemediesMechanic;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.ExpressionAdapter;
+import com.bedrockk.molang.Expression
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.DataRegistry
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.AprijuicesMechanic
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.BerriesMechanic
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.PotionsMechanic
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.RemediesMechanic
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics.SlowpokeTailsMechanic
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.CobblemonMechanicsSyncPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.ExpressionAdapter
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.ExpressionLikeAdapter
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import com.google.gson.GsonBuilder
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.resources.ResourceManager
+final class CobblemonMechanics : DataRegistry {
+    override val id: ResourceLocation = cobblemonResource("mechanics")
+    override val type = PackType.SERVER_DATA
+    override val observable = SimpleObservable<CobblemonMechanics>()
+    val gson = GsonBuilder()
+        .setPrettyPrinting()
+        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+        .create()
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+    var remedies = RemediesMechanic()
+    var berries = BerriesMechanic()
+    var potions = PotionsMechanic()
+    var aprijuices = AprijuicesMechanic()
+    var slowpokeTails = SlowpokeTailsMechanic()
 
-import java.io.Closeable;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+    override fun sync(player: ServerPlayer) {
+        CobblemonMechanicsSyncPacket(
+            this.remedies,
+            this.berries,
+            this.potions,
+            this.aprijuices,
+            this.slowpokeTails
+        ).sendToPlayer(player)
+    }
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.resources.ResourceManager;
+    override fun reload(manager: ResourceManager) {
+        remedies = loadMechanic(manager, "remedies", RemediesMechanic::class.java)
+        berries = loadMechanic(manager, "berries", BerriesMechanic::class.java)
+        potions = loadMechanic(manager, "potions", PotionsMechanic::class.java)
+        aprijuices = loadMechanic(manager, "aprijuices", AprijuicesMechanic::class.java)
+        slowpokeTails = loadMechanic(manager, "slowpoke_tails", SlowpokeTailsMechanic::class.java)
+    }
 
-public object CobblemonMechanics : DataRegistry {
-   public final var berries: BerriesMechanic = new BerriesMechanic();
-   public final val gson: Gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(Expression::class.java, ExpressionAdapter.INSTANCE).create();
-   public open val id: ResourceLocation = MiscUtilsKt.cobblemonResource("mechanics");
-   public open val observable: SimpleObservable<CobblemonMechanics> = new SimpleObservable();
-   public final var potions: PotionsMechanic = new PotionsMechanic();
-   public final var remedies: RemediesMechanic = new RemediesMechanic();
-   public open val type: PackType = PackType.SERVER_DATA;
-   public override fun sync(player: ServerPlayer) {
-   }
-
-   public override fun reload(manager: ResourceManager) {
-      remedies = this.loadMechanic(manager, "remedies", RemediesMechanic.class);
-      berries = this.loadMechanic(manager, "berries", BerriesMechanic.class);
-      potions = this.loadMechanic(manager, "potions", PotionsMechanic.class);
-   }
-
-   private fun <T> loadMechanic(manager: ResourceManager, name: String, clazz: Class<Any>): Any {
-      label18: {
-         val var4: Closeable = manager.m_215593_(MiscUtilsKt.cobblemonResource("mechanics/$name.json")).m_215507_();
-         var var5: java.lang.Throwable = null;
-
-         try {
-            try {
-               val it: InputStream = var4 as InputStream;
-               val var10000: Gson = gson;
-               val var10: Any = var10000.fromJson(new InputStreamReader(it, Charsets.UTF_8), clazz);
-            } 
-            catch (var11: java.lang.Throwable) {
-               var5 = var11;
-               throw var11;
-            }
-         } catch (var12: java.lang.Throwable) {
-            CloseableKt.closeFinally(var4, var5);
-         }
-
-         CloseableKt.closeFinally(var4, null);
-      }
-   }
+    private fun <T> loadMechanic(manager: ResourceManager, name: String, clazz: Class<T>): T {
+        manager.getResourceOrThrow(cobblemonResource("mechanics/$name.json")).open().use {
+            return gson.fromJson(it.reader(), clazz)
+        }
+    }
 }

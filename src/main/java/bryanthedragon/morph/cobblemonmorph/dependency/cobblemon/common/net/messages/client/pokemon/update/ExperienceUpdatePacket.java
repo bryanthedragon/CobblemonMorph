@@ -1,33 +1,26 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import io.netty.buffer.ByteBuf
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class ExperienceUpdatePacket(pokemon: () -> Pokemon, value: Int) : IntUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
+class ExperienceUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<ExperienceUpdatePacket>(pokemon, value) {
+    override val id = ID
+    override fun getSize() = IntSize.INT
+    override fun set(pokemon: Pokemon, value: Int) = pokemon.setExperienceAndUpdateLevel(value)
 
-   init {
-      this.id = ID;
-   }
-
-   public override fun getSize(): IntSize {
-      return IntSize.INT;
-   }
-
-   public open fun set(pokemon: Pokemon, value: Int) {
-      pokemon.setExperienceAndUpdateLevel(value);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): ExperienceUpdatePacket {
-         return new ExperienceUpdatePacket(PokemonUpdatePacket.Companion.decodePokemon(buffer), NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.INT));
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("experience_update")
+        fun decode(buffer: RegistryFriendlyByteBuf) = ExperienceUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.INT))
+    }
 }

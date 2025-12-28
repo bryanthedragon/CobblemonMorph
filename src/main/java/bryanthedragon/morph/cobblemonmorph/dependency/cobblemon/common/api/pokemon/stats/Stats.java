@@ -1,147 +1,74 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat.Type
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import java.util.EnumSet
 import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-public enum Stats(identifier: ResourceLocation, displayName: Component, type: Type, showdownId: String) : Stat {
-   HP,
-   ATTACK,
-   DEFENCE,
-   SPECIAL_ATTACK,
-   SPECIAL_DEFENCE,
-   SPEED,
-   EVASION,
-   ACCURACY
-   public open val displayName: Component
-   public open val identifier: ResourceLocation
-   public open val showdownId: String
-   public open val type: Type
-   @JvmStatic
-   public Stats.Companion Companion = new Stats.Companion(null);
-   @JvmStatic
-   private java.util.Set<Stat> ALL;
-   @JvmStatic
-   private java.util.Set<Stat> PERMANENT;
-   @JvmStatic
-   private java.util.Set<Stat> BATTLE_ONLY;
+/**
+ * An enumeration of the default implemented [Stat]s.
+ * Contains all the traditional stats in official Pokémon games.
+ */
+enum class Stats(override val identifier: ResourceLocation, override val displayName: Component, override val type: Stat.Type, override val showdownId: String) : Stat {
 
-   init {
-      this.identifier = identifier;
-      this.displayName = displayName;
-      this.type = type;
-      this.showdownId = showdownId;
-   }
+    HP(cobblemonResource("hp"), lang("stat.hp.name"), Stat.Type.PERMANENT, "hp"),
+    ATTACK(cobblemonResource("attack"), lang("stat.attack.name"), Stat.Type.PERMANENT, "atk"),
+    DEFENCE(cobblemonResource("defence"), lang("stat.defence.name"), Stat.Type.PERMANENT, "def"),
+    SPECIAL_ATTACK(cobblemonResource("special_attack"), lang("stat.special_attack.name"), Stat.Type.PERMANENT, "spa"),
+    SPECIAL_DEFENCE(cobblemonResource("special_defence"), lang("stat.special_defence.name"), Stat.Type.PERMANENT, "spd"),
+    SPEED(cobblemonResource("speed"), lang("stat.speed.name"), Stat.Type.PERMANENT, "spe"),
+    EVASION(cobblemonResource("evasion"), lang("stat.evasion.name"), Stat.Type.BATTLE_ONLY, "evasion"),
+    ACCURACY(cobblemonResource("accuracy"), lang("stat.accuracy.name"), Stat.Type.BATTLE_ONLY, "accuracy");
 
-   // $VF: Failed to inline enum fields
-   // Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-   @JvmStatic
-   fun {
-      var var10004: ResourceLocation = MiscUtilsKt.cobblemonResource("hp");
-      var var10005: MutableComponent = LocalizationUtilsKt.lang("stat.hp.name");
-      HP = new Stats(var10004, var10005 as Component, Stat.Type.PERMANENT, "hp");
-      var10004 = MiscUtilsKt.cobblemonResource("attack");
-      var10005 = LocalizationUtilsKt.lang("stat.attack.name");
-      ATTACK = new Stats(var10004, var10005 as Component, Stat.Type.PERMANENT, "atk");
-      var10004 = MiscUtilsKt.cobblemonResource("defence");
-      var10005 = LocalizationUtilsKt.lang("stat.defence.name");
-      DEFENCE = new Stats(var10004, var10005 as Component, Stat.Type.PERMANENT, "def");
-      var10004 = MiscUtilsKt.cobblemonResource("special_attack");
-      var10005 = LocalizationUtilsKt.lang("stat.special_attack.name");
-      SPECIAL_ATTACK = new Stats(var10004, var10005 as Component, Stat.Type.PERMANENT, "spa");
-      var10004 = MiscUtilsKt.cobblemonResource("special_defence");
-      var10005 = LocalizationUtilsKt.lang("stat.special_defence.name");
-      SPECIAL_DEFENCE = new Stats(var10004, var10005 as Component, Stat.Type.PERMANENT, "spd");
-      var10004 = MiscUtilsKt.cobblemonResource("speed");
-      var10005 = LocalizationUtilsKt.lang("stat.speed.name");
-      SPEED = new Stats(var10004, var10005 as Component, Stat.Type.PERMANENT, "spe");
-      var10004 = MiscUtilsKt.cobblemonResource("evasion");
-      var10005 = LocalizationUtilsKt.lang("stat.evasion.name");
-      EVASION = new Stats(var10004, var10005 as Component, Stat.Type.BATTLE_ONLY, "evasion");
-      var10004 = MiscUtilsKt.cobblemonResource("accuracy");
-      var10005 = LocalizationUtilsKt.lang("stat.accuracy.name");
-      ACCURACY = new Stats(var10004, var10005 as Component, Stat.Type.BATTLE_ONLY, "accuracy");
-      var var10000: EnumSet = EnumSet.allOf(Stats.class);
-      ALL = var10000;
-      var10000 = EnumSet.of(HP, new Stats[]{ATTACK, DEFENCE, SPECIAL_ATTACK, SPECIAL_DEFENCE, SPEED});
-      PERMANENT = var10000;
-      var10000 = EnumSet.of(EVASION, ACCURACY);
-      BATTLE_ONLY = var10000;
-   }
+    companion object {
 
-   public companion object {
-      public final val ALL: Set<Stat>
-      public final val BATTLE_ONLY: Set<Stat>
-      public final val PERMANENT: Set<Stat>
+        /**
+         * All the stats, an alternative to [values].
+         * Using [StatProvider.all] is recommended instead for maximum addon compatibility.
+         */
+        val ALL: Set<Stat> = EnumSet.allOf(Stats::class.java)
 
-      public fun getStat(statKey: String): Stats {
-         switch (statKey.hashCode()) {
-            case -1380056955:
-               if (statKey.equals("evasion")) {
-                  return Stats.EVASION;
-               }
-               break;
-            case -1085397472:
-               if (statKey.equals("Defense")) {
-                  return Stats.DEFENCE;
-               }
-               break;
-            case 96920:
-               if (statKey.equals("atk")) {
-                  return Stats.ATTACK;
-               }
-               break;
-            case 99333:
-               if (statKey.equals("def")) {
-                  return Stats.DEFENCE;
-               }
-               break;
-            case 114084:
-               if (statKey.equals("spa")) {
-                  return Stats.SPECIAL_ATTACK;
-               }
-               break;
-            case 114087:
-               if (statKey.equals("spd")) {
-                  return Stats.SPECIAL_DEFENCE;
-               }
-               break;
-            case 114088:
-               if (statKey.equals("spe")) {
-                  return Stats.SPEED;
-               }
-               break;
-            case 1971575400:
-               if (statKey.equals("Attack")) {
-                  return Stats.ATTACK;
-               }
-            default:
-         }
+        /**
+         * All the stats with type of [Stat.Type.PERMANENT].
+         * Using [StatProvider.ofType] with type [Stat.Type.PERMANENT] is recommended instead for maximum addon compatibility.
+         */
+        val PERMANENT: Set<Stat> = EnumSet.of(HP, ATTACK, DEFENCE, SPECIAL_ATTACK, SPECIAL_DEFENCE, SPEED)
 
-         return Stats.ACCURACY;
-      }
+        /**
+         * All the stats with type of [Stat.Type.BATTLE_ONLY].
+         * Using [StatProvider.ofType] with type [Stat.Type.BATTLE_ONLY] is recommended instead for maximum addon compatibility.
+         */
+        val BATTLE_ONLY: Set<Stat> = EnumSet.of(EVASION, ACCURACY)
 
-      public fun getSeverity(stages: Int): String {
-         var var10000: java.lang.String;
-         switch (stages) {
-            case 0:
-               var10000 = "cap.single";
-               break;
-            case 1:
-               var10000 = "slight";
-               break;
-            case 2:
-               var10000 = "sharp";
-               break;
-            default:
-               var10000 = "severe";
-         }
+        /** Gets the [Stat] from the respective Showdown id. */
+        fun getStat(statKey: String) = when(statKey.lowercase()) {
+            "hp" -> HP
+            "atk", "attack" -> ATTACK // Hyper Cutter states the full stat name "Attack"
+            "def", "defense", "defence" -> DEFENCE // Big Pecks states the full stat name "Defense"
+            "spa" -> SPECIAL_ATTACK
+            "spd" -> SPECIAL_DEFENCE
+            "spe", "speed" -> SPEED
+            "evasion" -> EVASION
+            else -> ACCURACY
+        }
 
-         return var10000;
-      }
-   }
+        /** Gets the severity lang key from the respective boost/unboost stage. */
+        fun getSeverity(stages: Int) = when(stages) {
+            0 -> "cap.single"
+            1 -> "slight"
+            2 -> "sharp"
+            else -> "severe"
+        }
+
+    }
+
 }

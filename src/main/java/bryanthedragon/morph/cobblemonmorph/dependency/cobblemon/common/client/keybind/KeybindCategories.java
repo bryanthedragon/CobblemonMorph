@@ -1,6 +1,13 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-public object KeybindCategories {
-   public const val COBBLEMON_CATEGORY: String = "key.cobblemon.categories.cobblemon"
-   public const val COBBLEMON_DEBUG_CATEGORY: String = "key.cobblemon.categories.cobblemon.debug"
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind
+final class KeybindCategories {
+    const val COBBLEMON_CATEGORY = "key.cobblemon.categories.cobblemon"
+    const val COBBLEMON_DEBUG_CATEGORY = "key.cobblemon.categories.cobblemon.debug"
 }

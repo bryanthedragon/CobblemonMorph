@@ -1,23 +1,58 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics
 
-import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangRuntime
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MoLangExtensionsKt
-import java.util.LinkedHashMap
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-@SourceDebugExtension(["SMAP\nRemediesMechanic.kt\nKotlin\n*S Kotlin\n*F\n+ 1 RemediesMechanic.kt\ncom/cobblemon/mod/common/mechanics/RemediesMechanic\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,22:1\n1#2:23\n*E\n"])
-public class RemediesMechanic {
-   public final val friendshipDrop: Expression = MoLangExtensionsKt.asExpression("10")
-   public final val healingAmounts: MutableMap<String, Expression> = (new LinkedHashMap()) as java.util.Map
+class RemediesMechanic {
+    val remedies = mutableMapOf<String, RemedyEntry>()
 
-   public fun getHealingAmount(type: String, runtime: MoLangRuntime, default: Int = 20): Int {
-      val var10000: Expression = this.healingAmounts.get(type);
-      return if (var10000 != null) MoLangExtensionsKt.resolveInt(runtime, var10000) else default;
-   }
+    internal fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeMap(this.remedies,
+            { _, key -> buffer.writeString(key) },
+            { _, entry ->
+                buffer.writeExpressionLike(entry.healingAmount)
+                buffer.writeExpressionLike(entry.friendshipDrop)
+            }
+        )
+    }
 
-   public fun getFriendshipDrop(runtime: MoLangRuntime): Int {
-      val var10001: Expression = this.friendshipDrop;
-      return MoLangExtensionsKt.resolveInt(runtime, var10001);
-   }
+    companion object {
+        internal fun decode(buffer: RegistryFriendlyByteBuf): RemediesMechanic {
+            val mechanic = RemediesMechanic()
+
+            val decodedRemedies = buffer.readMap(
+                { buffer.readString() },
+                {
+                    val healingExpression = buffer.readExpressionLike()
+                    val friendshipExpression = buffer.readExpressionLike()
+                    RemedyEntry(healingExpression, friendshipExpression)
+                }
+            )
+
+            mechanic.remedies.clear()
+            mechanic.remedies.putAll(decodedRemedies)
+
+            return mechanic
+        }
+    }
+
+    fun getHealingAmount(type: String, runtime: MoLangRuntime, default: Int = 20) = remedies[type]?.let { runtime.resolveInt(it.healingAmount) } ?: default
+    fun getFriendshipDrop(type: String, runtime: MoLangRuntime, default: Int = 0) = remedies[type]?.let { runtime.resolveInt(it.friendshipDrop) } ?: default
 }
+
+record RemedyEntry(val healingAmount: ExpressionLike, val friendshipDrop: ExpressionLike)

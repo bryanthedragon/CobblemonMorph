@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
@@ -8,85 +16,45 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.berry.Bio
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.berry.PreferredBiomeGrowthFactor
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
-import java.lang.reflect.Type
-import java.util.HashMap
-import java.util.Locale
-import java.util.Map.Entry
-import kotlin.jvm.internal.SourceDebugExtension
-import kotlin.reflect.KClass
 import net.minecraft.resources.ResourceLocation
+import java.lang.reflect.Type
+import kotlin.reflect.KClass
 
-@SourceDebugExtension(["SMAP\nCobblemonGrowthFactorAdapter.kt\nKotlin\n*S Kotlin\n*F\n+ 1 CobblemonGrowthFactorAdapter.kt\ncom/cobblemon/mod/common/util/adapters/CobblemonGrowthFactorAdapter\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,62:1\n1#2:63\n*E\n"])
-public object CobblemonGrowthFactorAdapter : GrowthFactorAdapter {
-   private const val VARIANT: String = "variant"
-   private final val types: HashMap<String, KClass<out GrowthFactor>> = new HashMap()
+/**
+ * The Cobblemon implementation of [GrowthFactorAdapter].
+ *
+ * @author Licious
+ * @since December 2nd, 2022
+ */final class CobblemonGrowthFactorAdapter : GrowthFactorAdapter {
 
-   public override fun register(type: KClass<out GrowthFactor>, identifier: ResourceLocation) {
-      val existing: KClass = types.put(identifier.toString(), type);
-      if (existing != null) {
-         Cobblemon.INSTANCE
-            .getLOGGER()
-            .debug(
-               "Replaced {} under ID {} with {} in the {}",
-               (existing.getClass()::class).getQualifiedName(),
-               identifier.toString(),
-               type.getQualifiedName(),
-               (this.getClass()::class).getQualifiedName()
-            );
-      }
-   }
+    private const val VARIANT = "variant"
+    private val types = hashMapOf<String, KClass<out GrowthFactor>>()
 
-   public open fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): GrowthFactor {
-      val json: JsonObject = jElement.getAsJsonObject();
-      var var10000: java.lang.String = json.get("variant").getAsString();
-      var10000 = var10000.toLowerCase(Locale.ROOT);
-      val var8: KClass = types.get(var10000);
-      if (var8 == null) {
-         throw new IllegalArgumentException("Cannot resolve type for variant $var10000");
-      } else {
-         val var9: Any = context.deserialize(json as JsonElement, JvmClassMappingKt.getJavaClass(var8));
-         return var9 as GrowthFactor;
-      }
-   }
+    init {
+        this.register(BiomeDownfallGrowthFactor::class, BiomeDownfallGrowthFactor.ID)
+        this.register(BiomeTemperatureGrowthFactor::class, BiomeTemperatureGrowthFactor.ID)
+        this.register(PreferredBiomeGrowthFactor::class, PreferredBiomeGrowthFactor.ID)
+    }
 
-   public open fun serialize(factor: GrowthFactor, type: Type, context: JsonSerializationContext): JsonElement {
-      val json: JsonObject = context.serialize(factor).getAsJsonObject();
-      var var10000: java.util.Set = types.entrySet();
-      val var7: java.util.Iterator = var10000.iterator();
+    override fun register(type: KClass<out GrowthFactor>, identifier: ResourceLocation) {
+        val existing = this.types.put(identifier.toString(), type)
+        if (existing != null) {
+            Cobblemon.LOGGER.debug("Replaced {} under ID {} with {} in the {}", existing::class.qualifiedName, identifier.toString(), type.qualifiedName, this::class.qualifiedName)
+        }
+    }
 
-      while (true) {
-         if (var7.hasNext()) {
-            val var8: Any = var7.next();
-            if (!((var8 as Entry).getValue() == factor.getClass()::class)) {
-               continue;
-            }
+    override fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): GrowthFactor {
+        val json = jElement.asJsonObject
+        val variant = json.get(VARIANT).asString.lowercase()
+        val registeredType = this.types[variant] ?: throw IllegalArgumentException("Cannot resolve type for variant $variant")
+        return context.deserialize(json, registeredType.java)
+    }
 
-            var10000 = (java.util.Set)var8;
-            break;
-         }
-
-         var10000 = null;
-         break;
-      }
-
-      val var12: Entry = var10000 as Entry;
-      if (var10000 as Entry != null) {
-         val var13: java.lang.String = var12.getKey() as java.lang.String;
-         if (var13 != null) {
-            json.addProperty("variant", var13);
-            return json as JsonElement;
-         }
-      }
-
-      throw new IllegalArgumentException("Cannot resolve variant for type ${(factor.getClass()::class).getQualifiedName()}");
-   }
-
-   @JvmStatic
-   fun {
-      INSTANCE.register(BiomeDownfallGrowthFactor::class, BiomeDownfallGrowthFactor.Companion.getID());
-      INSTANCE.register(BiomeTemperatureGrowthFactor::class, BiomeTemperatureGrowthFactor.Companion.getID());
-      INSTANCE.register(PreferredBiomeGrowthFactor::class, PreferredBiomeGrowthFactor.Companion.getID());
-   }
+    override fun serialize(factor: GrowthFactor, type: Type, context: JsonSerializationContext): JsonElement {
+        val json = context.serialize(factor).asJsonObject
+        val variant = this.types.entries.find { it.value == factor::class }?.key ?: throw IllegalArgumentException("Cannot resolve variant for type ${factor::class.qualifiedName}")
+        json.addProperty(VARIANT, variant)
+        return json
+    }
 }

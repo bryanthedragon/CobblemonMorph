@@ -1,25 +1,27 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.elemental
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.TeraType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-public class ElementalTypeTeraType(type: ElementalType) : TeraType {
-   public open val displayName: Component
-   public open val id: ResourceLocation
-   public open val legalAsStatic: Boolean
-   public final val type: ElementalType
+class ElementalTypeTeraType(val type: ElementalType) : TeraType {
+    override val legalAsStatic: Boolean = true
 
-   init {
-      this.type = type;
-      this.legalAsStatic = true;
-      this.id = MiscUtilsKt.cobblemonResource(this.type.getName());
-      this.displayName = this.type.getDisplayName() as Component;
-   }
+    override val name: String = this.type.name
 
-   public override fun showdownId(): String {
-      return this.type.getName();
-   }
+    override val id: ResourceLocation = cobblemonResource(this.type.showdownId)
+
+    override val displayName: Component = this.type.displayName
+
+    override fun showdownId(): String = this.type.showdownId()
 }

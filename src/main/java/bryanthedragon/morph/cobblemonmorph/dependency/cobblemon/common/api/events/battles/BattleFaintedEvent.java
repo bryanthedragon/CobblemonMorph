@@ -1,58 +1,38 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles
 
+import com.bedrockk.molang.runtime.value.MoValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.ActorType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asArrayValue
 
-public data BattleFaintedEvent(battle: PokemonBattle, killed: BattlePokemon, context: BattleContext) : BattleEvent {
-   public open val battle: PokemonBattle
-   public final val context: BattleContext
-   public final val killed: BattlePokemon
-
-   init {
-      this.battle = battle;
-      this.killed = killed;
-      this.context = context;
-   }
-
-   public operator fun component1(): PokemonBattle {
-      return this.battle;
-   }
-
-   public operator fun component2(): BattlePokemon {
-      return this.killed;
-   }
-
-   public operator fun component3(): BattleContext {
-      return this.context;
-   }
-
-   public fun copy(battle: PokemonBattle = this.battle, killed: BattlePokemon = this.killed, context: BattleContext = this.context): BattleFaintedEvent {
-      return new BattleFaintedEvent(battle, killed, context);
-   }
-
-   public override fun toString(): String {
-      return "BattleFaintedEvent(battle=${this.battle}, killed=${this.killed}, context=${this.context})";
-   }
-
-   public override fun hashCode(): Int {
-      return (this.battle.hashCode() * 31 + this.killed.hashCode()) * 31 + this.context.hashCode();
-   }
-
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is BattleFaintedEvent) {
-         return false;
-      } else {
-         val var2: BattleFaintedEvent = other as BattleFaintedEvent;
-         if (!(this.battle == (other as BattleFaintedEvent).battle)) {
-            return false;
-         } else if (!(this.killed == var2.killed)) {
-            return false;
-         } else {
-            return this.context == var2.context;
-         }
-      }
-   }
+/**
+ * Event fired when a [BattlePokemon] faints. Exposes the [BattlePokemon] that fainted and the [BattleContext]
+ * of how it fainted.
+ *
+ * @author Segfault Guy
+ * @since April 6th, 2023
+ */
+record BattleFaintedEvent(
+    override val battle: PokemonBattle,
+    val killed: BattlePokemon,
+    val context: BattleContext
+) : BattleEvent {
+    val structContext = mutableMapOf<String, MoValue>(
+        "battle" to battle.struct,
+        "players" to battle.actors.filter { it.type == ActorType.PLAYER }.asArrayValue { it.struct },
+        "npcs" to battle.actors.filter { it.type == ActorType.NPC }.asArrayValue { it.struct },
+        "wild_pokemon" to battle.actors.filter { it.type == ActorType.WILD }.asArrayValue { it.struct },
+        "pokemon" to killed.struct,
+        "context" to context.getStruct()
+    )
 }

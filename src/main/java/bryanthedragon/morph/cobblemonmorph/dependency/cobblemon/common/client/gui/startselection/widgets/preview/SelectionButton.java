@@ -1,10 +1,70 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method playDownSound (Lnet/minecraft/client/sounds/SoundManager;)V in class com/cobblemon/mod/common/client/gui/startselection/widgets/preview/SelectionButton
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.startselection.widgets.preview
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.ColourLibrary
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.blitk
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.CobblemonRenderable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.drawScaledText
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.Button
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.sounds.SoundManager
+import net.minecraft.network.chat.Component
+
+class SelectionButton(
+    pX: Int, pY: Int,
+    pWidth: Int, pHeight: Int,
+    onPress: OnPress
+): Button(pX, pY, pWidth, pHeight, Component.literal("SelectionButton"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
+
+    companion object {
+        private val buttonTexture = cobblemonResource("textures/gui/starterselection/starterselection_button.png")
+        const val BUTTON_WIDTH = 56
+        const val BUTTON_HEIGHT = 12
+        private const val SCALE = 0.7f
+    }
+
+    override fun playDownSound(soundManager: SoundManager) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+    }
+
+    override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        val matrices = context.pose()
+        if (isHovered)
+            blitk(
+                matrixStack = matrices,
+                texture = buttonTexture,
+                x = x + 0.6, y = y + 0.6,
+                width = BUTTON_WIDTH - 0.25, height = BUTTON_HEIGHT - 0.25,
+                red = 0.75f, green = 0.75f, blue = 0.75f
+            )
+        else
+            blitk(
+                matrixStack = matrices,
+                texture = buttonTexture,
+                x = x + 0.6, y = y + 0.6,
+                width = BUTTON_WIDTH - 0.25, height = BUTTON_HEIGHT - 0.25
+            )
+        drawScaledText(
+            context = context,
+            text = lang("ui.starter.choosebutton"),
+            x = x + BUTTON_WIDTH / 2, y = y + BUTTON_HEIGHT / 2 - 2.4,
+            colour = ColourLibrary.WHITE,
+            centered = true,
+            maxCharacterWidth = 68,
+            scale = SCALE,
+            shadow = true
+        )
+    }
+}

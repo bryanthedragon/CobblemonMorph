@@ -1,6 +1,13 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 
-import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.struct.MoStruct
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
@@ -11,173 +18,143 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalTypes
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.MoveTarget
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import java.util.HashMap
-import kotlin.jvm.functions.Function0
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.codec.CodecUtils
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
+import com.google.gson.annotations.SerializedName
+import com.mojang.serialization.Codec
 import net.minecraft.network.chat.MutableComponent
 
-public open class MoveTemplate(name: String,
-   num: Int,
-   elementalType: ElementalType,
-   damageCategory: DamageCategory,
-   power: Double,
-   target: MoveTarget,
-   accuracy: Double,
-   pp: Int,
-   priority: Int,
-   critRatio: Double,
-   vararg effectChances: Any,
-   actionEffect: ActionEffectTimeline?
+/**
+ * This class represents the base of a Move.
+ * To build a Move you need to use its template
+ *
+ * @param name The name in Showdown ID form.
+ * @param num The numerical ID of this move on Showdown.
+ * @param elementalType The [ElementalType] of this move.
+ * @param damageCategory The [DamageCategory] of this move.
+ * @param power The base power of this move.
+ * @param target The [MoveTarget] of this move.
+ * @param accuracy The accuracy of this move.
+ * @param pp The power points of this move, these mean how many times the move can be used before some manner of restoration is required.
+ * @param priority The priority of this move.
+ * @param critRatio The ratio at which this move will land a critical hit.
+ * @param effectChances The effect chances if any ordered by effect.
+ */
+open class MoveTemplate(
+    val name: String,
+    val num: Int,
+    @SerializedName("type")
+    val elementalType: ElementalType,
+    val damageCategory: DamageCategory,
+    val power: Double,
+    val target: MoveTarget,
+    val accuracy: Double,
+    val pp: Int,
+    val priority: Int,
+    val critRatio: Double,
+    val effectChances: Array<Double>
 ) {
-   public final val accuracy: Double
-   public final val actionEffect: ActionEffectTimeline?
-   public final val critRatio: Double
-   public final val damageCategory: DamageCategory
-
-   public final val description: MutableComponent
-      public final get() {
-         val var10000: MutableComponent = LocalizationUtilsKt.lang("move.${this.name}.desc");
-         return var10000;
-      }
-
-
-   public final val displayName: MutableComponent
-      public final get() {
-         val var10000: MutableComponent = LocalizationUtilsKt.lang("move.${this.name}");
-         return var10000;
-      }
+    val struct: MoStruct by lazy {
+        QueryStruct(hashMapOf())
+            .addFunction("name") { StringValue(name) }
+            .addFunction("type") { StringValue(elementalType.showdownId) }
+            .addFunction("damage_category") { StringValue(damageCategory.name) }
+            .addFunction("power") { DoubleValue(power) }
+            .addFunction("target") { StringValue(target.name) }
+            .addFunction("accuracy") { DoubleValue(accuracy) }
+            .addFunction("pp") { DoubleValue(pp) }
+            .addFunction("priority") { DoubleValue(priority) }
+            .addFunction("crit_ratio") { DoubleValue(critRatio) }
+    }
 
 
-   public final val effectChances: Array<Double>
-   public final val elementalType: ElementalType
+    val displayName: MutableComponent
+        get() = lang("move.$name")
+    val description: MutableComponent
+        get() = lang("move.$name.desc")
+    val maxPp: Int
+        get() = 8 * pp / 5
+    class Dummy(name: String) : MoveTemplate(
+        name = name,
+        num = -1,
+        elementalType = ElementalTypes.NORMAL,
+        damageCategory = DamageCategories.STATUS,
+        power = 0.0,
+        target = MoveTarget.all,
+        accuracy = 100.0,
+        pp = 5,
+        priority = 0,
+        critRatio = 0.0,
+        effectChances = emptyArray()
+    )
 
-   public final val maxPp: Int
-      public final get() {
-         return 8 * this.pp / 5;
-      }
+    companion object {
+        fun dummy(name: String) = Dummy(name)
 
+        @JvmStatic
+        val BY_STRING_CODEC: Codec<MoveTemplate> = CodecUtils.createByStringCodec(
+            Moves::getByNameOrDummy,
+            MoveTemplate::name
+        ) { id -> "No MoveTemplate for ID $id" }
+    }
 
-   public final val name: String
-   public final val num: Int
-   public final val power: Double
-   public final val pp: Int
-   public final val priority: Int
+    /**
+     * Creates the Move with full PP
+     */
+    fun create() = create(pp)
 
-   public final val struct: MoStruct
-      public final get() {
-         val var10000: Any = this.struct$delegate.getValue();
-         return var10000 as MoStruct;
-      }
+    /**
+     * Creates the Move with given PP out of the normal maximum
+     */
+    fun create(currentPp: Int) = create(currentPp, 0)
 
+    /**
+     * Creates the Move with given current PP and the given raised PP stages.
+     */
+    fun create(currentPp: Int, raisedPpStages: Int): Move {
+        return Move(
+            currentPp = currentPp,
+            raisedPpStages = raisedPpStages,
+            template = this
+        )
+    }
 
-   public final val target: MoveTarget
-
-   init {
-      this.name = name;
-      this.num = num;
-      this.elementalType = elementalType;
-      this.damageCategory = damageCategory;
-      this.power = power;
-      this.target = target;
-      this.accuracy = accuracy;
-      this.pp = pp;
-      this.priority = priority;
-      this.critRatio = critRatio;
-      this.effectChances = effectChances;
-      this.actionEffect = actionEffect;
-      this.struct$delegate = LazyKt.lazy(
-         (
-            new Function0<QueryStruct>(this) {
-               {
-                  super(0);
-                  this.this$0 = `$receiver`;
-               }
-
-               public final QueryStruct invoke() {
-                  return new QueryStruct(new HashMap<>())
-                     .addFunction("name", <unrepresentable>::invoke$lambda$0)
-                     .addFunction("type", <unrepresentable>::invoke$lambda$1)
-                     .addFunction("damage_category", <unrepresentable>::invoke$lambda$2)
-                     .addFunction("power", <unrepresentable>::invoke$lambda$3)
-                     .addFunction("target", <unrepresentable>::invoke$lambda$4)
-                     .addFunction("accuracy", <unrepresentable>::invoke$lambda$5)
-                     .addFunction("pp", <unrepresentable>::invoke$lambda$6)
-                     .addFunction("priority", <unrepresentable>::invoke$lambda$7)
-                     .addFunction("crit_ratio", <unrepresentable>::invoke$lambda$8);
-               }
-
-               private static final Object invoke$lambda$0(MoveTemplate this$0, MoParams it) {
-                  return new StringValue(`this$0`.getName());
-               }
-
-               private static final Object invoke$lambda$1(MoveTemplate this$0, MoParams it) {
-                  return new StringValue(`this$0`.getElementalType().getName());
-               }
-
-               private static final Object invoke$lambda$2(MoveTemplate this$0, MoParams it) {
-                  return new StringValue(`this$0`.getDamageCategory().getName());
-               }
-
-               private static final Object invoke$lambda$3(MoveTemplate this$0, MoParams it) {
-                  return new DoubleValue(`this$0`.getPower());
-               }
-
-               private static final Object invoke$lambda$4(MoveTemplate this$0, MoParams it) {
-                  return new StringValue(`this$0`.getTarget().name());
-               }
-
-               private static final Object invoke$lambda$5(MoveTemplate this$0, MoParams it) {
-                  return new DoubleValue(`this$0`.getAccuracy());
-               }
-
-               private static final Object invoke$lambda$6(MoveTemplate this$0, MoParams it) {
-                  return new DoubleValue(`this$0`.getPp());
-               }
-
-               private static final Object invoke$lambda$7(MoveTemplate this$0, MoParams it) {
-                  return new DoubleValue(`this$0`.getPriority());
-               }
-
-               private static final Object invoke$lambda$8(MoveTemplate this$0, MoParams it) {
-                  return new DoubleValue(`this$0`.getCritRatio());
-               }
+    fun getEffectiveElementalType(pokemon: Pokemon?) : ElementalType {
+        if(pokemon == null) {
+            return this.elementalType
+        }
+        if (name == "hiddenpower") {
+            return HiddenPowerUtil.getHiddenPowerType(pokemon)
+        }
+        // TODO: Handle ability suppression: clientactivebattlepokemon needs data about volatiles
+        // TODO: Handle Liquid Voice: need to know what moves have the sound flag
+        // TODO: Handle weatherball, naturalgift, judgement, technoblast, terrainpulse, and terrablast
+        if (this.elementalType == ElementalTypes.NORMAL) {
+            if (this.damageCategory != DamageCategories.STATUS) {
+                return when (pokemon.ability.name) {
+                    "pixilate" -> ElementalTypes.FAIRY
+                    "aerilate" -> ElementalTypes.FLYING
+                    "refrigerate" -> ElementalTypes.ICE
+                    "galvanize" -> ElementalTypes.ELECTRIC
+                    else -> this.elementalType
+                }
             }
-         ) as Function0
-      );
-   }
-
-   public fun create(): Move {
-      return this.create(this.pp);
-   }
-
-   public fun create(currentPp: Int): Move {
-      return this.create(currentPp, 0);
-   }
-
-   public fun create(currentPp: Int, raisedPpStages: Int): Move {
-      return new Move(this, currentPp, raisedPpStages);
-   }
-
-   public companion object {
-      public fun dummy(name: String): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate.Dummy {
-         return new MoveTemplate.Dummy(name);
-      }
-   }
-
-   @SourceDebugExtension(["SMAP\nMoveTemplate.kt\nKotlin\n*S Kotlin\n*F\n+ 1 MoveTemplate.kt\ncom/cobblemon/mod/common/api/moves/MoveTemplate$Dummy\n+ 2 ArrayIntrinsics.kt\nkotlin/ArrayIntrinsicsKt\n*L\n1#1,117:1\n26#2:118\n*S KotlinDebug\n*F\n+ 1 MoveTemplate.kt\ncom/cobblemon/mod/common/api/moves/MoveTemplate$Dummy\n*L\n88#1:118\n*E\n"])
-   public class Dummy(name: String) : MoveTemplate(
-         name,
-         -1,
-         ElementalTypes.INSTANCE.getNORMAL(),
-         DamageCategories.INSTANCE.getSTATUS(),
-         0.0,
-         MoveTarget.all,
-         100.0,
-         5,
-         0,
-         0.0,
-         new java.lang.Double[0],
-         null
-      )
+        } else if (pokemon.ability.name == "normalize") {
+            /*
+            * Exceptions that ignore normalize that we'll need to deal with at some point:
+            * hiddenpower
+            * weatherball
+            * naturalgift
+            * judgement
+            * technoblast
+            * multi-attack
+            * z-moves
+            * terrainpulse
+            * terrablast?
+            * */
+            return ElementalTypes.NORMAL
+        }
+        return this.elementalType
+    }
 }

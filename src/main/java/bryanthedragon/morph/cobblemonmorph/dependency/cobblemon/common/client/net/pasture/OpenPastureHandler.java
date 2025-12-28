@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
@@ -5,20 +13,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pasture.PasturePCGUIConfiguration
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pc.PCGUI
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.storage.ClientPC
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.OpenPasturePacket
 import net.minecraft.client.Minecraft
+final class OpenPastureHandler : ClientNetworkPacketHandler<OpenPasturePacket> {
+    override fun handle(packet: OpenPasturePacket, client: Minecraft) {
 
-public object OpenPastureHandler : ClientNetworkPacketHandler<OpenPasturePacket> {
-   public open fun handle(packet: OpenPasturePacket, client: Minecraft) {
-      val pcConfiguration: PasturePCGUIConfiguration = new PasturePCGUIConfiguration(
-         packet.getPastureId(), packet.getLimit(), new SettableObservable<>(packet.getTetheredPokemon()), packet.getPermissions()
-      );
-      val var10003: Any = CobblemonClient.INSTANCE.getStorage().getPcStores().get(packet.getPcId());
-      client.m_91152_(new PCGUI(var10003 as ClientPC, CobblemonClient.INSTANCE.getStorage().getMyParty(), pcConfiguration));
-   }
+        val pcConfiguration = PasturePCGUIConfiguration(
+            pastureId = packet.pastureId,
+            limit = packet.limit,
+            permissions = packet.permissions,
+            pasturedPokemon = SettableObservable(packet.tetheredPokemon)
+        )
 
-   fun handleOnNettyThread(packet: OpenPasturePacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
+        client.setScreen(PCGUI(pc = CobblemonClient.storage.pcStores[packet.pcId]!!, party = CobblemonClient.storage.party, configuration = pcConfiguration))
+    }
 }

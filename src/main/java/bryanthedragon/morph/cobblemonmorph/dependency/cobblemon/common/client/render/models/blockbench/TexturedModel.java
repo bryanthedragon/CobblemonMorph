@@ -1,239 +1,347 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench
 
-import com.google.gson.Gson
-import java.util.ArrayList;
-import java.util.HashMap
-import java.util.Map.Entry
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.util.adapters.LocatorBoneAdapter
+import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
+import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.model.geom.PartPose
-import net.minecraft.client.model.geom.builders.CubeDeformation
-import net.minecraft.client.model.geom.builders.CubeListBuilder
-import net.minecraft.client.model.geom.builders.LayerDefinition
-import net.minecraft.client.model.geom.builders.MeshDefinition
-import net.minecraft.client.model.geom.builders.PartDefinition
+import net.minecraft.client.model.geom.builders.*
 
-@SourceDebugExtension(["SMAP\nTexturedModel.kt\nKotlin\n*S Kotlin\n*F\n+ 1 TexturedModel.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/TexturedModel\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 _Maps.kt\nkotlin/collections/MapsKt___MapsKt\n+ 4 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,345:1\n1603#2,9:346\n1855#2:355\n1856#2:361\n1612#2:362\n1864#2,3:363\n125#3:356\n152#3,3:357\n1#4:360\n*S KotlinDebug\n*F\n+ 1 TexturedModel.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/TexturedModel\n*L\n163#1:346,9\n163#1:355\n163#1:361\n163#1:362\n266#1:363,3\n165#1:356\n165#1:357,3\n163#1:360\n*E\n"])
-public class TexturedModel {
-   public final val formatVersion: String = "0"
-   public final val geometry: List<ModelGeometry>?
+/**
+ * Bedrock's GEO format.
+ *
+ * @author Chris Fusco
+ * @since May 10th, 2022
+ */
+class TexturedModel {
+    @SerializedName("format_version")
+    val formatVersion: String = "0"
+    @SerializedName("minecraft:geometry")
+    val geometry: List<ModelGeometry>? = null
 
-   public fun create(isForLivingEntityRenderer: Boolean): LayerDefinition {
-      return this.createWithUvOverride(isForLivingEntityRenderer, 0, 0, null, null);
-   }
+    fun create() : LayerDefinition {
+        return createWithUvOverride(0, 0, null, null)
+    }
 
-   public fun resolveParentsFromRoot(boneMap: MutableMap<String, ModelBone>, bone: ModelBone): Set<ModelBone> {
-      val var10000: java.util.Set;
-      if (bone.getParent() == null) {
-         var10000 = SetsKt.emptySet();
-      } else {
-         val var4: ModelBone = boneMap.get(bone.getParent()) as ModelBone;
-         if (var4 == null) {
-            return SetsKt.emptySet();
-         }
+    fun resolveParentsFromRoot(boneMap: MutableMap<String, ModelBone>, bone: ModelBone): Set<ModelBone> {
+        return if (bone.parent == null) {
+            emptySet()
+        } else {
+            val parent = boneMap[bone.parent] ?: return emptySet()
+            resolveParentsFromRoot(boneMap, parent) + bone
+        }
+    }
 
-         var10000 = SetsKt.plus(this.resolveParentsFromRoot(boneMap, var4), bone);
-      }
+    /**
+     * The core idea here is that Bedrock GEO models have a particular set of rules, and Flywheel has its own
+     * set of rules. In Bedrock, there are bones, and those are used to apply cumulative rotations, and rotations
+     * alone. This can make cubes move if you rotate around a distant pivot point, but modifying pivots alone is
+     * not going to change cubes.
+     *
+     * If a bone has a crazy far away pivot but no rotation, it has no effect on the cubes. This is different to Java
+     * Edition's [net.minecraft.client.model.ModelPart] models, which have 'parts', and the position of those parts
+     * has a cumulative position impact on the children rather than just a rotational one.
+     *
+     * Flywheel, on the other hand, has none of these. There is no hierarchy, and rotations are always around the
+     * origin. This is very like the Java Edition baked model format that's used for blocks, but we're not converting
+     * a block model, are we?
+     *
+     * The major issue is that our GEO cumulative rotations must be converted to be done in a single rotation about
+     * (0,0,0). We need both the orientation and the position to be the same. The way this has been accomplished is to:
+     * - use [PoseStack]s to calculate the correct final-destination for each cube start position,
+     * - convert the matrix we used to a rotation about zero by breaking it into euler angles
+     * - note that this euler rotation is correct on orientation but wrong on final position, and is how flywheel does it.
+     * - invert the euler rotation
+     * - apply the inverted rotation to the correct final-destination to find the correct pre-destination
+     *
+     * - Hiro & Apion
+     */
+//    fun createFlywheelModel(atlas: TextureAtlasHolder, textureName: Identifier, name: String): Model {
+//        val texture = atlas.getSprite(textureName)
+//        val width = ((texture.maxU * atlas.atlas.width.toFloat()) - (texture.minU * atlas.atlas.width)).toInt()
+//        val height =( (texture.maxV * atlas.atlas.height.toFloat()) - (texture.minV * atlas.atlas.height)).toInt()
+//
+//        val modelBuilder = PartBuilder(name, width, height)
+//        modelBuilder.sprite(texture)
+//        val boneMap = mutableMapOf<String, ModelBone>()
+//        geometry?.forEach { it.bones?.forEach { boneMap[it.name] = it } }
+//
+//        geometry?.forEach {
+//            it.bones?.forEach { bone ->
+//                // This is meant to prepare the rotation stack so that the rotation around a cube's pivot point is respecting
+//                // all of the parent bone rotations. It's not meant to influence the POSITION of the cubes further down
+//                // the chain, only the location of the joints. It doesn't sum the pivot points either; the child bones
+//                // are only affected by the parent bones because of the rotations.
+//                //
+//                // This probably doesn't work but haven't tested it on models with joints so.
+//                val stack = PoseStack()
+//                for (bone in resolveParentsFromRoot(mutableMapOf(), bone)) {
+//                    val rotation = bone.rotation?.takeIf { it[0] != 0F || it[1] != 0F || it[2] != 0F } ?: continue
+//                    stack.translate(-bone.pivot[0], bone.pivot[1], -bone.pivot[2])
+//                    stack.multiply(Quaternionf().rotationXYZ(rotation[0].toRadians(), rotation[1].toRadians(), rotation[2].toRadians()))
+//                    stack.translate(bone.pivot[0], -bone.pivot[1], bone.pivot[2])
+//                }
+//
+//                bone.cubes?.forEach { cube ->
+//                    val size = cube.size?.let { Vector3f(it[0], it[1], it[2]) } ?: Vector3f()
+//                    val rotation = cube.rotation?.let { Vector3f(it[0], it[1], it[2]) } ?: Vector3f()
+//                    val inflation = (cube.inflate ?: 0F) / 2
+//                    val uvs = cube.uv?.let { Vector2i(it[0], it[1]) } ?: Vector2i()
+//
+//                    /*
+//                     * The origin has the X and Z flipped, and that also means counting from the opposite side of the
+//                     * cube (second line is accomplishing that part). The reason for this is because Minecraft Java Edition
+//                     * is a "right hand" coordinate system (finger guns time!!) whereas Bedrock presumably is left-hand.
+//                     *
+//                     * Pivots are also inverted fyi.
+//                     *
+//                     * - Hiro
+//                     */
+//                    val origin = cube.origin?.let { Vector3f(-it[0], it[1], -it[2]) } ?: Vector3f()
+//                    origin.sub(size.get(Vector3f()).mul(1F, 0F, 1F))
+//                    val pivot = cube.pivot?.let { Vector3f(-it[0], it[1], -it[2]) } ?: Vector3f()
+//
+//                    // Apply translate, rotate, then translate back because the pivots don't actually directly translate
+//                    // to shifted positions in Bedrock.
+//                    stack.pushPose()
+//                    stack.translate(pivot.x, pivot.y, pivot.z)
+//                    stack.multiply(Quaternionf().rotationXYZ(rotation.x.toRadians(), rotation.y.toRadians(), rotation.z.toRadians()))
+//                    stack.translate(-pivot.x, -pivot.y, -pivot.z)
+//                    val rotationMatrix = stack.peek().positionMatrix
+//                    stack.popPose()
+//
+//                    // Finds where Bedrock put the start of the cube. The matrix does the rotation correctly because we
+//                    // are chasing rotations around very specific points.
+//                    val desiredPoint = rotationMatrix.transformPosition(origin.get(Vector3f()))
+//
+//                    // The rotation in Euler angles (which are about 0,0,0), that's what Flywheel likes to eat.
+//                    // It will orient it correctly, but a limitation of Euler angles is that it can't get the thing
+//                    // to rotate around a specific point, only ever the origin. We'll fix that.
+//                    val eulerRotation = rotationMatrix.getEulerAnglesXYZ(Vector3f())
+//                    // The reversed form of the rotation Flywheel is about to apply.
+//                    val reversedRotation = Quaternionf().fromEulerXYZ(-eulerRotation.x, -eulerRotation.y, -eulerRotation.z)
+//                    // Figure out the start point such that Flywheel applying the eulerRotation will put it at the desired point.
+//                    val correctStart = reversedRotation.transform(desiredPoint.get(Vector3f()))
+//
+//                    // Now just put it all together. Inflation is a slight tweak to size and start position.
+//                    // Invert YZ is something I don't understand but is necessary.
+//                    modelBuilder.cuboid()
+//                        .sprite(texture)
+//                        .start(correctStart.x - inflation, correctStart.y - inflation, correctStart.z - inflation)
+//                        .invertYZ()
+//                        .size(size.x + 2 * inflation, size.y + 2 * inflation, size.z + 2 * inflation)
+//                        .rotate(eulerRotation.x, eulerRotation.y, eulerRotation.z)
+//                        .textureOffset(uvs.x, uvs.y)
+//                        .endCuboid()
+//                }
+//            }
+//        }
+//        return modelBuilder.build()
+//    }
 
-      return var10000;
-   }
+    fun createWithUvOverride(u: Int, v: Int, textureWidth: Int?, textureHeight: Int?) : LayerDefinition {
+        val modelData = MeshDefinition()
+        val parts = HashMap<String, PartDefinition>()
+        val bones = HashMap<String, ModelBone>()
 
-   public fun createWithUvOverride(isForLivingEntityRenderer: Boolean, u: Int, v: Int, textureWidth: Int?, textureHeight: Int?): LayerDefinition {
-      val modelData: MeshDefinition = new MeshDefinition();
-      val parts: HashMap = new HashMap();
-      val bones: HashMap = new HashMap();
+        try {
+            val geometry = this.geometry!![0]
+            val geometryBones = geometry.bones!!.toMutableList()
+            var parentPart: PartDefinition
 
-      try {
-         var var10000: java.util.List = this.geometry;
-         val e: ModelGeometry = var10000.get(0) as ModelGeometry;
-         var10000 = e.getBones();
-         val geometryBones: java.util.List = CollectionsKt.toMutableList(var10000);
-         val var12: java.util.Collection = geometryBones;
-         val bone: java.lang.Iterable = geometryBones;
-         val modelPart: java.util.Collection = new ArrayList();
+            // We want all the regular bones, but then we want locators to be mapped into being empty bones.
+            // Reasoning there is that in many ways they really do function the same. Creating a bespoke locator
+            // thing in ModelPart and holding onto it through runtime would require 500 mixins and 1000 virgin
+            // sacrifices, so no thanks. This actually works startlingly well and allows us to follow DRY.
+            // - Hiro
+            geometryBones += geometryBones.mapNotNull { bone ->
+                val locators = bone.locators ?: return@mapNotNull null
+                locators.map { (name, locator) ->
+                    val locatorBone = ModelBone()
+                    locatorBone.name = LocatorAccess.PREFIX + name
+                    locatorBone.parent = bone.name
+                    locatorBone.pivot = locator.offset
+                    locatorBone.rotation = locator.rotation
+                    return@map locatorBone
+                }
+            }.flatten() + ModelBone().apply {
+                this.name = LocatorAccess.PREFIX + "root"
+            }
 
-         for (Object element$iv$iv$iv : $this$mapNotNull$iv) {
-            val bonex: ModelBone = `$this$forEachIndexed$iv` as ModelBone;
-            val var71: java.util.Map = (`$this$forEachIndexed$iv` as ModelBone).getLocators();
-            if (var71 == null) {
-               var10000 = null;
+            for (bone in geometryBones) {
+                bones[bone.name] = bone
+                parentPart = if (bone.parent != null) parts[bone.parent]!! else modelData.root
+
+                val boneRotation = bone.rotation
+                val modelTransform : PartPose
+                when {
+                    bone.parent == null -> {
+                        modelTransform = PartPose.offset(0F, 0F, 0F)
+                    }
+                    boneRotation != null -> {
+                        modelTransform = PartPose.offsetAndRotation(
+                            -(bones[bone.parent]!!.pivot[0] - bone.pivot[0]),
+                            bones[bone.parent]!!.pivot[1] - bone.pivot[1],
+                            -(bones[bone.parent]!!.pivot[2] - bone.pivot[2]),
+                            Math.toRadians(boneRotation[0].toDouble()).toFloat(),
+                            Math.toRadians(boneRotation[1].toDouble()).toFloat(),
+                            Math.toRadians(boneRotation[2].toDouble()).toFloat()
+                        )
+                    }
+                    else -> {
+                        modelTransform = PartPose.offset(
+                            -(bones[bone.parent]!!.pivot[0] - bone.pivot[0]),
+                            bones[bone.parent]!!.pivot[1] - bone.pivot[1],
+                            -(bones[bone.parent]!!.pivot[2] - bone.pivot[2])
+                        )
+                    }
+                }
+
+                val modelPart = CubeListBuilder.create()
+                val subParts = mutableListOf<CubeListBuilder>()
+                val modelTransforms = mutableListOf<PartPose>()
+
+                val boneCubes = bone.cubes
+                if (boneCubes != null) {
+                    var pivot: List<Float>
+                    var subPart: CubeListBuilder
+
+                    for (cube in boneCubes) {
+                        subPart = if (cube.rotation != null) CubeListBuilder.create() else modelPart
+                        pivot = cube.pivot ?: bone.pivot
+
+                        if (cube.uv != null) {
+                            subPart.texOffs(
+                                cube.uv[0] + u,
+                                cube.uv[1] + v
+                            )
+                        }
+                        if (cube.mirror != null && cube.mirror == true) {
+                            subPart.mirror()
+                        }
+                        if (cube.size != null && cube.origin != null) {
+                            subPart.addBox(
+                                cube.origin[0] - pivot[0],
+                                // Y is inverted in Java Edition, but that also means counting from the other side of the cube.
+                                -(cube.origin[1] - pivot[1] + cube.size[1]),
+                                cube.origin[2] - pivot[2],
+                                cube.size[0],
+                                cube.size[1],
+                                cube.size[2],
+                                CubeDeformation(cube.inflate ?: 0f)
+                            )
+                        }
+                        if (cube.mirror != null && cube.mirror == true) {
+                            subPart.mirror(false)
+                        }
+
+                        if (subPart != modelPart) {
+                            modelTransforms.add(PartPose.offsetAndRotation(
+                                -(bone.pivot[0] - cube.pivot!![0]),
+                                bone.pivot[1] - cube.pivot[1],
+                                -(bone.pivot[2] - cube.pivot[2]),
+                                Math.toRadians(cube.rotation!![0].toDouble()).toFloat(),
+                                Math.toRadians(cube.rotation[1].toDouble()).toFloat(),
+                                Math.toRadians(cube.rotation[2].toDouble()).toFloat()
+                            ))
+                            subParts.add(subPart)
+                        }
+                    }
+                }
+
+                parts[bone.name] = parentPart.addOrReplaceChild(
+                    bone.name,
+                    modelPart,
+                    modelTransform
+                )
+
+                var counter = 0
+                subParts.forEachIndexed { index, part ->
+                    parts[bone.name]!!.addOrReplaceChild(
+                        "%" + bone.name + "%" + counter++.toString(),
+                        part,
+                        modelTransforms[index]
+                    )
+                }
+            }
+
+            return LayerDefinition.create(
+                modelData,
+                textureWidth ?: geometry.description.textureWidth,
+                textureHeight ?: geometry.description.textureHeight
+            )
+        } catch (e: Exception) {
+            if (geometry != null) {
+                throw IllegalArgumentException("Error creating LayerDefinition with identifier ${geometry[0].description.identifier}", e)
             } else {
-               val `destination$iv$ivx`: java.util.Collection = new ArrayList(var71.size());
-
-               for (Entry item$iv$iv : var71.entrySet()) {
-                  val name: java.lang.String = `item$iv$iv`.getKey() as java.lang.String;
-                  val locator: LocatorBone = `item$iv$iv`.getValue() as LocatorBone;
-                  val locatorBone: ModelBone = new ModelBone();
-                  locatorBone.setName("locator_$name");
-                  locatorBone.setParent(bonex.getName());
-                  locatorBone.setPivot(locator.getOffset());
-                  locatorBone.setRotation(locator.getRotation());
-                  `destination$iv$ivx`.add(locatorBone);
-               }
-
-               var10000 = `destination$iv$ivx` as java.util.List;
+                throw IllegalArgumentException("Error creating LayerDefinition", e)
             }
+        }
+    }
 
-            if (var10000 != null) {
-               modelPart.add(var10000);
+    companion object {
+        val GSON = GsonBuilder()
+            .setLenient()
+            .registerTypeAdapter(LocatorBone::class.java, LocatorBoneAdapter)
+            .create()
+
+        fun from(json: String) : TexturedModel? {
+            return try {
+                GSON.fromJson(json, TexturedModel::class.java)
+            } catch (exception: Exception) {
+                LOGGER.warn(exception)
+                null
             }
-         }
-
-         val var73: java.util.Collection = CollectionsKt.flatten(modelPart as java.util.List);
-         val var46: ModelBone = new ModelBone();
-         var46.setName("locator_root");
-         CollectionsKt.addAll(var12, CollectionsKt.plus(var73, var46));
-
-         for (ModelBone bonexx : geometryBones) {
-            bones.put(bonexx.getName(), bonexx);
-            val var75: PartDefinition;
-            if (bonexx.getParent() != null) {
-               val var74: Any = parts.get(bonexx.getParent());
-               var75 = var74 as PartDefinition;
-            } else {
-               var75 = modelData.m_171576_();
-            }
-
-            val var48: java.util.List = bonexx.getRotation();
-            val var50: PartPose;
-            if (bonexx.getParent() == null) {
-               val var76: PartPose = PartPose.m_171419_(0.0F, if (isForLivingEntityRenderer) 24.0F else 0.0F, 0.0F);
-               var50 = var76;
-            } else if (var48 != null) {
-               var var77: Any = bones.get(bonexx.getParent());
-               val var78: Float = -((var77 as ModelBone).getPivot().get(0).floatValue() - bonexx.getPivot().get(0).floatValue());
-               val var10001: Any = bones.get(bonexx.getParent());
-               val var90: Float = (var10001 as ModelBone).getPivot().get(1).floatValue() - bonexx.getPivot().get(1).floatValue();
-               val var10002: Any = bones.get(bonexx.getParent());
-               var77 = PartPose.m_171423_(
-                  var78,
-                  var90,
-                  -((var10002 as ModelBone).getPivot().get(2).floatValue() - bonexx.getPivot().get(2).floatValue()),
-                  (float)Math.toRadians((double)(var48.get(0) as java.lang.Number).floatValue()),
-                  (float)Math.toRadians((double)(var48.get(1) as java.lang.Number).floatValue()),
-                  (float)Math.toRadians((double)(var48.get(2) as java.lang.Number).floatValue())
-               );
-               var50 = (PartPose)var77;
-            } else {
-               var var80: Any = bones.get(bonexx.getParent());
-               val var81: Float = -((var80 as ModelBone).getPivot().get(0).floatValue() - bonexx.getPivot().get(0).floatValue());
-               val var91: Any = bones.get(bonexx.getParent());
-               val var92: Float = (var91 as ModelBone).getPivot().get(1).floatValue() - bonexx.getPivot().get(1).floatValue();
-               val var98: Any = bones.get(bonexx.getParent());
-               var80 = PartPose.m_171419_(var81, var92, -((var98 as ModelBone).getPivot().get(2).floatValue() - bonexx.getPivot().get(2).floatValue()));
-               var50 = (PartPose)var80;
-            }
-
-            val var51: CubeListBuilder = CubeListBuilder.m_171558_();
-            val var52: java.util.List = new ArrayList();
-            val modelTransforms: java.util.List = new ArrayList();
-            val var53: java.util.List = bonexx.getCubes();
-            if (var53 != null) {
-               for (Cube cube : boneCubes) {
-                  val var83: CubeListBuilder;
-                  if (var64.getRotation() != null) {
-                     var83 = CubeListBuilder.m_171558_();
-                  } else {
-                     var83 = var51;
-                  }
-
-                  var10000 = var64.getPivot();
-                  if (var10000 == null) {
-                     var10000 = bonexx.getPivot();
-                  }
-
-                  if (var64.getUv() != null) {
-                     var83.m_171514_(var64.getUv().get(0).intValue() + u, var64.getUv().get(1).intValue() + v);
-                  }
-
-                  var64.getMirror();
-                  if (var64.getMirror()) {
-                     var83.m_171480_();
-                  }
-
-                  if (var64.getSize() != null && var64.getOrigin() != null) {
-                     val var93: Float = var64.getOrigin().get(0).floatValue() - (var10000.get(0) as java.lang.Number).floatValue();
-                     val var99: Float = -(
-                        var64.getOrigin().get(1).floatValue() - (var10000.get(1) as java.lang.Number).floatValue() + var64.getSize().get(1).floatValue()
-                     );
-                     val var10003: Float = var64.getOrigin().get(2).floatValue() - (var10000.get(2) as java.lang.Number).floatValue();
-                     val var10004: Float = var64.getSize().get(0).floatValue();
-                     val var10005: Float = var64.getSize().get(1).floatValue();
-                     val var10006: Float = var64.getSize().get(2).floatValue();
-                     val var10009: java.lang.Float = var64.getInflate();
-                     var83.m_171488_(var93, var99, var10003, var10004, var10005, var10006, new CubeDeformation(var10009 ?: 0.0F));
-                  }
-
-                  var64.getMirror();
-                  if (var64.getMirror()) {
-                     var83.m_171555_(false);
-                  }
-
-                  if (!(var83 == var51)) {
-                     var var94: Float = bonexx.getPivot().get(0).floatValue();
-                     val var100: java.util.List = var64.getPivot();
-                     var94 = -(var94 - (var100.get(0) as java.lang.Number).floatValue());
-                     val var101: Float = bonexx.getPivot().get(1).floatValue() - var64.getPivot().get(1).floatValue();
-                     val var102: Float = -(bonexx.getPivot().get(2).floatValue() - var64.getPivot().get(2).floatValue());
-                     val var103: java.util.List = var64.getRotation();
-                     val var96: PartPose = PartPose.m_171423_(
-                        var94,
-                        var101,
-                        var102,
-                        (float)Math.toRadians((double)(var103.get(0) as java.lang.Number).floatValue()),
-                        (float)Math.toRadians((double)var64.getRotation().get(1).floatValue()),
-                        (float)Math.toRadians((double)var64.getRotation().get(2).floatValue())
-                     );
-                     modelTransforms.add(var96);
-                     var52.add(var83);
-                  }
-               }
-            }
-
-            val var56: java.util.Map = parts;
-            val var60: java.lang.String = bonexx.getName();
-            val var85: PartDefinition = var75.m_171599_(bonexx.getName(), var51, var50);
-            var56.put(var60, var85);
-            var var57: Int = 0;
-            val var61: java.lang.Iterable = var52;
-            var var65: Int = 0;
-
-            for (Object item$iv : $this$forEachIndexed$iv) {
-               val var68: Int = var65++;
-               if (var68 < 0) {
-                  CollectionsKt.throwIndexOverflow();
-               }
-
-               val part: CubeListBuilder = var67 as CubeListBuilder;
-               val var87: Any = parts.get(bonexx.getName());
-               (var87 as PartDefinition).m_171599_("${bonexx.getName()}${var57++}", part, modelTransforms.get(var68) as PartPose);
-            }
-         }
-
-         val var89: LayerDefinition = LayerDefinition.m_171565_(
-            modelData, textureWidth ?: e.getDescription().getTextureWidth(), textureHeight ?: e.getDescription().getTextureHeight()
-         );
-         return var89;
-      } catch (var43: Exception) {
-         if (this.geometry != null) {
-            throw new IllegalArgumentException(
-               "Error creating TexturedModelData with identifier ${this.geometry.get(0).getDescription().getIdentifier()}", var43
-            );
-         } else {
-            throw new IllegalArgumentException("Error creating TexturedModelData", var43);
-         }
-      }
-   }
-
-   public companion object {
-      public final val GSON: Gson
-
-      public fun from(json: String): TexturedModel {
-         try {
-            val var10000: Any = this.getGSON().fromJson(json, TexturedModel.class);
-            return var10000 as TexturedModel;
-         } catch (var3: Exception) {
-            throw new IllegalStateException("Issue loading pokemon geo: $json", var3);
-         }
-      }
-   }
+        }
+    }
 }
+class ModelGeometry {
+    lateinit var description: ModelDataDescription
+    val bones: List<ModelBone>? = null
+}
+class ModelDataDescription(
+    val identifier: String,
+    @SerializedName("texture_width")
+    val textureWidth: Int,
+    @SerializedName("texture_height")
+    val textureHeight: Int,
+    @SerializedName("visible_bounds_width")
+    val visibleBoundsWidth: Float,
+    @SerializedName("visible_bounds_height")
+    val visibleBoundsHeight: Float,
+    @SerializedName("visible_bounds_offset")
+    val visibleBoundsOffset: List<Float>
+)
+
+class ModelBone {
+    var name: String = ""
+    var parent: String? = null
+    var pivot: List<Float> = emptyList()
+    var rotation: List<Float>? = null
+    var cubes: List<Cube>? = null
+    var locators: Map<String, LocatorBone>? = null
+}
+
+class Cube {
+    val origin: List<Float>? = null
+    val size: List<Float>? = null
+    val pivot: List<Float>? = null
+    val rotation: List<Float>? = null
+    val uv: List<Int>? = null
+    val inflate: Float? = null
+    val mirror: Boolean = false
+}
+
+class LocatorBone(
+    var offset: List<Float> = listOf(0F, 0F, 0F),
+    var rotation: List<Float> = listOf(0F, 0F, 0F)
+)

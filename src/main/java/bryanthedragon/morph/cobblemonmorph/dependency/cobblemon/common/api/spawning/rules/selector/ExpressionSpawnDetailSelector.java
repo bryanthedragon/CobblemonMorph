@@ -1,19 +1,28 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector
 
-import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangRuntime
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.setup
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MoLangExtensionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpression
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveBoolean
 
-public class ExpressionSpawnDetailSelector : SpawnDetailSelector {
-   public final var expression: Expression = MoLangExtensionsKt.asExpression("true")
-   public final val runtime: MoLangRuntime = MoLangFunctions.INSTANCE.setup(new MoLangRuntime())
+class ExpressionSpawnDetailSelector : SpawnDetailSelector {
+    @Transient
+    val runtime = MoLangRuntime().setup()
+    var expression = "true".asExpressionLike()
 
-   public override fun selects(spawnDetail: SpawnDetail): Boolean {
-      this.runtime.getEnvironment().setSimpleVariable("spawn", spawnDetail.getStruct());
-      val var10000: MoLangRuntime = this.runtime;
-      val var10001: Expression = this.expression;
-      return MoLangExtensionsKt.resolveBoolean(var10000, var10001);
-   }
+    override fun selects(spawnDetail: SpawnDetail): Boolean {
+        runtime.environment.setSimpleVariable("spawn", spawnDetail.struct)
+        runtime.environment.setSimpleVariable("spawn_detail", spawnDetail.struct)
+        return runtime.resolveBoolean(expression)
+    }
 }

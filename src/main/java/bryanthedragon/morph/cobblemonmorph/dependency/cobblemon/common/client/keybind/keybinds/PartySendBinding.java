@@ -1,100 +1,176 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.keybinds
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork.sendToServer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.RidingStyle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleFormat
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.BattleGUI
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.CobblemonBlockingKeyBinding
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.KeybindCategories
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.BattleChallengePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.RequestPlayerInteractionsPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.SendOutPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt
-import com.mojang.blaze3d.platform.InputConstants.Type
-import java.util.UUID
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.DismountPokemonPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isUsingPokedex
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.traceFirstEntityCollision
+import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.ClipContext
+import kotlin.math.pow
+final class PartySendBinding : CobblemonBlockingKeyBinding(
+    "key.cobblemon.throwpartypokemon",
+    InputConstants.Type.KEYSYM,
+    InputConstants.KEY_R,
+    KeybindCategories.COBBLEMON_CATEGORY
+) {
+    var canApplyChange = true
+    var heldDownSeconds = 0F
 
-public object PartySendBinding : CobblemonBlockingKeyBinding("key.cobblemon.throwpartypokemon", Type.KEYSYM, 82, "key.cobblemon.categories.cobblemon") {
-   public final var canApplyChange: Boolean = true
-   public final var secondsSinceActioned: Float
+    fun actioned() {
+        canApplyChange = false
+        wasDown = true
+        heldDownSeconds = 0F
+    }
 
-   public fun actioned() {
-      canApplyChange = false;
-      secondsSinceActioned = 0.0F;
-      this.setWasDown(false);
-   }
+    fun canAction() = canApplyChange && Minecraft.getInstance().player?.isUsingPokedex() == false
 
-   public fun canAction(): Boolean {
-      return canApplyChange;
-   }
-
-   public override fun onTick() {
-      if (secondsSinceActioned < 100.0F) {
-         secondsSinceActioned = secondsSinceActioned + Minecraft.m_91087_().m_91296_();
-      }
-
-      super.onTick();
-   }
-
-   public override fun onRelease() {
-      this.setWasDown(false);
-      if (!this.canAction()) {
-         canApplyChange = true;
-      } else {
-         canApplyChange = true;
-         val var10000: LocalPlayer = Minecraft.m_91087_().f_91074_;
-         if (var10000 != null) {
-            if (!var10000.m_5833_()) {
-               val battle: ClientBattle = CobblemonClient.INSTANCE.getBattle();
-               if (battle != null) {
-                  battle.setMinimised(!battle.getMinimised());
-                  if (!battle.getMinimised()) {
-                     Minecraft.m_91087_().m_91152_(new BattleGUI());
-                  }
-               } else {
-                  if (CobblemonClient.INSTANCE.getStorage().getSelectedSlot() != -1 && Minecraft.m_91087_().f_91080_ == null) {
-                     val pokemon: Pokemon = CobblemonClient.INSTANCE.getStorage().getMyParty().get(CobblemonClient.INSTANCE.getStorage().getSelectedSlot());
-                     if (pokemon != null && pokemon.getCurrentHealth() > 0) {
-                        val targetEntity: LivingEntity = PlayerExtensionsKt.traceFirstEntityCollision$default(
-                           var10000 as Player, 0.0F, 0.0F, LivingEntity.class, var10000 as Entity, 3, null
-                        ) as LivingEntity;
-                        if (targetEntity != null && (targetEntity !is PokemonEntity || !((targetEntity as PokemonEntity).m_21805_() == var10000.m_20148_()))) {
-                           this.processEntityTarget(var10000, pokemon, targetEntity);
-                        } else {
-                           CobblemonNetwork.INSTANCE.sendPacketToServer(new SendOutPokemonPacket(CobblemonClient.INSTANCE.getStorage().getSelectedSlot()));
-                        }
-                     }
-                  }
-               }
+    override fun onTick() {
+        if (wasDown) {
+            if (heldDownSeconds < 100) {
+                heldDownSeconds += Minecraft.getInstance().timer.getGameTimeDeltaPartialTick(false)
             }
-         }
-      }
-   }
+        } else {
+            heldDownSeconds = 0F
+        }
 
-   private fun processEntityTarget(player: LocalPlayer, pokemon: Pokemon, entity: LivingEntity) {
-      if (entity is Player) {
-         val var10000: CobblemonNetwork = CobblemonNetwork.INSTANCE;
-         val var10003: UUID = (entity as Player).m_20148_();
-         val var10004: Int = (entity as Player).m_19879_();
-         val var10005: UUID = pokemon.getUuid();
-         var10000.sendPacketToServer(new RequestPlayerInteractionsPacket(var10003, var10004, var10005));
-      } else if (entity is PokemonEntity) {
-         if (!(entity as PokemonEntity).canBattle(player as Player)) {
-            return;
-         }
+        super.onTick()
+    }
 
-         val var5: CobblemonNetwork = CobblemonNetwork.INSTANCE;
-         val var6: Int = (entity as PokemonEntity).m_19879_();
-         val var7: UUID = pokemon.getUuid();
-         var5.sendPacketToServer(new BattleChallengePacket(var6, var7));
-      }
-   }
+    override fun onRelease() {
+        val canAction = canAction()
+        wasDown = false
+        canApplyChange = true
+        if (!canAction) {
+            return
+        }
+        val player = Minecraft.getInstance().player ?: return
+        if (player.isSpectator) return
 
-   public override fun onPress() {
-   }
+        val battle = CobblemonClient.battle
+        if (battle != null) {
+            toggleBattleScreen(battle)
+            return
+        }
+
+        if (Minecraft.getInstance().screen != null) return
+
+        val selectedPartyPokemon = if (CobblemonClient.storage.selectedSlot >= 0) {
+            CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+        } else {
+            null
+        }
+
+        if (isRidingPokemon(player) && canAttemptDismount(player, selectedPartyPokemon)) {
+            sendToServer(DismountPokemonPacket())
+        } else if (selectedPartyPokemon != null && !isRidingSelectedPokemon(player, selectedPartyPokemon)){
+            checkForTargetInteractions(player, selectedPartyPokemon)
+        }
+    }
+
+    private fun toggleBattleScreen(battle: ClientBattle) {
+        battle.minimised = !battle.minimised
+        if (!battle.minimised && !Minecraft.getInstance().options.hideGui) {
+            Minecraft.getInstance().setScreen(BattleGUI())
+        }
+    }
+
+    private fun checkForTargetInteractions(player: LocalPlayer, selectedPartyPokemon: Pokemon) {
+        val targetEntity = player.traceFirstEntityCollision(
+            entityClass = LivingEntity::class.java,
+            ignoreEntity = player,
+            maxDistance = Cobblemon.config.battleSpectateMaxDistance,
+            collideBlock = ClipContext.Fluid.NONE)
+        if (canSendOutPokemon(player, targetEntity)) {
+            sendToServer(SendOutPokemonPacket(CobblemonClient.storage.selectedSlot))
+        } else {
+            processEntityTarget(player, selectedPartyPokemon, targetEntity)
+        }
+    }
+
+    private fun canSendOutPokemon(player: LocalPlayer, target: LivingEntity?): Boolean {
+        if (isRidingPokemon(player, ignoreControlling = true)) return false
+        return target == null || (target is PokemonEntity && target.ownerUUID == player.uuid)
+    }
+
+    private fun processEntityTarget(player: LocalPlayer, pokemon: Pokemon, entity: LivingEntity?) {
+        if (entity == null) return
+        if (!canProcessEntityTarget(player, entity)) return
+        when (entity) {
+            is Player -> {
+                //This sends a packet to the server with the id of the player
+                //The server sends a packet back that opens the player interaction menu with the proper options
+                sendToServer(RequestPlayerInteractionsPacket(entity.uuid, entity.id, pokemon.uuid))
+            }
+            is PokemonEntity -> {
+                if (!entity.canBattle(player) || entity.position().distanceToSqr(player.position()) > Cobblemon.config.battleWildMaxDistance.pow(2)) return
+                    sendToServer(BattleChallengePacket(entity.id,  pokemon.uuid, BattleFormat.GEN_9_SINGLES))
+                }
+        }
+    }
+
+    private fun canProcessEntityTarget(player: LocalPlayer, target: LivingEntity): Boolean {
+        return when (target) {
+            is Player -> !isRidingPokemon(player)
+            is PokemonEntity -> !isRidingPokemon(player, ignoreControlling = true)
+            else -> true
+        }
+    }
+
+    private fun canAttemptDismount(player: LocalPlayer, selectedPartyPokemon: Pokemon?): Boolean {
+        if (player.vehicle !is PokemonEntity) return false
+        val vehicle = player.vehicle as PokemonEntity
+        if (player != vehicle.controllingPassenger) {
+            return true
+        }
+        val isAirRide = vehicle.ridingController?.context?.style == RidingStyle.AIR
+        val hasLandRide = vehicle.rideProp.behaviours?.get(RidingStyle.LAND) != null
+        return if (isAirRide && hasLandRide) {
+            false
+        } else {
+            vehicle.pokemon.uuid == selectedPartyPokemon?.uuid
+        }
+    }
+
+    private fun isRidingPokemon(player: LocalPlayer, ignoreControlling: Boolean = false): Boolean {
+        if (!player.isPassenger) return false
+        if (player.vehicle !is PokemonEntity) return false
+        if (ignoreControlling && player.vehicle!!.controllingPassenger == player) return false
+        return true
+    }
+
+    private fun isRidingSelectedPokemon(player: LocalPlayer, selectedPartyPokemon: Pokemon, ignoreControlling: Boolean = false): Boolean {
+        if (!player.isPassenger) return false
+        if (player.vehicle !is PokemonEntity) return false
+        val vehicle = player.vehicle as PokemonEntity
+        if (ignoreControlling && player.vehicle!!.controllingPassenger == player) return false
+        return vehicle.pokemon.uuid == selectedPartyPokemon.uuid
+    }
+
+    override fun onPress() {
+    }
 }

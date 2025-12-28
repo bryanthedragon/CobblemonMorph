@@ -1,34 +1,44 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.widgets.type
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.blitk
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.widgets.SoundlessWidget
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 
-public abstract class TypeWidget : SoundlessWidget {
-   open fun TypeWidget(pX: Int, pY: Int, pWidth: Int, pHeight: Int, pMessage: Component) {
-      super(pX, pY, pWidth, pHeight, pMessage);
-   }
+abstract class TypeWidget(
+    pX: Int, pY: Int,
+    pWidth: Int, pHeight: Int,
+    pMessage: Component
+): SoundlessWidget(pX, pY, pWidth, pHeight, pMessage) {
 
-   public fun renderType(type: ElementalType, pMatrixStack: PoseStack, pX: Int = this.m_252754_(), pY: Int = this.m_252907_()) {
-      val var5: ResourceLocation = typeResource;
-      val var6: Double = pX + 0.5;
-      val var8: Int = this.f_93618_;
-      val var9: Int = this.f_93619_;
-      val var10: Double = (float)this.f_93618_ * type.getTextureXMultiplier() + 0.1;
-      val var12: Int = this.f_93618_ * 18;
-      GuiUtilsKt.blitk$default(pMatrixStack, var5, var6, pY, var9, var8, var10, null, var12, null, null, null, null, null, null, false, 0.0F, 130688, null);
-   }
+    companion object {
+        val typeResource = cobblemonResource("textures/gui/types.png")
+        private const val OFFSET = 0.5
+    }
 
-   public fun renderType(mainType: ElementalType, secondaryType: ElementalType, pMatrixStack: PoseStack) {
-      renderType$default(this, secondaryType, pMatrixStack, this.m_252754_() + 16, 0, 8, null);
-      renderType$default(this, mainType, pMatrixStack, 0, 0, 12, null);
-   }
+    fun renderType(type: ElementalType, pPoseStack: PoseStack, pX: Int = x, pY: Int = y) {
+        blitk(
+            matrixStack = pPoseStack,
+            texture = typeResource,
+            x = pX + OFFSET, y = pY,
+            width = width, height = height,
+            uOffset = width * type.textureXMultiplier.toFloat() + 0.1,
+            textureWidth = width * 18
+        )
+    }
 
-   public companion object {
-      private const val OFFSET: Double
-      public final val typeResource: ResourceLocation
-   }
+    fun renderType(mainType: ElementalType, secondaryType: ElementalType, pPoseStack: PoseStack) {
+        renderType(secondaryType, pPoseStack, x + 16)
+        renderType(mainType, pPoseStack)
+    }
 }

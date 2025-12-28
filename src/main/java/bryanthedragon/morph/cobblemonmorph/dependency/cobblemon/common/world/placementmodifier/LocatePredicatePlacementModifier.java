@@ -1,10 +1,56 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method getPositions (Lnet/minecraft/world/level/levelgen/placement/PlacementContext;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/BlockPos;)Ljava/util/stream/Stream; in class com/cobblemon/mod/common/world/placementmodifier/LocatePredicatePlacementModifier
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.placementmodifier
+
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.PrimitiveCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.core.BlockPos
+import net.minecraft.util.RandomSource
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate
+import net.minecraft.world.level.levelgen.placement.PlacementContext
+import net.minecraft.world.level.levelgen.placement.PlacementModifier
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType
+import java.util.stream.Stream
+
+class LocatePredicatePlacementModifier(
+    val predicate: BlockPredicate,
+    val maxTries: Int,
+    val xzRange: Int,
+    val yRange: Int
+) : PlacementModifier() {
+    companion object {
+        val MODIFIER_CODEC: MapCodec<LocatePredicatePlacementModifier> = RecordCodecBuilder.mapCodec { instance ->
+            instance.group(
+                BlockPredicate.CODEC.fieldOf("predicate").forGetter {it.predicate},
+                PrimitiveCodec.INT.fieldOf("maxTries").forGetter {it.maxTries},
+                PrimitiveCodec.INT.fieldOf("xzRange").forGetter {it.xzRange},
+                PrimitiveCodec.INT.fieldOf("yRange").forGetter {it.yRange}
+            )
+            .apply(instance) {predicate, maxTries, xzRange, yRange ->
+                LocatePredicatePlacementModifier(predicate, maxTries, xzRange, yRange)
+            }
+        }
+    }
+    override fun getPositions(
+        context: PlacementContext,
+        random: RandomSource,
+        pos: BlockPos
+    ): Stream<BlockPos> {
+        for (i in 0..maxTries) {
+            val newPos = pos.offset(random.nextIntBetweenInclusive(0, xzRange), random.nextIntBetweenInclusive(-yRange, yRange), random.nextIntBetweenInclusive(0, xzRange))
+            if (predicate.test(context.level, newPos)) {
+                return Stream.of(newPos)
+            }
+        }
+        return Stream.empty()
+    }
+
+    override fun type(): PlacementModifierType<*> = CobblemonPlacementModifierTypes.LOCATE_PREDICATE
+}

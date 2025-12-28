@@ -1,35 +1,41 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.fossil
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.SchedulingTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import net.minecraft.world.entity.Entity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
 
-public class FossilState(startAge: Int = -1, startPartialTicks: Float = 0.0F) : PoseableEntityState<Entity> {
-   public final var growthState: String
-   public open val schedulingTracker: SchedulingTracker
-   public final var totalPartialTicks: Float
+/**
+ * Floating state for a fossil Pokémon in the resurrection machine.
+ *
+ * @author Hiroku
+ * @since October 30th, 2023
+ */
+class FossilState(startAge: Int = -1, startPartialTicks: Float = 0F) : PosableState() {
+    var totalPartialTicks = 0F
+    init {
+        // generate phase offset if new
+        age = if (startAge >= 0) startAge else (200F * Math.random()).toInt()
+        currentPartialTicks = if(startAge > 0f) startPartialTicks else 0F
+    }
+    override fun getEntity() = null
 
-   init {
-      this.setAge(if (startAge >= 0) startAge else (int)((double)200.0F * Math.random()));
-      this.setCurrentPartialTicks(if ((float)startAge > 0.0F) startPartialTicks else 0.0F);
-      this.growthState = "Embryo";
-      this.schedulingTracker = new SchedulingTracker();
-   }
+    fun peekAge() : Int { // Need to find a way to do this with getAge that's not protected
+        return this.age
+    }
 
-   public open fun getEntity(): Nothing? {
-      return null;
-   }
+    // for dictating growth state of the Fossil Embryo
+    var growthState = "Embryo"
+    override fun updatePartialTicks(partialTicks: Float) {
+        currentPartialTicks += partialTicks / 2
+        totalPartialTicks += partialTicks / 2
+    }
 
-   public fun peekAge(): Int {
-      return this.getAge();
-   }
-
-   public override fun updatePartialTicks(partialTicks: Float) {
-      this.setCurrentPartialTicks(this.getCurrentPartialTicks() + partialTicks / (float)2);
-      this.totalPartialTicks += partialTicks / 2;
-   }
-
-   fun FossilState() {
-      this(0, 0.0F, 3, null);
-   }
+    override val schedulingTracker = SchedulingTracker()
 }

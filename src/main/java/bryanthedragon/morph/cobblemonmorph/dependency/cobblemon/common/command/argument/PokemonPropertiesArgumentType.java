@@ -1,101 +1,72 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.argument
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonPropertyType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.PropertiesCompletionProvider
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
-import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.commands.SharedSuggestionProvider
+import java.util.concurrent.CompletableFuture
 
-@SourceDebugExtension(["SMAP\nPokemonPropertiesArgumentType.kt\nKotlin\n*S Kotlin\n*F\n+ 1 PokemonPropertiesArgumentType.kt\ncom/cobblemon/mod/common/command/argument/PokemonPropertiesArgumentType\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,72:1\n766#2:73\n857#2,2:74\n1549#2:76\n1620#2,3:77\n1549#2:80\n1620#2,3:81\n*S KotlinDebug\n*F\n+ 1 PokemonPropertiesArgumentType.kt\ncom/cobblemon/mod/common/command/argument/PokemonPropertiesArgumentType\n*L\n61#1:73\n61#1:74,2\n61#1:76\n61#1:77,3\n69#1:80\n69#1:81,3\n*E\n"])
-public class PokemonPropertiesArgumentType : ArgumentType<PokemonProperties> {
-   public open fun parse(reader: StringReader): PokemonProperties {
-      val properties: java.lang.String = reader.getRemaining();
-      reader.setCursor(reader.getTotalLength());
-      val var10000: PokemonProperties.Companion = PokemonProperties.Companion;
-      return PokemonProperties.Companion.parse$default(var10000, properties, null, null, 6, null);
-   }
+class PokemonPropertiesArgumentType: ArgumentType<PokemonProperties> {
 
-   public open fun <S> listSuggestions(context: CommandContext<Any>, builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
-      val var10000: java.lang.String = builder.getRemainingLowerCase();
-      val sections: java.util.List = StringsKt.split$default(var10000, new java.lang.String[]{" "}, false, 0, 6, null);
-      if (sections.isEmpty()) {
-         val var29: CompletableFuture = this.suggestSpeciesAndPropertyKeys(builder);
-         return var29;
-      } else {
-         val var16: java.lang.String = CollectionsKt.last(sections) as java.lang.String;
-         if (StringsKt.contains$default(var16, ASSIGNER, false, 2, null)) {
-            return PropertiesCompletionProvider.INSTANCE
-               .suggestValues(
-                  StringsKt.substringBefore$default(var16, ASSIGNER, null, 2, null), StringsKt.substringAfter$default(var16, ASSIGNER, null, 2, null), builder
-               );
-         } else if (sections.size() < 2) {
-            val var28: CompletableFuture = this.suggestSpeciesAndPropertyKeys(builder);
-            return var28;
-         } else {
-            var `$this$map$iv`: java.lang.Iterable = sections;
-            var `destination$iv$iv`: java.util.Collection = new ArrayList();
+    companion object {
+        val EXAMPLES: List<String> = listOf("eevee")
+        private val ASSIGNER = "="
 
-            for (Object element$iv$iv : $this$filter$iv) {
-               if (StringsKt.contains$default(`item$iv$iv` as java.lang.String, "=", false, 2, null)) {
-                  `destination$iv$iv`.add(`item$iv$iv`);
-               }
-            }
+        fun properties() = PokemonPropertiesArgumentType()
 
-            `$this$map$iv` = `destination$iv$iv` as java.util.List;
-            `destination$iv$iv` = new ArrayList(CollectionsKt.collectionSizeOrDefault(`destination$iv$iv` as java.util.List, 10));
+        fun <S> getPokemonProperties(context: CommandContext<S>, name: String): PokemonProperties {
+            return context.getArgument(name, PokemonProperties::class.java)
+        }
+    }
 
-            for (Object item$iv$iv : $this$filter$iv) {
-               `destination$iv$iv`.add(StringsKt.substringBefore$default(var24 as java.lang.String, "=", null, 2, null));
-            }
+    override fun parse(reader: StringReader): PokemonProperties {
+        val properties = reader.remaining
+        reader.cursor = reader.totalLength
+        return PokemonProperties.parse(properties)
+    }
 
-            return PropertiesCompletionProvider.INSTANCE.suggestKeys(var16, CollectionsKt.toSet(`destination$iv$iv` as java.util.List), builder);
-         }
-      }
-   }
+    override fun <S : Any?> listSuggestions(
+        context: CommandContext<S>,
+        builder: SuggestionsBuilder
+    ): CompletableFuture<Suggestions> {
+        val sections = builder.remainingLowerCase.split(" ")
+        if (sections.isEmpty())
+            return this.suggestSpeciesAndPropertyKeys(builder)
+        val currentSection = sections.last()
+        /**
+         * We already have a property defined and a potential value, let's try to suggest values based on provided [CustomPokemonPropertyType.examples]
+         */
+        if (currentSection.contains(ASSIGNER)) {
+            val propertyKey = currentSection.substringBefore(ASSIGNER)
+            val currentValue = currentSection.substringAfter(ASSIGNER)
+            return PropertiesCompletionProvider.suggestValues(propertyKey, currentValue, builder)
+        }
+        // We will always assume a species identifier has the priority as the first command argument as that's the most traditional approach as such lets provide property keys for the suggestion
+        else if (sections.size >= 2) {
+            val usedKeys = sections.filter { it.contains("=") }.map { it.substringBefore("=") }.toSet()
+            return PropertiesCompletionProvider.suggestKeys(currentSection, usedKeys, builder)
+        }
+        return this.suggestSpeciesAndPropertyKeys(builder)
+    }
 
-   private fun suggestSpeciesAndPropertyKeys(builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
-      return SharedSuggestionProvider.m_82970_(CollectionsKt.plus(this.collectSpeciesIdentifiers(), PropertiesCompletionProvider.INSTANCE.keys()), builder);
-   }
+    private fun suggestSpeciesAndPropertyKeys(builder: SuggestionsBuilder) = SharedSuggestionProvider.suggest(this.collectSpeciesIdentifiers() + PropertiesCompletionProvider.keys(), builder)
 
-   private fun collectSpeciesIdentifiers(): List<String> {
-      val `$this$map$iv`: java.lang.Iterable = PokemonSpecies.INSTANCE.getSpecies();
-      val `destination$iv$iv`: java.util.Collection = new ArrayList(CollectionsKt.collectionSizeOrDefault(`$this$map$iv`, 10));
+    private fun collectSpeciesIdentifiers() = PokemonSpecies.species.map { if (it.resourceIdentifier.namespace == Cobblemon.MODID) it.resourceIdentifier.path else it.resourceIdentifier.toString() }
 
-      for (Object item$iv$iv : $this$map$iv) {
-         `destination$iv$iv`.add(
-            if ((`item$iv$iv` as Species).getResourceIdentifier().m_135827_() == "cobblemon")
-               (`item$iv$iv` as Species).getResourceIdentifier().m_135815_()
-               else
-               (`item$iv$iv` as Species).getResourceIdentifier().toString()
-         );
-      }
-
-      return `destination$iv$iv` as MutableList<java.lang.String>;
-   }
-
-   public open fun getExamples(): List<String> {
-      return EXAMPLES;
-   }
-
-   public companion object {
-      private final val ASSIGNER: String
-      public final val EXAMPLES: List<String>
-
-      public fun properties(): PokemonPropertiesArgumentType {
-         return new PokemonPropertiesArgumentType();
-      }
-
-      public fun <S> getPokemonProperties(context: CommandContext<Any>, name: String): PokemonProperties {
-         val var10000: Any = context.getArgument(name, PokemonProperties.class);
-         return var10000 as PokemonProperties;
-      }
-   }
+    override fun getExamples() = EXAMPLES
 }

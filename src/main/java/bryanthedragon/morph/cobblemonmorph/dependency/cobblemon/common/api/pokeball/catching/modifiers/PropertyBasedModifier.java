@@ -1,37 +1,31 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CatchRateModifier
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CatchRateModifier.Behavior
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.world.entity.LivingEntity
 
-public class PropertyBasedModifier(property: PokemonProperties, multiplier: Float) : CatchRateModifier {
-   public final val multiplier: Float
-   public final val property: PokemonProperties
+class PropertyBasedModifier(
+    val property: PokemonProperties,
+    val multiplier: Float
+) : CatchRateModifier {
 
-   init {
-      this.property = property;
-      this.multiplier = multiplier;
-   }
+    override fun isGuaranteed(): Boolean = false
 
-   public override fun isGuaranteed(): Boolean {
-      return false;
-   }
+    override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = this.multiplier
 
-   public override fun value(thrower: LivingEntity, pokemon: Pokemon): Float {
-      return this.multiplier;
-   }
+    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
 
-   public override fun behavior(thrower: LivingEntity, pokemon: Pokemon): Behavior {
-      return CatchRateModifier.Behavior.MULTIPLY;
-   }
+    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean = this.property.matches(pokemon)
 
-   public override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean {
-      return this.property.matches(pokemon);
-   }
+    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
 
-   public override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float {
-      return (this.behavior(thrower, pokemon).getMutator().invoke(currentCatchRate, this.value(thrower, pokemon)) as java.lang.Number).floatValue();
-   }
 }

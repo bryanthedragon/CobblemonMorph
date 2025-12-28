@@ -1,50 +1,38 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution
 
+import com.bedrockk.molang.runtime.value.MoValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.moLangFunctionMap
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-public data EvolutionAcceptedEvent(pokemon: Pokemon, evolution: Evolution) : Cancelable, EvolutionEvent {
-   public open val evolution: Evolution
-   public open val pokemon: Pokemon
+/**
+ * Fired when an evolution is accepted.
+ * Canceling will not notify users nor remove the evolution from the pending list.
+ *
+ * @param pokemon The [Pokemon] about to evolve.
+ * @param evolution The [Evolution] being used.
+ *
+ * @author Licious
+ * @since April 28th, 2022
+ */
+record EvolutionAcceptedEvent(
+    override val pokemon: Pokemon,
+    override val evolution: Evolution
+) : Cancelable(), EvolutionEvent {
+    val context = mutableMapOf<String, MoValue>(
+        "pokemon" to pokemon.struct,
+        "evolution" to evolution.asMoLangValue()
+    )
 
-   init {
-      this.pokemon = pokemon;
-      this.evolution = evolution;
-   }
-
-   public operator fun component1(): Pokemon {
-      return this.pokemon;
-   }
-
-   public operator fun component2(): Evolution {
-      return this.evolution;
-   }
-
-   public fun copy(pokemon: Pokemon = this.pokemon, evolution: Evolution = this.evolution): EvolutionAcceptedEvent {
-      return new EvolutionAcceptedEvent(pokemon, evolution);
-   }
-
-   public override fun toString(): String {
-      return "EvolutionAcceptedEvent(pokemon=${this.pokemon}, evolution=${this.evolution})";
-   }
-
-   public override fun hashCode(): Int {
-      return this.pokemon.hashCode() * 31 + this.evolution.hashCode();
-   }
-
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is EvolutionAcceptedEvent) {
-         return false;
-      } else {
-         val var2: EvolutionAcceptedEvent = other as EvolutionAcceptedEvent;
-         if (!(this.pokemon == (other as EvolutionAcceptedEvent).pokemon)) {
-            return false;
-         } else {
-            return this.evolution == var2.evolution;
-         }
-      }
-   }
+    val functions = moLangFunctionMap(cancelFunc)
 }

@@ -1,44 +1,36 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.network.chat.Component
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readText
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeText
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
 
-public class NicknameUpdatePacket(pokemon: () -> Pokemon, value: MutableComponent?) : SingleUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
+class NicknameUpdatePacket(pokemon: () -> Pokemon?, value: MutableComponent?): SingleUpdatePacket<MutableComponent?, NicknameUpdatePacket>(pokemon, value) {
+    override val id = ID
 
-   init {
-      this.id = ID;
-   }
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeNullable(value) { _, v -> buffer.writeText(v) }
+    }
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      buffer.m_236821_(this.getValue(), NicknameUpdatePacket::encodeValue$lambda$0);
-   }
+    override fun set(pokemon: Pokemon, value: MutableComponent?) { pokemon.nickname = value }
 
-   public open fun set(pokemon: Pokemon, value: MutableComponent?) {
-      pokemon.setNickname(value);
-   }
+    companion object {
+        val ID = cobblemonResource("nickname_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): NicknameUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val nickname = buffer.readNullable { buffer.readText().copy() }
+            return NicknameUpdatePacket(pokemon, nickname)
+        }
+    }
 
-   @JvmStatic
-   fun `encodeValue$lambda$0`(`$buffer`: FriendlyByteBuf, `this$0`: NicknameUpdatePacket, var2: FriendlyByteBuf, v: MutableComponent) {
-      `$buffer`.m_130083_(`this$0`.getValue() as Component);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): NicknameUpdatePacket {
-         return new NicknameUpdatePacket(
-            PokemonUpdatePacket.Companion.decodePokemon(buffer), buffer.m_236868_(NicknameUpdatePacket.Companion::decode$lambda$0) as MutableComponent
-         );
-      }
-
-      @JvmStatic
-      fun `decode$lambda$0`(`$buffer`: FriendlyByteBuf, it: FriendlyByteBuf): MutableComponent {
-         return `$buffer`.m_130238_().m_6881_();
-      }
-   }
 }

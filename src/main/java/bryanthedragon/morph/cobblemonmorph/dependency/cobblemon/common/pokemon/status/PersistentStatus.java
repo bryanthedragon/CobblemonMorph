@@ -1,44 +1,74 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Status
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asTranslated
+import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
 import kotlin.random.Random
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.resources.ResourceLocation
 
-public open class PersistentStatus(name: ResourceLocation,
-   showdownName: String,
-   applyMessage: String,
-   removeMessage: String,
-   defaultDuration: IntRange = new IntRange(0, 0)
+/**
+ * Represents a status that persists outside of battle.
+ *
+ * @author Deltric
+ */
+open class PersistentStatus(
+    name: ResourceLocation,
+    showdownName: String,
+    applyMessage: String,
+    removeMessage: String,
+    private val defaultDuration: IntRange = 0..0
 ) : Status(name, showdownName, applyMessage, removeMessage) {
-   private final val defaultDuration: IntRange
+    /**
+     * Called when a status duration is expired.
+     */
+    open fun onStatusExpire(player: ServerPlayer, pokemon: Pokemon, random: Random) {
+        player.sendSystemMessage(removeMessage.asTranslated(pokemon.getDisplayName()))
+    }
 
-   init {
-      this.defaultDuration = defaultDuration;
-   }
+    /**
+     * Called every second on the Pokémon for the status
+     */
+    open fun onSecondPassed(player: ServerPlayer, pokemon: Pokemon, random: Random) {
 
-   public open fun onStatusExpire(player: ServerPlayer, pokemon: Pokemon, random: Random) {
-      player.m_213846_(MiscUtilsKt.asTranslated(this.getRemoveMessage(), pokemon.getDisplayName()) as Component);
-   }
+    }
 
-   public open fun onSecondPassed(player: ServerPlayer, pokemon: Pokemon, random: Random) {
-   }
+    /**
+     * The random period that this status could last.
+     * @return the random period of the status.
+     */
+    fun statusPeriod(): IntRange {
+        return Cobblemon.config.passiveStatuses[name.toString()] ?: defaultDuration
+    }
 
-   public fun statusPeriod(): IntRange {
-      var var10000: IntRange = Cobblemon.INSTANCE.getConfig().getPassiveStatuses().get(this.getName().toString());
-      if (var10000 == null) {
-         var10000 = this.defaultDuration;
-      }
+    /**
+     * The status's period as a config entry.
+     * @return Status id with random period as a pair.
+     */
+    fun configEntry(): Pair<String, IntRange> {
+        return name.toString() to defaultDuration
+    }
 
-      return var10000;
-   }
+    companion object {
 
-   public fun configEntry(): Pair<String, IntRange> {
-      val var10000: java.lang.String = this.getName().toString();
-      return TuplesKt.to(var10000, this.defaultDuration);
-   }
+        /**
+         * A [Codec] for [PersistentStatus].
+         */
+        @JvmStatic
+        val CODEC: Codec<PersistentStatus> = Status.CODEC.comapFlatMap(
+            { status -> if (status is PersistentStatus) DataResult.success(status) else DataResult.error { "${status.name} is not a ${PersistentStatus::class.simpleName}" } },
+            { status -> status }
+        )
+    }
 }

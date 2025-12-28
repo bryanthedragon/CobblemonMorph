@@ -1,10 +1,30 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder; in class com/cobblemon/mod/common/item/VivichokeItem
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.VivichokeBlock
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.PlaceOnWaterBlockItem
+import net.minecraft.world.item.context.UseOnContext
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.level.Level
+
+class VivichokeItem(block: VivichokeBlock) : ItemNameBlockItem(block, Properties()) {
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+        val blockHitResult = PlaceOnWaterBlockItem.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY)
+        val blockHitResult2 = blockHitResult.withPosition(blockHitResult.blockPos.above())
+        val actionResult: InteractionResult = super.useOn(UseOnContext(user, hand, blockHitResult2))
+        return InteractionResultHolder(actionResult, user.getItemInHand(hand))
+    }
+}

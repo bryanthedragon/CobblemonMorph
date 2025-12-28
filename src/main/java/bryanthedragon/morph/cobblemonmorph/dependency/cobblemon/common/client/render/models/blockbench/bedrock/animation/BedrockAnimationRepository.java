@@ -1,85 +1,86 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.BedrockAnimationReferenceFactory
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.JsonPokemonPoseableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.JsonPose
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.fromJson
 import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.util.LinkedHashMap
-import java.util.Map.Entry
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.packs.resources.Resource
 import net.minecraft.server.packs.resources.ResourceManager
 
-@SourceDebugExtension(["SMAP\nBedrockAnimationRepository.kt\nKotlin\n*S Kotlin\n*F\n+ 1 BedrockAnimationRepository.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/bedrock/animation/BedrockAnimationRepository\n+ 2 _Maps.kt\nkotlin/collections/MapsKt___MapsKt\n+ 3 GsonExtensions.kt\ncom/cobblemon/mod/common/util/GsonExtensionsKt\n*L\n1#1,70:1\n215#2:71\n216#2:73\n17#3:72\n*S KotlinDebug\n*F\n+ 1 BedrockAnimationRepository.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/bedrock/animation/BedrockAnimationRepository\n*L\n44#1:71\n44#1:73\n46#1:72\n*E\n"])
-public object BedrockAnimationRepository {
-   private final val animationGroups: MutableMap<String, BedrockAnimationGroup> = (new LinkedHashMap()) as java.util.Map
-   private final val gson: Gson =
-      new GsonBuilder()
-         .disableHtmlEscaping()
-         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-         .registerTypeAdapter(BedrockAnimation::class.java, BedrockAnimationAdapter.INSTANCE)
-         .create()
+/**
+ * Handles the loading and retrieval of bedrock animations. These animations are agnostic of the type of
+ * model that they are loaded onto.
+ *
+ * @author landonjw
+ * @since January 5, 2022
+ */final class BedrockAnimationRepository {
 
-   public fun loadAnimations(resourceManager: ResourceManager, directories: List<String>) {
-      JsonPokemonPoseableModel.Companion.registerFactory("bedrock", BedrockAnimationReferenceFactory.INSTANCE);
-      Cobblemon.INSTANCE.getLOGGER().info("Loading animations...");
-      var animationCount: Int = 0;
-      animationGroups.clear();
+    private val gson = GsonBuilder()
+        .disableHtmlEscaping()
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        .registerTypeAdapter(BedrockAnimation::class.java, BedrockAnimationAdapter)
+        .create()
 
-      for (java.lang.String directory : directories) {
-         var var10000: java.util.Map = resourceManager.m_214159_(directory, BedrockAnimationRepository::loadAnimations$lambda$0);
+    private val animationGroups = mutableMapOf<String, BedrockAnimationGroup>()
 
-         for (Entry element$iv : var10000.entrySet()) {
-            val identifier: ResourceLocation = `element$iv`.getKey() as ResourceLocation;
-            val resource: Resource = `element$iv`.getValue() as Resource;
+    fun loadAnimations(resourceManager: ResourceManager, directories: List<String>) {
+        JsonPose.registerAnimationFactory("bedrock", BedrockAnimationReferenceFactory)
 
-            try {
-               val var22: Gson = gson;
-               val var23: InputStream = resource.m_215507_();
-               val e: BedrockAnimationGroup = var22.fromJson(new InputStreamReader(var23, Charsets.UTF_8), BedrockAnimationGroup.class) as BedrockAnimationGroup;
-               val var24: java.lang.String = identifier.m_135815_();
-               val var19: java.lang.String = StringsKt.replace$default(
-                  StringsKt.substringAfterLast$default(var24, "/", null, 2, null), ".animation.json", "", false, 4, null
-               );
-               var10000 = animationGroups;
-               var10000.put(var19, e);
-               animationCount += e.getAnimations().size();
-            } catch (var18: Exception) {
-               Cobblemon.INSTANCE.getLOGGER().error("Failed to load animation group $identifier", var18);
-            }
-         }
-      }
+        LOGGER.info("Loading animations...")
+        var animationCount = 0
+        animationGroups.clear()
+        var wereValidationErrors = false
+        for (directory in directories) {
+            resourceManager.listResources(directory) { it.path.endsWith(".animation.json") }
+                .forEach { (identifier, resource) ->
+                    try {
+                        val animationGroup = gson.fromJson<BedrockAnimationGroup>(resource.open().reader())
+                        animationGroup.animations.entries.forEach { (name, animation) ->
+                            animation.name = name
+                            try {
+                                animation.checkForErrors()
+                            } catch (e: Throwable) {
+                                LOGGER.error("Failed to load animation $name in group $identifier: ${e.message}")
+                                wereValidationErrors= true
+                            }
+                        }
+                        val animationGroupName = identifier.path.substringAfterLast("/").replace(".animation.json", "")
+                        animationGroups[animationGroupName] = animationGroup
+                        animationCount += animationGroup.animations.size
+                    } catch (e: Exception) {
+                        LOGGER.error("Failed to load animation group $identifier", e)
+                    }
+                }
+        }
+        if (wereValidationErrors) {
+            LOGGER.error("There were errors in the animations. See above for details. You should fix these or there might be crashes later.")
+        }
+        LOGGER.info("Loaded $animationCount animations from ${animationGroups.size} animation groups")
+    }
 
-      Cobblemon.INSTANCE.getLOGGER().info("Loaded $animationCount animations from ${animationGroups.size()} animation groups");
-   }
+    fun tryGetAnimation(fileName: String, animationName: String): BedrockAnimation? {
+        val animationGroup = animationGroups[fileName] ?: return null
+        return animationGroup.animations[animationName]
+    }
 
-   public fun tryGetAnimation(fileName: String, animationName: String): BedrockAnimation? {
-      val var10000: BedrockAnimationGroup = animationGroups.get(fileName);
-      return if (var10000 == null) null else var10000.getAnimations().get(animationName);
-   }
+    fun getAnimation(fileName: String, animationName: String): BedrockAnimation {
+        val animationGroup = animationGroups[fileName]
+            ?: throw IllegalArgumentException("Unknown animation group: $fileName")
 
-   public fun getAnimation(fileName: String, animationName: String): BedrockAnimation {
-      val var10000: BedrockAnimationGroup = animationGroups.get(fileName);
-      if (var10000 == null) {
-         throw new IllegalArgumentException("Unknown animation group: $fileName");
-      } else {
-         val var4: BedrockAnimation = var10000.getAnimations().get(animationName);
-         if (var4 == null) {
-            throw new IllegalArgumentException("Animation $animationName not found in animation group $fileName");
-         } else {
-            return var4;
-         }
-      }
-   }
+        return animationGroup.animations[animationName]
+            ?: throw IllegalArgumentException("Animation $animationName not found in animation group $fileName")
+    }
 
-   @JvmStatic
-   fun `loadAnimations$lambda$0`(it: ResourceLocation): Boolean {
-      val var10000: java.lang.String = it.m_135815_();
-      return StringsKt.endsWith$default(var10000, ".animation.json", false, 2, null);
-   }
+    fun getAnimationOrNull(fileName: String, animationName: String): BedrockAnimation? {
+        return animationGroups[fileName]?.animations?.get(animationName)
+    }
 }

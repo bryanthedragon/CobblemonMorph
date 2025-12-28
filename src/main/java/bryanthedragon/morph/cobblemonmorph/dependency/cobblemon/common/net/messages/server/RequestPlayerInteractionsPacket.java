@@ -1,66 +1,40 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class RequestPlayerInteractionsPacket(targetId: UUID, targetNumericId: Int, pokemonId: UUID) : NetworkPacket<RequestPlayerInteractionsPacket> {
-   public open val id: ResourceLocation
-   public final val pokemonId: UUID
-   public final val targetId: UUID
-   public final val targetNumericId: Int
+/**
+ * Sent from client to request a [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PlayerInteractOptionsPacket]
+ *
+ * @author Apion
+ * @since November 5th, 2023
+ */
 
-   init {
-      this.targetId = targetId;
-      this.targetNumericId = targetNumericId;
-      this.pokemonId = pokemonId;
-      this.id = ID;
-   }
+class RequestPlayerInteractionsPacket(
+    val targetId: UUID,
+    val targetNumericId: Int,
+    val pokemonId: UUID
+) : NetworkPacket<RequestPlayerInteractionsPacket> {
+    companion object {
+        val ID = cobblemonResource("request_interactions")
+        fun decode(buffer: RegistryFriendlyByteBuf) = RequestPlayerInteractionsPacket(buffer.readUUID(), buffer.readInt(), buffer.readUUID())
+    }
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.targetId);
-      buffer.writeInt(this.targetNumericId);
-      buffer.m_130077_(this.pokemonId);
-   }
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(targetId)
+        buffer.writeInt(targetNumericId)
+        buffer.writeUUID(pokemonId)
+    }
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): RequestPlayerInteractionsPacket {
-         val var10002: UUID = buffer.m_130259_();
-         val var10003: Int = buffer.readInt();
-         val var10004: UUID = buffer.m_130259_();
-         return new RequestPlayerInteractionsPacket(var10002, var10003, var10004);
-      }
-   }
 }

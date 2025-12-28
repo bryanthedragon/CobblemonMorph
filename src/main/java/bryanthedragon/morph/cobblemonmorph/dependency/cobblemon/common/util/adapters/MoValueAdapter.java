@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
 import com.bedrockk.molang.runtime.value.MoValue
@@ -8,19 +16,12 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
+final class MoValueAdapter : JsonSerializer<MoValue>, JsonDeserializer<MoValue> {
+    override fun serialize(src: MoValue, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return MoValue.writeToJson(src) ?: JsonObject()
+    }
 
-public object MoValueAdapter : JsonSerializer<MoValue>, JsonDeserializer<MoValue> {
-   public open fun serialize(src: MoValue, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-      var var10000: JsonElement = MoValue.writeToJson(src);
-      if (var10000 == null) {
-         var10000 = (new JsonObject()) as JsonElement;
-      }
-
-      return var10000;
-   }
-
-   public open fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): MoValue {
-      val var10000: MoValue = MoValue.of(json);
-      return var10000;
-   }
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): MoValue {
+        return MoValue.of(json)
+    }
 }

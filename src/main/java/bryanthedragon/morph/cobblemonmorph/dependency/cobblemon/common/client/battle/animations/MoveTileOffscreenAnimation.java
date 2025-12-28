@@ -1,30 +1,27 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.animations
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ActiveClientBattlePokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattlePokemon
 
-public class MoveTileOffscreenAnimation(duration: Float = 0.75F) : TileAnimation {
-   public final val duration: Float
-   public final var passedSeconds: Float
-
-   init {
-      this.duration = duration;
-   }
-
-   public override fun shouldHoldUntilNextAnimation(): Boolean {
-      return true;
-   }
-
-   public override operator fun invoke(activeBattlePokemon: ActiveClientBattlePokemon, deltaTicks: Float): Boolean {
-      this.passedSeconds += deltaTicks / 20;
-      this.passedSeconds = RangesKt.coerceAtMost(this.passedSeconds, this.duration);
-      val ratio: Float = this.passedSeconds / this.duration;
-      activeBattlePokemon.setXDisplacement(
-         activeBattlePokemon.getXDisplacement() + (activeBattlePokemon.getInvisibleX() - activeBattlePokemon.getXDisplacement()) * ratio
-      );
-      return this.passedSeconds == this.duration;
-   }
-
-   fun MoveTileOffscreenAnimation() {
-      this(0.0F, 1, null);
-   }
+class MoveTileOffscreenAnimation(val duration: Float = 0.75F, val swappedPokemon: ClientBattlePokemon? = null) : TileAnimation {
+    var passedSeconds = 0F
+    override fun shouldHoldUntilNextAnimation() = true
+    override fun invoke(activeBattlePokemon: ActiveClientBattlePokemon, deltaTicks: Float): Boolean {
+        if (passedSeconds == duration) swappedPokemon?.let { activeBattlePokemon.battlePokemon = it }
+        passedSeconds += deltaTicks / 20
+        passedSeconds = passedSeconds.coerceAtMost(duration)
+        val ratio = passedSeconds / duration
+        val totalMovement = activeBattlePokemon.invisibleX - activeBattlePokemon.xDisplacement
+        val currentMovement = totalMovement * ratio
+        activeBattlePokemon.xDisplacement += currentMovement
+        return passedSeconds == duration
+    }
 }

@@ -1,43 +1,42 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
 
-public class TetheringUpdatePacket(pokemon: () -> Pokemon, tetheringId: UUID?) : SingleUpdatePacket(pokemon, tetheringId) {
-   public open val id: ResourceLocation
+/**
+ * Packet sent to update the client's tetheringId for a Pokémon. Really only used to show in the PC appropriately.
+ *
+ * @author Hiroku
+ * @since April 4th, 2023
+ */
+class TetheringUpdatePacket(pokemon: () -> Pokemon?, tetheringId: UUID?) : SingleUpdatePacket<UUID?, TetheringUpdatePacket>(pokemon, tetheringId) {
 
-   init {
-      this.id = ID;
-   }
+    override val id = ID
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      buffer.m_236821_(this.getValue(), TetheringUpdatePacket::encodeValue$lambda$0);
-   }
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeNullable(this.value) { _, v -> buffer.writeUUID(v) }
+    }
 
-   public open fun set(pokemon: Pokemon, value: UUID?) {
-      pokemon.setTetheringId(value);
-   }
+    override fun set(pokemon: Pokemon, value: UUID?) {
+        pokemon.tetheringId = value
+    }
 
-   @JvmStatic
-   fun `encodeValue$lambda$0`(`$buffer`: FriendlyByteBuf, var1: FriendlyByteBuf, v: UUID) {
-      `$buffer`.m_130077_(v);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): TetheringUpdatePacket {
-         return new TetheringUpdatePacket(
-            PokemonUpdatePacket.Companion.decodePokemon(buffer), buffer.m_236868_(TetheringUpdatePacket.Companion::decode$lambda$0) as UUID
-         );
-      }
-
-      @JvmStatic
-      fun `decode$lambda$0`(`$buffer`: FriendlyByteBuf, it: FriendlyByteBuf): UUID {
-         return `$buffer`.m_130259_();
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("tethering_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): TetheringUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val tetheringId = buffer.readNullable { buffer.readUUID() }
+            return TetheringUpdatePacket(pokemon, tetheringId)
+        }
+    }
 }

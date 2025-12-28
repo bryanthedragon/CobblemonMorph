@@ -1,22 +1,26 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.keyframes
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
 import java.util.concurrent.CompletableFuture
 
-public class SequenceActionEffectKeyframe(keyframes: List<ActionEffectKeyframe> = CollectionsKt.emptyList()) : ConditionalActionEffectKeyframe {
-   public final val keyframes: List<ActionEffectKeyframe>
-
-   init {
-      this.keyframes = keyframes;
-   }
-
-   public override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
-      val future: CompletableFuture = new CompletableFuture();
-      context.getActionEffect().chainKeyframes(context, CollectionsKt.toList(this.keyframes).iterator(), future);
-      return future;
-   }
-
-   fun SequenceActionEffectKeyframe() {
-      this(null, 1, null);
-   }
+/**
+ * A sequence of action effects that are dependent on a condition.
+ *
+ * @author Hiroku
+ * @since October 29th, 2023
+ */
+class SequenceActionEffectKeyframe(val keyframes: List<ActionEffectKeyframe> = listOf()) : ConditionalActionEffectKeyframe() {
+    override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
+        val future = CompletableFuture<Unit>()
+        context.actionEffect.chainKeyframes(context, keyframes.toList().iterator(), future)
+        return future
+    }
 }

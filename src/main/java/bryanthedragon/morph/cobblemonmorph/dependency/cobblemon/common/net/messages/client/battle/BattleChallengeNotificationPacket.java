@@ -1,69 +1,77 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle
 
-public class BattleChallengeNotificationPacket(battleChallengeId: UUID, challengerId: UUID, challengerName: MutableComponent) :
-   NetworkPacket<BattleChallengeNotificationPacket> {
-   public final val battleChallengeId: UUID
-   public final val challengerId: UUID
-   public final val challengerName: MutableComponent
-   public open val id: ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleFormat
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ChallengeManager
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
+import java.util.*
 
-   init {
-      this.battleChallengeId = battleChallengeId;
-      this.challengerId = challengerId;
-      this.challengerName = challengerName;
-      this.id = ID;
-   }
+/**
+ * Packet send when a player has challenged to battle. The responsibility
+ * of this packet currently is to send a battle challenge message that includes
+ * the keybind to challenge them back.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.battle.BattleChallengeNotificationHandler].
+ *
+ * @param challengeID The unique identifier of the challenge.
+ * @param senderID The unique identifier of the party that sent the challenge.
+ * @param challengerIDs In the case of a multi battle, the unique identifiers of all the players on the challenging team.
+ * Otherwise, the unique identifier of the challenging player (same as [senderID]).
+ * @param battleFormat The showdown format of the challenge.
+ * @param expiryTime How long (in seconds) the challenge is active.
+ *
+ * @author Hiroku
+ * @since August 5th, 2022
+ */
+class BattleChallengeNotificationPacket(
+    val challengeID: UUID,
+    val senderID: UUID,
+    val challengerIDs: List<UUID>,
+    val battleFormat: BattleFormat,
+    val expiryTime: Int
+): NetworkPacket<BattleChallengeNotificationPacket> {
+    override val id = ID
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.battleChallengeId);
-      buffer.m_130077_(this.challengerId);
-      buffer.m_130083_(this.challengerName as Component);
-   }
+    constructor(battleChallengeId: UUID, challengerId: UUID, battleFormat: BattleFormat, expiryTime: Int) :
+        this(battleChallengeId, challengerId, listOf(challengerId), battleFormat, expiryTime)
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
+    constructor(challenge: ChallengeManager.BattleChallenge) : this(
+        challengeID = challenge.requestID,
+        senderID = challenge.senderID,
+        challengerIDs =
+            if (challenge is ChallengeManager.MultiBattleChallenge)
+                challenge.senderTeam.teamPlayersUUID
+            else
+                listOf(challenge.senderID),
+        battleFormat = challenge.battleFormat,
+        expiryTime = challenge.expiryTime
+    )
 
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(challengeID)
+        buffer.writeUUID(senderID)
+        buffer.writeCollection(challengerIDs) { _, value -> buffer.writeUUID(value) }
+        battleFormat.saveToBuffer(buffer)
+        buffer.writeInt(expiryTime)
+    }
 
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): BattleChallengeNotificationPacket {
-         val var10002: UUID = buffer.m_130259_();
-         val var10003: UUID = buffer.m_130259_();
-         val var10004: MutableComponent = buffer.m_130238_().m_6881_();
-         return new BattleChallengeNotificationPacket(var10002, var10003, var10004);
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("battle_challenge_notification")
+        fun decode(buffer: RegistryFriendlyByteBuf) = BattleChallengeNotificationPacket(
+            buffer.readUUID(),
+            buffer.readUUID(),
+            buffer.readList { it.readUUID() },
+            BattleFormat.loadFromBuffer(buffer),
+            buffer.readInt()
+        )
+    }
 }

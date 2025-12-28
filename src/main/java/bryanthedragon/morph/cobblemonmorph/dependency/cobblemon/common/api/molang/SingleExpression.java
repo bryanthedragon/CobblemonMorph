@@ -1,42 +1,27 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MoLangExtensionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolve
 
-public class SingleExpression(expr: Expression) : ExpressionLike {
-   public final val expr: Expression
-
-   init {
-      this.expr = expr;
-   }
-
-   public override fun resolve(runtime: MoLangRuntime): MoValue {
-      return MoLangExtensionsKt.resolve(runtime, this.expr);
-   }
-
-   override fun resolveDouble(runtime: MoLangRuntime): Double {
-      return ExpressionLike.DefaultImpls.resolveDouble(this, runtime);
-   }
-
-   override fun resolveFloat(runtime: MoLangRuntime): Float {
-      return ExpressionLike.DefaultImpls.resolveFloat(this, runtime);
-   }
-
-   override fun resolveString(runtime: MoLangRuntime): java.lang.String {
-      return ExpressionLike.DefaultImpls.resolveString(this, runtime);
-   }
-
-   override fun resolveInt(runtime: MoLangRuntime): Int {
-      return ExpressionLike.DefaultImpls.resolveInt(this, runtime);
-   }
-
-   override fun resolveBoolean(runtime: MoLangRuntime): Boolean {
-      return ExpressionLike.DefaultImpls.resolveBoolean(this, runtime);
-   }
-
-   override fun resolveObject(runtime: MoLangRuntime): ObjectValue<?> {
-      return ExpressionLike.DefaultImpls.resolveObject(this, runtime);
-   }
+/**
+ * A simple implementation of [ExpressionLike] that is just a single [Expression]. This
+ * is as opposed to [ListExpression]s.
+ *
+ * @author Hiroku
+ * @since October 22nd, 2023
+ */
+class SingleExpression(val expr: Expression) : ExpressionLike {
+    override fun toString() = expr.getString()
+    override fun resolve(runtime: MoLangRuntime, context: Map<String, MoValue>) = runtime.resolve(expr, context)
 }

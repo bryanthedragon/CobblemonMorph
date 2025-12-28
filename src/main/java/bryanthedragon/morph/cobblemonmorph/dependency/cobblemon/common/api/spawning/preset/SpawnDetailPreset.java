@@ -1,79 +1,78 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset
-;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnBucket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnLoader;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SpawningCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.RegisteredSpawningContext;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.multiplier.WeightMultiplier;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MergeMode;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnBucket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnDetailPresets
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnLoader
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SpawningCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePositionType
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.multiplier.WeightMultiplier
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MergeMode
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.SpawnDetailAdapter
+import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 
-public abstract class SpawnDetailPreset {
-   public final var anticondition: JsonObject?
-   public final var bucket: SpawnBucket?
-   public final var condition: JsonObject?
-   public final var context: RegisteredSpawningContext<*>?
-   public final var mergeMode: MergeMode = MergeMode.INSERT
-   public final var percentage: Float?
-   public final var spawnDetailType: String?
-   public final var weight: Float?
-   public final var weightMultipliers: MutableList<WeightMultiplier>?
+/**
+ * Base class for spawn detail presets. Presets are a spawn loading mechanism that allows various properties to be
+ * defined in a preset that will then be inserted into any spawn details that apply this preset. Presets can be used
+ * to shortcut the process of commonly used conditions and other [SpawnDetail] properties as well as make those
+ * commonly used properties very easy to maintain.
+ *
+ * A subclass of this base must be registered using [SpawnDetailPresets.registerPresetType].
+ *
+ * Preset loading occurs during initialization and first will load the internal presets. Then the external
+ * config/cobblemon/spawning/presets directory and its child directories will be searched for presets.
+ * If a preset is loaded internally that has the same name as an external one, the external preset will take
+ * precedence.
+ *
+ * Most of the logic for presets occurs inside the [SpawnDetailAdapter].
+ *
+ * It is worth understanding that these presets are purely a loading mechanism and don't exist from then on.
+ *
+ * @author Hiroku
+ * @since July 8th, 2022
+ */
+abstract class SpawnDetailPreset {
+    var bucket: SpawnBucket? = null
+    var spawnDetailType: String? = null
+    @SerializedName("spawnablePositionType", alternate = ["context"])
+    var spawnablePositionType: SpawnablePositionType<*>? = null
+    var condition: JsonObject? = null
+    var anticondition: JsonObject? = null
+    var weightMultipliers: MutableList<WeightMultiplier>? = null
+    var weight: Float? = null
+    var percentage: Float? = null
+    var mergeMode = MergeMode.INSERT
 
-   public open fun apply(spawnDetail: SpawnDetail) {
-      if (this.bucket != null) {
-         spawnDetail.setBucket(this.bucket);
-      }
+    open fun apply(spawnDetail: SpawnDetail) {
+        bucket?.let { spawnDetail.bucket = it }
+        spawnablePositionType?.let { spawnDetail.spawnablePositionType = it }
+        weight?.let { spawnDetail.weight = it }
+        percentage?.let { spawnDetail.percentage = it }
+        mergeMode.merge(spawnDetail.weightMultipliers, weightMultipliers)
 
-      if (this.context != null) {
-         spawnDetail.setContext(this.context);
-      }
+        applyToConditionList(spawnDetail.conditions, condition?.let { resolveCondition(spawnDetail, it) })
+        anticondition?.let { spawnDetail.anticonditions.add(resolveCondition(spawnDetail, it)) }
+    }
 
-      if (this.weight != null) {
-         spawnDetail.setWeight(this.weight.floatValue());
-      }
+    fun applyToConditionList(conditions: MutableList<SpawningCondition<*>>, resolvedCondition: SpawningCondition<*>?) {
+        resolvedCondition ?: return
+        conditions.forEach { it.copyFrom(resolvedCondition, mergeMode) }
+        if (conditions.isEmpty()) {
+            conditions.add(resolvedCondition)
+        }
+    }
 
-      if (this.percentage != null) {
-         spawnDetail.setPercentage(this.percentage.floatValue());
-      }
-
-      this.mergeMode.merge(spawnDetail.getWeightMultipliers(), this.weightMultipliers);
-      var var10000: SpawnDetailPreset = this;
-      val var10001: java.util.List = spawnDetail.getConditions();
-      val var10002: SpawningCondition;
-      if (this.condition != null) {
-         val var6: SpawningCondition = this.resolveCondition(spawnDetail, this.condition);
-         var10000 = this;
-         var10002 = var6;
-      } else {
-         var10002 = null;
-      }
-
-      var10000.applyToConditionList(var10001, var10002);
-      if (this.anticondition != null) {
-         val var11: JsonObject = this.anticondition;
-         spawnDetail.getAnticonditions().add(this.resolveCondition(spawnDetail, var11));
-      }
-   }
-
-   public fun applyToConditionList(conditions: MutableList<SpawningCondition<*>>, resolvedCondition: SpawningCondition<*>?) {
-      if (resolvedCondition != null) {
-         val `$this$forEach$iv`: java.lang.Iterable;
-         for (Object element$iv : $this$forEach$iv) {
-            (`element$iv` as SpawningCondition).copyFrom(resolvedCondition, this.mergeMode);
-         }
-
-         if (conditions.isEmpty()) {
-            conditions.add(resolvedCondition);
-         }
-      }
-   }
-
-   public fun resolveCondition(spawnDetail: SpawnDetail, conditionJson: JsonObject): SpawningCondition<*> {
-      SpawnLoader.INSTANCE.setDeserializingConditionClass(SpawningCondition.Companion.getByName(spawnDetail.getContext().getDefaultCondition()));
-      val var10000: Any = SpawnLoader.INSTANCE.getGson().fromJson(conditionJson as JsonElement, SpawningCondition.class);
-      return var10000 as SpawningCondition<?>;
-   }
+    fun resolveCondition(spawnDetail: SpawnDetail, conditionJson: JsonObject): SpawningCondition<*> {
+        SpawnLoader.deserializingConditionClass = SpawningCondition.getByName(spawnDetail.spawnablePositionType.defaultCondition)
+        return SpawnLoader.gson.fromJson(conditionJson, SpawningCondition::class.java)
+    }
 }

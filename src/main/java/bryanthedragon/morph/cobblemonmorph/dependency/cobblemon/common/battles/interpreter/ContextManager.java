@@ -1,184 +1,107 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleContext.Type
-import java.util.ArrayList;
-import java.util.Arrays
-import java.util.HashMap
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
 
-@SourceDebugExtension(["SMAP\nContextManager.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ContextManager.kt\ncom/cobblemon/mod/common/battles/interpreter/ContextManager\n+ 2 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n+ 3 Maps.kt\nkotlin/collections/MapsKt__MapsKt\n+ 4 fake.kt\nkotlin/jvm/internal/FakeKt\n+ 5 ArraysJVM.kt\nkotlin/collections/ArraysKt__ArraysJVMKt\n*L\n1#1,104:1\n13579#2:105\n13580#2:120\n13579#2,2:122\n13579#2:124\n13580#2:129\n13579#2:130\n13580#2:133\n361#3,7:106\n361#3,7:113\n1#4:121\n37#5,2:125\n37#5,2:127\n37#5,2:131\n*S KotlinDebug\n*F\n+ 1 ContextManager.kt\ncom/cobblemon/mod/common/battles/interpreter/ContextManager\n*L\n26#1:105\n26#1:120\n58#1:122,2\n66#1:124\n66#1:129\n78#1:130\n78#1:133\n28#1:106,7\n33#1:113,7\n71#1:125,2\n72#1:127,2\n81#1:131,2\n*E\n"])
-public class ContextManager {
-   public final val buckets: HashMap<Type, MutableCollection<BattleContext>> = new HashMap()
+/**
+ * Maintains buckets of [BattleContext] during a battle.
+ *
+ * @author Segfault Guy
+ * @since April 10th, 2023
+ */
+@Deprecated(message =
+    "This was designed before Doubles and Multi battle formats were introduce and has not been maintained since." +
+    "Accurate context for formats other than Singles is not guaranteed. This will be replaced in the near future.")
+class ContextManager {
 
-   public fun add(vararg contexts: BattleContext) {
-      for (Object element$iv : contexts) {
-         if (((BattleContext)`element$iv`).getType().getExclusive()) {
-            val `key$iv`: java.util.Map = this.buckets;
-            val `$i$f$getOrPut`: Any = ((BattleContext)`element$iv`).getType();
-            val `answer$iv`: Any = `key$iv`.get(`$i$f$getOrPut`);
-            val var10000: Any;
-            if (`answer$iv` == null) {
-               val var20: Any = new ArrayList();
-               `key$iv`.put(`$i$f$getOrPut`, var20);
-               var10000 = var20;
-            } else {
-               var10000 = `answer$iv`;
+    /** [BattleContext.Type] buckets containing [BattleContexts] of that type. */
+    val buckets = hashMapOf<BattleContext.Type, MutableCollection<BattleContext>>()
+
+    /** Adds a [BattleContext] to its corresponding [BattleContext.Type] bucket. */
+    fun add(vararg contexts: BattleContext) {
+        contexts.forEach { context ->
+            if (context.type.exclusive) {
+                val bucket = this.buckets.getOrPut(context.type) { mutableListOf() }
+                bucket.clear()
+                bucket.add(context)
             }
-
-            val `$this$getOrPut$iv`: java.util.Collection = var10000 as java.util.Collection;
-            (var10000 as java.util.Collection).clear();
-            `$this$getOrPut$iv`.add(`element$iv`);
-         } else {
-            val var21: java.util.Map = this.buckets;
-            val var15: Any = ((BattleContext)`element$iv`).getType();
-            val var17: Any = var21.get(var15);
-            val var22: Any;
-            if (var17 == null) {
-               val var19: Any = new ArrayList();
-               var21.put(var15, var19);
-               var22 = var19;
-            } else {
-               var22 = var17;
+            else {
+                this.buckets.getOrPut(context.type) { mutableListOf() }.add(context)
             }
+        }
+    }
 
-            (var22 as java.util.Collection).add(`element$iv`);
-         }
-      }
-   }
+    /** Adds a [BattleContext] to its corresponding [BattleContext.Type] bucket, if the bucket does not have a context
+     * of the same id. */
+    fun addUnique(context: BattleContext) {
+        if (this.buckets[context.type]?.find { it.id == context.id } == null) {
+            add(context)
+        }
+    }
 
-   public fun addUnique(context: BattleContext) {
-      var var10000: java.util.Collection = this.buckets.get(context.getType());
-      val var9: BattleContext;
-      if (var10000 != null) {
-         val var4: java.util.Iterator = var10000.iterator();
+    /** Removes all [BattleContext]s that have IDs matching [contextID] from the [bucketType] bucket. */
+    fun remove(contextID: String, bucketType: BattleContext.Type) {
+        if (bucketType.exclusive) {
+            this.buckets[bucketType]?.clear()
+        }
+        else {
+            this.buckets[bucketType]?.removeIf{it.id == contextID}
+        }
+    }
 
-         while (true) {
-            if (!var4.hasNext()) {
-               var10000 = null;
-               break;
+    /** Clears all [BattleContext]s belonging to the [bucketTypes] buckets. */
+    fun clear(vararg bucketTypes: BattleContext.Type) {
+        bucketTypes.forEach { bucketType ->
+            this.buckets[bucketType]?.clear()
+        }
+    }
+
+    /** Swaps all the [BattleContext]s belonging to the [bucketTypes] buckets with the contexts of the
+     * [with] manager's respective buckets. */
+    fun swap(with: ContextManager, vararg bucketTypes: BattleContext.Type) {
+        bucketTypes.forEach { bucketType ->
+            val oldContexts = this.buckets[bucketType]?.toMutableList()
+            val newContexts = with.buckets[bucketType]?.toMutableList()
+            this.clear(bucketType)
+            with.clear(bucketType)
+            oldContexts?.let { with.add(*it.toTypedArray()) }
+            newContexts?.let { this.add(*it.toTypedArray()) }
+        }
+    }
+
+    /** Copies all the [BattleContext]s belonging to the [bucketTypes] buckets of the [with] manager's respective buckets. */
+    fun copy(with: ContextManager, vararg bucketTypes: BattleContext.Type) {
+        bucketTypes.forEach { bucketType ->
+            val newContexts = with.buckets[bucketType]?.toMutableList()
+            this.clear(bucketType)
+            newContexts?.let { this.add(*it.toTypedArray()) }
+        }
+    }
+
+    /** Gets all [BattleContext]s belonging to the [bucketType] bucket. */
+    fun get(bucketType: BattleContext.Type) : Collection<BattleContext>? {
+        return buckets[bucketType]
+    }
+
+    companion object {
+
+        /**
+         * Extracts a [BattleContext] from multiple context buckets.
+         *
+         * @return The most recently added [BattleContext] with an ID matching [contextID].
+         * */
+        fun scoop(contextID: String, vararg contextBuckets: Collection<BattleContext>?): BattleContext? {
+            contextBuckets.filterNotNull().forEach { bucket ->
+                bucket.findLast { it.id == contextID }?.let { return it }
             }
-
-            val var5: Any = var4.next();
-            if ((var5 as BattleContext).getId() == context.getId()) {
-               var10000 = (java.util.Collection)var5;
-               break;
-            }
-         }
-
-         var9 = var10000 as BattleContext;
-      } else {
-         var9 = null;
-      }
-
-      if (var9 == null) {
-         this.add(context);
-      }
-   }
-
-   public fun remove(contextID: String, bucketType: Type) {
-      if (bucketType.getExclusive()) {
-         val var10000: java.util.Collection = this.buckets.get(bucketType);
-         if (var10000 != null) {
-            var10000.clear();
-         }
-      } else {
-         val var3: java.util.Collection = this.buckets.get(bucketType);
-         if (var3 != null) {
-            var3.removeIf(ContextManager::remove$lambda$4);
-         }
-      }
-   }
-
-   public fun clear(vararg bucketTypes: Type) {
-      for (Object element$iv : bucketTypes) {
-         val var10000: java.util.Collection = this.buckets.get(`element$iv`);
-         if (var10000 != null) {
-            var10000.clear();
-         }
-      }
-   }
-
-   public fun swap(with: ContextManager, vararg bucketTypes: Type) {
-      for (Object element$iv : bucketTypes) {
-         val newContexts: java.util.Collection = this.buckets.get(`element$iv`);
-         var var10000: java.util.List;
-         if (newContexts != null) {
-            var10000 = CollectionsKt.toMutableList(newContexts);
-         } else {
-            var10000 = null;
-         }
-
-         val var12: java.util.Collection = with.buckets.get(`element$iv`);
-         if (var12 != null) {
-            var10000 = CollectionsKt.toMutableList(var12);
-         } else {
-            var10000 = null;
-         }
-
-         this.clear((BattleContext.Type)`element$iv`);
-         with.clear((BattleContext.Type)`element$iv`);
-         if (var10000 != null) {
-            val var18: Array<BattleContext> = var10000.toArray(new BattleContext[0]);
-            with.add(Arrays.copyOf(var18, var18.length));
-         }
-
-         if (var10000 != null) {
-            val var25: Array<BattleContext> = var10000.toArray(new BattleContext[0]);
-            this.add(Arrays.copyOf(var25, var25.length));
-         }
-      }
-   }
-
-   public fun copy(with: ContextManager, vararg bucketTypes: Type) {
-      for (Object element$iv : bucketTypes) {
-         val var10: java.util.Collection = with.buckets.get(`element$iv`);
-         val var10000: java.util.List;
-         if (var10 != null) {
-            var10000 = CollectionsKt.toMutableList(var10);
-         } else {
-            var10000 = null;
-         }
-
-         this.clear((BattleContext.Type)`element$iv`);
-         if (var10000 != null) {
-            val var17: Array<BattleContext> = var10000.toArray(new BattleContext[0]);
-            this.add(Arrays.copyOf(var17, var17.length));
-         }
-      }
-   }
-
-   public fun get(bucketType: Type): Collection<BattleContext>? {
-      return this.buckets.get(bucketType);
-   }
-
-   @JvmStatic
-   fun `remove$lambda$4`(`$tmp0`: Function1, p0: Any): Boolean {
-      return `$tmp0`.invoke(p0) as java.lang.Boolean;
-   }
-
-   @SourceDebugExtension(["SMAP\nContextManager.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ContextManager.kt\ncom/cobblemon/mod/common/battles/interpreter/ContextManager$Companion\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,104:1\n1855#2:105\n1856#2:107\n1#3:106\n*S KotlinDebug\n*F\n+ 1 ContextManager.kt\ncom/cobblemon/mod/common/battles/interpreter/ContextManager$Companion\n*L\n98#1:105\n98#1:107\n*E\n"])
-   public companion object {
-      public fun scoop(contextID: String, vararg contextBuckets: Collection<BattleContext>?): BattleContext? {
-         val `$this$forEach$iv`: java.lang.Iterable;
-         for (Object element$iv : $this$forEach$iv) {
-            val it: java.lang.Iterable = `element$iv` as java.util.Collection;
-            var var10: Any = null;
-
-            for (Object var12 : it) {
-               if ((var12 as BattleContext).getId() == contextID) {
-                  var10 = var12;
-               }
-            }
-
-            val var10000: BattleContext = var10 as BattleContext;
-            if (var10 as BattleContext != null) {
-               return var10000;
-            }
-         }
-
-         return null;
-      }
-   }
+            return null
+        }
+    }
 }

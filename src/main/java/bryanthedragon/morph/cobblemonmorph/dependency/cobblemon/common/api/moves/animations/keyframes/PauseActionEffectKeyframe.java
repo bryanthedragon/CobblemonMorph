@@ -1,15 +1,18 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.keyframes
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.SchedulingFunctionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MoLangExtensionsKt
-import java.util.concurrent.CompletableFuture
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.delayedFuture
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
 
-public class PauseActionEffectKeyframe : ConditionalActionEffectKeyframe {
-   public final val pause: ExpressionLike = MoLangExtensionsKt.asExpressionLike("1")
-
-   public override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
-      return SchedulingFunctionsKt.delayedFuture$default(0, this.pause.resolveFloat(context.getRuntime()), true, 1, null);
-   }
+class PauseActionEffectKeyframe : ConditionalActionEffectKeyframe() {
+    val pause = "1".asExpressionLike()
+    override fun playWhenTrue(context: ActionEffectContext) = delayedFuture(seconds = pause.resolveFloat(context.runtime))
 }

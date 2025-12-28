@@ -1,10 +1,62 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method renderButton (Lnet/minecraft/client/gui/GuiGraphics;IIF)V in class com/cobblemon/mod/common/client/gui/summary/widgets/screens/info/InfoOneLineWidget
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.widgets.screens.info
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonResources
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.widgets.SoundlessWidget
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.Component
+
+class InfoOneLineWidget(
+    pX: Int,
+    pY: Int,
+    width: Int,
+    height: Int = ROW_HEIGHT,
+    private val label: MutableComponent,
+    private val value: MutableComponent,
+) : SoundlessWidget(pX, pY, width, height, Component.literal("InfoOneLineWidget")) {
+    companion object {
+        private val FONT = CobblemonResources.DEFAULT_LARGE
+        private const val ROW_HEIGHT = 15
+        private const val WITHIN_ROW_VERTICAL_OFFSET = 6
+        private const val LABEL_HORIZONTAL_OFFSET = 8
+        private const val VALUE_HORIZONTAL_OFFSET = 53
+    }
+
+
+    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+
+        // Label
+        val label = InfoBlockWidget(
+            pX = x + LABEL_HORIZONTAL_OFFSET,
+            pY = y,
+            blockWidth = Minecraft.getInstance().font.width(label),
+            blockHeight = height,
+            text = label,
+            font = FONT,
+            withinRowVerticalTextOffset = WITHIN_ROW_VERTICAL_OFFSET
+        )
+        label.render(context, pMouseX, pMouseY, pPartialTicks)
+
+        // Value
+        val value = InfoBlockWidget(
+            pX = x + VALUE_HORIZONTAL_OFFSET,
+            pY = y,
+            blockWidth = Minecraft.getInstance().font.width(value),
+            blockHeight = height,
+            text = value,
+            font = FONT,
+            withinRowVerticalTextOffset = WITHIN_ROW_VERTICAL_OFFSET
+        )
+        value.render(context, pMouseX, pMouseY, pPartialTicks)
+    }
+
+}

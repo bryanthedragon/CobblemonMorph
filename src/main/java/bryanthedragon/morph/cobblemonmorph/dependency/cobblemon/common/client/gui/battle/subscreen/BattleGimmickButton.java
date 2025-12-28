@@ -1,250 +1,213 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.subscreen
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.ShowdownIdentifiable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.blitk
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.categories.DamageCategory
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.InBattleGimmickMove
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.InBattleMove
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.MoveActionResponse
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.MoveTarget
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownMoveset
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.Targetable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownMoveset.Gimmick
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.subscreen.BattleMoveSelection.MoveTile
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.SimpleMathExtensionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.*
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.toRGB
 import com.mojang.blaze3d.vertex.PoseStack
-import java.util.ArrayList;
-import java.util.Locale
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
-import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.sounds.SoundEvents
-import org.jetbrains.annotations.NotNull
 
-public abstract class BattleGimmickButton {
-   private final val sfx: SimpleSoundInstance
-   private final val texture: String
-   public abstract val tiles: List<MoveTile>
-   public final var toggled: Boolean
-   public final val x: Float
-   public final val y: Float
+/**
+ * Button for toggling gimmicks during a battle.
+ *
+ * @param gimmick The [ShowdownMoveset.Gimmick] tied to this button.
+ * @property tiles The [GimmickTile]s to render when this button is [toggled].
+ *
+ * @author Segfault Guy
+ * @since July 8th, 2023
+ */
+abstract class BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, val x: Float, val y: Float) {
 
-   open fun BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, x: Float, y: Float) {
-      this.x = x;
-      this.y = y;
-      this.sfx = SimpleSoundInstance.m_119752_(SoundEvents.f_11668_, 1.0F);
-      this.texture = gimmick.getId();
-   }
+    companion object {
+        const val WIDTH = 36
+        const val HEIGHT = 34
+        const val SCALE = 0.5F
+        const val XOFF = WIDTH * SCALE
+        const val YOFF = HEIGHT * SCALE
+        const val SPACING = 26
 
-   public fun render(matrices: PoseStack, mouseX: Int, mouseY: Int, delta: Float) {
-      GuiUtilsKt.blitk$default(
-         matrices,
-         MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_gimmick_${this.texture}.png"),
-         this.x * (float)2,
-         this.y * (float)2,
-         34,
-         36,
-         null,
-         if (!this.toggled && !this.isHovered((double)mouseX, (double)mouseY)) 0 else 34,
-         null,
-         68,
-         null,
-         null,
-         null,
-         null,
-         null,
-         false,
-         0.5F,
-         64832,
-         null
-      );
-   }
-
-   public fun isHovered(mouseX: Double, mouseY: Double): Boolean {
-      return mouseX >= this.x && mouseX <= this.x + 18.0F && mouseY >= this.y && mouseY <= this.y + 17.0F;
-   }
-
-   public fun toggle(): Boolean {
-      this.toggled = !this.toggled;
-      Minecraft.m_91087_().m_91106_().m_120367_(this.sfx as SoundInstance);
-      return this.toggled;
-   }
-
-   public companion object {
-      public const val HEIGHT: Int
-      public const val SCALE: Float
-      public const val SPACING: Int
-      public const val WIDTH: Int
-      public const val XOFF: Float
-      public const val YOFF: Float
-
-      public fun create(gimmick: Gimmick, moveSelection: BattleMoveSelection, x: Float, y: Float): BattleGimmickButton {
-         var var10000: BattleGimmickButton;
-         switch (BattleGimmickButton.Companion.WhenMappings.$EnumSwitchMapping$0[gimmick.ordinal()]) {
-            case 1:
-            case 2:
-               var10000 = new ZPowerButton(moveSelection, x, y);
-               break;
-            case 3:
-               var10000 = new DynamaxButton(moveSelection, x, y);
-               break;
-            default:
-               var10000 = new BattleGimmickButton(moveSelection, gimmick, x, y) {
-                  @NotNull
-                  private java.util.List<? extends BattleMoveSelection.MoveTile> tiles;
-
-                  {
-                     super(`$gimmick`, `$x`, `$y`);
-                     val `$this$map$iv`: java.lang.Iterable = `$moveSelection`.getBaseTiles();
-                     val `destination$iv$iv`: java.util.Collection = new ArrayList(CollectionsKt.collectionSizeOrDefault(`$this$map$iv`, 10));
-
-                     for (Object item$iv$iv : $this$map$iv) {
-                        `destination$iv$iv`.add(
-                           new BattleGimmickButton.GimmickTile(
-                              `$gimmick`,
-                              `$moveSelection`,
-                              (`item$iv$iv` as BattleMoveSelection.MoveTile).getMove(),
-                              (`item$iv$iv` as BattleMoveSelection.MoveTile).getX(),
-                              (`item$iv$iv` as BattleMoveSelection.MoveTile).getY()
-                           )
-                        );
-                     }
-
-                     this.tiles = `destination$iv$iv` as MutableList<BattleMoveSelection.MoveTile>;
-                  }
-
-                  @NotNull
-                  @Override
-                  public java.util.List<BattleMoveSelection.MoveTile> getTiles() {
-                     return this.tiles;
-                  }
-
-                  public void setTiles(@NotNull java.util.List<? extends BattleMoveSelection.MoveTile> <set-?>) {
-                     this.tiles = `<set-?>`;
-                  }
-               };
-         }
-
-         return var10000;
-      }
-   }
-
-   public open class GimmickTile(gimmick: Gimmick, moveSelection: BattleMoveSelection, move: InBattleMove, x: Float, y: Float) : BattleMoveSelection.MoveTile(
-         moveSelection, move, x, y
-      ) {
-      private final val gimmick: Gimmick
-      protected final val gimmickMove: InBattleGimmickMove?
-
-      private final val gimmickMoveTemplate: MoveTemplate?
-         private final get() {
-            val var10000: InBattleGimmickMove = this.getMove().getGimmickMove();
-            if (var10000 != null) {
-               val var6: java.lang.String = var10000.getMove();
-               if (var6 != null) {
-                  val var7: java.lang.String = var6.toLowerCase(Locale.ROOT);
-                  if (var7 != null) {
-                     val var8: java.lang.String = ShowdownIdentifiable.Companion.getREGEX$common().replace(var7, "");
-                     if (var8 != null) {
-                        var gimmickTemplate: MoveTemplate;
-                        var var10003: Int;
-                        var var10004: ElementalType;
-                        label61: {
-                           gimmickTemplate = Moves.INSTANCE.getByName(var8);
-                           var9 = new MoveTemplate;
-                           var10003 = if (gimmickTemplate != null) gimmickTemplate.getNum() else -1;
-                           if (gimmickTemplate != null) {
-                              var10004 = gimmickTemplate.getElementalType();
-                              if (var10004 != null) {
-                                 break label61;
-                              }
-                           }
-
-                           var10004 = this.getMoveTemplate().getElementalType();
+        /** Factory for creating an instance of [BattleGimmickButton] based on [ShowdownMoveset.Gimmick]. */
+        fun create(gimmick: ShowdownMoveset.Gimmick, moveSelection: BattleMoveSelection, x: Float, y: Float): BattleGimmickButton {
+            return when(gimmick) {
+                ShowdownMoveset.Gimmick.Z_POWER, ShowdownMoveset.Gimmick.ULTRA_BURST ->
+                    ZPowerButton(moveSelection, x, y)
+                ShowdownMoveset.Gimmick.DYNAMAX ->
+                    DynamaxButton(moveSelection, x, y)
+                else ->
+                    object: BattleGimmickButton(gimmick, x, y) {
+                        override var tiles: List<BattleMoveSelection.MoveTile> = moveSelection.baseTiles.map { tile ->
+                            GimmickTile(gimmick, moveSelection, tile.move, tile.x, tile.y)
                         }
-
-                        var var10005: DamageCategory;
-                        var var10006: Double;
-                        var var10007: MoveTarget;
-                        label55: {
-                           var10005 = this.getMoveTemplate().getDamageCategory();
-                           var10006 = if (gimmickTemplate != null) gimmickTemplate.getPower() else this.getMoveTemplate().getPower();
-                           if (gimmickTemplate != null) {
-                              var10007 = gimmickTemplate.getTarget();
-                              if (var10007 != null) {
-                                 break label55;
-                              }
-                           }
-
-                           var10007 = this.getMoveTemplate().getTarget();
-                        }
-
-                        var var10008: Double;
-                        var var10009: Int;
-                        var var10010: Int;
-                        var var10011: Double;
-                        var var10012: Array<java.lang.Double>;
-                        label49: {
-                           var10008 = if (gimmickTemplate != null) gimmickTemplate.getAccuracy() else this.getMoveTemplate().getAccuracy();
-                           var10009 = if (gimmickTemplate != null) gimmickTemplate.getPp() else this.getMoveTemplate().getPp();
-                           var10010 = if (gimmickTemplate != null) gimmickTemplate.getPriority() else this.getMoveTemplate().getPriority();
-                           var10011 = if (gimmickTemplate != null) gimmickTemplate.getCritRatio() else this.getMoveTemplate().getCritRatio();
-                           if (gimmickTemplate != null) {
-                              var10012 = gimmickTemplate.getEffectChances();
-                              if (var10012 != null) {
-                                 break label49;
-                              }
-                           }
-
-                           var10012 = this.getMoveTemplate().getEffectChances();
-                        }
-
-                        var9./* $VF: Unable to resugar constructor */<init>(
-                           var8, var10003, var10004, var10005, var10006, var10007, var10008, var10009, var10010, var10011, var10012, null
-                        );
-                        return var9;
-                     }
-                  }
-               }
+                    }
             }
+        }
+    }
 
-            return null;
-         }
+    abstract val tiles: List<BattleMoveSelection.MoveTile>
+    var toggled = false
+    private val sfx = SimpleSoundInstance.forUI(SoundEvents.ANVIL_LAND, 1.0F)
+    private val texture = gimmick.id
 
+    fun render(matrices: PoseStack, mouseX: Int, mouseY: Int, delta: Float) {
+        blitk(
+            matrixStack = matrices,
+            texture = cobblemonResource("textures/gui/battle/battle_gimmick_${texture}.png"),
+            x = x * 2,
+            y = y * 2,
+            height = HEIGHT,
+            width = WIDTH,
+            vOffset = if (toggled || isHovered(mouseX.toDouble(), mouseY.toDouble())) HEIGHT else 0,
+            textureHeight = HEIGHT * 2,
+            scale = SCALE
+        )
+    }
 
-      public open val response: MoveActionResponse
-         public open get() {
-            return new MoveActionResponse(this.getMove().getId(), this.getTargetPnx(), this.gimmick.getId());
-         }
+    fun isHovered(mouseX: Double, mouseY: Double) = mouseX >= x && mouseX <= x + XOFF && mouseY >= y && mouseY <= y + YOFF
 
+    fun toggle(): Boolean {
+        toggled = !toggled
+        Minecraft.getInstance().soundManager.play(sfx)
+        return toggled
+    }
 
-      public open val selectable: Boolean
-         public open get() {
-            return if (this.gimmickMove != null) !this.gimmickMove.getDisabled() else super.getSelectable();
-         }
+    /**
+     * Tile for an [InBattleMove] when a [BattleGimmickButton] is toggled. Triggers a gimmick when executed.
+     *
+     * @param moveSelection The [BattleMoveSelection] subscreen this tile is rendered on.
+     * @param move The [InBattleMove] this tile is rendered for. May or may not have an associated [InBattleGimmickMove].
+     * @property gimmick The [ShowdownMoveset.Gimmick] that is triggered.
+     *
+     * @author Segfault Guy
+     * @since July 15th, 2023
+     */
+    open class GimmickTile(
+        private val gimmick: ShowdownMoveset.Gimmick,
+        moveSelection: BattleMoveSelection,
+        move: InBattleMove,
+        x: Float,
+        y: Float
+    ) : BattleMoveSelection.MoveTile(moveSelection, move, x, y) {
 
+        // if there isn't a compatible gimmick for this move, the rendered moveTemplate will default to the base template
+        init {
+            gimmickMoveTemplate?.let {
+                moveTemplate = it
+                rgb = it.elementalType.hue.toRGB()
+            }
+        }
 
-      public open val targetList: List<Targetable>?
-         public open get() {
-            return if (this.gimmickMove != null)
-               this.gimmickMove.getTarget().getTargetList().invoke(this.getMoveSelection().getRequest().getActivePokemon()) as java.util.List
-               else
-               super.getTargetList();
-         }
+        protected val gimmickMove = move.gimmickMove
 
+        // showdown already translates the base move id to the gimmick variant
+        override val response: MoveActionResponse
+            get() = MoveActionResponse(move.id, targetPnx, gimmick.id)
+        override val targetList: List<Targetable>?
+            get() = if (gimmickMove != null) gimmickMove.target.targetList(moveSelection.request.activePokemon) else super.targetList
+        override val selectable: Boolean
+            get() = if (gimmickMove != null) !gimmickMove.disabled else super.selectable
 
-      init {
-         this.gimmick = gimmick;
-         val var10000: MoveTemplate = this.getGimmickMoveTemplate();
-         if (var10000 != null) {
-            this.setMoveTemplate(var10000);
-            this.setRgb(SimpleMathExtensionsKt.toRGB(var10000.getElementalType().getHue()));
-         }
+        /**
+         * Couple reasons for making a unique template for gimmick moves:
+         * 1. Z versions of status moves aren't registered as distinct moves, so can't get a template by name or num
+         * 2. Damaging moves are registered as physical and it's confusing since the actual damageCategory is inherited from the base move
+         */
+        private val gimmickMoveTemplate: MoveTemplate? get() {
+            val gimmickMoveID = move.gimmickMove?.move?.lowercase()?.replace(ShowdownIdentifiable.REGEX, "") ?: return null
+            val gimmickTemplate = Moves.getByName(gimmickMoveID)
+            return MoveTemplate(
+                name = gimmickMoveID,
+                num = gimmickTemplate?.num ?: -1,
+                elementalType = gimmickTemplate?.elementalType ?: moveTemplate.elementalType,
+                damageCategory = moveTemplate.damageCategory,
+                power = gimmickTemplate?.power ?: moveTemplate.power,
+                target = gimmickTemplate?.target ?: moveTemplate.target,
+                accuracy = gimmickTemplate?.accuracy ?: moveTemplate.accuracy,
+                pp = gimmickTemplate?.pp ?: moveTemplate.pp,
+                priority = gimmickTemplate?.priority ?: moveTemplate.priority,
+                critRatio = gimmickTemplate?.critRatio ?: moveTemplate.critRatio,
+                effectChances = gimmickTemplate?.effectChances ?: moveTemplate.effectChances
+            )
+        }
+    }
+}
 
-         this.gimmickMove = move.getGimmickMove();
-      }
-   }
+/**
+ * Button for toggling Z-Power variations of compatible moves.
+ *
+ * @property tiles The Z-Moves for this moveset.
+ *
+ * @author Segfault Guy
+ * @since July 15th, 2023
+ */
+class ZPowerButton(moveSelection: BattleMoveSelection, x: Float, y: Float) : BattleGimmickButton(ShowdownMoveset.Gimmick.Z_POWER, x, y) {
+
+    override var tiles: List<BattleMoveSelection.MoveTile> = moveSelection.baseTiles.map { tile ->
+        ZPowerTile(moveSelection, tile.move, tile.x, tile.y)
+    }
+
+    /**
+     * Tile for Z-Power variation of a move.
+     *
+     * @param move The base move.
+     * @property gimmickMove The respective Z-Move (if it exists).
+     *
+     * @author Segfault Guy
+     * @since July 16th, 2023
+     */
+    class ZPowerTile(
+        moveSelection: BattleMoveSelection,
+        move: InBattleMove,
+        x: Float,
+        y: Float
+    ) : GimmickTile(ShowdownMoveset.Gimmick.Z_POWER, moveSelection, move, x, y) {
+        override val selectable: Boolean
+            get() = gimmickMove != null && !gimmickMove.disabled
+    }
+}
+
+/**
+ * Button for toggling Max variations of moves.
+ *
+ * @property tiles The Max Moves for this moveset.
+ *
+ * @author Segfault Guy
+ * @since July 27th, 2023
+ */
+class DynamaxButton(moveSelection: BattleMoveSelection, x: Float, y: Float) : BattleGimmickButton(ShowdownMoveset.Gimmick.DYNAMAX, x, y) {
+
+    override var tiles: List<BattleMoveSelection.MoveTile> = moveSelection.baseTiles.map { tile ->
+        DynamaxTile(moveSelection, tile.move, tile.x, tile.y)
+    }
+
+    /**
+     * Tile for Max variation of a move.
+     *
+     * @param move The base move.
+     * @property gimmickMove The respective Max Move.
+     *
+     * @author Segfault Guy
+     * @since July 27th, 2023
+     */
+    class DynamaxTile(
+        moveSelection: BattleMoveSelection,
+        move: InBattleMove,
+        x: Float,
+        y: Float
+    ) : GimmickTile(ShowdownMoveset.Gimmick.DYNAMAX, moveSelection, move, x, y) {
+        override val selectable: Boolean
+            get() = gimmickMove != null && !gimmickMove.disabled
+    }
 }

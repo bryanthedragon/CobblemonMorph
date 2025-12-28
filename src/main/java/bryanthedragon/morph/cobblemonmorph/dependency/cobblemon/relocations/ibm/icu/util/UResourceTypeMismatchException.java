@@ -1,9 +1,0 @@
-package com.cobblemon.mod.relocations.ibm.icu.util;
-
-public class UResourceTypeMismatchException extends RuntimeException {
-   static final long serialVersionUID = 1286569061095434541L;
-
-   public UResourceTypeMismatchException(String msg) {
-      super(msg);
-   }
-}

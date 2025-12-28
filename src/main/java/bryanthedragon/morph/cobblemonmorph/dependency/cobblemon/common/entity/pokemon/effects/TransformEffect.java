@@ -1,104 +1,76 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.effects
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity.pokemon.MocKEffect
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonPropertyExtractor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.SchedulingFunctionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.afterOnServer
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.aspects.PokemonAspectsKt
-import java.util.concurrent.CompletableFuture
-import kotlin.jvm.functions.Function0
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.aspects.SHINY_ASPECT
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
+import java.util.concurrent.CompletableFuture
 
-public class TransformEffect(mock: PokemonProperties = new PokemonProperties(), scale: Float = 1.0F, doCry: Boolean = true) : BattleEffect, MocKEffect {
-   public final val doCry: Boolean
-   public open var mock: PokemonProperties
-   public open var scale: Float
+/**
+ * A [BattleEffect] that alters a [PokemonEntity] to look like a target [Pokemon].
+ *
+ * @param mimic The [Pokemon] to copy.
+ * @author Segfault Guy
+ * @since March 5th, 2024
+ */
+class TransformEffect(
+    // This really should include aspects separately
+    override var mock: PokemonProperties = PokemonProperties(),
+    override var scale: Float = 1.0F,
+    val doCry: Boolean = true
+) : BattleEffect(), MocKEffect {
 
-   init {
-      this.mock = mock;
-      this.scale = scale;
-      this.doCry = doCry;
-   }
+    constructor(mimic: Pokemon, doCry: Boolean = true) : this(
+        mock = mimic.createPokemonProperties(PokemonPropertyExtractor.TRANSFORM),
+        scale = mimic.form.baseScale * mimic.scaleModifier,
+        doCry = doCry
+    )
 
-   public constructor(mimic: Pokemon, doCry: Boolean = true) : this(
-         mimic.createPokemonProperties(PokemonPropertyExtractor.TRANSFORM), mimic.getForm().getBaseScale() * mimic.getScaleModifier(), doCry
-      )
-   protected override fun apply(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {
-      val var3: PokemonProperties = this.getMock();
-      var3.setAspects(SetsKt.plus(var3.getAspects(), PokemonAspectsKt.getSHINY_ASPECT().provide(entity.getPokemon())));
-      entity.getEffects().setMockEffect(this);
-      SchedulingFunctionsKt.afterOnServer$default(0, 1.0F, (new Function0<Unit>(this, entity, future) {
-         {
-            super(0);
-            this.this$0 = `$receiver`;
-            this.$entity = `$entity`;
-            this.$future = `$future`;
-         }
+    override fun apply(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {
+        mock.aspects += SHINY_ASPECT.provide(entity.pokemon)    // apply shiny property to new appearance
+        entity.effects.mockEffect = this
+        afterOnServer(seconds = 1.0F) {
+            if (doCry) entity.cry()
+            future.complete(entity)
+        }
+    }
 
-         public final void invoke() {
-            if (this.this$0.getDoCry()) {
-               this.$entity.cry();
-            }
+    override fun revert(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {
+        entity.effects.mockEffect = null
+        afterOnServer(seconds = 1.0F) {
+            entity.cry()
+            future.complete(entity)
+        }
+    }
 
-            this.$future.complete(this.$entity);
-         }
-      }) as Function0, 1, null);
-   }
+    override fun saveToNbt(registryLookup: HolderLookup.Provider): CompoundTag {
+        val nbt = CompoundTag()
+        nbt.putString(DataKeys.ENTITY_EFFECT_MOCK, ID)
+        nbt.put(DataKeys.POKEMON_ENTITY_MOCK, mock.saveToNBT(registryLookup))
+        nbt.putFloat(DataKeys.POKEMON_ENTITY_SCALE, scale)
+        return nbt
+    }
 
-   protected override fun revert(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {
-      entity.getEffects().setMockEffect(null);
-      SchedulingFunctionsKt.afterOnServer$default(0, 1.0F, (new Function0<Unit>(entity, future) {
-         {
-            super(0);
-            this.$entity = `$entity`;
-            this.$future = `$future`;
-         }
+    override fun loadFromNBT(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+        if (nbt.contains(DataKeys.POKEMON_ENTITY_MOCK)) this.mock = PokemonProperties().loadFromNBT(nbt.getCompound(DataKeys.POKEMON_ENTITY_MOCK), registryLookup)
+        if (nbt.contains(DataKeys.POKEMON_ENTITY_SCALE)) this.scale = nbt.getFloat(DataKeys.POKEMON_ENTITY_SCALE)
+    }
 
-         public final void invoke() {
-            this.$entity.cry();
-            this.$future.complete(this.$entity);
-         }
-      }) as Function0, 1, null);
-   }
-
-   public override fun saveToNbt(): CompoundTag {
-      val nbt: CompoundTag = new CompoundTag();
-      nbt.m_128359_("EntityEffectMock", ID);
-      nbt.m_128365_("PokemonEntityMock", this.getMock().saveToNBT() as Tag);
-      nbt.m_128350_("PokemonEntityScale", this.getScale());
-      return nbt;
-   }
-
-   public override fun loadFromNBT(nbt: CompoundTag) {
-      if (nbt.m_128441_("PokemonEntityMock")) {
-         val var10001: PokemonProperties = new PokemonProperties();
-         val var10002: CompoundTag = nbt.m_128469_("PokemonEntityMock");
-         this.setMock(var10001.loadFromNBT(var10002));
-      }
-
-      if (nbt.m_128441_("PokemonEntityScale")) {
-         this.setScale(nbt.m_128457_("PokemonEntityScale"));
-      }
-   }
-
-   override fun getExposedSpecies(): Species? {
-      return MocKEffect.DefaultImpls.getExposedSpecies(this);
-   }
-
-   override fun getExposedForm(): FormData? {
-      return MocKEffect.DefaultImpls.getExposedForm(this);
-   }
-
-   fun TransformEffect() {
-      this(null, 0.0F, false, 7, null);
-   }
-
-   public companion object {
-      public final val ID: String
-   }
+    companion object {
+        val ID = "TRANSFORM"
+    }
 }

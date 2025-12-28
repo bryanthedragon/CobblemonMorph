@@ -1,84 +1,99 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.effects
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity.pokemon.MocKEffect
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity.pokemon.*
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonSeenEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonPropertyExtractor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.SchedulingFunctionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.afterOnServer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonBehaviourFlag
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
-import java.util.concurrent.CompletableFuture
-import kotlin.jvm.functions.Function0
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
+import java.util.concurrent.CompletableFuture
 
-public class IllusionEffect(mock: PokemonProperties = new PokemonProperties(), scale: Float = 1.0F) : BattleEffect, MocKEffect {
-   public open var mock: PokemonProperties
-   public open var scale: Float
+/**
+ * A [BattleEffect] that alters a [PokemonEntity] to be disguised as a target [Pokemon].
+ *
+ * @param disguise The [Pokemon] to use as a disguise.
+ * @author Segfault Guy
+ * @since March 5th, 2024
+ */
+class IllusionEffect(
+    override var mock: PokemonProperties = PokemonProperties(),
+    override var scale: Float = 1.0F
+) : BattleEffect(), MocKEffect {
 
-   init {
-      this.mock = mock;
-      this.scale = scale;
-   }
+    constructor(disguise: Pokemon) : this(
+        mock = disguise.createPokemonProperties(PokemonPropertyExtractor.ILLUSION),
+        scale = disguise.form.baseScale * disguise.scaleModifier
+    )
 
-   public constructor(disguise: Pokemon) : this(
-         disguise.createPokemonProperties(PokemonPropertyExtractor.ILLUSION), disguise.getForm().getBaseScale() * disguise.getScaleModifier()
-      )
-   protected override fun apply(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {
-      entity.getEffects().setMockEffect(this);
-      future.complete(entity);
-   }
+    override fun apply(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {
+        entity.effects.mockEffect = this
+        future.complete(entity)
+    }
 
-   protected override fun revert(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {
-      entity.getEffects().setMockEffect(null);
-      SchedulingFunctionsKt.afterOnServer$default(0, 1.0F, (new Function0<Unit>(entity, future) {
-         {
-            super(0);
-            this.$entity = `$entity`;
-            this.$future = `$future`;
-         }
+    override fun revert(entity: PokemonEntity, future: CompletableFuture<PokemonEntity>) {
+        entity.effects.mockEffect = null
 
-         public final void invoke() {
-            this.$entity.cry();
-            this.$future.complete(this.$entity);
-         }
-      }) as Function0, 1, null);
-   }
+        if (!entity.exposedForm.behaviour.moving.fly.canFly && entity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) {
+            // Transitioning from a flying form to a non-flying form.
+            // If we were flying, need to turn the behavior flag off or the pokemon will continue to float in the air.
+            entity.setBehaviourFlag(PokemonBehaviourFlag.FLYING, false)
+        }
+        afterOnServer(seconds = 1.0F) {
+            entity.cry()
+            if (entity.pokemon.shiny) SpawnSnowstormEntityParticlePacket(cobblemonResource("shiny_ring"), entity.id, listOf("shiny_particles", "middle")).sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, entity.level().dimension())
+            this.revealToDex(entity)
+            future.complete(entity)
+        }
+    }
 
-   public override fun saveToNbt(): CompoundTag {
-      val nbt: CompoundTag = new CompoundTag();
-      nbt.m_128359_("EntityEffectID", ID);
-      nbt.m_128365_("PokemonEntityMock", this.getMock().saveToNBT() as Tag);
-      nbt.m_128350_("PokemonEntityScale", this.getScale());
-      return nbt;
-   }
+    override fun saveToNbt(registryLookup: HolderLookup.Provider): CompoundTag {
+        val nbt = CompoundTag()
+        nbt.putString(DataKeys.ENTITY_EFFECT_ID, ID)
+        nbt.put(DataKeys.POKEMON_ENTITY_MOCK, mock.saveToNBT(registryLookup))
+        nbt.putFloat(DataKeys.POKEMON_ENTITY_SCALE, scale)
+        return nbt
+    }
 
-   public override fun loadFromNBT(nbt: CompoundTag) {
-      if (nbt.m_128441_("PokemonEntityMock")) {
-         val var10001: PokemonProperties = new PokemonProperties();
-         val var10002: CompoundTag = nbt.m_128469_("PokemonEntityMock");
-         this.setMock(var10001.loadFromNBT(var10002));
-      }
+    override fun loadFromNBT(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+        if (nbt.contains(DataKeys.POKEMON_ENTITY_MOCK)) this.mock = PokemonProperties().loadFromNBT(nbt.getCompound(DataKeys.POKEMON_ENTITY_MOCK), registryLookup)
+        if (nbt.contains(DataKeys.POKEMON_ENTITY_SCALE)) this.scale = nbt.getFloat(DataKeys.POKEMON_ENTITY_SCALE)
+    }
 
-      if (nbt.m_128441_("PokemonEntityScale")) {
-         this.setScale(nbt.m_128457_("PokemonEntityScale"));
-      }
-   }
+    /**
+     * Reveals the "base" Pokemon to everyone in the battle for dex purposes.
+     *
+     * @param entity The [PokemonEntity] being revealed.
+     */
+    private fun revealToDex(entity: PokemonEntity) {
+        // Step 1 resolve source battle and presence in actor.
+        val battleId = entity.battleId ?: return
+        val battle = BattleRegistry.getBattle(battleId) ?: return
+        val wildActor = battle.getActor(entity.pokemon.uuid) ?: return
+        val battlePokemon = wildActor.pokemonList.firstOrNull { it.uuid == entity.pokemon.uuid } ?: return
+        // Step 2 flag all players as seeing the Pokemon
+        battle.playerUUIDs.forEach { uuid ->
+            CobblemonEvents.POKEMON_SEEN.post(PokemonSeenEvent(uuid, battlePokemon.effectedPokemon))
+        }
+    }
 
-   override fun getExposedSpecies(): Species? {
-      return MocKEffect.DefaultImpls.getExposedSpecies(this);
-   }
-
-   override fun getExposedForm(): FormData? {
-      return MocKEffect.DefaultImpls.getExposedForm(this);
-   }
-
-   fun IllusionEffect() {
-      this(null, 0.0F, 3, null);
-   }
-
-   public companion object {
-      public final val ID: String
-   }
+    companion object {
+        val ID = "ILLUSION"
+    }
 }

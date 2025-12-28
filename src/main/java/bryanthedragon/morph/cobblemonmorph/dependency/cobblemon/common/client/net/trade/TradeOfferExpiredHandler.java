@@ -1,22 +1,21 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.ClientPlayerIcon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeOfferExpiredPacket
-import kotlin.jvm.functions.Function1
 import net.minecraft.client.Minecraft
-
-public object TradeOfferExpiredHandler : ClientNetworkPacketHandler<TradeOfferExpiredPacket> {
-   public open fun handle(packet: TradeOfferExpiredPacket, client: Minecraft) {
-      CobblemonClient.INSTANCE.getRequests().getTradeOffers().removeIf(TradeOfferExpiredHandler::handle$lambda$0);
-   }
-
-   fun handleOnNettyThread(packet: TradeOfferExpiredPacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
-
-   @JvmStatic
-   fun `handle$lambda$0`(`$tmp0`: Function1, p0: Any): Boolean {
-      return `$tmp0`.invoke(p0) as java.lang.Boolean;
-   }
+final class TradeOfferExpiredHandler : ClientNetworkPacketHandler<TradeOfferExpiredPacket> {
+    override fun handle(packet: TradeOfferExpiredPacket, client: Minecraft) {
+        CobblemonClient.requests.tradeOffers.remove(packet.senderID)
+        ClientPlayerIcon.update(packet.senderID)
+    }
 }

@@ -1,33 +1,33 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import io.netty.buffer.ByteBuf
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class HealthUpdatePacket(pokemon: () -> Pokemon, value: Int) : IntUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
-
-   init {
-      this.id = ID;
-   }
-
-   public override fun getSize(): IntSize {
-      return IntSize.U_SHORT;
-   }
-
-   public open fun set(pokemon: Pokemon, value: Int) {
-      pokemon.setCurrentHealth(value);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): HealthUpdatePacket {
-         return new HealthUpdatePacket(PokemonUpdatePacket.Companion.decodePokemon(buffer), NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_SHORT));
-      }
-   }
+/**
+ * Updates the current health of the Pokémon
+ *
+ * @author Hiroku
+ * @since February 12, 2022
+ */
+class HealthUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<HealthUpdatePacket>(pokemon, value) {
+    override val id = ID
+    override fun getSize() = IntSize.U_SHORT
+    override fun set(pokemon: Pokemon, value: Int) {
+        pokemon.currentHealth = value
+    }
+    companion object {
+        val ID = cobblemonResource("health_update")
+        fun decode(buffer: RegistryFriendlyByteBuf) = HealthUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.U_SHORT))
+    }
 }

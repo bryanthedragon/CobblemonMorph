@@ -1,46 +1,54 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.ItemInteractionEvolution
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.TradeEvolution
 
-public interface ContextEvolution<RC, TC> : Evolution {
-   public val requiredContext: Any
+/**
+ * Represents an evolution of a [Pokemon] that can only occur during specific actions and with added context.
+ * For the default implementations see [ItemInteractionEvolution] & [TradeEvolution].
+ *
+ * @param RC The context given at runtime when querying the [Evolution].
+ * @param TC The context that is serialized from JSON during species loading, this is what the [RC] is expected to match against.
+ * @author Licious
+ * @since March 19th, 2022
+ */
+interface ContextEvolution<RC, TC> : Evolution {
 
-   public open fun attemptEvolution(pokemon: Pokemon, context: Any): Boolean {
-   }
+    /**
+     * The target context for this [Evolution] to even be tested.
+     */
+    val requiredContext: TC
 
-   public abstract fun testContext(pokemon: Pokemon, context: Any): Boolean {
-   }
+    /**
+     * Attempts to evolve the given [Pokemon] under the given context of type [RC].
+     *
+     * @param pokemon The [Pokemon] attempting to evolve.
+     * @param context The context of this query.
+     * @return If the evolution was successful.
+     */
+    fun attemptEvolution(pokemon: Pokemon, context: RC): Boolean {
+        if (this.testContext(pokemon, context) && super.test(pokemon)) {
+            return super.evolve(pokemon)
+        }
+        return false
+    }
 
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun <RC, TC> attemptEvolution(`$this`: ContextEvolution<RC, TC>, pokemon: Pokemon, context: RC): Boolean {
-         return `$this`.testContext(pokemon, context) && Evolution.DefaultImpls.test(`$this`, pokemon) && Evolution.DefaultImpls.evolve(`$this`, pokemon);
-      }
+    /**
+     * Checks if the given context is valid for the [requiredContext].
+     *
+     * @param pokemon The [Pokemon] attempting to evolve.
+     * @param context The context of this query.
+     * @return If the context matched the [requiredContext].
+     */
+    fun testContext(pokemon: Pokemon, context: RC): Boolean
 
-      @JvmStatic
-      fun <RC, TC> test(`$this`: ContextEvolution<RC, TC>, pokemon: Pokemon): Boolean {
-         return Evolution.DefaultImpls.test(`$this`, pokemon);
-      }
-
-      @JvmStatic
-      fun <RC, TC> evolve(`$this`: ContextEvolution<RC, TC>, pokemon: Pokemon): Boolean {
-         return Evolution.DefaultImpls.evolve(`$this`, pokemon);
-      }
-
-      @JvmStatic
-      fun <RC, TC> forceEvolve(`$this`: ContextEvolution<RC, TC>, pokemon: Pokemon) {
-         Evolution.DefaultImpls.forceEvolve(`$this`, pokemon);
-      }
-
-      @JvmStatic
-      fun <RC, TC> evolutionMethod(`$this`: ContextEvolution<RC, TC>, pokemon: Pokemon) {
-         Evolution.DefaultImpls.evolutionMethod(`$this`, pokemon);
-      }
-
-      @JvmStatic
-      fun <RC, TC> applyTo(`$this`: ContextEvolution<RC, TC>, pokemon: Pokemon) {
-         Evolution.DefaultImpls.applyTo(`$this`, pokemon);
-      }
-   }
 }

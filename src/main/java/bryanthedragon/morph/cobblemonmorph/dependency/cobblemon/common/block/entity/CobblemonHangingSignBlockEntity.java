@@ -1,10 +1,26 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method getType ()Lnet/minecraft/world/level/block/entity/BlockEntityType; in class com/cobblemon/mod/common/block/entity/CobblemonHangingSignBlockEntity
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBlockEntities
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonHangingSignBlock
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonWallHangingSignBlock
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.entity.HangingSignBlockEntity
+import net.minecraft.core.BlockPos
+
+class CobblemonHangingSignBlockEntity(pos: BlockPos, state: BlockState) : HangingSignBlockEntity(pos, state) {
+
+    override fun getType(): BlockEntityType<*> = CobblemonBlockEntities.HANGING_SIGN
+
+    override fun isValidBlockState(blockState: BlockState): Boolean {
+        return blockState.block is CobblemonHangingSignBlock || blockState.block is CobblemonWallHangingSignBlock
+    }
+}

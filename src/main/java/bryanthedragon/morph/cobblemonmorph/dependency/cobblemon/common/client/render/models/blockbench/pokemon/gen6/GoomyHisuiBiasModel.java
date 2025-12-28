@@ -1,86 +1,52 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen6
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.SimpleQuirk
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.CobblemonPose
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
-import kotlin.jvm.functions.Function1
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
-import org.jetbrains.annotations.NotNull
 
-public class GoomyHisuiBiasModel(root: ModelPart) : PokemonPoseableModel {
-   public open val cryAnimation: CryProvider
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rootPart: ModelPart
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class GoomyHisuiBiasModel (root: ModelPart) : PokemonPosableModel(root) {
+    override val rootPart = root.registerChildWithAllChildren("goomy_hisui_bias")
+    override var portraitScale = 1.73F
+    override var portraitTranslation = Vec3(-0.09, -0.98, 0.0)
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "goomy_hisui_bias");
-      this.portraitScale = 1.73F;
-      this.portraitTranslation = new Vec3(-0.09, -0.98, 0.0);
-      this.profileScale = 1.0F;
-      this.profileTranslation = new Vec3(-0.03, 0.12, 0.0);
-      this.cryAnimation = GoomyHisuiBiasModel::cryAnimation$lambda$0;
-   }
+    override var profileScale = 1F
+    override var profileTranslation = Vec3(-0.03, 0.12, 0.0)
 
-   public override fun registerPoses() {
-      val blink: SimpleQuirk = PoseableEntityModel.quirk$default(
-         this, null, null, null, (new Function1<PoseableEntityState<PokemonEntity>, StatefulAnimation<PokemonEntity, ?>>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
-            }
+    lateinit var standing: CobblemonPose
+    lateinit var walk: CobblemonPose
 
-            @NotNull
-            public final StatefulAnimation<PokemonEntity, ?> invoke(@NotNull PoseableEntityState<PokemonEntity> it) {
-               return PoseableEntityModel.bedrockStateful$default(this.this$0, "goomy_hisui_bias", "blink", null, 4, null);
-            }
-         }) as Function1, 7, null
-      );
-      val var10001: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var9: java.util.Set = var10001;
-      val var10002: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "standing",
-            SetsKt.plus(var9, var10002),
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "goomy_hisui_bias", "ground_idle", null, 4, null)},
-            null,
-            new ModelQuirk[]{blink},
-            188,
-            null
-         )
-      );
-      val var6: EnumSet = PoseType.Companion.getMOVING_POSES();
-      val var7: Array<ModelQuirk> = new ModelQuirk[]{blink};
-      val var8: Array<StatelessAnimation> = new StatelessAnimation[]{
-         PoseableEntityModel.bedrock$default(this, "goomy_hisui_bias", "ground_idle", null, 4, null)
-      };
-      val var10: PoseableEntityModel = this;
-      this.setWalk(PoseableEntityModel.registerPose$default(var10, "walk", var6, null, 0, null, null, var8, null, var7, 188, null));
-   }
+    override val cryAnimation = CryProvider { bedrockStateful("goomy_hisui_bias", "cry") }
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: GoomyHisuiBiasModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "goomy_hisui_bias", "cry", null, 4, null);
-   }
+    override fun registerPoses() {
+        val blink = quirk { bedrockStateful("goomy_hisui_bias", "blink") }
+
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = PoseType.STATIONARY_POSES + PoseType.UI_POSES,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                bedrock("goomy_hisui_bias", "ground_idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseTypes = PoseType.MOVING_POSES,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                bedrock("goomy_hisui_bias", "ground_idle"),
+            )
+        )
+    }
 }

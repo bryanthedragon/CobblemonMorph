@@ -1,100 +1,222 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.JsonDataRegistry
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
 import com.mojang.brigadier.arguments.ArgumentType
-
-import java.util.HashMap
-
-import net.minecraft.advancements.CriterionTrigger
-import net.minecraft.command.argument.serialize.ArgumentSerializer.ArgumentTypeProperties
+import kotlin.reflect.KClass
 import net.minecraft.commands.synchronization.ArgumentTypeInfo
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.PreparableReloadListener
-import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.tags.TagKey
-import net.minecraft.world.GameRules.Category
-import net.minecraft.world.GameRules.Key
-import net.minecraft.world.GameRules.Rule
-import net.minecraft.world.GameRules.Type
-import net.minecraft.world.gen.GenerationStep.Feature
+import net.minecraft.world.level.GameRules
 import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
 
-public interface CobblemonImplementation {
-   public val modAPI: ModAPI
-   public val networkManager: NetworkManager
+interface CobblemonImplementation {
+    val modAPI: ModAPI
 
-   public abstract fun environment(): Environment {
-   }
+    /**
+     *
+     */
+    val networkManager: NetworkManager
 
-   public abstract fun isModInstalled(id: String): Boolean {
-   }
+    /**
+     * TODO
+     *
+     * @return
+     */
+    fun environment(): Environment
 
-   public abstract fun registerPermissionValidator() {
-   }
+    /**
+     * TODO
+     *
+     * @param id
+     * @return
+     */
+    fun isModInstalled(id: String): Boolean
 
-   public abstract fun registerSoundEvents() {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun registerPermissionValidator()
 
-   public abstract fun registerItems() {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun registerSoundEvents()
 
-   public abstract fun registerBlocks() {
-   }
+    fun registerDataComponents()
 
-   public abstract fun registerEntityTypes() {
-   }
+    fun registerEntityDataSerializers()
 
-   public abstract fun registerEntityAttributes() {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun registerItems()
 
-   public abstract fun registerBlockEntityTypes() {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun registerBlocks()
 
-   public abstract fun registerWorldGenFeatures() {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun registerEntityTypes()
 
-   public abstract fun registerParticles() {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun registerEntityAttributes()
 
-   public abstract fun addFeatureToWorldGen(feature: ResourceKey<PlacedFeature>, step: Feature, validTag: TagKey<Biome>?) {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun registerBlockEntityTypes()
 
-   public abstract fun <A : ArgumentType<*>, T : ArgumentTypeProperties<Any>> registerCommandArgument(
-      identifier: ResourceLocation,
-      argumentClass: KClass<Any>,
-      serializer: ArgumentTypeInfo<Any, Any>
-   ) {
-   }
+    fun registerPoiTypes()
+    /**
+     * TODO
+     *
+     */
+    fun registerVillagers()
 
-   public abstract fun <T : Rule<Any>> registerGameRule(name: String, category: Category, type: Type<Any>): Key<Any> {
-   }
+    fun registerRecipeSerializers()
+    fun registerRecipeTypes()
 
-   public abstract fun <T : CriterionTrigger<*>> registerCriteria(criteria: Any): Any {
-   }
 
-   public abstract fun registerResourceReloader(
-      identifier: ResourceLocation,
-      reloader: PreparableReloadListener,
-      type: PackType,
-      dependencies: Collection<ResourceLocation>
-   ) {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun registerWorldGenFeatures()
 
-   public abstract fun server(): MinecraftServer? {
-   }
+    fun registerParticles()
 
-   public abstract fun <T> reloadJsonRegistry(registry: JsonDataRegistry<Any>, manager: ResourceManager): HashMap<ResourceLocation, Any> {
-   }
+    fun registerMenu()
 
-   public abstract fun registerCompostable(item: ItemLike, chance: Float) {
-   }
+    fun registerEntitySubPredicates()
 
-   public abstract fun registerBuiltinResourcePack(id: ResourceLocation, title: Component, activationBehaviour: ResourcePackActivationBehaviour) {
-   }
+
+    /**
+     * Add a feature to the current platform implementation.
+     *
+     * @param feature The [PlacedFeature] being added.
+     * @param step The [GenerationStep.Feature] of this feature.
+     * @param validTag The [TagKey] required by the [Biome] for this feature to generate in, if null all biomes are valid.
+     */
+    fun addFeatureToWorldGen(feature: ResourceKey<PlacedFeature>, step: GenerationStep.Decoration, validTag: TagKey<Biome>?)
+
+    /**
+     * TODO
+     *
+     * @param A
+     * @param T
+     * @param identifier
+     * @param argumentClass
+     * @param serializer
+     */
+    fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(identifier: ResourceLocation, argumentClass: KClass<A>, serializer: ArgumentTypeInfo<A, T>)
+
+    /**
+     * TODO
+     *
+     * @param T
+     * @param name
+     * @param category
+     * @param type
+     * @return
+     */
+    fun <T : GameRules.Value<T>> registerGameRule(name: String, category: GameRules.Category, type: GameRules.Type<T>): GameRules.Key<T>
+
+    /**
+     * TODO
+     *
+     * @param T
+     * @param criteria
+     * @return
+     */
+    fun registerCriteria()
+
+    /**
+     * TODO
+     *
+     * @param identifier
+     * @param reloader
+     * @param type
+     * @param dependencies
+     */
+    fun registerResourceReloader(identifier: ResourceLocation, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<ResourceLocation>)
+
+    /**
+     * TODO
+     *
+     * @return
+     */
+    fun server(): MinecraftServer?
+
+    /**
+     * Registers an item to the [ComposterBlock].
+     *
+     * @param item The [ItemLike] being registered.
+     * @param chance The chance % of increasing the composter level, 0 to 1 expected.
+     */
+    fun registerCompostable(item: ItemLike, chance: Float)
+}
+
+enum class ResourcePackActivationBehaviour {
+
+    /**
+     * The resource pack will start disabled.
+     */
+    NORMAL,
+
+    /**
+     * The resource pack will start enabled.
+     */
+    DEFAULT_ENABLED,
+
+    /**
+     * The resource pack will always be enabled.
+     * The user can reorder it but cannot remove it.
+     */
+    ALWAYS_ENABLED;
+
+}
+
+enum class ModAPI {
+    FABRIC,
+    FORGE,
+    NEOFORGE
+}
+
+interface NetworkManager {
+    fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>)
+
+    fun sendToServer(packet: NetworkPacket<*>)
+}
+
+enum class Environment {
+    CLIENT,
+    SERVER
 }

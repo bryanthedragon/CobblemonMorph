@@ -1,88 +1,66 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ScheduledTask.Builder
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.Ref.FloatRef
-import org.jetbrains.annotations.NotNull
+import java.util.concurrent.CompletableFuture
 
-public interface Schedulable {
-   public val schedulingTracker: SchedulingTracker
+/**
+ * An interface for which an implementation must provide a [SchedulingTracker] so that the standard scheduling
+ * functions can be executed.
+ *
+ * @author Hiroku
+ * @since November 5th, 2023
+ */
+interface Schedulable {
+    val schedulingTracker: SchedulingTracker
 
-   public open fun momentarily(action: () -> Unit): ScheduledTask {
-   }
+    fun momentarily(action: () -> Unit): ScheduledTask = after(action = action)
+    fun after(seconds: Float = 0F, action: () -> Unit): ScheduledTask {
+        return schedulingTracker.addTask(
+            ScheduledTask(
+                action = { action() },
+                delaySeconds = seconds
+            )
+        )
+    }
 
-   public open fun after(seconds: Float = ..., action: () -> Unit): ScheduledTask {
-   }
+    fun lerp(seconds: Float = 0F, action: (Float) -> Unit): ScheduledTask {
+        var passed = 0F
+        if (seconds == 0F) {
+            action(1F)
+            return ScheduledTask.BLANK
+        }
+        action(passed / seconds)
+        return if (passed / seconds != 1F) {
+            taskBuilder().tracker(schedulingTracker).interval(0F).iterations(-1).execute { task ->
+                passed = task.secondsPassed
+                if (passed > seconds) {
+                    passed = seconds
+                }
+                val ratio = passed / seconds
+                action(ratio)
+                if (passed >= seconds) {
+                    task.expire()
+                }
+            }.build()
+        } else {
+            ScheduledTask.BLANK
+        }
+    }
 
-   public open fun lerp(seconds: Float = ..., action: (Float) -> Unit): ScheduledTask {
-   }
+    fun delayedFuture(seconds: Float): CompletableFuture<Unit> {
+        val future = CompletableFuture<Unit>()
+        after(seconds = seconds) {
+            future.complete(Unit)
+        }
+        return future
+    }
 
-   public open fun taskBuilder(): Builder {
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun momentarily(`$this`: Schedulable, action: () -> Unit): ScheduledTask {
-         return after$default(`$this`, 0.0F, action, 1, null);
-      }
-
-      @JvmStatic
-      fun after(`$this`: Schedulable, seconds: Float, action: () -> Unit): ScheduledTask {
-         return `$this`.getSchedulingTracker().addTask(new ScheduledTask((new Function1<ScheduledTask, Unit>(action) {
-            {
-               super(1);
-               this.$action = `$action`;
-            }
-
-            public final void invoke(@NotNull ScheduledTask it) {
-               this.$action.invoke();
-            }
-         }) as Function1, null, seconds, 0.0F, 0, 26, null));
-      }
-
-      @JvmStatic
-      fun lerp(`$this`: Schedulable, seconds: Float, action: (java.lang.Float?) -> Unit): ScheduledTask {
-         val passed: FloatRef = new FloatRef();
-         if (seconds == 0.0F) {
-            action.invoke(1.0F);
-            return ScheduledTask.Companion.getBLANK();
-         } else {
-            action.invoke(passed.element / seconds);
-            return if (passed.element / seconds != 1.0F)
-               `$this`.taskBuilder()
-                  .tracker(`$this`.getSchedulingTracker())
-                  .interval(0.0F)
-                  .iterations(-1)
-                  .execute((new Function1<ScheduledTask, Unit>(passed, seconds, action) {
-                     {
-                        super(1);
-                        this.$passed = `$passed`;
-                        this.$seconds = `$seconds`;
-                        this.$action = `$action`;
-                     }
-
-                     public final void invoke(@NotNull ScheduledTask task) {
-                        this.$passed.element = task.getSecondsPassed();
-                        if (this.$passed.element > this.$seconds) {
-                           this.$passed.element = this.$seconds;
-                        }
-
-                        this.$action.invoke(this.$passed.element / this.$seconds);
-                        if (this.$passed.element >= this.$seconds) {
-                           task.expire();
-                        }
-                     }
-                  }) as (ScheduledTask?) -> Unit)
-                  .build()
-               else
-               ScheduledTask.Companion.getBLANK();
-         }
-      }
-
-      @JvmStatic
-      fun taskBuilder(`$this`: Schedulable): ScheduledTask.Builder {
-         return new ScheduledTask.Builder().tracker(`$this`.getSchedulingTracker());
-      }
-   }
+    fun taskBuilder(): ScheduledTask.Builder = ScheduledTask.Builder().tracker(schedulingTracker)
 }

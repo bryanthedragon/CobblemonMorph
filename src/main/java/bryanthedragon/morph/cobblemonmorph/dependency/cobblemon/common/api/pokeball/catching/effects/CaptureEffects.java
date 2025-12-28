@@ -1,23 +1,34 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.effects
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CaptureEffect
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import net.minecraft.world.entity.LivingEntity
 
-public object CaptureEffects {
-   public final val FULL_RESTORE: CaptureEffect = CaptureEffects::FULL_RESTORE$lambda$0
+/**
+ * A collection of some high order functions of [CaptureEffect]s.
+ *
+ * @author Licious
+ * @since May 8th, 2022
+ */final class CaptureEffects {
 
-   public fun friendshipSetter(value: Int): CaptureEffect {
-      return CaptureEffects::friendshipSetter$lambda$1;
-   }
+    /**
+     * Used by [PokeBalls.HEAL_BALL].
+     * Heals, removes status & fully restores the PP of the captured Pokémon.
+     */
+    val FULL_RESTORE = CaptureEffect { _, pokemon -> pokemon.heal() }
 
-   @JvmStatic
-   fun `FULL_RESTORE$lambda$0`(var0: LivingEntity, pokemon: Pokemon) {
-      pokemon.heal();
-   }
+    /**
+     * Used by [PokeBalls.FRIEND_BALL].
+     *
+     * @param value The value the friendship of the Pokémon will start at must be between 0 and 255.
+     * @return The created capture effect.
+     */
+    fun friendshipSetter(value: Int) = CaptureEffect { _, pokemon -> pokemon.setFriendship(value) }
 
-   @JvmStatic
-   fun `friendshipSetter$lambda$1`(`$value`: Int, var1: LivingEntity, pokemon: Pokemon) {
-      Pokemon.setFriendship$default(pokemon, `$value`, false, 2, null);
-   }
 }

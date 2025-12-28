@@ -1,35 +1,76 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.CancelableObservable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.EventObservable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ClientPlayerEvent.Login
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ClientPlayerEvent.Logout
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ClientTickEvent.Post
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ClientTickEvent.Pre
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerEvent.Started
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerEvent.Starting
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerEvent.Stopped
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerEvent.Stopping
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.Death
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.RightClickBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.RightClickEntity
 
-public object PlatformEvents {
-   public final val CHANGE_DIMENSION: EventObservable<ChangeDimensionEvent> = new EventObservable()
-   public final val CLIENT_ITEM_TOOLTIP: EventObservable<ItemTooltipEvent> = new EventObservable()
-   public final val CLIENT_PLAYER_LOGIN: EventObservable<Login> = new EventObservable()
-   public final val CLIENT_PLAYER_LOGOUT: EventObservable<Logout> = new EventObservable()
-   public final val CLIENT_TICK_POST: EventObservable<Post> = new EventObservable()
-   public final val CLIENT_TICK_PRE: EventObservable<Pre> = new EventObservable()
-   public final val PLAYER_DEATH: CancelableObservable<Death> = new CancelableObservable()
-   public final val RIGHT_CLICK_BLOCK: CancelableObservable<RightClickBlock> = new CancelableObservable()
-   public final val RIGHT_CLICK_ENTITY: CancelableObservable<RightClickEntity> = new CancelableObservable()
-   public final val SERVER_PLAYER_LOGIN: EventObservable<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.Login> = new EventObservable()
-   public final val SERVER_PLAYER_LOGOUT: EventObservable<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.Logout> = new EventObservable()
-   public final val SERVER_STARTED: EventObservable<Started> = new EventObservable()
-   public final val SERVER_STARTING: EventObservable<Starting> = new EventObservable()
-   public final val SERVER_STOPPED: EventObservable<Stopped> = new EventObservable()
-   public final val SERVER_STOPPING: EventObservable<Stopping> = new EventObservable()
-   public final val SERVER_TICK_POST: EventObservable<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerTickEvent.Post> = new EventObservable()
-   public final val SERVER_TICK_PRE: EventObservable<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerTickEvent.Pre> = new EventObservable()
+/**
+ * A class for our converted events from platform specific to a trigger on common.
+ * If you're using this class as API it is recommended that you use the platform specific events instead.
+ *
+ * @author Licious
+ * @since February 13th, 2023
+ */final class PlatformEvents {
+    @JvmField
+    val SERVER_STARTING = EventObservable<ServerEvent.Starting>()
+    @JvmField
+    val SERVER_STARTED = EventObservable<ServerEvent.Started>()
+    @JvmField
+    val SERVER_STOPPING = EventObservable<ServerEvent.Stopping>()
+    @JvmField
+    val SERVER_STOPPED = EventObservable<ServerEvent.Stopped>()
+
+    @JvmField
+    val SERVER_PLAYER_TICK_PRE = EventObservable<ServerPlayerTickEvent.Pre>()
+    @JvmField
+    val SERVER_PLAYER_TICK_POST = EventObservable<ServerPlayerTickEvent.Post>()
+
+    @JvmField
+    val SERVER_PLAYER_ADVANCEMENT_EARNED = EventObservable<ServerPlayerEvent.AdvancementEarned>()
+
+    @JvmField
+    val SERVER_TICK_PRE = EventObservable<ServerTickEvent.Pre>()
+    @JvmField
+    val SERVER_TICK_POST = EventObservable<ServerTickEvent.Post>()
+
+    @JvmField
+    val CLIENT_TICK_PRE = EventObservable<ClientTickEvent.Pre>()
+    @JvmField
+    val CLIENT_TICK_POST = EventObservable<ClientTickEvent.Post>()
+
+    @JvmField
+    val SERVER_PLAYER_LOGIN = EventObservable<ServerPlayerEvent.Login>()
+    @JvmField
+    val SERVER_PLAYER_LOGOUT = EventObservable<ServerPlayerEvent.Logout>()
+    @JvmField
+    val CLIENT_PLAYER_LOGIN = EventObservable<ClientPlayerEvent.Login>()
+    @JvmField
+    val CLIENT_PLAYER_LOGOUT = EventObservable<ClientPlayerEvent.Logout>()
+    @JvmField
+    val PLAYER_DEATH = CancelableObservable<ServerPlayerEvent.Death>()
+    @JvmField
+    val RIGHT_CLICK_BLOCK = CancelableObservable<ServerPlayerEvent.RightClickBlock>()
+    @JvmField
+    val RIGHT_CLICK_ENTITY = CancelableObservable<ServerPlayerEvent.RightClickEntity>()
+
+    @JvmField
+    val CHANGE_DIMENSION = EventObservable<ChangeDimensionEvent>()
+
+    @JvmField
+    val CLIENT_ITEM_TOOLTIP = EventObservable<ItemTooltipEvent>()
+
+    @JvmField
+    val CLIENT_ENTITY_LOAD = EventObservable<ClientEntityEvent.Load>()
+    @JvmField
+    val CLIENT_ENTITY_UNLOAD = EventObservable<ClientEntityEvent.Unload>()
+
+    @JvmField
+    val RENDER = EventObservable<RenderEvent>()
 }

@@ -1,63 +1,44 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.Effect
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InstructionSet
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 
-public class EndInstruction(message: BattleMessage) : InterpreterInstruction {
-   public final val message: BattleMessage
+/**
+ * Format: |-end|POKEMON|EFFECT
+ *
+ * The volatile status from EFFECT inflicted on POKEMON has ended.
+ * @author Hiroku
+ * @since October 3rd, 2022
+ */
+class EndInstruction(val message: BattleMessage): InterpreterInstruction {
 
-   init {
-      this.message = message;
-   }
-
-   public override operator fun invoke(battle: PokemonBattle) {
-      PokemonBattle.dispatchWaiting$default(
-         battle,
-         0.0F,
-         (
-            new Function0<Unit>(this, battle) {
-               {
-                  super(0);
-                  this.this$0 = `$receiver`;
-                  this.$battle = `$battle`;
-               }
-
-               public final void invoke() {
-                  val var10000: BattlePokemon = this.this$0.getMessage().battlePokemon(0, this.$battle);
-                  if (var10000 != null) {
-                     val pokemonName: MutableComponent = var10000.getName();
-                     val var7: Effect = this.this$0.getMessage().effectAt(1);
-                     if (var7 != null) {
-                        val var8: java.lang.String = var7.getId();
-                        if (var8 != null) {
-                           if (!this.this$0.getMessage().hasOptionalArgument("silent")) {
-                              val var9: MutableComponent = if (var8 == "yawn")
-                                 LocalizationUtilsKt.lang("status.sleep.apply", pokemonName)
-                                 else
-                                 LocalizationUtilsKt.battleLang("end.$var8", pokemonName);
-                              val var11: PokemonBattle = this.$battle;
-                              var11.broadcastChatMessage(var9 as Component);
-                           }
-
-                           var10000.getContextManager().remove(var8, BattleContext.Type.VOLATILE);
-                           this.$battle.getMinorBattleActions().put(var10000.getUuid(), this.this$0.getMessage());
-                           return;
-                        }
-                     }
-                  }
-               }
+    override fun invoke(battle: PokemonBattle) {
+        battle.dispatchWaiting {
+            val pokemon = message.battlePokemon(0, battle) ?: return@dispatchWaiting
+            val pokemonName = pokemon.getName()
+            val effectID = message.effectAt(1)?.id ?: return@dispatchWaiting
+            if (!message.hasOptionalArgument("silent")) {
+                val lang = when (effectID) {
+                    "yawn" -> lang("status.sleep.apply", pokemonName)
+                    else -> battleLang("end.$effectID", pokemonName)
+                }
+                battle.broadcastChatMessage(lang)
             }
-         ) as Function0,
-         1,
-         null
-      );
-   }
+            pokemon.contextManager.remove(effectID, BattleContext.Type.VOLATILE)
+            battle.minorBattleActions[pokemon.uuid] = message
+        }
+    }
 }

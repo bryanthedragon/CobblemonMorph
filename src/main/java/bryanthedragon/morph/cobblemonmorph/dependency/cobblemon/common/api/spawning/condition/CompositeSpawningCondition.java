@@ -1,67 +1,50 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SpawningContext
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
+import net.minecraft.core.Holder
+import net.minecraft.world.level.biome.Biome
 
-@SourceDebugExtension(["SMAP\nCompositeSpawningCondition.kt\nKotlin\n*S Kotlin\n*F\n+ 1 CompositeSpawningCondition.kt\ncom/cobblemon/mod/common/api/spawning/condition/CompositeSpawningCondition\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,40:1\n2624#2,3:41\n1747#2,3:44\n*S KotlinDebug\n*F\n+ 1 CompositeSpawningCondition.kt\ncom/cobblemon/mod/common/api/spawning/condition/CompositeSpawningCondition\n*L\n34#1:41,3\n37#1:44,3\n*E\n"])
-public class CompositeSpawningCondition {
-   public final var anticonditions: MutableList<SpawningCondition<*>> = (new ArrayList()) as java.util.List
-   public final var conditions: MutableList<SpawningCondition<*>> = (new ArrayList()) as java.util.List
+/**
+ * A spawning condition that is composed of a list of conditions and anticonditions.
+ *
+ * A composite condition passes if both of the following are true:
+ * - The conditions list is empty, or any of the conditions match.
+ * - The anticonditions list is empty, or none of the anticonditions match.
+ *
+ * In other words, if the anticonditions list has five elements, then only one of those
+ * needs to be true for the spawn to be canceled. Meanwhile, if there are five elements
+ * in the conditions list, then all of them would need to be false for the spawn to be
+ * canceled.
+ *
+ * @author Hiroku
+ * @since January 26th, 2022
+ */
+class CompositeSpawningCondition {
+    var conditions = mutableListOf<SpawningCondition<*>>()
+    var anticonditions = mutableListOf<SpawningCondition<*>>()
 
-   public fun satisfiedBy(ctx: SpawningContext): Boolean {
-      if (!this.conditions.isEmpty()) {
-         val `$this$any$iv`: java.lang.Iterable = this.conditions;
-         var var10000: Boolean;
-         if (this.conditions is java.util.Collection && this.conditions.isEmpty()) {
-            var10000 = true;
-         } else {
-            val var4: java.util.Iterator = `$this$any$iv`.iterator();
-
-            while (true) {
-               if (!var4.hasNext()) {
-                  var10000 = true;
-                  break;
-               }
-
-               if ((var4.next() as SpawningCondition).isSatisfiedBy(ctx)) {
-                  var10000 = false;
-                  break;
-               }
+    fun isBiomeValid(holder: Holder<Biome>): Boolean {
+        if (conditions.isEmpty() || conditions.any { it.biomes == null || it.biomes!!.isEmpty() || it.biomes!!.any { it.fits(holder) } }) {
+            if (anticonditions.isEmpty() || anticonditions.none { it.biomes != null && it.biomes!!.any { it.fits(holder) } }) {
+                return true
             }
-         }
+        }
+        return false
+    }
 
-         if (var10000) {
-            return false;
-         }
-      }
-
-      if (!this.anticonditions.isEmpty()) {
-         val var8: java.lang.Iterable = this.anticonditions;
-         var var14: Boolean;
-         if (this.anticonditions is java.util.Collection && this.anticonditions.isEmpty()) {
-            var14 = false;
-         } else {
-            val var10: java.util.Iterator = var8.iterator();
-
-            while (true) {
-               if (!var10.hasNext()) {
-                  var14 = false;
-                  break;
-               }
-
-               if ((var10.next() as SpawningCondition).isSatisfiedBy(ctx)) {
-                  var14 = true;
-                  break;
-               }
-            }
-         }
-
-         if (var14) {
-            return false;
-         }
-      }
-
-      return true;
-   }
+    fun satisfiedBy(spawnablePosition: SpawnablePosition): Boolean {
+        return if (conditions.isNotEmpty() && conditions.none { it.isSatisfiedBy(spawnablePosition) }) {
+            false
+        } else {
+            !(anticonditions.isNotEmpty() && anticonditions.any { it.isSatisfiedBy(spawnablePosition) })
+        }
+    }
 }

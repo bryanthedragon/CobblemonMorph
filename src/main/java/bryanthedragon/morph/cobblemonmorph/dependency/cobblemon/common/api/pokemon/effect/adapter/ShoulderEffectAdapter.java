@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.effect.adapter
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.effect.ShoulderEffect
@@ -7,41 +15,28 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import java.lang.reflect.Type
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.effect.MobEffect
+import java.lang.reflect.Type
+final class ShoulderEffectAdapter: JsonDeserializer<ShoulderEffect> {
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ShoulderEffect {
+        val (typeId, obj) = if (json.isJsonPrimitive) {
+            json.asString to JsonObject()
+        } else {
+            json.asJsonObject.get("type").asString to json.asJsonObject
+        }
+        val effect = ShoulderEffectRegistry.get(typeId) ?: run {
+            try {
+                val effectId = ResourceLocation.parse(typeId.replace("-", "_").replace("slow_fall", "slow_falling"))
+                val registry = BuiltInRegistries.MOB_EFFECT
+                val effect = registry.get(effectId)
+                if (effect != null) {
+                    return PotionBaseEffect(effect, 0, true, false, false)
+                }
+            } catch (_: Exception) {}
 
-public object ShoulderEffectAdapter : JsonDeserializer<ShoulderEffect> {
-   public open fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ShoulderEffect {
-      val var4: Pair = if (json.isJsonPrimitive())
-         TuplesKt.to(json.getAsString(), new JsonObject())
-         else
-         TuplesKt.to(json.getAsJsonObject().get("type").getAsString(), json.getAsJsonObject());
-      val typeId: java.lang.String = var4.component1() as java.lang.String;
-      val obj: JsonObject = var4.component2() as JsonObject;
-      val var10000: ShoulderEffectRegistry = ShoulderEffectRegistry.INSTANCE;
-      val var14: Class = var10000.get(typeId);
-      if (var14 == null) {
-         val `$this$deserialize_u24lambda_u240`: ShoulderEffectAdapter = this;
-
-         try {
-            val effect: MobEffect = BuiltInRegistries.f_256974_
-               .m_7745_(
-                  new ResourceLocation(
-                     StringsKt.replace$default(StringsKt.replace$default(typeId, "-", "_", false, 4, null), "slow_fall", "slow_falling", false, 4, null)
-                  )
-               ) as MobEffect;
-            if (effect != null) {
-               return new PotionBaseEffect(effect, 0, true, false, false);
-            }
-         } catch (var13: Exception) {
-         }
-
-         throw new IllegalArgumentException("Cannot find shoulder effect with type '$typeId'");
-      } else {
-         val var15: Any = context.deserialize(obj as JsonElement, var14);
-         return var15 as ShoulderEffect;
-      }
-   }
+            throw IllegalArgumentException("Cannot find shoulder effect with type '$typeId'")
+        }
+        return context.deserialize(obj, effect)
+    }
 }

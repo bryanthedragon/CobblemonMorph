@@ -1,29 +1,42 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.Matrix4fExtensionsKt
-import net.minecraft.world.phys.Vec3
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.getOrigin
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.transformPosition
 import org.joml.Matrix4f
-import org.joml.Matrix4fc
+import net.minecraft.world.phys.Vec3
 
-public class MatrixWrapper {
-   public final var matrix: Matrix4f
-   public final var position: Vec3
+/**
+ * Holds onto a space matrix for quick access, exposes the matrix to mutation.
+ *
+ * @author Hiroku
+ * @since February 10th, 2023
+ */
+class MatrixWrapper {
+    var position: Vec3 = Vec3.ZERO
+    var matrix: Matrix4f = Matrix4f()
+    var updateFunction: ((MatrixWrapper) -> Unit)? = null
 
-   public fun updateMatrix(rotationMatrix: Matrix4f): MatrixWrapper {
-      this.matrix = new Matrix4f(rotationMatrix as Matrix4fc);
-      return this;
-   }
+    fun updateMatrix(rotationMatrix: Matrix4f) = apply {
+        this.matrix = Matrix4f(rotationMatrix)
+    }
 
-   public fun updatePosition(position: Vec3): MatrixWrapper {
-      this.position = position;
-      return this;
-   }
+    fun updatePosition(position: Vec3) = apply {
+        this.position = position
+    }
 
-   public fun getOrigin(): Vec3 {
-      return this.position.m_82549_(Matrix4fExtensionsKt.getOrigin(this.matrix));
-   }
-
-   public fun transformPosition(position: Vec3): Vec3 {
-      return this.position.m_82549_(Matrix4fExtensionsKt.transformPosition(this.matrix, position));
-   }
+    fun getOrigin(): Vec3 {
+        updateFunction?.invoke(this)
+        return position.add(matrix.getOrigin())
+    }
+    fun transformPosition(position: Vec3) = this.position.add(matrix.transformPosition(position))
+    fun transformWorldToParticle(position: Vec3) = Matrix4f(matrix).invertAffine().transformPosition(position.subtract(this.position))
+    fun clone() = MatrixWrapper().updateMatrix(matrix).updatePosition(position)
 }

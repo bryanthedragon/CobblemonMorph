@@ -1,16 +1,19 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.SetPartyPokemonPacket
 import net.minecraft.client.Minecraft
-
-public object SetPartyPokemonHandler : ClientNetworkPacketHandler<SetPartyPokemonPacket> {
-   public open fun handle(packet: SetPartyPokemonPacket, client: Minecraft) {
-      CobblemonClient.INSTANCE.getStorage().setPartyPokemon(packet.getStoreID(), packet.getStorePosition(), packet.getPokemonDTO().create());
-   }
-
-   fun handleOnNettyThread(packet: SetPartyPokemonPacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
+final class SetPartyPokemonHandler : ClientNetworkPacketHandler<SetPartyPokemonPacket> {
+    override fun handle(packet: SetPartyPokemonPacket, client: Minecraft) {
+        CobblemonClient.storage.setPartyPokemon(packet.storeID, packet.storePosition, packet.pokemon(client.level!!.registryAccess()))
+    }
 }

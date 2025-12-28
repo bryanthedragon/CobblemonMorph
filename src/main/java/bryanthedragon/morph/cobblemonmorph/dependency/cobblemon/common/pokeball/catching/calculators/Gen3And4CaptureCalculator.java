@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.catching.calculators
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.PokeBalls
@@ -5,97 +13,70 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.calculators.CaptureCalculator
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatusContainer
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.BurnStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.FrozenStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.ParalysisStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.PoisonBadlyStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.PoisonStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.SleepStatus
-import kotlin.math.MathKt
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 import kotlin.random.Random
 import net.minecraft.world.entity.LivingEntity
 
-public object Gen3And4CaptureCalculator : CaptureCalculator {
-   private final val apricornPokeballs: Set<PokeBall> =
-      SetsKt.setOf(
-         new PokeBall[]{
-            PokeBalls.INSTANCE.getHEAVY_BALL(),
-            PokeBalls.INSTANCE.getLURE_BALL(),
-            PokeBalls.INSTANCE.getFRIEND_BALL(),
-            PokeBalls.INSTANCE.getLOVE_BALL(),
-            PokeBalls.INSTANCE.getLEVEL_BALL(),
-            PokeBalls.INSTANCE.getFAST_BALL(),
-            PokeBalls.INSTANCE.getMOON_BALL()
-         }
-      )
+/**
+ * An implementation of the capture calculator used in the generation 3 and 4 games.
+ * For more information see the [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Catch_rate#Capture_method_.28Generation_III-IV.29) page.
+ *
+ * @author Licious
+ * @since January 29th, 2022
+ */final class Gen3And4CaptureCalculator : CaptureCalculator {
 
-   public override fun id(): String {
-      return "generation_3_and_4";
-   }
+    override fun id(): String = "generation_3_and_4"
 
-   public override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
-      val pokeBall: PokeBall = pokeBallEntity.getPokeBall();
-      val pokemon: Pokemon = target.getPokemon();
-      if (pokeBall.getCatchRateModifier().isGuaranteed()) {
-         return CaptureContext.Companion.successful$default(CaptureContext.Companion, false, 1, null);
-      } else {
-         val catchRate: Float = this.getCatchRate(thrower, pokeBallEntity, target, (float)pokemon.getForm().getCatchRate());
-         val validModifier: Boolean = pokeBall.getCatchRateModifier().isValid(thrower, pokemon);
-         val var10000: PersistentStatusContainer = pokemon.getStatus();
-         val rate: PersistentStatus = if (var10000 != null) var10000.getStatus() else null;
-         val bonusStatus: Float = if (rate is SleepStatus || rate is FrozenStatus)
-            2.0F
-            else
-            (if (rate is ParalysisStatus || rate is BurnStatus || rate is PoisonStatus || rate is PoisonBadlyStatus) 1.5F else 1.0F);
-         val var20: Float;
-         val var21: Float;
-         if (apricornPokeballs.contains(pokeBall)) {
-            var20 = if (validModifier) pokeBall.getCatchRateModifier().modifyCatchRate(catchRate, thrower, pokemon) else 1.0F;
-            var21 = 1.0F;
-         } else {
-            var20 = catchRate;
-            var21 = if (validModifier) pokeBall.getCatchRateModifier().value(thrower, pokemon) else 1.0F;
-         }
+    private val apricornPokeballs = setOf(
+        PokeBalls.HEAVY_BALL,
+        PokeBalls.LURE_BALL,
+        PokeBalls.FRIEND_BALL,
+        PokeBalls.LOVE_BALL,
+        PokeBalls.LEVEL_BALL,
+        PokeBalls.FAST_BALL,
+        PokeBalls.MOON_BALL
+    )
 
-         val shakeProbability: Int = MathKt.roundToInt(
-            1048560.0F
-               / (float)MathKt.roundToInt(
-                  Math.sqrt(
-                     Math.sqrt(
-                        (double)MathKt.roundToInt(
-                           1.671168E7F
-                              / (
-                                 (pokeBall.getCatchRateModifier()
-                                          .behavior(thrower, pokemon)
-                                          .getMutator()
-                                          .invoke((3.0F * (float)pokemon.getHp() - 2.0F * (float)pokemon.getCurrentHealth()) * var20, var21) as java.lang.Number)
-                                       .floatValue()
-                                    / (3.0F * (float)pokemon.getHp())
-                                    * bonusStatus
-                              )
-                        )
-                     )
-                  )
-               )
-         );
-         var shakes: Int = 0;
-         val var14: Byte = 4;
+    override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
+        val pokeBall = pokeBallEntity.pokeBall
+        val pokemon = target.pokemon
+        if (pokeBall.catchRateModifier.isGuaranteed()) {
+            return CaptureContext.successful()
+        }
+        val catchRate = getCatchRate(thrower, pokeBallEntity, target, pokemon.form.catchRate.toFloat())
+        val validModifier = pokeBall.catchRateModifier.isValid(thrower, pokemon)
+        val bonusStatus = when (pokemon.status?.status) {
+            is SleepStatus, is FrozenStatus -> 2F
+            is ParalysisStatus, is BurnStatus, is PoisonStatus, is PoisonBadlyStatus -> 1.5F
+            else -> 1F
+        }
+        val rate: Float
+        val ballBonus = if (this.apricornPokeballs.contains(pokeBall)) {
+            rate = if (validModifier) pokeBall.catchRateModifier.modifyCatchRate(catchRate, thrower, pokemon) else 1F
+            1F
+        }
+        else {
+            rate = catchRate
+            if (validModifier) pokeBall.catchRateModifier.value(thrower, pokemon) else 1F
+        }
 
-         for (int var15 = 0; var15 < var14; var15++) {
-            if (Random.Default.nextInt(65537) < shakeProbability) {
-               shakes++;
+        val modifiedCatchRate = (pokeBall.catchRateModifier.behavior(thrower, pokemon).mutator((3F * pokemon.maxHealth - 2F * pokemon.currentHealth) * rate, ballBonus) / (3F * pokemon.maxHealth)) * bonusStatus
+        val shakeProbability = (1048560F / sqrt(sqrt((16711680F / modifiedCatchRate).roundToInt().toDouble())).roundToInt()).roundToInt()
+        var shakes = 0
+        repeat(4) {
+            val n = Random.nextInt(65537)
+            if (n < shakeProbability) {
+                shakes++
             }
-         }
+        }
+        return CaptureContext(numberOfShakes = shakes, isSuccessfulCapture = shakes == 4, isCriticalCapture = false)
+    }
 
-         return new CaptureContext(shakes, shakes == 4, false);
-      }
-   }
-
-   override fun getCatchRate(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity, catchRate: Float): Float {
-      return CaptureCalculator.DefaultImpls.getCatchRate(this, thrower, pokeBallEntity, target, catchRate);
-   }
 }

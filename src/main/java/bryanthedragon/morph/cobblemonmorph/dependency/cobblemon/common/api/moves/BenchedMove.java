@@ -1,111 +1,177 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeSizedInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import io.netty.buffer.ByteBuf
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.nbt.ListTag
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public data BenchedMove(moveTemplate: MoveTemplate, ppRaisedStages: Int) {
-   public final val moveTemplate: MoveTemplate
-   public final val ppRaisedStages: Int
+class BenchedMoves : Iterable<BenchedMove> {
+    var changeFunction: ((BenchedMoves) -> Unit) = {}
+    private var emit = true
+    private val benchedMoves = mutableListOf<BenchedMove>()
 
-   init {
-      this.moveTemplate = moveTemplate;
-      this.ppRaisedStages = ppRaisedStages;
-   }
+    fun doWithoutEmitting(action: () -> Unit) {
+        val previousEmit = emit
+        emit = false
+        action()
+        emit = previousEmit
+    }
 
-   public fun saveToNBT(nbt: CompoundTag): CompoundTag {
-      nbt.m_128359_("MoveName", this.moveTemplate.getName());
-      nbt.m_128344_("RaisedPPStages", (byte)this.ppRaisedStages);
-      return nbt;
-   }
+    fun copyFrom(other: BenchedMoves) {
+        doWithoutEmitting {
+            clear()
+            other.forEach { add(it) }
+        }
+        update()
+    }
 
-   public fun saveToJSON(json: JsonObject): JsonObject {
-      json.addProperty("MoveName", this.moveTemplate.getName());
-      json.addProperty("RaisedPPStages", this.ppRaisedStages);
-      return json;
-   }
+    fun doThenEmit(action: () -> Unit) {
+        doWithoutEmitting(action)
+        update()
+    }
 
-   public fun saveToBuffer(buffer: FriendlyByteBuf) {
-      buffer.m_130070_(this.moveTemplate.getName());
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, this.ppRaisedStages);
-   }
+    fun update() {
+        if (emit) {
+            changeFunction(this)
+        }
+    }
 
-   public operator fun component1(): MoveTemplate {
-      return this.moveTemplate;
-   }
+    fun add(benchedMove: BenchedMove): Boolean {
+        if (any { it.moveTemplate == benchedMove.moveTemplate }) {
+            return false
+        }
 
-   public operator fun component2(): Int {
-      return this.ppRaisedStages;
-   }
+        doThenEmit { benchedMoves.add(benchedMove) }
+        return true
+    }
 
-   public fun copy(moveTemplate: MoveTemplate = this.moveTemplate, ppRaisedStages: Int = this.ppRaisedStages): BenchedMove {
-      return new BenchedMove(moveTemplate, ppRaisedStages);
-   }
+    fun addAll(benchedMoves: Iterable<BenchedMove>) = doThenEmit { this.benchedMoves.addAll(benchedMoves) }
+    fun clear() = doThenEmit { benchedMoves.clear() }
+    fun remove(benchedMove: BenchedMove) = doThenEmit { benchedMoves.remove(benchedMove) }
+    fun remove(moveTemplate: MoveTemplate) = doThenEmit { benchedMoves.removeIf { it.moveTemplate == moveTemplate } }
+    override fun iterator() = benchedMoves.iterator()
 
-   public override fun toString(): String {
-      return "BenchedMove(moveTemplate=${this.moveTemplate}, ppRaisedStages=${this.ppRaisedStages})";
-   }
+    fun saveToNBT(nbt: ListTag): ListTag {
+        nbt.addAll(benchedMoves.map { it.saveToNBT(CompoundTag()) })
+        return nbt
+    }
 
-   public override fun hashCode(): Int {
-      return this.moveTemplate.hashCode() * 31 + Integer.hashCode(this.ppRaisedStages);
-   }
+    fun saveToJSON(json: JsonArray): JsonArray {
+        val jsons = benchedMoves.map { it.saveToJSON(JsonObject()) }
+        jsons.forEach { json.add(it) }
+        return json
+    }
 
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is BenchedMove) {
-         return false;
-      } else {
-         val var2: BenchedMove = other as BenchedMove;
-         if (!(this.moveTemplate == (other as BenchedMove).moveTemplate)) {
-            return false;
-         } else {
-            return this.ppRaisedStages == var2.ppRaisedStages;
-         }
-      }
-   }
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeShort(benchedMoves.size)
+        benchedMoves.forEach { it.saveToBuffer(buffer) }
+    }
 
-   public companion object {
-      public fun loadFromNBT(nbt: CompoundTag): BenchedMove {
-         val name: java.lang.String = nbt.m_128461_("MoveName");
-         val var10000: BenchedMove = new BenchedMove;
-         val var10002: Moves = Moves.INSTANCE;
-         var var3: MoveTemplate = var10002.getByName(name);
-         if (var3 == null) {
-            var3 = MoveTemplate.Companion.dummy(name);
-         }
+    fun loadFromNBT(nbt: ListTag): BenchedMoves {
+        doThenEmit {
+            clear()
+            nbt.forEach { benchedMoves.add(BenchedMove.loadFromNBT(it as CompoundTag)) }
+        }
 
-         var10000./* $VF: Unable to resugar constructor */<init>(var3, nbt.m_128445_("RaisedPPStages"));
-         return var10000;
-      }
+        return this
+    }
 
-      public fun loadFromJSON(json: JsonObject): BenchedMove {
-         val name: java.lang.String = json.get("MoveName").getAsString();
-         val var10000: BenchedMove = new BenchedMove;
-         val var10002: Moves = Moves.INSTANCE;
-         var var3: MoveTemplate = var10002.getByName(name);
-         if (var3 == null) {
-            var3 = MoveTemplate.Companion.dummy(name);
-         }
+    fun loadFromJSON(json: JsonArray): BenchedMoves {
+        doThenEmit {
+            clear()
+            json.forEach { benchedMoves.add(BenchedMove.loadFromJSON(it.asJsonObject)) }
+        }
+        return this
+    }
 
-         var10000./* $VF: Unable to resugar constructor */<init>(var3, json.get("RaisedPPStages").getAsInt());
-         return var10000;
-      }
+    fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): BenchedMoves {
+        doThenEmit {
+            clear()
+            repeat(times = buffer.readShort().toInt()) {
+                benchedMoves.add(BenchedMove.loadFromBuffer(buffer))
+            }
+        }
+        return this
+    }
 
-      public fun loadFromBuffer(buffer: FriendlyByteBuf): BenchedMove {
-         val name: java.lang.String = buffer.m_130277_();
-         val var10000: BenchedMove = new BenchedMove;
-         val var10002: Moves = Moves.INSTANCE;
-         var var3: MoveTemplate = var10002.getByName(name);
-         if (var3 == null) {
-            var3 = MoveTemplate.Companion.dummy(name);
-         }
+    companion object {
+        @JvmStatic
+        val CODEC: Codec<BenchedMoves> = Codec.list(BenchedMove.CODEC)
+            .xmap(
+                { moveList ->
+                    val benchedMoves = BenchedMoves()
+                    benchedMoves.addAll(moveList.filter { it.moveTemplate !is MoveTemplate.Dummy })
+                    return@xmap benchedMoves
+                },
+                BenchedMoves::toList
+            )
+    }
+}
 
-         var10000./* $VF: Unable to resugar constructor */<init>(var3, NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE));
-         return var10000;
-      }
-   }
+record BenchedMove(val moveTemplate: MoveTemplate, val ppRaisedStages: Int) {
+    fun saveToNBT(nbt: CompoundTag): CompoundTag {
+        nbt.putString(DataKeys.POKEMON_MOVESET_MOVENAME, moveTemplate.name)
+        nbt.putByte(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES, ppRaisedStages.toByte())
+        return nbt
+    }
+
+    fun saveToJSON(json: JsonObject): JsonObject {
+        json.addProperty(DataKeys.POKEMON_MOVESET_MOVENAME, moveTemplate.name)
+        json.addProperty(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES, ppRaisedStages)
+        return json
+    }
+
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(moveTemplate.name)
+        buffer.writeSizedInt(IntSize.U_BYTE, ppRaisedStages)
+    }
+
+    companion object {
+        fun loadFromNBT(nbt: CompoundTag): BenchedMove {
+            val name = nbt.getString(DataKeys.POKEMON_MOVESET_MOVENAME)
+            return BenchedMove(
+                Moves.getByName(name) ?: MoveTemplate.dummy(name),
+                nbt.getByte(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES).toInt()
+            )
+        }
+
+        fun loadFromJSON(json: JsonObject): BenchedMove {
+            val name = json.get(DataKeys.POKEMON_MOVESET_MOVENAME).asString
+            return BenchedMove(
+                Moves.getByName(name) ?: MoveTemplate.dummy(name),
+                json.get(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES).asInt
+            )
+        }
+
+        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): BenchedMove {
+            val name = buffer.readString()
+            return BenchedMove(
+                Moves.getByName(name) ?: MoveTemplate.dummy(name),
+                buffer.readSizedInt(IntSize.U_BYTE)
+            )
+        }
+
+        @JvmStatic
+        val CODEC: Codec<BenchedMove> = RecordCodecBuilder.create { it.group(
+            MoveTemplate.BY_STRING_CODEC.fieldOf(DataKeys.POKEMON_MOVESET_MOVENAME).forGetter(BenchedMove::moveTemplate),
+            Codec.intRange(0, 3).fieldOf(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES).forGetter(BenchedMove::ppRaisedStages)
+        ).apply(it, ::BenchedMove) }
+    }
 }

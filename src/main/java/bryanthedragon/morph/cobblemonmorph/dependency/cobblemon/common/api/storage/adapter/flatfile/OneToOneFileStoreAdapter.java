@@ -1,99 +1,111 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.adapter.flatfile
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStore
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.StorePosition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.adapter.CobblemonAdapterParent
 import java.io.File
-import java.util.Locale
 import java.util.UUID
+import net.minecraft.core.RegistryAccess
 
-public abstract class OneToOneFileStoreAdapter<S> : CobblemonAdapterParent<S>, FileStoreAdapter<S> {
-   private final val fileExtension: String
-   private final val folderPerClass: Boolean
-   private final val rootFolder: String
-   private final val useNestedFolders: Boolean
+/**
+ * A subset of [FileStoreAdapter] that make predictable use of files based on the implementation of [rootFolder],
+ * [useNestedFolders], [folderPerClass], and [fileExtension].
+ *
+ * @property rootFolder The root folder for these storages, such as "data/mystores/"
+ * @property useNestedFolders Whether the stores in a folder should be nested within folders named after the first
+ * two characters of the UUID. This makes it easier to access files on an FTP connection by drastically reducing the
+ * number of stores in a single folder. For example, a store with UUID 380df991-f603-344c-a090-369bad2a924a would be
+ * located under the root folder in {rootFolder}/38/{fileName}.
+ * @property folderPerClass Whether different types of store will be saved in different folders beneath the root. If this
+ * is false, stores will save with a suffix denoting what class of store they are so that they can be differentiated.
+ * @property fileExtension The file extension, such as json or dat, that will be appended to the file.
+ * @param S The serialized form of a storage. This is what will be constructed synchronously, while the saving
+ *             may occur asynchronously.
+ *
+ * @author Hiroku
+ * @since November 30th, 2021
+ */
+abstract class OneToOneFileStoreAdapter<S>(
+    private val rootFolder: String,
+    private val useNestedFolders: Boolean,
+    private val folderPerClass: Boolean,
+    private val fileExtension: String
+) : FileStoreAdapter<S>, CobblemonAdapterParent<S>() {
+    abstract fun save(file: File, serialized: S)
+    abstract fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, uuid: UUID, registryAccess: RegistryAccess): T?
 
-   open fun OneToOneFileStoreAdapter(rootFolder: java.lang.String, useNestedFolders: Boolean, folderPerClass: Boolean, fileExtension: java.lang.String) {
-      this.rootFolder = rootFolder;
-      this.useNestedFolders = useNestedFolders;
-      this.folderPerClass = folderPerClass;
-      this.fileExtension = fileExtension;
-   }
+    fun getFile(storeClass: Class<out PokemonStore<*>>, uuid: UUID): File {
+        val className = storeClass.simpleName.lowercase()
+        val subfolder1 = if (folderPerClass) "$className/" else ""
+        val subfolder2 = if (useNestedFolders) "${uuid.toString().substring(0, 2)}/" else ""
+        val folder = if (!rootFolder.endsWith("/")) "$rootFolder/" else rootFolder
+        val fileName = if (folderPerClass) "$uuid.$fileExtension" else "$uuid-$className.$fileExtension"
+        val file = File(folder + subfolder1 + subfolder2, fileName)
+        file.parentFile.mkdirs()
+        return file
+    }
 
-   public abstract fun save(file: File, serialized: Any) {
-   }
+    override fun save(storeClass: Class<out PokemonStore<*>>, uuid: UUID, serialized: S) {
+        val file = getFile(storeClass, uuid)
+        val tempFile = File(file.absolutePath + ".temp")
+        val oldFile = File(file.absolutePath + ".old")
+        tempFile.createNewFile()
+        save(tempFile, serialized)
+        if (file.exists()) {
+            file.copyTo(oldFile, overwrite = true)
+        }
+        tempFile.copyTo(file, overwrite = true)
+        tempFile.delete()
+    }
 
-   public abstract fun <E, T : PokemonStore<Any>> load(file: File, storeClass: Class<out Any>, uuid: UUID): Any? {
-   }
+    override fun <E : StorePosition, T : PokemonStore<E>> provide(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+        val file = getFile(storeClass, uuid)
+        val oldFile = File(file.absolutePath + ".old")
 
-   public fun getFile(storeClass: Class<out PokemonStore<*>>, uuid: UUID): File {
-      var var10000: java.lang.String = storeClass.getSimpleName();
-      var10000 = var10000.toLowerCase(Locale.ROOT);
-      val subfolder1: java.lang.String = if (this.folderPerClass) "$var10000/" else "";
-      if (this.useNestedFolders) {
-         var10000 = uuid.toString();
-         var10000 = var10000.substring(0, 2);
-         var10000 = "$var10000/";
-      } else {
-         var10000 = "";
-      }
-
-      val var11: File = new File(
-         "${if (!StringsKt.endsWith$default(this.rootFolder, "/", false, 2, null)) "${this.rootFolder}/" else this.rootFolder}$subfolder1$var10000",
-         if (this.folderPerClass) "$uuid.${this.fileExtension}" else "$uuid-$var10000.${this.fileExtension}"
-      );
-      var11.getParentFile().mkdirs();
-      return var11;
-   }
-
-   public override fun save(storeClass: Class<out PokemonStore<*>>, uuid: UUID, serialized: Any) {
-      val file: File = this.getFile(storeClass, uuid);
-      val tempFile: File = new File("${file.getAbsolutePath()}.temp");
-      tempFile.createNewFile();
-      this.save(tempFile, (S)serialized);
-      FilesKt.copyTo$default(tempFile, file, true, 0, 4, null);
-      tempFile.delete();
-   }
-
-   public override fun <E : StorePosition, T : PokemonStore<Any>> provide(storeClass: Class<Any>, uuid: UUID): Any? {
-      label32: {
-         var tempFile: File;
-         label49: {
-            val file: File = this.getFile(storeClass, uuid);
-            tempFile = new File("${file.getAbsolutePath()}.temp");
-            if (tempFile.exists()) {
-               try {
-                  val tempLoaded: PokemonStore = this.load(tempFile, storeClass, uuid);
-                  if (tempLoaded != null) {
-                     this.save(file, this.serialize(tempLoaded));
-                     break label49;
-                  }
-               } catch (var10: java.lang.Throwable) {
-                  tempFile.delete();
-               }
-
-               tempFile.delete();
+        return if (file.exists() && file.length() > 0L) {
+            load(file, storeClass, uuid, registryAccess)
+                ?: let {
+                    file.delete()
+                    if (oldFile.exists() && oldFile.length() > 0L) {
+                        var result = load(oldFile, storeClass, uuid, registryAccess) ?: let {
+                            LOGGER.error("Pokémon save file for ${storeClass.simpleName} ($uuid) was corrupted. A fresh file will be created.")
+                            var result = storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                            save(storeClass, uuid, serialize(result, registryAccess))
+                            oldFile.delete()
+                            return result
+                        }
+                        LOGGER.warn("Loading old Pokémon save file for ${storeClass.simpleName} ($uuid) due to corruption of current file.")
+                        oldFile.copyTo(file, overwrite = true)
+                        result
+                    }
+                    else {
+                        storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                        var result = storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                        save(storeClass, uuid, serialize(result, registryAccess))
+                        oldFile.delete()
+                        result
+                    }
+                }
+        } else {
+            file.delete()
+            if (oldFile.exists() && oldFile.length() > 0L) {
+                var result = load(oldFile, storeClass, uuid, registryAccess) ?: let {
+                    oldFile.delete()
+                    return null
+                }
+                oldFile.copyTo(file, overwrite = true)
+                result
             }
-
-            var var10000: PokemonStore;
-            if (file.exists()) {
-               var10000 = this.load(file, storeClass, uuid);
-               if (var10000 == null) {
-                  val it: OneToOneFileStoreAdapter = this;
-                  Cobblemon.INSTANCE
-                     .getLOGGER()
-                     .error("Pokémon save file for ${storeClass.getSimpleName()} ($uuid) was corrupted. A fresh file will be created.");
-                  var10000 = storeClass.getConstructor(UUID.class).newInstance(uuid) as PokemonStore;
-               }
-            } else {
-               var10000 = null;
-            }
-
-            return (T)var10000;
-         }
-
-         tempFile.delete();
-      }
-   }
+            null
+        }
+    }
 }

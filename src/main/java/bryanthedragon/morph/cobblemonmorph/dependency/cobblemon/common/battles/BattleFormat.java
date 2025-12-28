@@ -1,127 +1,118 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import io.netty.buffer.ByteBuf
-import java.util.LinkedHashSet
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getStringOrNull
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeSizedInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-@SourceDebugExtension(["SMAP\nBattleFormat.kt\nKotlin\n*S Kotlin\n*F\n+ 1 BattleFormat.kt\ncom/cobblemon/mod/common/battles/BattleFormat\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,76:1\n1855#2,2:77\n*S KotlinDebug\n*F\n+ 1 BattleFormat.kt\ncom/cobblemon/mod/common/battles/BattleFormat\n*L\n61#1:77,2\n*E\n"])
-public data BattleFormat(mod: String = "cobblemon",
-   battleType: BattleType = BattleTypes.INSTANCE.getSINGLES(),
-   ruleSet: Set<String> = SetsKt.emptySet(),
-   gen: Int = 9
+/**
+ * Rules around how a battle is going to work.
+ *
+ * @author Hiroku
+ * @since March 9th, 2022
+ */
+record BattleFormat(
+    val mod: String = "cobblemon",
+    val battleType: BattleType = BattleTypes.SINGLES,
+    var ruleSet: Set<String> = setOf(),
+    val gen: Int = 9,
+    var adjustLevel: Int = -1, // Stop gap rule before a more general system for rules enforced by Cobblemon is implemented.
 ) {
-   public final val battleType: BattleType
-   public final val gen: Int
-   public final val mod: String
-   public final val ruleSet: Set<String>
+    companion object {
+        fun setBattleRules(
+            battleFormat: BattleFormat,
+            rules: Set<String>? = null
+        ): BattleFormat {
+            val filteredRules = rules?.filter { it.isNotBlank() }?.toSet()
+            val ruleValues = filteredRules?.mapNotNull { ruleName ->
+                BattleRules::class.members
+                    .filterIsInstance<kotlin.reflect.KProperty1<BattleRules, String>>()
+                    .find { it.name == ruleName }
+                    ?.getter
+                    ?.call()
+            }.orEmpty()
 
-   init {
-      this.mod = mod;
-      this.battleType = battleType;
-      this.ruleSet = ruleSet;
-      this.gen = gen;
-   }
+            return battleFormat.copy(
+                ruleSet = filteredRules ?: (battleFormat.ruleSet + ruleValues)
+            )
+        }
 
-   public fun saveToBuffer(buffer: FriendlyByteBuf): FriendlyByteBuf {
-      buffer.m_130070_(this.mod);
-      this.battleType.saveToBuffer(buffer);
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, this.ruleSet.size());
+        fun fromFormatIdentifier(id: String): BattleFormat = when (id) {
+            "single_battle", "single", "singles" -> BattleFormat.GEN_9_SINGLES
+            "double_battle", "double", "doubles" -> BattleFormat.GEN_9_DOUBLES
+            "triple_battle", "triple", "triples" -> BattleFormat.GEN_9_TRIPLES
+            else ->  BattleFormat.GEN_9_SINGLES
+        }
 
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         buffer.m_130070_(`element$iv` as java.lang.String);
-      }
+        val GEN_9_SINGLES = BattleFormat(
+            battleType = BattleTypes.SINGLES,
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+        )
 
-      return buffer;
-   }
+        val GEN_9_DOUBLES = BattleFormat(
+            battleType = BattleTypes.DOUBLES,
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+        )
 
-   public fun toFormatJSON(): String {
-      return StringsKt.replace$default(
-         StringsKt.trimIndent(
-            "\n            {\n                \"mod\": \"${this.mod}\",\n                \"gameType\": \"${this.battleType.getName()}\",\n                \"gen\": ${this.gen},\n                \"ruleset\": [${CollectionsKt.joinToString$default(
-               this.ruleSet, null, null, null, 0, null, <unrepresentable>.INSTANCE, 31, null
-            )}],\n                \"effectType\": \"Format\"\n            }\n        "
-         ),
-         "\n",
-         "",
-         false,
-         4,
-         null
-      );
-   }
+        val GEN_9_TRIPLES = BattleFormat(
+                battleType = BattleTypes.TRIPLES,
+                ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+        )
 
-   public operator fun component1(): String {
-      return this.mod;
-   }
+        val GEN_9_MULTI = BattleFormat(
+            battleType = BattleTypes.MULTI,
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+        )
 
-   public operator fun component2(): BattleType {
-      return this.battleType;
-   }
+        val GEN_9_ROYAL = BattleFormat(
+            battleType = BattleTypes.ROYAL,
+            ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
+        )
 
-   public operator fun component3(): Set<String> {
-      return this.ruleSet;
-   }
+        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): BattleFormat {
+            val mod = buffer.readString()
+            val battleType = BattleType.loadFromBuffer(buffer)
+            val ruleSet = mutableSetOf<String>()
+            repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) { ruleSet.add(buffer.readString()) }
+            val adjustLevel = buffer.readSizedInt(IntSize.INT)
+            return BattleFormat(
+                mod = mod,
+                battleType = battleType,
+                ruleSet = ruleSet,
+                adjustLevel = adjustLevel
+            )
+        }
+    }
 
-   public operator fun component4(): Int {
-      return this.gen;
-   }
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf): RegistryFriendlyByteBuf {
+        buffer.writeString(mod)
+        battleType.saveToBuffer(buffer)
+        buffer.writeSizedInt(IntSize.U_BYTE, ruleSet.size)
+        ruleSet.forEach(buffer::writeString)
+        buffer.writeSizedInt(IntSize.INT, adjustLevel)
+        return buffer
+    }
 
-   public fun copy(mod: String = this.mod, battleType: BattleType = this.battleType, ruleSet: Set<String> = this.ruleSet, gen: Int = this.gen): BattleFormat {
-      return new BattleFormat(mod, battleType, ruleSet, gen);
-   }
-
-   public override fun toString(): String {
-      return "BattleFormat(mod=${this.mod}, battleType=${this.battleType}, ruleSet=${this.ruleSet}, gen=${this.gen})";
-   }
-
-   public override fun hashCode(): Int {
-      return ((this.mod.hashCode() * 31 + this.battleType.hashCode()) * 31 + this.ruleSet.hashCode()) * 31 + Integer.hashCode(this.gen);
-   }
-
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is BattleFormat) {
-         return false;
-      } else {
-         val var2: BattleFormat = other as BattleFormat;
-         if (!(this.mod == (other as BattleFormat).mod)) {
-            return false;
-         } else if (!(this.battleType == var2.battleType)) {
-            return false;
-         } else if (!(this.ruleSet == var2.ruleSet)) {
-            return false;
-         } else {
-            return this.gen == var2.gen;
-         }
-      }
-   }
-
-   fun BattleFormat() {
-      this(null, null, null, 0, 15, null);
-   }
-
-   @SourceDebugExtension(["SMAP\nBattleFormat.kt\nKotlin\n*S Kotlin\n*F\n+ 1 BattleFormat.kt\ncom/cobblemon/mod/common/battles/BattleFormat$Companion\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,76:1\n1#2:77\n*E\n"])
-   public companion object {
-      public final val GEN_9_DOUBLES: BattleFormat
-      public final val GEN_9_MULTI: BattleFormat
-      public final val GEN_9_SINGLES: BattleFormat
-
-      public fun loadFromBuffer(buffer: FriendlyByteBuf): BattleFormat {
-         val mod: java.lang.String = buffer.m_130277_();
-         val battleType: BattleType = BattleType.Companion.loadFromBuffer(buffer);
-         val ruleSet: java.util.Set = new LinkedHashSet();
-         val var5: Int = NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE);
-
-         for (int var6 = 0; var6 < var5; var6++) {
-            val var10001: java.lang.String = buffer.m_130277_();
-            ruleSet.add(var10001);
-         }
-
-         return new BattleFormat(mod, battleType, ruleSet, 0, 8, null);
-      }
-   }
+    fun toFormatJSON(): String {
+        return """
+            {
+                "mod": "$mod",
+                "gameType": "${battleType.name}",
+                "gen": $gen,
+                "ruleset": [${ruleSet.joinToString { "\"$it\"" }}],
+                "effectType": "Format"
+            }
+        """.trimIndent().replace("\n", "")
+    }
 }

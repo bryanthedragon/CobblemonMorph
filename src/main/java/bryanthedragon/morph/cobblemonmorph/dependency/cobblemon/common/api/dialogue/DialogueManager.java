@@ -1,29 +1,60 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork.sendPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.DialogueClosedPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.DialogueOpenedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt
-import java.util.LinkedHashMap
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.activeDialogue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.withNPCValue
 import java.util.UUID
 import net.minecraft.server.level.ServerPlayer
 
-public object DialogueManager {
-   public final val activeDialogues: MutableMap<UUID, ActiveDialogue> = (new LinkedHashMap()) as java.util.Map
+/**
+ * Manages the active dialogues for players. Map is indexed by player UUID.
+ * You really need to make sure any dialogues you start with a player go through this otherwise
+ * the player won't be able to close the dialogue.
+ *
+ * @author Hiroku
+ * @since December 27th, 2023
+ */final class DialogueManager {
+    val activeDialogues = mutableMapOf<UUID, ActiveDialogue>()
 
-   public fun startDialogue(playerEntity: ServerPlayer, dialogue: Dialogue) {
-      val activeDialogue: ActiveDialogue = new ActiveDialogue(playerEntity, dialogue);
-      val packet: java.util.Map = activeDialogues;
-      val var10000: UUID = playerEntity.m_20148_();
-      packet.put(var10000, activeDialogue);
-      CobblemonNetwork.INSTANCE.sendPacket(playerEntity, new DialogueOpenedPacket(activeDialogue, true));
-   }
+    @JvmStatic
+    fun startDialogue(playerEntity: ServerPlayer, dialogue: Dialogue): ActiveDialogue {
+        val activeDialogue = ActiveDialogue(playerEntity, dialogue)
+        startDialogue(activeDialogue)
+        return activeDialogue
+    }
 
-   public fun stopDialogue(playerEntity: ServerPlayer) {
-      val var10000: ActiveDialogue = PlayerExtensionsKt.getActiveDialogue(playerEntity);
-      if (var10000 != null) {
-         new DialogueClosedPacket(var10000.getDialogueId()).sendToPlayer(playerEntity);
-         activeDialogues.remove(var10000.getDialogueId());
-      }
-   }
+    @JvmStatic
+    fun startDialogue(playerEntity: ServerPlayer, npcEntity: NPCEntity, dialogue: Dialogue): ActiveDialogue {
+        val activeDialogue = ActiveDialogue(playerEntity, dialogue)
+        activeDialogue.runtime.withNPCValue("npc", npcEntity)
+        activeDialogue.npc = npcEntity
+        startDialogue(activeDialogue)
+        return activeDialogue
+    }
+
+    @JvmStatic
+    fun startDialogue(activeDialogue: ActiveDialogue) {
+        activeDialogue.initialize()
+        if (!activeDialogue.completion.isDone) {
+            activeDialogues[activeDialogue.playerEntity.uuid] = activeDialogue
+        }
+    }
+
+    @JvmStatic
+    fun stopDialogue(playerEntity: ServerPlayer) {
+        val activeDialogue = playerEntity.activeDialogue ?: return
+        DialogueClosedPacket(activeDialogue.dialogueId).sendToPlayer(playerEntity)
+        activeDialogues.remove(playerEntity.uuid)
+    }
 }

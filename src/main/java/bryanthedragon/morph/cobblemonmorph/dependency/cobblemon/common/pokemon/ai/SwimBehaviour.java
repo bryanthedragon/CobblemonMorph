@@ -1,29 +1,47 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.ai
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpression
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.createDuplicateRuntime
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveFloat
 import net.minecraft.tags.FluidTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.material.Fluid
 
-public class SwimBehaviour {
-   public final val avoidsWater: Boolean
-   public final val canBreatheUnderlava: Boolean
-   public final val canBreatheUnderwater: Boolean
-   public final val canSwimInLava: Boolean = true
-   public final val canSwimInWater: Boolean = true
-   public final val canWalkOnLava: Boolean
-   public final val canWalkOnWater: Boolean
-   public final val hurtByLava: Boolean = true
-   public final val swimSpeed: Float = 0.3F
+class SwimBehaviour {
+    val avoidsWater = false
 
-   public fun canWalkOnFluid(tag: TagKey<Fluid>): Boolean {
-      return if (tag == FluidTags.f_13131_) this.canWalkOnWater else tag == FluidTags.f_13132_ && this.canWalkOnLava;
-   }
+    val canSwimInWater = true
+    val swimSpeed = "0.3".asExpression()
+    val canBreatheUnderwater = false
+    val canWalkOnWater = false
 
-   public fun canBreatheUnderFluid(tag: TagKey<Fluid>): Boolean {
-      return if (tag == FluidTags.f_13131_) this.canBreatheUnderwater else tag == FluidTags.f_13132_ && this.canBreatheUnderlava;
-   }
+    val canSwimInLava = false
+    val canBreatheUnderlava = false
+    val canWalkOnLava = false
 
-   public fun canSwimInFluid(tag: TagKey<Fluid>): Boolean {
-      return if (tag == FluidTags.f_13131_) this.canSwimInWater else tag == FluidTags.f_13132_ && this.canSwimInLava;
-   }
+    fun canWalkOnFluid(tag: TagKey<Fluid>) = if (tag == FluidTags.WATER) canWalkOnWater else if (tag == FluidTags.LAVA) canWalkOnLava else false
+    fun canBreatheUnderFluid(tag: TagKey<Fluid>) = if (tag == FluidTags.WATER) canBreatheUnderwater else if (tag == FluidTags.LAVA) canBreatheUnderlava else false
+    fun canSwimInFluid(tag: TagKey<Fluid>) = if (tag == FluidTags.WATER) canSwimInWater else if (tag == FluidTags.LAVA) canSwimInLava else false
+
+    @Transient
+    val struct = ObjectValue(this).also {
+        it.addFunction("avoids_water") { DoubleValue(avoidsWater) }
+        it.addFunction("can_swim_in_water") { DoubleValue(canSwimInWater) }
+        it.addFunction("can_swim_in_lava") { DoubleValue(canSwimInLava) }
+        it.addFunction("swim_speed") { it.environment.createDuplicateRuntime().resolveFloat(swimSpeed) }
+        it.addFunction("can_breathe_underwater") { DoubleValue(canBreatheUnderwater) }
+        it.addFunction("can_breathe_underlava") { DoubleValue(canBreatheUnderlava) }
+        it.addFunction("can_walk_on_water") { DoubleValue(canWalkOnWater) }
+        it.addFunction("can_walk_on_lava") { DoubleValue(canWalkOnLava) }
+    }
 }

@@ -1,80 +1,41 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Status
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Statuses
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class BattlePersistentStatusPacket(pnx: String, status: PersistentStatus?) : NetworkPacket<BattlePersistentStatusPacket> {
-   public open val id: ResourceLocation
-   public final val pnx: String
-   public final val status: PersistentStatus?
+/**
+ * Packet sent to change the status of a Pokémon in battle, such as paralysis or sleep.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.battle.BattlePersistentStatusHandler].
+ *
+ * @author Hiroku
+ * @since November 5th, 2022
+ */
+class BattlePersistentStatusPacket(val pnx: String, val status: PersistentStatus?) : NetworkPacket<BattlePersistentStatusPacket> {
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(pnx)
+        buffer.writeNullable(status) { buf, value -> buf.writeIdentifier(value.name)}
+    }
 
-   init {
-      this.pnx = pnx;
-      this.status = status;
-      this.id = ID;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130070_(this.pnx);
-      buffer.m_236821_(this.status, BattlePersistentStatusPacket::encode$lambda$0);
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$0`(buf: FriendlyByteBuf, value: PersistentStatus) {
-      buf.m_130085_(value.getName());
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): BattlePersistentStatusPacket {
-         val pnx: java.lang.String = buffer.m_130277_();
-         val var10000: ResourceLocation = buffer.m_236868_(BattlePersistentStatusPacket.Companion::decode$lambda$0) as ResourceLocation;
-         if (var10000 == null) {
-            return new BattlePersistentStatusPacket(pnx, null);
-         } else {
-            val var5: Status = Statuses.INSTANCE.getStatus(var10000);
-            val status: PersistentStatus = var5 as? PersistentStatus;
-            return new BattlePersistentStatusPacket(pnx, status);
-         }
-      }
-
-      @JvmStatic
-      fun `decode$lambda$0`(it: FriendlyByteBuf): ResourceLocation {
-         return it.m_130281_();
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("battle_persistent_status")
+        fun decode(buffer: RegistryFriendlyByteBuf): BattlePersistentStatusPacket {
+            val pnx = buffer.readString()
+            val statusId = buffer.readNullable { it.readIdentifier() } ?: return BattlePersistentStatusPacket(pnx, null)
+            val status = Statuses.getStatus(statusId) as? PersistentStatus
+            return BattlePersistentStatusPacket(pnx, status)
+        }
+    }
 }

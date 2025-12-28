@@ -1,41 +1,37 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.PokeBalls
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readIdentifier
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeIdentifier
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class CaughtBallUpdatePacket(pokemon: () -> Pokemon, value: PokeBall) : SingleUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
+class CaughtBallUpdatePacket(pokemon: () -> Pokemon?, value: PokeBall): SingleUpdatePacket<PokeBall, CaughtBallUpdatePacket>(pokemon, value) {
+    override val id = ID
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeIdentifier(this.value.name)
+    }
 
-   init {
-      this.id = ID;
-   }
+    override fun set(pokemon: Pokemon, value: PokeBall) {
+        pokemon.caughtBall = value
+    }
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      buffer.m_130085_(this.getValue().getName());
-   }
-
-   public open fun set(pokemon: Pokemon, value: PokeBall) {
-      pokemon.setCaughtBall(value);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): CaughtBallUpdatePacket {
-         val pokemon: Function0 = PokemonUpdatePacket.Companion.decodePokemon(buffer);
-         val var10000: PokeBalls = PokeBalls.INSTANCE;
-         val var10001: ResourceLocation = buffer.m_130281_();
-         var var4: PokeBall = var10000.getPokeBall(var10001);
-         if (var4 == null) {
-            var4 = PokeBalls.INSTANCE.getPOKE_BALL();
-         }
-
-         return new CaughtBallUpdatePacket(pokemon, var4);
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("caught_ball_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): CaughtBallUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val pokeBall = PokeBalls.getPokeBall(buffer.readIdentifier()) ?: PokeBalls.POKE_BALL
+            return CaughtBallUpdatePacket(pokemon, pokeBall)
+        }
+    }
 }

@@ -1,40 +1,43 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.battle
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ActiveClientBattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattle
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattleActor
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleInitializePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleReplacePokemonPacket
 import net.minecraft.client.Minecraft
 
-public object BattleReplacePokemonHandler : ClientNetworkPacketHandler<BattleReplacePokemonPacket> {
-   public open fun handle(packet: BattleReplacePokemonPacket, client: Minecraft) {
-      val var10000: ClientBattle = CobblemonClient.INSTANCE.getBattle();
-      if (var10000 != null) {
-         val var4: Pair = var10000.getPokemonFromPNX(packet.getPnx());
-         val actor: ClientBattleActor = var4.component1() as ClientBattleActor;
-         val activeBattlePokemon: ActiveClientBattlePokemon = var4.component2() as ActiveClientBattlePokemon;
-         val `$this$handle_u24lambda_u241`: BattleInitializePacket.ActiveBattlePokemonDTO = packet.getRealPokemon();
-         val var9: ClientBattlePokemon = new ClientBattlePokemon(
-            `$this$handle_u24lambda_u241`.getUuid(),
-            `$this$handle_u24lambda_u241`.getDisplayName(),
-            `$this$handle_u24lambda_u241`.getProperties(),
-            `$this$handle_u24lambda_u241`.getAspects(),
-            `$this$handle_u24lambda_u241`.getHpValue(),
-            `$this$handle_u24lambda_u241`.getMaxHp(),
-            packet.isAlly(),
-            `$this$handle_u24lambda_u241`.getStatus(),
-            `$this$handle_u24lambda_u241`.getStatChanges()
-         );
-         var9.setActor(actor);
-         activeBattlePokemon.setBattlePokemon(var9);
-      }
-   }
+/**
+ * The handler for [BattleReplacePokemonPacket]s. Removes the illusion [ClientBattlePokemon] and replaces it with the actual data.
+ *
+ * @author Segfault Guy
+ * @since March 30th, 2024
+ */final class BattleReplacePokemonHandler : ClientNetworkPacketHandler<BattleReplacePokemonPacket> {
+    override fun handle(packet: BattleReplacePokemonPacket, client: Minecraft) {
+        val battle = CobblemonClient.battle ?: return
+        val (actor, activeBattlePokemon) = battle.getPokemonFromPNX(packet.pnx)
 
-   fun handleOnNettyThread(packet: BattleReplacePokemonPacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
+        with(packet.realPokemon) {
+            activeBattlePokemon.battlePokemon = ClientBattlePokemon(
+                uuid = uuid,
+                displayName = displayName,
+                properties = properties,
+                aspects = aspects,
+                hpValue = hpValue,
+                maxHp = maxHp,
+                isHpFlat = packet.isAlly,
+                status = status,
+                statChanges = statChanges
+            ).also {
+                it.actor = actor
+            }
+        }
+    }
 }

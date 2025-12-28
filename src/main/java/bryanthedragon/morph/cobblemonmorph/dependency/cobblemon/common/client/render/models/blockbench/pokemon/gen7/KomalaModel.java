@@ -1,64 +1,45 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen7
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.CobblemonPose
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
-import kotlin.jvm.functions.Function1
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
-import org.jetbrains.annotations.NotNull
 
-public class KomalaModel(root: ModelPart) : PokemonPoseableModel {
-   public open val cryAnimation: CryProvider
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rootPart: ModelPart
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
+class KomalaModel (root: ModelPart) : PokemonPosableModel(root) {
+    override val rootPart = root.registerChildWithAllChildren("komala")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "komala");
-      this.portraitScale = 1.8F;
-      this.portraitTranslation = new Vec3(0.0, -0.4, 0.0);
-      this.profileScale = 0.8F;
-      this.profileTranslation = new Vec3(0.0, 0.5, 0.0);
-      this.cryAnimation = KomalaModel::cryAnimation$lambda$0;
-   }
+    override var portraitScale = 1.8F
+    override var portraitTranslation = Vec3(0.0, -0.4, 0.0)
+    override var profileScale = 0.8F
+    override var profileTranslation = Vec3(0.0, 0.5, 0.0)
 
-   public override fun registerPoses() {
-      val var3: Array<ModelQuirk> = new ModelQuirk[]{
-         PoseableEntityModel.quirk$default(
-            this, TuplesKt.to(60.0F, 120.0F), null, null, (new Function1<PoseableEntityState<PokemonEntity>, StatefulAnimation<PokemonEntity, ?>>(this) {
-               {
-                  super(1);
-                  this.this$0 = `$receiver`;
-               }
+    lateinit var standing: CobblemonPose
 
-               @NotNull
-               public final StatefulAnimation<PokemonEntity, ?> invoke(@NotNull PoseableEntityState<PokemonEntity> it) {
-                  return PoseableEntityModel.bedrockStateful$default(this.this$0, "komala", "quirk_doze_off", null, 4, null);
-               }
-            }) as Function1, 6, null
-         )
-      };
-      val var6: EnumSet = PoseType.Companion.getALL_POSES();
-      val var5: Array<StatelessAnimation> = new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "komala", "ground_idle", null, 4, null)};
-      val var10001: PoseableEntityModel = this;
-      this.setStanding(PoseableEntityModel.registerPose$default(var10001, "standing", var6, null, 0, null, null, var5, null, var3, 188, null));
-   }
+    override val cryAnimation = CryProvider { bedrockStateful("komala", "cry") }
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: KomalaModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "komala", "cry", null, 4, null);
-   }
+    override fun registerPoses() {
+        val doze = quirk(secondsBetweenOccurrences = 60F to 120F) { bedrockStateful("komala", "quirk_doze_off")}
+
+        standing = registerPose(
+            poseName = "standing",
+            quirks = arrayOf(doze),
+            poseTypes = PoseType.ALL_POSES,
+            animations = arrayOf(bedrock("komala", "ground_idle"))
+        )
+    }
+
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing)) bedrockStateful("komala", "faint") else null
 }

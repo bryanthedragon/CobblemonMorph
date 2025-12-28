@@ -1,193 +1,110 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen4
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BipedFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.SimpleQuirk
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
-import kotlin.jvm.functions.Function1
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.UI_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBattling
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.jetbrains.annotations.NotNull
 
-public class PiplupModel(root: ModelPart) : PokemonPoseableModel, HeadedFrame, BipedFrame {
-   public final lateinit var battleidle: Pose<PokemonEntity, ModelFrame>
-   public open val cryAnimation: CryProvider
-   public final lateinit var float: Pose<PokemonEntity, ModelFrame>
-   public open val head: ModelPart
-   public open val leftLeg: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rightLeg: ModelPart
-   public open val rootPart: ModelPart
-   public final lateinit var sleep: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var swim: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class PiplupModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
+    override val rootPart = root.registerChildWithAllChildren("piplup")
+    override val head = getPart("head")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "piplup");
-      this.head = this.getPart("head");
-      this.leftLeg = this.getPart("leg_left");
-      this.rightLeg = this.getPart("leg_right");
-      this.portraitScale = 2.2F;
-      this.portraitTranslation = new Vec3(-0.1, -0.65, 0.0);
-      this.profileScale = 0.85F;
-      this.profileTranslation = new Vec3(0.0, 0.48, 0.0);
-      this.cryAnimation = PiplupModel::cryAnimation$lambda$0;
-   }
+    override val leftLeg = getPart("leg_left")
+    override val rightLeg = getPart("leg_right")
 
-   public override fun registerPoses() {
-      val blink: SimpleQuirk = PoseableEntityModel.quirk$default(
-         this, null, null, null, (new Function1<PoseableEntityState<PokemonEntity>, StatefulAnimation<PokemonEntity, ?>>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
-            }
+    override var portraitScale = 2.2F
+    override var portraitTranslation = Vec3(-0.1, -0.65, 0.0)
 
-            @NotNull
-            public final StatefulAnimation<PokemonEntity, ?> invoke(@NotNull PoseableEntityState<PokemonEntity> it) {
-               return PoseableEntityModel.bedrockStateful$default(this.this$0, "piplup", "blink", null, 4, null);
-            }
-         }) as Function1, 7, null
-      );
-      this.setSleep(
-         PoseableEntityModel.registerPose$default(
-            this,
-            PoseType.SLEEP,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "piplup", "sleep", null, 4, null)},
-            null,
-            null,
-            222,
-            null
-         )
-      );
-      val var19: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "standing",
-            SetsKt.plus(var19, PoseType.STAND),
-            <unrepresentable>.INSTANCE,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "piplup", "ground_idle", null, 4, null)
-            },
-            null,
-            new ModelQuirk[]{blink},
-            184,
-            null
-         )
-      );
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "walk",
-            PoseType.WALK,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "piplup", "ground_walk", null, 4, null)
-            },
-            null,
-            new ModelQuirk[]{blink},
-            188,
-            null
-         )
-      );
-      this.setFloat(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "float",
-            PoseType.FLOAT,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "piplup", "water_idle", null, 4, null)
-            },
-            null,
-            new ModelQuirk[]{blink},
-            188,
-            null
-         )
-      );
-      this.setSwim(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "swim",
-            PoseType.SWIM,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "piplup", "water_swim", null, 4, null)
-            },
-            null,
-            new ModelQuirk[]{blink},
-            188,
-            null
-         )
-      );
-      val var10: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var14: Array<ModelQuirk> = new ModelQuirk[]{blink};
-      val var18: Array<StatelessAnimation> = new StatelessAnimation[]{
-         HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-         PoseableEntityModel.bedrock$default(this, "piplup", "battle_idle", null, 4, null)
-      };
-      val var20: PoseableEntityModel = this;
-      this.setBattleidle(
-         PoseableEntityModel.registerPose$default(var20, "battle_idle", var10, <unrepresentable>.INSTANCE, 10, null, null, var18, null, var14, 176, null)
-      );
-   }
+    override var profileScale = 0.85F
+    override var profileTranslation = Vec3(0.0, 0.48, 0.0)
 
-   override fun <T extends Entity> singleBoneLook(
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: java.lang.Float?,
-      yawMultiplier: java.lang.Float?,
-      maxPitch: java.lang.Float?,
-      minPitch: java.lang.Float?,
-      maxYaw: java.lang.Float?,
-      minYaw: java.lang.Float?
-   ): SingleBoneLookAnimation<T> {
-      return HeadedFrame.DefaultImpls.singleBoneLook(
-         this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw
-      );
-   }
+    lateinit var sleep: Pose
+    lateinit var standing: Pose
+    lateinit var walk: Pose
+    lateinit var float: Pose
+    lateinit var swim: Pose
+    lateinit var battleidle: Pose
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: PiplupModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "piplup", "cry", null, 4, null);
-   }
+    override val cryAnimation = CryProvider { bedrockStateful("piplup", "cry") }
+
+    override fun registerPoses() {
+        val blink = quirk { bedrockStateful("piplup", "blink") }
+        sleep = registerPose(
+            poseType = PoseType.SLEEP,
+            animations = arrayOf(bedrock("piplup", "sleep"))
+        )
+
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = UI_POSES + PoseType.STAND,
+            quirks = arrayOf(blink),
+            condition = { !it.isBattling },
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("piplup", "ground_idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseType = PoseType.WALK,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("piplup", "ground_walk")
+            )
+        )
+
+        float = registerPose(
+            poseName = "float",
+            poseType = PoseType.FLOAT,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("piplup", "water_idle")
+            )
+        )
+
+        swim = registerPose(
+            poseName = "swim",
+            poseType = PoseType.SWIM,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("piplup", "water_swim")
+            )
+        )
+
+        battleidle = registerPose(
+            poseName = "battle_idle",
+            poseTypes = PoseType.STATIONARY_POSES,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            condition = { it.isBattling },
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("piplup", "battle_idle")
+            )
+
+        )
+    }
+
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing, walk)) bedrockStateful("piplup", "faint") else null
 }

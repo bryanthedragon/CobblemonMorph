@@ -1,19 +1,134 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "n.simpleName" is null
-  at org.vineflower.kotlin.KotlinWriter.lambda$writeClass$0(KotlinWriter.java:265)
-  at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:178)
-  at java.base/java.util.ArrayList$ArrayListSpliterator.tryAdvance(ArrayList.java:1602)
-  at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129)
-  at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527)
-  at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513)
-  at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
-  at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(FindOps.java:150)
-  at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-  at java.base/java.util.stream.ReferencePipeline.findAny(ReferencePipeline.java:652)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:266)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon
+
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.StringValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asStruct
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.helditem.HeldItemManager
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.helditem.HeldItemProvider
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.MultiPokemonBattleActor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PokemonBattleActor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.ContextManager
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleUpdateTeamPokemonPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.IVs
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Nature
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.BattleCloneProperty
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.UncatchableProperty
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
+import java.util.UUID
+import net.minecraft.network.chat.MutableComponent
+import java.util.function.Function
+
+open class BattlePokemon(
+    val originalPokemon: Pokemon,
+    val effectedPokemon: Pokemon = originalPokemon,
+    val postBattleEntityOperation: (PokemonEntity) -> Unit = {}
+) {
+    lateinit var actor: BattleActor
+
+    companion object {
+        fun safeCopyOf(pokemon: Pokemon): BattlePokemon {
+            //TOOD figure out a closer registry access (might have to break some method signatures for this (1.7?)
+            val effectedPokemon = pokemon.clone(registryAccess = server()?.registryAccess() ?: throw IllegalStateException("No registry access available"))
+            BattleCloneProperty.isBattleClone().apply(effectedPokemon)
+            UncatchableProperty.uncatchable().apply(effectedPokemon)
+            return BattlePokemon(
+                originalPokemon = pokemon,
+                effectedPokemon = effectedPokemon,
+                postBattleEntityOperation = { it.recallWithAnimation() }
+            )
+        }
+
+        fun playerOwned(pokemon: Pokemon): BattlePokemon = BattlePokemon(
+            originalPokemon = pokemon,
+            effectedPokemon = pokemon,
+            postBattleEntityOperation = { entity ->
+                entity.effects.wipe()
+            }
+        )
+    }
+
+    val struct = QueryStruct(
+        hashMapOf(
+            "pokemon" to Function { effectedPokemon.asStruct() },
+            "original_pokemon" to Function {
+                originalPokemon.asStruct()
+            },
+            "actor" to Function { actor.struct },
+            "battle" to Function { actor.battle.struct },
+            "uuid" to Function { StringValue(uuid.toString()) },
+            "health" to Function { DoubleValue(health.toDouble()) },
+            "max_health" to Function { DoubleValue(maxHealth.toDouble()) },
+            "ivs" to Function { effectedPokemon.ivs.struct },
+            "nature" to Function { StringValue(effectedPokemon.nature.name.toString()) },
+            "moveset" to Function { effectedPokemon.moveSet.toStruct() }
+        ))
+
+    val uuid: UUID
+        get() = effectedPokemon.uuid
+    val health: Int
+        get() = effectedPokemon.currentHealth
+    val maxHealth: Int
+        get() = effectedPokemon.maxHealth
+    val ivs: IVs
+        get() = effectedPokemon.ivs
+    val nature: Nature
+        get() = effectedPokemon.nature
+    val moveSet: MoveSet
+        get() = effectedPokemon.moveSet
+    val statChanges = mutableMapOf<Stat, Int>()
+    var gone = false
+    // etc
+
+    val entity: PokemonEntity?
+        get() = effectedPokemon.entity
+
+    var willBeSwitchedIn = false
+
+    /** A set of all the BattlePokemon that they faced during the battle (for exp purposes) */
+    val facedOpponents = mutableSetOf<BattlePokemon>()
+
+    /**
+     * The [HeldItemManager] backing this [BattlePokemon].
+     */
+    val heldItemManager: HeldItemManager by lazy { HeldItemProvider.provide(this) }
+
+    val contextManager = ContextManager()
+
+    open fun getName(): MutableComponent {
+        val displayPokemon = getIllusion()?.effectedPokemon ?: effectedPokemon
+        return if (actor is PokemonBattleActor || actor is MultiPokemonBattleActor) {
+            displayPokemon.getDisplayName()
+        } else {
+            battleLang("owned_pokemon", actor.getName(), displayPokemon.getDisplayName())
+        }
+    }
+
+    fun sendUpdate() {
+        actor.sendUpdate(BattleUpdateTeamPokemonPacket(effectedPokemon))
+    }
+
+    fun isSentOut() = actor.battle.activePokemon.any { it.battlePokemon == this }
+    fun canBeSentOut() =
+        if (actor.request?.side?.pokemon?.any { it.reviving } == true) {
+            !isSentOut() && !willBeSwitchedIn && health <= 0
+        } else {
+            !isSentOut() && !willBeSwitchedIn && health > 0
+        }
+
+    fun getIllusion(): BattlePokemon? = this.actor.activePokemon.find { it.battlePokemon == this }?.illusion
+}

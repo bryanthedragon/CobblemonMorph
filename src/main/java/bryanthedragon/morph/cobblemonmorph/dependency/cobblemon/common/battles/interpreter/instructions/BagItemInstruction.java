@@ -1,42 +1,48 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asTranslated
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.giveOrDropItemStack
+import net.minecraft.world.item.ItemStack
 
-public class BagItemInstruction(message: BattleMessage) : InterpreterInstruction {
-   public final val message: BattleMessage
+/**
+ * Format: |bagitem|POKEMON|ITEM
+ *
+ * POKEMON had ITEM used on it from the 'bag'.
+ * @author landonjw
+ * @since July 31st, 2023
+ */
+class BagItemInstruction(val message: BattleMessage): InterpreterInstruction {
 
-   init {
-      this.message = message;
-   }
+    override fun invoke(battle: PokemonBattle) {
+        battle.dispatchGo {
 
-   public override operator fun invoke(battle: PokemonBattle) {
-      battle.dispatchGo((new Function0<Unit>(this, battle) {
-         {
-            super(0);
-            this.this$0 = `$receiver`;
-            this.$battle = `$battle`;
-         }
+            val pokemon = message.pokemonByUuid(0, battle)!!
+            val item = message.argumentAt(1)!!
 
-         public final void invoke() {
-            val var10000: BattlePokemon = this.this$0.getMessage().pokemonByUuid(0, this.$battle);
-            val var6: java.lang.String = this.this$0.getMessage().argumentAt(1);
-            val ownerName: MutableComponent = var10000.getActor().getName();
-            val itemName: MutableComponent = MiscUtilsKt.asTranslated(var6);
-            val var7: PokemonBattle = this.$battle;
-            val var5: Array<Any> = new Object[]{ownerName, null, null};
-            var5[1] = itemName;
-            var5[2] = var10000.getName();
-            val var10001: MutableComponent = LocalizationUtilsKt.battleLang("bagitem.use", var5);
-            var7.broadcastChatMessage(var10001 as Component);
-         }
-      }) as () -> Unit);
-   }
+            val index = pokemon.actor.itemsUsed.indexOfFirst { item == it.itemName }
+            if (index >= 0) {
+                val player = pokemon.actor.getPlayerUUIDs().first().getPlayer()
+                player?.giveOrDropItemStack(ItemStack(pokemon.actor.itemsUsed[index].returnItem))
+                pokemon.actor.itemsUsed.removeAt(index)
+            }
+
+            val ownerName = pokemon.actor.getName()
+            val itemName = item.asTranslated()
+
+            battle.broadcastChatMessage(battleLang("bagitem.use", ownerName, itemName, pokemon.getName()))
+        }
+    }
 }

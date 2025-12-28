@@ -1,304 +1,228 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.helditem
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItemComponents.HELD_ITEM_EFFECT
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.Effect
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.helditem.HeldItemManager
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonItemTags
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ActiveBattlePokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PlayerBattleActor
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import java.util.ArrayList;
-import java.util.LinkedHashMap
-import java.util.function.Function
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
-import net.minecraft.tags.TagKey
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
+import net.minecraft.network.chat.Component
+import net.minecraft.world.item.Items
+import java.util.function.Function
 
-@SourceDebugExtension(["SMAP\nCobblemonHeldItemManager.kt\nKotlin\n*S Kotlin\n*F\n+ 1 CobblemonHeldItemManager.kt\ncom/cobblemon/mod/common/pokemon/helditem/CobblemonHeldItemManager\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,178:1\n1#2:179\n*E\n"])
-public object CobblemonHeldItemManager : BaseCobblemonHeldItemManager {
-   private final val giveItemEffect: Set<String> =
-      SetsKt.setOf(new java.lang.String[]{"pickup", "recycle", "magician", "pickpocket", "thief", "covet", "harvest", "bestow", "switcheroo", "trick"})
-      private final val remaps: MutableMap<Item, String> = (new LinkedHashMap()) as java.util.Map
-   private final val stackRemaps: MutableList<Function<ItemStack, String?>> = (new ArrayList()) as java.util.List
-   private final val takeItemEffect: Set<String> = SetsKt.setOf(new java.lang.String[]{"magician", "pickpocket", "covet", "bestow"})
+/**
+ * The Cobblemon implementation of [HeldItemManager].
+ * It directly consumes the [Pokemon.heldItem] when required.
+ * The literal IDs are the path of item identifiers under the [Cobblemon.MODID] namespace.
+ *
+ * @author Licious
+ * @since December 30th, 2022
+ */
+@Suppress("unused")final class CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
 
-   internal override fun load() {
-      super.load$common();
-      Cobblemon.INSTANCE.getLOGGER().info("Imported {} held item IDs from showdown", this.loadedItemCount());
-   }
+    /**
+     * A collection of literal effect IDs that will trigger the Pokémon receiving the associated held item.
+     */
+    private val giveItemEffect = setOf("pickup", "recycle", "magician", "pickpocket", "thief", "covet", "harvest", "bestow", "switcheroo", "trick")
 
-   public override fun showdownId(pokemon: BattlePokemon): String? {
-      val itemStack: ItemStack = pokemon.getEffectedPokemon().heldItemNoCopy$common();
-      if (remaps.containsKey(itemStack.m_41720_())) {
-         return remaps.get(itemStack.m_41720_());
-      } else {
-         for (Function remap : stackRemaps) {
-            val id: java.lang.String = remap.apply(itemStack) as java.lang.String;
+    /**
+     * A collection of literal effect IDs that will trigger the Pokémon needing to have their item removed these are never communicated through '-enditem'.
+     */
+    private val takeItemEffect = setOf("magician", "pickpocket", "covet", "bestow")
+
+    /** Remappings of [Item] to showdownId strings. */
+    private val remaps = mutableMapOf<Item, String>()
+
+    /** Remappings of [ItemStack] to showdownId strings. */
+    private val stackRemaps = mutableListOf<Function<ItemStack, String?>>()
+
+    override fun load() {
+        super.load()
+        Cobblemon.LOGGER.info("Imported {} held item IDs from showdown", this.loadedItemCount())
+        this.registerRemap(Items.BONE, "thickclub")
+        this.registerRemap(Items.SNOWBALL, "snowball")
+        this.registerRemap(Items.GOLD_BLOCK, "bignugget")
+    }
+
+    override fun showdownId(pokemon: BattlePokemon): String? {
+        val itemStack = pokemon.effectedPokemon.heldItemNoCopy()
+
+        if (itemStack.has(HELD_ITEM_EFFECT))
+            return itemStack.get(HELD_ITEM_EFFECT)!!.showdownId
+
+        if (remaps.containsKey(itemStack.item))
+            return remaps[itemStack.item]
+
+        for (remap in stackRemaps) {
+            val id = remap.apply(itemStack)
             if (id != null) {
-               return id;
+                return id
             }
-         }
+        }
 
-         val var6: java.lang.String = super.showdownId(pokemon);
-         return if (var6 == null && pokemon.getEffectedPokemon().heldItemNoCopy$common().m_41619_()) "" else var6;
-      }
-   }
+        val original = super.showdownId(pokemon)
+        if (original == null && pokemon.effectedPokemon.heldItemNoCopy().isEmpty) {
+            // This will allow interactions such as thief to occur, we want this when there is no item only instead of overwriting other stacks that aren't held items.
+            return ""
+        }
+        return original
+    }
 
-   public override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {
-      val var10000: Effect = battleMessage.effectAt(1);
-      if (var10000 != null) {
-         val var20: java.lang.String = var10000.getId();
-         if (var20 != null) {
-            val consumeHeldItems: Boolean = this.shouldConsumeItem(pokemon, battle, var20);
-            if (battleMessage.hasOptionalArgument("silent")) {
-               if (consumeHeldItems) {
-                  this.take(pokemon, var20);
-               }
+    fun showdownId(itemStack: ItemStack): String? {
+        if (itemStack.has(HELD_ITEM_EFFECT))
+            return itemStack.get(HELD_ITEM_EFFECT)?.showdownId
 
-               return;
+        if (remaps.containsKey(itemStack.item))
+            return remaps[itemStack.item]
+
+        for (remap in stackRemaps) {
+            val id = remap.apply(itemStack)
+            if (id != null) {
+                return id
             }
+        }
 
-            val effect: Effect = BattleMessage.effect$default(battleMessage, null, 1, null);
-            val battlerName: MutableComponent = pokemon.getName();
-            if (effect == null) {
-               val var29: MutableComponent = LocalizationUtilsKt.battleLang("item.$var20", battlerName);
-               battle.broadcastChatMessage(var29 as Component);
-               return;
+        return this.showdownIdOf(itemStack.item)
+    }
+
+override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {
+    val itemID = battleMessage.effectAt(1)?.id ?: return
+    val consumeHeldItems = this.shouldConsumeItem(pokemon, battle, itemID)
+    if (battleMessage.hasOptionalArgument("silent")) {
+        if (consumeHeldItems) {
+            this.take(pokemon, itemID)
+        }
+        return
+    }
+    val effect = battleMessage.effect()
+    val battlerName = pokemon.getName()
+    val itemName = this.nameOf(itemID)
+    // Airballoon is the only item using the null effect gimmick
+    if (effect == null) {
+        battle.broadcastChatMessage(battleLang("item.$itemID", battlerName, itemName))
+        return
+    }
+    val sourceName = battleMessage.battlePokemonFromOptional(battle)?.getName() ?: Component.literal("UNKNOWN")
+    val effectId = effect.id
+    val text = when (effectId) {
+        "magician", "pickpocket", "covet", "thief" -> battleLang("item.thief", battlerName, itemName, sourceName) // The "source" is actually the target here
+        "pickup", "recycle" -> battleLang("item.recycle", battlerName, itemName)
+        "switcheroo", "trick" -> battleLang("item.trick", battlerName, itemName)
+        else -> battleLang("item.$effectId", battlerName, itemName, sourceName)
+    }
+    battle.broadcastChatMessage(text)
+    // If it's a take and give effect, we don't want to follow through if we are not consuming held items
+    if (this.takeItemEffect.contains(effectId) && this.giveItemEffect.contains(effectId) && !consumeHeldItems) {
+        return
+    }
+    // TODO: This is strictly a temporary fix to prevent duping, we should determine a proper solution where we
+    //  can allow physical item swapping while covering the proper use cases here.
+    if (this.takeItemEffect.contains(effectId) || this.giveItemEffect.contains(effectId)) {
+        return
+    }
+    // Block item swapping in PVP until we have a rule
+    if (battle.isPvP && !consumeHeldItems) {
+        return
+    }
+    // Block stealing from NPCs
+    if (battle.isPvN) {
+        return
+    }
+    // if items aren't consumed, then we don't want to give them to wild pokemon (dupe)
+    if (this.giveItemEffect.contains(effectId) && (pokemon.actor is PlayerBattleActor || consumeHeldItems)) {
+        this.give(pokemon, itemID)
+    }
+    // allow players to steal wild held items
+    if (this.takeItemEffect.contains(effectId) && (pokemon.actor !is PlayerBattleActor || consumeHeldItems)) {
+        battleMessage.actorAndActivePokemonFromOptional(battle)?.second?.battlePokemon?.let { this.take(it, itemID) }
+    }
+}
+
+    override fun handleEndInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {
+        val itemID = battleMessage.effectAt(1)?.id ?: return
+        val consumeHeldItems = this.shouldConsumeItem(pokemon, battle, itemID)
+        // These are sent when showdown wants the client to animate something but not produce any text
+        if (battleMessage.hasOptionalArgument("silent")) {
+            if (consumeHeldItems) this.take(pokemon, itemID)
+            return
+        }
+        val battlerName = pokemon.getName()
+        val itemName = this.nameOf(itemID)
+        if (battleMessage.hasOptionalArgument("eat")) {
+            battle.broadcastChatMessage(battleLang("item.eat", battlerName, itemName))
+            if (consumeHeldItems) this.take(pokemon, itemID)
+            return
+        }
+        val sourceName = battleMessage.battlePokemonFromOptional(battle)?.getName() ?: Component.literal("UNKNOWN")
+        val effect = battleMessage.effect()
+        val text = when {
+            effect?.id != null -> battleLang("enditem.${effect.id}", battlerName, itemName, sourceName)
+            else -> when (itemID) {
+                "boosterenergy", "electricseed", "grassyseed", "mistyseed", "psychicseed", "roomservice", "blunderpolicy", "weaknesspolicy", "absorbbulb",
+                    -> battleLang("enditem.generic", battlerName, itemName)   // TODO this cannot scale like this
+                else
+                    -> battleLang("enditem.$itemID", battlerName)
             }
+        }
+        if (consumeHeldItems) this.take(pokemon, itemID)
+        battle.broadcastChatMessage(text)
+    }
 
-            label106: {
-               val var21: BattlePokemon = BattleMessage.battlePokemonFromOptional$default(battleMessage, battle, null, 2, null);
-               if (var21 != null) {
-                  val var22: MutableComponent = var21.getName();
-                  if (var22 != null) {
-                     var23 = var22 as Component;
-                     break label106;
-                  }
-               }
+    override fun shouldConsumeItem(pokemon: BattlePokemon, battle: PokemonBattle, showdownId: String): Boolean {
+        val itemStack = pokemon.effectedPokemon.heldItem()
 
-               var23 = Component.m_130674_("UNKNOWN");
+        if (itemStack.has(HELD_ITEM_EFFECT))
+            return itemStack.get(HELD_ITEM_EFFECT)!!.consumed
+
+        // In 3rd party and the future battles might have multiple types, give it a priority from pvp down to wild.
+        val tag = when {
+            battle.isPvP -> CobblemonItemTags.CONSUMED_IN_PVP_BATTLE
+            battle.isPvN -> CobblemonItemTags.CONSUMED_IN_NPC_BATTLE
+            else -> CobblemonItemTags.CONSUMED_IN_WILD_BATTLE
+        }
+        return itemStack.`is`(tag)
+    }
+
+    /**
+     * Registers a custom mapping from [Item] to showdown ID string.
+     *
+     * @param item The Minecraft [Item] instance that has a specific showdownId.
+     * @param showdownId The showdown name of this item.
+     */
+    fun registerRemap(item: Item, showdownId: String) {
+        this.remaps[item] = showdownId
+    }
+
+    /**
+     * Registers a custom mapping from [ItemStack] to showdown ID string.
+     *
+     * @param remap A function that takes an [ItemStack] and returns the showdown name of this item or null if there was no match.
+     */
+    fun registerStackRemap(remap: Function<ItemStack, String?>) {
+        this.stackRemaps.add(remap)
+    }
+
+    override fun nameOf(showdownId: String): Component {
+        // Check Remaps before defaulting to super
+        for (remap in remaps) {
+            if (remap.value == showdownId) {
+                return remap.key.description
             }
-
-            var effectId: java.lang.String;
-            label101: {
-               var itemName: Component;
-               label100: {
-                  label99: {
-                     label98: {
-                        itemName = this.nameOf(var20);
-                        effectId = effect.getId();
-                        switch (effectId.hashCode()) {
-                           case -1108625161:
-                              if (effectId.equals("pickpocket")) {
-                                 break label100;
-                              }
-                              break;
-                           case -988476804:
-                              if (effectId.equals("pickup")) {
-                                 break label99;
-                              }
-                              break;
-                           case -346775423:
-                              if (effectId.equals("switcheroo")) {
-                                 break label98;
-                              }
-                              break;
-                           case -69865079:
-                              if (effectId.equals("magician")) {
-                                 break label100;
-                              }
-                              break;
-                           case 94852025:
-                              if (effectId.equals("covet")) {
-                                 break label100;
-                              }
-                              break;
-                           case 110330838:
-                              if (effectId.equals("thief")) {
-                                 break label100;
-                              }
-                              break;
-                           case 110628691:
-                              if (effectId.equals("trick")) {
-                                 break label98;
-                              }
-                              break;
-                           case 1082880659:
-                              if (effectId.equals("recycle")) {
-                                 break label99;
-                              }
-                           default:
-                        }
-
-                        val var25: java.lang.String = "item.$effectId";
-                        val var18: Array<Any> = new Object[]{battlerName, itemName, null};
-                        var18[2] = var23;
-                        var24 = LocalizationUtilsKt.battleLang(var25, var18);
-                        break label101;
-                     }
-
-                     var24 = LocalizationUtilsKt.battleLang("item.trick", battlerName, itemName);
-                     break label101;
-                  }
-
-                  var24 = LocalizationUtilsKt.battleLang("item.recycle", battlerName, itemName);
-                  break label101;
-               }
-
-               val var19: Array<Any> = new Object[]{battlerName, itemName, null};
-               var19[2] = var23;
-               var24 = LocalizationUtilsKt.battleLang("item.thief", var19);
-            }
-
-            battle.broadcastChatMessage(var24 as Component);
-            if (takeItemEffect.contains(effectId) && giveItemEffect.contains(effectId) && !consumeHeldItems) {
-               return;
-            }
-
-            if (battle.isPvP() && !consumeHeldItems) {
-               return;
-            }
-
-            if (giveItemEffect.contains(effectId) && (pokemon.getActor() is PlayerBattleActor || consumeHeldItems)) {
-               this.give(pokemon, var20);
-            }
-
-            if (takeItemEffect.contains(effectId) && (pokemon.getActor() !is PlayerBattleActor || consumeHeldItems)) {
-               val var26: Pair = BattleMessage.actorAndActivePokemonFromOptional$default(battleMessage, battle, null, 2, null);
-               if (var26 != null) {
-                  val var27: ActiveBattlePokemon = var26.getSecond() as ActiveBattlePokemon;
-                  if (var27 != null) {
-                     val var28: BattlePokemon = var27.getBattlePokemon();
-                     if (var28 != null) {
-                        this.take(var28, var20);
-                     }
-                  }
-               }
-            }
-
-            return;
-         }
-      }
-   }
-
-   public override fun handleEndInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {
-      val var10000: Effect = battleMessage.effectAt(1);
-      if (var10000 != null) {
-         val var15: java.lang.String = var10000.getId();
-         if (var15 != null) {
-            val consumeHeldItems: Boolean = this.shouldConsumeItem(pokemon, battle, var15);
-            if (battleMessage.hasOptionalArgument("silent")) {
-               if (consumeHeldItems) {
-                  this.take(pokemon, var15);
-               }
-
-               return;
-            }
-
-            val battlerName: MutableComponent = pokemon.getName();
-            val itemName: Component = this.nameOf(var15);
-            if (battleMessage.hasOptionalArgument("eat")) {
-               val var10001: MutableComponent = LocalizationUtilsKt.battleLang("item.eat", battlerName, itemName);
-               battle.broadcastChatMessage(var10001 as Component);
-               if (consumeHeldItems) {
-                  this.take(pokemon, var15);
-               }
-
-               return;
-            }
-
-            label67: {
-               val var16: BattlePokemon = BattleMessage.battlePokemonFromOptional$default(battleMessage, battle, null, 2, null);
-               if (var16 != null) {
-                  val var17: MutableComponent = var16.getName();
-                  if (var17 != null) {
-                     var18 = var17 as Component;
-                     break label67;
-                  }
-               }
-
-               var18 = Component.m_130674_("UNKNOWN");
-            }
-
-            val effect: Effect = BattleMessage.effect$default(battleMessage, null, 1, null);
-            var var20: MutableComponent;
-            if ((if (effect != null) effect.getId() else null) != null) {
-               val var19: java.lang.String = "enditem.${effect.getId()}";
-               val var11: Array<Any> = new Object[]{battlerName, itemName, null};
-               var11[2] = var18;
-               var20 = LocalizationUtilsKt.battleLang(var19, var11);
-            } else {
-               label60: {
-                  label59: {
-                     switch (var15.hashCode()) {
-                        case -362369778:
-                           if (var15.equals("electricseed")) {
-                              break label59;
-                           }
-                           break;
-                        case 880781690:
-                           if (var15.equals("roomservice")) {
-                              break label59;
-                           }
-                           break;
-                        case 987810420:
-                           if (var15.equals("grassyseed")) {
-                              break label59;
-                           }
-                           break;
-                        case 1287412621:
-                           if (var15.equals("mistyseed")) {
-                              break label59;
-                           }
-                           break;
-                        case 1473685510:
-                           if (var15.equals("psychicseed")) {
-                              break label59;
-                           }
-                           break;
-                        case 1548556824:
-                           if (var15.equals("boosterenergy")) {
-                              break label59;
-                           }
-                        default:
-                     }
-
-                     var20 = LocalizationUtilsKt.battleLang("enditem.$var15", battlerName);
-                     break label60;
-                  }
-
-                  var20 = LocalizationUtilsKt.battleLang("enditem.generic", battlerName, itemName);
-               }
-            }
-
-            if (consumeHeldItems) {
-               this.take(pokemon, var15);
-            }
-
-            battle.broadcastChatMessage(var20 as Component);
-            return;
-         }
-      }
-   }
-
-   public override fun shouldConsumeItem(pokemon: BattlePokemon, battle: PokemonBattle, showdownId: String): Boolean {
-      val tag: TagKey = if (battle.isPvP())
-         CobblemonItemTags.CONSUMED_IN_PVP_BATTLE
-         else
-         (if (battle.isPvN()) CobblemonItemTags.CONSUMED_IN_NPC_BATTLE else CobblemonItemTags.CONSUMED_IN_WILD_BATTLE);
-      return pokemon.getEffectedPokemon().heldItem().m_204117_(tag);
-   }
-
-   public fun registerRemap(item: Item, showdownId: String) {
-      remaps.put(item, showdownId);
-   }
-
-   public fun registerStackRemap(remap: Function<ItemStack, String?>) {
-      stackRemaps.add(remap);
-   }
+        }
+        return super.nameOf(showdownId)
+    }
 }

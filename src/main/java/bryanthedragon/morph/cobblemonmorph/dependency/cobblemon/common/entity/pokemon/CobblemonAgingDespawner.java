@@ -1,66 +1,52 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity.Despawner
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.player.Player
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.CobblemonConfig
 
-@SourceDebugExtension(["SMAP\nCobblemonAgingDespawner.kt\nKotlin\n*S Kotlin\n*F\n+ 1 CobblemonAgingDespawner.kt\ncom/cobblemon/mod/common/entity/pokemon/CobblemonAgingDespawner\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,61:1\n1#2:62\n*E\n"])
-public class CobblemonAgingDespawner<T extends Entity>(nearDistance: Float = 32.0F,
-      farDistance: Float = 96.0F,
-      minAgeTicks: Int = 600,
-      maxAgeTicks: Int = 3600,
-      getAgeTicks: (Any) -> Int
-   ) :
-   Despawner<T> {
-   public final val farDistance: Float
-   public final val getAgeTicks: (Any) -> Int
-   public final val maxAgeTicks: Int
-   public final val minAgeTicks: Int
-   public final val nearDistance: Float
-   public final val nearToFar: Float
-   public final val youngToOld: Int
+/**
+ * The aging despawner applies strictly to mobs that can age. Its logic is relatively simple: the closer to
+ * the [CobblemonConfig.despawnerNearDistance] that the entity is to a player, the older the entity must be to be despawned. At
+ * [CobblemonConfig.despawnerNearDistance], an entity must be [CobblemonConfig.despawnerMaxAgeTicks] to despawn. At [CobblemonConfig.despawnerFarDistance], an entity must be [CobblemonConfig.despawnerMinAgeTicks]
+ * to despawn. The required age moves gradually for all distances between near and far.
+ *
+ * @author Hiroku
+ * @since March 19th, 2022
+ */
+class CobblemonAgingDespawner<T : Entity>(
+    val getAgeTicks: (T) -> Int
+) : Despawner<T> {
 
-   init {
-      this.nearDistance = nearDistance;
-      this.farDistance = farDistance;
-      this.minAgeTicks = minAgeTicks;
-      this.maxAgeTicks = maxAgeTicks;
-      this.getAgeTicks = getAgeTicks;
-      this.nearToFar = this.farDistance - this.nearDistance;
-      this.youngToOld = this.maxAgeTicks - this.minAgeTicks;
-   }
+    private val nearToFar = Cobblemon.config.despawnerFarDistance - Cobblemon.config.despawnerNearDistance
+    private val youngToOld = Cobblemon.config.despawnerMaxAgeTicks - Cobblemon.config.despawnerMinAgeTicks
 
-   public override fun beginTracking(entity: Any) {
-   }
+    override fun beginTracking(entity: T) {}
 
-   public override fun shouldDespawn(entity: Any): Boolean {
-      val age: Int = (this.getAgeTicks.invoke(entity) as java.lang.Number).intValue();
-      if (age >= this.minAgeTicks && (entity !is PokemonEntity || !(entity as PokemonEntity).isBusy()) && !entity.m_20159_()) {
-         val var10000: java.util.List = entity.m_9236_().m_6907_();
-         val var6: java.util.Iterator = var10000.iterator();
-         val var13: java.lang.Float;
-         if (!var6.hasNext()) {
-            var13 = null;
-         } else {
-            var var10: Float = (var6.next() as Player).m_20270_(entity);
+    override fun shouldDespawn(entity: T): Boolean {
+        val age = getAgeTicks(entity)
+        if (age < Cobblemon.config.despawnerMinAgeTicks || (entity is PokemonEntity && entity.isBusy) || entity.isPassenger()) {
+            return false
+        }
 
-            while (var6.hasNext()) {
-               var10 = Math.min(var10, (var6.next() as Player).m_20270_(entity));
+        // TODO an AFK check at some point, don't count the AFK ones.
+        val closestDistance = entity.level().players().minOfOrNull { it.distanceTo(entity) } ?: Float.MAX_VALUE
+        return when {
+            closestDistance < Cobblemon.config.despawnerNearDistance -> false
+            age > Cobblemon.config.despawnerMaxAgeTicks || closestDistance > Cobblemon.config.despawnerFarDistance -> true
+            else -> {
+                val distanceRatio = (closestDistance - Cobblemon.config.despawnerNearDistance) / nearToFar
+                val maximumAge = (1 - distanceRatio) * youngToOld
+                age > maximumAge
             }
-
-            var13 = var10;
-         }
-
-         val closestDistance: Float = var13 ?: java.lang.Float.MAX_VALUE;
-         return !(closestDistance < this.nearDistance)
-            && (
-               age > this.maxAgeTicks
-                  || closestDistance > this.farDistance
-                  || age > (1 - (closestDistance - this.nearDistance) / this.nearToFar) * this.youngToOld
-            );
-      } else {
-         return false;
-      }
-   }
+        }
+    }
 }

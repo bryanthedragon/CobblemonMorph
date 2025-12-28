@@ -1,12 +1,13 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.MintBlock.MintType
-import net.minecraft.world.item.Item.Properties
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.MintBlock
 
-public class MintLeafItem(mintType: MintType) : CobblemonItem(new Properties()) {
-   public final val mintType: MintType
-
-   init {
-      this.mintType = mintType;
-   }
-}
+class MintLeafItem(val mintType: MintBlock.MintType) : CobblemonItem(Properties())

@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.input
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.DialogueAction
@@ -7,27 +15,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialo
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.FunctionDialoguePredicate
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.WrappedDialogueText
 
-public class DialogueOption(text: DialogueText = (new WrappedDialogueText(null, 1, null)) as DialogueText,
-   value: String = "",
-   action: DialogueAction = (new FunctionDialogueAction(<unrepresentable>.INSTANCE)) as DialogueAction,
-   isVisible: DialoguePredicate = (new FunctionDialoguePredicate(null, 1, null)) as DialoguePredicate,
-   isSelectable: DialoguePredicate = (new FunctionDialoguePredicate(null, 1, null)) as DialoguePredicate
-) {
-   public final var action: DialogueAction
-   public final val isSelectable: DialoguePredicate
-   public final val isVisible: DialoguePredicate
-   public final var text: DialogueText
-   public final var value: String
-
-   init {
-      this.text = text;
-      this.value = value;
-      this.action = action;
-      this.isVisible = isVisible;
-      this.isSelectable = isSelectable;
-   }
-
-   fun DialogueOption() {
-      this(null, null, null, null, null, 31, null);
-   }
-}
+/**
+ * A choosable option as part of a [DialogueOptionSetInput].
+ *
+ * @author Hiroku
+ * @since December 27th, 2023
+ */
+class DialogueOption(
+    var text: DialogueText = WrappedDialogueText(),
+    /** The value is a unique identifier so the client can tell the server what they selected. Don't forget this. */
+    var value: String = "",
+    /** The action to run when they click it. */
+    var action: DialogueAction = FunctionDialogueAction { _, _ -> },
+    val isVisible: DialoguePredicate = FunctionDialoguePredicate(),
+    val isSelectable: DialoguePredicate = FunctionDialoguePredicate()
+)

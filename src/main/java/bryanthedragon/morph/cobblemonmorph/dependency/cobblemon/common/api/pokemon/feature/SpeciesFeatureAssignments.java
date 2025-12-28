@@ -1,85 +1,64 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork.sendPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.JsonDataRegistry
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.SpeciesFeatureAssignmentSyncPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import java.util.LinkedHashMap
-import java.util.LinkedHashSet
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
-import net.minecraft.server.packs.resources.ResourceManager
 
-@SourceDebugExtension(["SMAP\nSpeciesFeatureAssignments.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SpeciesFeatureAssignments.kt\ncom/cobblemon/mod/common/api/pokemon/feature/SpeciesFeatureAssignments\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 Maps.kt\nkotlin/collections/MapsKt__MapsKt\n*L\n1#1,64:1\n1855#2:65\n1855#2:66\n1856#2:74\n1856#2:75\n361#3,7:67\n*S KotlinDebug\n*F\n+ 1 SpeciesFeatureAssignments.kt\ncom/cobblemon/mod/common/api/pokemon/feature/SpeciesFeatureAssignments\n*L\n50#1:65\n51#1:66\n51#1:74\n50#1:75\n52#1:67,7\n*E\n"])
-public object SpeciesFeatureAssignments : JsonDataRegistry<SpeciesFeatureAssignment> {
-   private final val assignments: MutableMap<ResourceLocation, MutableSet<String>> = (new LinkedHashMap()) as java.util.Map
-   public open val gson: Gson
-   public open val id: ResourceLocation = MiscUtilsKt.cobblemonResource("species_feature_assignments")
-   public open val observable: SimpleObservable<SpeciesFeatureAssignments> = new SimpleObservable()
-   public open val resourcePath: String = "species_feature_assignments"
-   public open val type: PackType = PackType.SERVER_DATA
-   public open val typeToken: TypeToken<SpeciesFeatureAssignment> = TypeToken.get(SpeciesFeatureAssignment.class)
+/**
+ * A registry of assignments combining [SpeciesFeatures] and [PokemonSpecies]. This is a way around the issue
+ * of when multiple data packs want to add their own [SpeciesFeature]s to the same species. The correct way,
+ * with this registry, is to add a new JSON that joins together a list of species with a list of species feature
+ * keys.
+ *
+ * @author Hiroku
+ * @since December 1st, 2022
+ */final class SpeciesFeatureAssignments : JsonDataRegistry<SpeciesFeatureAssignment> {
+    override val id: ResourceLocation = cobblemonResource("species_feature_assignments")
+    override val type: PackType = PackType.SERVER_DATA
+    override val observable = SimpleObservable<SpeciesFeatureAssignments>()
 
-   public override fun sync(player: ServerPlayer) {
-      CobblemonNetwork.INSTANCE.sendPacket(player, new SpeciesFeatureAssignmentSyncPacket(assignments));
-   }
+    override val gson: Gson = GsonBuilder().setPrettyPrinting().create()
+    override val typeToken = TypeToken.get(SpeciesFeatureAssignment::class.java)
+    override val resourcePath = "species_feature_assignments"
 
-   public override fun reload(data: Map<ResourceLocation, SpeciesFeatureAssignment>) {
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         val it: SpeciesFeatureAssignment = `element$iv` as SpeciesFeatureAssignment;
+    private val assignments = mutableMapOf<ResourceLocation, MutableSet<String>>()
 
-         val `$this$forEach$ivx`: java.lang.Iterable;
-         for (Object element$ivx : $this$forEach$ivx) {
-            val pokemon: java.lang.String = `element$ivx` as java.lang.String;
-            val `$this$getOrPut$iv`: java.util.Map = assignments;
-            val `key$iv`: Any = ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(pokemon, null, 1, null);
-            val `value$iv`: Any = `$this$getOrPut$iv`.get(`key$iv`);
-            val var10000: Any;
-            if (`value$iv` == null) {
-               val var20: Any = new LinkedHashSet();
-               `$this$getOrPut$iv`.put(`key$iv`, var20);
-               var10000 = var20;
-            } else {
-               var10000 = `value$iv`;
+    override fun sync(player: ServerPlayer) {
+        player.sendPacket(SpeciesFeatureAssignmentSyncPacket(assignments))
+    }
+    override fun reload(data: Map<ResourceLocation, SpeciesFeatureAssignment>) {
+        data.values.forEach {
+            it.pokemon.forEach { pokemon ->
+                assignments.getOrPut(pokemon.asIdentifierDefaultingNamespace()) { mutableSetOf() }.addAll(it.features)
             }
+        }
+        this.observable.emit(this)
+    }
 
-            (var10000 as java.util.Set).addAll(it.getFeatures());
-         }
-      }
+    fun loadOnClient(data: Map<ResourceLocation, MutableSet<String>>) {
+        this.assignments.clear()
+        this.assignments.putAll(data)
+    }
 
-      this.getObservable().emit(this);
-   }
-
-   public fun loadOnClient(data: Map<ResourceLocation, MutableSet<String>>) {
-      assignments.clear();
-      assignments.putAll(data);
-   }
-
-   public fun getFeatures(species: Species): Set<String> {
-      var var10000: java.util.Set = assignments.get(species.getResourceIdentifier());
-      if (var10000 == null) {
-         var10000 = SetsKt.emptySet();
-      }
-
-      return var10000;
-   }
-
-   override fun reload(manager: ResourceManager) {
-      JsonDataRegistry.DefaultImpls.reload(this, manager);
-   }
-
-   @JvmStatic
-   fun {
-      val var10000: Gson = new GsonBuilder().setPrettyPrinting().create();
-      gson = var10000;
-   }
+    @JvmStatic
+    fun getFeatures(species: Species) = assignments[species.resourceIdentifier] ?: emptySet()
 }

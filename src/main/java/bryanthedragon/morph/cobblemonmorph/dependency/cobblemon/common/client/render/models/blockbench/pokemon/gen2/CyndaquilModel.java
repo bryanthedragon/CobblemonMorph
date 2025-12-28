@@ -1,137 +1,84 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen2
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBattling
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
-public class CyndaquilModel(root: ModelPart) : PokemonPoseableModel, HeadedFrame {
-   public final lateinit var battleidle: Pose<PokemonEntity, ModelFrame>
-   public open val cryAnimation: CryProvider
-   public open val head: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rootPart: ModelPart
-   public final lateinit var sleep: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walking: Pose<PokemonEntity, ModelFrame>
+class CyndaquilModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+    override val rootPart = root.registerChildWithAllChildren("cyndaquil")
+    override val head = getPart("head")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "cyndaquil");
-      this.head = this.getPart("head");
-      this.portraitScale = 1.4F;
-      this.portraitTranslation = new Vec3(-0.26, 0.0, 0.0);
-      this.profileScale = 0.65F;
-      this.profileTranslation = new Vec3(0.0, 0.8, 0.0);
-      this.cryAnimation = CyndaquilModel::cryAnimation$lambda$0;
-   }
+    override var portraitScale = 1.4F
+    override var portraitTranslation = Vec3(-0.26, 0.0, 0.0)
 
-   public override fun registerPoses() {
-      this.setSleep(
-         PoseableEntityModel.registerPose$default(
-            this,
-            PoseType.SLEEP,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "cyndaquil", "sleep", null, 4, null)},
-            null,
-            null,
-            222,
-            null
-         )
-      );
-      val var8: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var9: java.util.Set = var8;
-      val var12: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "standing",
-            SetsKt.plus(var9, var12),
-            <unrepresentable>.INSTANCE,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "cyndaquil", "ground_idle", null, 4, null)
-            },
-            null,
-            null,
-            432,
-            null
-         )
-      );
-      val var10: PoseableEntityModel = this;
-      val var10003: EnumSet = PoseType.Companion.getMOVING_POSES();
-      this.setWalking(
-         PoseableEntityModel.registerPose$default(
-            var10,
-            "walking",
-            var10003,
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "cyndaquil", "ground_walk", null, 4, null)
-            },
-            null,
-            null,
-            436,
-            null
-         )
-      );
-      val var6: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var7: Array<StatelessAnimation> = new StatelessAnimation[]{
-         HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, 0.0F, null, null, 895, null),
-         PoseableEntityModel.bedrock$default(this, "cyndaquil", "battle_idle", null, 4, null)
-      };
-      val var11: PoseableEntityModel = this;
-      this.setBattleidle(
-         PoseableEntityModel.registerPose$default(var11, "battle_idle", var6, <unrepresentable>.INSTANCE, 10, null, null, var7, null, null, 432, null)
-      );
-   }
+    override var profileScale = 0.65F
+    override var profileTranslation = Vec3(0.0, 0.8, 0.0)
 
-   override fun <T extends Entity> singleBoneLook(
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: java.lang.Float?,
-      yawMultiplier: java.lang.Float?,
-      maxPitch: java.lang.Float?,
-      minPitch: java.lang.Float?,
-      maxYaw: java.lang.Float?,
-      minYaw: java.lang.Float?
-   ): SingleBoneLookAnimation<T> {
-      return HeadedFrame.DefaultImpls.singleBoneLook(
-         this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw
-      );
-   }
+    lateinit var standing: Pose
+    lateinit var walking: Pose
+    lateinit var sleep: Pose
+    lateinit var battleidle: Pose
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: CyndaquilModel, entity: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return if (entity.isBattling())
-         PoseableEntityModel.bedrockStateful$default(`this$0`, "cyndaquil", "battle_cry", null, 4, null)
-         else
-         PoseableEntityModel.bedrockStateful$default(`this$0`, "cyndaquil", "cry", null, 4, null);
-   }
+    override val cryAnimation = CryProvider { if (it.isBattling) bedrockStateful("cyndaquil", "battle_cry") else bedrockStateful("cyndaquil", "cry") }
+
+    override fun registerPoses() {
+//        val sneeze = quirk { bedrockStateful("cyndaquil", "sneeze_quirk") }
+
+        sleep = registerPose(
+            poseType = PoseType.SLEEP,
+            animations = arrayOf(bedrock("cyndaquil", "sleep"))
+        )
+
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = PoseType.STATIONARY_POSES + PoseType.UI_POSES,
+            transformTicks = 10,
+            condition = { !it.isBattling },
+//            quirks = arrayOf(sneeze),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("cyndaquil", "ground_idle")
+            )
+        )
+
+        walking = registerPose(
+            poseName = "walking",
+            poseTypes = PoseType.MOVING_POSES,
+            transformTicks = 10,
+//            quirks = arrayOf(sneeze),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("cyndaquil", "ground_walk")
+            )
+        )
+
+        battleidle = registerPose(
+            poseName = "battle_idle",
+            poseTypes = PoseType.STATIONARY_POSES,
+            transformTicks = 10,
+//            quirks = arrayOf(sneeze),
+            condition = { it.isBattling },
+            animations = arrayOf(
+                singleBoneLook(minPitch = 0F),
+                bedrock("cyndaquil", "battle_idle")
+            )
+        )
+    }
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing, walking, battleidle, sleep)) bedrockStateful("cyndaquil", "faint") else null
 }

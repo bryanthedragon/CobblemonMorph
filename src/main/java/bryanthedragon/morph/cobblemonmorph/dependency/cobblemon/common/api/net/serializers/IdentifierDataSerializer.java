@@ -1,20 +1,34 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.serializers
 
-import net.minecraft.network.FriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.syncher.EntityDataSerializer
 import net.minecraft.resources.ResourceLocation
 
-public object IdentifierDataSerializer : EntityDataSerializer<ResourceLocation> {
-   public open fun copy(value: ResourceLocation): ResourceLocation {
-      return new ResourceLocation(value.m_135827_(), value.m_135815_());
-   }
+/**
+ * Data serializer of [ResourceLocation] for DataTracker things.
+ *
+ * @author Hiroku
+ * @since May 22nd, 2023
+ */final class IdentifierDataSerializer : EntityDataSerializer<ResourceLocation> {
+    val ID = cobblemonResource("identifier")
+    override fun copy(value: ResourceLocation) = ResourceLocation.fromNamespaceAndPath(value.namespace, value.path)
+    fun read(buf: RegistryFriendlyByteBuf) = ResourceLocation.fromNamespaceAndPath(buf.readString(), buf.readString())
+    fun write(buf: RegistryFriendlyByteBuf, value: ResourceLocation) {
+        buf.writeString(value.namespace)
+        buf.writeString(value.path)
+    }
 
-   public open fun read(buf: FriendlyByteBuf): ResourceLocation {
-      return new ResourceLocation(buf.m_130277_(), buf.m_130277_());
-   }
-
-   public open fun write(buf: FriendlyByteBuf, value: ResourceLocation) {
-      buf.m_130070_(value.m_135827_());
-      buf.m_130070_(value.m_135815_());
-   }
+    override fun codec() = StreamCodec.of(::write, ::read)
 }

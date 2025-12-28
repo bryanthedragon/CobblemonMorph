@@ -1,49 +1,44 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution
 
+import com.bedrockk.molang.runtime.value.MoValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-public data EvolutionCompleteEvent(pokemon: Pokemon, evolution: Evolution) : EvolutionEvent {
-   public open val evolution: Evolution
-   public open val pokemon: Pokemon
-
-   init {
-      this.pokemon = pokemon;
-      this.evolution = evolution;
-   }
-
-   public operator fun component1(): Pokemon {
-      return this.pokemon;
-   }
-
-   public operator fun component2(): Evolution {
-      return this.evolution;
-   }
-
-   public fun copy(pokemon: Pokemon = this.pokemon, evolution: Evolution = this.evolution): EvolutionCompleteEvent {
-      return new EvolutionCompleteEvent(pokemon, evolution);
-   }
-
-   public override fun toString(): String {
-      return "EvolutionCompleteEvent(pokemon=${this.pokemon}, evolution=${this.evolution})";
-   }
-
-   public override fun hashCode(): Int {
-      return this.pokemon.hashCode() * 31 + this.evolution.hashCode();
-   }
-
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is EvolutionCompleteEvent) {
-         return false;
-      } else {
-         val var2: EvolutionCompleteEvent = other as EvolutionCompleteEvent;
-         if (!(this.pokemon == (other as EvolutionCompleteEvent).pokemon)) {
-            return false;
-         } else {
-            return this.evolution == var2.evolution;
-         }
-      }
-   }
+/**
+ * Fired after an evolution finishes.
+ *
+ * @param pokemon The [Pokemon] resulting from the evolution.
+ * @param evolution The [Evolution] that was used.
+ *
+ * @author Licious
+ * @since October 2nd, 2022
+ */
+record EvolutionCompleteEvent(
+    /**
+     * The [Pokemon] resulting from the evolution.
+     */
+    override val pokemon: Pokemon,
+    /**
+     * The [Pokemon] that was the source of the evolution.
+     */
+    val sourcePokemon: Pokemon,
+    /**
+     * The [Evolution] that was used.
+     */
+    override val evolution: Evolution
+) : EvolutionEvent {
+    val context = mutableMapOf<String, MoValue>(
+        "pokemon" to pokemon.struct,
+        "source_pokemon" to sourcePokemon.struct,
+        "evolution" to evolution.asMoLangValue()
+    )
 }

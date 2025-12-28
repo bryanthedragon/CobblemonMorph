@@ -1,63 +1,78 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.chest.GildedState
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.GildedChestBlockEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.blockentity.BlockEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.BlockEntityModelRepository
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.VaryingModelRepository
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
-import kotlin.jvm.functions.Function0
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory.Context
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.client.renderer.texture.OverlayTexture
-import net.minecraft.core.Direction
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.block.state.properties.Property
 
-public class GildedChestBlockRenderer(context: Context) : BlockEntityRenderer<GildedChestBlockEntity> {
-   public open fun render(entity: GildedChestBlockEntity, tickDelta: Float, matrices: PoseStack, vertexConsumers: MultiBufferSource, light: Int, overlay: Int) {
-      val aspects: java.util.Set = SetsKt.emptySet();
-      val state: GildedState = entity.getPoseableState();
-      state.updatePartialTicks(tickDelta);
-      val poserId: ResourceLocation = entity.getType().getPoserId();
-      val model: BlockEntityModel = BlockEntityModelRepository.INSTANCE.getPoser(poserId, aspects);
-      val vertexConsumer: VertexConsumer = vertexConsumers.m_6299_(
-         model.m_103119_(BlockEntityModelRepository.INSTANCE.getTexture(poserId, aspects, state.getAnimationSeconds()))
-      );
-      model.setBufferProvider(vertexConsumers);
-      state.setCurrentModel(model);
-      matrices.m_85836_();
-      matrices.m_252781_(Axis.f_252403_.m_252977_(180.0F));
-      matrices.m_85837_(-0.5, 0.0, 0.5);
-      matrices.m_252781_(Axis.f_252436_.m_252977_((entity.m_58900_().m_61143_(BlockStateProperties.f_61374_ as Property) as Direction).m_122435_()));
-      matrices.m_252781_(Axis.f_252436_.m_252977_(180.0F));
-      model.setupAnimStateful(null, state, 0.0F, 0.0F, state.getAnimationSeconds() * (float)20, 0.0F, 0.0F);
-      model.m_7695_(matrices, vertexConsumer, light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
-      model.withLayerContext(
-         vertexConsumers,
-         state,
-         BlockEntityModelRepository.INSTANCE.getLayers(poserId, aspects),
-         (new Function0<Unit>(model, matrices, vertexConsumer, light) {
-            {
-               super(0);
-               this.$model = `$model`;
-               this.$matrices = `$matrices`;
-               this.$vertexConsumer = `$vertexConsumer`;
-               this.$light = `$light`;
-            }
+class GildedChestBlockRenderer(context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<GildedChestBlockEntity> {
+    val context = RenderContext().also {
+        it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.BLOCK)
+        it.put(RenderContext.DO_QUIRKS, true)
+    }
+    override fun render(
+        entity: GildedChestBlockEntity,
+        tickDelta: Float,
+        matrices: PoseStack,
+        vertexConsumers: MultiBufferSource,
+        light: Int,
+        overlay: Int
+    ) {
+        val aspects = emptySet<String>()
+        val state = entity.posableState
+        state.currentAspects = aspects
+        state.updatePartialTicks(tickDelta)
 
-            public final void invoke() {
-               val var10000: BlockEntityModel = this.$model;
-               val var10001: PoseStack = this.$matrices;
-               val var10002: VertexConsumer = this.$vertexConsumer;
-               var10000.m_7695_(var10001, var10002, this.$light, OverlayTexture.f_118083_, 1.0F, 1.0F, 1.0F, 1.0F);
-            }
-         }) as () -> Unit
-      );
-      model.setDefault();
-      matrices.m_85849_();
-   }
+        val poserId = entity.type.poserId
+
+        val model = VaryingModelRepository.getPoser(poserId, state) as BlockEntityModel
+        model.context = context
+        val texture = VaryingModelRepository.getTexture(poserId, state)
+        val vertexConsumer = vertexConsumers.getBuffer(RenderType.entityCutout(texture))
+        model.bufferProvider = vertexConsumers
+        state.currentModel = model
+        context.put(RenderContext.ASPECTS, aspects)
+        context.put(RenderContext.TEXTURE, texture)
+        context.put(RenderContext.SPECIES, poserId)
+        context.put(RenderContext.POSABLE_STATE, state)
+
+        matrices.pushPose()
+        matrices.mulPose(Axis.ZP.rotationDegrees(180f))
+        matrices.translate(-0.5, 0.0, 0.5)
+        matrices.mulPose(Axis.YP.rotationDegrees(entity.blockState.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()))
+        matrices.mulPose(Axis.YP.rotationDegrees(180f))
+
+        model.applyAnimations(
+            entity = null,
+            state = state,
+            headYaw = 0F,
+            headPitch = 0F,
+            limbSwing = 0F,
+            limbSwingAmount = 0F,
+            ageInTicks = state.animationSeconds * 20
+        )
+        model.render(context, matrices, vertexConsumer, light, overlay, -0x1)
+        model.withLayerContext(vertexConsumers, state, VaryingModelRepository.getLayers(poserId, state)) {
+            model.render(context, matrices, vertexConsumer, light, OverlayTexture.NO_OVERLAY, -0x1)
+        }
+        model.setDefault()
+        matrices.popPose()
+
+    }
 }

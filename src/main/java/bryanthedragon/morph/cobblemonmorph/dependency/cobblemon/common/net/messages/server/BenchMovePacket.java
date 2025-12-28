@@ -1,76 +1,62 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.BenchMoveHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readUUID
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeUUID
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class BenchMovePacket(isParty: Boolean, uuid: UUID, oldMove: MoveTemplate, newMove: MoveTemplate) : NetworkPacket<BenchMovePacket> {
-   public open val id: ResourceLocation
-   public final val isParty: Boolean
-   public final val newMove: MoveTemplate
-   public final val oldMove: MoveTemplate
-   public final val uuid: UUID
+/**
+ * Tells the server to exchange a current move with a benched move in the specified Pokémon's
+ * moveset. It can be used for PC and party Pokémon.
+ *
+ * It should probably be split into two packets for which store type it's targeting, or include the store
+ * position in an abstract way so that the PC case doesn't have to scavenge through the entire PC.
+ *
+ * Handled by [BenchMoveHandler].
+ *
+ * @author Hiroku
+ * @since April 18th, 2022
+ */
+class BenchMovePacket(val isParty: Boolean, val uuid: UUID, val oldMove: MoveTemplate?, val newMove: MoveTemplate?) : NetworkPacket<BenchMovePacket> {
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeBoolean(isParty)
+        buffer.writeUUID(uuid)
+        buffer.writeBoolean(oldMove != null)
+        if (oldMove != null) {
+            buffer.writeString(oldMove.name)
+        }
+        buffer.writeBoolean(newMove != null)
+        if (newMove != null) {
+            buffer.writeString(newMove.name)
+        }
+    }
 
-   init {
-      this.isParty = isParty;
-      this.uuid = uuid;
-      this.oldMove = oldMove;
-      this.newMove = newMove;
-      this.id = ID;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.writeBoolean(this.isParty);
-      buffer.m_130077_(this.uuid);
-      buffer.m_130070_(this.oldMove.getName());
-      buffer.m_130070_(this.newMove.getName());
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): BenchMovePacket {
-         val isParty: Boolean = buffer.readBoolean();
-         val uuid: UUID = buffer.m_130259_();
-         var var10000: Moves = Moves.INSTANCE;
-         var var10001: java.lang.String = buffer.m_130277_();
-         val var6: MoveTemplate = var10000.getByName(var10001);
-         var10000 = Moves.INSTANCE;
-         var10001 = buffer.m_130277_();
-         val var8: MoveTemplate = var10000.getByName(var10001);
-         return new BenchMovePacket(isParty, uuid, var6, var8);
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("bench_move")
+        fun decode(buffer: RegistryFriendlyByteBuf): BenchMovePacket {
+            val isParty = buffer.readBoolean()
+            val uuid = buffer.readUUID()
+            val oldMoveName = if(buffer.readBoolean()) buffer.readString() else null
+            val oldMove = if (oldMoveName?.isNotEmpty() == true) Moves.getByName(oldMoveName) else null
+            val newMoveName = if(buffer.readBoolean()) buffer.readString() else null
+            val newMove = if (newMoveName?.isNotEmpty() == true) Moves.getByName(newMoveName) else null
+            return BenchMovePacket(isParty, uuid, oldMove, newMove)
+        }
+    }
 }

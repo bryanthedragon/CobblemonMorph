@@ -1,107 +1,126 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities;
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Abilities;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 
-public class Ability {
-   private final AbilityTemplate template;
-   private boolean forced;
-   private int index;
-   private Priority priority;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-   public Ability(AbilityTemplate template, boolean forced) {
-      this.template = template;
-      this.forced = forced;
-      this.index = -1;
-      this.priority = Priority.LOWEST;
-   }
 
-   public final String getDescription() {
-      return this.template.getDescription();
-   }
+/**
+ * Representing an Ability with all its attributes
+ *
+ * Can be extended to allow for custom attributes (be sure to overwrite the load and save methods)
+ *
+ * @author Qu
+ * @since January 9th, 2022
+ */
+open class Ability internal constructor(var template: AbilityTemplate, forced: Boolean, priority: Priority) {
 
-   public final String getDisplayName() {
-      return this.template.getDisplayName();
-   }
+    public static final name: String
+        get() = template.name
 
-   public boolean isForced() {
-      return forced;
-   }
+    public static final displayName: String
+        get() = template.displayName
 
-   public void setForced(boolean forced) {
-      this.forced = forced;
-   }
+    public static final description: String
+        get() = template.description
 
-   public int getIndex() {
-      return index;
-   }
+    /**
+     * This represents the last known index of this backing ability in the species data.
+     * @see [Pokemon.updateAbility].
+     */
+    var forced: Boolean = forced
+        internal set
 
-   public void setIndex(int index) {
-      this.index = index;
-   }
+    /**
+     * This represents the last known index of this backing ability in the species data.
+     *
+     * @see [Pokemon.updateAbility].
+     */
+    var index: Int = -1
+        internal set
 
-   public final String getName() {
-      return this.template.getName();
-   }
+    /**
+     * The last known priority of this ability in the species data.
+     *
+     * @see [Pokemon.updateAbility].
+     */
+    var priority = priority
+        internal set
 
-   public Priority getPriority() {
-      return priority;
-   }
+    @Deprecated("Please use the Codec instead", ReplaceWith("Ability.CODEC"))
+    open fun saveToNBT(nbt: CompoundTag): CompoundTag {
+        CODEC.encodeStart(NbtOps.INSTANCE, this).ifSuccess { nElement ->
+            if (nElement is CompoundTag) {
+                nbt.merge(nElement)
+            }
+        }
+        return nbt
+    }
 
-   public void setPriority(Priority priority) {
-      this.priority = priority;
-   }
+    @Deprecated("Please use the Codec instead", ReplaceWith("Ability.CODEC"))
+    open fun saveToJSON(json: JsonObject): JsonObject {
+        CODEC.encodeStart(JsonOps.INSTANCE, this).ifSuccess { jElement ->
+            if (jElement is JsonObject) {
+                jElement.asMap().forEach(json::add)
+            }
+        }
+        return json
+    }
 
-   public final AbilityTemplate getTemplate() {
-      return template;
-   }
+    @Deprecated("Please use the Codec instead", ReplaceWith("Ability.CODEC"))
+    open fun loadFromNBT(nbt: CompoundTag): Ability {
+        CODEC.parse(NbtOps.INSTANCE, nbt).ifSuccess { ability ->
+            this.template = ability.template
+            this.forced = ability.forced
+            this.index = ability.index
+            this.priority = ability.priority
+        }
+        return this
+    }
 
-   public CompoundTag saveToNBT(CompoundTag nbt) {
-      nbt.m_128359_("AbilityName", this.getName());
-      nbt.m_128379_("AbilityForced", this.forced);
-      nbt.m_128405_("AbilityIndex", this.index);
-      nbt.m_128359_("AbilityPriority", this.priority.name());
-      return nbt;
-   }
+    @Deprecated("Please use the Codec instead", ReplaceWith("Ability.CODEC"))
+    open fun loadFromJSON(json: JsonObject): Ability {
+        CODEC.parse(JsonOps.INSTANCE, json).ifSuccess { ability ->
+            this.template = ability.template
+            this.forced = ability.forced
+            this.index = ability.index
+            this.priority = ability.priority
+        }
+        return this
+    }
 
-   public JsonObject saveToJSON(JsonObject json) {
-      json.addProperty("AbilityName", this.getName());
-      json.addProperty("AbilityForced", this.forced);
-      json.addProperty("AbilityIndex", this.index);
-      json.addProperty("AbilityPriority", this.priority.name());
-      return json;
-   }
+    companion object {
 
-   public Ability loadFromNBT(CompoundTag nbt) {
-      Abilities var10001 = Abilities.INSTANCE;
-      String var10002 = nbt.m_128461_("AbilityName");
-      this.template = var10001.getOrException(var10002);
-      this.forced = nbt.m_128471_("AbilityForced");
-      if (nbt.m_128441_("AbilityIndex") && nbt.m_128441_("AbilityPriority")) {
-         this.index = nbt.m_128451_("AbilityIndex");
-         String var2 = nbt.m_128461_("AbilityPriority");
-         this.priority = Priority.valueOf(var2);
-      }
+        @JvmStatic
+        public static final CODEC: Codec<Ability> = RecordCodecBuilder.create {
+            it.group(
+                AbilityTemplate.CODEC.fieldOf(DataKeys.POKEMON_ABILITY_NAME).forGetter(Ability::template),
+                Codec.BOOL.optionalFieldOf(DataKeys.POKEMON_ABILITY_FORCED, false).forGetter(Ability::forced),
+                Codec.INT.optionalFieldOf(DataKeys.POKEMON_ABILITY_INDEX, -1).forGetter(Ability::index),
+                Priority.CODEC.optionalFieldOf(DataKeys.POKEMON_ABILITY_PRIORITY, Priority.LOWEST).forGetter(Ability::priority)
+            ).apply(it) { template, forced, index, priority -> Ability(template, forced, priority).apply {
+                this.index = index
+                this.priority = priority
+            } }
+        }
 
-      return this;
-   }
+    }
 
-   public Ability loadFromJSON(JsonObject json) {
-      Abilities var10001 = Abilities.INSTANCE;
-      String var10002 = json.get("AbilityName").getAsString();
-      this.template = var10001.getOrException(var10002);
-      JsonElement var2 = json.get("AbilityForced");
-      this.forced = var2 != null && var2.getAsBoolean();
-      if (json.has("AbilityIndex") && json.has("AbilityPriority")) {
-         this.index = json.get("AbilityIndex").getAsInt();
-         String var3 = json.get("AbilityPriority").getAsString();
-         this.priority = Priority.valueOf(var3);
-      }
-
-      return this;
-   }
 }

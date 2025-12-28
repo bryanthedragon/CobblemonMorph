@@ -1,79 +1,63 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen1
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.BipedWalkAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BipedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.MOVING_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.STATIONARY_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.UI_POSES
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-public class GengarModel(root: ModelPart) : PokemonPoseableModel, BipedFrame {
-   public open val leftLeg: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rightLeg: ModelPart
-   public open val rootPart: ModelPart
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class GengarModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame {
+    override val rootPart = root.registerChildWithAllChildren("gengar")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "gengar");
-      this.leftLeg = this.getPart("leg_left");
-      this.rightLeg = this.getPart("leg_right");
-      this.portraitScale = 1.1F;
-      this.portraitTranslation = new Vec3(-0.3, 0.55, 0.0);
-      this.profileScale = 0.6F;
-      this.profileTranslation = new Vec3(0.0, 0.77, 0.0);
-   }
+    override val leftLeg = getPart("leg_left")
+    override val rightLeg = getPart("leg_right")
 
-   public override fun registerPoses() {
-      var var10001: PoseableEntityModel = this;
-      var var10003: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var4: java.util.Set = var10003;
-      val var10004: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            var10001,
-            "standing",
-            SetsKt.plus(var4, var10004),
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "gengar", "ground_idle", null, 4, null)},
-            null,
-            null,
-            444,
-            null
-         )
-      );
-      var10001 = this;
-      var10003 = PoseType.Companion.getMOVING_POSES();
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            var10001,
-            "walk",
-            var10003,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               new BipedWalkAnimation(this, 1.0F, 0.9F), PoseableEntityModel.bedrock$default(this, "gengar", "ground_idle", null, 4, null)
-            },
-            null,
-            null,
-            444,
-            null
-         )
-      );
-   }
+    override var portraitScale = 1.1F
+    override var portraitTranslation = Vec3(-0.3, 0.55, 0.0)
+
+    override var profileScale = 0.6F
+    override var profileTranslation = Vec3(0.0, 0.77, 0.0)
+
+    lateinit var standing: Pose
+    lateinit var walk: Pose
+
+    override val cryAnimation = CryProvider { bedrockStateful("gengar", "cry") }
+
+    override fun registerPoses() {
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = STATIONARY_POSES + UI_POSES,
+            animations = arrayOf(
+                bedrock("gengar", "ground_idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseTypes = MOVING_POSES,
+            animations = arrayOf(
+                BipedWalkAnimation(this, periodMultiplier = 1.0F, amplitudeMultiplier = 0.9f),
+                bedrock("gengar", "ground_idle")
+                //bedrock("gengar", "ground_walk")
+            )
+        )
+    }
+
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing, walk)) bedrockStateful("gengar", "faint") else null
 }

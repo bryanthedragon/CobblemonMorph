@@ -1,38 +1,40 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.factory
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStore
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStoreManager
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.StorePosition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PlayerPartyStore
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.PCBlockEntity
 import java.util.UUID
+import net.minecraft.core.RegistryAccess
 import net.minecraft.server.level.ServerPlayer
 
-public interface PokemonStoreFactory {
-   public abstract fun getPlayerParty(playerID: UUID): PlayerPartyStore? {
-   }
+/**
+ * A provider for [PokemonStore]'s when given a player UUID. An implementation of this interface
+ * does not need to always provide a value. In some cases you may only want to provide a store for
+ * specific players, or under specific conditions, or only for parties, etc.
+ *
+ * If you have an implementation of this interface and want it to be used by Cobblemon, register
+ * the factory using [PokemonStoreManager.registerFactory].
+ *
+ * @author Hiroku
+ * @since November 29th, 2021
+ */
+interface PokemonStoreFactory {
+    fun getPlayerParty(playerID: UUID, registryAccess: RegistryAccess): PlayerPartyStore?
+    fun getPC(playerID: UUID, registryAccess: RegistryAccess): PCStore?
+    fun getPCForPlayer(player: ServerPlayer, pcBlockEntity: PCBlockEntity): PCStore? = getPC(player.uuid, player.registryAccess())
 
-   public abstract fun getPC(playerID: UUID): PCStore? {
-   }
-
-   public open fun getPCForPlayer(player: ServerPlayer, pcBlockEntity: PCBlockEntity): PCStore? {
-   }
-
-   public abstract fun <E : StorePosition, T : PokemonStore<Any>> getCustomStore(storeClass: Class<Any>, uuid: UUID): Any? {
-   }
-
-   public abstract fun shutdown() {
-   }
-
-   public abstract fun onPlayerDisconnect(playerID: UUID) {
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun getPCForPlayer(`$this`: PokemonStoreFactory, player: ServerPlayer, pcBlockEntity: PCBlockEntity): PCStore? {
-         val var10001: UUID = player.m_20148_();
-         return `$this`.getPC(var10001);
-      }
-   }
+    fun <E : StorePosition, T : PokemonStore<E>> getCustomStore(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T?
+    fun shutdown(registryAccess: RegistryAccess)
+    fun onPlayerDisconnect(player: ServerPlayer)
 }

@@ -1,29 +1,39 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import net.minecraft.network.FriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public abstract class SingleUpdatePacket<T, N extends NetworkPacket<N>> : PokemonUpdatePacket<N> {
-   public final val value: Any
+/**
+ * Base class for packets which update a single value of a Pokémon.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pokemon.update.PokemonUpdatePacketHandler]
+ *
+ * @author Hiroku
+ * @since November 28th, 2021
+ */
+abstract class SingleUpdatePacket<T, N : NetworkPacket<N>>(pokemon: () -> Pokemon?, val value: T) : PokemonUpdatePacket<N>(pokemon) {
 
-   open fun SingleUpdatePacket(pokemon: () -> Pokemon, value: T) {
-      super(pokemon);
-      this.value = (T)value;
-   }
+    override fun encodeDetails(buffer: RegistryFriendlyByteBuf) {
+        this.encodeValue(buffer)
+    }
 
-   public override fun encodeDetails(buffer: FriendlyByteBuf) {
-      this.encodeValue(buffer);
-   }
+    override fun applyToPokemon() {
+        val pokemon = pokemon() ?: return
+        set(pokemon, this.value)
+    }
 
-   public override fun applyToPokemon() {
-      this.set(this.getPokemon().invoke() as Pokemon, this.value);
-   }
+    abstract fun encodeValue(buffer: RegistryFriendlyByteBuf)
 
-   public abstract fun encodeValue(buffer: FriendlyByteBuf) {
-   }
-
-   public abstract fun set(pokemon: Pokemon, value: Any) {
-   }
+    /** Sets the value in the client-side Pokémon. */
+    abstract fun set(pokemon: Pokemon, value: T)
 }

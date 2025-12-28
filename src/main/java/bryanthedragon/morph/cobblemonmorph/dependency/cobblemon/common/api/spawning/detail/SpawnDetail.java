@@ -1,156 +1,184 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail
 
-import com.bedrockk.molang.runtime.struct.ArrayStruct
-import com.bedrockk.molang.runtime.struct.VariableStruct
+import com.bedrockk.molang.runtime.struct.QueryStruct
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.StringValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ModDependant
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.queryStructOf
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnBucket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.CompositeSpawningCondition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SpawningCondition
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.RegisteredSpawningContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SpawningContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.multiplier.WeightMultiplier
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.chat.MutableComponent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePositionType
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.selection.SpawnSelectionData
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.text
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asArrayValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asTranslated
+import com.google.gson.annotations.SerializedName
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.MinecraftServer
 
-@SourceDebugExtension(["SMAP\nSpawnDetail.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SpawnDetail.kt\ncom/cobblemon/mod/common/api/spawning/detail/SpawnDetail\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,94:1\n1559#2:95\n1590#2,4:96\n2624#2,3:100\n1747#2,3:103\n*S KotlinDebug\n*F\n+ 1 SpawnDetail.kt\ncom/cobblemon/mod/common/api/spawning/detail/SpawnDetail\n*L\n70#1:95\n70#1:96,4\n78#1:100,3\n80#1:103,3\n*E\n"])
-public abstract class SpawnDetail : ModDependant {
-   public final var anticonditions: MutableList<SpawningCondition<*>> = (new ArrayList()) as java.util.List
-   public final var bucket: SpawnBucket = new SpawnBucket("", 0.0F)
-   public final var compositeCondition: CompositeSpawningCondition?
-   public final var conditions: MutableList<SpawningCondition<*>> = (new ArrayList()) as java.util.List
-   public final lateinit var context: RegisteredSpawningContext<*>
-   public final var displayName: String?
-   public final var height: Int = -1
-   public final var id: String = ""
-   public final var labels: MutableList<String> = (new ArrayList()) as java.util.List
-   public open var neededInstalledMods: List<String> = CollectionsKt.emptyList()
-   public open var neededUninstalledMods: List<String> = CollectionsKt.emptyList()
-   public final var percentage: Float = -1.0F
-   public final val struct: VariableStruct = new VariableStruct()
-   public abstract val type: String
-   public final var weight: Float = -1.0F
-   public final var weightMultipliers: MutableList<WeightMultiplier> = (new ArrayList()) as java.util.List
-   public final var width: Int = -1
-
-   public open fun autoLabel() {
-      this.struct.setDirectly("weight", new DoubleValue((double)this.weight));
-      this.struct.setDirectly("percentage", new DoubleValue((double)this.percentage));
-      this.struct.setDirectly("id", new StringValue(this.id));
-      this.struct.setDirectly("bucket", new StringValue(this.bucket.getName()));
-      this.struct.setDirectly("width", new DoubleValue((double)this.width));
-      this.struct.setDirectly("height", new DoubleValue((double)this.height));
-      this.struct.setDirectly("context", new StringValue(this.getContext().getName()));
-      val `$this$mapIndexed$iv`: java.lang.Iterable = this.labels;
-      val var13: VariableStruct = this.struct;
-      val `destination$iv$iv`: java.util.Collection = new ArrayList(CollectionsKt.collectionSizeOrDefault(`$this$mapIndexed$iv`, 10));
-      var `index$iv$iv`: Int = 0;
-
-      for (Object item$iv$iv : $this$mapIndexed$iv) {
-         val var9: Int = `index$iv$iv`++;
-         if (var9 < 0) {
-            CollectionsKt.throwIndexOverflow();
-         }
-
-         `destination$iv$iv`.add(TuplesKt.to(java.lang.String.valueOf(var9), new StringValue(`item$iv$iv` as java.lang.String)));
-      }
-
-      var13.setDirectly("labels", new ArrayStruct(MapsKt.toMap(`destination$iv$iv` as java.util.List)));
-   }
-
-   public open fun getName(): MutableComponent {
-      var var10000: MutableComponent = if (this.displayName != null) MiscUtilsKt.asTranslated(this.displayName) else null;
-      if (var10000 == null) {
-         var10000 = TextKt.text(this.id);
-      }
-
-      return var10000;
-   }
-
-   public open fun isSatisfiedBy(ctx: SpawningContext): Boolean {
-      if (!ctx.preFilter(this)) {
-         return false;
-      } else {
-         if (!this.conditions.isEmpty()) {
-            val `$this$any$iv`: java.lang.Iterable = this.conditions;
-            var var10000: Boolean;
-            if (this.conditions is java.util.Collection && this.conditions.isEmpty()) {
-               var10000 = true;
-            } else {
-               val var4: java.util.Iterator = `$this$any$iv`.iterator();
-
-               while (true) {
-                  if (!var4.hasNext()) {
-                     var10000 = true;
-                     break;
-                  }
-
-                  if ((var4.next() as SpawningCondition).isSatisfiedBy(ctx)) {
-                     var10000 = false;
-                     break;
-                  }
-               }
+/**
+ * A spawnable unit in the Best Spawner API. This is extended for any kind of entity
+ * you want to spawn.
+ *
+ * @author Hiroku
+ * @since January 31st, 2022
+ */
+abstract class SpawnDetail : ModDependant {
+    companion object {
+        val pokemonTypes = mutableListOf<String>()
+        val spawnDetailTypes = mutableMapOf<String, RegisteredSpawnDetail<*>>()
+        fun <T : SpawnDetail> registerSpawnType(name: String, detailClass: Class<T>) {
+            spawnDetailTypes[name] = RegisteredSpawnDetail(detailClass)
+            if (detailClass == PokemonSpawnDetail::class.java || detailClass == PokemonHerdSpawnDetail::class.java) {
+                pokemonTypes.add(name)
             }
+        }
+    }
 
-            if (var10000) {
-               return false;
+    abstract val type: String
+    var id = ""
+    var displayName: String? = null
+    @SerializedName("spawnablePositionType", alternate = ["context"])
+    lateinit var spawnablePositionType: SpawnablePositionType<*>
+    var bucket = SpawnBucket("", 0F)
+    var conditions = mutableListOf<SpawningCondition<*>>()
+    var anticonditions = mutableListOf<SpawningCondition<*>>()
+    var compositeCondition: CompositeSpawningCondition? = null
+    var weightMultipliers = mutableListOf<WeightMultiplier>()
+    var width = -1
+    var height = -1
+
+    var weight = -1F
+    var percentage = -1F
+
+    var labels = mutableListOf<String>()
+
+    /**
+     * This is calculated when the server starts. It is a set of all biome identifiers in which this spawn
+     * is possible. It is used as part of the [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.BiomePrecalculation].
+     */
+    @Transient
+    val validBiomes = mutableSetOf<ResourceLocation>()
+
+    @Transient
+    val struct: QueryStruct = queryStructOf(
+        "weight" to { DoubleValue(weight) },
+        "percentage" to { DoubleValue(percentage) },
+        "id" to { StringValue(id) },
+        "bucket" to { StringValue(bucket.name) },
+        "width" to { DoubleValue(width.toDouble()) },
+        "height" to { DoubleValue(height.toDouble()) },
+        "spawnable_position_type" to { StringValue(spawnablePositionType.name) },
+        "labels" to { labels.asArrayValue { StringValue(it) } }
+    )
+
+    override var neededInstalledMods = listOf<String>()
+    override var neededUninstalledMods = listOf<String>()
+
+    open fun autoLabel() {}
+
+    open fun getName() = displayName?.asTranslated() ?: id.text()
+
+    open fun onServerLoad(server: MinecraftServer) {
+        val biomeRegistry = server.registryAccess().registryOrThrow(Registries.BIOME)
+        validBiomes.clear()
+
+        // Calculate in advance what biomes of this world the spawn detail is valid for.
+        biomeRegistry.holders().forEach { holder ->
+            val key = holder.unwrapKey().orElse(null) ?: return@forEach
+            if (conditions.isEmpty() || conditions.any { it.biomes == null || it.biomes!!.isEmpty() || it.biomes!!.any { it.fits(holder) } }) {
+                if (anticonditions.isEmpty() || anticonditions.none { it.biomes != null && it.biomes!!.any { it.fits(holder) } }) {
+                    if (compositeCondition?.isBiomeValid(holder) != false) {
+                        validBiomes.add(key.location())
+                    }
+                }
             }
-         }
+        }
+    }
 
-         if (!this.anticonditions.isEmpty()) {
-            val var8: java.lang.Iterable = this.anticonditions;
-            var var14: Boolean;
-            if (this.anticonditions is java.util.Collection && this.anticonditions.isEmpty()) {
-               var14 = false;
-            } else {
-               val var10: java.util.Iterator = var8.iterator();
+    open fun isSatisfiedBy(spawnablePosition: SpawnablePosition): Boolean {
+        if (!spawnablePosition.preFilter(this)) {
+            return false
+        } else if (conditions.isNotEmpty() && conditions.none { it.isSatisfiedBy(spawnablePosition) }) {
+            return false
+        } else if (anticonditions.isNotEmpty() && anticonditions.any { it.isSatisfiedBy(spawnablePosition) }) {
+            return false
+        } else if (compositeCondition?.satisfiedBy(spawnablePosition) == false) {
+            return false
+        } else if (!spawnablePosition.postFilter(this)) {
+            return false
+        }
 
-               while (true) {
-                  if (!var10.hasNext()) {
-                     var14 = false;
-                     break;
-                  }
+        return true
+    }
 
-                  if ((var10.next() as SpawningCondition).isSatisfiedBy(ctx)) {
-                     var14 = true;
-                     break;
-                  }
-               }
-            }
+    open fun isValid(): Boolean {
+        var containsNullValues = false
+        if (conditions.isNotEmpty() && conditions.any { !it.isValid() }) {
+            containsNullValues = true
+            LOGGER.error("Spawn Detail with id $id is invalid as it contains invalid values in its conditions (commonly caused by trailing comma in biomes or other arrays)")
+        }
+        if (anticonditions.isNotEmpty() && anticonditions.any { !it.isValid() }) {
+            containsNullValues = true
+            LOGGER.error("Spawn Detail with id $id is invalid as it contains invalid values in its anticonditions (commonly caused by trailing comma in biomes or other arrays)")
+        }
+        return super.isModDependencySatisfied() && !containsNullValues
+    }
 
-            if (var14) {
-               return false;
-            }
-         }
+    /**
+     * Runs when selected by a selection algorithm. This handles removing any nearby spawns in the selection
+     * data and whatever else.
+     *
+     * [selectionData] the algorithm data that is being used to choose spawns.
+     * [spawnablePosition] where the spawn is taking place.
+     * [spawnAction] the spawn action that was chosen based off this [SpawnDetail] to spawn at this position.
+     */
+    protected open fun onSelection(
+        spawnablePosition: SpawnablePosition,
+        spawnAction: SpawnAction<*>,
+        selectionData: SpawnSelectionData
+    ) {
+        selectionData.removeSpawnablePositions { _, pos ->
+            pos.distanceTo(spawnablePosition) < Cobblemon.config.minimumDistanceBetweenEntities
+        }
+    }
 
-         if (this.compositeCondition != null && !this.compositeCondition.satisfiedBy(ctx)) {
-            return false;
-         } else {
-            return ctx.postFilter(this);
-         }
-      }
-   }
+    /**
+     * Chooses this spawn detail from selection data, returning a functional
+     * spawn action.
+     */
+    fun choose(
+        spawnablePosition: SpawnablePosition,
+        bucket: SpawnBucket,
+        selectionData: SpawnSelectionData
+    ): SpawnAction<*> {
+        val action = createSpawnAction(spawnablePosition, bucket, selectionData)
+        onSelection(
+            spawnablePosition = spawnablePosition,
+            spawnAction = action,
+            selectionData = selectionData
+        )
+        return action
+    }
 
-   public open fun isValid(): Boolean {
-      return this.isModDependencySatisfied();
-   }
-
-   public abstract fun doSpawn(ctx: SpawningContext): SpawnAction<*> {
-   }
-
-   override fun isModDependencySatisfied(): Boolean {
-      return ModDependant.DefaultImpls.isModDependencySatisfied(this);
-   }
-
-   public companion object {
-      public final val spawnDetailTypes: MutableMap<String, RegisteredSpawnDetail<*>>
-
-      public fun <T : SpawnDetail> registerSpawnType(name: String, detailClass: Class<Any>) {
-         this.getSpawnDetailTypes().put(name, new RegisteredSpawnDetail(detailClass));
-      }
-   }
+    /** Instantiates an action at the given [SpawnablePosition] for the given [SpawnBucket]. */
+    protected abstract fun createSpawnAction(
+        spawnablePosition: SpawnablePosition,
+        bucket: SpawnBucket,
+        selectionData: SpawnSelectionData
+    ): SpawnAction<*>
 }

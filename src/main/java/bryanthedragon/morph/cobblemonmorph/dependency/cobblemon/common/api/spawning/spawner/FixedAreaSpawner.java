@@ -1,45 +1,53 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnCause
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnerManager
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnPool
-import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.core.BlockPos
 
-public open class FixedAreaSpawner(name: String,
-   spawns: SpawnPool,
-   manager: SpawnerManager,
-   world: ServerLevel,
-   position: BlockPos,
-   horizontalRadius: Int,
-   verticalRadius: Int,
-   ticksBetweenSpawns: Float = 20.0F
-) : AreaSpawner(name, spawns, manager) {
-   public final val horizontalRadius: Int
-   public final val position: BlockPos
-   public open var ticksBetweenSpawns: Float
-   public final val verticalRadius: Int
-   public final val world: ServerLevel
+/**
+ * A spawner that works within a fixed area. Instances provide the center point and the radii and then the spawner
+ * can be told to [run] and it will spawn Pokémon within that area.
+ *
+ * @author Hiroku
+ * @since February 5th, 2022
+ */
+open class FixedAreaSpawner(
+    name: String,
+    spawnPool: SpawnPool,
+    val world: ServerLevel,
+    val position: BlockPos,
+    val horizontalRadius: Int,
+    val verticalRadius: Int,
+    maxPokemonPerChunk: Float = Cobblemon.config.pokemonPerChunk
+) : BasicSpawner(name, spawnPool, maxPokemonPerChunk) {
+    fun run(cause: SpawnCause, maxSpawns: Int? = null): List<Any> {
+        return runForArea(
+            zoneInput = getZoneInput(cause),
+            maxSpawns = maxSpawns
+        )
+    }
 
-   init {
-      this.world = world;
-      this.position = position;
-      this.horizontalRadius = horizontalRadius;
-      this.verticalRadius = verticalRadius;
-      this.ticksBetweenSpawns = ticksBetweenSpawns;
-   }
-
-   public override fun getArea(cause: SpawnCause): SpawningArea? {
-      val basePos: BlockPos = this.position.m_7918_(-this.horizontalRadius, -this.verticalRadius, -this.horizontalRadius);
-      return new SpawningArea(
-         cause,
-         this.world,
-         basePos.m_123341_(),
-         basePos.m_123342_(),
-         basePos.m_123343_(),
-         this.horizontalRadius * 2 + 1,
-         this.verticalRadius * 2 + 1,
-         this.horizontalRadius * 2 + 1
-      );
-   }
+    fun getZoneInput(cause: SpawnCause): SpawningZoneInput {
+        val basePos = position.offset(-horizontalRadius, -verticalRadius, -horizontalRadius)
+        return SpawningZoneInput(
+            cause = cause,
+            world = world,
+            baseX = basePos.x,
+            baseY = basePos.y,
+            baseZ = basePos.z,
+            length = horizontalRadius * 2 + 1,
+            height = verticalRadius * 2 + 1,
+            width = horizontalRadius * 2 + 1
+        )
+    }
 }

@@ -1,136 +1,123 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.dto
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.ActiveDialogue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.input.DialogueAutoContinueInput
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.input.DialogueOption
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.input.DialogueOptionSetInput
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.input.DialogueTextInput
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.input.DialogueTimeout
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.Decodable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.Encodable
-import java.util.ArrayList;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readEnumConstant
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readUUID
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeEnumConstant
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeUUID
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
 
-@SourceDebugExtension(["SMAP\nDialogueInputDTO.kt\nKotlin\n*S Kotlin\n*F\n+ 1 DialogueInputDTO.kt\ncom/cobblemon/mod/common/net/messages/client/dialogue/dto/DialogueInputDTO\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,119:1\n1549#2:120\n1620#2,3:121\n1855#2,2:124\n*S KotlinDebug\n*F\n+ 1 DialogueInputDTO.kt\ncom/cobblemon/mod/common/net/messages/client/dialogue/dto/DialogueInputDTO\n*L\n46#1:120\n46#1:121,3\n87#1:124,2\n*E\n"])
-public class DialogueInputDTO : Encodable, Decodable {
-   public final var allowSkip: Boolean
-   public final var deadline: Float
-   public final var inputId: UUID
-   public final var inputType: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.dto.DialogueInputDTO.InputType
-   public final var options: MutableList<DialogueOptionDTO>
-   public final var showTimer: Boolean
-   public final var vertical: Boolean
+/**
+ * Combined DTO file for all dialogue inputs. This is used to send the input data to the client.
+ *
+ * @author Hiroku
+ * @since December 29th, 2023
+ */
+class DialogueInputDTO() : Encodable, Decodable {
+    enum class InputType {
+        OPTION,
+        TEXT,
+        AUTO_CONTINUE,
+        NONE
+    }
 
-   init {
-      val var10001: UUID = UUID.randomUUID();
-      this.inputId = var10001;
-      this.inputType = DialogueInputDTO.InputType.NONE;
-      this.deadline = -1.0F;
-      this.showTimer = true;
-      this.options = new ArrayList<>();
-      this.allowSkip = true;
-   }
+    var inputId: UUID = UUID.randomUUID()
+    var inputType = InputType.NONE
+    var deadline = -1F
+    var showTimer = true
 
-   public constructor(optionSet: DialogueOptionSetInput, activeDialogue: ActiveDialogue) : this() {
-      val var10001: UUID = activeDialogue.getActiveInput().getInputId();
-      this.inputId = var10001;
-      val `$this$map$iv`: java.lang.Iterable = optionSet.getVisibleOptions(activeDialogue);
-      val `destination$iv$iv`: java.util.Collection = new ArrayList(CollectionsKt.collectionSizeOrDefault(`$this$map$iv`, 10));
+    var options = mutableListOf<DialogueOptionDTO>()
+    var vertical = false
 
-      for (Object item$iv$iv : $this$map$iv) {
-         `destination$iv$iv`.add(
-            new DialogueOptionDTO(
-               (`item$iv$iv` as DialogueOption).getText().invoke(activeDialogue),
-               (`item$iv$iv` as DialogueOption).getValue(),
-               (`item$iv$iv` as DialogueOption).isSelectable().invoke(activeDialogue)
+    var allowSkip = true
+
+    constructor(optionSet: DialogueOptionSetInput, activeDialogue: ActiveDialogue) : this() {
+        this.inputId = activeDialogue.activeInput.inputId
+        this.options = optionSet.getVisibleOptions(activeDialogue).map {
+            DialogueOptionDTO(
+                text = it.text(activeDialogue),
+                value = it.value,
+                selectable = it.isSelectable(activeDialogue)
             )
-         );
-      }
+        }.toMutableList()
+        this.deadline = optionSet.timeout?.duration ?: -1F
+        this.showTimer = optionSet.timeout?.showTimer ?: true
+        this.inputType = InputType.OPTION
+        this.vertical = optionSet.vertical
+    }
 
-      this.options = CollectionsKt.toMutableList(`destination$iv$iv` as java.util.List);
-      val var14: DialogueTimeout = optionSet.getTimeout();
-      this.deadline = if (var14 != null) var14.getDuration() else -1.0F;
-      val var15: DialogueTimeout = optionSet.getTimeout();
-      this.showTimer = var15 == null || var15.getShowTimer();
-      this.inputType = DialogueInputDTO.InputType.OPTION;
-      this.vertical = optionSet.getVertical();
-   }
+    constructor(autoContinue: DialogueAutoContinueInput, activeDialogue: ActiveDialogue): this() {
+        this.inputId = activeDialogue.activeInput.inputId
+        this.deadline = autoContinue.timeout?.duration ?: -1F
+        this.inputType = InputType.AUTO_CONTINUE
+        this.allowSkip = autoContinue.allowSkip
+        this.showTimer = autoContinue.showTimer
+    }
 
-   public constructor(autoContinue: DialogueAutoContinueInput, activeDialogue: ActiveDialogue) : this() {
-      val var10001: UUID = activeDialogue.getActiveInput().getInputId();
-      this.inputId = var10001;
-      val var3: DialogueTimeout = autoContinue.getTimeout();
-      this.deadline = if (var3 != null) var3.getDuration() else -1.0F;
-      this.inputType = DialogueInputDTO.InputType.AUTO_CONTINUE;
-      this.allowSkip = autoContinue.getAllowSkip();
-      this.showTimer = autoContinue.getShowTimer();
-   }
+    constructor(text: DialogueTextInput, activeDialogue: ActiveDialogue): this() {
+        this.inputId = activeDialogue.activeInput.inputId
+        this.deadline = text.timeout?.duration ?: -1F
+        this.inputType = InputType.TEXT
+        this.showTimer = text.timeout?.showTimer ?: true
+    }
 
-   public constructor(text: DialogueTextInput, activeDialogue: ActiveDialogue) : this() {
-      val var10001: UUID = activeDialogue.getActiveInput().getInputId();
-      this.inputId = var10001;
-      val var3: DialogueTimeout = text.getTimeout();
-      this.deadline = if (var3 != null) var3.getDuration() else -1.0F;
-      this.inputType = DialogueInputDTO.InputType.TEXT;
-      val var4: DialogueTimeout = text.getTimeout();
-      this.showTimer = var4 == null || var4.getShowTimer();
-   }
+    constructor(activeDialogue: ActiveDialogue): this() {
+        this.inputId = activeDialogue.activeInput.inputId
+    }
 
-   public constructor(activeDialogue: ActiveDialogue) : this() {
-      val var10001: UUID = activeDialogue.getActiveInput().getInputId();
-      this.inputId = var10001;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.inputId);
-      buffer.m_130068_(this.inputType);
-      buffer.writeFloat(this.deadline);
-      buffer.writeBoolean(this.showTimer);
-      switch (DialogueInputDTO.WhenMappings.$EnumSwitchMapping$0[this.inputType.ordinal()]) {
-         case 1:
-            buffer.writeBoolean(this.vertical);
-            buffer.writeInt(this.options.size());
-
-            val `$this$forEach$iv`: java.lang.Iterable;
-            for (Object element$iv : $this$forEach$iv) {
-               (`element$iv` as DialogueOptionDTO).encode(buffer);
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(inputId)
+        buffer.writeEnumConstant(inputType)
+        buffer.writeFloat(deadline)
+        buffer.writeBoolean(showTimer)
+        when (inputType) {
+            InputType.OPTION -> {
+                buffer.writeBoolean(vertical)
+                buffer.writeInt(options.size)
+                options.forEach { it.encode(buffer) }
             }
-            break;
-         case 2:
-            buffer.writeBoolean(this.allowSkip);
-         default:
-      }
-   }
-
-   public override fun decode(buffer: FriendlyByteBuf) {
-      val var10001: UUID = buffer.m_130259_();
-      this.inputId = var10001;
-      val var5: java.lang.Enum = buffer.m_130066_(DialogueInputDTO.InputType.class);
-      this.inputType = var5 as DialogueInputDTO.InputType;
-      this.deadline = buffer.readFloat();
-      this.showTimer = buffer.readBoolean();
-      switch (DialogueInputDTO.WhenMappings.$EnumSwitchMapping$0[this.inputType.ordinal()]) {
-         case 1:
-            this.vertical = buffer.readBoolean();
-            val size: Int = buffer.readInt();
-
-            for (int i = 0; i < size; i++) {
-               val option: DialogueOptionDTO = new DialogueOptionDTO(null, null, false, 7, null);
-               option.decode(buffer);
-               this.options.add(option);
+            InputType.AUTO_CONTINUE -> {
+                buffer.writeBoolean(allowSkip)
             }
-            break;
-         case 2:
-            this.allowSkip = buffer.readBoolean();
-         default:
-      }
-   }
+            else -> // No extra data
+                Unit
+        }
+    }
 
-   public enum InputType {
-      OPTION,
-      TEXT,
-      AUTO_CONTINUE,
-      NONE   }
+    override fun decode(buffer: RegistryFriendlyByteBuf) {
+        inputId = buffer.readUUID()
+        inputType = buffer.readEnumConstant(InputType::class.java)
+        deadline = buffer.readFloat()
+        showTimer = buffer.readBoolean()
+        when (inputType) {
+            InputType.OPTION -> {
+                vertical = buffer.readBoolean()
+                val size = buffer.readInt()
+                for (i in 0 until size) {
+                    val option = DialogueOptionDTO()
+                    option.decode(buffer)
+                    options.add(option)
+                }
+            }
+            InputType.AUTO_CONTINUE -> {
+                allowSkip = buffer.readBoolean()
+            }
+            else -> // No extra data
+                Unit
+        }
+    }
 }

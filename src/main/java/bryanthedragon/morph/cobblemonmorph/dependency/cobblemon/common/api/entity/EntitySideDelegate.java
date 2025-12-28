@@ -1,30 +1,23 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity
 
+import com.bedrockk.molang.runtime.struct.QueryStruct
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.world.entity.Entity
 
-public interface EntitySideDelegate<T extends Entity> {
-   public open fun initialize(entity: Any) {
-   }
-
-   public open fun tick(entity: Any) {
-   }
-
-   public open fun onTrackedDataSet(data: EntityDataAccessor<*>) {
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun <T extends Entity> initialize(`$this`: EntitySideDelegate<T>, entity: T) {
-      }
-
-      @JvmStatic
-      fun <T extends Entity> tick(`$this`: EntitySideDelegate<T>, entity: T) {
-      }
-
-      @JvmStatic
-      fun <T extends Entity> onTrackedDataSet(`$this`: EntitySideDelegate<T>, data: EntityDataAccessor<?>) {
-      }
-   }
+/**
+ * Represents a delegation of a portion of an entity's logic to a particular side.
+ */
+interface EntitySideDelegate<T : Entity> {
+    fun initialize(entity: T) {}
+    fun tick(entity: T) {}
+    fun onSyncedDataUpdated(data: EntityDataAccessor<*>) {}
+    fun addToStruct(struct: QueryStruct) {}
 }

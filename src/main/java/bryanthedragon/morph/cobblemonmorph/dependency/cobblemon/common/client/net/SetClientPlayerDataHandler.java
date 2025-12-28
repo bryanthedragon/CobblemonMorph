@@ -1,22 +1,24 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.starter.ClientPlayerData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.starter.SetClientPlayerDataPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.SetClientPlayerDataPacket
 import net.minecraft.client.Minecraft
+final class SetClientPlayerDataHandler : ClientNetworkPacketHandler<SetClientPlayerDataPacket> {
+    override fun handle(packet: SetClientPlayerDataPacket, client: Minecraft) {
+        if (packet.isIncremental) {
+            packet.type.incrementalAfterDecodeAction.invoke(packet.playerData)
+        }
+        else {
+            packet.type.afterDecodeAction.invoke(packet.playerData)
+        }
 
-public object SetClientPlayerDataHandler : ClientNetworkPacketHandler<SetClientPlayerDataPacket> {
-   public open fun handle(packet: SetClientPlayerDataPacket, client: Minecraft) {
-      CobblemonClient.INSTANCE
-         .setClientPlayerData(new ClientPlayerData(packet.getPromptStarter(), packet.getStarterLocked(), packet.getStarterSelected(), packet.getStarterUUID()));
-      if (packet.getResetStarterPrompt() == true) {
-         CobblemonClient.INSTANCE.setCheckedStarterScreen(false);
-         CobblemonClient.INSTANCE.getOverlay().resetAttachedToast();
-      }
-   }
-
-   fun handleOnNettyThread(packet: SetClientPlayerDataPacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
+    }
 }

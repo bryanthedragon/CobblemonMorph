@@ -1,67 +1,84 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.ai.BattleAI
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ActiveBattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownActionRequest
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.PassActionResponse
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownActionResponse
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownMoveset
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.exception.IllegalActionChoiceException
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleFaintPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleHealthChangePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMakeChoicePacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattlePersistentStatusPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleReplacePokemonPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleSwapPokemonPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleSwitchPokemonPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleTransformPokemonPacket
 import java.util.UUID
-import kotlin.jvm.functions.Function3
-import org.jetbrains.annotations.NotNull
-import org.jetbrains.annotations.Nullable
 
-public abstract class AIBattleActor : BattleActor {
-   public final val battleAI: BattleAI
+abstract class AIBattleActor(
+    gameId: UUID,
+    pokemonList: List<BattlePokemon>,
+    val battleAI: BattleAI
+) : BattleActor(gameId, pokemonList.toMutableList()) {
+    override fun sendUpdate(packet: NetworkPacket<*>) {
+        super.sendUpdate(packet)
 
-   open fun AIBattleActor(gameId: UUID, pokemonList: MutableList<BattlePokemon>, battleAI: BattleAI) {
-      super(gameId, CollectionsKt.toMutableList(pokemonList));
-      this.battleAI = battleAI;
-   }
+        when (packet) {
+            is BattleMakeChoicePacket -> this.onChoiceRequested()
+            is BattlePersistentStatusPacket -> {}
+            is BattleFaintPacket -> {}
+            is BattleSwitchPokemonPacket -> if (!packet.isAlly) { /* TODO this might be redundant; switch on opposing site should be visible during turn */ }
+            is BattleSwapPokemonPacket -> { /* TODO CONSIDER MULTI SHIFTING */ }
+            is BattleHealthChangePacket -> battleAI.onHealthChange(packet)
+            is BattleTransformPokemonPacket -> if (!packet.isAlly) { /* TODO this might be redundant; switch on opposing site should be visible during turn */ }
+            is BattleReplacePokemonPacket -> if (!packet.isAlly) { /* TODO this might be redundant; switch on opposing site should be visible during turn */ }
+        }
+    }
 
-   public override fun sendUpdate(packet: NetworkPacket<*>) {
-      super.sendUpdate(packet);
-      if (packet is BattleMakeChoicePacket) {
-         this.onChoiceRequested();
-      }
-   }
-
-   public open fun onChoiceRequested() {
-      try {
-         val var3: ShowdownActionRequest = this.getRequest();
-         this.setActionResponses(
-            var3.iterate(
-               this.getActivePokemon(),
-               (
-                  new Function3<ActiveBattlePokemon, ShowdownMoveset, java.lang.Boolean, ShowdownActionResponse>(this.battleAI) {
-                     {
-                        super(
-                           3,
-                           receiver,
-                           BattleAI::class.java,
-                           "choose",
-                           "choose(Lcom/cobblemon/mod/common/battles/ActiveBattlePokemon;Lcom/cobblemon/mod/common/battles/ShowdownMoveset;Z)Lcom/cobblemon/mod/common/battles/ShowdownActionResponse;",
-                           0
-                        );
-                     }
-
-                     @NotNull
-                     public final ShowdownActionResponse invoke(@NotNull ActiveBattlePokemon p0, @Nullable ShowdownMoveset p1, boolean p2) {
-                        return (this.receiver as BattleAI).choose(p0, p1, p2);
-                     }
-                  }
-               ) as (ActiveBattlePokemon?, ShowdownMoveset?, java.lang.Boolean?) -> ShowdownActionResponse
-            )
-         );
-      } catch (var2: IllegalActionChoiceException) {
-         Cobblemon.INSTANCE.getLOGGER().error("AI was unable to choose a move, we're going to need to pass!");
-         var2.printStackTrace();
-         val var10001: ShowdownActionRequest = this.getRequest();
-         this.setActionResponses(var10001.iterate(this.getActivePokemon(), <unrepresentable>.INSTANCE));
-      }
-   }
+    /**
+     * Called when the AI is requested to make a choice.
+     */
+    open fun onChoiceRequested() {
+        try {
+            request?.let {
+                setActionResponses(it.iterate(this.activePokemon) { battleMon, moveset, forceSwitch ->
+                    battleAI.choose(battleMon, battle, getSide(), moveset, forceSwitch)
+                })
+                pokemonList.forEach { pokemon ->
+                    pokemon.willBeSwitchedIn = false
+                }
+            } ?: {
+                val response = mutableListOf<ShowdownActionResponse>()
+                repeat(activePokemon.size) {
+                    response.add(PassActionResponse)
+                }
+                setActionResponses(response)
+                LOGGER.warn("AI requested choice, but no request was set. Returning PassActionResponses.")
+            }
+        } catch (exception: IllegalActionChoiceException) {
+            LOGGER.error("AI was unable to choose an action, we're going to need to pass!")
+            exception.printStackTrace()
+            request?.let {
+                setActionResponses(it.iterate(this.activePokemon) { _, _ , _->
+                    PassActionResponse
+                })
+            } ?: {
+                val response = mutableListOf<ShowdownActionResponse>()
+                repeat(activePokemon.size) {
+                    response.add(PassActionResponse)
+                }
+                setActionResponses(response)
+            }
+        }
+    }
 }

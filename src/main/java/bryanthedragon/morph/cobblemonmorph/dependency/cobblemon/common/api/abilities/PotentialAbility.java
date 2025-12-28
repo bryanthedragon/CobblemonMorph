@@ -1,17 +1,54 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
-import java.util.ArrayList;
+import com.google.gson.JsonElement
 
-public interface PotentialAbility {
-   public val priority: Priority
-   public val template: AbilityTemplate
-   public val type: PotentialAbilityType<*>
-
-   public abstract fun isSatisfiedBy(aspects: Set<String>): Boolean {
-   }
-
-   public companion object {
-      public final val types: MutableList<PotentialAbilityType<*>> = (new ArrayList()) as java.util.List
-   }
+interface PotentialAbilityType<T : PotentialAbility> {
+    fun parseFromJSON(element: JsonElement): T?
 }
+
+/**
+ * An ability on a species that may or may not be available for a specific instance of the species.
+ *
+ * Controls whether a Pokémon can learn an ability.
+ *
+ * @author Hiroku
+ * @since July 27th, 2022
+ */
+interface PotentialAbility {
+    val template: AbilityTemplate
+    val priority: Priority
+    val type: PotentialAbilityType<*>
+    fun isSatisfiedBy(aspects: Set<String>): Boolean
+    companion object {
+        val types = mutableListOf<PotentialAbilityType<*>>()
+    }
+}
+final class CommonAbilityType : PotentialAbilityType<CommonAbility> {
+    override fun parseFromJSON(element: JsonElement): CommonAbility? {
+        val str = if (element.isJsonPrimitive) element.asString else null
+        return str?.let {
+            val ability = Abilities.get(it)
+            if (ability != null) {
+                return@let CommonAbility(ability)
+            } else {
+                return@let null
+            }
+        }
+    }
+}
+
+open class CommonAbility(override val template: AbilityTemplate) : PotentialAbility {
+    override val priority = Priority.LOWEST
+    override val type = CommonAbilityType
+    override fun isSatisfiedBy(aspects: Set<String>) = true
+}
+

@@ -1,226 +1,298 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Bone
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.VaryingModelRepository
-import com.google.gson.Gson
-import java.util.ArrayList;
-import java.util.LinkedHashMap
-import java.util.LinkedHashSet
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.*
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveBoolean
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.toRGBA
+import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
+import com.mojang.blaze3d.platform.NativeImage
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.texture.DynamicTexture
+import kotlin.math.floor
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.entity.Entity
+import org.joml.Vector3f
+import org.joml.Vector4f
 
-@SourceDebugExtension(["SMAP\nVaryingRenderableResolver.kt\nKotlin\n*S Kotlin\n*F\n+ 1 VaryingRenderableResolver.kt\ncom/cobblemon/mod/common/client/render/VaryingRenderableResolver\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,205:1\n533#2,4:206\n1726#2,3:210\n538#2:213\n1726#2,3:214\n766#2:217\n857#2,2:218\n1855#2,2:220\n*S KotlinDebug\n*F\n+ 1 VaryingRenderableResolver.kt\ncom/cobblemon/mod/common/client/render/VaryingRenderableResolver\n*L\n57#1:206,4\n57#1:210,3\n57#1:213\n64#1:214,3\n70#1:217\n70#1:218,2\n98#1:220,2\n*E\n"])
-public class VaryingRenderableResolver<E extends Entity, M extends PoseableEntityModel<E>>(name: ResourceLocation, variations: MutableList<ModelAssetVariation>) {
-   public final val models: MutableMap<ResourceLocation, Bone>
-   public final val name: ResourceLocation
-   public final val posers: MutableMap<Pair<ResourceLocation, ResourceLocation>, Any>
-   public final lateinit var repository: VaryingModelRepository<Any, Any>
-   public final val variations: MutableList<ModelAssetVariation>
+/**
+ * All the information required for rendering a Pokémon/Poké Ball/NPC with aspects.
+ *
+ * @author Hiroku
+ * @since May 14th, 2022
+ */
+class VaryingRenderableResolver(
+    val name: ResourceLocation,
+    val variations: MutableList<ModelAssetVariation>
+) {
+    lateinit var repository: VaryingModelRepository
+    val posers = mutableMapOf<Pair<ResourceLocation, ResourceLocation>, PosableModel>()
+    val models = mutableMapOf<ResourceLocation, Bone>()
 
-   init {
-      this.name = name;
-      this.variations = variations;
-      this.posers = new LinkedHashMap<>();
-      this.models = new LinkedHashMap<>();
-   }
+    fun getResolvedPoser(state: PosableState): ResourceLocation {
+        return getVariationValue(state) { poser }
+            ?: throw IllegalStateException("Unable to find a poser for $name with aspects ${state.currentAspects.joinToString()}. This shouldn't be possible if you've defined the fallback variation.")
+    }
 
-   public fun getResolvedPoser(aspects: Set<String>): ResourceLocation {
-      val var10000: ResourceLocation = this.getVariationValue(aspects, <unrepresentable>.INSTANCE);
-      if (var10000 == null) {
-         throw new IllegalStateException(
-            "Unable to find a poser for ${this.name} with aspects ${CollectionsKt.joinToString$default(aspects, null, null, null, 0, null, null, 63, null)}. This shouldn't be possible if you've defined the fallback variation."
-         );
-      } else {
-         return var10000;
-      }
-   }
+    fun getResolvedModel(state: PosableState): ResourceLocation {
+        return getVariationValue(state) { model }
+            ?: throw IllegalStateException("Unable to find a model for $name with aspects ${state.currentAspects.joinToString()}. This shouldn't be possible if you've defined the fallback variation.")
+    }
 
-   public fun getResolvedModel(aspects: Set<String>): ResourceLocation {
-      val var10000: ResourceLocation = this.getVariationValue(aspects, <unrepresentable>.INSTANCE);
-      if (var10000 == null) {
-         throw new IllegalStateException(
-            "Unable to find a model for ${this.name} with aspects ${CollectionsKt.joinToString$default(aspects, null, null, null, 0, null, null, 63, null)}. This shouldn't be possible if you've defined the fallback variation."
-         );
-      } else {
-         return var10000;
-      }
-   }
+    fun getResolvedTexture(state: PosableState): ResourceLocation {
+        return getVariationValue(state) { texture }?.invoke(state)
+            ?: throw IllegalStateException("Unable to find a texture for $name with aspects ${state.currentAspects.joinToString()}. This shouldn't be possible if you've defined the fallback variation.")
+    }
 
-   public fun getResolvedTexture(aspects: Set<String>, animationSeconds: Float): ResourceLocation {
-      val var10000: ModelTextureSupplier = this.getVariationValue(aspects, <unrepresentable>.INSTANCE);
-      if (var10000 != null) {
-         val var3: ResourceLocation = var10000.invoke(animationSeconds);
-         if (var3 != null) {
-            return var3;
-         }
-      }
+    fun getSprite(state: PosableState, type: SpriteType): ResourceLocation? {
+        return getVariationValue(state) { sprites }?.get(type)
+    }
 
-      throw new IllegalStateException(
-         "Unable to find a texture for ${this.name} with aspects ${CollectionsKt.joinToString$default(aspects, null, null, null, 0, null, null, 63, null)}. This shouldn't be possible if you've defined the fallback variation."
-      );
-   }
+    private fun <T> getVariationValue(state: PosableState, selector: ModelAssetVariation.() -> T?): T? {
+        return variations.lastOrNull { it.fits(state) && selector(it) != null }?.let(selector)
+    }
 
-   private fun <T> getVariationValue(aspects: Set<String>, selector: (ModelAssetVariation) -> Any?): Any? {
-      val `iterator$iv`: java.util.ListIterator = this.variations.listIterator(this.variations.size());
-
-      var var15: Any;
-      while (true) {
-         if (!`iterator$iv`.hasPrevious()) {
-            var15 = null;
-            break;
-         }
-
-         val `element$iv`: Any = `iterator$iv`.previous();
-         val it: ModelAssetVariation = `element$iv` as ModelAssetVariation;
-         val `$this$all$iv`: java.lang.Iterable = (`element$iv` as ModelAssetVariation).getAspects();
-         var var10000: Boolean;
-         if (`$this$all$iv` is java.util.Collection && (`$this$all$iv` as java.util.Collection).isEmpty()) {
-            var10000 = true;
-         } else {
-            val var11: java.util.Iterator = `$this$all$iv`.iterator();
-
-            while (true) {
-               if (!var11.hasNext()) {
-                  var10000 = true;
-                  break;
-               }
-
-               if (!aspects.contains(var11.next() as java.lang.String)) {
-                  var10000 = false;
-                  break;
-               }
+    fun getResolvedLayers(state: PosableState): Iterable<ModelLayer> {
+        val layerMaps = mutableMapOf<String, ModelLayer>()
+        for (variation in variations) {
+            val layers = variation.layers
+            if (layers != null && variation.fits(state)) {
+                for (layer in layers) {
+                    layerMaps[layer.name] = layer
+                }
             }
-         }
+        }
+        return layerMaps.values.filter(ModelLayer::enabled)
+    }
 
-         if (var10000 && selector.invoke(it) != null) {
-            var15 = `element$iv`;
-            break;
-         }
-      }
-
-      return (T)(if (var15 as ModelAssetVariation != null) selector.invoke(var15 as ModelAssetVariation) else null);
-   }
-
-   public fun getResolvedLayers(aspects: Set<String>): Iterable<ModelLayer> {
-      val layerMaps: java.util.Map = new LinkedHashMap();
-
-      for (ModelAssetVariation variation : this.variations) {
-         val `$this$filterTo$iv$iv`: java.util.List = `$i$f$filter`.getLayers();
-         if (`$this$filterTo$iv$iv` != null) {
-            val `destination$iv$iv`: java.lang.Iterable = `$i$f$filter`.getAspects();
-            var var10000: Boolean;
-            if (`destination$iv$iv` is java.util.Collection && (`destination$iv$iv` as java.util.Collection).isEmpty()) {
-               var10000 = true;
-            } else {
-               val var8: java.util.Iterator = `destination$iv$iv`.iterator();
-
-               while (true) {
-                  if (!var8.hasNext()) {
-                     var10000 = true;
-                     break;
-                  }
-
-                  if (!aspects.contains(var8.next() as java.lang.String)) {
-                     var10000 = false;
-                     break;
-                  }
-               }
+    fun getAllModels(): Set<ResourceLocation> {
+        val models = mutableSetOf<ResourceLocation>()
+        for (variation in variations) {
+            if (variation.model != null) {
+                models.add(variation.model)
             }
+        }
+        return models
+    }
 
-            if (var10000) {
-               for (ModelLayer layer : layers) {
-                  layerMaps.put(var16.getName(), var16);
-               }
+    companion object {
+        val GSON = GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+            .registerTypeAdapter(Vector3f::class.java, Vector3fAdapter)
+            .registerTypeAdapter(Vector4f::class.java, Vector4fAdapter)
+            .registerTypeAdapter(ModelTextureSupplier::class.java, ModelTextureSupplierAdapter)
+            .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+            .registerTypeAdapter(SpriteType::class.java, SpriteTypeAdapter)
+            .disableHtmlEscaping()
+            .setLenient()
+            .create()
+    }
+
+    fun initialize(repository: VaryingModelRepository) {
+        this.repository = repository
+        posers.clear()
+        getAllModels().forEach { identifier ->
+            try {
+                models[identifier] = repository.texturedModels[identifier]!!
+            } catch (e: Exception) {
+                throw IllegalStateException("Unable to load model $identifier for $name", e)
             }
-         }
-      }
+        }
+    }
 
-      val var12: java.lang.Iterable = layerMaps.values();
-      val var15: java.util.Collection = new ArrayList();
+    fun getPoser(state: PosableState): PosableModel {
+        val poserName = getResolvedPoser(state)
+        val poserSupplier = repository.posers[poserName] ?: throw IllegalStateException("No poser found for name: $poserName for $name")
+        val modelName = getResolvedModel(state)
+        val existingEntityModel = posers[poserName to modelName]
+        return if (existingEntityModel != null) {
+            existingEntityModel
+        } else {
+            val model = models[modelName]!!
+            val entityModel = poserSupplier(model)
+            entityModel.initializeLocatorAccess()
+            entityModel.registerPoses()
+            posers[poserName to modelName] = entityModel
+            entityModel
+        }
+    }
 
-      for (Object element$iv$iv : $this$filter$iv) {
-         if ((var19 as ModelLayer).getEnabled()) {
-            var15.add(var19);
-         }
-      }
+    fun getTexture(state: PosableState): ResourceLocation {
+        repository.posers[getResolvedPoser(state)] ?: throw IllegalStateException("No poser for $name")
+        return getResolvedTexture(state)
+    }
 
-      return var15;
-   }
+    fun getLayers(state: PosableState): Iterable<ModelLayer> {
+        repository.posers[getResolvedPoser(state)] ?: throw IllegalStateException("No poser for $name")
+        return getResolvedLayers(state)
+    }
+}
 
-   public fun getAllModels(): Set<ResourceLocation> {
-      val models: java.util.Set = new LinkedHashSet();
+/**
+ * A set of variations. This is essentially a prioritized list of [ModelAssetVariation]s, with
+ * an [order] property to control the priority of this set compared to other sets.
+ *
+ * @author Hiroku
+ * @since December 4th, 2022
+ */
+class ModelVariationSet(
+    @SerializedName("name", alternate = ["species", "pokeball"])
+    val name: ResourceLocation = cobblemonResource("thing"),
+    val order: Int = 0,
+    val variations: MutableList<ModelAssetVariation> = mutableListOf()
+)
 
-      for (ModelAssetVariation variation : this.variations) {
-         if (variation.getModel() != null) {
-            models.add(variation.getModel());
-         }
-      }
 
-      return models;
-   }
+/**
+ * A variation to the base set, which can overwrite the poser, model, texture, or any combination of the above.
+ * It contains a set of aspects that must ALL be present on a renderable for this variation to be considered.
+ * If a later variation also matches, but provides different properties, both this and the other variation will
+ * be used for their respective non-null properties.
+ *
+ * @author Hiroku
+ * @since May 14th, 2022
+ */
+class ModelAssetVariation(
+    val aspects: MutableSet<String> = mutableSetOf(),
+    val condition: ExpressionLike? = null,
+    val poser: ResourceLocation? = null,
+    val model: ResourceLocation? = null,
+    val texture: ModelTextureSupplier? = null,
+    val layers: List<ModelLayer>? = null,
+    val sprites: Map<SpriteType, ResourceLocation>? = null
+) {
+    fun fits(state: PosableState): Boolean {
+        return aspects.all { it in state.currentAspects } && (condition == null || state.runtime.resolveBoolean(condition))
+    }
+}
 
-   public fun initialize(repository: VaryingModelRepository<Any, Any>) {
-      this.setRepository(repository);
-      this.posers.clear();
+/**
+ * Given the animation seconds, returns a texture to use. Only implemented
+ * by [StaticModelTextureSupplier] and [AnimatedModelTextureSupplier].
+ *
+ * @author Hiroku
+ * @since February 6th, 2023
+ */
+fun interface ModelTextureSupplier {
+    operator fun invoke(state: PosableState): ResourceLocation
+}
 
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         val identifier: ResourceLocation = `element$iv` as ResourceLocation;
+class StaticModelTextureSupplier(val texture: ResourceLocation): ModelTextureSupplier {
+    override fun invoke(state: PosableState): ResourceLocation {
+        return texture
+    }
+}
 
-         try {
-            val var10000: java.util.Map = this.models;
-            val var10002: Any = repository.getTexturedModels().get(identifier);
-            var10000.put(identifier, (var10002 as Function1).invoke(repository.isForLivingEntityRenderer()));
-         } catch (var9: Exception) {
-            throw new IllegalStateException("Unable to load model ${`element$iv` as ResourceLocation} for ${this.name}", var9);
-         }
-      }
-   }
+class AnimatedModelTextureSupplier(
+    val loop: Boolean,
+    val fps: Float,
+    val frames: List<ResourceLocation>,
+    val interpolation: Boolean
+): ModelTextureSupplier {
+    override fun invoke(state: PosableState): ResourceLocation {
+        val frameIndex = floor(state.animationSeconds * fps).toInt()
+        return if (frameIndex >= frames.size && !loop) {
+            frames.last()
+        } else {
+            frames[frameIndex % frames.size]
+        }
+    }
 
-   public fun getPoser(aspects: Set<String>): Any {
-      val poserName: ResourceLocation = this.getResolvedPoser(aspects);
-      val var10000: Function1 = this.getRepository().getPosers().get(poserName);
-      if (var10000 == null) {
-         throw new IllegalStateException("No poser found for name: $poserName for ${this.name}");
-      } else {
-         val modelName: ResourceLocation = this.getResolvedModel(aspects);
-         val existingEntityModel: PoseableEntityModel = this.posers.get(TuplesKt.to(poserName, modelName));
-         val var8: PoseableEntityModel;
-         if (existingEntityModel != null) {
-            var8 = existingEntityModel;
-         } else {
-            val var9: Any = this.models.get(modelName);
-            val entityModel: PoseableEntityModel = var10000.invoke(var9 as Bone) as PoseableEntityModel;
-            entityModel.initializeLocatorAccess();
-            entityModel.registerPoses();
-            this.posers.put(TuplesKt.to(poserName, modelName), (M)entityModel);
-            var8 = entityModel;
-         }
+    fun interpolatedTexture(state: PosableState): DynamicTexture? {
+        val resourceManager = Minecraft.getInstance().resourceManager
 
-         return (M)var8;
-      }
-   }
+        val frameIndex = floor(state.animationSeconds * fps).toInt()
+        try {
+            if (frameIndex >= frames.size && !loop) {
+                return DynamicTexture(NativeImage.read(resourceManager.getResourceOrThrow(frames.last()).open()))
+            }
+        } catch (e : Exception) {
+            return null
+        }
+        val o = frameIndex % frames.size
+        val i = state.animationSeconds * fps - frameIndex
 
-   public fun getTexture(aspects: Set<String>, animationSeconds: Float): ResourceLocation {
-      if (this.getRepository().getPosers().get(this.getResolvedPoser(aspects)) as Function1 == null) {
-         throw new IllegalStateException("No poser for ${this.name}");
-      } else {
-         return this.getResolvedTexture(aspects, animationSeconds);
-      }
-   }
+        val texture1 : NativeImage
+        val texture2 : NativeImage
 
-   public fun getLayers(aspects: Set<String>): Iterable<ModelLayer> {
-      if (this.getRepository().getPosers().get(this.getResolvedPoser(aspects)) as Function1 == null) {
-         throw new IllegalStateException("No poser for ${this.name}");
-      } else {
-         return this.getResolvedLayers(aspects);
-      }
-   }
+        try { //Try getting images of the frames so we can use them to make a new one
+            texture1 = NativeImage.read(resourceManager.getResourceOrThrow(frames[o]).open())
+            val s = if (o == frames.size - 1) 0 else o + 1
+            texture2 = NativeImage.read(resourceManager.getResourceOrThrow(frames[s]).open())
+        } catch (e : Exception) {
+            return null
+        }
 
-   public companion object {
-      public final val GSON: Gson
-   }
+        for (x in 0..<texture1.width) {
+            for (y in 0..<texture1.height) {
+                val color1 = texture1.getPixelRGBA(x,y).toRGBA()
+                val color2 = texture2.getPixelRGBA(x,y).toRGBA()
+
+                var newRed : Int
+                var newGreen : Int
+                var newBlue : Int
+                var newAlpha : Int
+
+                //Usually full transparent pixel is black, so this makes it copy the other texture colours to look better, however considering if we should allow to disable this feature
+                if (color1.w == 0F && color2.w == 1F) {
+                    newRed = floor(color2.x * 255).toInt()
+                    newGreen = floor(color2.y * 255).toInt()
+                    newBlue = floor(color2.z * 255).toInt()
+                } else if (color1.w == 1F && color2.w == 0F) {
+                    newRed = floor(color1.x * 255).toInt()
+                    newGreen = floor(color1.y * 255).toInt()
+                    newBlue = floor(color1.z * 255).toInt()
+                } else {
+                    newRed = floor((color1.x + (color2.x - color1.x) * i) * 255).toInt()
+                    newGreen = floor((color1.y + (color2.y - color1.y) * i) * 255).toInt()
+                    newBlue = floor((color1.z + (color2.z - color1.z) * i) * 255).toInt()
+                }
+
+                newAlpha = floor((color1.w + (color2.w - color1.w) * i) * 255).toInt()
+
+                val finalColor = (newAlpha shl 24) or (newRed shl 16) or (newGreen shl 8) or newBlue
+
+                texture1.setPixelRGBA(x,y,finalColor) //We aren't using texture 1 anymore so it's easier to override it
+            }
+        }
+        val newTexture = DynamicTexture(texture1)
+        newTexture.setFilter(false, false)
+        return newTexture
+    }
+}
+
+class VariableModelTextureSupplier : ModelTextureSupplier {
+    override fun invoke(state: PosableState): ResourceLocation {
+        return state.runtime.environment.variable.map["texture"]?.asString()?.asIdentifierDefaultingNamespace()
+            ?: cobblemonResource("textures/npcs/default.png")
+    }
+}
+
+class ModelLayer {
+    val name: String = ""
+    val enabled: Boolean = true
+    val tint: Vector4f = Vector4f(1F, 1F, 1F, 1F)
+    val texture: ModelTextureSupplier? = null
+    val emissive: Boolean = false
+    val translucent: Boolean = false
+    val translucent_cull: Boolean = false
+}
+
+enum class SpriteType {
+    PORTRAIT,
+    PROFILE
 }

@@ -1,63 +1,51 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.component
 
 import com.bedrockk.molang.Expression
 import com.bedrockk.molang.ast.BooleanExpression
 import com.bedrockk.molang.runtime.MoLangRuntime
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnBucket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SpawningContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.calculators.SpawningContextCalculator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnAction
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.setup
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector.AllSpawnDetailSelector
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector.AllSpawningContextSelector
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector.AllSpawnablePositionSelector
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector.SpawnDetailSelector
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector.SpawningContextSelector
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MoLangExtensionsKt
-import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.Entity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector.SpawnablePositionSelector
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveBoolean
+import com.google.gson.annotations.SerializedName
 
-public class FilterRuleComponent : SpawnRuleComponent {
-   public final val allow: Expression = (new BooleanExpression(true)) as Expression
-   public final val contextSelector: SpawningContextSelector = AllSpawningContextSelector.INSTANCE as SpawningContextSelector
-   public final val runtime: MoLangRuntime = MoLangFunctions.INSTANCE.setup(new MoLangRuntime())
-   public final val spawnSelector: SpawnDetailSelector = AllSpawnDetailSelector.INSTANCE as SpawnDetailSelector
+/**
+ * A rule component that targets specific spawns and spawnable positions and judges whether it
+ * is allowed to spawn. This runs prior to the regular SpawnDetail conditions.
+ *
+ * @author Hiroku
+ * @since October 1st, 2023
+ */
+class FilterRuleComponent : SpawnRuleComponent {
+    @Transient
+    val runtime = MoLangRuntime().setup()
 
-   public override fun affectSpawnable(detail: SpawnDetail, ctx: SpawningContext): Boolean {
-      val var10000: Boolean;
-      if (this.spawnSelector.selects(detail) && this.contextSelector.selects(ctx)) {
-         this.runtime.getEnvironment().setSimpleVariable("spawn", detail.getStruct());
-         this.runtime.getEnvironment().setSimpleVariable("context", ctx.getOrSetupStruct());
-         var10000 = MoLangExtensionsKt.resolveBoolean(this.runtime, this.allow);
-      } else {
-         var10000 = true;
-      }
+    @SerializedName("spawnDetailSelector", alternate = ["spawnSelector"])
+    val spawnDetailSelector: SpawnDetailSelector = AllSpawnDetailSelector
+    @SerializedName("spawnablePositionSelector", alternate = ["contextSelector"])
+    val spawnablePositionSelector: SpawnablePositionSelector = AllSpawnablePositionSelector
+    val allow: Expression = BooleanExpression(true)
 
-      return var10000;
-   }
-
-   override fun isExpired(): Boolean {
-      return SpawnRuleComponent.DefaultImpls.isExpired(this);
-   }
-
-   override fun affectWeight(detail: SpawnDetail, ctx: SpawningContext, weight: Float): Float {
-      return SpawnRuleComponent.DefaultImpls.affectWeight(this, detail, ctx, weight);
-   }
-
-   override fun affectAction(action: SpawnAction<?>) {
-      SpawnRuleComponent.DefaultImpls.affectAction(this, action);
-   }
-
-   override fun affectSpawn(entity: Entity) {
-      SpawnRuleComponent.DefaultImpls.affectSpawn(this, entity);
-   }
-
-   override fun affectBucketWeight(bucket: SpawnBucket, weight: Float): Float {
-      return SpawnRuleComponent.DefaultImpls.affectBucketWeight(this, bucket, weight);
-   }
-
-   override fun isAllowedPosition(world: ServerLevel, pos: BlockPos, contextCalculator: SpawningContextCalculator<?, ?>): Boolean {
-      return SpawnRuleComponent.DefaultImpls.isAllowedPosition(this, world, pos, contextCalculator);
-   }
+    override fun affectSpawnable(detail: SpawnDetail, spawnablePosition: SpawnablePosition): Boolean {
+        return if (spawnDetailSelector.selects(detail) && spawnablePositionSelector.selects(spawnablePosition)) {
+            runtime.environment.setSimpleVariable("spawn", detail.struct)
+            runtime.environment.setSimpleVariable("spawn_detail", detail.struct)
+            runtime.environment.setSimpleVariable("spawnable_position", spawnablePosition.getOrSetupStruct())
+            runtime.resolveBoolean(allow)
+        } else {
+            true
+        }
+    }
 }

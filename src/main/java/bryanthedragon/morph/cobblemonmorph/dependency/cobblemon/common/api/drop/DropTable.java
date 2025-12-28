@@ -1,99 +1,121 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents.LOOT_DROPPED
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.drops.LootDroppedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.CancelableObservable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.EventObservable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.ArrayList;
-import java.util.Arrays
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import kotlin.random.Random
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.ItemLike
 import net.minecraft.world.phys.Vec3
 
-@SourceDebugExtension(["SMAP\nDropTable.kt\nKotlin\n*S Kotlin\n*F\n+ 1 DropTable.kt\ncom/cobblemon/mod/common/api/drop/DropTable\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 EventObservables.kt\ncom/cobblemon/mod/common/api/reactive/CancelableObservable\n+ 4 EventObservables.kt\ncom/cobblemon/mod/common/api/reactive/EventObservable\n+ 5 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n+ 6 EventObservables.kt\ncom/cobblemon/mod/common/api/reactive/CancelableObservable$postThen$1\n*L\n1#1,99:1\n766#2:100\n857#2,2:101\n288#2,2:103\n1855#2,2:114\n39#3,2:105\n41#3,2:110\n44#3:113\n46#3:116\n47#3:119\n17#4,2:107\n19#4:118\n13579#5:109\n13580#5:117\n39#6:112\n*S KotlinDebug\n*F\n+ 1 DropTable.kt\ncom/cobblemon/mod/common/api/drop/DropTable\n*L\n49#1:100\n49#1:101,2\n59#1:103,2\n96#1:114,2\n94#1:105,2\n94#1:110,2\n94#1:113\n94#1:116\n94#1:119\n94#1:107,2\n94#1:118\n94#1:109\n94#1:117\n94#1:112\n*E\n"])
-public class DropTable {
-   public final val amount: IntRange = new IntRange(1, 1)
-   public final val entries: MutableList<DropEntry> = (new ArrayList()) as java.util.List
+/**
+ * A table of drops that can produce a list of [DropEntry]. You can produce a drop list from [getDrops] to
+ * then handle the drops yourself, or make it select and perform the drop by running [drop].
+ *
+ * A drop table is defined by its [entries], and by the [amount] range which act as the default constraint around the
+ * total dropped quantity. These are only defaults, as both [getDrops] and [drop] allow the range to be overwritten.
+ * These amounts are based on [DropEntry.quantity]. In some cases a single entry can be worth multiple. An example of
+ * this is an item drop which drops 3 of an item. While it may only be 1 entry, it is considered 3 drops.
+ *
+ * A drop can be guaranteed by having a [DropEntry.percentage] of 100. This will still obey the rules around how many
+ * times it can be repeated and not being selected if its quantity would exceed the amount that has been chosen for
+ * the drop. For example, a 5 item drop for a drop action maxed out at 3 will never be selected even if the 5 item drop
+ * was marked as a guaranteed entry.
+ *
+ * @author Hiroku
+ * @since July 24th, 2022
+ */
+class DropTable {
+    /** All [DropEntry] values in the drop table. */
+    val entries = mutableListOf<DropEntry>()
+    /** The default range of values which might be selected to decide the 'quantity' of drops for a drop attempt. */
+    val amount = 1..1
 
-   public fun getDrops(amount: IntRange = this.amount): List<DropEntry> {
-      val chosenAmount: Int = RangesKt.random(amount, Random.Default as Random);
-      val drops: java.lang.Iterable = this.entries;
-      val remaining: java.util.Collection = new ArrayList();
+    /**
+     * Gets a drop list from this table as a list of [DropEntry]. You can specify the range of drop quantity totals
+     * that will be possible, or if you leave it blank it will use [DropTable.amount].
+     */
+    fun getDrops(amount: IntRange = this.amount, pokemon: Pokemon? = null): List<DropEntry> {
+        val chosenAmount = amount.random()
+        val possibleDrops = entries.filter {
+            it.quantity <= chosenAmount && it.canDrop(pokemon)
+        }.toMutableList()
 
-      for (Object element$iv$iv : $this$filter$iv) {
-         if ((`element$iv` as DropEntry).getQuantity() <= chosenAmount) {
-            remaining.add(`element$iv`);
-         }
-      }
+        if (possibleDrops.isEmpty()) {
+            return emptyList()
+        }
 
-      val possibleDrops: java.util.List = CollectionsKt.toMutableList(remaining as java.util.List);
-      if (possibleDrops.isEmpty()) {
-         return CollectionsKt.emptyList();
-      } else {
-         val var13: java.util.List = new ArrayList();
-         var var14: Int = 0;
+        val drops = mutableListOf<DropEntry>()
+        var dropCount = 0
 
-         do {
-            var var10000: Any;
-            label46: {
-               for (Object element$iv : var15) {
-                  if (Random.Default.nextFloat() * 100.0F < (var19 as DropEntry).getPercentage()) {
-                     var10000 = var19;
-                     break label46;
-                  }
-               }
+        do {
+            val drop = possibleDrops.firstOrNull { Random.Default.nextFloat() * 100F < it.percentage }
 
-               var10000 = null;
+            if (drop == null) {
+                // That counts as a drop in the eyes of the law, otherwise we'd be looping all week and percentages won't mean squat.
+                dropCount++
+                continue
             }
 
-            val drop: DropEntry = var10000 as DropEntry;
-            if (var10000 as DropEntry == null) {
-               var14++;
-            } else {
-               var13.add(drop);
-               var14 += drop.getQuantity();
-               val var16: Int = chosenAmount - var14;
-               possibleDrops.removeIf(DropTable::getDrops$lambda$2);
-            }
-         } while (dropCount < chosenAmount && !possibleDrops.isEmpty());
+            drops.add(drop)
+            dropCount += drop.quantity
+            val remaining = chosenAmount - dropCount
+            possibleDrops.removeIf { (it == drop && it.maxSelectableTimes <= drops.count { it == drop }) || it.quantity > remaining }
+        } while (dropCount < chosenAmount && possibleDrops.isNotEmpty())
 
-         return var13;
-      }
-   }
+        return drops
+    }
 
-   public fun drop(entity: LivingEntity?, world: ServerLevel, pos: Vec3, player: ServerPlayer?, amount: IntRange = this.amount) {
-      val drops: java.util.List = CollectionsKt.toMutableList(this.getDrops(amount));
-      val heldItem: ItemStack = (entity as PokemonEntity).getPokemon().heldItemNoCopy$common();
-      if (!heldItem.m_41619_()) {
-         (entity as PokemonEntity).m_19998_(heldItem.m_41720_() as ItemLike);
-      }
+    /**
+     * Performs a drop, including posting the [LootDroppedEvent]. The entity that is dropping it and the player that caused
+     * the drop are both optional, but in some cases a drop will only be possible when these fields are non-null. A
+     * command drop that needs the player for its command will do nothing when it is dropped without a player cause.
+     *
+     * The amount of drop entries that are possible can be changed from the [amount] parameter, and if left blank it
+     * will fall back to the [DropTable.amount] range.
+     */
+    fun drop(
+        entity: LivingEntity?,
+        world: ServerLevel,
+        pos: Vec3,
+        player: ServerPlayer?,
+        amount: IntRange = this.amount,
+        pokemon: Pokemon? = null,
+    ) {
+        val drops = getDrops(amount, pokemon).toMutableList()
+        postLootDroppedEvent(drops, entity, world, pos, player)
+    }
 
-      val `$this$iv`: CancelableObservable = CobblemonEvents.LOOT_DROPPED;
-      val `event$iv`: Cancelable = new LootDroppedEvent(this, player, entity, drops);
-      val `this_$iv$iv`: EventObservable = `$this$iv`;
-      val `events$iv$iv`: Array<Cancelable> = new Cancelable[]{`event$iv`};
-      `this_$iv$iv`.emit(Arrays.copyOf(`events$iv$iv`, `events$iv$iv`.length));
+    fun postLootDroppedEvent(
+        drops: MutableList<DropEntry>,
+        entity: LivingEntity?,
+        world: ServerLevel,
+        pos: Vec3,
+        player: ServerPlayer?,
+    ) {
+        LOOT_DROPPED.postThen(
+            event = LootDroppedEvent(this, player, entity, drops),
+            ifSucceeded = { it.drops.forEach { it.drop(entity, world, pos, player) } }
+        )
+    }
 
-      for (Object element$iv$iv$iv : events$iv$iv) {
-         if (!((Cancelable)`element$iv$iv$iv`).isCanceled()) {
-            val `$this$forEach$iv`: java.lang.Iterable;
-            for (Object element$iv : $this$forEach$iv) {
-               (`element$iv` as DropEntry).drop(entity, world, pos, player);
-            }
-         }
-      }
-   }
+    fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeInt(this.entries.size)
+        this.entries.filterIsInstance<ItemDropEntry>().forEach { it.encode(buffer) }
+    }
 
-   @JvmStatic
-   fun `getDrops$lambda$2`(`$tmp0`: Function1, p0: Any): Boolean {
-      return `$tmp0`.invoke(p0) as java.lang.Boolean;
-   }
+    fun decode(buffer: RegistryFriendlyByteBuf) {
+        val entries = buffer.readInt()
+        repeat(entries) { this.entries.add(ItemDropEntry().decode(buffer)) }
+    }
 }

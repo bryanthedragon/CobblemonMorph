@@ -1,20 +1,32 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.keybinds
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.Summary
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.CobblemonPartyLockedKeyBinding
-import com.mojang.blaze3d.platform.InputConstants.Type
-
-public object SummaryBinding : CobblemonPartyLockedKeyBinding("key.cobblemon.summary", Type.KEYSYM, 77, "key.cobblemon.categories.cobblemon") {
-   public override fun onPress() {
-      if (CobblemonClient.INSTANCE.getStorage().getSelectedSlot() >= 0) {
-         try {
-            Summary.Companion
-               .open(CobblemonClient.INSTANCE.getStorage().getMyParty().getSlots(), true, CobblemonClient.INSTANCE.getStorage().getSelectedSlot());
-         } catch (var2: Exception) {
-            Cobblemon.INSTANCE.getLOGGER().debug("Failed to open the summary from the Summary keybind", var2);
-         }
-      }
-   }
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.KeybindCategories
+import com.mojang.blaze3d.platform.InputConstants
+final class SummaryBinding : CobblemonPartyLockedKeyBinding(
+    "key.cobblemon.summary",
+    InputConstants.Type.KEYSYM,
+    InputConstants.KEY_M,
+    KeybindCategories.COBBLEMON_CATEGORY
+) {
+    override fun onPress() {
+        if (CobblemonClient.storage.selectedSlot >= 0) {
+            try {
+                Summary.open(CobblemonClient.storage.party.slots, true, CobblemonClient.storage.selectedSlot)
+            } catch (e: Exception) {
+                Cobblemon.LOGGER.debug("Failed to open the summary from the Summary keybind", e)
+            }
+        }
+    }
 }

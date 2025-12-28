@@ -1,31 +1,32 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.featurerenderers
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeature
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.client.gui.GuiGraphics
 
-public interface SummarySpeciesFeatureRenderer<T extends SynchronizedSpeciesFeature> {
-   public val name: String
-
-   public abstract fun render(drawContext: GuiGraphics, x: Float, y: Float, pokemon: Pokemon, feature: Any) {
-   }
-
-   public open fun render(drawContext: GuiGraphics, x: Float, y: Float, pokemon: Pokemon): Boolean {
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun <T extends SynchronizedSpeciesFeature> render(
-         `$this`: SummarySpeciesFeatureRenderer<T>, drawContext: GuiGraphics, x: Float, y: Float, pokemon: Pokemon
-      ): Boolean {
-         val var10000: SynchronizedSpeciesFeature = pokemon.getFeature(`$this`.getName());
-         if (var10000 == null) {
-            return false;
-         } else {
-            `$this`.render(drawContext, x, y, pokemon, var10000);
-            return true;
-         }
-      }
-   }
+/**
+ * A renderer for some kind of [SynchronizedSpeciesFeature] so that it will display
+ * in the summary screen of the Pokémon (under other stats).
+ *
+ * @author Hiroku
+ * @since November 13th, 2023
+ */
+interface SummarySpeciesFeatureRenderer<T : SynchronizedSpeciesFeature> {
+    /** The name of the feature (so we know where to look to find it in the [Pokemon]) */
+    val name: String
+    /** Draws it at a particular position. */
+    fun render(guiGraphics: GuiGraphics, x: Float, y: Float, pokemon: Pokemon, feature: T)
+    fun render(guiGraphics: GuiGraphics, x: Float, y: Float, pokemon: Pokemon): Boolean {
+        val feature = pokemon.getFeature<T>(name) ?: return false
+        render(guiGraphics, x, y, pokemon, feature)
+        return true
+    }
 }

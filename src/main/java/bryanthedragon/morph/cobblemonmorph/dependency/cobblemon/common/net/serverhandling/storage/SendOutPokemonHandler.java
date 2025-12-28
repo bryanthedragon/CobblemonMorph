@@ -1,56 +1,66 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ServerNetworkPacketHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.RidingStyle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.SendOutPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.ActivePokemonState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.PokemonState
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.ShoulderedState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.raycastSafeSendout
 import net.minecraft.server.MinecraftServer
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.level.ClipContext.Fluid
-import net.minecraft.world.phys.Vec3
+import net.minecraft.world.level.ClipContext
+final class SendOutPokemonHandler : ServerNetworkPacketHandler<SendOutPokemonPacket> {
 
-@SourceDebugExtension(["SMAP\nSendOutPokemonHandler.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SendOutPokemonHandler.kt\ncom/cobblemon/mod/common/net/serverhandling/storage/SendOutPokemonHandler\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,48:1\n1#2:49\n*E\n"])
-public object SendOutPokemonHandler : ServerNetworkPacketHandler<SendOutPokemonPacket> {
-   public const val SEND_OUT_DURATION: Float = 1.5F
+    const val THROW_DURATION = 0.5F
+    const val SEND_OUT_DURATION = 1.5F
+    const val SEND_OUT_STAGGER_BASE_DURATION = 0.35F
+    const val SEND_OUT_STAGGER_RANDOM_MAX_DURATION = 0.15F
 
-   public open fun handle(packet: SendOutPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
-      val pokemon: Int = packet.getSlot();
-      val state: Int = pokemon.intValue();
-      val var10000: Int = if (state >= 0) pokemon else null;
-      if ((if (state >= 0) pokemon else null) != null) {
-         val var13: Pokemon = Cobblemon.INSTANCE.getStorage().getParty(player).get(var10000);
-         if (var13 != null) {
-            if (!var13.isFainted()) {
-               val var10: PokemonState = var13.getState();
-               if (var10 !is ShoulderedState && var10 is ActivePokemonState) {
-                  val var12: PokemonEntity = (var10 as ActivePokemonState).getEntity();
-                  if (var12 != null) {
-                     var12.recallWithAnimation();
-                  } else {
-                     var13.recall();
-                  }
-               } else {
-                  val var11: Vec3 = PlayerExtensionsKt.raycastSafeSendout(player, var13, 12.0, 5.0, Fluid.ANY);
-                  if (var11 != null) {
-                     val var10001: LivingEntity = player as LivingEntity;
-                     val var10002: ServerLevel = player.m_284548_();
-                     Pokemon.sendOutWithAnimation$default(var13, var10001, var10002, var11, null, false, null, null, 120, null);
-                  }
-               }
+    override fun handle(packet: SendOutPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
+        val slot = packet.slot.takeIf { it >= 0 } ?: return
+        val party = Cobblemon.storage.getParty(player)
+        val pokemon = party.get(slot) ?: return
+        if (pokemon.isFainted()) {
+            return
+        }
+        val state = pokemon.state
+        if (state is ShoulderedState || state !is ActivePokemonState) {
+            val position = player.raycastSafeSendout(pokemon, 12.0, 5.0, ClipContext.Fluid.ANY)
+
+            if (position != null) {
+                pokemon.sendOutWithAnimation(player, player.serverLevel(), position)
             }
-         }
-      }
-   }
+        } else {
+            val entity = state.entity
+            when {
+                entity == null -> pokemon.recall()
+                else -> recallWithAnimation(entity)
+            }
+        }
+    }
 
-   fun handleOnNettyThread(packet: SendOutPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
-      ServerNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet, server, player);
-   }
+    private fun recallWithAnimation(pokemon: PokemonEntity) {
+        // Calculate time until ball throw animation would be finished nicely
+        val buffer = THROW_DURATION + 0.5F - pokemon.ticksLived.toFloat() / 20F
+        if (buffer > 0.75F) {
+            // Do nothing if the recall button is spammed too fast
+        } else if (buffer > 0) {
+            // If the recall button is pressed early,
+            // buffer the recall instruction until after ball throw animation is complete
+            pokemon.after(buffer) { pokemon.recallWithAnimation() }
+        } else {
+            // Recall normally
+            pokemon.recallWithAnimation()
+        }
+    }
 }

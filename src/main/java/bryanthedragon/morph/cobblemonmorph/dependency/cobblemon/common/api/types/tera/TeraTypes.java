@@ -1,117 +1,135 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalTypes
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.elemental.ElementalTypeTeraType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.gimmick.StellarTeraType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import java.util.ArrayList;
-import java.util.HashMap
-import kotlin.jvm.internal.SourceDebugExtension
-import kotlin.random.Random
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
 
-@SourceDebugExtension(["SMAP\nTeraTypes.kt\nKotlin\n*S Kotlin\n*F\n+ 1 TeraTypes.kt\ncom/cobblemon/mod/common/api/types/tera/TeraTypes\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,128:1\n766#2:129\n857#2,2:130\n*S KotlinDebug\n*F\n+ 1 TeraTypes.kt\ncom/cobblemon/mod/common/api/types/tera/TeraTypes\n*L\n92#1:129\n92#1:130,2\n*E\n"])
-public object TeraTypes {
-   @JvmStatic
-   public final val BUG: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("bug"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getBUG()))
+/**
+ * The registry of all [TeraType]s.
+ */
+@Suppress("unused")final class TeraTypes : Iterable<TeraType> {
+    private val types = hashMapOf<ResourceLocation, TeraType>()
 
-   @JvmStatic
-   public final val DARK: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("dark"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getDARK()))
+    @JvmStatic
+    val NORMAL = this.create(cobblemonResource("normal"), ElementalTypeTeraType(ElementalTypes.NORMAL))
 
-   @JvmStatic
-   public final val DRAGON: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("dragon"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getDRAGON()))
+    @JvmStatic
+    val FIRE = this.create(cobblemonResource("fire"), ElementalTypeTeraType(ElementalTypes.FIRE))
 
-   @JvmStatic
-   public final val ELECTRIC: TeraType =
-      INSTANCE.create(MiscUtilsKt.cobblemonResource("electric"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getELECTRIC()))
+    @JvmStatic
+    val WATER = this.create(cobblemonResource("water"), ElementalTypeTeraType(ElementalTypes.WATER))
 
-   @JvmStatic
-   public final val FAIRY: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("fairy"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFAIRY()))
+    @JvmStatic
+    val GRASS = this.create(cobblemonResource("grass"), ElementalTypeTeraType(ElementalTypes.GRASS))
 
-   @JvmStatic
-   public final val FIGHTING: TeraType =
-      INSTANCE.create(MiscUtilsKt.cobblemonResource("fighting"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFIGHTING()))
+    @JvmStatic
+    val ELECTRIC = this.create(cobblemonResource("electric"), ElementalTypeTeraType(ElementalTypes.ELECTRIC))
 
-   @JvmStatic
-   public final val FIRE: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("fire"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFIRE()))
+    @JvmStatic
+    val ICE = this.create(cobblemonResource("ice"), ElementalTypeTeraType(ElementalTypes.ICE))
 
-   @JvmStatic
-   public final val FLYING: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("flying"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getFLYING()))
+    @JvmStatic
+    val FIGHTING = this.create(cobblemonResource("fighting"), ElementalTypeTeraType(ElementalTypes.FIGHTING))
 
-   @JvmStatic
-   public final val GHOST: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("ghost"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getGHOST()))
+    @JvmStatic
+    val POISON = this.create(cobblemonResource("poison"), ElementalTypeTeraType(ElementalTypes.POISON))
 
-   @JvmStatic
-   public final val GRASS: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("grass"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getGRASS()))
+    @JvmStatic
+    val GROUND = this.create(cobblemonResource("ground"), ElementalTypeTeraType(ElementalTypes.GROUND))
 
-   @JvmStatic
-   public final val GROUND: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("ground"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getGROUND()))
+    @JvmStatic
+    val FLYING = this.create(cobblemonResource("flying"), ElementalTypeTeraType(ElementalTypes.FLYING))
 
-   @JvmStatic
-   public final val ICE: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("ice"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getICE()))
+    @JvmStatic
+    val PSYCHIC = this.create(cobblemonResource("psychic"), ElementalTypeTeraType(ElementalTypes.PSYCHIC))
 
-   @JvmStatic
-   public final val NORMAL: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("normal"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getNORMAL()))
+    @JvmStatic
+    val BUG = this.create(cobblemonResource("bug"), ElementalTypeTeraType(ElementalTypes.BUG))
 
-   @JvmStatic
-   public final val POISON: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("poison"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getPOISON()))
+    @JvmStatic
+    val ROCK = this.create(cobblemonResource("rock"), ElementalTypeTeraType(ElementalTypes.ROCK))
 
-   @JvmStatic
-   public final val PSYCHIC: TeraType =
-      INSTANCE.create(MiscUtilsKt.cobblemonResource("psychic"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getPSYCHIC()))
+    @JvmStatic
+    val GHOST = this.create(cobblemonResource("ghost"), ElementalTypeTeraType(ElementalTypes.GHOST))
 
-   @JvmStatic
-   public final val ROCK: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("rock"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getROCK()))
+    @JvmStatic
+    val DRAGON = this.create(cobblemonResource("dragon"), ElementalTypeTeraType(ElementalTypes.DRAGON))
 
-   @JvmStatic
-   public final val STEEL: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("steel"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getSTEEL()))
+    @JvmStatic
+    val DARK = this.create(cobblemonResource("dark"), ElementalTypeTeraType(ElementalTypes.DARK))
 
-   @JvmStatic
-   public final val STELLAR: TeraType = INSTANCE.create(StellarTeraType.Companion.getID(), new StellarTeraType())
+    @JvmStatic
+    val STEEL = this.create(cobblemonResource("steel"), ElementalTypeTeraType(ElementalTypes.STEEL))
 
-   @JvmStatic
-   public final val WATER: TeraType = INSTANCE.create(MiscUtilsKt.cobblemonResource("water"), new ElementalTypeTeraType(ElementalTypes.INSTANCE.getWATER()))
+    @JvmStatic
+    val FAIRY = this.create(cobblemonResource("fairy"), ElementalTypeTeraType(ElementalTypes.FAIRY))
 
-   private final val types: HashMap<ResourceLocation, TeraType> = new HashMap()
+    @JvmStatic
+    val STELLAR = this.create(StellarTeraType.ID, StellarTeraType())
 
-   @JvmStatic
-   public fun random(legalOnly: Boolean): TeraType {
-      val var10000: java.util.Collection = types.values();
-      if (legalOnly) {
-         val `$this$filter$iv`: java.lang.Iterable = var10000;
-         val `destination$iv$iv`: java.util.Collection = new ArrayList();
+    /**
+     * Pick a random [TeraType].
+     *
+     * @param legalOnly If [TeraType.legalAsStatic] should be respected.
+     * @return The selected [TeraType].
+     */
+    @JvmStatic
+    fun random(legalOnly: Boolean): TeraType {
+        val possible = this.types.values
+        if (legalOnly) {
+            return possible.filter(TeraType::legalAsStatic).random()
+        }
+        return possible.random()
+    }
 
-         for (Object element$iv$iv : $this$filter$iv) {
-            if ((`element$iv$iv` as TeraType).getLegalAsStatic()) {
-               `destination$iv$iv`.add(`element$iv$iv`);
-            }
-         }
+    /**
+     * Gets a [TeraType] by its [id].
+     *
+     * @param id The [ResourceLocation] expected to match against a [TeraType.id].
+     * @return The found [TeraType] or null.
+     */
+    @JvmStatic
+    fun get(id: ResourceLocation): TeraType? = this.types[id]
 
-         return CollectionsKt.random(`destination$iv$iv` as java.util.List, Random.Default as Random) as TeraType;
-      } else {
-         return CollectionsKt.random(var10000, Random.Default as Random) as TeraType;
-      }
-   }
+    /**
+     * Gets a [TeraType] by its [id].
+     *
+     * @param id The string representation of a [ResourceLocation] if no namespace is present assumes Cobblemon' instead of Minecraft'.
+     * @return The found [TeraType] or null.
+     */
+    @JvmStatic
+    fun get(id: String): TeraType? = this.get(cobblemonResource(id)) ?: this.getByName(id)
 
-   @JvmStatic
-   public fun get(id: ResourceLocation): TeraType? {
-      return types.get(id);
-   }
+    /**
+     * Attempts to retrieve the [TeraType] by its english name.
+     */
+    @JvmStatic
+    fun getByName(name: String) = this.types.values.firstOrNull { it.name.equals(name, true) }
 
-   @JvmStatic
-   public fun get(id: String): TeraType? {
-      return get(MiscUtilsKt.cobblemonResource(id));
-   }
+    /**
+     * Gets the corresponding tera type for a [ElementalType].
+     *
+     * @param type The [ElementalType] being checked.
+     * @return The associated [TeraType].
+     */
+    @JvmStatic
+    fun forElementalType(type: ElementalType): TeraType = this.get(cobblemonResource(type.showdownId))!! // it's safe to do
 
-   @JvmStatic
-   public fun forElementalType(type: ElementalType): TeraType {
-      val var10000: TeraType = get(MiscUtilsKt.cobblemonResource(type.getName()));
-      return var10000;
-   }
+    private fun create(id: ResourceLocation, type: TeraType): TeraType {
+        this.types[id] = type
+        return type
+    }
 
-   private fun create(id: ResourceLocation, type: TeraType): TeraType {
-      types.put(id, type);
-      return type;
-   }
+    override fun iterator(): Iterator<TeraType> = this.types.values.iterator()
 }

@@ -1,78 +1,63 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonFloatingState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.FloatingState
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
 import java.util.UUID
 import net.minecraft.network.chat.MutableComponent
 
-public class ClientBattlePokemon(uuid: UUID,
-   displayName: MutableComponent,
-   properties: PokemonProperties,
-   aspects: Set<String>,
-   hpValue: Float,
-   maxHp: Float,
-   isHpFlat: Boolean,
-   status: PersistentStatus?,
-   statChanges: MutableMap<Stat, Int>
+/**
+ * The client side representation of a Pokémon in battle.
+ *
+ * @property uuid
+ * @property displayName
+ * @property properties
+ * @property aspects
+ * @property hpValue The current value of the HP.
+ * @property maxHp The maximum value of HP.
+ * @property isHpFlat If this is a flat value, this will be true if the client is the player controlling the Pokémon or is an ally of the controller.
+ * @property status
+ * @property statChanges
+ */
+class ClientBattlePokemon(
+    val uuid: UUID,
+    var displayName: MutableComponent,
+    var properties: PokemonProperties,
+    private var aspects: Set<String>,
+    var hpValue: Float,
+    var maxHp: Float,
+    var isHpFlat: Boolean,
+    var status: PersistentStatus?,
+    var statChanges: MutableMap<Stat, Int>
 ) {
-   public final lateinit var actor: ClientBattleActor
-   public final var aspects: Set<String>
-   public final var displayName: MutableComponent
+    lateinit var actor: ClientBattleActor
+    val species: Species
+        get() = PokemonSpecies.getByIdentifier(properties.species!!.asIdentifierDefaultingNamespace())!!
+    val level: Int
+        get() = properties.level ?: 0
 
-   public final val gender: Gender
-      public final get() {
-         var var10000: Gender = this.properties.getGender();
-         if (var10000 == null) {
-            var10000 = Gender.GENDERLESS;
-         }
+    val gender: Gender
+        get() = properties.gender ?: Gender.GENDERLESS
 
-         return var10000;
-      }
+    var state = FloatingState().also {
+        it.currentAspects = aspects
+    }
 
-
-   public final var hpValue: Float
-   public final var isHpFlat: Boolean
-
-   public final val level: Int
-      public final get() {
-         val var10000: Int = this.properties.getLevel();
-         return var10000 ?: 0;
-      }
-
-
-   public final var maxHp: Float
-   public final var properties: PokemonProperties
-
-   public final val species: Species
-      public final get() {
-         val var10000: PokemonSpecies = PokemonSpecies.INSTANCE;
-         val var10001: java.lang.String = this.properties.getSpecies();
-         val var1: Species = var10000.getByIdentifier(ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(var10001, null, 1, null));
-         return var1;
-      }
-
-
-   public final var statChanges: MutableMap<Stat, Int>
-   public final var state: PokemonFloatingState
-   public final var status: PersistentStatus?
-   public final val uuid: UUID
-
-   init {
-      this.uuid = uuid;
-      this.displayName = displayName;
-      this.properties = properties;
-      this.aspects = aspects;
-      this.hpValue = hpValue;
-      this.maxHp = maxHp;
-      this.isHpFlat = isHpFlat;
-      this.status = status;
-      this.statChanges = statChanges;
-      this.state = new PokemonFloatingState();
-   }
+    fun updateAspects(aspects: Set<String>) {
+        this.aspects = aspects
+        state.currentAspects = aspects
+    }
 }

@@ -1,36 +1,42 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.input
 
 import com.bedrockk.molang.runtime.value.DoubleValue
 import com.bedrockk.molang.runtime.value.MoValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.ActiveDialogue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DistributionUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
 import java.util.UUID
-import net.minecraft.server.MinecraftServer
 
-public class ActiveInput(activeDialogue: ActiveDialogue, dialogueInput: DialogueInput) {
-   public final val activeDialogue: ActiveDialogue
-   public final val dialogueInput: DialogueInput
-   public final val inputId: UUID
-   public final val startTime: Long
-   public final val struct: MoValue
+/**
+ * An active input waiting for the player as part of an [ActiveDialogue]. The purpose of this is to
+ * maintain some data integrity and track how long it's taken to choose an action.
+ *
+ * @author Hiroku
+ * @since December 27th, 2023
+ */
+class ActiveInput(
+    val activeDialogue: ActiveDialogue,
+    val dialogueInput: DialogueInput
+) {
+    val inputId = UUID.randomUUID()
+    val startTime = server()!!.overworld().gameTime
 
-   init {
-      this.activeDialogue = activeDialogue;
-      this.dialogueInput = dialogueInput;
-      this.inputId = UUID.randomUUID();
-      val var10001: MinecraftServer = DistributionUtilsKt.server();
-      this.startTime = var10001.m_129783_().m_46467_();
-      this.struct = this.toMoLangStruct();
-   }
+    val struct = toMoLangStruct()
 
-   public fun handle(input: String) {
-      val var10000: MinecraftServer = DistributionUtilsKt.server();
-      val secondsToChoose: Float = (float)(var10000.m_129783_().m_46467_() - this.startTime) / 20.0F;
-      this.activeDialogue.getRuntime().getEnvironment().setSimpleVariable("seconds_taken_to_input", new DoubleValue(secondsToChoose));
-      this.dialogueInput.handle(this, input);
-   }
+    fun handle(input: String) {
+        val secondsToChoose = (server()!!.overworld().gameTime - startTime) / 20F
+        activeDialogue.runtime.environment.setSimpleVariable("seconds_taken_to_input", DoubleValue(secondsToChoose))
+        dialogueInput.handle(this, input)
+    }
 
-   public fun toMoLangStruct(): MoValue {
-      return this.dialogueInput.toMoLangStruct(this);
-   }
+    fun toMoLangStruct(): MoValue {
+        return dialogueInput.toMoLangStruct(this)
+    }
 }

@@ -1,9 +1,19 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.multiblock.condition
 
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.shapes.VoxelShape
 
-public interface MultiblockCondition {
-   public abstract fun test(world: ServerLevel, box: VoxelShape): Boolean {
-   }
+/**
+ *
+ */
+interface MultiblockCondition {
+    fun test(world: ServerLevel, box: VoxelShape): Boolean
 }

@@ -1,115 +1,90 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DistributionUtilsKt
-import io.netty.buffer.Unpooled
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
 
-public interface NetworkPacket<T extends NetworkPacket<T>> : Encodable {
-   public val id: ResourceLocation
+/**
+ * Platform abstract blueprint of a packet being sent out.
+ * The handling of encoding, decoding and resolving the packet is done on the individual platform implementations.
+ *
+ * @author Hiroku, Licious
+ * @since November 27th, 2021
+ */
+interface NetworkPacket<T: NetworkPacket<T>> : CustomPacketPayload, Encodable {
 
-   public open fun sendToPlayer(player: ServerPlayer) {
-   }
+    /**
+     *
+     */
+    val id: ResourceLocation
 
-   public open fun sendToPlayers(players: Iterable<ServerPlayer>) {
-   }
+    /**
+     * TODO
+     *
+     * @param player
+     */
+    fun sendToPlayer(player: ServerPlayer) = CobblemonNetwork.sendPacketToPlayer(player, this)
 
-   public open fun sendToAllPlayers() {
-   }
+    /**
+     * TODO
+     *
+     * @param players
+     */
+    fun sendToPlayers(players: Iterable<ServerPlayer>) {
+        if (players.any()) {
+            CobblemonNetwork.sendPacketToPlayers(players, this)
+        }
+    }
 
-   public open fun sendToServer() {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun sendToAllPlayers() = CobblemonNetwork.sendToAllPlayers(this)
 
-   public open fun sendToPlayersAround(
-      x: Double,
-      y: Double,
-      z: Double,
-      distance: Double,
-      worldKey: ResourceKey<Level>,
-      exclusionCondition: (ServerPlayer) -> Boolean = ...
-   ) {
-   }
+    /**
+     * TODO
+     *
+     */
+    fun sendToServer() = CobblemonNetwork.sendToServer(this)
 
-   public open fun toBuffer(): FriendlyByteBuf {
-   }
+    // A copy from PlayerManager#sendToAround to work with our packets
+    /**
+     * TODO
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param distance
+     * @param worldKey
+     * @param exclusionCondition
+     */
+    fun sendToPlayersAround(x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer) -> Boolean = { false }) {
+        val server = server() ?: return
+        server.playerList.players.filter { player ->
+            if (exclusionCondition.invoke(player))
+                return@filter false
+            if (player.level().dimension() != worldKey)
+                return@filter false
+            val xDiff = x - player.x
+            val yDiff = y - player.y
+            val zDiff = z - player.z
+            return@filter (xDiff * xDiff + yDiff * yDiff + zDiff) < distance * distance
+        }
+        .forEach { player -> CobblemonNetwork.sendPacketToPlayer(player, this) }
+    }
 
-   // $VF: Class flags could not be determined
-   @SourceDebugExtension(["SMAP\nNetworkPacket.kt\nKotlin\n*S Kotlin\n*F\n+ 1 NetworkPacket.kt\ncom/cobblemon/mod/common/api/net/NetworkPacket$DefaultImpls\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,99:1\n766#2:100\n857#2,2:101\n1855#2,2:103\n*S KotlinDebug\n*F\n+ 1 NetworkPacket.kt\ncom/cobblemon/mod/common/api/net/NetworkPacket$DefaultImpls\n*L\n77#1:100\n77#1:101,2\n85#1:103,2\n*E\n"])
-   internal class DefaultImpls {
-      @JvmStatic
-      fun <T extends NetworkPacket<T>> sendToPlayer(`$this`: NetworkPacket<T>, player: ServerPlayer) {
-         CobblemonNetwork.INSTANCE.sendPacketToPlayer(player, `$this`);
-      }
-
-      @JvmStatic
-      fun <T extends NetworkPacket<T>> sendToPlayers(`$this`: NetworkPacket<T>, players: MutableIterable<ServerPlayer>) {
-         if (CollectionsKt.any(players)) {
-            CobblemonNetwork.INSTANCE.sendPacketToPlayers(players, `$this`);
-         }
-      }
-
-      @JvmStatic
-      fun <T extends NetworkPacket<T>> sendToAllPlayers(`$this`: NetworkPacket<T>) {
-         CobblemonNetwork.INSTANCE.sendToAllPlayers(`$this`);
-      }
-
-      @JvmStatic
-      fun <T extends NetworkPacket<T>> sendToServer(`$this`: NetworkPacket<T>) {
-         CobblemonNetwork.INSTANCE.sendPacketToServer(`$this`);
-      }
-
-      @JvmStatic
-      fun <T extends NetworkPacket<T>> sendToPlayersAround(
-         `$this`: NetworkPacket<T>,
-         x: Double,
-         y: Double,
-         z: Double,
-         distance: Double,
-         worldKey: ResourceKey<Level>,
-         exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-      ) {
-         val var10000: MinecraftServer = DistributionUtilsKt.server();
-         if (var10000 != null) {
-            val var32: java.util.List = var10000.m_6846_().m_11314_();
-            val `$this$forEach$iv`: java.lang.Iterable = var32;
-            val `element$iv`: java.util.Collection = new ArrayList();
-
-            for (Object element$iv$iv : $this$filter$iv) {
-               val player: ServerPlayer = `element$iv$iv` as ServerPlayer;
-               val var33: Boolean;
-               if (exclusionCondition.invoke(player) as java.lang.Boolean) {
-                  var33 = false;
-               } else {
-                  val xDiff: Double = x - player.m_20185_();
-                  val yDiff: Double = y - player.m_20186_();
-                  var33 = xDiff * xDiff + yDiff * yDiff + (z - player.m_20189_()) < distance * distance;
-               }
-
-               if (var33) {
-                  `element$iv`.add(`element$iv$iv`);
-               }
-            }
-
-            for (Object element$ivx : $this$filter$iv) {
-               val playerx: ServerPlayer = `element$ivx` as ServerPlayer;
-               val var34: CobblemonNetwork = CobblemonNetwork.INSTANCE;
-               var34.sendPacketToPlayer(playerx, `$this`);
-            }
-         }
-      }
-
-      @JvmStatic
-      fun <T extends NetworkPacket<T>> toBuffer(`$this`: NetworkPacket<T>): FriendlyByteBuf {
-         val buffer: FriendlyByteBuf = new FriendlyByteBuf(Unpooled.buffer());
-         `$this`.encode(buffer);
-         return buffer;
-      }
-   }
+    override fun type() = CustomPacketPayload.Type<T>(id)
 }

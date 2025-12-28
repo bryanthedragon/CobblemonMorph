@@ -1,233 +1,214 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.snowstorm
 
-import com.bedrockk.molang.runtime.MoLangEnvironment
 import com.bedrockk.molang.runtime.MoLangRuntime
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.setup
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.Decodable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.Encodable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.BedrockParticleEffectRepository
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.BedrockParticleOptionsRepository
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.ParticleStorm
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.MatrixWrapper
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.SnowstormParticle
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MoLangExtensionsKt
-import com.mojang.datafixers.kinds.App
-import com.mojang.datafixers.kinds.Applicative
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import com.mojang.serialization.codecs.RecordCodecBuilder.Instance
-import java.util.HashMap
-import kotlin.jvm.functions.Function0
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.client.multiplayer.ClientLevel
-import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.phys.Vec3
+import org.joml.Matrix4f
 
-@SourceDebugExtension(["SMAP\nParticleEvent.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ParticleEvent.kt\ncom/cobblemon/mod/common/api/snowstorm/ParticleEvent\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,174:1\n1#2:175\n*E\n"])
-public class ParticleEvent(particleEffect: EventParticleEffect? = null, soundEffect: EventSoundEffect? = null, expression: ExpressionLike? = null) :
-   Encodable,
-   Decodable {
-   public final var expression: ExpressionLike?
-   public final var particleEffect: EventParticleEffect?
-   public final var soundEffect: EventSoundEffect?
-
-   init {
-      this.particleEffect = particleEffect;
-      this.soundEffect = soundEffect;
-      this.expression = expression;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_236821_(this.particleEffect, ParticleEvent::encode$lambda$1);
-      buffer.m_236821_(this.soundEffect, ParticleEvent::encode$lambda$2);
-      buffer.m_236821_(this.expression, ParticleEvent::encode$lambda$3);
-   }
-
-   public override fun decode(buffer: FriendlyByteBuf) {
-      this.particleEffect = buffer.m_236868_(ParticleEvent::decode$lambda$5) as EventParticleEffect;
-      this.soundEffect = buffer.m_236868_(ParticleEvent::decode$lambda$6) as EventSoundEffect;
-      this.expression = buffer.m_236868_(ParticleEvent::decode$lambda$7) as ExpressionLike;
-   }
-
-   public fun run(storm: ParticleStorm, particle: SnowstormParticle?) {
-      if (this.particleEffect != null) {
-         val effect: EventParticleEffect = this.particleEffect;
-         val var10000: BedrockParticleEffect = BedrockParticleEffectRepository.INSTANCE.getEffect(this.particleEffect.getEffect());
-         if (var10000 != null) {
-            switch (ParticleEvent.WhenMappings.$EnumSwitchMapping$0[effect.getType().ordinal()]) {
-               case 1:
-               case 2:
-               case 3:
-               case 4:
-                  val rootMatrix: MatrixWrapper = new MatrixWrapper()
-                     .updatePosition(
-                        if (particle != null)
-                           new Vec3(particle.getX(), particle.getY(), particle.getZ())
-                           else
-                           new Vec3(storm.getX(), storm.getY(), storm.getZ())
-                     );
-                  var var45: Function0;
-                  switch (ParticleEvent.WhenMappings.$EnumSwitchMapping$0[effect.getType().ordinal()]) {
-                     case 1:
-                     case 2:
-                     case 3:
-                        var45 = <unrepresentable>.INSTANCE;
-                        break;
-                     case 4:
-                        val var34: Vec3 = if (particle != null)
-                           new Vec3(particle.getVelocityX(), particle.getVelocityY(), particle.getVelocityZ())
-                           else
-                           Vec3.f_82478_;
-                        var45 = (new Function0<Vec3>(var34) {
-                           {
-                              super(0);
-                              this.$it = `$it`;
-                           }
-
-                           public final Vec3 invoke() {
-                              return this.$it;
-                           }
-                        }) as Function0;
-                        break;
-                     default:
-                        throw new NoWhenBranchMatchedException();
-                  }
-
-                  val var10002: ClientLevel = storm.getWorld();
-                  val var10004: Function0 = storm.getSourceAlive();
-                  val var10005: Function0 = storm.getSourceVisible();
-                  val var10006: Function0 = <unrepresentable>.INSTANCE;
-                  val position: MoLangRuntime = MoLangFunctions.INSTANCE.setup(new MoLangRuntime());
-                  val var46: HashMap = position.getEnvironment().getStructs();
-                  val var38: java.util.Map = var46;
-                  val var47: MoLangFunctions = MoLangFunctions.INSTANCE;
-                  val var10001: MoLangEnvironment = storm.getRuntime().getEnvironment();
-                  var38.put("query", MoLangFunctions.getQueryStruct$default(var47, var10001, null, 1, null));
-                  val newStorm: ParticleStorm = new ParticleStorm(
-                     var10000, rootMatrix, var10002, var45, var10004, var10005, var10006, position, storm.getEntity()
-                  );
-                  val var48: ExpressionLike = effect.getExpression();
-                  if (var48 != null) {
-                     var48.resolve(newStorm.getRuntime());
-                  }
-
-                  newStorm.spawn();
-                  break;
-               default:
-                  throw new NoWhenBranchMatchedException();
+/**
+ * An event that can be referenced from various particle event triggers. The events are not necessarily particles,
+ * but can be combinations of particles, sounds, and MoLang expressions.
+ *
+ * @author Hiroku
+ * @since March 2nd, 2024
+ */
+class ParticleEvent(
+    var particleEffect: EventParticleOptions? = null,
+    var soundEffect: EventSoundEffect? = null,
+    var expression: ExpressionLike? = null
+): Encodable, Decodable {
+    companion object {
+        val CODEC: Codec<ParticleEvent> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                EventParticleOptions.CODEC.optionalFieldOf("particle_effect", null).forGetter { it.particleEffect },
+                EventSoundEffect.CODEC.optionalFieldOf("sound_effect", null).forGetter { it.soundEffect },
+                PrimitiveCodec.STRING.optionalFieldOf("expression", null).forGetter { it.expression?.toString() }
+            ).apply(instance) { particleEffect, soundEffect, expression ->
+                ParticleEvent(
+                    particleEffect,
+                    soundEffect,
+                    expression?.asExpressionLike()
+                )
             }
-         }
-      }
+        }
+    }
 
-      if (this.soundEffect != null) {
-         val var32: EventSoundEffect = this.soundEffect;
-         val var40: Vec3 = if (particle != null)
-            new Vec3(particle.getX(), particle.getY(), particle.getZ())
-            else
-            new Vec3(storm.getX(), storm.getY(), storm.getZ());
-         storm.getWorld()
-            .m_7785_(var40.f_82479_, var40.f_82480_, var40.f_82481_, SoundEvent.m_262824_(var32.getSound()), SoundSource.NEUTRAL, 1.0F, 1.0F, true);
-      }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeNullable(particleEffect) { pb, effect ->
+            pb.writeIdentifier(effect.effect)
+            pb.writeEnumConstant(effect.type)
+            pb.writeNullable(effect.expression) { pb, expr -> pb.writeString(expr.toString()) }
+        }
+        buffer.writeNullable(soundEffect) { pb, effect -> pb.writeIdentifier(effect.sound) }
+        buffer.writeNullable(expression) { pb, expr -> pb.writeString(expr.toString()) }
+    }
+    override fun decode(buffer: RegistryFriendlyByteBuf) {
+        particleEffect = buffer.readNullable { pb -> EventParticleOptions(
+            pb.readIdentifier(),
+            pb.readEnumConstant(EventParticleOptions.EventParticleType::class.java),
+            pb.readNullable { pb.readString().asExpressionLike() }
+        ) }
+        soundEffect = buffer.readNullable { pb -> EventSoundEffect(pb.readIdentifier()) }
+        expression = buffer.readNullable { pb -> pb.readString().asExpressionLike() }
+    }
 
-      if (this.expression != null) {
-         this.expression.resolve(storm.getRuntime());
-      }
-   }
+    fun run(storm: ParticleStorm, particle: SnowstormParticle?) {
+        particleEffect?.let { effect ->
+            val bedrockParticleOptions = BedrockParticleOptionsRepository.getEffect(effect.effect) ?: return@let
+            val particleMatrix = when (effect.type) {
+                //It may seem incorrect to clone for both of these, but the locator matrix determines whether the
+                //emitter follows the locator. We don't want the child emitter to affect the parent emitter so we make a copy
+                EventParticleOptions.EventParticleType.EMITTER,
+                EventParticleOptions.EventParticleType.EMITTER_BOUND -> storm.emitterSpaceMatrix.clone()
+                EventParticleOptions.EventParticleType.PARTICLE,
+                EventParticleOptions.EventParticleType.PARTICLE_WITH_VELOCITY -> (particle?.let {
+                    Vec3(
+                        it.getX(),
+                        it.getY(),
+                        it.getZ()
+                    )
+                } ?: Vec3(storm.getX(), storm.getY(), storm.getZ())).let {
+                    val matrixWrapper = MatrixWrapper()
+                    matrixWrapper.updatePosition(it)
+                    //We only want the orientation of the original matrix, not position/translation
+                    matrixWrapper.updateMatrix(Matrix4f(storm.emitterSpaceMatrix.matrix).setTranslation(0F, 0F, 0F))
+                }
+            }
 
-   @JvmStatic
-   fun `encode$lambda$1$lambda$0`(pb: FriendlyByteBuf, expr: ExpressionLike) {
-      pb.m_130070_(expr.toString());
-   }
+            val locatorMatrix = when (effect.type) {
+                EventParticleOptions.EventParticleType.EMITTER -> particleMatrix
+                EventParticleOptions.EventParticleType.EMITTER_BOUND -> storm.attachedMatrix
+                EventParticleOptions.EventParticleType.PARTICLE,
+                EventParticleOptions.EventParticleType.PARTICLE_WITH_VELOCITY -> particleMatrix
+            }
 
-   @JvmStatic
-   fun `encode$lambda$1`(pb: FriendlyByteBuf, effect: EventParticleEffect) {
-      pb.m_130085_(effect.getEffect());
-      pb.m_130068_(effect.getType());
-      pb.m_236821_(effect.getExpression(), ParticleEvent::encode$lambda$1$lambda$0);
-   }
+            val sourceVelocity = when (effect.type) {
+                EventParticleOptions.EventParticleType.EMITTER -> storm.sourceVelocity().let { { it } }
+                EventParticleOptions.EventParticleType.EMITTER_BOUND -> storm.sourceVelocity
+                EventParticleOptions.EventParticleType.PARTICLE -> { { Vec3.ZERO } }
+                EventParticleOptions.EventParticleType.PARTICLE_WITH_VELOCITY -> (particle?.let {
+                    Vec3(
+                        it.getVelocityX(),
+                        it.getVelocityY(),
+                        it.getVelocityZ()
+                    )
+                } ?: Vec3.ZERO).let { { it } }
+            }
 
-   @JvmStatic
-   fun `encode$lambda$2`(pb: FriendlyByteBuf, effect: EventSoundEffect) {
-      pb.m_130085_(effect.getSound());
-   }
+            val newStorm = ParticleStorm(
+                effect = bedrockParticleOptions,
+                emitterSpaceMatrix = particleMatrix,
+                attachedMatrix = locatorMatrix,
+                world = storm.world,
+                sourceVelocity = sourceVelocity,
+                sourceAlive = storm.sourceAlive,
+                sourceVisible = storm.sourceVisible,
+                onDespawn = {},
+                getParticleColor = storm.getParticleColor,
+                targetPos = storm.targetPos,
+                runtime = MoLangRuntime().setup(),
+                entity = storm.entity
+            )
+            //The reason this doesn't use the newStorms runtime is that the parent storm can add queries AFTER
+            //the child storm spawns in. Say a parent storm has a creation event. The child spawns before the parent
+            //When the parent tries to add its queries, it overwrites the child's
+            val tempRuntime = MoLangRuntime().setup().also {
+                it.environment.query = storm.runtime.environment.query
+            }
+            effect.expression?.resolve(tempRuntime)
 
-   @JvmStatic
-   fun `encode$lambda$3`(pb: FriendlyByteBuf, expr: ExpressionLike) {
-      pb.m_130070_(expr.toString());
-   }
+            newStorm.spawn()
+        }
+        soundEffect?.let { effect ->
+            val position = particle?.let {
+                Vec3(
+                    it.getX(),
+                    it.getY(),
+                    it.getZ()
+                )
+            } ?: Vec3(storm.getX(), storm.getY(), storm.getZ())
+            val world = storm.world
+            val soundEvent = SoundEvent.createVariableRangeEvent(effect.sound)
+            world.playLocalSound(position.x, position.y, position.z, soundEvent, SoundSource.NEUTRAL, 1F, 1F, true)
+        }
+        expression?.resolve(storm.runtime)
+    }
+}
 
-   @JvmStatic
-   fun `decode$lambda$5$lambda$4`(`$pb`: FriendlyByteBuf, it: FriendlyByteBuf): ExpressionLike {
-      val var10000: java.lang.String = `$pb`.m_130277_();
-      return MoLangExtensionsKt.asExpressionLike(var10000);
-   }
+/**
+ * A particle component of a [ParticleEvent]. It contains the effect to play, the spawning type, and a pre-run
+ * expression to run in the new storm's runtime.
+ *
+ * @author Hiroku
+ * @since March 2nd, 2024
+ */
+class EventParticleOptions(
+    val effect: ResourceLocation,
+    val type: EventParticleType,
+    val expression: ExpressionLike? = null
+) {
+    companion object {
+        val CODEC = RecordCodecBuilder.create<EventParticleOptions> { instance ->
+            instance.group(
+                ResourceLocation.CODEC.fieldOf("effect").forGetter { it.effect },
+                PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
+                PrimitiveCodec.STRING.optionalFieldOf("expression", null).forGetter { it.expression?.toString() }
+            ).apply(instance) { effect, type, expression ->
+                EventParticleOptions(
+                    effect,
+                    EventParticleType.valueOf(type),
+                    expression?.asExpressionLike()
+                )
+            }
+        }
+    }
 
-   @JvmStatic
-   fun `decode$lambda$5`(pb: FriendlyByteBuf): EventParticleEffect {
-      val var10002: ResourceLocation = pb.m_130281_();
-      val var10003: java.lang.Enum = pb.m_130066_(EventParticleEffect.EventParticleType.class);
-      return new EventParticleEffect(
-         var10002, var10003 as EventParticleEffect.EventParticleType, pb.m_236868_(ParticleEvent::decode$lambda$5$lambda$4) as ExpressionLike
-      );
-   }
+    enum class EventParticleType {
+        EMITTER,
+        EMITTER_BOUND,
+        PARTICLE,
+        PARTICLE_WITH_VELOCITY
+    }
+}
 
-   @JvmStatic
-   fun `decode$lambda$6`(pb: FriendlyByteBuf): EventSoundEffect {
-      val var10002: ResourceLocation = pb.m_130281_();
-      return new EventSoundEffect(var10002);
-   }
-
-   @JvmStatic
-   fun `decode$lambda$7`(pb: FriendlyByteBuf): ExpressionLike {
-      val var10000: java.lang.String = pb.m_130277_();
-      return MoLangExtensionsKt.asExpressionLike(var10000);
-   }
-
-   @JvmStatic
-   fun `CODEC$lambda$20$lambda$16`(it: ParticleEvent): EventParticleEffect {
-      return it.particleEffect;
-   }
-
-   @JvmStatic
-   fun `CODEC$lambda$20$lambda$17`(it: ParticleEvent): EventSoundEffect {
-      return it.soundEffect;
-   }
-
-   @JvmStatic
-   fun `CODEC$lambda$20$lambda$18`(it: ParticleEvent): java.lang.String {
-      return if (it.expression != null) it.expression.toString() else null;
-   }
-
-   @JvmStatic
-   fun `CODEC$lambda$20$lambda$19`(particleEffect: EventParticleEffect, soundEffect: EventSoundEffect, expression: java.lang.String): ParticleEvent {
-      return new ParticleEvent(particleEffect, soundEffect, if (expression != null) MoLangExtensionsKt.asExpressionLike(expression) else null);
-   }
-
-   @JvmStatic
-   fun `CODEC$lambda$20`(instance: Instance): App {
-      return instance.group(
-            EventParticleEffect.Companion.getCODEC().optionalFieldOf("particle_effect", null).forGetter(ParticleEvent::CODEC$lambda$20$lambda$16) as App,
-            EventSoundEffect.Companion.getCODEC().optionalFieldOf("sound_effect", null).forGetter(ParticleEvent::CODEC$lambda$20$lambda$17) as App,
-            PrimitiveCodec.STRING.optionalFieldOf("expression", null).forGetter(ParticleEvent::CODEC$lambda$20$lambda$18) as App
-         )
-         .apply(instance as Applicative, ParticleEvent::CODEC$lambda$20$lambda$19);
-   }
-
-   fun ParticleEvent() {
-      this(null, null, null, 7, null);
-   }
-
-   @JvmStatic
-   fun {
-      val var10000: Codec = RecordCodecBuilder.create(ParticleEvent::CODEC$lambda$20);
-      CODEC = var10000;
-   }
-
-   public companion object {
-      public final val CODEC: Codec<ParticleEvent>
-   }
+/**
+ * A simple sound effect component of a [ParticleEvent]. Plays a sound at the particle location, or if run from an
+ * emitter event, at the emitter's location.
+ *
+ * @author Hiroku
+ * @since March 2nd, 2024
+ */
+class EventSoundEffect(
+    val sound: ResourceLocation,
+) {
+    companion object {
+        val CODEC = RecordCodecBuilder.create<EventSoundEffect> { instance ->
+            instance.group(
+                ResourceLocation.CODEC.fieldOf("sound").forGetter { it.sound }
+            ).apply(instance, ::EventSoundEffect)
+        }
+    }
 }

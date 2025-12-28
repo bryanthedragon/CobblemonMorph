@@ -1,75 +1,37 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle
 
-public class BattleHealthChangePacket(pnx: String, newHealth: Float, newMaxHealth: Float? = null) : NetworkPacket<BattleHealthChangePacket> {
-   public open val id: ResourceLocation
-   public final val newHealth: Float
-   public final val newMaxHealth: Float?
-   public final val pnx: String
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-   init {
-      this.pnx = pnx;
-      this.newHealth = newHealth;
-      this.newMaxHealth = newMaxHealth;
-      this.id = ID;
-   }
+/**
+ * Informs the client that a Pokémon's health has changed. Executes a tile animation.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.battle.BattleHealthChangeHandler].
+ *
+ * @author Hiroku
+ * @since June 5th, 2022
+ */
+class BattleHealthChangePacket(val pnx: String, val newHealth: Float, val newMaxHealth: Float? = null) : NetworkPacket<BattleHealthChangePacket> {
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(pnx)
+        buffer.writeFloat(newHealth)
+        buffer.writeNullable(newMaxHealth) { _, newMaxHealth -> buffer.writeFloat(newMaxHealth) }
+    }
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130070_(this.pnx);
-      buffer.writeFloat(this.newHealth);
-      buffer.m_236821_(this.newMaxHealth, BattleHealthChangePacket::encode$lambda$0);
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$0`(`$buffer`: FriendlyByteBuf, var1: FriendlyByteBuf, newMaxHealth: java.lang.Float) {
-      `$buffer`.writeFloat(newMaxHealth);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): BattleHealthChangePacket {
-         val var10002: java.lang.String = buffer.m_130277_();
-         return new BattleHealthChangePacket(
-            var10002, buffer.readFloat(), buffer.m_236868_(BattleHealthChangePacket.Companion::decode$lambda$0) as java.lang.Float
-         );
-      }
-
-      @JvmStatic
-      fun `decode$lambda$0`(`$buffer`: FriendlyByteBuf, it: FriendlyByteBuf): java.lang.Float {
-         return `$buffer`.readFloat();
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("battle_health_change")
+        fun decode(buffer: RegistryFriendlyByteBuf) = BattleHealthChangePacket(buffer.readString(), buffer.readFloat(), buffer.readNullable { buffer.readFloat() })
+    }
 }

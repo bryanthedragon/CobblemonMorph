@@ -1,68 +1,47 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import io.netty.buffer.ByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readUUID
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeSizedInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeUUID
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class InitializePartyPacket(isThisPlayerParty: Boolean, uuid: UUID, slots: Int) : NetworkPacket<InitializePartyPacket> {
-   public open val id: ResourceLocation
-   public final val isThisPlayerParty: Boolean
-   public final val slots: Int
-   public final val uuid: UUID
+/**
+ * Creates a party on the client side with the given UUID and slot count.
+ *
+ * This can be used for immediately telling the client that this is their party to use
+ * in overlay rendering, but generally is just necessary before sending Pokémon updates
+ * targeting this store.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.InitializePartyHandler]
+ *
+ * @author Hiroku
+ * @since November 29th, 2021
+ */
+class InitializePartyPacket(val isThisPlayerParty: Boolean, val uuid: UUID, val slots: Int) : NetworkPacket<InitializePartyPacket> {
 
-   init {
-      this.isThisPlayerParty = isThisPlayerParty;
-      this.uuid = uuid;
-      this.slots = slots;
-      this.id = ID;
-   }
+    override val id = ID
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.writeBoolean(this.isThisPlayerParty);
-      buffer.m_130077_(this.uuid);
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, this.slots);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeBoolean(isThisPlayerParty)
+        buffer.writeUUID(uuid)
+        buffer.writeSizedInt(IntSize.U_BYTE, slots)
+    }
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): InitializePartyPacket {
-         val var10002: Boolean = buffer.readBoolean();
-         val var10003: UUID = buffer.m_130259_();
-         return new InitializePartyPacket(var10002, var10003, NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE));
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("initialize_party")
+        fun decode(buffer: RegistryFriendlyByteBuf) = InitializePartyPacket(buffer.readBoolean(), buffer.readUUID(), buffer.readSizedInt(IntSize.U_BYTE))
+    }
 }

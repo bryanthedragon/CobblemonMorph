@@ -1,16 +1,28 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.item
 
-import java.util.HashMap
 import net.minecraft.world.item.Item
 
-public object CobblemonBuiltinItemRendererRegistry {
-   private final val renderers: HashMap<Item, CobblemonBuiltinItemRenderer> = new HashMap()
+/**
+ * A registry of [CobblemonBuiltinItemRenderer]s.
+ *
+ * @author Nick, Licious
+ * @since December 28th, 2022
+ */final class CobblemonBuiltinItemRendererRegistry {
 
-   public fun register(item: Item, renderer: CobblemonBuiltinItemRenderer) {
-      renderers.put(item, renderer);
-   }
+    private val renderers = hashMapOf<Item, CobblemonBuiltinItemRenderer>()
 
-   public fun rendererOf(item: Item): CobblemonBuiltinItemRenderer? {
-      return renderers.get(item);
-   }
+    fun register(item: Item, renderer: CobblemonBuiltinItemRenderer) {
+        this.renderers[item] = renderer
+    }
+
+    fun rendererOf(item: Item): CobblemonBuiltinItemRenderer? = this.renderers[item]
+
 }

@@ -1,10 +1,43 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method renderButton (Lnet/minecraft/client/gui/GuiGraphics;IIF)V in class com/cobblemon/mod/common/client/gui/summary/widgets/type/SingleTypeWidget
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.widgets.type
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.ColourLibrary
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.drawScaledText
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.network.chat.Component
+class SingleTypeWidget(
+    pX: Int, pY: Int,
+    pWidth: Int, pHeight: Int,
+    private val type: ElementalType,
+    private val renderText: Boolean = true
+) : TypeWidget(pX, pY, pWidth, pHeight, Component.literal("SingleTypeWidget - ${type.name}")) {
+
+    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+        val matrices = context.pose()
+        matrices.pushPose()
+        matrices.translate(0.35, 0.0, 0.0)
+        renderType(type, matrices)
+        matrices.popPose()
+        // Render Type Name
+        if (this.renderText) {
+            matrices.pushPose()
+            drawScaledText(
+                context = context,
+                text = type.displayName,
+                x = x + 35.5F, y = y + 3F,
+                colour = ColourLibrary.WHITE, shadow = false,
+                centered = true,
+                maxCharacterWidth = 40,
+                scale = 0.6F
+            )
+        }
+    }
+}

@@ -1,88 +1,60 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import java.io.File
-import java.net.URI
-import java.net.URL
 import java.nio.file.FileVisitResult
+import java.nio.file.FileVisitResult.CONTINUE
+import java.nio.file.FileVisitResult.SKIP_SUBTREE
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
-import java.util.ArrayList;
-import java.util.Arrays
+import kotlin.io.path.toPath
 import net.minecraft.resources.ResourceLocation
-import org.jetbrains.annotations.NotNull
 
-public object AssetLoading {
-   public fun ResourceLocation.toPath(): Path? {
-      val var10000: URI = this.toURL(`$this$toPath`);
-      val var2: Path;
-      if (var10000 != null) {
-         var2 = Paths.get(var10000);
-      } else {
-         var2 = null;
-      }
-
-      return var2;
-   }
-
-   public fun ResourceLocation.toURL(): URI? {
-      val var3: Array<Any> = new Object[]{`$this$toURL`.m_135827_(), `$this$toURL`.m_135815_()};
-      val var10001: java.lang.String = java.lang.String.format("/assets/%s/%s", Arrays.copyOf(var3, var3.length));
-      val var10000: URL = Cobblemon.class.getResource(var10001);
-      return if (var10000 != null) var10000.toURI() else null;
-   }
-
-   public fun fileSearch(dir: Path, filter: (Path) -> Boolean, recursive: Boolean): List<Path> {
-      val files: java.util.List = new ArrayList();
-      Files.walkFileTree(dir, new SimpleFileVisitor<Path>(filter, files, recursive) {
-         {
-            this.$filter = `$filter`;
-            this.$files = `$files`;
-            this.$recursive = `$recursive`;
-         }
-
-         @NotNull
-         public FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes fileAttributes) {
-            if (this.$filter.invoke(file) as java.lang.Boolean) {
-               this.$files.add(file);
+/**
+ * Basic functions for dealing with assets inside the mod, using the standard file visitor
+ * strategy.
+ *
+ * @author Hiroku
+ * @since February 10th, 2022
+ */final class AssetLoading {
+    fun ResourceLocation.toPath() = toURL()?.toPath()
+    fun ResourceLocation.toURL() = Cobblemon::class.java.getResource(String.format("/assets/%s/%s", namespace, path))?.toURI()
+    fun fileSearch(dir: Path, filter: (Path) -> Boolean, recursive: Boolean): List<Path> {
+        val files = mutableListOf<Path>()
+        Files.walkFileTree(dir, object : SimpleFileVisitor<Path>() {
+            override fun visitFile(file: Path, fileAttributes: BasicFileAttributes): FileVisitResult {
+                if (filter(file)) {
+                    files.add(file)
+                }
+                return when (recursive) {
+                    true -> CONTINUE
+                    false -> SKIP_SUBTREE
+                }
             }
+        })
+        return files
+    }
 
-            val var10000: FileVisitResult;
-            if (this.$recursive) {
-               var10000 = FileVisitResult.CONTINUE;
-            } else {
-               if (this.$recursive) {
-                  throw new NoWhenBranchMatchedException();
-               }
-
-               var10000 = FileVisitResult.SKIP_SUBTREE;
+    fun searchFor(dir: String, suffix: String, list: MutableList<File>) {
+        val file = File(dir)
+        val ls = file.list() ?: return
+        for (name in ls) {
+            val subFile = File("$dir/$name")
+            if (subFile.isFile && name.endsWith(suffix)) {
+                list.add(subFile)
+            } else if (subFile.isDirectory) {
+                searchFor(dir = "$dir/$name", suffix = suffix, list = list)
             }
-
-            return var10000;
-         }
-      });
-      return files;
-   }
-
-   public fun searchFor(dir: String, suffix: String, list: MutableList<File>) {
-      val var10000: Array<java.lang.String> = new File(dir).list();
-      if (var10000 != null) {
-         for (java.lang.String name : var10000) {
-            val subFile: File = new File("$dir/$name");
-            if (subFile.isFile()) {
-               if (StringsKt.endsWith$default(name, suffix, false, 2, null)) {
-                  list.add(subFile);
-                  continue;
-               }
-            }
-
-            if (subFile.isDirectory()) {
-               this.searchFor("$dir/$name", suffix, list);
-            }
-         }
-      }
-   }
+        }
+    }
 }

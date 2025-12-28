@@ -1,31 +1,42 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Flavor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.cooking.Flavour
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.Natures
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.codec.CodecUtils
+import com.mojang.serialization.Codec
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.Mth
+import net.minecraft.util.Mth.floor
 
-public class Nature(name: ResourceLocation, displayName: String, increasedStat: Stat?, decreasedStat: Stat?, favoriteFlavor: Flavor?, dislikedFlavor: Flavor?) {
-   public final val decreasedStat: Stat?
-   public final val dislikedFlavor: Flavor?
-   public final val displayName: String
-   public final val favoriteFlavor: Flavor?
-   public final val increasedStat: Stat?
-   public final val name: ResourceLocation
+class Nature(
+    val name: ResourceLocation,
+    val displayName: String,
+    val increasedStat: Stat?,
+    val decreasedStat: Stat?,
+    val favouriteFlavour: Flavour?,
+    val dislikedFlavour: Flavour?
+) {
+    fun modifyStat(stat: Stat, value: Int): Int {
+        return when (stat) {
+            increasedStat -> floor(value * 1.1)
+            decreasedStat -> floor(value * 0.9)
+            else -> value
+        }
+    }
 
-   init {
-      this.name = name;
-      this.displayName = displayName;
-      this.increasedStat = increasedStat;
-      this.decreasedStat = decreasedStat;
-      this.favoriteFlavor = favoriteFlavor;
-      this.dislikedFlavor = dislikedFlavor;
-   }
-
-   public fun modifyStat(stat: Stat, value: Int): Int {
-      return if (stat == this.increasedStat)
-         Mth.m_14107_((double)value * 1.1)
-         else
-         (if (stat == this.decreasedStat) Mth.m_14107_((double)value * 0.9) else value);
-   }
+    companion object {
+        @JvmStatic
+        val BY_IDENTIFIER_CODEC: Codec<Nature> = CodecUtils.createByIdentifierCodec(
+            Natures::getNature,
+            Nature::name
+        ) { identifier -> "No nature for ID $identifier" }
+    }
 }

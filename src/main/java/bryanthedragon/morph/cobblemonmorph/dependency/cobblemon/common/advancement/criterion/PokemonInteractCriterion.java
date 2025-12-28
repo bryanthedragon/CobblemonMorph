@@ -1,40 +1,38 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.advancements.critereon.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.resources.ResourceLocation
+import java.util.Optional
 
-public class PokemonInteractCriterion(id: ResourceLocation, entity: ContextAwarePredicate) : SimpleCriterionCondition(id, entity) {
-   public final var item: String = "any"
-   public final var type: String = "any"
+class PokemonInteractContext(val species: ResourceLocation, val item: ResourceLocation)
 
-   public override fun toJson(json: JsonObject) {
-      json.addProperty("type", this.type);
-      json.addProperty("item", this.item);
-   }
+class PokemonInteractCriterion(
+    playerCtx: Optional<ContextAwarePredicate>,
+    val species: String,
+    val item: String
+): SimpleCriterionCondition<PokemonInteractContext>(playerCtx) {
+    companion object {
+        val CODEC: Codec<PokemonInteractCriterion> = RecordCodecBuilder.create { it.group(
+            EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(PokemonInteractCriterion::playerCtx),
+            Codec.STRING.optionalFieldOf("species", "any").forGetter(PokemonInteractCriterion::species),
+            Codec.STRING.optionalFieldOf("item", "any").forGetter(PokemonInteractCriterion::item)
+        ).apply(it, ::PokemonInteractCriterion) }
+    }
 
-   public override fun fromJson(json: JsonObject) {
-      var var10001: JsonElement = json.get("type");
-      var var2: java.lang.String = if (var10001 != null) var10001.getAsString() else null;
-      if (var2 == null) {
-         var2 = "any";
-      }
-
-      this.type = var2;
-      var10001 = json.get("item");
-      var var4: java.lang.String = if (var10001 != null) var10001.getAsString() else null;
-      if (var4 == null) {
-         var4 = "any";
-      }
-
-      this.item = var4;
-   }
-
-   public open fun matches(player: ServerPlayer, context: PokemonInteractContext): Boolean {
-      return (context.getType() == ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(this.type, null, 1, null) || this.type == "any")
-         && (context.getItem() == ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(this.item, null, 1, null) || this.item == "any");
-   }
+    override fun matches(player: ServerPlayer, context: PokemonInteractContext): Boolean {
+        return (context.species == this.species.asIdentifierDefaultingNamespace() || this.species == "any") && (context.item == this.item.asIdentifierDefaultingNamespace() || this.item == "any")
+    }
 }

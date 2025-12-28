@@ -1,10 +1,73 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder; in class com/cobblemon/mod/common/item/berry/FriendshipRaisingBerryItem
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.berry
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonMechanics
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.item.PokemonSelectingItem
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.ItemEvSource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.BerryBlock
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.genericRuntime
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveInt
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
+import kotlin.math.max
+
+/**
+ * A berry that raises friendship but lowers EVs in a particular stat.
+ *
+ * @author Hiroku
+ * @since August 4th, 2023
+ */
+class FriendshipRaisingBerryItem(block: BerryBlock, val stat: Stat) : BerryItem(block), PokemonSelectingItem {
+    override val bagItem = null
+
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = (pokemon.evs.getOrDefault(stat) > 0 || pokemon.friendship < Cobblemon.config.maxPokemonFriendship)
+            && super.canUseOnPokemon(stack, pokemon)
+
+    override fun applyToPokemon(
+        player: ServerPlayer,
+        stack: ItemStack,
+        pokemon: Pokemon
+    ): InteractionResultHolder<ItemStack> {
+        if (!canUseOnPokemon(stack, pokemon)) {
+            return InteractionResultHolder.fail(stack)
+        }
+
+        val friendshipRaiseAmount = genericRuntime.resolveInt(CobblemonMechanics.berries.friendshipRaiseAmount, pokemon)
+
+        val increasedFriendship = pokemon.incrementFriendship(friendshipRaiseAmount)
+
+        val evLowerAmount = max(genericRuntime.resolveInt(CobblemonMechanics.berries.evLowerAmount), 0)
+        val decreasedEVs = pokemon.evs.add(stat, -evLowerAmount, ItemEvSource(player, stack, pokemon)) != 0
+
+        return if (increasedFriendship || decreasedEVs) {
+            pokemon.feedPokemon(1)
+
+            stack.consume(1, player)
+            InteractionResultHolder.success(stack)
+        } else {
+            InteractionResultHolder.pass(stack)
+        }
+    }
+
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+        if (world is ServerLevel && user is ServerPlayer) {
+            return use(user, user.getItemInHand(hand))
+        }
+        return super<BerryItem>.use(world, user, hand)
+    }
+}

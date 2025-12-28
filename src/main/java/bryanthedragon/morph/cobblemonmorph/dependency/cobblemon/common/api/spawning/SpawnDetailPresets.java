@@ -1,104 +1,98 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning
 
+import com.bedrockk.molang.Expression
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.conditional.RegistryLikeCondition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.JsonDataRegistry
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.NPCClass
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SpawningCondition
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.RegisteredSpawningContext
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePositionType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.PossibleHeldItem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset.SpawnDetailPreset
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.BiomeLikeConditionAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.BlockLikeConditionAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.EitherIdentifierOrTagAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.FluidLikeConditionAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IdentifierAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IntRangesAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.PokemonPropertiesAdapterKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.PossibleHeldItemAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.RegisteredSpawningContextAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.SpawnBucketAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.SpawnDetailPresetAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.SpawningConditionAdapter
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.*
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.mojang.datafixers.util.Either
-import java.lang.reflect.Type
-import java.util.LinkedHashMap
 import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.packs.PackType
-import net.minecraft.server.packs.resources.ResourceManager
-import net.minecraft.tags.TagKey
-import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
+import net.minecraft.tags.TagKey
+import net.minecraft.server.packs.PackType
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.material.Fluid
 
-public object SpawnDetailPresets : JsonDataRegistry<SpawnDetailPreset> {
-   public final val GSON: Gson
-   public open val gson: Gson
-   public open val id: ResourceLocation = MiscUtilsKt.cobblemonResource(INSTANCE.getResourcePath())
-   public open val observable: SimpleObservable<SpawnDetailPresets> = new SimpleObservable()
-   public final val presetTypes: MutableMap<String, Class<out SpawnDetailPreset>> = (new LinkedHashMap()) as java.util.Map
-   public final var presets: MutableMap<ResourceLocation, SpawnDetailPreset> = (new LinkedHashMap()) as java.util.Map
-   public open val resourcePath: String = "spawn_detail_presets"
-   public open val type: PackType = PackType.SERVER_DATA
-   public open val typeToken: TypeToken<SpawnDetailPreset> = TypeToken.get(SpawnDetailPreset.class)
+/**
+ * Data registry for [SpawnDetailPreset]s. These help the maintainability of spawn files by allowing common presets
+ * to be defined separately to the spawns that obey it. You can register custom presets either programmatically or
+ * by adding preset JSONs to the spawn_detail_presets data folder.
+ *
+ * @author Hiroku
+ * @since December 9th, 2022
+ */final class SpawnDetailPresets : JsonDataRegistry<SpawnDetailPreset> {
+    val GSON = GsonBuilder()
+        .setPrettyPrinting()
+        .setLenient()
+        .disableHtmlEscaping()
+        .registerTypeAdapter(SpawnBucket::class.java, SpawnBucketAdapter)
+        .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Fluid::class.java).type, FluidLikeConditionAdapter)
+        .registerTypeAdapter(
+            TypeToken.getParameterized(
+                Either::class.java,
+                ResourceLocation::class.java,
+                TypeToken.getParameterized(
+                    TagKey::class.java,
+                    Structure::class.java
+                ).type
+            ).type,
+            EitherIdentifierOrTagAdapter(Registries.STRUCTURE)
+        )
+        .registerTypeAdapter(SpawnDetailPreset::class.java, SpawnDetailPresetAdapter)
+        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(SpawningCondition::class.java, SpawningConditionAdapter)
+        .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
+        .registerTypeAdapter(MoonPhaseRange::class.java, IntRangesAdapter(MoonPhaseRange.moonPhaseRanges) { MoonPhaseRange(*it) })
+        .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
+        .registerTypeAdapter(PossibleHeldItem::class.java, PossibleHeldItemAdapter)
+        .registerTypeAdapter(NPCClass::class.java, NPCClassReferenceAdapter)
+        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+        .create()
 
-   public fun <T : SpawnDetailPreset> registerPresetType(name: String, detailClass: Class<Any>) {
-      presetTypes.put(name, detailClass);
-   }
+    val presetTypes = mutableMapOf<String, Class<out SpawnDetailPreset>>()
+    fun <T : SpawnDetailPreset> registerPresetType(name: String, detailClass: Class<T>) {
+        presetTypes[name] = detailClass
+    }
 
-   public override fun sync(player: ServerPlayer) {
-   }
+    override val gson: Gson = GSON
+    override val typeToken = TypeToken.get(SpawnDetailPreset::class.java)
+    override val resourcePath = "spawn_detail_presets"
+    override val id = cobblemonResource(resourcePath)
+    override val type = PackType.SERVER_DATA
+    override val observable = SimpleObservable<SpawnDetailPresets>()
 
-   public override fun reload(data: Map<ResourceLocation, SpawnDetailPreset>) {
-      presets = MapsKt.toMutableMap(data);
-      Cobblemon.INSTANCE.getLOGGER().info("Loaded ${presets.size()} spawn detail presets.");
-   }
+    var presets = mutableMapOf<ResourceLocation, SpawnDetailPreset>()
 
-   override fun reload(manager: ResourceManager) {
-      JsonDataRegistry.DefaultImpls.reload(this, manager);
-   }
-
-   @JvmStatic
-   fun {
-      val var7: GsonBuilder = new GsonBuilder()
-         .setPrettyPrinting()
-         .setLenient()
-         .disableHtmlEscaping()
-         .registerTypeAdapter(SpawnBucket::class.java, SpawnBucketAdapter.INSTANCE)
-         .registerTypeAdapter(RegisteredSpawningContext::class.java, RegisteredSpawningContextAdapter.INSTANCE)
-         .registerTypeAdapter(
-            TypeToken.getParameterized(RegistryLikeCondition::class.java, new Type[]{Biome.class}).getType(), BiomeLikeConditionAdapter.INSTANCE
-         )
-         .registerTypeAdapter(
-            TypeToken.getParameterized(RegistryLikeCondition::class.java, new Type[]{Block.class}).getType(), BlockLikeConditionAdapter.INSTANCE
-         )
-         .registerTypeAdapter(
-            TypeToken.getParameterized(RegistryLikeCondition::class.java, new Type[]{Fluid.class}).getType(), FluidLikeConditionAdapter.INSTANCE
-         );
-      val var12: Type = TypeToken.getParameterized(
-            Either::class.java, new Type[]{ResourceLocation.class, TypeToken.getParameterized(TagKey::class.java, new Type[]{Structure.class}).getType()}
-         )
-         .getType();
-      val var13: ResourceKey = Registries.f_256944_;
-      GSON = var7.registerTypeAdapter(var12, new EitherIdentifierOrTagAdapter(var13))
-         .registerTypeAdapter(SpawnDetailPreset::class.java, SpawnDetailPresetAdapter.INSTANCE)
-         .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter.INSTANCE)
-         .registerTypeAdapter(SpawningCondition::class.java, SpawningConditionAdapter.INSTANCE)
-         .registerTypeAdapter(TimeRange::class.java, new IntRangesAdapter<>(TimeRange.Companion.getTimeRanges(), <unrepresentable>.INSTANCE))
-         .registerTypeAdapter(MoonPhaseRange::class.java, new IntRangesAdapter<>(MoonPhaseRange.Companion.getMoonPhaseRanges(), <unrepresentable>.INSTANCE))
-         .registerTypeAdapter(PokemonProperties::class.java, PokemonPropertiesAdapterKt.getPokemonPropertiesShortAdapter())
-         .registerTypeAdapter(PossibleHeldItem::class.java, PossibleHeldItemAdapter.INSTANCE)
-         .create();
-      val var8: Gson = GSON;
-      gson = var8;
-   }
+    override fun sync(player: ServerPlayer) {}
+    override fun reload(data: Map<ResourceLocation, SpawnDetailPreset>) {
+        this.presets = data.toMutableMap()
+        Cobblemon.LOGGER.info("Loaded ${presets.size} spawn detail presets.")
+    }
 }

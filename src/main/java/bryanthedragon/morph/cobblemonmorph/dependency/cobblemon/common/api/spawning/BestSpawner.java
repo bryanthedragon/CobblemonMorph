@@ -1,69 +1,156 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity.Despawner;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.AreaSpawningCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.BasicSpawningCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.GroundedSpawningCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SpawningCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SubmergedSpawningCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SurfaceSpawningCondition;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.GroundedSpawningContext;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.LavafloorSpawningContext;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SeafloorSpawningContext;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SpawningContext;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SubmergedSpawningContext;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SurfaceSpawningContext;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.calculators.GroundedSpawningContextCalculator;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.calculators.LavafloorSpawningContextCalculator;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.calculators.SeafloorSpawningContextCalculator;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.calculators.SpawningContextCalculator;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.calculators.SubmergedSpawningContextCalculator;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.calculators.SurfaceSpawningContextCalculator;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.PokemonSpawnDetail;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset.BasicSpawnDetailPreset;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset.BestSpawnerConfig;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset.PokemonSpawnDetailPreset;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.CobblemonAgingDespawner;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning
 
-public object BestSpawner {
-   public final var config: BestSpawnerConfig = new BestSpawnerConfig()
-   public final var defaultPokemonDespawner: Despawner<PokemonEntity> =
-      (new CobblemonAgingDespawner(0.0F, 0.0F, 0, 0, <unrepresentable>.INSTANCE, 15, null)) as Despawner
-      public final val spawnerManagers: MutableList<SpawnerManager> = CollectionsKt.mutableListOf(new SpawnerManager[]{CobblemonWorldSpawnerManager.INSTANCE})
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity.Despawner
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.AreaSpawningCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.BasicSpawningCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.FishingSpawningCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.GroundedSpawningCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SeafloorSpawningCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SpawningCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SubmergedSpawningCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.condition.SurfaceSpawningCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.NPCSpawnDetail
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.PokemonHerdSpawnDetail
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.PokemonSpawnDetail
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnAction
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.BucketMultiplyingInfluence
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.SpawningInfluence
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.AreaSpawnablePositionResolver
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.FishingSpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.GroundedSpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.LavafloorSpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SeafloorSpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SubmergedSpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SurfaceSpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.calculators.GroundedSpawnablePositionCalculator
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.calculators.LavafloorSpawnablePositionCalculator
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.calculators.SeafloorSpawnablePositionCalculator
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.calculators.SpawnablePositionCalculator
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.calculators.SubmergedSpawnablePositionCalculator
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.calculators.SurfaceSpawnablePositionCalculator
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset.BasicSpawnDetailPreset
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset.BestSpawnerConfig
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset.PokemonSpawnDetailPreset
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.selection.SpawningSelector
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.BasicSpawner
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.FixedAreaSpawner
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.PlayerSpawner
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.PlayerSpawnerFactory
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.Spawner
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.CobblemonAgingDespawner
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
+import net.minecraft.server.MinecraftServer
 
-   public fun loadConfig() {
-      Cobblemon.INSTANCE.getLOGGER().info("Starting the Best Spawner...");
-      SpawningCondition.Companion.register("basic", BasicSpawningCondition::class.java);
-      SpawningCondition.Companion.register("area", AreaSpawningCondition::class.java);
-      SpawningCondition.Companion.register("submerged", SubmergedSpawningCondition::class.java);
-      SpawningCondition.Companion.register("grounded", GroundedSpawningCondition::class.java);
-      SpawningCondition.Companion.register("surface", SurfaceSpawningCondition::class.java);
-      Cobblemon.INSTANCE.getLOGGER().info("Loaded ${SpawningCondition.Companion.getConditionTypes().size()} spawning condition types.");
-      SpawningContextCalculator.Companion.register$default(SpawningContextCalculator.Companion, GroundedSpawningContextCalculator.INSTANCE, null, 2, null);
-      SpawningContextCalculator.Companion.register$default(SpawningContextCalculator.Companion, SeafloorSpawningContextCalculator.INSTANCE, null, 2, null);
-      SpawningContextCalculator.Companion.register$default(SpawningContextCalculator.Companion, LavafloorSpawningContextCalculator.INSTANCE, null, 2, null);
-      SpawningContextCalculator.Companion.register$default(SpawningContextCalculator.Companion, SubmergedSpawningContextCalculator.INSTANCE, null, 2, null);
-      SpawningContextCalculator.Companion.register$default(SpawningContextCalculator.Companion, SurfaceSpawningContextCalculator.INSTANCE, null, 2, null);
-      SpawningContext.Companion.register("grounded", GroundedSpawningContext::class.java, "grounded");
-      SpawningContext.Companion.register("seafloor", SeafloorSpawningContext::class.java, "grounded");
-      SpawningContext.Companion.register("lavafloor", LavafloorSpawningContext::class.java, "grounded");
-      SpawningContext.Companion.register("submerged", SubmergedSpawningContext::class.java, "submerged");
-      SpawningContext.Companion.register("surface", SurfaceSpawningContext::class.java, "surface");
-      Cobblemon.INSTANCE.getLOGGER().info("Loaded ${SpawningContext.Companion.getContexts().size()} spawning context types.");
-      SpawnDetail.Companion.registerSpawnType(PokemonSpawnDetail.Companion.getTYPE(), PokemonSpawnDetail::class.java);
-      Cobblemon.INSTANCE.getLOGGER().info("Loaded ${SpawnDetail.Companion.getSpawnDetailTypes().size()} spawn detail types.");
-      config = BestSpawnerConfig.Companion.load();
-      SpawnDetailPresets.INSTANCE.registerPresetType("basic", BasicSpawnDetailPreset::class.java);
-      SpawnDetailPresets.INSTANCE.registerPresetType("pokemon", PokemonSpawnDetailPreset::class.java);
-   }
+/**
+ * A grouping of all the overarching behaviours of the Best Spawner system. This is a convenient accessor to
+ * the configuration and many other properties used by the spawner.
+ *
+ * The Best Spawner (in world spawning) works in distinct stages that are:
+ * - Spawning zone generation (see: [SpawningZoneGenerator])
+ * - Spawnable position resolving (see: [AreaSpawnablePositionResolver])
+ * - Spawn selection (see: [SpawningSelector])
+ * - Spawn action (see: [SpawnAction])
+ *
+ * In the case of more specialized use, the creation of a [SpawnablePosition] that motivates most of the spawn
+ * process can be created manually, skipping the first two steps.
+ *
+ * An individually spawnable thing is defined as a [SpawnDetail]. A processor handling this process is a [Spawner].
+ * Some subclasses exist for more specialized cases. If you are spawning in a fixed area and the spawner controlling
+ * that area is unmoving then it is a [FixedAreaSpawner] whereas if it is actively following the player it is a
+ * [PlayerSpawner]. You can also use a [BasicSpawner] for more general-purpose spawning without any issue.
+ *
+ * PlayerSpawners are stored inside ServerPlayers using a mixin and tick at the end of a player's tick. The [PlayerSpawnerFactory]
+ * is used to build those. An extension function exists for getting the spawner for a player.
+ *
+ * Spawners and spawnable positions are often put under the effects of [SpawningInfluence]s which can be used to make
+ * temporary or lasting changes to spawning for whatever component they are attached to (whether that is a spawner or a
+ * spawnable position). This pairs strongly with edits to the influence builders inside the [PlayerSpawnerFactory]. The
+ * range of effects an influence can exert is very broad.
+ *
+ * Broad configuration of this spawning system is found in [BestSpawner.config].
+ *
+ * @author Hiroku
+ * @since July 8th, 2022
+ */final class BestSpawner {
+    var config = BestSpawnerConfig()
 
-   public fun onServerStarted() {
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         (`element$iv` as SpawnerManager).onServerStarted();
-      }
-   }
+    lateinit var defaultPokemonDespawner: Despawner<PokemonEntity>
+    lateinit var fishingSpawner: BasicSpawner
+
+    fun init() {
+        LOGGER.info("Starting the Best Spawner...")
+
+        SpawningCondition.register(BasicSpawningCondition.NAME, BasicSpawningCondition::class.java)
+        SpawningCondition.register(AreaSpawningCondition.NAME, AreaSpawningCondition::class.java)
+        SpawningCondition.register(SubmergedSpawningCondition.NAME, SubmergedSpawningCondition::class.java)
+        SpawningCondition.register(GroundedSpawningCondition.NAME, GroundedSpawningCondition::class.java)
+        SpawningCondition.register(SurfaceSpawningCondition.NAME, SurfaceSpawningCondition::class.java)
+        SpawningCondition.register(SeafloorSpawningCondition.NAME, SeafloorSpawningCondition::class.java)
+        SpawningCondition.register(FishingSpawningCondition.NAME, FishingSpawningCondition::class.java)
+
+        LOGGER.info("Loaded ${SpawningCondition.conditionTypes.size} spawning condition types.")
+
+        SpawnablePositionCalculator.register(GroundedSpawnablePositionCalculator)
+        SpawnablePositionCalculator.register(SeafloorSpawnablePositionCalculator)
+        SpawnablePositionCalculator.register(LavafloorSpawnablePositionCalculator)
+        SpawnablePositionCalculator.register(SubmergedSpawnablePositionCalculator)
+        SpawnablePositionCalculator.register(SurfaceSpawnablePositionCalculator)
+
+        SpawnablePosition.register(name = "grounded", clazz = GroundedSpawnablePosition::class.java, defaultCondition = GroundedSpawningCondition.NAME)
+        SpawnablePosition.register(name = "seafloor", clazz = SeafloorSpawnablePosition::class.java, defaultCondition = SeafloorSpawningCondition.NAME)
+        SpawnablePosition.register(name = "lavafloor", clazz = LavafloorSpawnablePosition::class.java, defaultCondition = GroundedSpawningCondition.NAME)
+        SpawnablePosition.register(name = "submerged", clazz = SubmergedSpawnablePosition::class.java, defaultCondition = SubmergedSpawningCondition.NAME)
+        SpawnablePosition.register(name = "surface", clazz = SurfaceSpawnablePosition::class.java, defaultCondition = SurfaceSpawningCondition.NAME)
+        SpawnablePosition.register(name = "fishing", clazz = FishingSpawnablePosition::class.java, defaultCondition = FishingSpawningCondition.NAME)
+
+        LOGGER.info("Loaded ${SpawnablePosition.spawnablePositionTypes.size} spawnable position types.")
+
+        SpawnDetail.registerSpawnType(name = PokemonSpawnDetail.TYPE, PokemonSpawnDetail::class.java)
+        SpawnDetail.registerSpawnType(name = NPCSpawnDetail.TYPE, NPCSpawnDetail::class.java)
+        SpawnDetail.registerSpawnType(name = PokemonHerdSpawnDetail.TYPE, PokemonHerdSpawnDetail::class.java)
+        LOGGER.info("Loaded ${SpawnDetail.spawnDetailTypes.size} spawn detail types.")
+
+        loadConfig()
+
+        SpawnDetailPresets.registerPresetType(BasicSpawnDetailPreset.NAME, BasicSpawnDetailPreset::class.java)
+        SpawnDetailPresets.registerPresetType(PokemonSpawnDetailPreset.NAME, PokemonSpawnDetailPreset::class.java)
+    }
+
+    fun loadConfig() {
+        defaultPokemonDespawner = CobblemonAgingDespawner(getAgeTicks = { it.ticksLived })
+        config = BestSpawnerConfig.load()
+    }
+
+    fun reloadConfig() {
+        loadConfig()
+    }
+
+    fun onServerStarted(server: MinecraftServer) {
+        CobblemonSpawnPools.onServerLoad(server)
+        fishingSpawner = BasicSpawner(
+            name = "fishing",
+            spawnPool = CobblemonSpawnPools.WORLD_SPAWN_POOL
+        ).also {
+            it.influences.add(
+                BucketMultiplyingInfluence(
+                    multipliers = mapOf(
+                        "uncommon" to 2.25f,
+                        "rare" to 5.5f,
+                        "ultra-rare" to 5.5f,
+                    )
+                )
+            )
+        }
+    }
 }

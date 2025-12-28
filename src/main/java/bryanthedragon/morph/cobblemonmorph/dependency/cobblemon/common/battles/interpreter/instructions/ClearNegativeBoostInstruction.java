@@ -1,54 +1,43 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
 
-public class ClearNegativeBoostInstruction(message: BattleMessage) : InterpreterInstruction {
-   public final val message: BattleMessage
+/**
+ * Format: |-clearnegativeboost|POKEMON
+ *
+ * Clear the negative boosts from the target POKEMON (usually as the result of a zeffect).
+ * @author Segfault Guy
+ * @since September 10th, 2023
+ */
+class ClearNegativeBoostInstruction(val message: BattleMessage): InterpreterInstruction {
 
-   init {
-      this.message = message;
-   }
+    override fun invoke(battle: PokemonBattle) {
+        val battlePokemon = message.battlePokemon(0, battle) ?: return
 
-   public override operator fun invoke(battle: PokemonBattle) {
-      val var10000: BattlePokemon = this.message.battlePokemon(0, battle);
-      if (var10000 != null) {
-         val battlePokemon: BattlePokemon = var10000;
-         battle.dispatchWaiting(
-            1.5F,
-            (
-               new Function0<Unit>(battlePokemon, this, battle) {
-                  {
-                     super(0);
-                     this.$battlePokemon = `$battlePokemon`;
-                     this.this$0 = `$receiver`;
-                     this.$battle = `$battle`;
-                  }
+        battle.dispatchWaiting(1.5F) {
+            val pokemonName = battlePokemon.getName()
+            val lang = when {
+                message.hasOptionalArgument("zeffect") -> battleLang("clearallnegativeboost.zeffect", pokemonName)
+                else -> battleLang("clearallnegativeboost", pokemonName)
+            }
+            if (!message.hasOptionalArgument("silent")) {
+                battle.broadcastChatMessage(lang)
+            }
 
-                  public final void invoke() {
-                     val pokemonName: MutableComponent = this.$battlePokemon.getName();
-                     val var10000: MutableComponent = if (this.this$0.getMessage().hasOptionalArgument("zeffect"))
-                        LocalizationUtilsKt.battleLang("clearallnegativeboost.zeffect", pokemonName)
-                        else
-                        LocalizationUtilsKt.battleLang("clearallnegativeboost", pokemonName);
-                     if (!this.this$0.getMessage().hasOptionalArgument("silent")) {
-                        val var6: PokemonBattle = this.$battle;
-                        var6.broadcastChatMessage(var10000 as Component);
-                     }
-
-                     this.$battlePokemon.getContextManager().clear(BattleContext.Type.UNBOOST);
-                     this.$battle.getMinorBattleActions().put(this.$battlePokemon.getUuid(), this.this$0.getMessage());
-                  }
-               }
-            ) as () -> Unit
-         );
-      }
-   }
+            battlePokemon.contextManager.clear(BattleContext.Type.UNBOOST)
+            battle.minorBattleActions[battlePokemon.uuid] = message
+        }
+    }
 }

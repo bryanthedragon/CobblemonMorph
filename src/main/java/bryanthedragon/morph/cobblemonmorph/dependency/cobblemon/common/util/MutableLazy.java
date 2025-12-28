@@ -1,27 +1,30 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
 
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-public class MutableLazy<T>(initializer: (() -> Any)?) : ReadWriteProperty<Object, T> {
-   private final var initializer: (() -> Any)?
-   private final var value: Any?
+class MutableLazy<T>(private var initializer: (() -> T)?) : ReadWriteProperty<Any?, T> {
+    private var value: T? = null
 
-   init {
-      this.initializer = initializer;
-   }
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        if (value == null) {
+            value = initializer?.invoke()
+            initializer = null
+        }
+        return value!!
+    }
 
-   public open operator fun getValue(thisRef: Any?, property: KProperty<*>): Any {
-      if (this.value == null) {
-         this.value = (T)(if (this.initializer != null) this.initializer.invoke() else null);
-         this.initializer = null;
-      }
-
-      val var10000: Any = this.value;
-      return (T)var10000;
-   }
-
-   public open operator fun setValue(thisRef: Any?, property: KProperty<*>, value: Any) {
-      this.value = (T)value;
-   }
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+        this.value = value
+    }
 }
+
+fun <T> mutableLazy(initializer: () -> T) = MutableLazy(initializer)

@@ -1,83 +1,80 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.ModelPartExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.addRotation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.PitchTiltAnimation.Companion.CORRECTED_ANGLE
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.PitchTiltAnimation.Companion.PITCHED_TILT
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.PitchTiltAnimation.Companion.PREVIOUS_ANGLE
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Bone
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.AngleExtensionsKt
-import net.minecraft.world.entity.Entity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.X_AXIS
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.Y_AXIS
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.toRadians
 
-public class SingleBoneLookAnimation<T extends Entity>(frame: ModelFrame,
-   bone: Bone?,
-   pitchMultiplier: Float = 1.0F,
-   yawMultiplier: Float = 1.0F,
-   maxPitch: Float = 70.0F,
-   minPitch: Float = -45.0F,
-   maxYaw: Float = 45.0F,
-   minYaw: Float = -45.0F
-) : StatelessAnimation(frame) {
-   public final val bone: Bone?
-   public open var labels: Set<String>
-   public final val maxPitch: Float
-   public final val maxYaw: Float
-   public final val minPitch: Float
-   public final val minYaw: Float
-   public final val pitchMultiplier: Float
-   public open val targetFrame: Class<ModelFrame>
-   public final val yawMultiplier: Float
+/**
+ * A very simple animation for [HeadedFrame]s which has the entity look along the head yaw and pitch.
+ * This is designed for simple entities where the model only needs to move a single bone to look at a
+ * target.
+ *
+ * @author Hiroku
+ * @since December 5th, 2021
+ */
+class SingleBoneLookAnimation(
+    val bone: Bone?,
+    val pitchMultiplier: Float = 1F,
+    val yawMultiplier: Float = 1F,
+    val maxPitch: Float = 70F,
+    val minPitch: Float = -45F,
+    val maxYaw: Float = 45F,
+    val minYaw: Float = -45F,
+) : PoseAnimation() {
+    constructor(
+        frame: HeadedFrame,
+        invertX: Boolean,
+        invertY: Boolean,
+        disableX: Boolean,
+        disableY: Boolean,
+        pitchMultiplier: Float? = null,
+        yawMultiplier: Float? = null,
+        maxPitch: Float? = null,
+        minPitch: Float? = null,
+        maxYaw: Float? = null,
+        minYaw: Float? = null,
+    ): this(
+        bone = frame.head,
+        pitchMultiplier = pitchMultiplier ?: if (disableX) 0F else if (invertX) -1F else 1F,
+        yawMultiplier = yawMultiplier ?: if (disableY) 0F else if (invertY) -1F else 1F,
+        maxPitch = maxPitch ?: 70F,
+        minPitch = minPitch ?: -45F,
+        maxYaw = maxYaw ?: 45F,
+        minYaw = minYaw ?: -45F,
+    )
 
-   init {
-      this.bone = bone;
-      this.pitchMultiplier = pitchMultiplier;
-      this.yawMultiplier = yawMultiplier;
-      this.maxPitch = maxPitch;
-      this.minPitch = minPitch;
-      this.maxYaw = maxYaw;
-      this.minYaw = minYaw;
-      this.targetFrame = ModelFrame::class.java;
-      this.labels = SetsKt.setOf("look");
-   }
-
-   public constructor(frame: HeadedFrame,
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: Float? = null,
-      yawMultiplier: Float? = null,
-      maxPitch: Float? = null,
-      minPitch: Float? = null,
-      maxYaw: Float? = null,
-      minYaw: Float? = null
-   ) : this(
-         frame,
-         frame.getHead(),
-         pitchMultiplier ?: (if (disableX) 0.0F else (if (invertX) -1.0F else 1.0F)),
-         yawMultiplier ?: (if (disableY) 0.0F else (if (invertY) -1.0F else 1.0F)),
-         maxPitch ?: 70.0F,
-         minPitch ?: -45.0F,
-         maxYaw ?: 45.0F,
-         minYaw ?: -45.0F
-      )
-   protected override fun setAngles(
-      entity: Any?,
-      model: PoseableEntityModel<Any>,
-      state: PoseableEntityState<Any>?,
-      limbSwing: Float,
-      limbSwingAmount: Float,
-      ageInTicks: Float,
-      headYaw: Float,
-      headPitch: Float,
-      intensity: Float
-   ) {
-      if (this.bone != null) {
-         val head: Bone = this.bone;
-         val pitch: Float = this.pitchMultiplier * RangesKt.coerceIn(headPitch, this.minPitch, this.maxPitch);
-         val yaw: Float = this.yawMultiplier * RangesKt.coerceIn(headYaw, this.minYaw, this.maxYaw);
-         ModelPartExtensionsKt.addRotation(head, 0, AngleExtensionsKt.toRadians(pitch) * intensity);
-         ModelPartExtensionsKt.addRotation(head, 1, AngleExtensionsKt.toRadians(yaw) * intensity);
-      }
-   }
+    override var labels = setOf("look")
+    override fun setupAnim(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {
+        val head = bone ?: return
+        val pitch = pitchMultiplier * headPitch.coerceIn(minPitch, maxPitch)
+        val yaw = yawMultiplier * headYaw.coerceIn(minYaw, maxYaw)
+        // If PitchTiltAnimation was applied then we should counteract that tilt. It does kinda
+        // assume that the tilt was on the body bone, though.
+        var counterTiltDegrees = if (PITCHED_TILT in state.renderMarkers) { state.numbers[PREVIOUS_ANGLE] ?: 0F } else 0F
+        // If the corrected angle is present then we're probably in a pose transition so some amount of the tilt
+        // has already been corrected for, so we counter a bit less.
+        if (CORRECTED_ANGLE in state.numbers && PITCHED_TILT in state.renderMarkers) {
+            counterTiltDegrees -= state.numbers[CORRECTED_ANGLE] ?: 0F
+        }
+        state.numbers[CORRECTED_ANGLE] = counterTiltDegrees
+        head.addRotation(X_AXIS, pitch.toRadians() * intensity - counterTiltDegrees.toRadians())
+        head.addRotation(Y_AXIS, yaw.toRadians() * intensity)
+    }
 }

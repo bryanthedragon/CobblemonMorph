@@ -1,0 +1,61 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.prospecting
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonPoiTypes
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.IncenseSweetInfluence
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.SpatialSpawningZoneInfluence
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.SpawningZoneInfluence
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.detector.SpawningInfluenceDetector
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.Spawner
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.SpawningZoneInput
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.pow
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.toBlockPos
+import kotlin.math.ceil
+import kotlin.math.sqrt
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.ai.village.poi.PoiManager
+import net.minecraft.world.entity.ai.village.poi.PoiType
+import net.minecraft.world.level.block.state.BlockState
+final class IncenseSweetDetector : SpawningInfluenceDetector {
+    @JvmField
+    val RANGE: Int = 32
+
+    override fun detectFromInput(spawner: Spawner, input: SpawningZoneInput): MutableList<SpawningZoneInfluence> {
+        val world = input.world
+        val listOfInfluences = mutableListOf<SpawningZoneInfluence>()
+
+        val searchRange = RANGE + ceil(sqrt(((input.length pow 2) + (input.width pow 2)).toDouble())).toInt()
+        val centerPos = input.getCenter().toBlockPos()
+
+        // TODO after 1.7
+//        val sweetIncensePositions = world.poiManager.findAll(
+//                { holder: Holder<PoiType> -> holder.`is`(CobblemonPoiTypes.INCENSE_SWEET_KEY) },
+//                { true },
+//                centerPos,
+//                searchRange,
+//                PoiManager.Occupancy.ANY
+//        ).toList()
+//
+//        for (pos in sweetIncensePositions) {
+//            val influence = SpatialSpawningZoneInfluence(pos, radius = RANGE.toFloat(), IncenseSweetInfluence(pos))
+//            listOfInfluences.add(influence)
+//        }
+
+        return listOfInfluences
+    }
+
+    override fun detectFromBlock(
+        world: ServerLevel,
+        pos: BlockPos,
+        blockState: BlockState
+    ): List<SpawningZoneInfluence> = emptyList()
+}

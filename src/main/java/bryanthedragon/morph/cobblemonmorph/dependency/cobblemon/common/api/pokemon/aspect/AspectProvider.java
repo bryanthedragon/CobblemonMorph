@@ -1,37 +1,43 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.aspect
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import java.util.ArrayList;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-public interface AspectProvider {
-   public abstract fun provide(pokemon: Pokemon): Set<String> {
-   }
+/**
+ * A provider of 'aspects'. An aspect is a trait of a Pokémon that may be used
+ * to decide visual characteristics. This interface is the mechanism used to calculate
+ * the aspects of a specific [Pokemon] or [PokemonProperties].
+ *
+ * @author Hiroku
+ * @since May 13th, 2022
+ */
+interface AspectProvider {
+    companion object {
+        val providers = mutableListOf<AspectProvider>()
+        fun register(provider: AspectProvider): AspectProvider {
+            providers.add(provider)
+            return provider
+        }
+        fun unregister(provider: AspectProvider) {
+            providers.remove(provider)
+        }
+    }
 
-   public abstract fun provide(properties: PokemonProperties): Set<String> {
-   }
+    /** Returns a set of aspects for this [Pokemon]. It's fine if this is empty. */
+    fun provide(pokemon: Pokemon): Set<String>
+    /** Returns a set of aspects for this [PokemonProperties]. It's fine if this is empty. */
+    fun provide(properties: PokemonProperties): Set<String>
 
-   public open fun register(): AspectProvider {
-   }
-
-   public companion object {
-      public final val providers: MutableList<AspectProvider> = (new ArrayList()) as java.util.List
-
-      public fun register(provider: AspectProvider): AspectProvider {
-         providers.add(provider);
-         return provider;
-      }
-
-      public fun unregister(provider: AspectProvider) {
-         providers.remove(provider);
-      }
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun register(`$this`: AspectProvider): AspectProvider {
-         return AspectProvider.Companion.register(`$this`);
-      }
-   }
+    /** Just a convenience function. */
+    fun register(): AspectProvider {
+        return register(this)
+    }
 }

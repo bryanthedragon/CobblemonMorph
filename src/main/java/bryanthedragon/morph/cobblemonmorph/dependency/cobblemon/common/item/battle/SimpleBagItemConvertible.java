@@ -1,29 +1,24 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.battle
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 
-public interface SimpleBagItemConvertible : BagItemConvertible {
-   public val bagItem: BagItem
-
-   public override fun getBagItem(stack: ItemStack): BagItem? {
-   }
-
-   // $VF: Class flags could not be determined
-   @SourceDebugExtension(["SMAP\nSimpleBagItemConvertible.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SimpleBagItemConvertible.kt\ncom/cobblemon/mod/common/item/battle/SimpleBagItemConvertible$DefaultImpls\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,24:1\n1#2:25\n*E\n"])
-   internal class DefaultImpls {
-      @JvmStatic
-      fun getBagItem(`$this`: SimpleBagItemConvertible, stack: ItemStack): BagItem? {
-         val var2: Item = stack.m_41720_();
-         return if ((if (var2 == `$this`) var2 else null) != null) `$this`.getBagItem() else null;
-      }
-
-      @JvmStatic
-      fun handleInteraction(`$this`: SimpleBagItemConvertible, player: ServerPlayer, battlePokemon: BattlePokemon, stack: ItemStack): Boolean {
-         return BagItemConvertible.DefaultImpls.handleInteraction(`$this`, player, battlePokemon, stack);
-      }
-   }
+/**
+ * A type of [BagItemLike] that just checks the item type of the stack.
+ *
+ * Used for internal Item subclasses.
+ *
+ * @author Hiroku
+ * @since July 1st, 2023
+ */
+interface SimpleBagItemLike : BagItemLike {
+    val bagItem: BagItem
+    override fun getBagItem(stack: ItemStack) = stack.item.takeIf { it == this }?.let { bagItem }
 }

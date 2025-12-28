@@ -1,61 +1,55 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.gui.InteractPokemonUIPacketHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readUUID
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeUUID
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class InteractPokemonUIPacket(pokemonID: UUID, canMountShoulder: Boolean) : NetworkPacket<InteractPokemonUIPacket> {
-   public final val canMountShoulder: Boolean
-   public open val id: ResourceLocation
-   public final val pokemonID: UUID
+/**
+ * Tells the client to open the Pokémon interaction interface.
+ *
+ * Handled by [InteractPokemonUIPacketHandler].
+ *
+ * @author Village
+ * @since January 7th, 2023
+ */
+class InteractPokemonUIPacket(
+    val pokemonID: UUID,
+    val canMountShoulder: Boolean,
+    val canGiveHeld: Boolean,
+    val canGiveCosmetic: Boolean,
+    val canRide: Boolean
+): NetworkPacket<InteractPokemonUIPacket> {
 
-   init {
-      this.pokemonID = pokemonID;
-      this.canMountShoulder = canMountShoulder;
-      this.id = ID;
-   }
+    override val id = ID
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.pokemonID);
-      buffer.writeBoolean(this.canMountShoulder);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(pokemonID)
+        buffer.writeBoolean(canMountShoulder)
+        buffer.writeBoolean(canGiveHeld)
+        buffer.writeBoolean(canGiveCosmetic)
+        buffer.writeBoolean(canRide)
+    }
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): InteractPokemonUIPacket {
-         val var10002: UUID = buffer.m_130259_();
-         return new InteractPokemonUIPacket(var10002, buffer.readBoolean());
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("interact_pokemon_ui")
+        fun decode(buffer: RegistryFriendlyByteBuf) = InteractPokemonUIPacket(
+            buffer.readUUID(),
+            buffer.readBoolean(),
+            buffer.readBoolean(),
+            buffer.readBoolean(),
+            buffer.readBoolean()
+        )
+    }
 }

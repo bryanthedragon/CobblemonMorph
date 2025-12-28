@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.adapters
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
@@ -9,15 +17,12 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
+final class ElementalTypeAdapter: JsonSerializer<ElementalType>, JsonDeserializer<ElementalType> {
+    override fun serialize(src: ElementalType, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(src.showdownId)
+    }
 
-public object ElementalTypeAdapter : JsonSerializer<ElementalType>, JsonDeserializer<ElementalType> {
-   public open fun serialize(src: ElementalType, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-      return (new JsonPrimitive(src.getName())) as JsonElement;
-   }
-
-   public open fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ElementalType {
-      val var10000: ElementalTypes = ElementalTypes.INSTANCE;
-      val var10001: java.lang.String = json.getAsString();
-      return var10000.getOrException(var10001);
-   }
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ElementalType {
+        return ElementalTypes.getOrException(json.asString)
+    }
 }

@@ -1,126 +1,72 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen4
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.QuadrupedWalkAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.QuadrupedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
-public class LuxioModel(root: ModelPart) : PokemonPoseableModel, HeadedFrame, QuadrupedFrame {
-   public open val foreLeftLeg: ModelPart
-   public open val foreRightLeg: ModelPart
-   public open val head: ModelPart
-   public open val hindLeftLeg: ModelPart
-   public open val hindRightLeg: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rootPart: ModelPart
-   public final lateinit var sleep: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class LuxioModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+    override val rootPart = root.registerChildWithAllChildren("luxio")
+    override val head = getPart("head")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "luxio");
-      this.head = this.getPart("head");
-      this.foreLeftLeg = this.getPart("front_leg_left");
-      this.foreRightLeg = this.getPart("front_leg_right");
-      this.hindLeftLeg = this.getPart("back_leg_left");
-      this.hindRightLeg = this.getPart("back_leg_right");
-      this.portraitScale = 1.8F;
-      this.portraitTranslation = new Vec3(-0.6, -0.25, 0.0);
-      this.profileScale = 0.7F;
-      this.profileTranslation = new Vec3(0.0, 0.7, 0.0);
-   }
+    override val foreLeftLeg = getPart("front_leg_left")
+    override val foreRightLeg = getPart("front_leg_right")
+    override val hindLeftLeg = getPart("back_leg_left")
+    override val hindRightLeg = getPart("back_leg_right")
 
-   public override fun registerPoses() {
-      this.setSleep(
-         PoseableEntityModel.registerPose$default(
-            this,
-            PoseType.SLEEP,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "luxio", "sleep", null, 4, null)},
-            null,
-            null,
-            222,
-            null
-         )
-      );
-      var var4: PoseableEntityModel = this;
-      var var10003: EnumSet = PoseType.Companion.getUI_POSES();
-      val var6: java.util.Set = var10003;
-      val var10004: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            var4,
-            "standing",
-            SetsKt.plus(var6, var10004),
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "luxio", "idle", null, 4, null)
-            },
-            null,
-            null,
-            444,
-            null
-         )
-      );
-      var4 = this;
-      var10003 = PoseType.Companion.getMOVING_POSES();
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            var4,
-            "walk",
-            var10003,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               new QuadrupedWalkAnimation(this, 1.1F, 0.0F, 4, null),
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "luxio", "idle", null, 4, null)
-            },
-            null,
-            null,
-            444,
-            null
-         )
-      );
-   }
+    override var portraitScale = 1.8F
+    override var portraitTranslation = Vec3(-0.6, -0.25, 0.0)
 
-   override fun <T extends Entity> singleBoneLook(
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: java.lang.Float?,
-      yawMultiplier: java.lang.Float?,
-      maxPitch: java.lang.Float?,
-      minPitch: java.lang.Float?,
-      maxYaw: java.lang.Float?,
-      minYaw: java.lang.Float?
-   ): SingleBoneLookAnimation<T> {
-      return HeadedFrame.DefaultImpls.singleBoneLook(
-         this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw
-      );
-   }
+    override var profileScale = 0.7F
+    override var profileTranslation = Vec3(0.0, 0.7, 0.0)
+
+    lateinit var standing: Pose
+    lateinit var walk: Pose
+    lateinit var sleep: Pose
+
+    override fun registerPoses() {
+//        val blink = quirk { bedrockStateful("luxio", "blink") }
+        sleep = registerPose(
+            poseType = PoseType.SLEEP,
+            animations = arrayOf(bedrock("luxio", "sleep"))
+        )
+
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = PoseType.UI_POSES + PoseType.STATIONARY_POSES,
+//            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("luxio", "idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseTypes = PoseType.MOVING_POSES,
+//            quirks = arrayOf(blink),
+            animations = arrayOf(
+                QuadrupedWalkAnimation(this, periodMultiplier = 1.1F),
+                singleBoneLook(),
+                bedrock("luxio", "idle")
+            )
+        )
+    }
+
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing, walk)) bedrockStateful("luxio", "faint") else null
 }

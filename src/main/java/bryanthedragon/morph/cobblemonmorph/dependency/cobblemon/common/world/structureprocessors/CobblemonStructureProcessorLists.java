@@ -1,11 +1,17 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.structureprocessors
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList
-
-public object CobblemonStructureProcessorLists {
-   public final val CROP_TO_BERRY: ResourceKey<StructureProcessorList> =
-      ResourceKey.m_135785_(Registries.f_257011_, MiscUtilsKt.cobblemonResource("crop_to_berry"))
-   }
+final class CobblemonStructureProcessorLists {
+    @JvmField
+    val CROP_TO_BERRY = ResourceKey.create(Registries.PROCESSOR_LIST, cobblemonResource("crop_to_berry"))
+}

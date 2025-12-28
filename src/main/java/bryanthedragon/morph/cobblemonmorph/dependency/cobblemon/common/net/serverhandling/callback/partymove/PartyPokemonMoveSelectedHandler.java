@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.partymove
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.callback.PartyMoveSelectCallbacks
@@ -5,13 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.partymove.PartyPokemonMoveSelectedPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-
-public object PartyPokemonMoveSelectedHandler : ServerNetworkPacketHandler<PartyPokemonMoveSelectedPacket> {
-   public open fun handle(packet: PartyPokemonMoveSelectedPacket, server: MinecraftServer, player: ServerPlayer) {
-      PartyMoveSelectCallbacks.INSTANCE.handleCallback(player, packet.getUuid(), packet.getPokemonIndex(), packet.getMoveIndex());
-   }
-
-   fun handleOnNettyThread(packet: PartyPokemonMoveSelectedPacket, server: MinecraftServer, player: ServerPlayer) {
-      ServerNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet, server, player);
-   }
+final class PartyPokemonMoveSelectedHandler : ServerNetworkPacketHandler<PartyPokemonMoveSelectedPacket> {
+    override fun handle(packet: PartyPokemonMoveSelectedPacket, server: MinecraftServer, player: ServerPlayer) {
+        PartyMoveSelectCallbacks.handleCallback(player, packet.uuid, packet.pokemonIndex, packet.moveIndex)
+    }
 }

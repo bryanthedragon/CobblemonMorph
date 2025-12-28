@@ -1,34 +1,36 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readEnumConstant
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeEnumConstant
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class GenderUpdatePacket(pokemon: () -> Pokemon, value: Gender) : SingleUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
+class GenderUpdatePacket(pokemon: () -> Pokemon?, value: Gender): SingleUpdatePacket<Gender, GenderUpdatePacket>(pokemon, value) {
+    override val id = ID
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeEnumConstant(this.value)
+    }
 
-   init {
-      this.id = ID;
-   }
+    override fun set(pokemon: Pokemon, value: Gender) {
+        pokemon.gender = value
+    }
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      buffer.m_130068_(this.getValue());
-   }
-
-   public open fun set(pokemon: Pokemon, value: Gender) {
-      pokemon.setGender(value);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): GenderUpdatePacket {
-         val pokemon: Function0 = PokemonUpdatePacket.Companion.decodePokemon(buffer);
-         val gender: Gender = buffer.m_130066_(Gender.class) as Gender;
-         return new GenderUpdatePacket(pokemon, gender);
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("gender_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): GenderUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val gender = buffer.readEnumConstant(Gender::class.java)
+            return GenderUpdatePacket(pokemon, gender)
+        }
+    }
 }

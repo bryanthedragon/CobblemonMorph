@@ -1,387 +1,412 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.collections.ImmutableArray
-import java.util.Arrays
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.collections.immutableArrayOf
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 
-public data TransformationMatrix internal constructor(values: ImmutableArray<ImmutableArray<Float>>) {
-   public final val values: ImmutableArray<ImmutableArray<Float>>
+/**
+ * A 4x4 matrix that is used to represent transformations in three dimensional space.
+ * For more information about the operations provided here, see
+ * [Spatial Transformation Matrices](https://www.brainvoyager.com/bv/doc/UsersGuide/CoordsAndTransforms/SpatialTransformationMatrices.html)
+ *
+ * @property values the values of the matrix, in the form of a two-dimensional immutable array
+ * @author landonjw
+ */
+record TransformationMatrix internal constructor(val values: ImmutableArray<ImmutableArray<Float>>) {
 
-   init {
-      this.values = values;
-   }
+    operator fun get(row: Int): ImmutableArray<Float> = values[row]
 
-   public operator fun get(row: Int): ImmutableArray<Float> {
-      return this.values.get(row);
-   }
+    operator fun times(right: TransformationMatrix): TransformationMatrix = combine(this, right)
+    operator fun times(point: GeometricPoint): GeometricPoint = transform(this, point)
+    operator fun times(normal: GeometricNormal): GeometricNormal = transform(this, normal)
+    operator fun times(point: Vec3): Vec3 = transform(this, GeometricPoint(point)).toVec3d()
 
-   public operator fun times(right: TransformationMatrix): TransformationMatrix {
-      return Companion.combine(this, right);
-   }
+    override fun toString(): String {
+        return """
+            ${this[0][0]} ${this[0][1]} ${this[0][2]} ${this[0][3]}
+            ${this[1][0]} ${this[1][1]} ${this[1][2]} ${this[1][3]}
+            ${this[2][0]} ${this[2][1]} ${this[2][2]} ${this[2][3]}
+            ${this[3][0]} ${this[3][1]} ${this[3][2]} ${this[3][3]}
+        """.trimIndent()
+    }
 
-   public operator fun times(point: GeometricPoint): GeometricPoint {
-      return Companion.transform(this, point);
-   }
+    companion object {
 
-   public operator fun times(normal: GeometricNormal): GeometricNormal {
-      return Companion.transform(this, normal);
-   }
+        /**
+         * Gets the [identity matrix](https://en.wikipedia.org/wiki/Identity_matrix) for a matrix of size 4x4.
+         *
+         * @return a new instance of an identity matrix
+         */
+        val identityMatrix: TransformationMatrix = TransformationMatrix(identityArray().toImmutable())
 
-   public operator fun times(point: Vec3): Vec3 {
-      return Companion.transform(this, new GeometricPoint(point)).toVec3d();
-   }
+        private fun identityArray() = arrayOf(
+            arrayOf(1f, 0f, 0f, 0f),
+            arrayOf(0f, 1f, 0f, 0f),
+            arrayOf(0f, 0f, 1f, 0f),
+            arrayOf(0f, 0f, 0f, 1f)
+        )
 
-   public override fun toString(): String {
-      return StringsKt.trimIndent(
-         "\n            ${this.get(0).get(0)} ${this.get(0).get(1)} ${this.get(0).get(2)} ${this.get(0).get(3)}\n            ${this.get(1).get(0)} ${this.get(1)
-            .get(1)} ${this.get(1).get(2)} ${this.get(1).get(3)}\n            ${this.get(2).get(0)} ${this.get(2).get(1)} ${this.get(2).get(2)} ${this.get(2)
-            .get(3)}\n            ${this.get(3).get(0)} ${this.get(3).get(1)} ${this.get(3).get(2)} ${this.get(3).get(3)}\n        "
-      );
-   }
+        fun of(translation: GeometricPoint, rotation: Vector3f): TransformationMatrix {
+            return translate(translation) * rotate(rotation)
+        }
 
-   public operator fun component1(): ImmutableArray<ImmutableArray<Float>> {
-      return this.values;
-   }
+        /**
+         * Gets the transformation matrix for a given set of translation values.
+         * If a target transformation matrix is specified, the transformation matrices are concatenated.
+         *
+         * @param point the values to translate by
+         * @param matrix an optional matrix to concatenate to
+         *
+         * @return a new transformation matrix for a given translation
+         */
+        fun translate(point: GeometricPoint, matrix: TransformationMatrix? = null): TransformationMatrix {
+            val values = identityArray()
+            values[0][3] = point.x
+            values[1][3] = point.y
+            values[2][3] = point.z
+            val transformation = TransformationMatrix(values.toImmutable())
+            return if (matrix == null) transformation else matrix * transformation
+        }
 
-   public fun copy(values: ImmutableArray<ImmutableArray<Float>> = this.values): TransformationMatrix {
-      return new TransformationMatrix(values);
-   }
+        /**
+         * Gets the rotation matrix for a given axis and angle.
+         * If a target transformation matrix is specified, the transformation matrices are concatenated.
+         *
+         * If rotating by multiple axes, this should be called several times for each axis.
+         * When doing so, keep in mind multiplication is non-commutative and order does matter.
+         *
+         * @param angle the angle to rotate by in radians
+         *              positive values for clockwise, negative values for counter-clockwise
+         * @param axis  the axis to rotate on
+         * @param matrix an optional matrix to concatenate to
+         *
+         * @return a new transformation matrix for a given rotation
+         */
+        fun rotate(angle: Float, axis: Axis, matrix: TransformationMatrix? = null): TransformationMatrix {
+            val transformation = axis.getRotationMatrix(angle)
+            return if (matrix == null) transformation else matrix * transformation
+        }
 
-   public override fun hashCode(): Int {
-      return this.values.hashCode();
-   }
+        /**
+         * Gets a transformation matrix for a combination of rotation values.
+         * This will rotate among all three axes.
+         * **These are multiplied in the order Z, Y, X.**
+         *
+         * @param angles the angles to rotate each axis, in radians
+         *               positive values for clockwise, negative values for counter-clockwise
+         * @param matrix an optional matrix to concatenate to
+         *
+         * @return a new transformation matrix for the given rotations
+         */
+        fun rotate(angles: Vector3f, matrix: TransformationMatrix? = null): TransformationMatrix {
+            val rotationX = Axis.X_AXIS.getRotationMatrix(angles.x)
+            val rotationY = Axis.Y_AXIS.getRotationMatrix(angles.y)
+            val rotationZ = Axis.Z_AXIS.getRotationMatrix(angles.z)
+            val transformation = rotationZ * rotationY * rotationX
+            return if (matrix == null) transformation else matrix * transformation
+        }
 
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is TransformationMatrix) {
-         return false;
-      } else {
-         return this.values == (other as TransformationMatrix).values;
-      }
-   }
+        /**
+         * Gets the transformation matrix for a given scalar.
+         * If a target transformation matrix is specified, the transformation matrices are concatenated.
+         *
+         * @param scalar the scalar to get matrix for
+         * @param matrix an optional matrix to concatenate to
+         *
+         * @return a new transformation matrix for a given scalar
+         */
+        fun scale(scalar: Float, matrix: TransformationMatrix? = null): TransformationMatrix =
+            scale(scalar, scalar, scalar, matrix)
 
-   @SourceDebugExtension(["SMAP\nTransformationMatrix.kt\nKotlin\n*S Kotlin\n*F\n+ 1 TransformationMatrix.kt\ncom/cobblemon/mod/common/util/math/geometry/TransformationMatrix$Companion\n+ 2 ImmutableArray.kt\ncom/cobblemon/mod/common/util/collections/ImmutableArrayKt\n*L\n1#1,412:1\n16#2:413\n16#2:414\n16#2:415\n16#2:416\n16#2:417\n*S KotlinDebug\n*F\n+ 1 TransformationMatrix.kt\ncom/cobblemon/mod/common/util/math/geometry/TransformationMatrix$Companion\n*L\n403#1:413\n404#1:414\n405#1:415\n406#1:416\n402#1:417\n*E\n"])
-   public companion object {
-      public final val identityMatrix: TransformationMatrix
+        /**
+         * Gets the transformation matrix for a set of scalars.
+         * These scalars allow you to stretch the dimensions of different dimensions.
+         * If a target transformation matrix is specified, the transformation matrices are concatenated.
+         *
+         * @param scalarX the scalar for the x axis
+         * @param scalarY the scalar for the y axis
+         * @param scalarZ the scalar for the z axis
+         * @param matrix an optional matrix to concatenate to
+         *
+         * @return a new transformation matrix for a given scalars
+         */
+        fun scale(
+            scalarX: Float,
+            scalarY: Float,
+            scalarZ: Float,
+            matrix: TransformationMatrix? = null
+        ): TransformationMatrix {
+            val values = identityArray()
+            values[0][0] = scalarX
+            values[1][1] = scalarY
+            values[2][2] = scalarZ
+            val transformation = TransformationMatrix(values.toImmutable())
+            return if (matrix == null) transformation else matrix * transformation
+        }
 
-      private fun identityArray(): Array<Array<Float>> {
-         return new java.lang.Float[][]{{1.0F, 0.0F, 0.0F, 0.0F}, {0.0F, 1.0F, 0.0F, 0.0F}, {0.0F, 0.0F, 1.0F, 0.0F}, {0.0F, 0.0F, 0.0F, 1.0F}};
-      }
+        /**
+         * Transforms a three dimensional point to get the new position, based off of the given transformation
+         * matrix.
+         *
+         * @param matrix the transformation matrix to use to transform the point
+         * @param point the point to transform
+         *
+         * @return a new three dimensional point that has been transformed by the given matrix
+         */
+        fun transform(matrix: TransformationMatrix, point: GeometricPoint): GeometricPoint {
+            val x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2] * point.z + matrix[0][3]
+            val y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2] * point.z + matrix[1][3]
+            val z = matrix[2][0] * point.x + matrix[2][1] * point.y + matrix[2][2] * point.z + matrix[2][3]
+            return GeometricPoint(x, y, z)
+        }
 
-      public fun of(translation: GeometricPoint, rotation: Vector3f): TransformationMatrix {
-         return translate$default(this, translation, null, 2, null).times(rotate$default(this, rotation, null, 2, null));
-      }
+        /**
+         * Transforms a normal to get the new position, based off of the given transformation matrix.
+         *
+         * @param matrix the transformation matrix to use to transform the normal
+         * @param point the point to transform
+         *
+         * @return a new normal that has been transformed by the given matrix
+         */
+        fun transform(matrix: TransformationMatrix, point: GeometricNormal): GeometricNormal {
+            val x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2] * point.z
+            val y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2] * point.z
+            val z = matrix[2][0] * point.x + matrix[2][1] * point.y + matrix[2][2] * point.z
+            return GeometricNormal(x, y, z)
+        }
 
-      public fun translate(point: GeometricPoint, matrix: TransformationMatrix? = null): TransformationMatrix {
-         val values: Array<Array<java.lang.Float>> = this.identityArray();
-         values[0][3] = point.getX();
-         values[1][3] = point.getY();
-         values[2][3] = point.getZ();
-         val transformation: TransformationMatrix = new TransformationMatrix(this.toImmutable(values));
-         return if (matrix == null) transformation else matrix.times(transformation);
-      }
+        /**
+         * Inverts the given transformation matrix, if possible.
+         *
+         * @param matrix the transformation matrix to invert
+         * @return a new transformation matrix if successfully inverted, or null if inversion was not possible
+         */
+        fun invert(matrix: TransformationMatrix): TransformationMatrix? {
+            val determinant = determinant(matrix)
+            if (determinant == 0f) return null
 
-      public fun rotate(angle: Float, axis: Axis, matrix: TransformationMatrix? = null): TransformationMatrix {
-         val transformation: TransformationMatrix = axis.getRotationMatrix(angle);
-         return if (matrix == null) transformation else matrix.times(transformation);
-      }
+            val inverseDeterminant = 1 / determinant
 
-      public fun rotate(angles: Vector3f, matrix: TransformationMatrix? = null): TransformationMatrix {
-         val transformation: TransformationMatrix = Axis.Z_AXIS
-            .getRotationMatrix(angles.z)
-            .times(Axis.Y_AXIS.getRotationMatrix(angles.y))
-            .times(Axis.X_AXIS.getRotationMatrix(angles.x));
-         return if (matrix == null) transformation else matrix.times(transformation);
-      }
+            val t00: Float = determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[1][1], matrix[2][1], matrix[3][1]),
+                    arrayOf(matrix[1][2], matrix[2][2], matrix[3][2]),
+                    arrayOf(matrix[1][3], matrix[2][3], matrix[3][3])
+                )
+            )
+            val t01: Float = -determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][1], matrix[2][1], matrix[3][1]),
+                    arrayOf(matrix[0][2], matrix[2][2], matrix[3][2]),
+                    arrayOf(matrix[0][3], matrix[2][3], matrix[3][3])
+                )
+            )
+            val t02: Float = determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][1], matrix[1][1], matrix[3][1]),
+                    arrayOf(matrix[0][2], matrix[1][2], matrix[3][2]),
+                    arrayOf(matrix[0][3], matrix[1][3], matrix[3][3])
+                )
+            )
+            val t03: Float = -determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][1], matrix[1][1], matrix[2][1]),
+                    arrayOf(matrix[0][2], matrix[1][2], matrix[2][2]),
+                    arrayOf(matrix[0][3], matrix[1][3], matrix[2][3])
+                )
+            )
+            val t10: Float = -determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[1][0], matrix[2][0], matrix[3][0]),
+                    arrayOf(matrix[1][2], matrix[2][2], matrix[3][2]),
+                    arrayOf(matrix[1][3], matrix[2][3], matrix[3][3])
+                )
+            )
+            val t11: Float = determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][0], matrix[2][0], matrix[3][0]),
+                    arrayOf(matrix[0][2], matrix[2][2], matrix[3][2]),
+                    arrayOf(matrix[0][3], matrix[2][3], matrix[3][3])
+                )
+            )
+            val t12: Float = -determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][0], matrix[1][0], matrix[3][0]),
+                    arrayOf(matrix[0][2], matrix[1][2], matrix[3][2]),
+                    arrayOf(matrix[0][3], matrix[1][3], matrix[3][3])
+                )
+            )
+            val t13: Float = determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][0], matrix[1][0], matrix[2][0]),
+                    arrayOf(matrix[0][2], matrix[1][2], matrix[2][2]),
+                    arrayOf(matrix[0][3], matrix[1][3], matrix[2][3])
+                )
+            )
+            val t20: Float = determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[1][0], matrix[2][0], matrix[3][0]),
+                    arrayOf(matrix[1][1], matrix[2][1], matrix[3][1]),
+                    arrayOf(matrix[1][3], matrix[2][3], matrix[3][3])
+                )
+            )
+            val t21: Float = -determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][0], matrix[2][0], matrix[3][0]),
+                    arrayOf(matrix[0][1], matrix[2][1], matrix[3][1]),
+                    arrayOf(matrix[0][3], matrix[2][3], matrix[3][3])
+                )
+            )
+            val t22: Float = determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][0], matrix[1][0], matrix[3][0]),
+                    arrayOf(matrix[0][1], matrix[1][1], matrix[3][1]),
+                    arrayOf(matrix[0][3], matrix[1][3], matrix[3][3])
+                )
+            )
+            val t23: Float = -determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][0], matrix[1][0], matrix[2][0]),
+                    arrayOf(matrix[0][1], matrix[1][1], matrix[2][1]),
+                    arrayOf(matrix[0][3], matrix[1][3], matrix[2][3])
+                )
+            )
+            val t30: Float = -determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[1][0], matrix[2][0], matrix[3][0]),
+                    arrayOf(matrix[1][1], matrix[2][1], matrix[3][1]),
+                    arrayOf(matrix[1][2], matrix[2][2], matrix[3][2])
+                )
+            )
+            val t31: Float = determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][0], matrix[2][0], matrix[3][0]),
+                    arrayOf(matrix[0][1], matrix[2][1], matrix[3][1]),
+                    arrayOf(matrix[0][2], matrix[2][2], matrix[3][2])
+                )
+            )
+            val t32: Float = -determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][0], matrix[1][0], matrix[3][0]),
+                    arrayOf(matrix[0][1], matrix[1][1], matrix[3][1]),
+                    arrayOf(matrix[0][2], matrix[1][2], matrix[3][2])
+                )
+            )
+            val t33: Float = determinant3x3(
+                arrayOf(
+                    arrayOf(matrix[0][0], matrix[1][0], matrix[2][0]),
+                    arrayOf(matrix[0][1], matrix[1][1], matrix[2][1]),
+                    arrayOf(matrix[0][2], matrix[1][2], matrix[2][2])
+                )
+            )
 
-      public fun scale(scalar: Float, matrix: TransformationMatrix? = null): TransformationMatrix {
-         return this.scale(scalar, scalar, scalar, matrix);
-      }
+            val values = identityArray()
+            values[0][0] = t00 * inverseDeterminant
+            values[0][1] = t01 * inverseDeterminant
+            values[0][2] = t02 * inverseDeterminant
+            values[0][3] = t03 * inverseDeterminant
+            values[1][0] = t10 * inverseDeterminant
+            values[1][1] = t11 * inverseDeterminant
+            values[1][2] = t12 * inverseDeterminant
+            values[1][3] = t13 * inverseDeterminant
+            values[2][0] = t20 * inverseDeterminant
+            values[2][1] = t21 * inverseDeterminant
+            values[2][2] = t22 * inverseDeterminant
+            values[2][3] = t23 * inverseDeterminant
+            values[3][0] = t30 * inverseDeterminant
+            values[3][1] = t31 * inverseDeterminant
+            values[3][2] = t32 * inverseDeterminant
+            values[3][3] = t33 * inverseDeterminant
 
-      public fun scale(scalarX: Float, scalarY: Float, scalarZ: Float, matrix: TransformationMatrix? = null): TransformationMatrix {
-         val values: Array<Array<java.lang.Float>> = this.identityArray();
-         values[0][0] = scalarX;
-         values[1][1] = scalarY;
-         values[2][2] = scalarZ;
-         val transformation: TransformationMatrix = new TransformationMatrix(this.toImmutable(values));
-         return if (matrix == null) transformation else matrix.times(transformation);
-      }
+            return TransformationMatrix(values.toImmutable())
+        }
 
-      public fun transform(matrix: TransformationMatrix, point: GeometricPoint): GeometricPoint {
-         return new GeometricPoint(
-            matrix.get(0).get(0).floatValue() * point.getX()
-               + matrix.get(0).get(1).floatValue() * point.getY()
-               + matrix.get(0).get(2).floatValue() * point.getZ()
-               + matrix.get(0).get(3).floatValue(),
-            matrix.get(1).get(0).floatValue() * point.getX()
-               + matrix.get(1).get(1).floatValue() * point.getY()
-               + matrix.get(1).get(2).floatValue() * point.getZ()
-               + matrix.get(1).get(3).floatValue(),
-            matrix.get(2).get(0).floatValue() * point.getX()
-               + matrix.get(2).get(1).floatValue() * point.getY()
-               + matrix.get(2).get(2).floatValue() * point.getZ()
-               + matrix.get(2).get(3).floatValue()
-         );
-      }
+        /**
+         * Gets the [determinant](https://en.wikipedia.org/wiki/Determinant) of a given transformation matrix.
+         *
+         * @param matrix the transformation matrix to get determinant for
+         * @return the determinant of the matrix
+         */
+        fun determinant(matrix: TransformationMatrix): Float {
+            var determinant: Float = (matrix[0][0]
+                    * (matrix[1][1] * matrix[2][2] * matrix[3][3] + matrix[2][1] * matrix[3][2] * matrix[1][3] + matrix[3][1] * matrix[1][2] * matrix[2][3]
+                    - matrix[3][1] * matrix[2][2] * matrix[1][3] - matrix[1][1] * matrix[3][2] * matrix[2][3] - matrix[2][1] * matrix[1][2] * matrix[3][3]))
+            determinant -= (matrix[1][0]
+                    * (matrix[0][1] * matrix[2][2] * matrix[3][3] + matrix[2][1] * matrix[3][2] * matrix[0][3] + matrix[3][1] * matrix[0][2] * matrix[2][3]
+                    - matrix[3][1] * matrix[2][2] * matrix[0][3] - matrix[0][1] * matrix[3][2] * matrix[2][3] - matrix[2][1] * matrix[0][2] * matrix[3][3]))
+            determinant += (matrix[2][0]
+                    * (matrix[0][1] * matrix[1][2] * matrix[3][3] + matrix[1][1] * matrix[3][2] * matrix[0][3] + matrix[3][1] * matrix[0][2] * matrix[1][3]
+                    - matrix[3][1] * matrix[1][2] * matrix[0][3] - matrix[0][1] * matrix[3][2] * matrix[1][3] - matrix[1][1] * matrix[0][2] * matrix[3][3]))
+            determinant -= (matrix[3][0]
+                    * (matrix[0][1] * matrix[1][2] * matrix[2][3] + matrix[1][1] * matrix[2][2] * matrix[0][3] + matrix[2][1] * matrix[0][2] * matrix[1][3]
+                    - matrix[2][1] * matrix[1][2] * matrix[0][3] - matrix[0][1] * matrix[2][2] * matrix[1][3] - matrix[1][1] * matrix[0][2] * matrix[2][3]))
+            return determinant
+        }
 
-      public fun transform(matrix: TransformationMatrix, point: GeometricNormal): GeometricNormal {
-         return new GeometricNormal(
-            matrix.get(0).get(0).floatValue() * point.getX()
-               + matrix.get(0).get(1).floatValue() * point.getY()
-               + matrix.get(0).get(2).floatValue() * point.getZ(),
-            matrix.get(1).get(0).floatValue() * point.getX()
-               + matrix.get(1).get(1).floatValue() * point.getY()
-               + matrix.get(1).get(2).floatValue() * point.getZ(),
-            matrix.get(2).get(0).floatValue() * point.getX()
-               + matrix.get(2).get(1).floatValue() * point.getY()
-               + matrix.get(2).get(2).floatValue() * point.getZ()
-         );
-      }
+        private fun determinant3x3(values: Array<Array<Float>>): Float {
+            assert(values.size == 3)
+            for (row in values) assert(row.size == 3)
 
-      public fun invert(matrix: TransformationMatrix): TransformationMatrix? {
-         val determinant: Float = this.determinant(matrix);
-         if (determinant == 0.0F) {
-            return null;
-         } else {
-            val inverseDeterminant: Float = 1 / determinant;
-            val t00: Float = this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(1).get(1), matrix.get(2).get(1), matrix.get(3).get(1)},
-                  {matrix.get(1).get(2), matrix.get(2).get(2), matrix.get(3).get(2)},
-                  {matrix.get(1).get(3), matrix.get(2).get(3), matrix.get(3).get(3)}
-               }
-            );
-            val var22: Float = -this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(1), matrix.get(2).get(1), matrix.get(3).get(1)},
-                  {matrix.get(0).get(2), matrix.get(2).get(2), matrix.get(3).get(2)},
-                  {matrix.get(0).get(3), matrix.get(2).get(3), matrix.get(3).get(3)}
-               }
-            );
-            val var26: Float = this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(1), matrix.get(1).get(1), matrix.get(3).get(1)},
-                  {matrix.get(0).get(2), matrix.get(1).get(2), matrix.get(3).get(2)},
-                  {matrix.get(0).get(3), matrix.get(1).get(3), matrix.get(3).get(3)}
-               }
-            );
-            val var30: Float = -this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(1), matrix.get(1).get(1), matrix.get(2).get(1)},
-                  {matrix.get(0).get(2), matrix.get(1).get(2), matrix.get(2).get(2)},
-                  {matrix.get(0).get(3), matrix.get(1).get(3), matrix.get(2).get(3)}
-               }
-            );
-            val var34: Float = -this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(1).get(0), matrix.get(2).get(0), matrix.get(3).get(0)},
-                  {matrix.get(1).get(2), matrix.get(2).get(2), matrix.get(3).get(2)},
-                  {matrix.get(1).get(3), matrix.get(2).get(3), matrix.get(3).get(3)}
-               }
-            );
-            val var38: Float = this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(0), matrix.get(2).get(0), matrix.get(3).get(0)},
-                  {matrix.get(0).get(2), matrix.get(2).get(2), matrix.get(3).get(2)},
-                  {matrix.get(0).get(3), matrix.get(2).get(3), matrix.get(3).get(3)}
-               }
-            );
-            val var42: Float = -this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(0), matrix.get(1).get(0), matrix.get(3).get(0)},
-                  {matrix.get(0).get(2), matrix.get(1).get(2), matrix.get(3).get(2)},
-                  {matrix.get(0).get(3), matrix.get(1).get(3), matrix.get(3).get(3)}
-               }
-            );
-            val var46: Float = this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(0), matrix.get(1).get(0), matrix.get(2).get(0)},
-                  {matrix.get(0).get(2), matrix.get(1).get(2), matrix.get(2).get(2)},
-                  {matrix.get(0).get(3), matrix.get(1).get(3), matrix.get(2).get(3)}
-               }
-            );
-            val var50: Float = this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(1).get(0), matrix.get(2).get(0), matrix.get(3).get(0)},
-                  {matrix.get(1).get(1), matrix.get(2).get(1), matrix.get(3).get(1)},
-                  {matrix.get(1).get(3), matrix.get(2).get(3), matrix.get(3).get(3)}
-               }
-            );
-            val var54: Float = -this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(0), matrix.get(2).get(0), matrix.get(3).get(0)},
-                  {matrix.get(0).get(1), matrix.get(2).get(1), matrix.get(3).get(1)},
-                  {matrix.get(0).get(3), matrix.get(2).get(3), matrix.get(3).get(3)}
-               }
-            );
-            val var58: Float = this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(0), matrix.get(1).get(0), matrix.get(3).get(0)},
-                  {matrix.get(0).get(1), matrix.get(1).get(1), matrix.get(3).get(1)},
-                  {matrix.get(0).get(3), matrix.get(1).get(3), matrix.get(3).get(3)}
-               }
-            );
-            val var62: Float = -this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(0), matrix.get(1).get(0), matrix.get(2).get(0)},
-                  {matrix.get(0).get(1), matrix.get(1).get(1), matrix.get(2).get(1)},
-                  {matrix.get(0).get(3), matrix.get(1).get(3), matrix.get(2).get(3)}
-               }
-            );
-            val var66: Float = -this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(1).get(0), matrix.get(2).get(0), matrix.get(3).get(0)},
-                  {matrix.get(1).get(1), matrix.get(2).get(1), matrix.get(3).get(1)},
-                  {matrix.get(1).get(2), matrix.get(2).get(2), matrix.get(3).get(2)}
-               }
-            );
-            val var70: Float = this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(0), matrix.get(2).get(0), matrix.get(3).get(0)},
-                  {matrix.get(0).get(1), matrix.get(2).get(1), matrix.get(3).get(1)},
-                  {matrix.get(0).get(2), matrix.get(2).get(2), matrix.get(3).get(2)}
-               }
-            );
-            val var74: Float = -this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(0), matrix.get(1).get(0), matrix.get(3).get(0)},
-                  {matrix.get(0).get(1), matrix.get(1).get(1), matrix.get(3).get(1)},
-                  {matrix.get(0).get(2), matrix.get(1).get(2), matrix.get(3).get(2)}
-               }
-            );
-            val var78: Float = this.determinant3x3(
-               new java.lang.Float[][]{
-                  {matrix.get(0).get(0), matrix.get(1).get(0), matrix.get(2).get(0)},
-                  {matrix.get(0).get(1), matrix.get(1).get(1), matrix.get(2).get(1)},
-                  {matrix.get(0).get(2), matrix.get(1).get(2), matrix.get(2).get(2)}
-               }
-            );
-            val var82: Array<Array<java.lang.Float>> = this.identityArray();
-            var82[0][0] = t00 * inverseDeterminant;
-            var82[0][1] = var22 * inverseDeterminant;
-            var82[0][2] = var26 * inverseDeterminant;
-            var82[0][3] = var30 * inverseDeterminant;
-            var82[1][0] = var34 * inverseDeterminant;
-            var82[1][1] = var38 * inverseDeterminant;
-            var82[1][2] = var42 * inverseDeterminant;
-            var82[1][3] = var46 * inverseDeterminant;
-            var82[2][0] = var50 * inverseDeterminant;
-            var82[2][1] = var54 * inverseDeterminant;
-            var82[2][2] = var58 * inverseDeterminant;
-            var82[2][3] = var62 * inverseDeterminant;
-            var82[3][0] = var66 * inverseDeterminant;
-            var82[3][1] = var70 * inverseDeterminant;
-            var82[3][2] = var74 * inverseDeterminant;
-            var82[3][3] = var78 * inverseDeterminant;
-            return new TransformationMatrix(this.toImmutable(var82));
-         }
-      }
+            return values[0][0] * (values[1][1] * values[2][2] - values[1][2] * values[2][1]) +
+                    values[0][1] * (values[1][2] * values[2][0] - values[1][0] * values[2][2]) +
+                    values[0][2] * (values[1][0] * values[2][1] - values[1][1] * values[2][0])
+        }
 
-      public fun determinant(matrix: TransformationMatrix): Float {
-         return matrix.get(0).get(0).floatValue()
-               * (
-                  matrix.get(1).get(1).floatValue() * matrix.get(2).get(2).floatValue() * matrix.get(3).get(3).floatValue()
-                     + matrix.get(2).get(1).floatValue() * matrix.get(3).get(2).floatValue() * matrix.get(1).get(3).floatValue()
-                     + matrix.get(3).get(1).floatValue() * matrix.get(1).get(2).floatValue() * matrix.get(2).get(3).floatValue()
-                     - matrix.get(3).get(1).floatValue() * matrix.get(2).get(2).floatValue() * matrix.get(1).get(3).floatValue()
-                     - matrix.get(1).get(1).floatValue() * matrix.get(3).get(2).floatValue() * matrix.get(2).get(3).floatValue()
-                     - matrix.get(2).get(1).floatValue() * matrix.get(1).get(2).floatValue() * matrix.get(3).get(3).floatValue()
-               )
-            - matrix.get(1).get(0).floatValue()
-               * (
-                  matrix.get(0).get(1).floatValue() * matrix.get(2).get(2).floatValue() * matrix.get(3).get(3).floatValue()
-                     + matrix.get(2).get(1).floatValue() * matrix.get(3).get(2).floatValue() * matrix.get(0).get(3).floatValue()
-                     + matrix.get(3).get(1).floatValue() * matrix.get(0).get(2).floatValue() * matrix.get(2).get(3).floatValue()
-                     - matrix.get(3).get(1).floatValue() * matrix.get(2).get(2).floatValue() * matrix.get(0).get(3).floatValue()
-                     - matrix.get(0).get(1).floatValue() * matrix.get(3).get(2).floatValue() * matrix.get(2).get(3).floatValue()
-                     - matrix.get(2).get(1).floatValue() * matrix.get(0).get(2).floatValue() * matrix.get(3).get(3).floatValue()
-               )
-            + matrix.get(2).get(0).floatValue()
-               * (
-                  matrix.get(0).get(1).floatValue() * matrix.get(1).get(2).floatValue() * matrix.get(3).get(3).floatValue()
-                     + matrix.get(1).get(1).floatValue() * matrix.get(3).get(2).floatValue() * matrix.get(0).get(3).floatValue()
-                     + matrix.get(3).get(1).floatValue() * matrix.get(0).get(2).floatValue() * matrix.get(1).get(3).floatValue()
-                     - matrix.get(3).get(1).floatValue() * matrix.get(1).get(2).floatValue() * matrix.get(0).get(3).floatValue()
-                     - matrix.get(0).get(1).floatValue() * matrix.get(3).get(2).floatValue() * matrix.get(1).get(3).floatValue()
-                     - matrix.get(1).get(1).floatValue() * matrix.get(0).get(2).floatValue() * matrix.get(3).get(3).floatValue()
-               )
-            - matrix.get(3).get(0).floatValue()
-               * (
-                  matrix.get(0).get(1).floatValue() * matrix.get(1).get(2).floatValue() * matrix.get(2).get(3).floatValue()
-                     + matrix.get(1).get(1).floatValue() * matrix.get(2).get(2).floatValue() * matrix.get(0).get(3).floatValue()
-                     + matrix.get(2).get(1).floatValue() * matrix.get(0).get(2).floatValue() * matrix.get(1).get(3).floatValue()
-                     - matrix.get(2).get(1).floatValue() * matrix.get(1).get(2).floatValue() * matrix.get(0).get(3).floatValue()
-                     - matrix.get(0).get(1).floatValue() * matrix.get(2).get(2).floatValue() * matrix.get(1).get(3).floatValue()
-                     - matrix.get(1).get(1).floatValue() * matrix.get(0).get(2).floatValue() * matrix.get(2).get(3).floatValue()
-               );
-      }
-
-      private fun determinant3x3(values: Array<Array<Float>>): Float {
-         if (_Assertions.ENABLED && (values as Array<Any>).length != 3) {
-            throw new AssertionError("Assertion failed");
-         } else {
-            for (java.lang.Float[] row : (Object[])values) {
-               if (_Assertions.ENABLED && row.length != 3) {
-                  throw new AssertionError("Assertion failed");
-               }
+        /**
+         * Combines, or concatenates, two transformation matrices.
+         *
+         * This operation is completed by matrix multiplication between the two matrices.
+         * When using this, keep in mind it is non-commutative and order does matter.
+         *
+         * @param left the left side of the combination
+         * @param right the right side of the combination
+         *
+         * @return a new transformation matrix representing the combination of the original matrices
+         */
+        fun combine(left: TransformationMatrix, right: TransformationMatrix): TransformationMatrix {
+            val values = Array(4) {
+                Array(4) { 0f }
             }
 
-            return values[0][0] * (values[1][1] * values[2][2] - values[1][2] * values[2][1])
-               + values[0][1] * (values[1][2] * values[2][0] - values[1][0] * values[2][2])
-               + values[0][2] * (values[1][0] * values[2][1] - values[1][1] * values[2][0]);
-         }
-      }
-
-      public fun combine(left: TransformationMatrix, right: TransformationMatrix): TransformationMatrix {
-         var row: Int = 0;
-
-         val col: Array<Array<java.lang.Float>>;
-         for (col = new java.lang.Float[4][]; row < 4; row++) {
-            var var7: Int = 0;
-
-            val var8: Array<java.lang.Float>;
-            for (var8 = new java.lang.Float[4]; var7 < 4; var7++) {
-               var8[var7] = 0.0F;
+            for (row in 0 until 4) {
+                for (col in 0 until 4) {
+                    values[row][col] = multiplyRowCol(row, col, left, right)
+                }
             }
+            return TransformationMatrix(values.toImmutable())
+        }
 
-            col[row] = var8;
-         }
+        private fun multiplyRowCol(row: Int, col: Int, left: TransformationMatrix, right: TransformationMatrix): Float {
+            var sum = 0f
+            for (i in 0 until 4) sum += left[row][i] * right[i][col]
+            return sum
+        }
 
-         val values: Array<Array<java.lang.Float>> = col;
+        /**
+         * Returns an immutable two-dimensional array.
+         *
+         * This assumes that the array that is being turned immutable is of 4x4.
+         *
+         * @return an immutable version of the two-dimensional array
+         */
+        private fun Array<Array<Float>>.toImmutable(): ImmutableArray<ImmutableArray<Float>> {
+            return immutableArrayOf(
+                immutableArrayOf(*this[0]),
+                immutableArrayOf(*this[1]),
+                immutableArrayOf(*this[2]),
+                immutableArrayOf(*this[3])
+            )
+        }
 
-         for (int rowx = 0; rowx < 4; rowx++) {
-            for (int colx = 0; colx < 4; colx++) {
-               values[rowx][colx] = this.multiplyRowCol(rowx, colx, left, right);
-            }
-         }
+    }
 
-         return new TransformationMatrix(this.toImmutable(values));
-      }
-
-      private fun multiplyRowCol(row: Int, col: Int, left: TransformationMatrix, right: TransformationMatrix): Float {
-         var sum: Float = 0.0F;
-
-         for (int i = 0; i < 4; i++) {
-            sum += left.get(row).get(i).floatValue() * right.get(i).get(col).floatValue();
-         }
-
-         return sum;
-      }
-
-      private fun Array<Array<Float>>.toImmutable(): ImmutableArray<ImmutableArray<Float>> {
-         val `values$iv`: Array<ImmutableArray> = new ImmutableArray[4];
-         var var5: Array<Any> = Arrays.copyOf(`$this$toImmutable`[0], `$this$toImmutable`[0].length);
-         `values$iv`[0] = new ImmutableArray<>(Arrays.copyOf(var5, var5.length));
-         var5 = Arrays.copyOf(`$this$toImmutable`[1], `$this$toImmutable`[1].length);
-         `values$iv`[1] = new ImmutableArray<>(Arrays.copyOf(var5, var5.length));
-         var5 = Arrays.copyOf(`$this$toImmutable`[2], `$this$toImmutable`[2].length);
-         `values$iv`[2] = new ImmutableArray<>(Arrays.copyOf(var5, var5.length));
-         var5 = Arrays.copyOf(`$this$toImmutable`[3], `$this$toImmutable`[3].length);
-         `values$iv`[3] = new ImmutableArray<>(Arrays.copyOf(var5, var5.length));
-         return new ImmutableArray<>(Arrays.copyOf(`values$iv`, `values$iv`.length));
-      }
-   }
 }

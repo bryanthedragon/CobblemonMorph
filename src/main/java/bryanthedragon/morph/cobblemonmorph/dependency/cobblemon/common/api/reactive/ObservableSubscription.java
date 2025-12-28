@@ -1,22 +1,21 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive
 
-public class ObservableSubscription<T>(observable: Observable<Any>, handler: (Any) -> Unit) {
-   public final var alive: Boolean
-   private final val handler: (Any) -> Unit
-   private final val observable: Observable<Any>
-
-   init {
-      this.observable = observable;
-      this.handler = handler;
-      this.alive = true;
-   }
-
-   public fun handle(value: Any) {
-      this.handler.invoke(value);
-   }
-
-   public fun unsubscribe() {
-      this.observable.unsubscribe(this);
-      this.alive = false;
-   }
+class ObservableSubscription<T>(
+    private val observable: Observable<T>,
+    private val handler: (T) -> Unit
+) {
+    var alive = true
+    fun handle(value: T) = handler(value)
+    fun unsubscribe() {
+        observable.unsubscribe(this)
+        alive = false
+    }
 }

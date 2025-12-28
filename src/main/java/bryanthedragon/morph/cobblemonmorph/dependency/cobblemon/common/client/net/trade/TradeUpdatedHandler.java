@@ -1,31 +1,27 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.trade.ClientTrade
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeUpdatedPacket
-import java.util.UUID
 import net.minecraft.client.Minecraft
-import net.minecraft.client.player.LocalPlayer
+final class TradeUpdatedHandler : ClientNetworkPacketHandler<TradeUpdatedPacket> {
+    override fun handle(packet: TradeUpdatedPacket, client: Minecraft) {
+        val trade = CobblemonClient.trade ?: return
 
-public object TradeUpdatedHandler : ClientNetworkPacketHandler<TradeUpdatedPacket> {
-   public open fun handle(packet: TradeUpdatedPacket, client: Minecraft) {
-      val var10000: ClientTrade = CobblemonClient.INSTANCE.getTrade();
-      if (var10000 != null) {
-         val var4: UUID = packet.getPlayerId();
-         val var10001: LocalPlayer = Minecraft.m_91087_().f_91074_;
-         if (var4 == (if (var10001 != null) var10001.m_20148_() else null)) {
-            var10000.getMyOffer().set(packet.getPokemon());
-         } else {
-            var10000.getOppositeOffer().set(packet.getPokemon());
-         }
-
-         var10000.getOppositeAcceptedMyOffer().set(false);
-         var10000.setAcceptedOppositeOffer(false);
-      }
-   }
-
-   fun handleOnNettyThread(packet: TradeUpdatedPacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
+        if (packet.playerId == Minecraft.getInstance().player?.uuid) {
+            trade.myOffer.set(packet.pokemon)
+        } else {
+            trade.oppositeOffer.set(packet.pokemon)
+        }
+        trade.oppositeAcceptedMyOffer.set(false)
+        trade.acceptedOppositeOffer = false
+    }
 }

@@ -1,39 +1,43 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.input
 
 import com.bedrockk.molang.runtime.struct.QueryStruct
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.DialogueAction
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.FunctionDialogueAction
-import java.util.HashMap
 
-public class DialogueAutoContinueInput : DialogueInput {
-   public final val action: DialogueAction = (new FunctionDialogueAction(<unrepresentable>.INSTANCE)) as DialogueAction
-   public final var allowSkip: Boolean = true
-   public final val delay: Float = 5.0F
-   public final var showTimer: Boolean
+/**
+ * Input that has no input but has an action that will run after a delay.
+ *
+ * @author Hiroku
+ * @since December 27th, 2023
+ */
+class DialogueAutoContinueInput : DialogueInput {
+    val delay = 5F
+    /** Whether the player can click to move on in a hurry or if they must wait. */
+    var allowSkip = true
+    var showTimer = false
+    val action: DialogueAction = FunctionDialogueAction { dialogue, _ -> dialogue.incrementPage() }
 
-   public open var timeout: DialogueTimeout?
-      public open get() {
-         return new DialogueTimeout(this.delay, this.showTimer, this.action);
-      }
+    override var timeout: DialogueTimeout?
+        get() = DialogueTimeout(duration = delay, showTimer = showTimer, action)
+        set(_) {}
 
-      public open set(<anonymous parameter 0>) {
-      }
+    override fun toMoLangStruct(activeInput: ActiveInput) = QueryStruct(hashMapOf())
 
 
-   public open fun toMoLangStruct(activeInput: ActiveInput): QueryStruct {
-      return new QueryStruct(new HashMap<>());
-   }
+    override fun handle(activeInput: ActiveInput, value: String) {
+        if (!allowSkip) {
+            return Cobblemon.LOGGER.warn("A no-skip dialogue received input from ${activeInput.activeDialogue.playerEntity.gameProfile.name}, is this person a hacker or something")
+        }
 
-   public override fun handle(activeInput: ActiveInput, value: String) {
-      if (!this.allowSkip) {
-         Cobblemon.INSTANCE
-            .getLOGGER()
-            .warn(
-               "A no-skip dialogue received input from ${activeInput.getActiveDialogue().getPlayerEntity().m_36316_().getName()}, is this person a hacker or something"
-            );
-      } else {
-         DialogueAction.DefaultImpls.invoke$default(this.action, activeInput.getActiveDialogue(), null, 2, null);
-      }
-   }
+        action.invoke(activeInput.activeDialogue)
+    }
 }

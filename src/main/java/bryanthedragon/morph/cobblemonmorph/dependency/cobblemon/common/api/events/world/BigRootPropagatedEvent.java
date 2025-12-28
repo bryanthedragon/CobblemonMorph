@@ -1,20 +1,33 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.world
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.BigRootBlock
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.EnergyRootBlock
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.state.BlockState
 
-public class BigRootPropagatedEvent(world: ServerLevel, pos: BlockPos, newRootPosition: BlockPos, resultingSpread: BlockState) : Cancelable {
-   public final var newRootPosition: BlockPos
-   public final val pos: BlockPos
-   public final var resultingSpread: BlockState
-   public final val world: ServerLevel
-
-   init {
-      this.world = world;
-      this.pos = pos;
-      this.newRootPosition = newRootPosition;
-      this.resultingSpread = resultingSpread;
-   }
-}
+/**
+ * Event fired when a [BigRootBlock] attempts to spread. The event includes the original root position
+ * as well as the position of the new root. [resultingSpread] controls whether the new root will be an
+ * [EnergyRootBlock]. The new root position and whether it is an energy root is mutable.
+ *
+ * Cancelling this event will prevent propagation from occurring.
+ *
+ * @since June 17th, 2023
+ * @author Hiroku
+ */
+class BigRootPropagatedEvent(
+    val world: ServerLevel,
+    val pos: BlockPos,
+    var newRootPosition: BlockPos,
+    var resultingSpread: BlockState
+) : Cancelable()

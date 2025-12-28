@@ -1,217 +1,178 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen5
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.WingFlapIdleAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BiWingedFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BipedFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.SimpleQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.WaveFunctionKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.parabolaFunction
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.sineFunction
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.AngleExtensionsKt
-import java.util.EnumSet
-import kotlin.jvm.functions.Function1
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.toRadians
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.jetbrains.annotations.NotNull
 
-public class PidoveModel(root: ModelPart) : PokemonPoseableModel, HeadedFrame, BipedFrame, BiWingedFrame {
-   public open val cryAnimation: CryProvider
-   public final lateinit var fly: Pose<PokemonEntity, ModelFrame>
-   public open val head: ModelPart
-   public final lateinit var hover: Pose<PokemonEntity, ModelFrame>
-   public open val leftLeg: ModelPart
-   public open val leftWing: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rightLeg: ModelPart
-   public open val rightWing: ModelPart
-   public open val rootPart: ModelPart
-   public final lateinit var stand: Pose<PokemonEntity, ModelFrame>
-   private final val tail: ModelPart
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class PidoveModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BiWingedFrame {
+    override val rootPart = root.registerChildWithAllChildren("pidove")
+    override val leftWing = getPart("wing_left")
+    override val rightWing = getPart("wing_right")
+    override val leftLeg = getPart("leg_left")
+    override val rightLeg = getPart("leg_right")
+    override val head = getPart("head_ai")
+    private val tail = getPart("tail")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "pidove");
-      this.leftWing = this.getPart("wing_left");
-      this.rightWing = this.getPart("wing_right");
-      this.leftLeg = this.getPart("leg_left");
-      this.rightLeg = this.getPart("leg_right");
-      this.head = this.getPart("head_ai");
-      this.tail = this.getPart("tail");
-      this.portraitScale = 2.4F;
-      this.portraitTranslation = new Vec3(-0.2, -1.0, 0.0);
-      this.profileScale = 1.0F;
-      this.profileTranslation = new Vec3(0.0, 0.3, 0.0);
-      this.cryAnimation = PidoveModel::cryAnimation$lambda$0;
-   }
+    override var portraitScale = 2.4F
+    override var portraitTranslation = Vec3(-0.2, -1.0, 0.0)
 
-   public override fun registerPoses() {
-      val blink: SimpleQuirk = PoseableEntityModel.quirk$default(
-         this, null, null, null, (new Function1<PoseableEntityState<PokemonEntity>, StatefulAnimation<PokemonEntity, ?>>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
-            }
+    override var profileScale = 1.0F
+    override var profileTranslation = Vec3(0.0, 0.3, 0.0)
 
-            @NotNull
-            public final StatefulAnimation<PokemonEntity, ?> invoke(@NotNull PoseableEntityState<PokemonEntity> it) {
-               return PoseableEntityModel.bedrockStateful$default(this.this$0, "pidove", "blink", null, 4, null);
-            }
-         }) as Function1, 7, null
-      );
-      val var10001: EnumSet = PoseType.Companion.getSHOULDER_POSES();
-      val var19: java.util.Set = var10001;
-      val var10002: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStand(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "standing",
-            SetsKt.plus(SetsKt.plus(var19, var10002), PoseType.STAND),
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "pidove", "ground_idle", null, 4, null)
-            },
-            null,
-            new ModelQuirk[]{blink},
-            180,
-            null
-         )
-      );
-      this.setHover(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "hover",
-            PoseType.HOVER,
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               new WingFlapIdleAnimation(
-                  this, WaveFunctionKt.sineFunction$default(0.6F, 0.9F, 0.0F, -AngleExtensionsKt.toRadians(10.0F), 4, null), <unrepresentable>.INSTANCE, 2
-               )
-            },
-            null,
-            new ModelQuirk[]{blink},
-            180,
-            null
-         )
-      );
-      this.setFly(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "fly",
-            PoseType.FLY,
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               new WingFlapIdleAnimation(
-                  this, WaveFunctionKt.sineFunction$default(0.9F, 0.9F, 0.0F, -AngleExtensionsKt.toRadians(14.0F), 4, null), <unrepresentable>.INSTANCE, 2
-               )
-            },
-            null,
-            new ModelQuirk[]{blink},
-            180,
-            null
-         )
-      );
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "walking",
-            PoseType.WALK,
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "pidove", "ground_idle", null, 4, null),
-               this.translation(this.getRootPart(), WaveFunctionKt.parabolaFunction(-4.0F, 0.4F), 1, <unrepresentable>.INSTANCE),
-               this.translation(
-                  this.getHead(),
-                  WaveFunctionKt.sineFunction$default(AngleExtensionsKt.toRadians(-20.0F), 1.0F, 0.0F, AngleExtensionsKt.toRadians(-10.0F), 4, null),
-                  0,
-                  <unrepresentable>.INSTANCE
-               ),
-               this.rotation(
-                  this.getLeftLeg(), WaveFunctionKt.parabolaFunction(-20.0F, 0.0F, AngleExtensionsKt.toRadians(30.0F)), 0, <unrepresentable>.INSTANCE
-               ),
-               this.rotation(
-                  this.getRightLeg(), WaveFunctionKt.parabolaFunction(-20.0F, 0.0F, AngleExtensionsKt.toRadians(30.0F)), 0, <unrepresentable>.INSTANCE
-               ),
-               this.rotation(
-                  this.tail, WaveFunctionKt.sineFunction$default(AngleExtensionsKt.toRadians(-5.0F), 1.0F, 0.0F, 0.0F, 12, null), 0, <unrepresentable>.INSTANCE
-               ),
-               this.wingFlap(
-                  WaveFunctionKt.sineFunction(AngleExtensionsKt.toRadians(-5.0F), 0.4F, 0.0F, AngleExtensionsKt.toRadians(-20.0F)),
-                  <unrepresentable>.INSTANCE,
-                  2
-               ),
-               this.translation(
-                  this.getRightWing(), WaveFunctionKt.parabolaFunction(-10.0F, 30.0F, AngleExtensionsKt.toRadians(25.0F)), 1, <unrepresentable>.INSTANCE
-               ),
-               this.translation(
-                  this.getLeftWing(), WaveFunctionKt.parabolaFunction(-10.0F, 30.0F, AngleExtensionsKt.toRadians(25.0F)), 1, <unrepresentable>.INSTANCE
-               )
-            },
-            null,
-            new ModelQuirk[]{blink},
-            180,
-            null
-         )
-      );
-   }
+    //    lateinit var sleep: Pose
+    lateinit var stand: Pose
+    lateinit var walk: Pose
+    lateinit var hover: Pose
+    lateinit var fly: Pose
 
-   override fun <T extends Entity> singleBoneLook(
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: java.lang.Float?,
-      yawMultiplier: java.lang.Float?,
-      maxPitch: java.lang.Float?,
-      minPitch: java.lang.Float?,
-      maxYaw: java.lang.Float?,
-      minYaw: java.lang.Float?
-   ): SingleBoneLookAnimation<T> {
-      return HeadedFrame.DefaultImpls.singleBoneLook(
-         this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw
-      );
-   }
+    override val cryAnimation = CryProvider { bedrockStateful("pidove", "cry") }
 
-   override fun <T extends Entity> wingFlap(
-      flapFunction: (java.lang.Float?) -> java.lang.Float,
-      timeVariable: (PoseableEntityState<T>?, java.lang.Float?, java.lang.Float?) -> java.lang.Float,
-      axis: Int
-   ): WingFlapIdleAnimation<T> {
-      return BiWingedFrame.DefaultImpls.wingFlap(this, flapFunction, timeVariable, axis);
-   }
+    override fun registerPoses() {
+//        sleep = registerPose(
+//            poseType = PoseType.SLEEP,
+//            animations = arrayOf(bedrock("pidove", "sleep"))
+//        )
+        val blink = quirk { bedrockStateful("pidove", "blink") }
+        stand = registerPose(
+            poseName = "standing",
+            poseTypes = PoseType.SHOULDER_POSES + PoseType.UI_POSES + PoseType.STAND,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("pidove", "ground_idle")
+            )
+        )
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: PidoveModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "pidove", "cry", null, 4, null);
-   }
+        hover = registerPose(
+            poseName = "hover",
+            poseType = PoseType.HOVER,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                WingFlapIdleAnimation(this,
+                    flapFunction = sineFunction(verticalShift = -10F.toRadians(), period = 0.9F, amplitude = 0.6F),
+                    timeVariable = { state, _, _ -> state.animationSeconds },
+                    axis = ModelPartTransformation.Z_AXIS
+                )
+            )
+        )
+
+        fly = registerPose(
+            poseName = "fly",
+            poseType = PoseType.FLY,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                WingFlapIdleAnimation(this,
+                    flapFunction = sineFunction(verticalShift = -14F.toRadians(), period = 0.9F, amplitude = 0.9F),
+                    timeVariable = { state, _, _ -> state.animationSeconds },
+                    axis = ModelPartTransformation.Z_AXIS
+                )
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walking",
+            poseType = PoseType.WALK,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("pidove", "ground_idle"),
+                rootPart.translation(
+                    function = parabolaFunction(
+                        peak = -4F,
+                        period = 0.4F
+                    ),
+                    timeVariable = { state, _, _ -> state.animationSeconds },
+                    axis = ModelPartTransformation.Y_AXIS
+                ),
+                head.translation(
+                    function = sineFunction(
+                        amplitude = (-20F).toRadians(),
+                        period = 1F,
+                        verticalShift = (-10F).toRadians()
+                    ),
+                    axis = ModelPartTransformation.X_AXIS,
+                    timeVariable = { state, _, _ -> state.animationSeconds }
+                ),
+                leftLeg.rotation(
+                    function = parabolaFunction(
+                        tightness = -20F,
+                        phaseShift = 0F,
+                        verticalShift = (30F).toRadians()
+                    ),
+                    axis = ModelPartTransformation.X_AXIS,
+                    timeVariable = { _, _, ageInTicks -> ageInTicks / 20 },
+                ),
+                rightLeg.rotation(
+                    function = parabolaFunction(
+                        tightness = -20F,
+                        phaseShift = 0F,
+                        verticalShift = (30F).toRadians()
+                    ),
+                    axis = ModelPartTransformation.X_AXIS,
+                    timeVariable = { _, _, ageInTicks -> ageInTicks / 20 },
+                ),
+                tail.rotation(
+                    function = sineFunction(
+                        amplitude = (-5F).toRadians(),
+                        period = 1F
+                    ),
+                    axis = ModelPartTransformation.X_AXIS,
+                    timeVariable = { _, _, ageInTicks -> ageInTicks / 20 },
+                ),
+                wingFlap(
+                    flapFunction = sineFunction(
+                        amplitude = (-5F).toRadians(),
+                        period = 0.4F,
+                        phaseShift = 0.00F,
+                        verticalShift = (-20F).toRadians()
+                    ),
+                    timeVariable = { state, _, _ -> state.animationSeconds },
+                    axis = ModelPartTransformation.Z_AXIS
+                ),
+                rightWing.translation(
+                    function = parabolaFunction(
+                        tightness = -10F,
+                        phaseShift = 30F,
+                        verticalShift = (25F).toRadians()
+                    ),
+                    axis = ModelPartTransformation.Y_AXIS,
+                    timeVariable = { _, _, ageInTicks -> ageInTicks / 20 },
+                ),
+                leftWing.translation(
+                    function = parabolaFunction(
+                        tightness = -10F,
+                        phaseShift = 30F,
+                        verticalShift = (25F).toRadians()
+                    ),
+                    axis = ModelPartTransformation.Y_AXIS,
+                    timeVariable = { _, _, ageInTicks -> ageInTicks / 20 },
+                ),
+            )
+        )
+    }
 }

@@ -1,108 +1,363 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.BattleFaintedEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.BattleFledEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.BattleStartedPostEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.BattleStartedPreEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.BattleStartedEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.BattleVictoryEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.instruction.FormeChangeEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.instruction.MegaEvolutionEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.instruction.TerastallizationEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.instruction.ZMoveUsedEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.berry.BerryHarvestEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.berry.BerryMutationOfferEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.berry.BerryMutationResultEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.berry.BerryYieldCalculationEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.cooking.PokeSnackSpawnPokemonEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.drops.LootDroppedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.entity.PokemonEntityLoadEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.entity.PokemonEntitySaveEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.entity.PokemonEntitySaveToWorldEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.entity.SpawnEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.entity.*
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.farming.ApricornHarvestEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.fishing.*
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.item.LeftoversCreatedEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokeball.PokeBallCaptureCalculatedEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokeball.PokemonCatchRateEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokeball.ThrownPokeballHitEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.ExperienceGainedPostEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.ExperienceGainedPreEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.FossilRevivedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.FriendshipUpdatedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.LevelUpEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonCapturedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonFaintedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonNicknamedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonRecalledEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonSentPostEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonSentPreEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.ShoulderMountEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.TradeCompletedEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokedex.scanning.PokemonScannedEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.*
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution.EvolutionCompleteEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution.EvolutionDisplayEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution.EvolutionTestedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.interaction.HeldItemUpdatedEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.healing.PokemonHealedEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.interaction.ExperienceCandyUseEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.interaction.PokemonInteractionGUICreationEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.interaction.ExperienceCandyUseEvent.Post
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.interaction.ExperienceCandyUseEvent.Pre
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.starter.StarterChosenEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.storage.*
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.world.BigRootPropagatedEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.CancelableObservable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.EventObservable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Observable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Observable.Companion.filter
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Observable.Companion.map
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Transform
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.TransformObservable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.events.SelectDriverEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 import net.minecraft.server.level.ServerPlayer
 
-public object CobblemonEvents {
-   public final val APRICORN_HARVESTED: EventObservable<ApricornHarvestEvent> = new EventObservable()
-   public final val BATTLE_FAINTED: EventObservable<BattleFaintedEvent> = new EventObservable()
-   public final val BATTLE_FLED: EventObservable<BattleFledEvent> = new EventObservable()
-   public final val BATTLE_STARTED_POST: EventObservable<BattleStartedPostEvent> = new EventObservable()
-   public final val BATTLE_STARTED_PRE: CancelableObservable<BattleStartedPreEvent> = new CancelableObservable()
-   public final val BATTLE_VICTORY: EventObservable<BattleVictoryEvent> = new EventObservable()
-   public final val BERRY_HARVEST: EventObservable<BerryHarvestEvent> = new EventObservable()
-   public final val BERRY_MUTATION_OFFER: EventObservable<BerryMutationOfferEvent> = new EventObservable()
-   public final val BERRY_MUTATION_RESULT: EventObservable<BerryMutationResultEvent> = new EventObservable()
-   public final val BERRY_YIELD: EventObservable<BerryYieldCalculationEvent> = new EventObservable()
-   public final val BIG_ROOT_PROPAGATED: CancelableObservable<BigRootPropagatedEvent> = new CancelableObservable()
-   public final val DATA_SYNCHRONIZED: SimpleObservable<ServerPlayer> = new SimpleObservable()
-   public final val ENTITY_SPAWN: CancelableObservable<SpawnEvent<*>> = new CancelableObservable()
-   public final val EVOLUTION_ACCEPTED: CancelableObservable<EvolutionAcceptedEvent> = new CancelableObservable()
-   public final val EVOLUTION_COMPLETE: EventObservable<EvolutionCompleteEvent> = new EventObservable()
-   public final val EVOLUTION_DISPLAY: EventObservable<EvolutionDisplayEvent> = new EventObservable()
-   public final val EVOLUTION_TESTED: EventObservable<EvolutionTestedEvent> = new EventObservable()
-   public final val EXPERIENCE_CANDY_USE_POST: EventObservable<Post> = new EventObservable()
-   public final val EXPERIENCE_CANDY_USE_PRE: CancelableObservable<Pre> = new CancelableObservable()
-   public final val EXPERIENCE_GAINED_EVENT_POST: EventObservable<ExperienceGainedPostEvent> = new EventObservable()
-   public final val EXPERIENCE_GAINED_EVENT_PRE: CancelableObservable<ExperienceGainedPreEvent> = new CancelableObservable()
-   public final val FOSSIL_REVIVED: EventObservable<FossilRevivedEvent> = new EventObservable()
-   public final val FRIENDSHIP_UPDATED: EventObservable<FriendshipUpdatedEvent> = new EventObservable()
-   public final val HELD_ITEM_POST: EventObservable<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.HeldItemEvent.Post> = new EventObservable()
-   public final val HELD_ITEM_PRE: CancelableObservable<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.HeldItemEvent.Pre> = new CancelableObservable()
-   public final val HELD_ITEM_UPDATED: CancelableObservable<HeldItemUpdatedEvent> = new CancelableObservable()
-   public final val LEFTOVERS_CREATED: CancelableObservable<LeftoversCreatedEvent> = new CancelableObservable()
-   public final val LEVEL_UP_EVENT: EventObservable<LevelUpEvent> = new EventObservable()
-   public final val LOOT_DROPPED: CancelableObservable<LootDroppedEvent> = new CancelableObservable()
-   public final val POKEMON_CAPTURED: EventObservable<PokemonCapturedEvent> = new EventObservable()
-   public final val POKEMON_CATCH_RATE: EventObservable<PokemonCatchRateEvent> = new EventObservable()
-   public final val POKEMON_ENTITY_LOAD: CancelableObservable<PokemonEntityLoadEvent> = new CancelableObservable()
-   public final val POKEMON_ENTITY_SAVE: EventObservable<PokemonEntitySaveEvent> = new EventObservable()
-   public final val POKEMON_ENTITY_SAVE_TO_WORLD: CancelableObservable<PokemonEntitySaveToWorldEvent> = new CancelableObservable()
-   public final val POKEMON_ENTITY_SPAWN: TransformObservable<SpawnEvent<*>, SpawnEvent<PokemonEntity>> =
-      ENTITY_SPAWN.pipe(
-         Observable.Companion.filter(<unrepresentable>.INSTANCE) as Transform<SpawnEvent<?>, SpawnEvent<?>>,
-         Observable.Companion.map(<unrepresentable>.INSTANCE)
-      )
-      public final val POKEMON_FAINTED: EventObservable<PokemonFaintedEvent> = new EventObservable()
-   public final val POKEMON_INTERACTION_GUI_CREATION: EventObservable<PokemonInteractionGUICreationEvent> = new EventObservable()
-   public final val POKEMON_NICKNAMED: CancelableObservable<PokemonNicknamedEvent> = new CancelableObservable()
-   public final val POKEMON_RECALLED: EventObservable<PokemonRecalledEvent> = new EventObservable()
-   public final val POKEMON_RELEASED_EVENT_POST: EventObservable<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.storage.ReleasePokemonEvent.Post> = new EventObservable()
-   public final val POKEMON_RELEASED_EVENT_PRE: CancelableObservable<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.storage.ReleasePokemonEvent.Pre> =
-      new CancelableObservable()
-      public final val POKEMON_SENT_POST: EventObservable<PokemonSentPostEvent> = new EventObservable()
-   public final val POKEMON_SENT_PRE: CancelableObservable<PokemonSentPreEvent> = new CancelableObservable()
-   public final val POKE_BALL_CAPTURE_CALCULATED: EventObservable<PokeBallCaptureCalculatedEvent> = new EventObservable()
-   public final val SHOULDER_MOUNT: CancelableObservable<ShoulderMountEvent> = new CancelableObservable()
-   public final val STARTER_CHOSEN: CancelableObservable<StarterChosenEvent> = new CancelableObservable()
-   public final val THROWN_POKEBALL_HIT: CancelableObservable<ThrownPokeballHitEvent> = new CancelableObservable()
-   public final val TRADE_COMPLETED: EventObservable<TradeCompletedEvent> = new EventObservable()
+@Suppress("unused")final class CobblemonEvents {
+
+    @JvmField
+    val POKEMON_PROPERTY_INITIALISED = SimpleObservable<Unit>()
+
+    @JvmField
+    val COBBLEMON_INITIALISED = SimpleObservable<Unit>()
+
+    @JvmField
+    val DATA_SYNCHRONIZED = SimpleObservable<ServerPlayer>()
+
+    @JvmField
+    val SHOULDER_MOUNT = CancelableObservable<ShoulderMountEvent>()
+
+    @JvmField
+    val FRIENDSHIP_UPDATED = EventObservable<FriendshipUpdatedEvent>()
+
+    @JvmField
+    val FULLNESS_UPDATED = EventObservable<FullnessUpdatedEvent>()
+
+    @JvmField
+    val POKEMON_FAINTED = EventObservable<PokemonFaintedEvent>()
+
+    @JvmField
+    val EVOLUTION_ACCEPTED = CancelableObservable<EvolutionAcceptedEvent>()
+
+    @JvmField
+    val EVOLUTION_DISPLAY = EventObservable<EvolutionDisplayEvent>()
+
+    @JvmField
+    val EVOLUTION_TESTED = EventObservable<EvolutionTestedEvent>()
+
+    @JvmField
+    val EVOLUTION_COMPLETE = EventObservable<EvolutionCompleteEvent>()
+
+    @JvmField
+    val POKEMON_NICKNAMED = CancelableObservable<PokemonNicknamedEvent>()
+
+    @JvmField
+    val THROWN_POKEBALL_HIT = CancelableObservable<ThrownPokeballHitEvent>()
+
+    @JvmField
+    val POKEMON_CATCH_RATE = EventObservable<PokemonCatchRateEvent>()
+
+    @JvmField
+    val POKE_BALL_CAPTURE_CALCULATED = EventObservable<PokeBallCaptureCalculatedEvent>()
+
+    @JvmField
+    val POKEMON_CAPTURED = EventObservable<PokemonCapturedEvent>()
+
+    @JvmField
+    val FOSSIL_REVIVED = EventObservable<FossilRevivedEvent>()
+
+    @JvmField
+    val BATTLE_STARTED_PRE = CancelableObservable<BattleStartedEvent.Pre>()
+
+    @JvmField
+    val BATTLE_STARTED_POST = EventObservable<BattleStartedEvent.Post>()
+
+    @JvmField
+    val BATTLE_FLED = EventObservable<BattleFledEvent>()
+
+    @JvmField
+    val BATTLE_VICTORY = EventObservable<BattleVictoryEvent>()
+
+    @JvmField
+    val BATTLE_FAINTED = EventObservable<BattleFaintedEvent>()
+
+    // instructions
+    @JvmField
+    val MEGA_EVOLUTION = EventObservable<MegaEvolutionEvent>()
+
+    @JvmField
+    val TERASTALLIZATION = EventObservable<TerastallizationEvent>()
+
+    @JvmField
+    val ZPOWER_USED = EventObservable<ZMoveUsedEvent>()
+
+    @JvmField
+    val FORME_CHANGE = EventObservable<FormeChangeEvent>()
+
+    @JvmField
+    val POKEMON_SENT_PRE = CancelableObservable<PokemonSentEvent.Pre>()
+
+    @JvmField
+    val POKEMON_SENT_POST = EventObservable<PokemonSentEvent.Post>()
+    
+    @JvmField
+    val POKEMON_RECALL_PRE = CancelableObservable<PokemonRecallEvent.Pre>()
+
+    @JvmField
+    val POKEMON_RECALL_POST = EventObservable<PokemonRecallEvent.Post>()
+
+    @JvmField
+    val TRADE_EVENT_PRE = CancelableObservable<TradeEvent.Pre>()
+
+    @JvmField
+    val TRADE_EVENT_POST = EventObservable<TradeEvent.Post>()
+
+    @JvmField
+    val RIDE_EVENT_PRE = CancelableObservable<RidePokemonEvent.Pre>()
+
+    @JvmField
+    val RIDE_EVENT_APPLY_STAMINA = EventObservable<RidePokemonEvent.ApplyStamina>()
+
+    @JvmField
+    val RIDE_EVENT_POST = EventObservable<RidePokemonEvent.Post>()
+
+    @JvmField
+    val LEVEL_UP_EVENT = EventObservable<LevelUpEvent>()
+
+    @JvmField
+    val POKEMON_HEALED = CancelableObservable<PokemonHealedEvent>()
+
+    @JvmField
+            /** CLIENT ONLY! */
+    val POKEMON_INTERACTION_GUI_CREATION = EventObservable<PokemonInteractionGUICreationEvent>()
+
+    @JvmField
+    val POKEMON_ENTITY_SAVE = EventObservable<PokemonEntitySaveEvent>()
+
+    @JvmField
+    val POKEMON_ENTITY_LOAD = CancelableObservable<PokemonEntityLoadEvent>()
+
+    @JvmField
+    val POKEMON_ENTITY_SAVE_TO_WORLD = CancelableObservable<PokemonEntitySaveToWorldEvent>()
+
+    @JvmField
+    val ENTITY_SPAWN = CancelableObservable<SpawnEvent<*>>()
+
+    @JvmField
+    val SHINY_CHANCE_CALCULATION = EventObservable<ShinyChanceCalculationEvent>()
+
+    @JvmField
+    val POKEMON_ENTITY_SPAWN = ENTITY_SPAWN
+        .pipe(
+            filter { it.entity is PokemonEntity },
+            map {
+                @Suppress("UNCHECKED_CAST")
+                it as SpawnEvent<PokemonEntity>
+            }
+        )
+
+    @JvmField
+    val EXPERIENCE_GAINED_EVENT_PRE = CancelableObservable<ExperienceGainedEvent.Pre>()
+
+    @JvmField
+    val EXPERIENCE_GAINED_EVENT_POST = EventObservable<ExperienceGainedEvent.Post>()
+
+    @JvmField
+    val EXPERIENCE_CANDY_USE_PRE = CancelableObservable<ExperienceCandyUseEvent.Pre>()
+
+    @JvmField
+    val EXPERIENCE_CANDY_USE_POST = EventObservable<ExperienceCandyUseEvent.Post>()
+
+    @JvmField
+    val EV_GAINED_EVENT_PRE = CancelableObservable<EvGainedEvent.Pre>()
+
+    @JvmField
+    val EV_GAINED_EVENT_POST = EventObservable<EvGainedEvent.Post>()
+
+    @JvmField
+    val HYPER_TRAINED_IV_PRE = CancelableObservable<HyperTrainedIvEvent.Pre>()
+
+    @JvmField
+    val HYPER_TRAINED_IV_POST = EventObservable<HyperTrainedIvEvent.Post>()
+
+    @JvmField
+    val POKEMON_RELEASED_EVENT_PRE = CancelableObservable<ReleasePokemonEvent.Pre>()
+
+    @JvmField
+    val POKEMON_RELEASED_EVENT_POST = EventObservable<ReleasePokemonEvent.Post>()
+
+    @JvmField
+    val RENAME_PC_BOX_EVENT_PRE = CancelableObservable<RenamePCBoxEvent.Pre>()
+
+    @JvmField
+    val RENAME_PC_BOX_EVENT_POST = EventObservable<RenamePCBoxEvent.Post>()
+
+    @JvmField
+    val WALLPAPER_COLLECTION_EVENT = EventObservable<WallpaperCollectionEvent>()
+
+    @JvmField
+    val WALLPAPER_UNLOCKED_EVENT = CancelableObservable<WallpaperUnlockedEvent>()
+
+    @JvmField
+    val CHANGE_PC_BOX_WALLPAPER_EVENT_PRE = CancelableObservable<ChangePCBoxWallpaperEvent.Pre>()
+
+    @JvmField
+    val CHANGE_PC_BOX_WALLPAPER_EVENT_POST = EventObservable<ChangePCBoxWallpaperEvent.Post>()
+
+    @JvmField
+    val LOOT_DROPPED = CancelableObservable<LootDroppedEvent>()
+
+    @JvmField
+    val STARTER_CHOSEN = CancelableObservable<StarterChosenEvent>()
+
+    @JvmField
+    val POKEMON_SCANNED = EventObservable<PokemonScannedEvent>()
+
+    @JvmField
+    val APRICORN_HARVESTED = EventObservable<ApricornHarvestEvent>()
+
+    // Berries
+    @JvmField
+    val BERRY_HARVEST = EventObservable<BerryHarvestEvent>()
+
+    @JvmField
+    val BERRY_MUTATION_OFFER = EventObservable<BerryMutationOfferEvent>()
+
+    @JvmField
+    val BERRY_MUTATION_RESULT = EventObservable<BerryMutationResultEvent>()
+
+    @JvmField
+    val BERRY_YIELD = EventObservable<BerryYieldCalculationEvent>()
+
+    @JvmField
+    val LEFTOVERS_CREATED = CancelableObservable<LeftoversCreatedEvent>()
+
+    @JvmField
+    val BIG_ROOT_PROPAGATED = CancelableObservable<BigRootPropagatedEvent>()
+
+    @JvmField
+    val HELD_ITEM_PRE = CancelableObservable<HeldItemEvent.Pre>()
+
+    @JvmField
+    val HELD_ITEM_POST = EventObservable<HeldItemEvent.Post>()
+
+    @JvmField
+    val COSMETIC_ITEM_PRE = CancelableObservable<HeldItemEvent.Pre>()
+
+    @JvmField
+    val COSMETIC_ITEM_POST = EventObservable<HeldItemEvent.Post>()
+
+    @JvmField
+    val POKEMON_GAINED = EventObservable<PokemonGainedEvent>()
+
+    @JvmField
+    val POKEMON_SEEN = CancelableObservable<PokemonSeenEvent>()
+
+    @JvmField
+    val POKEMON_ASPECTS_CHANGED = EventObservable<PokemonAspectsChangedEvent>()
+
+    @JvmField
+    val POKEDEX_DATA_CHANGED_PRE = CancelableObservable<PokedexDataChangedEvent.Pre>()
+
+    @JvmField
+    val POKEDEX_DATA_CHANGED_POST = EventObservable<PokedexDataChangedEvent.Post>()
+
+    // Fishing
+    @JvmField
+    val BAIT_SET = CancelableObservable<BaitSetEvent>()
+
+    @JvmField
+    val BAIT_SET_PRE = CancelableObservable<BaitSetEvent>()
+
+    @JvmField
+    val BAIT_CONSUMED = CancelableObservable<BaitConsumedEvent>()
+
+    @JvmField
+    val POKEROD_CAST_PRE = CancelableObservable<PokerodCastEvent.Pre>()
+
+    @JvmField
+    val POKEROD_CAST_POST = EventObservable<PokerodCastEvent.Post>()
+
+    @JvmField
+    val POKEROD_REEL = CancelableObservable<PokerodReelEvent>()
+
+    @JvmField
+    val BOBBER_SPAWN_POKEMON_PRE = CancelableObservable<BobberSpawnPokemonEvent.Pre>()
+
+    @JvmField
+    val BOBBER_SPAWN_POKEMON_MODIFY = EventObservable<BobberSpawnPokemonEvent.Modify>()
+
+    @JvmField
+    val BOBBER_SPAWN_POKEMON_POST = EventObservable<BobberSpawnPokemonEvent.Post>()
+
+    @JvmField
+    val POKE_SNACK_SPAWN_POKEMON_PRE = CancelableObservable<PokeSnackSpawnPokemonEvent.Pre>()
+
+    @JvmField
+    val POKE_SNACK_SPAWN_POKEMON_POST = EventObservable<PokeSnackSpawnPokemonEvent.Post>()
+
+    @JvmField
+    val BAIT_EFFECT_REGISTRATION = EventObservable<BaitEffectFunctionRegistryEvent>()
+
+    @JvmField
+    val SPAWN_BUCKET_CHOSEN = EventObservable<SpawnBucketChosenEvent>()
+
+    // Baits and Lures
+    @JvmField
+    val BAIT_SPAWN_POKEMON_MODIFY = EventObservable<BaitSpawnPokemonEvent.Modify>()
+
+
+    @JvmField
+    val COLLECT_EGG = CancelableObservable<CollectEggEvent>()
+
+    @JvmField
+    val HATCH_EGG_PRE = CancelableObservable<HatchEggEvent.Pre>()
+
+    @JvmField
+    val HATCH_EGG_POST = EventObservable<HatchEggEvent.Post>()
+
+    // -------------------------------------------------------------------------------------
+    //
+    // Riding
+    //
+    // -------------------------------------------------------------------------------------
+    @JvmField
+    val SELECT_DRIVER = EventObservable<SelectDriverEvent>()
 }

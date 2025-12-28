@@ -1,109 +1,65 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
-import kotlin.jvm.internal.SourceDebugExtension
 
-public fun interface LearnsetQuery {
-   public abstract fun canLearn(move: MoveTemplate, learnset: Learnset): Boolean {
-   }
+/**
+ * A functional interface for a query to the learnset of a Pokémon.
+ * A few default implementations to make common queries can be found in [LearnsetQuery.Companion].
+ *
+ * @author Licious
+ * @since November 1st, 2022
+ */
+fun interface LearnsetQuery {
 
-   @SourceDebugExtension(["SMAP\nLearnsetQuery.kt\nKotlin\n*S Kotlin\n*F\n+ 1 LearnsetQuery.kt\ncom/cobblemon/mod/common/api/pokemon/moves/LearnsetQuery$Companion\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,51:1\n1747#2,3:52\n1747#2,3:55\n*S KotlinDebug\n*F\n+ 1 LearnsetQuery.kt\ncom/cobblemon/mod/common/api/pokemon/moves/LearnsetQuery$Companion\n*L\n27#1:52,3\n37#1:55,3\n*E\n"])
-   public companion object {
-      public final val ANY: LearnsetQuery = LearnsetQuery.Companion::ANY$lambda$1
-      public final val ANY_LEVEL: LearnsetQuery = LearnsetQuery.Companion::ANY_LEVEL$lambda$4
-      public final val EGG_MOVE: LearnsetQuery = LearnsetQuery.Companion::EGG_MOVE$lambda$5
-      public final val EVOLUTION: LearnsetQuery = LearnsetQuery.Companion::EVOLUTION$lambda$9
-      public final val FORM_CHANGE: LearnsetQuery = LearnsetQuery.Companion::FORM_CHANGE$lambda$8
-      public final val TM_MOVE: LearnsetQuery = LearnsetQuery.Companion::TM_MOVE$lambda$7
-      public final val TUTOR_MOVES: LearnsetQuery = LearnsetQuery.Companion::TUTOR_MOVES$lambda$6
+    fun canLearn(move: MoveTemplate, learnset: Learnset): Boolean
 
-      public fun level(level: Int): LearnsetQuery {
-         return LearnsetQuery.Companion::level$lambda$2;
-      }
+    companion object {
 
-      @JvmStatic
-      fun `ANY$lambda$1`(move: MoveTemplate, learnset: Learnset): Boolean {
-         val `$this$any$iv`: java.lang.Iterable = learnset.getLevelUpMoves().values();
-         var var10000: Boolean;
-         if (`$this$any$iv` is java.util.Collection && (`$this$any$iv` as java.util.Collection).isEmpty()) {
-            var10000 = false;
-         } else {
-            val var4: java.util.Iterator = `$this$any$iv`.iterator();
+        val ANY = LearnsetQuery { move, learnset ->
+            learnset.levelUpMoves.values.any { it.contains(move) }
+                    || learnset.eggMoves.contains(move)
+                    || learnset.tutorMoves.contains(move)
+                    || learnset.tmMoves.contains(move)
+                    || learnset.formChangeMoves.contains(move)
+                    || learnset.evolutionMoves.contains(move)
+                    || learnset.legacyMoves.contains(move)
+                    || learnset.specialMoves.contains(move)
+        }
 
-            while (true) {
-               if (!var4.hasNext()) {
-                  var10000 = false;
-                  break;
-               }
+        val LEGAL = LearnsetQuery { move, learnset ->
+            learnset.levelUpMoves.values.any { it.contains(move) }
+                    || learnset.eggMoves.contains(move)
+                    || learnset.tutorMoves.contains(move)
+                    || learnset.tmMoves.contains(move)
+                    || learnset.formChangeMoves.contains(move)
+                    || learnset.evolutionMoves.contains(move)
+        }
 
-               if ((var4.next() as java.util.List).contains(move)) {
-                  var10000 = true;
-                  break;
-               }
-            }
-         }
+        fun level(level: Int) = LearnsetQuery { move, learnset -> learnset.getLevelUpMovesUpTo(level).contains(move) }
 
-         return var10000
-            || learnset.getEggMoves().contains(move)
-            || learnset.getTutorMoves().contains(move)
-            || learnset.getTmMoves().contains(move)
-            || learnset.getFormChangeMoves().contains(move)
-            || learnset.getEvolutionMoves().contains(move);
-      }
+        val ANY_LEVEL = LearnsetQuery { move, learnset -> learnset.levelUpMoves.values.any { it.contains(move) } }
 
-      @JvmStatic
-      fun `level$lambda$2`(`$level`: Int, move: MoveTemplate, learnset: Learnset): Boolean {
-         return learnset.getLevelUpMovesUpTo(`$level`).contains(move);
-      }
+        val EGG_MOVE = LearnsetQuery { move, learnset -> learnset.eggMoves.contains(move) }
 
-      @JvmStatic
-      fun `ANY_LEVEL$lambda$4`(move: MoveTemplate, learnset: Learnset): Boolean {
-         val `$this$any$iv`: java.lang.Iterable = learnset.getLevelUpMoves().values();
-         var var10000: Boolean;
-         if (`$this$any$iv` is java.util.Collection && (`$this$any$iv` as java.util.Collection).isEmpty()) {
-            var10000 = false;
-         } else {
-            val var4: java.util.Iterator = `$this$any$iv`.iterator();
+        val TUTOR_MOVES = LearnsetQuery { move, learnset -> learnset.tutorMoves.contains(move) }
 
-            while (true) {
-               if (!var4.hasNext()) {
-                  var10000 = false;
-                  break;
-               }
+        val TM_MOVE = LearnsetQuery { move, learnset -> learnset.tmMoves.contains(move) }
 
-               if ((var4.next() as java.util.List).contains(move)) {
-                  var10000 = true;
-                  break;
-               }
-            }
-         }
+        val FORM_CHANGE = LearnsetQuery { move, learnset -> learnset.formChangeMoves.contains(move) }
 
-         return var10000;
-      }
+        val EVOLUTION = LearnsetQuery { move, learnset -> learnset.evolutionMoves.contains(move) }
 
-      @JvmStatic
-      fun `EGG_MOVE$lambda$5`(move: MoveTemplate, learnset: Learnset): Boolean {
-         return learnset.getEggMoves().contains(move);
-      }
+        val LEGACY_MOVES = LearnsetQuery { move, learnset -> learnset.legacyMoves.contains(move) }
 
-      @JvmStatic
-      fun `TUTOR_MOVES$lambda$6`(move: MoveTemplate, learnset: Learnset): Boolean {
-         return learnset.getTutorMoves().contains(move);
-      }
+        val SPECIAL_MOVES = LearnsetQuery { move, learnset -> learnset.specialMoves.contains(move) }
+    }
 
-      @JvmStatic
-      fun `TM_MOVE$lambda$7`(move: MoveTemplate, learnset: Learnset): Boolean {
-         return learnset.getTmMoves().contains(move);
-      }
-
-      @JvmStatic
-      fun `FORM_CHANGE$lambda$8`(move: MoveTemplate, learnset: Learnset): Boolean {
-         return learnset.getFormChangeMoves().contains(move);
-      }
-
-      @JvmStatic
-      fun `EVOLUTION$lambda$9`(move: MoveTemplate, learnset: Learnset): Boolean {
-         return learnset.getEvolutionMoves().contains(move);
-      }
-   }
 }

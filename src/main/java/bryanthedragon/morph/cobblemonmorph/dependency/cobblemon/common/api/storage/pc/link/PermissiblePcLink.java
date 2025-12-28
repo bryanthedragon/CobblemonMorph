@@ -1,28 +1,33 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.link
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission.Permission
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
-import java.util.UUID
 import net.minecraft.server.level.ServerPlayer
 
-public class PermissiblePcLink(pc: PCStore, player: ServerPlayer, permission: Permission) : PCLink {
-   private final val permission: Permission
+/**
+ * A [PCLink] tied to a player that must have a permission.
+ *
+ * @param pc The [PCStore] being opened.
+ * @param player The [ServerPlayer] opening the PC.
+ * @param permission The [Permission] required for this link to work.
+ */
+class PermissiblePcLink(pc: PCStore, player: ServerPlayer, private val permission: Permission) : PCLink(pc, player.uuid) {
 
-   init {
-      val var10002: UUID = player.m_20148_();
-      super(pc, var10002);
-      this.permission = permission;
-   }
+    override fun isPermitted(player: ServerPlayer): Boolean {
+        val result = Cobblemon.permissionValidator.hasPermission(player, this.permission)
+        if (!result) {
+            PCLinkManager.removeLink(player.uuid)
+        }
+        return result
+    }
 
-   public override fun isPermitted(player: ServerPlayer): Boolean {
-      val result: Boolean = Cobblemon.INSTANCE.getPermissionValidator().hasPermission(player, this.permission);
-      if (!result) {
-         val var10000: PCLinkManager = PCLinkManager.INSTANCE;
-         val var10001: UUID = player.m_20148_();
-         var10000.removeLink(var10001);
-      }
-
-      return result;
-   }
 }

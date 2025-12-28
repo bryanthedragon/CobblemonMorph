@@ -1,61 +1,63 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.adapter.flatfile
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStore
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.StorePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.PrintWriter
 import java.util.UUID
-import kotlin.jvm.internal.SourceDebugExtension
+import net.minecraft.core.RegistryAccess
 
-@SourceDebugExtension(["SMAP\nJSONStoreAdapter.kt\nKotlin\n*S Kotlin\n*F\n+ 1 JSONStoreAdapter.kt\ncom/cobblemon/mod/common/api/storage/adapter/flatfile/JSONStoreAdapter\n+ 2 GsonExtensions.kt\ncom/cobblemon/mod/common/util/GsonExtensionsKt\n*L\n1#1,62:1\n17#2:63\n*S KotlinDebug\n*F\n+ 1 JSONStoreAdapter.kt\ncom/cobblemon/mod/common/api/storage/adapter/flatfile/JSONStoreAdapter\n*L\n49#1:63\n*E\n"])
-public open class JSONStoreAdapter(rootFolder: String,
-   useNestedFolders: Boolean,
-   folderPerClass: Boolean,
-   gson: Gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
-) : OneToOneFileStoreAdapter(rootFolder, useNestedFolders, folderPerClass, "json") {
-   private final val gson: Gson
+/**
+ * A [FileStoreAdapter] for JSON files. This allows a [PokemonStore] to be serialized to a .json file. This is usually
+ * slower and makes for a larger file per storage by several times compared to a [NBTStoreAdapter].
+ *
+ * @author Hiroku
+ * @since November 29th, 2021
+ */
+open class JSONStoreAdapter(
+    rootFolder: String,
+    useNestedFolders: Boolean,
+    folderPerClass: Boolean,
+    private val gson: Gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create(),
+) : OneToOneFileStoreAdapter<JsonObject>(rootFolder, useNestedFolders, folderPerClass, "json") {
+    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess) = store.saveToJSON(JsonObject(), registryAccess)
 
-   init {
-      this.gson = gson;
-   }
+    override fun save(file: File, serialized: JsonObject) {
+        val pw = PrintWriter(file)
+        val json = gson.toJson(serialized)
+        pw.write(json)
+        pw.flush()
+        pw.close()
+    }
 
-   public open fun <E : StorePosition, T : PokemonStore<Any>> serialize(store: Any): JsonObject {
-      return store.saveToJSON(new JsonObject());
-   }
-
-   public open fun save(file: File, serialized: JsonObject) {
-      val pw: PrintWriter = new PrintWriter(file);
-      pw.write(this.gson.toJson(serialized as JsonElement));
-      pw.flush();
-      pw.close();
-   }
-
-   public override fun <E, T : PokemonStore<Any>> load(file: File, storeClass: Class<out Any>, uuid: UUID): Any? {
-      var br: PokemonStore;
-      try {
-         val var12: BufferedReader = new BufferedReader(new FileReader(file));
-         val e: JsonObject = this.gson.fromJson(var12, JsonObject.class) as JsonObject;
-         var12.close();
-
-         var var13: PokemonStore;
-         try {
-            var13 = storeClass.getConstructor(UUID.class, UUID.class).newInstance(uuid, uuid) as PokemonStore;
-         } catch (var10: NoSuchMethodException) {
-            var13 = storeClass.getConstructor(UUID.class).newInstance(uuid) as PokemonStore;
-         }
-
-         var13.loadFromJSON(e);
-         br = var13;
-      } catch (var11: Exception) {
-         br = null;
-      }
-
-      return (T)br;
-   }
+    override fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+        return try {
+            file.reader().use {
+                val json = gson.fromJson<JsonObject>(it)
+                val store = try {
+                    storeClass.getConstructor(UUID::class.java, UUID::class.java).newInstance(uuid, uuid)
+                } catch (exception: NoSuchMethodException) {
+                    storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                }
+                store.loadFromJSON(json, registryAccess)
+                store
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
 }

@@ -1,40 +1,36 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
-import java.lang.reflect.Type
+import com.google.gson.*
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
+import java.lang.reflect.Type
 
-public class RegistryElementAdapter<T>(registryProvider: () -> Registry<Any>) : JsonDeserializer<T>, JsonSerializer<T> {
-   public final val registryProvider: () -> Registry<Any>
+/**
+ * A type adapter to process elements of a registry.
+ *
+ * @param T The type of the registry element.
+ * @property registryProvider A supplier for the registry that gets used. This is used to ensure the registry is only used once it's safe.
+ */
+class RegistryElementAdapter<T : Any>(val registryProvider: () -> Registry<T>) : JsonDeserializer<T>, JsonSerializer<T> {
 
-   init {
-      this.registryProvider = registryProvider;
-   }
+    override fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): T {
+        val identifier = context.deserialize<ResourceLocation>(jElement, ResourceLocation::class.java)
+        val registry = this.registryProvider()
+        return registry.get(identifier) ?: throw IllegalArgumentException("Cannot resolve element '$identifier' from ${registry.key().location()}")
+    }
 
-   public open fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): Any {
-      val identifier: ResourceLocation = context.deserialize(jElement, ResourceLocation::class.java) as ResourceLocation;
-      val registry: Registry = this.registryProvider.invoke() as Registry;
-      val var10000: Any = registry.m_7745_(identifier);
-      if (var10000 == null) {
-         throw new IllegalArgumentException("Cannot resolve element '$identifier' from ${registry.m_123023_().m_135782_()}");
-      } else {
-         return (T)var10000;
-      }
-   }
+    override fun serialize(element: T, type: Type, context: JsonSerializationContext): JsonElement {
+        val registry = this.registryProvider()
+        val identifier = registry.getKey(element) ?: throw IllegalArgumentException("Cannot resolve the identifier from the registry ${registry.key().location()} for $element")
+        return JsonPrimitive(identifier.toString())
+    }
 
-   public open fun serialize(element: Any, type: Type, context: JsonSerializationContext): JsonElement {
-      val registry: Registry = this.registryProvider.invoke() as Registry;
-      val var10000: ResourceLocation = registry.m_7981_(element);
-      if (var10000 == null) {
-         throw new IllegalArgumentException("Cannot resolve the identifier from the registry ${registry.m_123023_().m_135782_()} for $element");
-      } else {
-         return (new JsonPrimitive(var10000.toString())) as JsonElement;
-      }
-   }
 }

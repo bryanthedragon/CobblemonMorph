@@ -1,42 +1,41 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CatchRateModifier
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CatchRateModifier.Behavior
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import java.util.Arrays
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.labels.CobblemonPokemonLabels
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.world.entity.LivingEntity
 
-public class LabelModifier(multiplier: Float, matching: Boolean, vararg labels: String) : CatchRateModifier {
-   public final val labels: Array<out String>
-   public final val matching: Boolean
-   public final val multiplier: Float
+/**
+ * A [CatchRateModifier] based on the presence of [Pokemon] literal labels.
+ * This is checked against [Pokemon.hasLabels].
+ * See [CobblemonPokemonLabels] for some default labels.
+ *
+ * @property multiplier The multiplier if the label is present.
+ * @property matching Will this multiplier should be applied if the labels match?
+ * @property labels The literal labels being queried.
+ */
+class LabelModifier(
+    val multiplier: Float,
+    val matching: Boolean,
+    vararg val labels: String
+) : CatchRateModifier {
 
-   init {
-      this.multiplier = multiplier;
-      this.matching = matching;
-      this.labels = labels;
-   }
+    override fun isGuaranteed(): Boolean = false
 
-   public override fun isGuaranteed(): Boolean {
-      return false;
-   }
+    override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = this.multiplier
 
-   public override fun value(thrower: LivingEntity, pokemon: Pokemon): Float {
-      return this.multiplier;
-   }
+    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
 
-   public override fun behavior(thrower: LivingEntity, pokemon: Pokemon): Behavior {
-      return CatchRateModifier.Behavior.MULTIPLY;
-   }
+    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean = if (this.matching) pokemon.hasLabels(*this.labels) else !pokemon.hasLabels(*this.labels)
 
-   public override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean {
-      return if (this.matching)
-         pokemon.hasLabels(Arrays.copyOf(this.labels, this.labels.length))
-         else
-         !pokemon.hasLabels(Arrays.copyOf(this.labels, this.labels.length));
-   }
+    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
 
-   public override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float {
-      return (this.behavior(thrower, pokemon).getMutator().invoke(currentCatchRate, this.value(thrower, pokemon)) as java.lang.Number).floatValue();
-   }
 }

@@ -1,18 +1,23 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.tags
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonPropertyType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.StringProperty
+final class PokemonFlagProperty : CustomPokemonPropertyType<StringProperty> {
 
-public object PokemonFlagProperty : CustomPokemonPropertyType<StringProperty> {
-   private const val KEY: String = "tag"
-   public open val keys: Set<String> = SetsKt.setOf("tag")
-   public open val needsKey: Boolean = true
+    private const val KEY = "tag"
 
-   public open fun fromString(value: String?): StringProperty? {
-      return if (value == null) null else new StringProperty("tag", value, <unrepresentable>.INSTANCE, <unrepresentable>.INSTANCE);
-   }
+    override val keys = setOf(KEY)
+    override val needsKey = true
 
-   public open fun examples(): Set<String> {
-      return SetsKt.emptySet();
-   }
+    override fun fromString(value: String?) = if (value == null) null else StringProperty(KEY, value, { _, _ -> }, { pokemon, underlyingValue -> pokemon.hasLabels(underlyingValue) })
+
+    override fun examples() = emptySet<String>()
 }

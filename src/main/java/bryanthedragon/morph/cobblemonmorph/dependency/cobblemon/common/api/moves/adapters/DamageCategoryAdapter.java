@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.adapters
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.categories.DamageCategories
@@ -9,15 +17,13 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
+final class DamageCategoryAdapter: JsonSerializer<DamageCategory>, JsonDeserializer<DamageCategory> {
 
-public object DamageCategoryAdapter : JsonSerializer<DamageCategory>, JsonDeserializer<DamageCategory> {
-   public open fun serialize(src: DamageCategory, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-      return (new JsonPrimitive(src.getName())) as JsonElement;
-   }
+    override fun serialize(src: DamageCategory, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(src.name)
+    }
 
-   public open fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DamageCategory {
-      val var10000: DamageCategories = DamageCategories.INSTANCE;
-      val var10001: java.lang.String = json.getAsString();
-      return var10000.getOrException(var10001);
-   }
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DamageCategory {
+        return DamageCategories.getOrException(json.asString)
+    }
 }

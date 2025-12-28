@@ -1,6 +1,21 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMostSpecificMoLangValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.moLangFunctionMap
+import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
@@ -8,230 +23,83 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 
-public interface ServerPlayerEvent {
-   public val player: ServerPlayer
+/**
+ * Events related to a [ServerPlayer].
+ * As implied by the name these are fired on the server side.
+ *
+ * @author Licious
+ * @since February 15th, 2023
+ */
+interface ServerPlayerEvent {
 
-   public data Death(player: ServerPlayer) : Cancelable, ServerPlayerEvent {
-      public open val player: ServerPlayer
+    /**
+     * The [ServerPlayer] triggering the platform specific events.
+     */
+    val player: ServerPlayer
 
-      init {
-         this.player = player;
-      }
+    val context: MutableMap<String, MoValue>
+        get() = mutableMapOf("player" to player.asMoLangValue())
 
-      public operator fun component1(): ServerPlayer {
-         return this.player;
-      }
+    /**
+     * Fired when the [player] logs in.
+     */
+    record Login(override val player: ServerPlayer) : ServerPlayerEvent
 
-      public fun copy(player: ServerPlayer = this.player): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.Death {
-         return new ServerPlayerEvent.Death(player);
-      }
+    /**
+     * Fired when the [player] logs out.
+     */
+    record Logout(override val player: ServerPlayer) : ServerPlayerEvent
 
-      public override fun toString(): String {
-         return "Death(player=${this.player})";
-      }
+    /**
+     * Fired when the [player] dies.
+     * If canceled the death will be prevented but healing is required in order to not be stuck in a loop.
+     */
+    record Death(override val player: ServerPlayer) : ServerPlayerEvent, Cancelable()
 
-      public override fun hashCode(): Int {
-         return this.player.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerPlayerEvent.Death) {
-            return false;
-         } else {
-            return this.player == (other as ServerPlayerEvent.Death).player;
-         }
-      }
-   }
-
-   public data Login(player: ServerPlayer) : ServerPlayerEvent {
-      public open val player: ServerPlayer
-
-      init {
-         this.player = player;
-      }
-
-      public operator fun component1(): ServerPlayer {
-         return this.player;
-      }
-
-      public fun copy(player: ServerPlayer = this.player): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.Login {
-         return new ServerPlayerEvent.Login(player);
-      }
-
-      public override fun toString(): String {
-         return "Login(player=${this.player})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.player.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerPlayerEvent.Login) {
-            return false;
-         } else {
-            return this.player == (other as ServerPlayerEvent.Login).player;
-         }
-      }
-   }
-
-   public data Logout(player: ServerPlayer) : ServerPlayerEvent {
-      public open val player: ServerPlayer
-
-      init {
-         this.player = player;
-      }
-
-      public operator fun component1(): ServerPlayer {
-         return this.player;
-      }
-
-      public fun copy(player: ServerPlayer = this.player): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.Logout {
-         return new ServerPlayerEvent.Logout(player);
-      }
-
-      public override fun toString(): String {
-         return "Logout(player=${this.player})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.player.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerPlayerEvent.Logout) {
-            return false;
-         } else {
-            return this.player == (other as ServerPlayerEvent.Logout).player;
-         }
-      }
-   }
-
-   public data RightClickBlock(player: ServerPlayer, pos: BlockPos, hand: InteractionHand, face: Direction?) : Cancelable, ServerPlayerEvent {
-      public final val face: Direction?
-      public final val hand: InteractionHand
-      public open val player: ServerPlayer
-      public final val pos: BlockPos
-
-      init {
-         this.player = player;
-         this.pos = pos;
-         this.hand = hand;
-         this.face = face;
-      }
-
-      public operator fun component1(): ServerPlayer {
-         return this.player;
-      }
-
-      public operator fun component2(): BlockPos {
-         return this.pos;
-      }
-
-      public operator fun component3(): InteractionHand {
-         return this.hand;
-      }
-
-      public operator fun component4(): Direction? {
-         return this.face;
-      }
-
-      public fun copy(player: ServerPlayer = this.player, pos: BlockPos = this.pos, hand: InteractionHand = this.hand, face: Direction? = this.face): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.RightClickBlock {
-         return new ServerPlayerEvent.RightClickBlock(player, pos, hand, face);
-      }
-
-      public override fun toString(): String {
-         return "RightClickBlock(player=${this.player}, pos=${this.pos}, hand=${this.hand}, face=${this.face})";
-      }
-
-      public override fun hashCode(): Int {
-         return ((this.player.hashCode() * 31 + this.pos.hashCode()) * 31 + this.hand.hashCode()) * 31 + (if (this.face == null) 0 else this.face.hashCode());
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerPlayerEvent.RightClickBlock) {
-            return false;
-         } else {
-            val var2: ServerPlayerEvent.RightClickBlock = other as ServerPlayerEvent.RightClickBlock;
-            if (!(this.player == (other as ServerPlayerEvent.RightClickBlock).player)) {
-               return false;
-            } else if (!(this.pos == var2.pos)) {
-               return false;
-            } else if (this.hand != var2.hand) {
-               return false;
-            } else {
-               return this.face === var2.face;
+    /**
+     * Fired when the [player] right clicks a block.
+     * When canceled no interaction will occur.
+     *
+     * @property pos The [BlockPos] of the targeted block.
+     * @property hand The [InteractionHand] that hit the block.
+     * @property face The [Direction] of the block if any.
+     */
+    record RightClickBlock(override val player: ServerPlayer, val pos: BlockPos, val hand: InteractionHand, val face: Direction?) : ServerPlayerEvent, Cancelable() {
+        override val context: MutableMap<String, MoValue>
+            get() = super.context.apply {
+                put("x", DoubleValue(pos.x))
+                put("y", DoubleValue(pos.y))
+                put("z", DoubleValue(pos.z))
+                put("hand", StringValue(hand.name))
+                face?.let { put("face", StringValue(it.name)) }
             }
-         }
-      }
-   }
 
-   public data RightClickEntity(player: ServerPlayer, item: ItemStack, hand: InteractionHand, entity: Entity) : Cancelable, ServerPlayerEvent {
-      public final val entity: Entity
-      public final val hand: InteractionHand
-      public final val item: ItemStack
-      public open val player: ServerPlayer
+        val functions = moLangFunctionMap(cancelFunc)
+    }
 
-      init {
-         this.player = player;
-         this.item = item;
-         this.hand = hand;
-         this.entity = entity;
-      }
-
-      public operator fun component1(): ServerPlayer {
-         return this.player;
-      }
-
-      public operator fun component2(): ItemStack {
-         return this.item;
-      }
-
-      public operator fun component3(): InteractionHand {
-         return this.hand;
-      }
-
-      public operator fun component4(): Entity {
-         return this.entity;
-      }
-
-      public fun copy(player: ServerPlayer = this.player, item: ItemStack = this.item, hand: InteractionHand = this.hand, entity: Entity = this.entity): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerPlayerEvent.RightClickEntity {
-         return new ServerPlayerEvent.RightClickEntity(player, item, hand, entity);
-      }
-
-      public override fun toString(): String {
-         return "RightClickEntity(player=${this.player}, item=${this.item}, hand=${this.hand}, entity=${this.entity})";
-      }
-
-      public override fun hashCode(): Int {
-         return ((this.player.hashCode() * 31 + this.item.hashCode()) * 31 + this.hand.hashCode()) * 31 + this.entity.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerPlayerEvent.RightClickEntity) {
-            return false;
-         } else {
-            val var2: ServerPlayerEvent.RightClickEntity = other as ServerPlayerEvent.RightClickEntity;
-            if (!(this.player == (other as ServerPlayerEvent.RightClickEntity).player)) {
-               return false;
-            } else if (!(this.item == var2.item)) {
-               return false;
-            } else if (this.hand != var2.hand) {
-               return false;
-            } else {
-               return this.entity == var2.entity;
+    /**
+     * Fired when the [player] right clicks an entity.
+     * When canceled no interaction will occur.
+     *
+     * @property item The [ItemStack] clicked on the [entity].
+     * @property hand The [InteractionHand] that clicked the [entity].
+     * @property entity The [Entity] the [player] clicked.
+     */
+    record RightClickEntity(override val player: ServerPlayer, val item: ItemStack, val hand: InteractionHand, val entity: Entity): ServerPlayerEvent, Cancelable() {
+        override val context: MutableMap<String, MoValue>
+            get() = super.context.apply {
+                put("item", item.asMoLangValue(player.registryAccess()))
+                put("hand", StringValue(hand.name))
+                put("entity", entity.asMostSpecificMoLangValue())
             }
-         }
-      }
-   }
+
+        val functions = moLangFunctionMap(cancelFunc)
+    }
+
+    record AdvancementEarned(override val player: ServerPlayer, val advancement: AdvancementHolder): ServerPlayerEvent {
+        override val context: MutableMap<String, MoValue>
+            get() = super.context.apply {
+                put("advancement", StringValue(advancement.id.toString()))
+            }
+    }
 }

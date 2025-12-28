@@ -1,89 +1,71 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.VolatileStatus
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.nonpersistent.AttractStatus
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.nonpersistent.ConfuseStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.BurnStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.FrozenStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.ParalysisStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.PoisonBadlyStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.PoisonStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.SleepStatus
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.nonpersistent.ConfuseStatus
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.nonpersistent.AttractStatus
 import net.minecraft.resources.ResourceLocation
 
-@SourceDebugExtension(["SMAP\nStatuses.kt\nKotlin\n*S Kotlin\n*F\n+ 1 Statuses.kt\ncom/cobblemon/mod/common/api/pokemon/status/Statuses\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,62:1\n1#2:63\n*E\n"])
-public object Statuses {
-   public final val ATTRACT: AttractStatus = INSTANCE.registerStatus(new AttractStatus()) as AttractStatus
-   public final val BURN: BurnStatus = INSTANCE.registerStatus(new BurnStatus()) as BurnStatus
-   public final val CONFUSE: ConfuseStatus = INSTANCE.registerStatus(new ConfuseStatus()) as ConfuseStatus
-   public final val FROZEN: FrozenStatus = INSTANCE.registerStatus(new FrozenStatus()) as FrozenStatus
-   public final val PARALYSIS: ParalysisStatus = INSTANCE.registerStatus(new ParalysisStatus()) as ParalysisStatus
-   public final val POISON: PoisonStatus = INSTANCE.registerStatus(new PoisonStatus()) as PoisonStatus
-   public final val POISON_BADLY: PoisonBadlyStatus = INSTANCE.registerStatus(new PoisonBadlyStatus()) as PoisonBadlyStatus
-   public final val SLEEP: SleepStatus = INSTANCE.registerStatus(new SleepStatus()) as SleepStatus
-   private final val allStatuses: MutableList<Status> = (new ArrayList()) as java.util.List
-   private final val persistentStatuses: MutableList<Status> = (new ArrayList()) as java.util.List
-   private final val volatileStatuses: MutableList<Status> = (new ArrayList()) as java.util.List
+/**
+ * Main API point for Statuses
+ * Get or register Statuses
+ *
+ * NOTE: May seem weird to have so many things called volatile statuses but the package is called nonpersistent.
+ * Its because volatile is a reserved keyword in Java. Cant use it in a package name
+ *
+ * @author Deltric
+ */final class Statuses {
+    private val persistentStatuses = mutableListOf<Status>()
+    private val volatileStatuses = mutableListOf<Status>()
+    private val allStatuses = mutableListOf<Status>()
 
-   public fun <T : Status> registerStatus(status: Any): Any {
-      if (status is PersistentStatus) {
-         persistentStatuses.add(status);
-      } else if (status is VolatileStatus) {
-         volatileStatuses.add(status);
-      }
+    @JvmField
+    val POISON = registerStatus(PoisonStatus())
+    @JvmField
+    val POISON_BADLY = registerStatus(PoisonBadlyStatus())
+    @JvmField
+    val PARALYSIS = registerStatus(ParalysisStatus())
+    @JvmField
+    val SLEEP = registerStatus(SleepStatus())
+    @JvmField
+    val FROZEN = registerStatus(FrozenStatus())
+    @JvmField
+    val BURN = registerStatus(BurnStatus())
+    @JvmField
+    val ATTRACT = registerStatus(AttractStatus())
+    @JvmField
+    val CONFUSE = registerStatus(ConfuseStatus())
 
-      allStatuses.add(status);
-      return (T)status;
-   }
+    @JvmStatic
+    fun <T: Status> registerStatus(status: T) : T {
+        if (status is PersistentStatus) {
+            persistentStatuses.add(status)
+        }
+        else if (status is VolatileStatus) {
+            volatileStatuses.add(status)
+        }
+        allStatuses.add(status)
+        return status
+    }
 
-   public fun getStatus(name: ResourceLocation): Status? {
-      val var3: java.util.Iterator = allStatuses.iterator();
-
-      var var10000: Any;
-      while (true) {
-         if (var3.hasNext()) {
-            val var4: Any = var3.next();
-            if (!((var4 as Status).getName() == name)) {
-               continue;
-            }
-
-            var10000 = var4;
-            break;
-         }
-
-         var10000 = null;
-         break;
-      }
-
-      return var10000 as Status;
-   }
-
-   public fun getStatus(showdownName: String): Status? {
-      val var3: java.util.Iterator = allStatuses.iterator();
-
-      var var10000: Any;
-      while (true) {
-         if (var3.hasNext()) {
-            val var4: Any = var3.next();
-            if (!((var4 as Status).getShowdownName() == showdownName)) {
-               continue;
-            }
-
-            var10000 = var4;
-            break;
-         }
-
-         var10000 = null;
-         break;
-      }
-
-      return var10000 as Status;
-   }
-
-   public fun getPersistentStatuses(): MutableList<Status> {
-      return persistentStatuses;
-   }
+    @JvmStatic
+    fun getStatus(name: ResourceLocation) = allStatuses.find { status -> status.name == name }
+    @JvmStatic
+    fun getStatus(showdownName: String) = allStatuses.find { it.showdownName == showdownName }
+    @JvmStatic
+    fun getPersistentStatuses() = persistentStatuses
 }

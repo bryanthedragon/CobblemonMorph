@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.berry
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Berry
@@ -7,42 +15,44 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 
-public class BerryYieldCalculationEvent(berry: Berry,
-      world: Level,
-      state: BlockState,
-      pos: BlockPos,
-      placer: LivingEntity?,
-      yield: Int,
-      passedGrowthFactors: Collection<GrowthFactor>
-   ) :
-   BerryEvent {
-   public open val berry: Berry
-   public final val passedGrowthFactors: Collection<GrowthFactor>
-   public final val placer: LivingEntity?
-   public final val pos: BlockPos
-   public final val state: BlockState
-   public final val world: Level
+/**
+ * The event fired when [Berry.calculateYield] is invoked.
+ *
+ * @property world The [World] the berry tree is in.
+ * @property state The [BlockState] of the berry tree.
+ * @property pos The [BlockPos] of the berry tree.
+ * @property placer The [LivingEntity] triggering the calculation.
+ * @property yield The current yield of berries.
+ * @property passedGrowthFactors The [Berry.growthFactors] where [GrowthFactor.isValid] was true.
+ *
+ * @author Licious
+ * @since November 28th, 2022
+ */
+class BerryYieldCalculationEvent(
+    override val berry: Berry,
+    val world: Level,
+    val state: BlockState,
+    val pos: BlockPos,
+    val placer: LivingEntity?,
+    yield: Int,
+    val passedGrowthFactors: Collection<GrowthFactor>
+) : BerryEvent {
 
-   public final var yield: Int
-      public final set(value) {
-         val max: Int = this.getBerry().maxYield();
-         if (value > max) {
-            throw new IllegalArgumentException("Cannot set the berry yield for ${this.getBerry().getIdentifier()} above $max");
-         } else if (value < 0) {
-            throw new IllegalArgumentException("A berry tree cannot yield a negative amount of berries");
-         } else {
-            this.yield = value;
-         }
-      }
+    /**
+     * The amount of berries this tree will yield.
+     *
+     * @throws IllegalArgumentException If a new value exceeds [Berry.maxYield] or be lesser than 0.
+     */
+    var yield: Int = yield
+        set(value) {
+            val max = this.berry.maxYield()
+            if (value > max) {
+                throw IllegalArgumentException("Cannot set the berry yield for ${this.berry.identifier} above $max")
+            }
+            if (value < 0) {
+                throw IllegalArgumentException("A berry tree cannot yield a negative amount of berries")
+            }
+            field = value
+        }
 
-
-   init {
-      this.berry = berry;
-      this.world = world;
-      this.state = state;
-      this.pos = pos;
-      this.placer = placer;
-      this.passedGrowthFactors = passedGrowthFactors;
-      this.yield = yield;
-   }
 }

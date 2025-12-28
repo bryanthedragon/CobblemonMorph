@@ -1,19 +1,23 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.pipes
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Transform
 
-public class MapTransform<I, O>(mapping: (Any) -> Any) : Transform<I, O> {
-   private final val mapping: (Any) -> Any
-
-   init {
-      this.mapping = mapping;
-   }
-
-   public override operator fun invoke(input: Any): Any {
-      return (O)this.mapping.invoke(input);
-   }
-
-   override fun noTransform(terminate: Boolean): Void {
-      return Transform.DefaultImpls.noTransform(this, terminate);
-   }
+/**
+ * A transform that transforms the emitted values from one value to another using the given mapping function.
+ *
+ * @author Hiroku
+ * @since November 26th, 2021
+ */
+class MapTransform<I, O>(private val mapping: (I) -> O) : Transform<I, O> {
+    override fun invoke(input: I): O {
+        return mapping(input)
+    }
 }

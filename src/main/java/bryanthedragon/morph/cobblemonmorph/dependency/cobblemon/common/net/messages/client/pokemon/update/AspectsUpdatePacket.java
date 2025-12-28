@@ -1,38 +1,37 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import io.netty.buffer.ByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class AspectsUpdatePacket(pokemon: () -> Pokemon, value: Set<String>) : SingleUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
+class AspectsUpdatePacket(pokemon: () -> Pokemon?, value: Set<String>): SingleUpdatePacket<Set<String>, AspectsUpdatePacket>(pokemon, value) {
+    override val id = ID
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeCollection(this.value) { pb, value -> pb.writeString(value) }
+    }
 
-   init {
-      this.id = ID;
-   }
+    override fun set(pokemon: Pokemon, value: Set<String>) {
+        pokemon.forcedAspects = value
+    }
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      buffer.m_236828_(this.getValue(), AspectsUpdatePacket::encodeValue$lambda$0);
-   }
+    companion object {
+        val ID = cobblemonResource("aspects_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): AspectsUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val aspects = buffer.readList(ByteBuf::readString).toSet()
+            return AspectsUpdatePacket(pokemon, aspects)
+        }
+    }
 
-   public open fun set(pokemon: Pokemon, value: Set<String>) {
-      pokemon.setAspects(value);
-   }
-
-   @JvmStatic
-   fun `encodeValue$lambda$0`(pb: FriendlyByteBuf, value: java.lang.String) {
-      pb.m_130070_(value);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): AspectsUpdatePacket {
-         val pokemon: Function0 = PokemonUpdatePacket.Companion.decodePokemon(buffer);
-         val var10000: java.util.List = buffer.m_236845_(FriendlyByteBuf::m_130277_);
-         return new AspectsUpdatePacket(pokemon, CollectionsKt.toSet(var10000));
-      }
-   }
 }

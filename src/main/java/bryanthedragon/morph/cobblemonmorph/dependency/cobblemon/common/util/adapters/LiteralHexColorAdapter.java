@@ -1,22 +1,24 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
+import com.google.gson.*
 import java.awt.Color
 import java.lang.reflect.Type
 
-public object LiteralHexColorAdapter : JsonDeserializer<Color>, JsonSerializer<Color> {
-   public open fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): Color {
-      val var10002: java.lang.String = element.getAsString();
-      return new Color(Integer.parseInt(StringsKt.removePrefix(var10002, "#"), CharsKt.checkRadix(16)));
-   }
+/**
+ * A type adapter meant to parse a hex string color code.
+ *
+ * @author Licious
+ * @since December 5th, 2022
+ */final class LiteralHexColorAdapter : JsonDeserializer<Color>, JsonSerializer<Color> {
+    override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext) = Color(element.asString.removePrefix("#").toInt(16))
 
-   public open fun serialize(color: Color, type: Type, context: JsonSerializationContext): JsonPrimitive {
-      val var10002: java.lang.String = Integer.toString(color.getRGB(), CharsKt.checkRadix(16));
-      return new JsonPrimitive("#$var10002");
-   }
+    override fun serialize(color: Color, type: Type, context: JsonSerializationContext) = JsonPrimitive("#${color.rgb.toString(16)}")
 }

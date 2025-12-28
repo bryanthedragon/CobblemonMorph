@@ -1,59 +1,44 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.starter
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.moLangFunctionMap
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
 import net.minecraft.server.level.ServerPlayer
 
-public data StarterChosenEvent(player: ServerPlayer, properties: PokemonProperties, pokemon: Pokemon) : Cancelable {
-   public final val player: ServerPlayer
-   public final var pokemon: Pokemon
-   public final val properties: PokemonProperties
+/**
+ * Event fired when a starter Pokémon is chosen.
+ *
+ * @author Hiroku
+ * @since August 1st, 2022
+ */
+record StarterChosenEvent(val player: ServerPlayer, val properties: PokemonProperties, var pokemon: Pokemon) : Cancelable() {
+    /**
+     * Returns a context map for use in MoLang functions.
+     */
+    fun getContext(): MutableMap<String, MoValue> {
+        return mutableMapOf(
+            "player" to (player.asMoLangValue() ?: DoubleValue.ZERO),
+            "pokemon" to pokemon.struct
+        )
+    }
 
-   init {
-      this.player = player;
-      this.properties = properties;
-      this.pokemon = pokemon;
-   }
-
-   public operator fun component1(): ServerPlayer {
-      return this.player;
-   }
-
-   public operator fun component2(): PokemonProperties {
-      return this.properties;
-   }
-
-   public operator fun component3(): Pokemon {
-      return this.pokemon;
-   }
-
-   public fun copy(player: ServerPlayer = this.player, properties: PokemonProperties = this.properties, pokemon: Pokemon = this.pokemon): StarterChosenEvent {
-      return new StarterChosenEvent(player, properties, pokemon);
-   }
-
-   public override fun toString(): String {
-      return "StarterChosenEvent(player=${this.player}, properties=${this.properties}, pokemon=${this.pokemon})";
-   }
-
-   public override fun hashCode(): Int {
-      return (this.player.hashCode() * 31 + this.properties.hashCode()) * 31 + this.pokemon.hashCode();
-   }
-
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is StarterChosenEvent) {
-         return false;
-      } else {
-         val var2: StarterChosenEvent = other as StarterChosenEvent;
-         if (!(this.player == (other as StarterChosenEvent).player)) {
-            return false;
-         } else if (!(this.properties == var2.properties)) {
-            return false;
-         } else {
-            return this.pokemon == var2.pokemon;
-         }
-      }
-   }
+    /**
+     * A map of MoLang functions that can be used in this event.
+     */
+    val functions = moLangFunctionMap(
+        cancelFunc
+    )
 }

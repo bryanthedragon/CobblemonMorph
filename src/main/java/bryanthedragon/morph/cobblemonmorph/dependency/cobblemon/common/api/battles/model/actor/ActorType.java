@@ -1,6 +1,21 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor
 
-public enum ActorType {
-   WILD,
-   PLAYER,
-   NPC}
+/**
+ * The type of actor it is. This is used for defining PvP, PvW, etc.
+ *
+ * @author Hiroku
+ * @since July 1st, 2022
+ */
+enum class ActorType {
+    WILD,
+    PLAYER,
+    NPC
+}

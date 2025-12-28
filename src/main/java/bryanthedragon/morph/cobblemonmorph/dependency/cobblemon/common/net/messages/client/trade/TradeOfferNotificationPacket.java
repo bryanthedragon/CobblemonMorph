@@ -1,68 +1,48 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.TradeManager
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class TradeOfferNotificationPacket(tradeOfferId: UUID, traderId: UUID, traderName: MutableComponent) : NetworkPacket<TradeOfferNotificationPacket> {
-   public open val id: ResourceLocation
-   public final val tradeOfferId: UUID
-   public final val traderId: UUID
-   public final val traderName: MutableComponent
+/**
+ * Packet sent to the client to notify a player that someone requested to trade with them.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeOfferNotificationHandler].
+ *
+ * @param requestID The unique identifier of the request.
+ * @param senderID The unique identifier of the player who sent the request.
+ * @param expiryTime How long (in seconds) the offer is active.
+ *
+ * @author Hiroku
+ * @since March 6th, 2023
+ */
+class TradeOfferNotificationPacket(val requestID: UUID, val senderID: UUID, val expiryTime: Int): NetworkPacket<TradeOfferNotificationPacket> {
+    override val id = ID
 
-   init {
-      this.tradeOfferId = tradeOfferId;
-      this.traderId = traderId;
-      this.traderName = traderName;
-      this.id = ID;
-   }
+    constructor(request: TradeManager.TradeRequest) : this(
+        requestID = request.requestID,
+        senderID = request.senderID,
+        expiryTime = request.expiryTime
+    )
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.tradeOfferId);
-      buffer.m_130077_(this.traderId);
-      buffer.m_130083_(this.traderName as Component);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(requestID)
+        buffer.writeUUID(senderID)
+        buffer.writeInt(expiryTime)
+    }
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): TradeOfferNotificationPacket {
-         val var10002: UUID = buffer.m_130259_();
-         val var10003: UUID = buffer.m_130259_();
-         val var10004: MutableComponent = buffer.m_130238_().m_6881_();
-         return new TradeOfferNotificationPacket(var10002, var10003, var10004);
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("trade_offer_notification")
+        fun decode(buffer: RegistryFriendlyByteBuf) = TradeOfferNotificationPacket(buffer.readUUID(), buffer.readUUID(), buffer.readInt())
+    }
 }

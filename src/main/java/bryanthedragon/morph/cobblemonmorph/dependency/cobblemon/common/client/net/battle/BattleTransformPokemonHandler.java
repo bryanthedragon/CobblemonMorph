@@ -1,35 +1,39 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.battle
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ActiveClientBattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleInitializePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleTransformPokemonPacket
 import net.minecraft.client.Minecraft
 
-public object BattleTransformPokemonHandler : ClientNetworkPacketHandler<BattleTransformPokemonPacket> {
-   public open fun handle(packet: BattleTransformPokemonPacket, client: Minecraft) {
-      val var10000: ClientBattle = CobblemonClient.INSTANCE.getBattle();
-      if (var10000 != null) {
-         val activeBattlePokemon: ActiveClientBattlePokemon = var10000.getPokemonFromPNX(packet.getPnx()).component2() as ActiveClientBattlePokemon;
-         val update: BattleInitializePacket.ActiveBattlePokemonDTO = packet.getUpdatedPokemon();
-         val var9: ClientBattlePokemon = activeBattlePokemon.getBattlePokemon();
-         if (var9 != null) {
-            var9.setDisplayName(update.getDisplayName());
-            var9.setProperties(update.getProperties());
-            var9.setAspects(update.getAspects());
-            var9.setHpValue(update.getHpValue());
-            var9.setMaxHp(update.getMaxHp());
-            var9.setHpFlat(update.isFlatHp());
-            var9.setStatus(update.getStatus());
-            var9.setStatChanges(update.getStatChanges());
-         }
-      }
-   }
+/**
+ * The handler for [BattleTransformPokemonPacket]s. Updates the [ClientBattlePokemon] after a transformation.
+ *
+ * @author Segfault Guy
+ * @since April 22nd, 2023
+ */final class BattleTransformPokemonHandler : ClientNetworkPacketHandler<BattleTransformPokemonPacket> {
+    override fun handle(packet: BattleTransformPokemonPacket, client: Minecraft) {
+        val battle = CobblemonClient.battle ?: return
+        val (_, activeBattlePokemon) = battle.getPokemonFromPNX(packet.pnx)
+        val update = packet.updatedPokemon
 
-   fun handleOnNettyThread(packet: BattleTransformPokemonPacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
+        activeBattlePokemon.battlePokemon?.apply {
+            displayName = update.displayName
+            properties = update.properties
+            updateAspects(update.aspects)
+            hpValue = update.hpValue
+            maxHp = update.maxHp
+            isHpFlat = update.isFlatHp
+            status = update.status
+            statChanges = update.statChanges
+        }
+    }
 }

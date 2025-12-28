@@ -1,61 +1,38 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.interact
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.wheel.InteractTypePokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readEnumConstant
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeEnumConstant
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class InteractPokemonPacket(pokemonID: UUID, mountShoulder: Boolean) : NetworkPacket<InteractPokemonPacket> {
-   public open val id: ResourceLocation
-   public final val mountShoulder: Boolean
-   public final val pokemonID: UUID
-
-   init {
-      this.pokemonID = pokemonID;
-      this.mountShoulder = mountShoulder;
-      this.id = ID;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.pokemonID);
-      buffer.writeBoolean(this.mountShoulder);
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): InteractPokemonPacket {
-         val var10002: UUID = buffer.m_130259_();
-         return new InteractPokemonPacket(var10002, buffer.readBoolean());
-      }
-   }
+/**
+ * Tells the server to handle Pokémon interaction.
+ *
+ * Handled by [InteractPokemonHandler].
+ *
+ * @author Village
+ * @since January 7th, 2023
+ */
+class InteractPokemonPacket(val pokemonID: UUID, val interactType: InteractTypePokemon) : NetworkPacket<InteractPokemonPacket> {
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(pokemonID)
+        buffer.writeEnumConstant(interactType)
+    }
+    companion object {
+        val ID = cobblemonResource("interact_pokemon")
+        fun decode(buffer: RegistryFriendlyByteBuf) = InteractPokemonPacket(buffer.readUUID(), buffer.readEnumConstant(InteractTypePokemon::class.java))
+    }
 }

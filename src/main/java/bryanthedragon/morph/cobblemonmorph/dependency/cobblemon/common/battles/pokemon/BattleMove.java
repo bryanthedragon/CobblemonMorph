@@ -1,12 +1,21 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Move
 
-public class BattleMove(move: Move) {
-   public final var disabled: Boolean
-   public final val move: Move
-
-   init {
-      this.move = move;
-   }
+/**
+ * Wrapper for [Move] containing battle only variables
+ *
+ * @since January 16th, 2022
+ * @author Deltric
+ */
+class BattleMove(val move : Move) {
+    var disabled : Boolean = false
 }

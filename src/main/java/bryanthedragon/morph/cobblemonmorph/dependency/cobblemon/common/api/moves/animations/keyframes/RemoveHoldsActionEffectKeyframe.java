@@ -1,31 +1,35 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.keyframes
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.SchedulingFunctionsKt
-import java.util.LinkedHashSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.delayedFuture
 import java.util.concurrent.CompletableFuture
-import kotlin.jvm.functions.Function1
 
-public class RemoveHoldsActionEffectKeyframe : ActionEffectKeyframe {
-   public final val delay: Float
-   public final val holds: MutableSet<String> = (new LinkedHashSet()) as java.util.Set
-
-   public override fun play(context: ActionEffectContext): CompletableFuture<Unit> {
-      val var10000: CompletableFuture = SchedulingFunctionsKt.delayedFuture$default(0, this.delay, true, 1, null)
-         .thenApply(RemoveHoldsActionEffectKeyframe::play$lambda$0);
-      return var10000;
-   }
-
-   override fun interrupt(context: ActionEffectContext) {
-      ActionEffectKeyframe.DefaultImpls.interrupt(this, context);
-   }
-
-   override fun skip(): CompletableFuture<Unit> {
-      return ActionEffectKeyframe.DefaultImpls.skip(this);
-   }
-
-   @JvmStatic
-   fun `play$lambda$0`(`$tmp0`: Function1, p0: Any): Unit {
-      return `$tmp0`.invoke(p0) as Unit;
-   }
+/**
+ * An [ActionEffectKeyframe] that clears some holds from the context, potentially marking the effect as
+ * complete as far as any blocked actions are concerned. If no holds are specified, then all holds are
+ * removed.
+ *
+ * @author Hiroku
+ * @since October 27th, 2023
+ */
+class RemoveHoldsActionEffectKeyframe : ActionEffectKeyframe {
+    val delay = 0F
+    val holds = mutableSetOf<String>()
+    override fun play(context: ActionEffectContext): CompletableFuture<Unit> {
+        return delayedFuture(seconds = delay).thenApply {
+            if (holds.isEmpty()) {
+                context.holds.clear()
+            } else {
+                context.holds.removeAll(holds)
+            }
+        }
+    }
 }

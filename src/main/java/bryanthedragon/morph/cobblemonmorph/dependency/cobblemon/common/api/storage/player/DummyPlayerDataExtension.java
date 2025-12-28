@@ -1,24 +1,35 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player
 
 import com.google.gson.JsonObject
 
-public class DummyPlayerDataExtension(json: JsonObject) : PlayerDataExtension {
-   public final val json: JsonObject
+/**
+ * A dummy implementation of the [PlayerDataExtension] interface.
+ * Used for when a previous [PlayerDataExtension] is no longer registered.
+ *
+ * @author Deltric
+ * @since 2023-10-01
+ */
+class DummyPlayerDataExtension(
+    val json: JsonObject
+): PlayerDataExtension {
 
-   init {
-      this.json = json;
-   }
+    override fun name(): String {
+        return this.json.get(PlayerDataExtension.NAME_KEY).asString
+    }
 
-   public override fun name(): String {
-      val var10000: java.lang.String = this.json.get(PlayerDataExtension.Companion.getNAME_KEY()).getAsString();
-      return var10000;
-   }
+    override fun serialize(): JsonObject {
+        return this.json
+    }
 
-   public override fun serialize(): JsonObject {
-      return this.json;
-   }
-
-   public override fun deserialize(json: JsonObject): PlayerDataExtension {
-      return new DummyPlayerDataExtension(json);
-   }
+    override fun deserialize(json: JsonObject): PlayerDataExtension {
+        return DummyPlayerDataExtension(json)
+    }
 }

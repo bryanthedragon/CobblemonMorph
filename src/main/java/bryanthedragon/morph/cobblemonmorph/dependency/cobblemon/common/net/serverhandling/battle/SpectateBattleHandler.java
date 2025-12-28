@@ -1,74 +1,83 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork.sendPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ServerNetworkPacketHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.yellow
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PlayerBattleActor
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleInitializePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMessagePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMusicPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.SpectateBattlePacket
-import java.util.ArrayList;
-import java.util.UUID
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundEvent
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.ClipContext
 import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+final class SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> {
+    val LOGGER = LogManager.getLogger()
+    override fun handle(
+        packet: SpectateBattlePacket,
+        server: MinecraftServer,
+        player: ServerPlayer
+    ) {
+        val battle = BattleRegistry.getBattleByParticipatingPlayerId(packet.targetedEntityId)
+        if (battle != null && Cobblemon.config.allowSpectating) {
+            val target = battle.actors.filterIsInstance<PlayerBattleActor>().firstOrNull { it.uuid == packet.targetedEntityId }
 
-@SourceDebugExtension(["SMAP\nSpectateBattleHandler.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SpectateBattleHandler.kt\ncom/cobblemon/mod/common/net/serverhandling/battle/SpectateBattleHandler\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,44:1\n800#2,11:45\n288#2,2:56\n1#3:58\n*S KotlinDebug\n*F\n+ 1 SpectateBattleHandler.kt\ncom/cobblemon/mod/common/net/serverhandling/battle/SpectateBattleHandler\n*L\n33#1:45,11\n33#1:56,2\n*E\n"])
-public object SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> {
-   public final val LOGGER: Logger = LogManager.getLogger()
-
-   public open fun handle(packet: SpectateBattlePacket, server: MinecraftServer, player: ServerPlayer) {
-      val battle: PokemonBattle = BattleRegistry.INSTANCE.getBattleByParticipatingPlayerId(packet.getTargetedEntityId());
-      if (battle != null && Cobblemon.INSTANCE.getConfig().getAllowSpectating()) {
-         val `$this$firstOrNull$iv`: java.lang.Iterable = battle.getActors();
-         val var9: java.util.Collection = new ArrayList();
-
-         for (Object element$iv$iv : $this$filterIsInstance$iv) {
-            if (`element$iv$iv` is PlayerBattleActor) {
-               var9.add(`element$iv$iv`);
-            }
-         }
-
-         val it: java.util.Iterator = (var9 as java.util.List).iterator();
-
-         var var10000: Any;
-         while (true) {
-            if (!it.hasNext()) {
-               var10000 = null;
-               break;
+            // Check los and range
+            val targetedPlayerEntity = packet.targetedEntityId.getPlayer() ?: return
+            if (player.traceFirstEntityCollision(
+                            entityClass = LivingEntity::class.java,
+                            ignoreEntity = player,
+                            maxDistance = Cobblemon.config.battleSpectateMaxDistance,
+                            collideBlock = ClipContext.Fluid.NONE) != targetedPlayerEntity) {
+                player.sendSystemMessage(lang("ui.interact.failed").yellow())
+                return
             }
 
-            val var16: Any = it.next();
-            if ((var16 as PlayerBattleActor).getUuid() == packet.getTargetedEntityId()) {
-               var10000 = (java.util.Set)var16;
-               break;
-            }
-         }
+            this.spectateBattle(targetedPlayerEntity, player)
 
-         val target: PlayerBattleActor = var10000 as PlayerBattleActor;
-         var10000 = battle.getSpectators();
-         val var10001: UUID = player.m_20148_();
-         var10000.add(var10001);
-         CobblemonNetwork.INSTANCE.sendPacket(player, new BattleInitializePacket(battle, null));
-         CobblemonNetwork.INSTANCE.sendPacket(player, new BattleMessagePacket(battle.getChatLog()));
-         if (target != null) {
-            val var21: SoundEvent = target.getBattleTheme();
-            if (var21 != null) {
-               CobblemonNetwork.INSTANCE.sendPacket(player, new BattleMusicPacket(var21, 0.0F, 0.0F, 6, null));
-            }
-         }
-      } else {
-         LOGGER.error("Battle of player id ${packet.getTargetedEntityId()} not found (${player.m_20148_()} tried spectating)");
-      }
-   }
+            // Handle music
+            target?.battleTheme?.let { player.sendPacket(BattleMusicPacket(it)) }
+        }
+        else {
+            LOGGER.error("Battle of player id ${packet.targetedEntityId} not found (${player.uuid} tried spectating)")
+        }
+    }
 
-   fun handleOnNettyThread(packet: SpectateBattlePacket, server: MinecraftServer, player: ServerPlayer) {
-      ServerNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet, server, player);
-   }
+    fun spectateBattle(target: ServerPlayer, player: ServerPlayer) {
+        if (player == target) {
+            player.sendSystemMessage(lang("command.spectatebattle.self_spectate_disallowed").red())
+            return
+        }
+
+        if (!target.isInBattle()) {
+            player.sendSystemMessage(lang("command.spectatebattle.player_not_in_battle").red())
+            return
+        }
+
+        if (player.isInBattle()) {
+            player.sendSystemMessage(lang("command.spectatebattle.while_battling_disallowed").red())
+            return
+        }
+
+        val battle = BattleRegistry.getBattleByParticipatingPlayer(target) ?: return
+
+        battle.spectators.add(player.uuid)
+        player.sendPacket(BattleInitializePacket(battle, null))
+        player.sendPacket(BattleMessagePacket(battle.chatLog))
+    }
+
 }

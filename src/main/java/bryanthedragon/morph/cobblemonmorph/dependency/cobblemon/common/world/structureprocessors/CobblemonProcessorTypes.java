@@ -1,28 +1,29 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.structureprocessors
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import com.mojang.serialization.Codec
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import com.mojang.serialization.MapCodec
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType
+final class CobblemonProcessorTypes {
+    val registry = BuiltInRegistries.STRUCTURE_PROCESSOR
+    val lists = CobblemonStructureProcessorLists
 
-public object CobblemonProcessorTypes {
-   public final val RANDOM_POOLED_STATES: StructureProcessorType<RandomizedStructureMappedBlockStatePairProcessor> =
-      INSTANCE.register("random_pooled_states", RandomizedStructureMappedBlockStatePairProcessor.Companion.getCODEC())
-      public final val lists: CobblemonStructureProcessorLists = CobblemonStructureProcessorLists.INSTANCE
-   public final val registry: Registry<StructureProcessorType<*>> = BuiltInRegistries.f_256897_
+    @JvmField
+    val RANDOM_POOLED_STATES = register("random_pooled_states", RandomizedStructureMappedBlockStatePairProcessor.CODEC)
 
-   public fun <T : StructureProcessor> register(id: String, codec: Codec<Any>): StructureProcessorType<Any> {
-      val var10000: Any = Registry.m_122965_(registry, MiscUtilsKt.cobblemonResource(id), CobblemonProcessorTypes::register$lambda$0);
-      return var10000 as StructureProcessorType<T>;
-   }
+    fun <T : StructureProcessor> register(id: String, codec: MapCodec<T>): StructureProcessorType<T> {
+        return Registry.register(registry, cobblemonResource(id), StructureProcessorType { codec })
+    }
 
-   public fun touch() {
-   }
-
-   @JvmStatic
-   fun `register$lambda$0`(`$codec`: Codec): Codec {
-      return `$codec`;
-   }
+    fun touch() = Unit
 }

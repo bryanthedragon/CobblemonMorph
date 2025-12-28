@@ -1,113 +1,80 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission.CobblemonPermissions
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.CobblemonWorldSpawnerManager
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnCause
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SpawningContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.EntitySpawnResult
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.PlayerSpawner
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner.SpawningArea
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.CommandUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PermissionUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.AreaSpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.green
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.alias
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.commandLang
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.effectiveName
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.permission
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.spawner
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType
-import com.mojang.brigadier.builder.ArgumentBuilder
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.tree.LiteralCommandNode
-import java.util.UUID
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.Entity
+import net.minecraft.commands.Commands.literal
 
-public object SpawnPokemonFromPool {
-   public const val ALIAS: String = "forcespawn"
-   public const val NAME: String = "spawnpokemonfrompool"
-   private final val UNABLE_TO_SPAWN: MutableComponent = LocalizationUtilsKt.commandLang("spawnpokemonfrompool.unable_to_spawn")
+/**
+ * Spawn Pokemon From Surrounding Pool
+ *
+ * `/spawnpokemonfrompool [amount]` or the alias `/forcespawn [amount]`
+ *
+ * This command can fail if the randomly selected spawn region has no possible [AreaSpawnablePosition]. For example if
+ *   you are flying in the air
+ */final class SpawnPokemonFromPool {
+    const val NAME = "spawnpokemonfrompool"
+    const val ALIAS = "forcespawn"
 
-   public fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-      val var10001: LiteralArgumentBuilder = Commands.m_82127_("spawnpokemonfrompool");
-      val spawnPokemonFromPoolCommand: LiteralCommandNode = dispatcher.register(
-         ((PermissionUtilsKt.permission$default(var10001 as ArgumentBuilder, CobblemonPermissions.INSTANCE.getSPAWN_POKEMON(), false, 2, null) as LiteralArgumentBuilder)
-               .then(Commands.m_82129_("amount", IntegerArgumentType.integer(1) as ArgumentType).executes(SpawnPokemonFromPool::register$lambda$0)) as LiteralArgumentBuilder)
-            .executes(SpawnPokemonFromPool::register$lambda$1) as LiteralArgumentBuilder
-      );
-      dispatcher.register(CommandUtilsKt.alias(spawnPokemonFromPoolCommand, "forcespawn"));
-   }
+    private val UNABLE_TO_SPAWN = commandLang("spawnpokemonfrompool.unable_to_spawn")
 
-   private fun execute(context: CommandContext<CommandSourceStack>, amount: Int): Int {
-      val player: ServerPlayer = (context.getSource() as CommandSourceStack).m_81375_();
-      val var10000: java.util.Map = CobblemonWorldSpawnerManager.INSTANCE.getSpawnersForPlayers();
-      val var10001: UUID = player.m_20148_();
-      val spawner: PlayerSpawner = MapsKt.getValue(var10000, var10001) as PlayerSpawner;
-      var spawnsTriggered: Int = 0;
-      var i: Int = 1;
-      if (1 <= amount) {
-         while (true) {
-            val var13: SpawningArea = spawner.getArea(new SpawnCause(spawner, spawner.chooseBucket(), spawner.getCauseEntity() as Entity));
-            if (var13 != null) {
-               val contexts: java.util.List = spawner.getResolver()
-                  .resolve(spawner, spawner.getContextCalculators(), spawner.getProspector().prospect(spawner, var13));
-               if (contexts.isEmpty()) {
-                  val var14: MutableComponent = UNABLE_TO_SPAWN;
-                  player.m_213846_(TextKt.red(var14) as Component);
-               } else {
-                  val result: Pair = spawner.getSpawningSelector().select(spawner, contexts);
-                  if (result == null) {
-                     val var15: MutableComponent = UNABLE_TO_SPAWN;
-                     player.m_213846_(TextKt.red(var15) as Component);
-                  } else {
-                     (result.getSecond() as SpawnDetail)
-                        .doSpawn(result.getFirst() as SpawningContext)
-                        .getFuture()
-                        .thenApply(SpawnPokemonFromPool::execute$lambda$2);
-                     spawnsTriggered++;
-                  }
-               }
+    fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
+        val spawnPokemonFromPoolCommand = dispatcher.register(literal(NAME)
+            .permission(CobblemonPermissions.SPAWN_POKEMON)
+            .then(Commands.argument("amount", IntegerArgumentType.integer(1))
+                .executes { context -> execute(context, IntegerArgumentType.getInteger(context, "amount")) }
+            )
+            .executes { context -> execute(context, 1) }
+        )
+
+        dispatcher.register(spawnPokemonFromPoolCommand.alias(ALIAS))
+    }
+
+    private fun execute(context: CommandContext<CommandSourceStack>, amount: Int): Int {
+        val player = context.source.playerOrException
+        val spawner = player.spawner
+
+        var spawnsTriggered = 0
+
+        repeat(times = amount) {
+            val spawnCause = SpawnCause(spawner = spawner, entity = player)
+            val results = spawner.runForArea(spawner.getZoneInput(spawnCause) ?: return@repeat, maxSpawns = 1)
+            if (results.isEmpty()) {
+                player.sendSystemMessage(UNABLE_TO_SPAWN.red())
+                return@repeat
             }
 
-            if (i == amount) {
-               break;
+            results.forEach {
+                if (it is EntitySpawnResult) {
+                    for (entity in it.entities) {
+                        spawnsTriggered++
+                        player.sendSystemMessage(commandLang("spawnpokemonfrompool", entity.effectiveName()).green())
+                    }
+                }
             }
+        }
 
-            i++;
-         }
-      }
-
-      return spawnsTriggered;
-   }
-
-   @JvmStatic
-   fun `register$lambda$0`(context: CommandContext): Int {
-      val var10000: SpawnPokemonFromPool = INSTANCE;
-      return var10000.execute(context, IntegerArgumentType.getInteger(context, "amount"));
-   }
-
-   @JvmStatic
-   fun `register$lambda$1`(context: CommandContext): Int {
-      val var10000: SpawnPokemonFromPool = INSTANCE;
-      return var10000.execute(context, 1);
-   }
-
-   @JvmStatic
-   fun `execute$lambda$2`(`$player`: ServerPlayer, it: Any): Unit {
-      if (it is EntitySpawnResult) {
-         for (Entity entity : ((EntitySpawnResult)it).getEntities()) {
-            val var4: Array<Any> = new Object[1];
-            val var10004: Component = entity.m_5446_();
-            var4[0] = var10004;
-            val var10001: MutableComponent = LocalizationUtilsKt.commandLang("spawnpokemonfrompool.success", var4);
-            `$player`.m_213846_(TextKt.green(var10001) as Component);
-         }
-      }
-
-      return Unit.INSTANCE;
-   }
+        return spawnsTriggered
+    }
 }

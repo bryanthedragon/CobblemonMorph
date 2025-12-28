@@ -1,6 +1,19 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.Decodable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.Encodable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.serialization.BufferSerializer
 
-public interface SynchronizedSpeciesFeature : SpeciesFeature, Encodable, Decodable
+/**
+ * A species feature that can be synchronized to the client. These must be managed by a [SynchronizedSpeciesFeatureProvider].
+ *
+ * @author Hiroku
+ * @since November 13th, 2023
+ */
+interface SynchronizedSpeciesFeature : SpeciesFeature, BufferSerializer

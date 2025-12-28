@@ -1,104 +1,200 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.PokeBalls
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CatchRateModifier
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.PokedexEntryProgress
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Status
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.fishing.FishingSpawnCause
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.PlayerInstancedDataStoreManager
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonBiomeTags
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ActiveBattlePokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatusContainer
-import kotlin.jvm.functions.Function2
-import kotlin.jvm.functions.Function3
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.LivingEntity
-import org.jetbrains.annotations.NotNull
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender
 
-public object CatchRateModifiers {
-   public final val LEVEL: BattleModifier = new BattleModifier(<unrepresentable>.INSTANCE)
-   public final val LIGHT_LEVEL: WorldStateModifier = new WorldStateModifier(<unrepresentable>.INSTANCE)
-   public final val LOVE: BattleModifier = new BattleModifier(<unrepresentable>.INSTANCE)
-   public final val MOON_PHASES: CatchRateModifier = (new WorldStateModifier(<unrepresentable>.INSTANCE)) as CatchRateModifier
-   public final val NEST: CatchRateModifier = (new DynamicMultiplierModifier(<unrepresentable>.INSTANCE, <unrepresentable>.INSTANCE)) as CatchRateModifier
-   public final val PARK: WorldStateModifier = new WorldStateModifier(<unrepresentable>.INSTANCE)
-   public final val SAFARI: WorldStateModifier = new WorldStateModifier(<unrepresentable>.INSTANCE)
-   public final val SUBMERGED_IN_WATER: WorldStateModifier = new WorldStateModifier(<unrepresentable>.INSTANCE)
-   public final val WEIGHT_BASED: CatchRateModifier =
-      (new DynamicMultiplierModifier(<unrepresentable>.INSTANCE, <unrepresentable>.INSTANCE)) as CatchRateModifier
+/**
+ * A collection of some default usages of [CatchRateModifier]s.
+ *
+ * @author Licious
+ * @since May 7th, 2022
+ */final class CatchRateModifiers {
 
-   public fun typeBoosting(multiplier: Float, vararg types: ElementalType): CatchRateModifier {
-      return new MultiplierModifier(multiplier, (new Function2<LivingEntity, Pokemon, java.lang.Boolean>(types) {
-         {
-            super(2);
-            this.$types = `$types`;
-         }
+    /**
+     * Used by [PokeBalls.LEVEL_BALL].
+     */
+    val LEVEL = BattleModifier { _, playerPokemon, pokemon ->
+        val highestLevel = playerPokemon.maxOf { bp -> bp.battlePokemon?.originalPokemon?.level ?: 1 }
+        when {
+            highestLevel > (pokemon.level * 4) -> 4F
+            highestLevel > (pokemon.level * 2) -> 3F
+            highestLevel > pokemon.level -> 2F
+            else -> 1F
+        }
+    }
 
-         @NotNull
-         public final java.lang.Boolean invoke(@NotNull LivingEntity var1, @NotNull Pokemon pokemon) {
-            val `$this$any$iv`: java.lang.Iterable = pokemon.getTypes();
-            val var4: Array<ElementalType> = this.$types;
-            var var10000: Boolean;
-            if (`$this$any$iv` is java.util.Collection && (`$this$any$iv` as java.util.Collection).isEmpty()) {
-               var10000 = false;
-            } else {
-               val var6: java.util.Iterator = `$this$any$iv`.iterator();
+    /**
+     * Used by [PokeBalls.DIVE_BALL].
+     * This is the Minecraft interpretation of the generation 3 mechanic.
+     */
+    val SUBMERGED_IN_WATER = WorldStateModifier { _, entity -> if (entity.isUnderWater) 3.5F else 1F }
 
-               while (true) {
-                  if (!var6.hasNext()) {
-                     var10000 = false;
-                     break;
-                  }
+    /**
+     * Used by [PokeBalls.NEST_BALL].
+     * See the [Bulbapedia article](https://bulbapedia.bulbagarden.net/wiki/Nest_Ball) for more info.
+     */
+    val NEST: CatchRateModifier = DynamicMultiplierModifier({ _, pokemon -> (41 - pokemon.level) / 10F }) { _, pokemon -> pokemon.level < 30 }
 
-                  if (ArraysKt.contains(var4, var6.next() as ElementalType)) {
-                     var10000 = true;
-                     break;
-                  }
-               }
-            }
+    /**
+     * Used by [PokeBalls.LOVE_BALL].
+     * Boosts the catch rate if the Pokémon is of the same species and opposite gender
+     */
+    val LOVE = BattleModifier { _, playerPokemon, pokemon ->
+        if (
+            pokemon.gender != Gender.GENDERLESS
+            && playerPokemon.mapNotNull { it.battlePokemon?.originalPokemon }
+                .any {
+                    it.gender != Gender.GENDERLESS &&
+                            it.species.name.equals(pokemon.species.name, true) &&
+                            it.gender != pokemon.gender
+                }
+        ) {
+            if (playerPokemon.any { it.battlePokemon?.originalPokemon?.species?.resourceIdentifier == pokemon.species.resourceIdentifier }) 8F else 2.5F
+        }
+        else {
+            1F
+        }
+    }
 
-            return var10000;
-         }
-      }) as (LivingEntity?, Pokemon?) -> java.lang.Boolean);
-   }
+    /**
+     * Used by [PokeBalls.MOON_BALL].
+     * Boosts the catch rate 1.5× during Moon Phases 2 and 6 between the times of 12000 – 24000.
+     * 2.5× during Moon Phases 1 and 7 between the times of 12000 – 24000.
+     * 4× during Moon Phase 0 between the times of 12000 – 24000.
+     * 1× otherwise.
+     */
+    val MOON_PHASES: CatchRateModifier = WorldStateModifier { _, entity ->
+        if (entity.level().gameTime in 12000..24000)
+            return@WorldStateModifier 1F
+        when (entity.level().moonPhase) {
+            2, 6 -> 1.5F
+            1, 7 -> 2.5F
+            0 -> 4F
+            else -> 1F
+        }
+    }
 
-   public fun statusBoosting(multiplier: Float, vararg status: Status): CatchRateModifier {
-      return new MultiplierModifier(multiplier, (new Function2<LivingEntity, Pokemon, java.lang.Boolean>(status) {
-         {
-            super(2);
-            this.$status = `$status`;
-         }
+    /**
+     * Used by [PokeBalls.DUSK_BALL].
+     * Boosts the catch rate by various values depending on the light level.
+     * *3 on light level of 0.
+     * *1.5 on light level of 7 or lower, excluding 0.
+     * *1 otherwise
+     */
+    val LIGHT_LEVEL = WorldStateModifier { _, entity ->
+        when (entity.level().getMaxLocalRawBrightness(entity.blockPosition())) {
+            0 -> 3.5F
+            in 1..7 -> 3F
+            else -> 1F
+        }
+    }
 
-         @NotNull
-         public final java.lang.Boolean invoke(@NotNull LivingEntity var1, @NotNull Pokemon pokemon) {
-            val var10000: Array<Status> = this.$status;
-            val var10001: PersistentStatusContainer = pokemon.getStatus();
-            if (var10001 != null) {
-               val var3: PersistentStatus = var10001.getStatus();
-               if (var3 != null) {
-                  return ArraysKt.contains(var10000, var3);
-               }
-            }
+    /**
+     * Used by [PokeBalls.SAFARI_BALL].
+     * Checks if the target is not battling, if true boost by *1.5
+     */
+    val SAFARI = WorldStateModifier { _, entity -> if (!entity.isBattling) 1.5F else 1F }
 
-            return false;
-         }
-      }) as (LivingEntity?, Pokemon?) -> java.lang.Boolean);
-   }
+    /**
+     * Used by [PokeBalls.PARK_BALL].
+     * Checks if the entity is in a biome valid for the tag [CobblemonBiomeTags.IS_TEMPERATE].
+     * If yes boosts the catch rate by *2.5
+     */
+    val PARK = WorldStateModifier { _, entity ->
+        if (entity.level().getBiome(entity.blockPosition()).`is`(CobblemonBiomeTags.IS_TEMPERATE))
+            2.5F
+        else
+            1F
+    }
 
-   public fun turnBased(multiplierCalculator: (Int) -> Float): BattleModifier {
-      return new BattleModifier(
-         (new Function3<ServerPlayer, java.lang.Iterable<? extends ActiveBattlePokemon>, Pokemon, java.lang.Float>(multiplierCalculator) {
-            {
-               super(3);
-               this.$multiplierCalculator = `$multiplierCalculator`;
-            }
+    /**
+     * Used by [PokeBalls.LURE_BALL].
+     * Checks if the entity has an aspect for being spawned from fishing.
+     * If yes boosts the catch rate by *4
+     */
+    val LURE = WorldStateModifier { _, entity ->
+        if (FishingSpawnCause.FISHED_ASPECT in entity.aspects)
+            4F
+        else
+            1F
+    }
 
-            @NotNull
-            public final java.lang.Float invoke(@NotNull ServerPlayer player, @NotNull java.lang.Iterable<ActiveBattlePokemon> var2, @NotNull Pokemon var3) {
-               val var10000: PokemonBattle = BattleRegistry.INSTANCE.getBattleByParticipatingPlayer(player);
-               return if (var10000 == null) 1.0F else this.$multiplierCalculator.invoke(var10000.getTurn()) as java.lang.Float;
-            }
-         }) as (ServerPlayer?, MutableIterable<ActiveBattlePokemon>?, Pokemon?) -> java.lang.Float
-      );
-   }
+    /**
+     * Used by [PokeBalls.HEAVY_BALL].
+     * The base implementation of the heavy ball modifier mechanics.
+     */
+    val WEIGHT_BASED: CatchRateModifier = DynamicMultiplierModifier({ _, pokemon ->
+        // Remember we use hectograms not kilograms
+        when {
+            pokemon.form.weight >= 3000F -> 4F
+            pokemon.form.weight in 2000F..2999F -> 2.5F
+            pokemon.form.weight in 1000F..1999F -> 1.5F
+            else -> 1F
+        }
+    }) { _, pokemon -> pokemon.form.weight >= 1000F }
+
+    /**
+     * Used by [PokeBalls.REPEAT_BALL].
+     * Checks if the entity is registered as caught in the thrower's pokedex data.
+     * If yes boosts the catch rate by *2.5
+     */
+    val REPEAT: CatchRateModifier = WorldStateModifier { thrower, pokemon ->
+        val playerDexData = Cobblemon.playerDataManager.getPokedexData(thrower.uuid)
+        val speciesId = pokemon.pokemon.species.resourceIdentifier
+        val knowledge = playerDexData.getKnowledgeForSpecies(speciesId)
+        when (knowledge) {
+            PokedexEntryProgress.CAUGHT -> 3.5F
+            else -> 1F
+        }
+    }
+
+    /**
+     * Used by [PokeBalls.NET_BALL].
+     * Boosts the catch rate if the target is of the given types.
+     *
+     * @param multiplier The multiplier to be applied if the target has any of the accepted [types].
+     * @param types The [ElementalType]s that will trigger the multiplier.
+     * @return The multiplier modifier.
+     */
+    fun typeBoosting(multiplier: Float, vararg types: ElementalType): CatchRateModifier = MultiplierModifier(multiplier) { _, pokemon -> pokemon.types.any { type -> types.contains(type) } }
+
+    /**
+     * Used by [PokeBalls.DREAM_BALL].
+     * Boosts the catch rate if the target has any of the given status conditions.
+     *
+     * @param multiplier The multiplier to be applied if the target has any of the accepted [status].
+     * @param status The [Status]' that will trigger the multiplier.
+     * @return The multiplier modifier.
+     */
+    fun statusBoosting(multiplier: Float, vararg status: Status): CatchRateModifier = MultiplierModifier(multiplier) { _, pokemon -> status.contains(pokemon.status?.status ?: return@MultiplierModifier false ) }
+
+    /**
+     * Used by [PokeBalls.QUICK_BALL] and [PokeBalls.TIMER_BALL].
+     * Boosts the catch rate based on the number of turns a battle has lasted.
+     *
+     * @param multiplierCalculator Resolves the multiplier based on the number of turns.
+     * @return The multiplier modifier.
+     */
+    fun turnBased(multiplierCalculator: (turn: Int) -> Float) = BattleModifier {  player, _, _ ->
+        val battle = BattleRegistry.getBattleByParticipatingPlayer(player) ?: return@BattleModifier 1F
+        multiplierCalculator.invoke(battle.turn)
+    }
 }

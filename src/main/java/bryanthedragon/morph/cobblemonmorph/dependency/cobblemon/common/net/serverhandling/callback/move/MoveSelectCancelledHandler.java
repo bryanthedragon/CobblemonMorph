@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.move
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.callback.MoveSelectCallbacks
@@ -5,13 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectCancelledPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-
-public object MoveSelectCancelledHandler : ServerNetworkPacketHandler<MoveSelectCancelledPacket> {
-   public open fun handle(packet: MoveSelectCancelledPacket, server: MinecraftServer, player: ServerPlayer) {
-      MoveSelectCallbacks.INSTANCE.handleCancelled(player, packet.getUuid());
-   }
-
-   fun handleOnNettyThread(packet: MoveSelectCancelledPacket, server: MinecraftServer, player: ServerPlayer) {
-      ServerNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet, server, player);
-   }
+final class MoveSelectCancelledHandler : ServerNetworkPacketHandler<MoveSelectCancelledPacket> {
+    override fun handle(packet: MoveSelectCancelledPacket, server: MinecraftServer, player: ServerPlayer) {
+        MoveSelectCallbacks.handleCancelled(player, packet.uuid)
+    }
 }

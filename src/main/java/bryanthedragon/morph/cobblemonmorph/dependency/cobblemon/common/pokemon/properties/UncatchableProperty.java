@@ -1,44 +1,37 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonPropertyType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.Locale
 
-public object UncatchableProperty : CustomPokemonPropertyType<FlagProperty> {
-   public open val keys: Set<String> = SetsKt.setOf("uncatchable")
-   public open val needsKey: Boolean = true
+/**
+ * A type of [CustomPokemonPropertyType] handling a [FlagProperty] which, when
+ * present, indicates that the Pokémon cannot be caught in- or out-of-battle.
+ *
+ * @author Hiroku
+ * @since July 1st, 2022
+ */final class UncatchableProperty : CustomPokemonPropertyType<FlagProperty> {
+    override val keys = setOf("uncatchable")
+    override val needsKey = true
 
-   public open fun fromString(value: String?): FlagProperty? {
-      if (value != null) {
-         var var10000: java.util.List = CollectionsKt.listOf(new java.lang.String[]{"true", "yes"});
-         var var10001: java.lang.String = value.toLowerCase(Locale.ROOT);
-         if (!var10000.contains(var10001)) {
-            var10000 = CollectionsKt.listOf(new java.lang.String[]{"false", "no"});
-            var10001 = value.toLowerCase(Locale.ROOT);
-            return if (var10000.contains(var10001)) this.catchable() else null;
-         }
-      }
+    override fun fromString(value: String?) =
+        when {
+            value == null || value.lowercase() in listOf("true", "yes") -> uncatchable()
+            value.lowercase() in listOf("false", "no") -> catchable()
+            else -> null
+        }
 
-      return this.uncatchable();
-   }
+    fun catchable() = FlagProperty(keys.first(), true)
+    fun uncatchable() = FlagProperty(keys.first(), false)
 
-   public fun catchable(): FlagProperty {
-      return new FlagProperty(CollectionsKt.first(this.getKeys()) as java.lang.String, true);
-   }
-
-   public fun uncatchable(): FlagProperty {
-      return new FlagProperty(CollectionsKt.first(this.getKeys()) as java.lang.String, false);
-   }
-
-   public fun isCatchable(pokemonEntity: PokemonEntity): Boolean {
-      return !PokemonProperties.Companion.parse$default(
-            PokemonProperties.Companion, CollectionsKt.first(this.getKeys()) as java.lang.String, null, null, 6, null
-         )
-         .matches(pokemonEntity);
-   }
-
-   public open fun examples(): Set<String> {
-      return SetsKt.setOf(new java.lang.String[]{"yes", "no"});
-   }
+    fun isCatchable(pokemonEntity: PokemonEntity) = !PokemonProperties.parse(keys.first()).matches(pokemonEntity)
+    override fun examples() = setOf("yes", "no")
 }

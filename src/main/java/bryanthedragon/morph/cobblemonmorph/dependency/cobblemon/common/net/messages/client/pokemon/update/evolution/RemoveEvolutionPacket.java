@@ -1,19 +1,43 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "n.simpleName" is null
-  at org.vineflower.kotlin.KotlinWriter.lambda$writeClass$0(KotlinWriter.java:265)
-  at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:178)
-  at java.base/java.util.ArrayList$ArrayListSpliterator.tryAdvance(ArrayList.java:1602)
-  at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129)
-  at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527)
-  at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513)
-  at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
-  at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(FindOps.java:150)
-  at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-  at java.base/java.util.stream.ReferencePipeline.findAny(ReferencePipeline.java:652)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:266)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.EvolutionDisplay
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.SingleUpdatePacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket.Companion.convertToDisplay
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket.Companion.decodeDisplay
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket.Companion.encode
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.core.RegistryAccess
+import net.minecraft.network.RegistryFriendlyByteBuf
+
+class RemoveEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, RemoveEvolutionPacket>(pokemon, value) {
+
+    override val id = ID
+
+    constructor(pokemon: Pokemon, value: Evolution, registryAccess: RegistryAccess) : this({ pokemon }, value.convertToDisplay(pokemon, registryAccess))
+
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        this.value.encode(buffer)
+    }
+
+    override fun set(pokemon: Pokemon, value: EvolutionDisplay) {
+        pokemon.evolutionProxy.client().remove(value)
+    }
+
+    companion object {
+        val ID = cobblemonResource("remove_evolution")
+
+        fun decode(buffer: RegistryFriendlyByteBuf) = RemoveEvolutionPacket(decodePokemon(buffer), decodeDisplay(buffer))
+
+    }
+
+}

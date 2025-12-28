@@ -1,34 +1,75 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.item.ability
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.AbilityTemplate
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.CommonAbility
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.CommonAbilityType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.PotentialAbility
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.PotentialAbilityType
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.*
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.interactive.ability.AbilityTypeChanger
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.abilities.HiddenAbility
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.abilities.HiddenAbilityType
 
-public interface AbilityChanger<T extends PotentialAbility> {
-   public val type: PotentialAbilityType<Any>
+/**
+ * Represents a change operation for a [Pokemon.ability].
+ * This is backed by the associated [PotentialAbility].
+ *
+ * @param T The type of [PotentialAbility].
+ */
+interface AbilityChanger<T : PotentialAbility> {
 
-   public abstract fun queryPossible(pokemon: Pokemon): Set<AbilityTemplate> {
-   }
+    /**
+     * The [PotentialAbilityType] of type [T].
+     */
+    val type: PotentialAbilityType<T>
 
-   public abstract fun performChange(pokemon: Pokemon): Boolean {
-   }
+    /**
+     * Collects all the possible targets for the [type] and the given [pokemon].
+     *
+     * @param pokemon The [Pokemon] being queried.
+     * @return A set containing all their legal abilities associated with [type], can be empty.
+     */
+    fun queryPossible(pokemon: Pokemon): Set<Pair<AbilityTemplate, Priority>>
 
-   public abstract fun canChangeFrom(type: PotentialAbilityType<*>?): Boolean {
-   }
+    /**
+     * Attempts to update the ability of the given [pokemon].
+     *
+     * @param pokemon The [Pokemon] attempting to change an ability.
+     * @return If the operation was successful.
+     */
+    fun performChange(pokemon: Pokemon): Boolean
 
-   public companion object {
-      @JvmStatic
-      public final val COMMON_ABILITY: AbilityChanger<CommonAbility> =
-         (new AbilityTypeChanger(CommonAbilityType.INSTANCE, <unrepresentable>.INSTANCE)) as AbilityChanger
+    /**
+     * Checks if the current [PotentialAbilityType] of a [Pokemon.ability] is possible to swap from with this.
+     *
+     * @param type The [PotentialAbilityType] or null if the ability is forced and/or illegal.
+     * @return If the operation can be performed.
+     */
+    fun canChangeFrom(type: PotentialAbilityType<*>?): Boolean
 
-      @JvmStatic
-      public final val HIDDEN_ABILITY: AbilityChanger<HiddenAbility> =
-         (new AbilityTypeChanger(HiddenAbilityType.INSTANCE, <unrepresentable>.INSTANCE)) as AbilityChanger
-      }
+    companion object {
+
+        /**
+         * An implementation of [AbilityChanger] for [CommonAbility].
+         *
+         * While this can be used in custom data scenarios this functions most "game-like" if the Pokémon only has 2 common abilities.
+         */
+        @JvmStatic
+        val COMMON_ABILITY: AbilityChanger<CommonAbility> = AbilityTypeChanger(CommonAbilityType) { other -> other == CommonAbilityType }
+
+        /**
+         * An implementation of [AbilityChanger] for [HiddenAbility].
+         *
+         * While this can be used in custom data scenarios this functions most "game-like" if the Pokémon only has 1 hidden ability.
+         */
+        @JvmStatic
+        val HIDDEN_ABILITY: AbilityChanger<HiddenAbility> = AbilityTypeChanger(HiddenAbilityType) { other -> other == CommonAbilityType || other == HiddenAbilityType }
+
+    }
+
 }

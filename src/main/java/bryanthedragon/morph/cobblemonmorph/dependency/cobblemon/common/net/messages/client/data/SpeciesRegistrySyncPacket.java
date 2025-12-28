@@ -1,69 +1,54 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
-import java.util.LinkedHashMap
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readIdentifier
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeIdentifier
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-@SourceDebugExtension(["SMAP\nSpeciesRegistrySyncPacket.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SpeciesRegistrySyncPacket.kt\ncom/cobblemon/mod/common/net/messages/client/data/SpeciesRegistrySyncPacket\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,52:1\n1194#2,2:53\n1222#2,4:55\n*S KotlinDebug\n*F\n+ 1 SpeciesRegistrySyncPacket.kt\ncom/cobblemon/mod/common/net/messages/client/data/SpeciesRegistrySyncPacket\n*L\n45#1:53,2\n45#1:55,4\n*E\n"])
-public class SpeciesRegistrySyncPacket(species: Collection<Species>) : DataRegistrySyncPacket(species) {
-   public open val id: ResourceLocation
+// We do not need to know every single attribute as a client, as such, we only sync the aspects that matter
+class SpeciesRegistrySyncPacket(species: Collection<Species>) : DataRegistrySyncPacket<Species, SpeciesRegistrySyncPacket>(species) {
 
-   init {
-      this.id = ID;
-   }
+    override val id = ID
 
-   public open fun encodeEntry(buffer: FriendlyByteBuf, entry: Species) {
-      try {
-         buffer.m_130085_(entry.getResourceIdentifier());
-         entry.encode(buffer);
-      } catch (var4: Exception) {
-         Cobblemon.INSTANCE.getLOGGER().error("Caught exception encoding the species {}", entry.getResourceIdentifier(), var4);
-      }
-   }
+    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Species) {
+        try {
+            buffer.writeIdentifier(entry.resourceIdentifier)
+            entry.encode(buffer)
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.error("Caught exception encoding the species {}", entry.resourceIdentifier, e)
+        }
+    }
 
-   public open fun decodeEntry(buffer: FriendlyByteBuf): Species? {
-      val identifier: ResourceLocation = buffer.m_130281_();
-      val species: Species = new Species();
-      species.setResourceIdentifier(identifier);
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Species? {
+        val identifier = buffer.readIdentifier()
+        val species = Species()
+        species.resourceIdentifier = identifier
+        return try {
+            species.decode(buffer)
+            species
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.error("Caught exception decoding the species {}", identifier, e)
+            null
+        }
+    }
 
-      var var4: Species;
-      try {
-         species.decode(buffer);
-         var4 = species;
-      } catch (var6: Exception) {
-         Cobblemon.INSTANCE.getLOGGER().error("Caught exception decoding the species {}", identifier, var6);
-         var4 = null;
-      }
+    override fun synchronizeDecoded(entries: Collection<Species>) {
+        PokemonSpecies.reload(entries.associateBy { it.resourceIdentifier })
+    }
 
-      return var4;
-   }
-
-   public override fun synchronizeDecoded(entries: Collection<Species>) {
-      val `$this$associateBy$iv`: java.lang.Iterable = entries;
-      val var12: PokemonSpecies = PokemonSpecies.INSTANCE;
-      val `destination$iv$iv`: java.util.Map = new LinkedHashMap(
-         RangesKt.coerceAtLeast(MapsKt.mapCapacity(CollectionsKt.collectionSizeOrDefault(`$this$associateBy$iv`, 10)), 16)
-      );
-
-      for (Object element$iv$iv : $this$associateBy$iv) {
-         `destination$iv$iv`.put((`element$iv$iv` as Species).getResourceIdentifier(), `element$iv$iv`);
-      }
-
-      var12.reload(`destination$iv$iv`);
-   }
-
-   @SourceDebugExtension(["SMAP\nSpeciesRegistrySyncPacket.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SpeciesRegistrySyncPacket.kt\ncom/cobblemon/mod/common/net/messages/client/data/SpeciesRegistrySyncPacket$Companion\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,52:1\n1#2:53\n*E\n"])
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): SpeciesRegistrySyncPacket {
-         val var2: SpeciesRegistrySyncPacket = new SpeciesRegistrySyncPacket(CollectionsKt.emptyList());
-         var2.decodeBuffer$common(buffer);
-         return var2;
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("species_sync")
+        fun decode(buffer: RegistryFriendlyByteBuf): SpeciesRegistrySyncPacket = SpeciesRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+    }
 }

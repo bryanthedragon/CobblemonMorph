@@ -1,74 +1,55 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.UnsplittablePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyPosition
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.PokemonDTO
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readPartyPosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writePartyPosition
 import java.util.UUID
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+import net.minecraft.core.RegistryAccess
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class SetPartyPokemonPacket internal constructor(storeID: UUID, storePosition: PartyPosition, pokemonDTO: PokemonDTO) :
-   NetworkPacket<SetPartyPokemonPacket> {
-   public open val id: ResourceLocation
-   public final val pokemonDTO: PokemonDTO
-   public final val storeID: UUID
-   public final val storePosition: PartyPosition
+/**
+ * Adds the given Pokémon to a specific location in the client storage. This should be a new
+ * Pokémon that the client doesn't know about yet.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.SetPartyPokemonHandler]
+ *
+ * @author Hiroku
+ * @since November 29th, 2021
+*/
+class SetPartyPokemonPacket internal constructor(val storeID: UUID, val storePosition: PartyPosition, val pokemon: (RegistryAccess) -> Pokemon) : NetworkPacket<SetPartyPokemonPacket>, UnsplittablePacket {
 
-   init {
-      this.storeID = storeID;
-      this.storePosition = storePosition;
-      this.pokemonDTO = pokemonDTO;
-      this.id = ID;
-   }
+    override val id = ID
 
-   public constructor(storeID: UUID, storePosition: PartyPosition, pokemon: Pokemon) : this(storeID, storePosition, new PokemonDTO(pokemon, true))
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.storeID);
-      PartyPosition.Companion.writePartyPosition(buffer, this.storePosition);
-      this.pokemonDTO.encode(buffer);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(this.storeID)
+        buffer.writePartyPosition(this.storePosition)
+        Pokemon.S2C_CODEC.encode(buffer, this.pokemon(buffer.registryAccess()))
+    }
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
+    companion object {
+        val ID = cobblemonResource("set_party_pokemon")
+        fun decode(buffer: RegistryFriendlyByteBuf): SetPartyPokemonPacket {
+            val uuid = buffer.readUUID()
+            val position = buffer.readPartyPosition()
+            val bufferCache = buffer.readBytes(buffer.readableBytes())
 
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
+            return SetPartyPokemonPacket(
+                storeID = uuid,
+                storePosition = position
+            ) { Pokemon.S2C_CODEC.decode(RegistryFriendlyByteBuf(bufferCache, it)) }
+        }
+    }
 
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   @SourceDebugExtension(["SMAP\nSetPartyPokemonPacket.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SetPartyPokemonPacket.kt\ncom/cobblemon/mod/common/net/messages/client/storage/party/SetPartyPokemonPacket$Companion\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,47:1\n1#2:48\n*E\n"])
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): SetPartyPokemonPacket {
-         val var10000: UUID = buffer.m_130259_();
-         val var10001: PartyPosition = PartyPosition.Companion.readPartyPosition(buffer);
-         val var2: PokemonDTO = new PokemonDTO();
-         var2.decode(buffer);
-         return new SetPartyPokemonPacket(var10000, var10001, var2);
-      }
-   }
 }
