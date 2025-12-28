@@ -1,10 +1,112 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method appendDefaultNarrations (Lnet/minecraft/client/gui/narration/NarrationElementOutput;)V in class com/cobblemon/mod/common/client/gui/summary/SummaryButton
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.blitk
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.bold
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonResources
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.CobblemonRenderable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.drawScaledText
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.Button
+import net.minecraft.client.gui.narration.NarrationElementOutput
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.sounds.SoundManager
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
+
+class SummaryButton(
+    var buttonX: Float,
+    var buttonY: Float,
+    val buttonWidth: Number,
+    val buttonHeight: Number,
+    val clickAction: OnPress,
+    private val text: MutableComponent = Component.empty(),
+    private val resource: ResourceLocation,
+    private val activeResource: ResourceLocation? = null,
+    private val renderRequirement: ((button: SummaryButton) -> Boolean) = { true },
+    private val clickRequirement: ((button: SummaryButton) -> Boolean) = { true },
+    private val hoverTexture: Boolean = true,
+    private val silent: Boolean = false,
+    private val boldText: Boolean = true,
+    private val largeText: Boolean = true,
+    private val textScale: Float = 1F,
+    private val scale: Float = 1F
+): Button(buttonX.toInt(), buttonY.toInt(), buttonWidth.toInt(), buttonHeight.toInt(), text, clickAction, DEFAULT_NARRATION), CobblemonRenderable {
+
+    companion object {
+        const val TEXT_HEIGHT = 9
+    }
+
+    var buttonActive = false
+
+    override fun mouseDragged(d: Double, e: Double, i: Int, f: Double, g: Double) = false
+
+    override fun defaultButtonNarrationText(builder: NarrationElementOutput) {
+    }
+
+    public override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+        if (!this.renderRequirement.invoke(this)) {
+            return
+        }
+        val matrices = context.pose()
+
+        // Render Button
+        blitk(
+            matrixStack = matrices,
+            texture = if (buttonActive && activeResource != null) activeResource else resource,
+            x = buttonX / scale,
+            y = buttonY / scale,
+            width = buttonWidth,
+            height = buttonHeight,
+            vOffset = if (hoverTexture && isButtonHovered(pMouseX, pMouseY)) buttonHeight else 0,
+            textureHeight = if (hoverTexture) (buttonHeight.toFloat() * 2) else buttonHeight,
+            scale = scale
+        )
+
+        // Render Text
+        drawScaledText(
+            context = context,
+            font = if (largeText) CobblemonResources.DEFAULT_LARGE else null,
+            text = if (boldText) text.bold() else text,
+            x = buttonX + (buttonWidth.toFloat() / 2),
+            y = buttonY + (buttonHeight.toFloat() / 2) - ((TEXT_HEIGHT / 2) * textScale),
+            scale = textScale,
+            centered = true,
+            shadow = true
+        )
+    }
+
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (this.clickRequirement.invoke(this) && isButtonHovered(mouseX, mouseY)) {
+            super.mouseClicked(mouseX, mouseY, button)
+        }
+        return false
+    }
+
+    override fun playDownSound(soundManager: SoundManager) {
+        if (!this.silent) {
+            soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+        }
+    }
+
+    fun setPosFloat(x: Float, y: Float) {
+        this.x = x.toInt()
+        this.y = y.toInt()
+        this.buttonX = x
+        this.buttonY = y
+    }
+
+    fun isButtonHovered(mouseX: Number, mouseY: Number): Boolean {
+        return mouseX.toFloat() in (buttonX..(buttonX + (buttonWidth.toFloat() * scale)))
+                && mouseY.toFloat() in (buttonY..(buttonY + (buttonHeight.toFloat() * scale)))
+    }
+}

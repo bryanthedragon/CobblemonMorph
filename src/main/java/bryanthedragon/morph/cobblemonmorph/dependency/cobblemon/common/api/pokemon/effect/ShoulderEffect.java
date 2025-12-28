@@ -1,12 +1,23 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.effect
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
 
-public interface ShoulderEffect {
-   public abstract fun applyEffect(pokemon: Pokemon, player: ServerPlayer, isLeft: Boolean) {
-   }
-
-   public abstract fun removeEffect(pokemon: Pokemon, player: ServerPlayer, isLeft: Boolean) {
-   }
+/**
+ * Interface for all ShoulderEffects
+ *
+ * @author Qu
+ * @since 2022-01-26
+ */
+interface ShoulderEffect {
+    fun applyEffect(pokemon: Pokemon, player: ServerPlayer, isLeft: Boolean)
+    fun removeEffect(pokemon: Pokemon, player: ServerPlayer, isLeft: Boolean)
 }

@@ -1,69 +1,69 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import net.minecraft.network.FriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.network.chat.MutableComponent
-import org.jetbrains.annotations.NotNull
 
-public object BattleTypes {
-   public final val DOUBLES: BattleType = makeBattleType$default(INSTANCE, "doubles", null, 1, 2, 2, null)
-   public final val MULTI: BattleType = makeBattleType$default(INSTANCE, "multi", null, 2, 1, 2, null)
-   public final val SINGLES: BattleType = makeBattleType$default(INSTANCE, "singles", null, 1, 1, 2, null)
-   public final val TRIPLES: BattleType = makeBattleType$default(INSTANCE, "triples", null, 1, 3, 2, null)
+// note: showdown calls it gameType, but in MC GameType would collide with plugins and shit a lot.
+final class BattleTypes {
+    val SINGLES = makeBattleType("singles", actorsPerSide = 1, slotsPerActor = 1)
+    val DOUBLES = makeBattleType("doubles", actorsPerSide = 1, slotsPerActor = 2)
+    val TRIPLES = makeBattleType("triples", actorsPerSide = 1, slotsPerActor = 3)
+    val MULTI = makeBattleType("multi", actorsPerSide = 2, slotsPerActor = 1)
+    val ROYAL = makeBattleType("freeforall", actorsPerSide = 1, slotsPerActor = 1)
+    // maybe one day we can add MULTI-3 for triple battles with 6 fuckers in it, that'd be sick. We could game it with partial actors though
 
-   public fun makeBattleType(
-      name: String,
-      displayName: MutableComponent = LocalizationUtilsKt.lang("battle.types.$name"),
-      actorsPerSide: Int,
-      slotsPerActor: Int
-   ): BattleType {
-      return new BattleType(name, displayName, actorsPerSide, slotsPerActor) {
-         @NotNull
-         private final java.lang.String name;
-         @NotNull
-         private final MutableComponent displayName;
-         private final int actorsPerSide;
-         private final int slotsPerActor;
+    fun makeBattleType(
+        name: String,
+        displayName: MutableComponent = lang("battle.types.$name"),
+        actorsPerSide: Int,
+        slotsPerActor: Int
+    ) = object : BattleType {
+        override val name = name
+        override val displayName = displayName
+        override val actorsPerSide = actorsPerSide
+        override val slotsPerActor = slotsPerActor
+    }
+}
 
-         {
-            this.name = `$name`;
-            this.displayName = `$displayName`;
-            this.actorsPerSide = `$actorsPerSide`;
-            this.slotsPerActor = `$slotsPerActor`;
-         }
+interface BattleType {
+    val name: String
+    val displayName: MutableComponent
+    val actorsPerSide: Int
+    val slotsPerActor: Int
 
-         @NotNull
-         @Override
-         public java.lang.String getName() {
-            return this.name;
-         }
+    val pokemonPerSide: Int
+        get() = actorsPerSide * slotsPerActor
 
-         @NotNull
-         @Override
-         public MutableComponent getDisplayName() {
-            return this.displayName;
-         }
-
-         @Override
-         public int getActorsPerSide() {
-            return this.actorsPerSide;
-         }
-
-         @Override
-         public int getSlotsPerActor() {
-            return this.slotsPerActor;
-         }
-
-         @Override
-         public int getPokemonPerSide() {
-            return BattleType.DefaultImpls.getPokemonPerSide(this);
-         }
-
-         @NotNull
-         @Override
-         public FriendlyByteBuf saveToBuffer(@NotNull FriendlyByteBuf buffer) {
-            return BattleType.DefaultImpls.saveToBuffer(this, buffer);
-         }
-      };
-   }
+    companion object {
+        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): BattleType {
+            val name = buffer.readString()
+            val displayName = ComponentSerialization.STREAM_CODEC.decode(buffer)
+            val actorsPerSide = buffer.readSizedInt(IntSize.U_BYTE)
+            val slotsPerActor = buffer.readSizedInt(IntSize.U_BYTE)
+            return BattleTypes.makeBattleType(
+                name = name,
+                displayName = displayName.copy(),
+                actorsPerSide = actorsPerSide,
+                slotsPerActor = slotsPerActor
+            )
+        }
+    }
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf): RegistryFriendlyByteBuf {
+        buffer.writeString(name)
+        ComponentSerialization.STREAM_CODEC.encode(buffer, displayName)
+        buffer.writeSizedInt(IntSize.U_BYTE, actorsPerSide)
+        buffer.writeSizedInt(IntSize.U_BYTE, slotsPerActor)
+        return buffer
+    }
 }

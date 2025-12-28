@@ -1,55 +1,59 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen7
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.BipedWalkAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BipedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.MOVING_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.STATIONARY_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.UI_POSES
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-public class BounsweetModel(root: ModelPart) : PokemonPoseableModel, BipedFrame {
-   public open val leftLeg: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rightLeg: ModelPart
-   public open val rootPart: ModelPart
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class BounsweetModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame {
+    override val rootPart = root.registerChildWithAllChildren("bounsweet")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "bounsweet");
-      this.leftLeg = this.getPart("left_foot");
-      this.rightLeg = this.getPart("right_foot");
-      this.portraitScale = 3.0F;
-      this.portraitTranslation = new Vec3(-0.1, -2.5, 0.0);
-      this.profileScale = 1.2F;
-      this.profileTranslation = new Vec3(0.0, 0.0, 0.0);
-   }
+    override val leftLeg = getPart("left_foot")
+    override val rightLeg = getPart("right_foot")
 
-   public override fun registerPoses() {
-      var var10001: PoseableEntityModel = this;
-      var var10003: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var3: java.util.Set = var10003;
-      val var10004: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            var10001, "standing", SetsKt.plus(var3, var10004), null, 0, null, null, new StatelessAnimation[0], null, null, 444, null
-         )
-      );
-      var10001 = this;
-      var10003 = PoseType.Companion.getMOVING_POSES();
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            var10001, "walk", var10003, null, 0, null, null, new StatelessAnimation[]{new BipedWalkAnimation(this, 1.0F, 0.5F)}, null, null, 444, null
-         )
-      );
-   }
+    override var portraitScale = 3.0F
+    override var portraitTranslation = Vec3(-0.1, -2.5, 0.0)
+
+    override var profileScale = 1.2F
+    override var profileTranslation = Vec3(0.0, 0.0, 0.0)
+
+    lateinit var standing: Pose
+    lateinit var walk: Pose
+
+    override fun registerPoses() {
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = STATIONARY_POSES + UI_POSES,
+            animations = arrayOf(
+                //bedrock("bounsweet", "ground_idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseTypes = MOVING_POSES,
+            animations = arrayOf(
+                BipedWalkAnimation(this, periodMultiplier = 1F, amplitudeMultiplier = 0.5F)
+                //bedrock("bounsweet", "ground_walk")
+            )
+        )
+    }
+
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing, walk)) bedrockStateful("bounsweet", "faint") else null
 }

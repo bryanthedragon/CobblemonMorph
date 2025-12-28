@@ -1,67 +1,81 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.asset
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import java.io.File
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.PrintWriter
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension
 
-@SourceDebugExtension(["SMAP\nJsonManifestWalker.kt\nKotlin\n*S Kotlin\n*F\n+ 1 JsonManifestWalker.kt\ncom/cobblemon/mod/common/api/asset/JsonManifestWalker\n+ 2 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n+ 3 GsonExtensions.kt\ncom/cobblemon/mod/common/util/GsonExtensionsKt\n+ 4 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,82:1\n13579#2,2:83\n17#3:85\n1855#4,2:86\n*S KotlinDebug\n*F\n+ 1 JsonManifestWalker.kt\ncom/cobblemon/mod/common/api/asset/JsonManifestWalker\n*L\n48#1:83,2\n65#1:85\n66#1:86,2\n*E\n"])
-public object JsonManifestWalker {
-   internal fun build(manifestPath: String) {
-      val file: File = new File(manifestPath);
-      file.createNewFile();
-      val folder: File = file.getParentFile();
-      folder.mkdir();
-      val members: Array<File> = folder.listFiles(JsonManifestWalker::build$lambda$0);
-      val jsonArray: JsonArray = new JsonArray();
+/**
+ * A utility object for managing the "manifest" based assets. A JSON in a directory named _MANIFEST.json
+ * is a list of all of the files in the folder that should be loaded.
+ *
+ * Rationale: On Forge this is completely unneeded, but the Fabric class loader is either bugged or
+ * designed in such a way that targeting a folder for an asset load returns a URI that cannot be converted
+ * into a path (which would then be used for file walking). As a result, arbitrarily loading all files in
+ * a folder is either not possible in Fabric or I don't know what trickery is required. A manifest means there
+ * will not be a blind searching for JSONs and in future enables us to make the manifest potentially compress
+ * all the JSONs into itself to speed up load times internally.
+ *
+ * @author Hiroku
+ * @since April 1st, 2022.
+ */final class JsonManifestWalker {
+    /**
+     * Builds a manifest at [manifestPath] using the files inside the same folder.
+     *
+     * This is for internal use though we could make this more normalized later.
+     */
+    internal fun build(manifestPath: String) {
+        val file = File(manifestPath)
+        file.createNewFile()
+        val folder = file.parentFile
+        folder.mkdir()
+        val members = folder.listFiles { f: File -> f.extension == "json" && f.nameWithoutExtension != "_MANIFEST" }
+        val jsonArray = JsonArray()
+        members.forEach {
+            jsonArray.add(it.relativeTo(folder).toString())
+        }
+        val pw = PrintWriter(file)
+        GsonBuilder().setPrettyPrinting().create().toJson(jsonArray, pw)
+        pw.flush()
+        pw.close()
+    }
 
-      for (Object element$iv : members) {
-         jsonArray.add(FilesKt.relativeTo((File)`element$iv`, folder).toString());
-      }
-
-      val var13: PrintWriter = new PrintWriter(file);
-      new GsonBuilder().setPrettyPrinting().create().toJson(jsonArray as JsonElement, var13);
-      var13.flush();
-      var13.close();
-   }
-
-   public fun <T> load(clazz: Class<Any>, folder: String, gson: Gson): List<Any> {
-      val manifestPath: java.lang.String = "/assets/cobblemon/$folder/_MANIFEST.json";
-      val var10000: InputStream = Cobblemon.class.getResourceAsStream(manifestPath);
-      val folderPath: java.lang.String = StringsKt.substringBeforeLast$default(manifestPath, "/", null, 2, null);
-      val list: java.util.List = new ArrayList();
-
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         val path: java.lang.String = (`element$iv` as JsonElement).getAsString();
-         val exception: InputStream = Cobblemon.INSTANCE.getClass().getResourceAsStream("$folderPath/$path");
-         if (exception == null) {
-            val `$this$load_u24lambda_u243_u24lambda_u242`: JsonManifestWalker = INSTANCE;
-            Cobblemon.INSTANCE.getLOGGER().error("manifest contains element $path which was not found.");
-         } else {
-            val stream: InputStream = exception;
-
-            try {
-               list.add(gson.fromJson(new InputStreamReader(stream), clazz));
-            } catch (var20: Exception) {
-               Cobblemon.INSTANCE.getLOGGER().error("Issue loading manifest component: $path");
-               var20.printStackTrace();
+    /**
+     * Loads the given manifest and all the files it references.
+     */
+    fun <T> load(clazz: Class<T>, folder: String, gson: Gson): List<T> {
+        val manifestPath = "/assets/${Cobblemon.MODID}/$folder/_MANIFEST.json"
+        val manifest = Cobblemon::class.java.getResourceAsStream(manifestPath)!!
+        val folderPath = manifestPath.substringBeforeLast("/")
+        val list = mutableListOf<T>()
+        val array = gson.fromJson<JsonArray>(InputStreamReader(manifest))
+        array.forEach {
+            val path = it.asString
+            val stream = Cobblemon.javaClass.getResourceAsStream("$folderPath/$path") ?: run {
+                LOGGER.error("manifest contains element $path which was not found.")
+                return@forEach
             }
-         }
-      }
+            try {
+                list.add(gson.fromJson(InputStreamReader(stream), clazz))
+            } catch (exception: Exception) {
+                LOGGER.error("Issue loading manifest component: $path")
+                exception.printStackTrace()
+            }
+        }
 
-      return list;
-   }
-
-   @JvmStatic
-   fun `build$lambda$0`(f: File): Boolean {
-      return FilesKt.getExtension(f) == "json" && !(FilesKt.getNameWithoutExtension(f) == "_MANIFEST");
-   }
+        return list
+    }
 }

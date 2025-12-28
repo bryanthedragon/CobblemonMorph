@@ -1,24 +1,31 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ServerNetworkPacketHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.TradeManager.TradeRequest
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeOfferNotificationPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.OfferTradePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.TradeManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
-public object OfferTradeHandler : ServerNetworkPacketHandler<OfferTradePacket> {
-   public open fun handle(packet: OfferTradePacket, server: MinecraftServer, player: ServerPlayer) {
-      if (!player.m_5833_()) {
-         val var10000: TradeManager = TradeManager.INSTANCE;
-         val var10002: ServerPlayer = PlayerExtensionsKt.getPlayer(packet.getOfferedPlayerId());
-         if (var10002 != null) {
-            var10000.offerTrade(player, var10002);
-         }
-      }
-   }
-
-   fun handleOnNettyThread(packet: OfferTradePacket, server: MinecraftServer, player: ServerPlayer) {
-      ServerNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet, server, player);
-   }
+/**
+ * Processes a player's interaction request to trade with another player. If valid, creates a respective [TradeRequest]
+ * and sends a [TradeOfferNotificationPacket] to the player to decide upon.
+ *
+ * @author Hiroku
+ * @since March 12th, 2023
+ */final class OfferTradeHandler : ServerNetworkPacketHandler<OfferTradePacket> {
+    override fun handle(packet: OfferTradePacket, server: MinecraftServer, player: ServerPlayer) {
+        val targetPlayerEntity = packet.offeredPlayerId.getPlayer() ?: return
+        TradeManager.sendRequest(TradeRequest(player, targetPlayerEntity))
+    }
 }

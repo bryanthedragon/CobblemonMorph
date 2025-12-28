@@ -1,25 +1,46 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon
 
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.moLangFunctionMap
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.server.level.ServerPlayer
 
-public class PokemonNicknamedEvent(player: ServerPlayer, pokemon: Pokemon, nickname: MutableComponent?) : Cancelable {
-   public final var nickname: MutableComponent?
+/**
+ * Event fired when a player attempts to nickname a Pokémon. The nickname that will be applied can be edited, or
+ * the event itself can be cancelled to prevent the nickname from changing.
+ *
+ * If [nickname] is null, it means they're trying to remove the nickname.
+ *
+ * @author Hiroku
+ * @since April 22nd, 2023
+ */
+class PokemonNicknamedEvent(val player: ServerPlayer, val pokemon: Pokemon, var nickname: MutableComponent?): Cancelable() {
+    /** A shortcut to using [nickname].getString(). Learn how Text works! */
+    val nicknameString: String?
+        get() = nickname?.string
 
-   public final val nicknameString: String?
-      public final get() {
-         return if (this.nickname != null) this.nickname.getString() else null;
-      }
-
-
-   public final val player: ServerPlayer
-   public final val pokemon: Pokemon
-
-   init {
-      this.player = player;
-      this.pokemon = pokemon;
-      this.nickname = nickname;
-   }
+    fun getContext(): MutableMap<String, MoValue> {
+        return mutableMapOf(
+            "player" to (player.asMoLangValue() ?: DoubleValue.ZERO),
+            "nickname" to StringValue(nicknameString),
+            "pokemon" to pokemon.struct
+        )
+    }
+    val functions = moLangFunctionMap(
+        cancelFunc
+    )
 }

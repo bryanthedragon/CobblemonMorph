@@ -1,27 +1,19 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pasture
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
-import java.util.UUID
+import java.util.*
 import net.minecraft.core.BlockPos
+import net.minecraft.core.RegistryAccess
 import net.minecraft.resources.ResourceLocation
 
-public class PastureLink(linkId: UUID, pcId: UUID, dimension: ResourceLocation, pos: BlockPos, permissions: PasturePermissions) {
-   public final val dimension: ResourceLocation
-   public final val linkId: UUID
-   public final val pcId: UUID
-   public final val permissions: PasturePermissions
-   public final val pos: BlockPos
-
-   init {
-      this.linkId = linkId;
-      this.pcId = pcId;
-      this.dimension = dimension;
-      this.pos = pos;
-      this.permissions = permissions;
-   }
-
-   public fun getPC(): PCStore {
-      return Cobblemon.INSTANCE.getStorage().getPC(this.pcId);
-   }
+class PastureLink(val linkId: UUID, val pcId: UUID, val dimension: ResourceLocation, val pos: BlockPos, val permissions: PasturePermissions) {
+    fun getPC(registryAccess: RegistryAccess) = Cobblemon.storage.getPC(pcId, registryAccess)
 }

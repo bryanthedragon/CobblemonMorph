@@ -1,53 +1,71 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import io.netty.buffer.ByteBuf
-import net.minecraft.network.FriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class InBattleMove {
-   public final var disabled: Boolean
-   public final var gimmickMove: InBattleGimmickMove?
-   public final lateinit var id: String
-   public final var maxpp: Int = 100
-   public final lateinit var move: String
-   public final var pp: Int = 100
-   public final var target: MoveTarget = MoveTarget.self
+class InBattleMove {
+    lateinit var id: String
+    lateinit var move: String
+    var pp: Int = 100
+    var maxpp: Int = 100
+    var target: MoveTarget = MoveTarget.self
+    var disabled: Boolean = false
+    var gimmickMove: InBattleGimmickMove? = null
 
-   public fun getTargets(user: ActiveBattlePokemon): List<Targetable>? {
-      return this.target.getTargetList().invoke(user) as MutableList<Targetable>;
-   }
+    companion object {
+        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): InBattleMove {
+            return InBattleMove().apply {
+                id = buffer.readString()
+                move = buffer.readString()
+                pp = buffer.readSizedInt(IntSize.U_BYTE)
+                maxpp = buffer.readSizedInt(IntSize.U_BYTE)
+                target = buffer.readEnumConstant(MoveTarget::class.java)
+                disabled = buffer.readBoolean()
+            }
+        }
+    }
 
-   public fun canBeUsed(): Boolean {
-      return this.pp > 0 && !this.disabled || this.mustBeUsed();
-   }
+    fun getTargets(user: ActiveBattlePokemon) = target.targetList(user)
+    fun canBeUsed() = (pp > 0 && !disabled) || mustBeUsed() // Second case is like Thrash, forced choice
+    fun mustBeUsed() = maxpp == 100 && pp == 100 && target == MoveTarget.self
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(id)
+        buffer.writeString(move)
+        buffer.writeSizedInt(IntSize.U_BYTE, pp)
+        buffer.writeSizedInt(IntSize.U_BYTE, maxpp)
+        buffer.writeEnumConstant(target)
+        buffer.writeBoolean(disabled)
+    }
+}
 
-   public fun mustBeUsed(): Boolean {
-      return this.maxpp == 100 && this.pp == 100 && this.target === MoveTarget.self;
-   }
+// Defined in sim/battle-actions.ts canZMove and getMaxMove
+class InBattleGimmickMove {
+    lateinit var move: String
+    var target: MoveTarget = MoveTarget.self
+    var disabled: Boolean = false
 
-   public fun saveToBuffer(buffer: FriendlyByteBuf) {
-      buffer.m_130070_(this.getId());
-      buffer.m_130070_(this.getMove());
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, this.pp);
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, this.maxpp);
-      buffer.m_130068_(this.target);
-      buffer.writeBoolean(this.disabled);
-   }
+    companion object {
+        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): InBattleGimmickMove {
+            return InBattleGimmickMove().apply {
+                move = buffer.readString()
+                target = buffer.readEnumConstant(MoveTarget::class.java)
+                disabled = buffer.readBoolean()
+            }
+        }
+    }
 
-   public companion object {
-      public fun loadFromBuffer(buffer: FriendlyByteBuf): InBattleMove {
-         val var2: InBattleMove = new InBattleMove();
-         var var10001: java.lang.String = buffer.m_130277_();
-         var2.setId(var10001);
-         var10001 = buffer.m_130277_();
-         var2.setMove(var10001);
-         var2.setPp(NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE));
-         var2.setMaxpp(NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE));
-         val var6: java.lang.Enum = buffer.m_130066_(MoveTarget.class);
-         var2.setTarget(var6 as MoveTarget);
-         var2.setDisabled(buffer.readBoolean());
-         return var2;
-      }
-   }
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(move)
+        buffer.writeEnumConstant(target)
+        buffer.writeBoolean(disabled)
+    }
 }

@@ -1,125 +1,85 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonProperty.Companion.register
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.PropertiesCompletionProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DistributionUtilsKt
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.server.MinecraftServer
-import net.minecraft.server.level.ServerPlayer
-import org.jetbrains.annotations.NotNull
-import org.jetbrains.annotations.Nullable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
 
-public interface CustomPokemonProperty {
-   public abstract fun asString(): String {
-   }
+/**
+ * A custom property that can be parsed from a string and applied/matched against
+ * a [Pokemon] and [PokemonEntity]. To register your own custom property, use
+ * any of the [register] method overloads.
+ *
+ * @author Hiroku
+ * @since February 12th, 2022
+ */
+interface CustomPokemonProperty {
+    companion object {
+        /** A list of all the registered [CustomPokemonPropertyType]s. */
+        val properties = mutableListOf<CustomPokemonPropertyType<*>>()
 
-   public abstract fun apply(pokemon: Pokemon) {
-   }
+        fun <T: CustomPokemonProperty> register(propertyType: CustomPokemonPropertyType<T>) {
+            properties.add(propertyType)
+            this.triggerSyncAttempt()
+        }
 
-   public open fun apply(pokemonEntity: PokemonEntity) {
-   }
+        fun <T : CustomPokemonProperty> register(name: String, needsLabel: Boolean = true, fromString: (String?) -> T?, examples: () -> Collection<String>) {
+            register(listOf(name), needsLabel, fromString, examples)
+        }
 
-   public abstract fun matches(pokemon: Pokemon): Boolean {
-   }
+        fun <T : CustomPokemonProperty> register(aliases: Iterable<String>, needsLabel: Boolean = true, fromString: (String?) -> T?, examples: () -> Collection<String>) {
+            properties.add(
+                object : CustomPokemonPropertyType<T> {
+                    override val keys = aliases
+                    override val needsKey = needsLabel
+                    override fun fromString(value: String?) = fromString(value)
+                    override fun examples() = examples.invoke()
+                }
+            )
+            this.triggerSyncAttempt()
+        }
 
-   public open fun matches(pokemonEntity: PokemonEntity): Boolean {
-   }
+        fun unregister(property: CustomPokemonPropertyType<*>) {
+            properties.remove(property)
+        }
 
-   @SourceDebugExtension(["SMAP\nCustomPokemonProperty.kt\nKotlin\n*S Kotlin\n*F\n+ 1 CustomPokemonProperty.kt\ncom/cobblemon/mod/common/api/properties/CustomPokemonProperty$Companion\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,85:1\n1855#2,2:86\n*S KotlinDebug\n*F\n+ 1 CustomPokemonProperty.kt\ncom/cobblemon/mod/common/api/properties/CustomPokemonProperty$Companion\n*L\n60#1:86,2\n*E\n"])
-   public companion object {
-      public final val properties: MutableList<CustomPokemonPropertyType<*>> = (new ArrayList()) as java.util.List
-
-      public fun <T : CustomPokemonProperty> register(propertyType: CustomPokemonPropertyType<Any>) {
-         properties.add(propertyType);
-         this.triggerSyncAttempt();
-      }
-
-      public fun <T : CustomPokemonProperty> register(
-         name: String,
-         needsLabel: Boolean = true,
-         fromString: (String?) -> Any?,
-         examples: () -> Collection<String>
-      ) {
-         this.register(CollectionsKt.listOf(name), needsLabel, fromString, examples);
-      }
-
-      public fun <T : CustomPokemonProperty> register(
-         aliases: Iterable<String>,
-         needsLabel: Boolean = true,
-         fromString: (String?) -> Any?,
-         examples: () -> Collection<String>
-      ) {
-         properties.add(new CustomPokemonPropertyType<T>(aliases, needsLabel, fromString, examples) {
-            @NotNull
-            private final java.lang.Iterable<java.lang.String> keys;
-            private final boolean needsKey;
-
-            {
-               this.$fromString = `$fromString`;
-               this.$examples = `$examples`;
-               this.keys = `$aliases`;
-               this.needsKey = `$needsLabel`;
+        // We do this every time a new property is registered if the server is running in order to synchronize all players with the new property for tab completion purposes
+        private fun triggerSyncAttempt() {
+            val server = server() ?: return
+            if (!server.isSingleplayer) {
+                PropertiesCompletionProvider.reload()
+                server.playerList.players.forEach { player -> PropertiesCompletionProvider.sync(player) }
             }
+        }
+    }
 
-            @NotNull
-            @Override
-            public java.lang.Iterable<java.lang.String> getKeys() {
-               return this.keys;
-            }
-
-            @Override
-            public boolean getNeedsKey() {
-               return this.needsKey;
-            }
-
-            @Nullable
-            @Override
-            public T fromString(@Nullable java.lang.String value) {
-               return (T)(this.$fromString.invoke(value) as CustomPokemonProperty);
-            }
-
-            @NotNull
-            @Override
-            public java.util.Collection<java.lang.String> examples() {
-               return this.$examples.invoke() as MutableCollection<java.lang.String>;
-            }
-         });
-         this.triggerSyncAttempt();
-      }
-
-      public fun unregister(property: CustomPokemonPropertyType<*>) {
-         properties.remove(property);
-      }
-
-      private fun triggerSyncAttempt() {
-         val var10000: MinecraftServer = DistributionUtilsKt.server();
-         if (var10000 != null) {
-            if (!var10000.m_129792_()) {
-               PropertiesCompletionProvider.INSTANCE.reload();
-
-               val `$this$forEach$iv`: java.lang.Iterable;
-               for (Object element$iv : $this$forEach$iv) {
-                  val player: ServerPlayer = `element$iv` as ServerPlayer;
-                  val var9: PropertiesCompletionProvider = PropertiesCompletionProvider.INSTANCE;
-                  var9.sync(player);
-               }
-            }
-         }
-      }
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun apply(`$this`: CustomPokemonProperty, pokemonEntity: PokemonEntity) {
-         `$this`.apply(pokemonEntity.getPokemon());
-      }
-
-      @JvmStatic
-      fun matches(`$this`: CustomPokemonProperty, pokemonEntity: PokemonEntity): Boolean {
-         return `$this`.matches(pokemonEntity.getPokemon());
-      }
-   }
+    /** Maps a property into the string form that would be used to create it anew. This is used for serialization. */
+    fun asString(): String
+    /** Applies this property to a [Pokemon]. */
+    fun apply(pokemon: Pokemon)
+    /**
+     * Applies this property to a [PokemonEntity]. By default this just assumes that the [apply] method taking a
+     * [Pokemon] is all this needs to run.
+     */
+    fun apply(pokemonEntity: PokemonEntity) = apply(pokemonEntity.pokemon)
+    /**
+     * Returns true if this property appears to be set on the given [Pokemon]. In some properties this should always
+     * return true (if the property isn't something that is usable as a filter.
+     */
+    fun matches(pokemon: Pokemon): Boolean
+    /**
+     * Returns true if this property appears to be set on the given [PokemonEntity]. In some properties this
+     * should always return true (if the property isn't something that is usable as a filter. The default implementation
+     * of this function assumes that the [matches] method taking a [Pokemon] is sufficient.
+     */
+    fun matches(pokemonEntity: PokemonEntity): Boolean = matches(pokemonEntity.pokemon)
 }

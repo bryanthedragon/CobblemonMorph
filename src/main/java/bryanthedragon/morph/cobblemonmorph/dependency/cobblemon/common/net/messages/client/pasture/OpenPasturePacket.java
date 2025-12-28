@@ -1,164 +1,114 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pasture.PasturePermissions
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.OpenPastureHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonBehaviourFlag
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import io.netty.buffer.ByteBuf
-import java.util.ArrayList;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Level
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 
-public class OpenPasturePacket(pcId: UUID,
-      pastureId: UUID,
-      limit: Int,
-      tetheredPokemon: List<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.OpenPasturePacket.PasturePokemonDataDTO>,
-      permissions: PasturePermissions
-   ) :
-   NetworkPacket<OpenPasturePacket> {
-   public open val id: ResourceLocation
-   public final val limit: Int
-   public final val pastureId: UUID
-   public final val pcId: UUID
-   public final val permissions: PasturePermissions
-   public final val tetheredPokemon: List<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.OpenPasturePacket.PasturePokemonDataDTO>
+/**
+ * Opens a pasture GUI using the provided data.
+ *
+ * Handled by [OpenPastureHandler].
+ *
+ * @author Hiroku
+ * @since April 9th, 2023
+ */
+class OpenPasturePacket(val pcId: UUID, val pastureId: UUID, val limit: Int, val tetheredPokemon: List<PasturePokemonDataDTO>, val permissions: PasturePermissions) : NetworkPacket<OpenPasturePacket> {
+    class PasturePokemonDataDTO(
+        val pokemonId: UUID,
+        val playerId: UUID,
+        val displayName: Component,
+        val ownerName: String?,
+        val species: ResourceLocation,
+        val aspects: Set<String>,
+        val heldItem: ItemStack,
+        val level: Int,
+        val entityKnown: Boolean,
+        var behaviourFlags: Set<PokemonBehaviourFlag> = emptySet()
+    ) {
+        companion object {
+            fun decode(buffer: RegistryFriendlyByteBuf): PasturePokemonDataDTO {
+                val pokemonId = buffer.readUUID()
+                val playerId = buffer.readUUID()
+                val displayName = buffer.readText()
+                val ownerName = buffer.readNullable { it.readString() }
+                val species = buffer.readIdentifier()
+                val aspects = buffer.readList { it.readString() }.toSet()
+                val heldItem = buffer.readItemStack()
+                val level = buffer.readSizedInt(IntSize.U_SHORT)
+                val entityKnown = buffer.readBoolean()
+                val behaviourFlags = buffer.readList { it.readEnumConstant(PokemonBehaviourFlag::class.java) }.toSet()
 
-   init {
-      this.pcId = pcId;
-      this.pastureId = pastureId;
-      this.limit = limit;
-      this.tetheredPokemon = tetheredPokemon;
-      this.permissions = permissions;
-      this.id = ID;
-   }
+                return PasturePokemonDataDTO(
+                    pokemonId = pokemonId,
+                    playerId = playerId,
+                    displayName = displayName,
+                    ownerName = ownerName,
+                    species = species,
+                    aspects = aspects,
+                    heldItem = heldItem,
+                    level = level,
+                    entityKnown = entityKnown,
+                    behaviourFlags = behaviourFlags
+                )
+            }
+        }
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.pcId);
-      buffer.m_130077_(this.pastureId);
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, this.limit);
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, this.tetheredPokemon.size());
+        fun encode(buffer: RegistryFriendlyByteBuf) {
+            buffer.writeUUID(pokemonId)
+            buffer.writeUUID(playerId)
+            buffer.writeText(displayName)
+            buffer.writeNullable(ownerName) { _, v -> buffer.writeString(v) }
+            buffer.writeIdentifier(species)
+            buffer.writeCollection(aspects) { _, v -> buffer.writeString(v) }
+            buffer.writeItemStack(heldItem)
+            buffer.writeSizedInt(IntSize.U_SHORT, level)
+            buffer.writeBoolean(entityKnown)
+            buffer.writeCollection(behaviourFlags) { _, flag -> buffer.writeEnumConstant(flag) }
+        }
+    }
 
-      for (OpenPasturePacket.PasturePokemonDataDTO tethered : this.tetheredPokemon) {
-         tethered.encode(buffer);
-      }
+    companion object {
+        val ID = cobblemonResource("open_pasture")
 
-      this.permissions.encode(buffer);
-   }
+        fun decode(buffer: RegistryFriendlyByteBuf): OpenPasturePacket {
+            val pcId = buffer.readUUID()
+            val pastureId = buffer.readUUID()
+            val limit = buffer.readSizedInt(IntSize.U_BYTE)
+            val dtos = mutableListOf<PasturePokemonDataDTO>()
+            repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
+                dtos.add(PasturePokemonDataDTO.decode(buffer))
+            }
+            val permissions = PasturePermissions.decode(buffer)
+            return OpenPasturePacket(pcId, pastureId, limit, dtos, permissions)
+        }
+    }
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
+    override val id = ID
 
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): OpenPasturePacket {
-         val pcId: UUID = buffer.m_130259_();
-         val pastureId: UUID = buffer.m_130259_();
-         val limit: Int = NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE);
-         val dtos: java.util.List = new ArrayList();
-         val permissions: Short = buffer.readUnsignedByte();
-
-         for (int var7 = 0; var7 < permissions; var7++) {
-            dtos.add(OpenPasturePacket.PasturePokemonDataDTO.Companion.decode(buffer));
-         }
-
-         val var10: PasturePermissions = PasturePermissions.Companion.decode(buffer);
-         return new OpenPasturePacket(pcId, pastureId, limit, dtos, var10);
-      }
-   }
-
-   public class PasturePokemonDataDTO(pokemonId: UUID,
-      playerId: UUID,
-      displayName: Component,
-      species: ResourceLocation,
-      aspects: Set<String>,
-      heldItem: ItemStack,
-      level: Int,
-      entityKnown: Boolean
-   ) {
-      public final val aspects: Set<String>
-      public final val displayName: Component
-      public final val entityKnown: Boolean
-      public final val heldItem: ItemStack
-      public final val level: Int
-      public final val playerId: UUID
-      public final val pokemonId: UUID
-      public final val species: ResourceLocation
-
-      init {
-         this.pokemonId = pokemonId;
-         this.playerId = playerId;
-         this.displayName = displayName;
-         this.species = species;
-         this.aspects = aspects;
-         this.heldItem = heldItem;
-         this.level = level;
-         this.entityKnown = entityKnown;
-      }
-
-      public fun encode(buffer: FriendlyByteBuf) {
-         buffer.m_130077_(this.pokemonId);
-         buffer.m_130077_(this.playerId);
-         buffer.m_130083_(this.displayName);
-         buffer.m_130085_(this.species);
-         buffer.m_236828_(this.aspects, OpenPasturePacket.PasturePokemonDataDTO::encode$lambda$0);
-         buffer.m_130055_(this.heldItem);
-         NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_SHORT, this.level);
-         buffer.writeBoolean(this.entityKnown);
-      }
-
-      @JvmStatic
-      fun `encode$lambda$0`(`$buffer`: FriendlyByteBuf, var1: FriendlyByteBuf, v: java.lang.String) {
-         `$buffer`.m_130070_(v);
-      }
-
-      public companion object {
-         public fun decode(buffer: FriendlyByteBuf): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.OpenPasturePacket.PasturePokemonDataDTO {
-            val pokemonId: UUID = buffer.m_130259_();
-            val playerId: UUID = buffer.m_130259_();
-            val displayName: Component = buffer.m_130238_();
-            val species: ResourceLocation = buffer.m_130281_();
-            val var10000: java.util.List = buffer.m_236845_(OpenPasturePacket.PasturePokemonDataDTO.Companion::decode$lambda$0);
-            val aspects: java.util.Set = CollectionsKt.toSet(var10000);
-            val heldItem: ItemStack = buffer.m_130267_();
-            val level: Int = NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_SHORT);
-            val entityKnown: Boolean = buffer.readBoolean();
-            return new OpenPasturePacket.PasturePokemonDataDTO(pokemonId, playerId, displayName, species, aspects, heldItem, level, entityKnown);
-         }
-
-         @JvmStatic
-         fun `decode$lambda$0`(it: FriendlyByteBuf): java.lang.String {
-            return it.m_130277_();
-         }
-      }
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(pcId)
+        buffer.writeUUID(pastureId)
+        buffer.writeSizedInt(IntSize.U_BYTE, limit)
+        buffer.writeSizedInt(IntSize.U_BYTE, tetheredPokemon.size)
+        for (tethered in tetheredPokemon) {
+            tethered.encode(buffer)
+        }
+        permissions.encode(buffer)
+    }
 }

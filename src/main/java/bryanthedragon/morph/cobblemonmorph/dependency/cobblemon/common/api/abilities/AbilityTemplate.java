@@ -1,31 +1,57 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import com.google.gson.JsonObject;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities
 
-import net.minecraft.nbt.CompoundTag;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.codec.CodecUtils
+import com.google.gson.JsonObject
+import com.mojang.serialization.Codec
+import net.minecraft.nbt.CompoundTag
 
-public class AbilityTemplate {
-   public final Function2<AbilityTemplate, Boolean, Ability> builder;
-   public final String description;
-   public final String displayName;
-   public final String name;
+/**
+ * This represents the base of an Ability.
+ * To build an Ability you MUST use its template.
+ *
+ * @param name: The English name used to load / find it (spaces -> _)
+ */
+class AbilityTemplate(
+    val name: String = "",
+    var builder: (AbilityTemplate, forced: Boolean, priority: Priority) -> Ability = { template, forced, priority -> Ability(template, forced, priority) },
+    val displayName: String = "cobblemon.ability.$name",
+    val description: String = "cobblemon.ability.$name.desc"
+) {
+    /**
+     * Returns the Ability or if applicable the extension connected to this template
+     */
+    fun create(forced: Boolean = false, priority: Priority = Priority.LOWEST) = builder(this, forced, priority)
 
-   public AbilityTemplate(String name, Function2<AbilityTemplate, Boolean, Ability> builder, String displayName, String description) {
-      this.name = name;
-      this.builder = builder;
-      this.displayName = displayName;
-      this.description = description;
-   }
+    /**
+     * Returns the Ability and loads the given NBT Tag into it.
+     *
+     * Ability extensions need to write and read their needed data from here.
+     */
+    fun create(nbt: CompoundTag) = create().loadFromNBT(nbt)
 
-   public Ability create(boolean forced) {
-      return (Ability) this.builder.invoke(this, forced);
-   }
+    /**
+     * Returns the Ability and loads the given JSON object into it.
+     *
+     * Ability extensions need to write and read their needed data from here.
+     */
+    fun create(json: JsonObject) = create().loadFromJSON(json)
 
-   public Ability create(CompoundTag nbt) {
-      return create(false).loadFromNBT(nbt);
-   }
+    companion object {
 
-   public Ability create(JsonObject json) {
-      return create(false).loadFromJSON(json);
-   }
+        @JvmStatic
+        val CODEC: Codec<AbilityTemplate> = CodecUtils.createByStringCodec(
+            Abilities::getOrDummy,
+            AbilityTemplate::name
+        ) { id -> "No ability for ID $id" }
+    }
+
 }

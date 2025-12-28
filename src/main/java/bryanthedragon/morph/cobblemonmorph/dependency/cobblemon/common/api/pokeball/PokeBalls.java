@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
@@ -7,482 +15,528 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CatchRateModifier
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.effects.CaptureEffects
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.effects.FriendshipEarningBoostEffect
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers.BaseStatModifier
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers.CatchRateModifiers
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers.GuaranteedModifier
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers.LabelModifier
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers.MultiplierModifier
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers.*
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.labels.CobblemonPokemonLabels
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Statuses
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalTypes
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import java.util.HashMap
-import java.util.LinkedHashMap
-import java.util.Map.Entry
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
-import net.minecraft.server.packs.resources.ResourceManager
+import kotlin.math.roundToInt
+
+/**
+ * The data registry for [PokeBall]s.
+ * All the pokeball fields are guaranteed to exist
+ */final class PokeBalls : JsonDataRegistry<PokeBall> {
+
+    override val id = cobblemonResource("pokeballs")
+    override val type = PackType.SERVER_DATA
+    override val observable = SimpleObservable<PokeBalls>()
+
+    // ToDo once datapack pokeball is implemented add required adapters here
+    override val gson: Gson = GsonBuilder()
+        .disableHtmlEscaping()
+        .setPrettyPrinting()
+        .create()
+    override val typeToken: TypeToken<PokeBall> = TypeToken.get(PokeBall::class.java)
+    override val resourcePath = "pokeballs"
+
+    private val defaults = hashMapOf<ResourceLocation, PokeBall>()
+    // ToDo datapack pokeball type here instead
+    private val custom = hashMapOf<ResourceLocation, PokeBall>()
+
+    @JvmStatic
+    @get:JvmName("getPokeBall")
+    val POKE_BALL
+        get() = this.byName("poke_ball")
+    @JvmStatic
+    @get:JvmName("getSlateBall")
+    val SLATE_BALL
+        get() = this.byName("slate_ball")
+    @JvmStatic
+    @get:JvmName("getAzureBall")
+    val AZURE_BALL
+        get() = this.byName("azure_ball")
+    @JvmStatic
+    @get:JvmName("getVerdantBall")
+    val VERDANT_BALL
+        get() = this.byName("verdant_ball")
+    @JvmStatic
+    @get:JvmName("getRoseateBall")
+    val ROSEATE_BALL
+        get() = this.byName("roseate_ball")
+    @JvmStatic
+    @get:JvmName("getCitrineBall")
+    val CITRINE_BALL
+        get() = this.byName("citrine_ball")
+    @JvmStatic
+    @get:JvmName("getGreatBall")
+    val GREAT_BALL
+        get() = this.byName("great_ball")
+    @JvmStatic
+    @get:JvmName("getUltraBall")
+    val ULTRA_BALL
+        get() = this.byName("ultra_ball")
+    @JvmStatic
+    @get:JvmName("getMasterBall")
+    val MASTER_BALL
+        get() = this.byName("master_ball")
+    @JvmStatic
+    @get:JvmName("getSafariBall")
+    val SAFARI_BALL
+        get() = this.byName("safari_ball")
+    @JvmStatic
+    @get:JvmName("getFastBall")
+    val FAST_BALL
+        get() = this.byName("fast_ball")
+    @JvmStatic
+    @get:JvmName("getLevelBall")
+    val LEVEL_BALL
+        get() = this.byName("level_ball")
+    @JvmStatic
+    @get:JvmName("getLureBall")
+    val LURE_BALL
+        get() = this.byName("lure_ball")
+    @JvmStatic
+    @get:JvmName("getHeavyBall")
+    val HEAVY_BALL
+        get() = this.byName("heavy_ball")
+    @JvmStatic
+    @get:JvmName("getLoveBall")
+    val LOVE_BALL
+        get() = this.byName("love_ball")
+    @JvmStatic
+    @get:JvmName("getFriendBall")
+    val FRIEND_BALL
+        get() = this.byName("friend_ball")
+    @JvmStatic
+    @get:JvmName("getMoonBall")
+    val MOON_BALL
+        get() = this.byName("moon_ball")
+    @JvmStatic
+    @get:JvmName("getSportBall")
+    val SPORT_BALL
+        get() = this.byName("sport_ball")
+    @JvmStatic
+    @get:JvmName("getNetBall")
+    val NET_BALL
+        get() = this.byName("net_ball")
+    @JvmStatic
+    @get:JvmName("getDiveBall")
+    val DIVE_BALL
+        get() = this.byName("dive_ball")
+    @JvmStatic
+    @get:JvmName("getNestBall")
+    val NEST_BALL
+        get() = this.byName("nest_ball")
+    @JvmStatic
+    @get:JvmName("getRepeatBall")
+    val REPEAT_BALL
+        get() = this.byName("repeat_ball")
+    @JvmStatic
+    @get:JvmName("getTimerBall")
+    val TIMER_BALL
+        get() = this.byName("timer_ball")
+    @JvmStatic
+    @get:JvmName("getLuxuryBall")
+    val LUXURY_BALL
+        get() = this.byName("luxury_ball")
+    @JvmStatic
+    @get:JvmName("getPremierBall")
+    val PREMIER_BALL
+        get() = this.byName("premier_ball")
+    @JvmStatic
+    @get:JvmName("getDuskBall")
+    val DUSK_BALL
+        get() = this.byName("dusk_ball")
+    @JvmStatic
+    @get:JvmName("getHealBall")
+    val HEAL_BALL
+        get() = this.byName("heal_ball")
+    @JvmStatic
+    @get:JvmName("getQuickBall")
+    val QUICK_BALL
+        get() = this.byName("quick_ball")
+    @JvmStatic
+    @get:JvmName("getCherishBall")
+    val CHERISH_BALL
+        get() = this.byName("cherish_ball")
+    @JvmStatic
+    @get:JvmName("getParkBall")
+    val PARK_BALL
+        get() = this.byName("park_ball")
+    @JvmStatic
+    @get:JvmName("getDreamBall")
+    val DREAM_BALL
+        get() = this.byName("dream_ball")
+    @JvmStatic
+    @get:JvmName("getBeastBall")
+    val BEAST_BALL
+        get() = this.byName("beast_ball")
+    @JvmStatic
+    @get:JvmName("getAncientPokeBall")
+    val ANCIENT_POKE_BALL
+        get() = this.byName("ancient_poke_ball")
+    @JvmStatic
+    @get:JvmName("getAncientCitrineBall")
+    val ANCIENT_CITRINE_BALL
+        get() = this.byName("ancient_citrine_ball")
+    @JvmStatic
+    @get:JvmName("getAncientVerdantBall")
+    val ANCIENT_VERDANT_BALL
+        get() = this.byName("ancient_verdant_ball")
+    @JvmStatic
+    @get:JvmName("getAncientAzureBall")
+    val ANCIENT_AZURE_BALL
+        get() = this.byName("ancient_azure_ball")
+    @JvmStatic
+    @get:JvmName("getAncientRoseateBall")
+    val ANCIENT_ROSEATE_BALL
+        get() = this.byName("ancient_roseate_ball")
+    @JvmStatic
+    @get:JvmName("getAncientSlateBall")
+    val ANCIENT_SLATE_BALL
+        get() = this.byName("ancient_slate_ball")
+    @JvmStatic
+    @get:JvmName("getAncientIvoryBall")
+    val ANCIENT_IVORY_BALL
+        get() = this.byName("ancient_ivory_ball")
+    @JvmStatic
+    @get:JvmName("getAncientGreatBall")
+    val ANCIENT_GREAT_BALL
+        get() = this.byName("ancient_great_ball")
+    @JvmStatic
+    @get:JvmName("getAncientUltraBall")
+    val ANCIENT_ULTRA_BALL
+        get() = this.byName("ancient_ultra_ball")
+    @JvmStatic
+    @get:JvmName("getAncientHeavyBall")
+    val ANCIENT_HEAVY_BALL
+        get() = this.byName("ancient_heavy_ball")
+    @JvmStatic
+    @get:JvmName("getAncientLeadenBall")
+    val ANCIENT_LEADEN_BALL
+        get() = this.byName("ancient_leaden_ball")
+    @JvmStatic
+    @get:JvmName("getAncientGigatonBall")
+    val ANCIENT_GIGATON_BALL
+        get() = this.byName("ancient_gigaton_ball")
+    @JvmStatic
+    @get:JvmName("getAncientFeatherBall")
+    val ANCIENT_FEATHER_BALL
+        get() = this.byName("ancient_feather_ball")
+    @JvmStatic
+    @get:JvmName("getAncientWingBall")
+    val ANCIENT_WING_BALL
+        get() = this.byName("ancient_wing_ball")
+    @JvmStatic
+    @get:JvmName("getAncientJetBall")
+    val ANCIENT_JET_BALL
+        get() = this.byName("ancient_jet_ball")
+    @JvmStatic
+    @get:JvmName("getAncientOriginBall")
+    val ANCIENT_ORIGIN_BALL
+        get() = this.byName("ancient_origin_ball")
+
+    init {
+        createDefault("poke_ball")
+        createDefault("slate_ball")
+        createDefault("azure_ball")
+        createDefault("verdant_ball")
+        createDefault("roseate_ball")
+        createDefault("citrine_ball")
+        createDefault("great_ball", MultiplierModifier(1.5F))
+        createDefault("ultra_ball", MultiplierModifier(2F))
+        createDefault("master_ball", GuaranteedModifier())
+        createDefault("safari_ball", CatchRateModifiers.SAFARI)
+        createDefault("fast_ball", BaseStatModifier(Stats.SPEED, { it >= 100 }, 4F))
+        createDefault("level_ball", CatchRateModifiers.LEVEL)
+        createDefault("lure_ball", CatchRateModifiers.LURE)
+        createDefault("heavy_ball", CatchRateModifiers.WEIGHT_BASED)
+        createDefault("love_ball", CatchRateModifiers.LOVE)
+        createDefault("friend_ball", effects = listOf(CaptureEffects.friendshipSetter(150)))
+        createDefault("moon_ball", CatchRateModifiers.MOON_PHASES)
+        createDefault("sport_ball", MultiplierModifier(1.5F))
+        createDefault("net_ball", CatchRateModifiers.typeBoosting(3F, ElementalTypes.BUG, ElementalTypes.WATER))
+        createDefault("dive_ball", CatchRateModifiers.SUBMERGED_IN_WATER, waterDragValue = 0.99F)
+        createDefault("nest_ball", CatchRateModifiers.NEST)
+        createDefault("repeat_ball", CatchRateModifiers.REPEAT)
+        createDefault("timer_ball", CatchRateModifiers.turnBased { turn -> (1F * turn * (1229F / 4096F)).coerceAtMost(4F) })
+        createDefault("luxury_ball", effects = listOf(FriendshipEarningBoostEffect(2F)))
+        createDefault("premier_ball")
+        createDefault("dusk_ball", CatchRateModifiers.LIGHT_LEVEL)
+        createDefault("heal_ball", effects = listOf(CaptureEffects.FULL_RESTORE))
+        createDefault("quick_ball", CatchRateModifiers.turnBased { turn -> if (turn == 1) 5F else 1F })
+        createDefault("cherish_ball")
+        createDefault("park_ball", CatchRateModifiers.PARK)
+        createDefault("dream_ball", CatchRateModifiers.statusBoosting(4F, Statuses.SLEEP))
+        createDefault("beast_ball", LabelModifier(5F, true, CobblemonPokemonLabels.ULTRA_BEAST)/*, LabelModifier(0.1F, false, CobblemonPokemonLabels.ULTRA_BEAST))*/)
+        createDefault("ancient_poke_ball", ancient = true)
+        createDefault("ancient_citrine_ball", ancient = true)
+        createDefault("ancient_verdant_ball", ancient = true)
+        createDefault("ancient_azure_ball", ancient = true)
+        createDefault("ancient_roseate_ball", ancient = true)
+        createDefault("ancient_slate_ball", ancient = true)
+        createDefault("ancient_ivory_ball", ancient = true)
+        createDefault("ancient_great_ball", MultiplierModifier(1.5F), ancient = true)
+        createDefault("ancient_ultra_ball", MultiplierModifier(2F), ancient = true)
+        createDefault("ancient_heavy_ball", throwPower = 0.75f, ancient = true)
+        createDefault("ancient_leaden_ball", throwPower = 0.75f, ancient = true)
+        createDefault("ancient_gigaton_ball", throwPower = 0.75f, ancient = true)
+        createDefault("ancient_feather_ball", throwPower = 2.5f, ancient = true)
+        createDefault("ancient_wing_ball", throwPower = 2.5f, ancient = true)
+        createDefault("ancient_jet_ball", throwPower = 2.5f, ancient = true)
+        createDefault("ancient_origin_ball", GuaranteedModifier(), ancient = true)
+        // Luxury ball effect, low priority as it must be triggered before soothe bell as of gen 4
+        CobblemonEvents.FRIENDSHIP_UPDATED.subscribe(priority = Priority.LOW) { event ->
+            var increment = (event.newFriendship - event.pokemon.friendship).toFloat()
+            if (increment <= 0) //these affects are only meant to affect positive gains
+                return@subscribe
+            if (increment <= 1F) {
+                event.pokemon.caughtBall.effects.filterIsInstance<FriendshipEarningBoostEffect>()
+                    .forEach { increment *= it.multiplier }
+            }
+            event.newFriendship = event.pokemon.friendship + increment.roundToInt()
+        }
+    }
+
+    override fun reload(data: Map<ResourceLocation, PokeBall>) {
+        this.custom.clear()
+        // ToDo once datapack pokeball is implemented load them here, we will want datapacks to be able to override our default pokeballs too, however they will never be able to disable them
+    }
+
+    override fun sync(player: ServerPlayer) {
+        // ToDo once datapack pokeball is implemented sync them here
+    }
+
+    /**
+     * Gets a Pokeball from registry name.
+     * @return the pokeball object if found otherwise null.
+     */
+    @JvmStatic
+    fun getPokeBall(name : ResourceLocation): PokeBall? = this.custom[name] ?: this.defaults[name]
+
+    @JvmStatic
+    fun all() = this.defaults.filterKeys { !this.custom.containsKey(it) }.values + this.custom.values
+
+    private fun createDefault(
+        name: String,
+        modifier: CatchRateModifier = MultiplierModifier(1F) { _, _ -> true },
+        effects: List<CaptureEffect> = emptyList(),
+        waterDragValue: Float = 0.8F,
+        model2d: ResourceLocation = cobblemonResource(name),
+        model3d: ResourceLocation = cobblemonResource("item/${name}_model"),
+        throwPower: Float = 1.25f,
+        ancient: Boolean = false
+    ): PokeBall {
+        val identifier = cobblemonResource(name)
+        //val finalModifiers = if (appendUltraBeastPenalty) modifiers + listOf(LabelModifier(0.1F, true, CobblemonPokemonLabels.ULTRA_BEAST)) else modifiers
+        val pokeball = PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient)
+        this.defaults[identifier] = pokeball
+        return pokeball
+    }
+
+    private fun byName(name: String): PokeBall {
+        val identifier = cobblemonResource(name)
+        return this.custom[identifier] ?: this.defaults[identifier]!!
+    }
+
+    /**
+     * Backwards compatibility getters
+     */
+    @JvmName("getPOKE_BALL")
+    @Deprecated("Use PokeBalls.getPokeBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getPOKE_BALL() = POKE_BALL
+
+    @JvmName("getSLATE_BALL")
+    @Deprecated("Use PokeBalls.getSlateBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getSLATE_BALL() = SLATE_BALL
+
+    @JvmName("getAZURE_BALL")
+    @Deprecated("Use PokeBalls.getAzureBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getAZURE_BALL() = AZURE_BALL
+
+    @JvmName("getVERDANT_BALL")
+    @Deprecated("Use PokeBalls.getVerdantBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getVERDANT_BALL() = VERDANT_BALL
+
+    @JvmName("getROSEATE_BALL")
+    @Deprecated("Use PokeBalls.getRoseateBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getROSEATE_BALL() = ROSEATE_BALL
+
+    @JvmName("getCITRINE_BALL")
+    @Deprecated("Use PokeBalls.getCitrineBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getCITRINE_BALL() = CITRINE_BALL
+
+    @JvmName("getGREAT_BALL")
+    @Deprecated("Use PokeBalls.getGreatBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getGREAT_BALL() = GREAT_BALL
+
+    @JvmName("getULTRA_BALL")
+    @Deprecated("Use PokeBalls.getUltraBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getULTRA_BALL() = ULTRA_BALL
+
+    @JvmName("getMASTER_BALL")
+    @Deprecated("Use PokeBalls.getMasterBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getMASTER_BALL() = MASTER_BALL
+
+    @JvmName("getSAFARI_BALL")
+    @Deprecated("Use PokeBalls.getSafariBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getSAFARI_BALL() = SAFARI_BALL
+
+    @JvmName("getFAST_BALL")
+    @Deprecated("Use PokeBalls.getFastBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getFAST_BALL() = FAST_BALL
+
+    @JvmName("getLEVEL_BALL")
+    @Deprecated("Use PokeBalls.getLevelBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getLEVEL_BALL() = LEVEL_BALL
+
+    @JvmName("getLURE_BALL")
+    @Deprecated("Use PokeBalls.getLureBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getLURE_BALL() = LURE_BALL
+
+    @JvmName("getHEAVY_BALL")
+    @Deprecated("Use PokeBalls.getHeavyBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getHEAVY_BALL() = HEAVY_BALL
+
+    @JvmName("getLOVE_BALL")
+    @Deprecated("Use PokeBalls.getLoveBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getLOVE_BALL() = LOVE_BALL
+
+    @JvmName("getFRIEND_BALL")
+    @Deprecated("Use PokeBalls.getFriendBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getFRIEND_BALL() = FRIEND_BALL
+
+    @JvmName("getMOON_BALL")
+    @Deprecated("Use PokeBalls.getMoonBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getMOON_BALL() = MOON_BALL
+
+    @JvmName("getSPORT_BALL")
+    @Deprecated("Use PokeBalls.getSportBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getSPORT_BALL() = SPORT_BALL
+
+    @JvmName("getNET_BALL")
+    @Deprecated("Use PokeBalls.getNetBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getNET_BALL() = NET_BALL
+
+    @JvmName("getNEST_BALL")
+    @Deprecated("Use PokeBalls.getNestBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getNEST_BALL() = NEST_BALL
+
+    @JvmName("getREPEAT_BALL")
+    @Deprecated("Use PokeBalls.getRepeatBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getREPEAT_BALL() = REPEAT_BALL
+
+    @JvmName("getTIMER_BALL")
+    @Deprecated("Use PokeBalls.getTimerBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getTIMER_BALL() = TIMER_BALL
+
+    @JvmName("getLUXURY_BALL")
+    @Deprecated("Use PokeBalls.getLuxuryBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getLUXURY_BALL() = LUXURY_BALL
+
+    @JvmName("getPREMIER_BALL")
+    @Deprecated("Use PokeBalls.getPremierBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getPREMIER_BALL() = PREMIER_BALL
+
+    @JvmName("getDUSK_BALL")
+    @Deprecated("Use PokeBalls.getDuskBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getDUSK_BALL() = DUSK_BALL
+
+    @JvmName("getHEAL_BALL")
+    @Deprecated("Use PokeBalls.getHealBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getHEAL_BALL() = HEAL_BALL
+
+    @JvmName("getQUICK_BALL")
+    @Deprecated("Use PokeBalls.getQuickBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getQUICK_BALL() = QUICK_BALL
+
+    @JvmName("getCHERISH_BALL")
+    @Deprecated("Use PokeBalls.getCherishBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getCHERISH_BALL() = CHERISH_BALL
+
+    @JvmName("getPARK_BALL")
+    @Deprecated("Use PokeBalls.getParkBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getPARK_BALL() = PARK_BALL
+
+    @JvmName("getDREAM_BALL")
+    @Deprecated("Use PokeBalls.getDreamBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getDREAM_BALL() = DREAM_BALL
+
+    @JvmName("getBEAST_BALL")
+    @Deprecated("Use PokeBalls.getBeastBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getBEAST_BALL() = BEAST_BALL
+
+    @JvmName("getANCIENT_POKE_BALL")
+    @Deprecated("Use PokeBalls.getAncientPokeBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_POKE_BALL() = ANCIENT_POKE_BALL
+
+    @JvmName("getANCIENT_CITRINE_BALL")
+    @Deprecated("Use PokeBalls.getAncientCitrineBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_CITRINE_BALL() = ANCIENT_CITRINE_BALL
+
+    @JvmName("getANCIENT_VERDANT_BALL")
+    @Deprecated("Use PokeBalls.getAncientVerdantBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_VERDANT_BALL() = ANCIENT_VERDANT_BALL
+
+    @JvmName("getANCIENT_AZURE_BALL")
+    @Deprecated("Use PokeBalls.getAncientAzureBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_AZURE_BALL() = ANCIENT_AZURE_BALL
+
+    @JvmName("getANCIENT_ROSEATE_BALL")
+    @Deprecated("Use PokeBalls.getAncientRoseateBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_ROSEATE_BALL() = ANCIENT_ROSEATE_BALL
+
+    @JvmName("getANCIENT_SLATE_BALL")
+    @Deprecated("Use PokeBalls.getAncientSlateBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_SLATE_BALL() = ANCIENT_SLATE_BALL
+
+    @JvmName("getANCIENT_IVORY_BALL")
+    @Deprecated("Use PokeBalls.getAncientIvoryBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_IVORY_BALL() = ANCIENT_IVORY_BALL
+
+    @JvmName("getANCIENT_GREAT_BALL")
+    @Deprecated("Use PokeBalls.getAncientGreatBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_GREAT_BALL() = ANCIENT_GREAT_BALL
+
+    @JvmName("getANCIENT_ULTRA_BALL")
+    @Deprecated("Use PokeBalls.getAncientUltraBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_ULTRA_BALL() = ANCIENT_ULTRA_BALL
+
+    @JvmName("getANCIENT_HEAVY_BALL")
+    @Deprecated("Use PokeBalls.getAncientHeavyBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_HEAVY_BALL() = ANCIENT_HEAVY_BALL
+
+    @JvmName("getANCIENT_LEADEN_BALL")
+    @Deprecated("Use PokeBalls.getAncientLeadenBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_LEADEN_BALL() = ANCIENT_LEADEN_BALL
+
+    @JvmName("getANCIENT_GIGATON_BALL")
+    @Deprecated("Use PokeBalls.getAncientGigatonBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_GIGATON_BALL() = ANCIENT_GIGATON_BALL
+
+    @JvmName("getANCIENT_FEATHER_BALL")
+    @Deprecated("Use PokeBalls.getAncientFeatherBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_FEATHER_BALL() = ANCIENT_FEATHER_BALL
+
+    @JvmName("getANCIENT_WING_BALL")
+    @Deprecated("Use PokeBalls.getAncientWingBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_WING_BALL() = ANCIENT_WING_BALL
+
+    @JvmName("getANCIENT_JET_BALL")
+    @Deprecated("Use PokeBalls.getAncientJetBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_JET_BALL() = ANCIENT_JET_BALL
+
+    @JvmName("getANCIENT_ORIGIN_BALL")
+    @Deprecated("Use PokeBalls.getAncientOriginBall(), provided for backwards compatibility until Cobblemon 1.8.")
+    fun getANCIENT_ORIGIN_BALL() = ANCIENT_ORIGIN_BALL
 
-@SourceDebugExtension(["SMAP\nPokeBalls.kt\nKotlin\n*S Kotlin\n*F\n+ 1 PokeBalls.kt\ncom/cobblemon/mod/common/api/pokeball/PokeBalls\n+ 2 Maps.kt\nkotlin/collections/MapsKt__MapsKt\n*L\n1#1,258:1\n467#2,7:259\n*S KotlinDebug\n*F\n+ 1 PokeBalls.kt\ncom/cobblemon/mod/common/api/pokeball/PokeBalls\n*L\n234#1:259,7\n*E\n"])
-public object PokeBalls : JsonDataRegistry<PokeBall> {
-   public final val ANCIENT_AZURE_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_azure_ball");
-      }
-
-
-   public final val ANCIENT_CITRINE_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_citrine_ball");
-      }
-
-
-   public final val ANCIENT_FEATHER_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_feather_ball");
-      }
-
-
-   public final val ANCIENT_GIGATON_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_gigaton_ball");
-      }
-
-
-   public final val ANCIENT_GREAT_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_great_ball");
-      }
-
-
-   public final val ANCIENT_HEAVY_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_heavy_ball");
-      }
-
-
-   public final val ANCIENT_IVORY_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_ivory_ball");
-      }
-
-
-   public final val ANCIENT_JET_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_jet_ball");
-      }
-
-
-   public final val ANCIENT_LEADEN_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_leaden_ball");
-      }
-
-
-   public final val ANCIENT_ORIGIN_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_origin_ball");
-      }
-
-
-   public final val ANCIENT_POKE_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_poke_ball");
-      }
-
-
-   public final val ANCIENT_ROSEATE_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_roseate_ball");
-      }
-
-
-   public final val ANCIENT_SLATE_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_slate_ball");
-      }
-
-
-   public final val ANCIENT_ULTRA_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_ultra_ball");
-      }
-
-
-   public final val ANCIENT_VERDANT_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_verdant_ball");
-      }
-
-
-   public final val ANCIENT_WING_BALL: PokeBall
-      public final get() {
-         return this.byName("ancient_wing_ball");
-      }
-
-
-   public final val AZURE_BALL: PokeBall
-      public final get() {
-         return this.byName("azure_ball");
-      }
-
-
-   public final val BEAST_BALL: PokeBall
-      public final get() {
-         return this.byName("beast_ball");
-      }
-
-
-   public final val CHERISH_BALL: PokeBall
-      public final get() {
-         return this.byName("cherish_ball");
-      }
-
-
-   public final val CITRINE_BALL: PokeBall
-      public final get() {
-         return this.byName("citrine_ball");
-      }
-
-
-   public final val DIVE_BALL: PokeBall
-      public final get() {
-         return this.byName("dive_ball");
-      }
-
-
-   public final val DREAM_BALL: PokeBall
-      public final get() {
-         return this.byName("dream_ball");
-      }
-
-
-   public final val DUSK_BALL: PokeBall
-      public final get() {
-         return this.byName("dusk_ball");
-      }
-
-
-   public final val FAST_BALL: PokeBall
-      public final get() {
-         return this.byName("fast_ball");
-      }
-
-
-   public final val FRIEND_BALL: PokeBall
-      public final get() {
-         return this.byName("friend_ball");
-      }
-
-
-   public final val GREAT_BALL: PokeBall
-      public final get() {
-         return this.byName("great_ball");
-      }
-
-
-   public final val HEAL_BALL: PokeBall
-      public final get() {
-         return this.byName("heal_ball");
-      }
-
-
-   public final val HEAVY_BALL: PokeBall
-      public final get() {
-         return this.byName("heavy_ball");
-      }
-
-
-   public final val LEVEL_BALL: PokeBall
-      public final get() {
-         return this.byName("level_ball");
-      }
-
-
-   public final val LOVE_BALL: PokeBall
-      public final get() {
-         return this.byName("love_ball");
-      }
-
-
-   public final val LURE_BALL: PokeBall
-      public final get() {
-         return this.byName("lure_ball");
-      }
-
-
-   public final val LUXURY_BALL: PokeBall
-      public final get() {
-         return this.byName("luxury_ball");
-      }
-
-
-   public final val MASTER_BALL: PokeBall
-      public final get() {
-         return this.byName("master_ball");
-      }
-
-
-   public final val MOON_BALL: PokeBall
-      public final get() {
-         return this.byName("moon_ball");
-      }
-
-
-   public final val NEST_BALL: PokeBall
-      public final get() {
-         return this.byName("nest_ball");
-      }
-
-
-   public final val NET_BALL: PokeBall
-      public final get() {
-         return this.byName("net_ball");
-      }
-
-
-   public final val PARK_BALL: PokeBall
-      public final get() {
-         return this.byName("park_ball");
-      }
-
-
-   public final val POKE_BALL: PokeBall
-      public final get() {
-         return this.byName("poke_ball");
-      }
-
-
-   public final val PREMIER_BALL: PokeBall
-      public final get() {
-         return this.byName("premier_ball");
-      }
-
-
-   public final val QUICK_BALL: PokeBall
-      public final get() {
-         return this.byName("quick_ball");
-      }
-
-
-   public final val REPEAT_BALL: PokeBall
-      public final get() {
-         return this.byName("repeat_ball");
-      }
-
-
-   public final val ROSEATE_BALL: PokeBall
-      public final get() {
-         return this.byName("roseate_ball");
-      }
-
-
-   public final val SAFARI_BALL: PokeBall
-      public final get() {
-         return this.byName("safari_ball");
-      }
-
-
-   public final val SLATE_BALL: PokeBall
-      public final get() {
-         return this.byName("slate_ball");
-      }
-
-
-   public final val SPORT_BALL: PokeBall
-      public final get() {
-         return this.byName("sport_ball");
-      }
-
-
-   public final val TIMER_BALL: PokeBall
-      public final get() {
-         return this.byName("timer_ball");
-      }
-
-
-   public final val ULTRA_BALL: PokeBall
-      public final get() {
-         return this.byName("ultra_ball");
-      }
-
-
-   public final val VERDANT_BALL: PokeBall
-      public final get() {
-         return this.byName("verdant_ball");
-      }
-
-
-   private final val custom: HashMap<ResourceLocation, PokeBall> = new HashMap()
-   private final val defaults: HashMap<ResourceLocation, PokeBall> = new HashMap()
-   public open val gson: Gson
-   public open val id: ResourceLocation = MiscUtilsKt.cobblemonResource("pokeballs")
-   public open val observable: SimpleObservable<PokeBalls> = new SimpleObservable()
-   public open val resourcePath: String = "pokeballs"
-   public open val type: PackType = PackType.SERVER_DATA
-   public open val typeToken: TypeToken<PokeBall>
-
-   public override fun reload(data: Map<ResourceLocation, PokeBall>) {
-      custom.clear();
-   }
-
-   public override fun sync(player: ServerPlayer) {
-   }
-
-   public fun getPokeBall(name: ResourceLocation): PokeBall? {
-      var var10000: PokeBall = custom.get(name);
-      if (var10000 == null) {
-         var10000 = defaults.get(name);
-      }
-
-      return var10000;
-   }
-
-   public fun all(): List<PokeBall> {
-      val `$this$filterKeys$iv`: java.util.Map = defaults;
-      val `result$iv`: LinkedHashMap = new LinkedHashMap();
-
-      for (Entry entry$iv : $this$filterKeys$iv.entrySet()) {
-         if (!custom.containsKey(`entry$iv`.getKey() as ResourceLocation)) {
-            `result$iv`.put(`entry$iv`.getKey(), `entry$iv`.getValue());
-         }
-      }
-
-      val var10000: java.util.Collection = `result$iv`.values();
-      val var10001: java.util.Collection = custom.values();
-      return CollectionsKt.plus(var10000, var10001);
-   }
-
-   private fun createDefault(
-      name: String,
-      modifier: CatchRateModifier = (new MultiplierModifier(1.0F, <unrepresentable>.INSTANCE)) as CatchRateModifier,
-      effects: List<CaptureEffect> = CollectionsKt.emptyList(),
-      waterDragValue: Float = 0.8F,
-      model2d: ResourceLocation = MiscUtilsKt.cobblemonResource(name),
-      model3d: ResourceLocation = MiscUtilsKt.cobblemonResource("$name_model"),
-      throwPower: Float = 1.25F,
-      ancient: Boolean = false
-   ): PokeBall {
-      val identifier: ResourceLocation = MiscUtilsKt.cobblemonResource(name);
-      val pokeball: PokeBall = new PokeBall(identifier, modifier, effects, waterDragValue, model2d, model3d, throwPower, ancient);
-      defaults.put(identifier, pokeball);
-      return pokeball;
-   }
-
-   private fun byName(name: String): PokeBall {
-      val identifier: ResourceLocation = MiscUtilsKt.cobblemonResource(name);
-      var var10000: PokeBall = custom.get(identifier);
-      if (var10000 == null) {
-         val var3: Any = defaults.get(identifier);
-         var10000 = var3 as PokeBall;
-      }
-
-      return var10000;
-   }
-
-   override fun reload(manager: ResourceManager) {
-      JsonDataRegistry.DefaultImpls.reload(this, manager);
-   }
-
-   @JvmStatic
-   fun {
-      val var10000: Gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-      gson = var10000;
-      val var4: TypeToken = TypeToken.get(PokeBall.class);
-      typeToken = var4;
-      createDefault$default(INSTANCE, "poke_ball", null, null, 0.0F, null, null, 0.0F, false, 254, null);
-      createDefault$default(INSTANCE, "slate_ball", null, null, 0.0F, null, null, 0.0F, false, 254, null);
-      createDefault$default(INSTANCE, "azure_ball", null, null, 0.0F, null, null, 0.0F, false, 254, null);
-      createDefault$default(INSTANCE, "verdant_ball", null, null, 0.0F, null, null, 0.0F, false, 254, null);
-      createDefault$default(INSTANCE, "roseate_ball", null, null, 0.0F, null, null, 0.0F, false, 254, null);
-      createDefault$default(INSTANCE, "citrine_ball", null, null, 0.0F, null, null, 0.0F, false, 254, null);
-      createDefault$default(INSTANCE, "great_ball", new MultiplierModifier(1.5F, null, 2, null), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(INSTANCE, "ultra_ball", new MultiplierModifier(2.0F, null, 2, null), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(INSTANCE, "master_ball", new GuaranteedModifier(), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(INSTANCE, "safari_ball", CatchRateModifiers.INSTANCE.getSAFARI(), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(
-         INSTANCE, "fast_ball", new BaseStatModifier(Stats.SPEED, <unrepresentable>.INSTANCE, 4.0F), null, 0.0F, null, null, 0.0F, false, 252, null
-      );
-      createDefault$default(INSTANCE, "level_ball", CatchRateModifiers.INSTANCE.getLEVEL(), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(
-         INSTANCE,
-         "lure_ball",
-         CatchRateModifiers.INSTANCE.typeBoosting(2.0F, ElementalTypes.INSTANCE.getWATER()),
-         null,
-         0.0F,
-         null,
-         null,
-         0.0F,
-         false,
-         252,
-         null
-      );
-      createDefault$default(INSTANCE, "heavy_ball", CatchRateModifiers.INSTANCE.getWEIGHT_BASED(), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(INSTANCE, "love_ball", CatchRateModifiers.INSTANCE.getLOVE(), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(
-         INSTANCE, "friend_ball", null, CollectionsKt.listOf(CaptureEffects.INSTANCE.friendshipSetter(150)), 0.0F, null, null, 0.0F, false, 250, null
-      );
-      createDefault$default(INSTANCE, "moon_ball", CatchRateModifiers.INSTANCE.getMOON_PHASES(), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(INSTANCE, "sport_ball", new MultiplierModifier(1.5F, null, 2, null), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(
-         INSTANCE,
-         "net_ball",
-         CatchRateModifiers.INSTANCE.typeBoosting(3.0F, ElementalTypes.INSTANCE.getBUG(), ElementalTypes.INSTANCE.getWATER()),
-         null,
-         0.0F,
-         null,
-         null,
-         0.0F,
-         false,
-         252,
-         null
-      );
-      createDefault$default(INSTANCE, "dive_ball", CatchRateModifiers.INSTANCE.getSUBMERGED_IN_WATER(), null, 0.99F, null, null, 0.0F, false, 244, null);
-      createDefault$default(INSTANCE, "nest_ball", CatchRateModifiers.INSTANCE.getNEST(), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(INSTANCE, "repeat_ball", null, null, 0.0F, null, null, 0.0F, false, 254, null);
-      createDefault$default(
-         INSTANCE, "timer_ball", CatchRateModifiers.INSTANCE.turnBased(<unrepresentable>.INSTANCE), null, 0.0F, null, null, 0.0F, false, 252, null
-      );
-      createDefault$default(
-         INSTANCE, "luxury_ball", null, CollectionsKt.listOf(new FriendshipEarningBoostEffect(2.0F)), 0.0F, null, null, 0.0F, false, 250, null
-      );
-      createDefault$default(INSTANCE, "premier_ball", null, null, 0.0F, null, null, 0.0F, false, 254, null);
-      createDefault$default(INSTANCE, "dusk_ball", CatchRateModifiers.INSTANCE.getLIGHT_LEVEL(), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(
-         INSTANCE, "heal_ball", null, CollectionsKt.listOf(CaptureEffects.INSTANCE.getFULL_RESTORE()), 0.0F, null, null, 0.0F, false, 250, null
-      );
-      createDefault$default(
-         INSTANCE, "quick_ball", CatchRateModifiers.INSTANCE.turnBased(<unrepresentable>.INSTANCE), null, 0.0F, null, null, 0.0F, false, 252, null
-      );
-      createDefault$default(INSTANCE, "cherish_ball", null, null, 0.0F, null, null, 0.0F, false, 254, null);
-      createDefault$default(INSTANCE, "park_ball", CatchRateModifiers.INSTANCE.getPARK(), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(
-         INSTANCE, "dream_ball", CatchRateModifiers.INSTANCE.statusBoosting(4.0F, Statuses.INSTANCE.getSLEEP()), null, 0.0F, null, null, 0.0F, false, 252, null
-      );
-      createDefault$default(INSTANCE, "beast_ball", new LabelModifier(5.0F, true, "ultra_beast"), null, 0.0F, null, null, 0.0F, false, 252, null);
-      createDefault$default(INSTANCE, "ancient_poke_ball", null, null, 0.0F, null, null, 0.0F, true, 126, null);
-      createDefault$default(INSTANCE, "ancient_citrine_ball", null, null, 0.0F, null, null, 0.0F, true, 126, null);
-      createDefault$default(INSTANCE, "ancient_verdant_ball", null, null, 0.0F, null, null, 0.0F, true, 126, null);
-      createDefault$default(INSTANCE, "ancient_azure_ball", null, null, 0.0F, null, null, 0.0F, true, 126, null);
-      createDefault$default(INSTANCE, "ancient_roseate_ball", null, null, 0.0F, null, null, 0.0F, true, 126, null);
-      createDefault$default(INSTANCE, "ancient_slate_ball", null, null, 0.0F, null, null, 0.0F, true, 126, null);
-      createDefault$default(INSTANCE, "ancient_ivory_ball", null, null, 0.0F, null, null, 0.0F, true, 126, null);
-      createDefault$default(INSTANCE, "ancient_great_ball", new MultiplierModifier(1.5F, null, 2, null), null, 0.0F, null, null, 0.0F, true, 124, null);
-      createDefault$default(INSTANCE, "ancient_ultra_ball", new MultiplierModifier(2.0F, null, 2, null), null, 0.0F, null, null, 0.0F, true, 124, null);
-      createDefault$default(INSTANCE, "ancient_heavy_ball", null, null, 0.0F, null, null, 0.75F, true, 62, null);
-      createDefault$default(INSTANCE, "ancient_leaden_ball", null, null, 0.0F, null, null, 0.75F, true, 62, null);
-      createDefault$default(INSTANCE, "ancient_gigaton_ball", null, null, 0.0F, null, null, 0.75F, true, 62, null);
-      createDefault$default(INSTANCE, "ancient_feather_ball", null, null, 0.0F, null, null, 2.5F, true, 62, null);
-      createDefault$default(INSTANCE, "ancient_wing_ball", null, null, 0.0F, null, null, 2.5F, true, 62, null);
-      createDefault$default(INSTANCE, "ancient_jet_ball", null, null, 0.0F, null, null, 2.5F, true, 62, null);
-      createDefault$default(INSTANCE, "ancient_origin_ball", new GuaranteedModifier(), null, 0.0F, null, null, 0.0F, true, 124, null);
-      CobblemonEvents.FRIENDSHIP_UPDATED.subscribe(Priority.LOW, <unrepresentable>.INSTANCE);
-   }
 }

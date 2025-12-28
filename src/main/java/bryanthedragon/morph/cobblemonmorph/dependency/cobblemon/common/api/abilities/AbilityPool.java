@@ -1,42 +1,38 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.PrioritizedList;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension;
-import kotlin.random.Random;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities
 
-public open class AbilityPool : PrioritizedList<PotentialAbility> {
-   public fun select(species: Species, aspects: Set<String>): Pair<Ability, Priority> {
-      for (Priority priority : Priority.values()) {
-         val var10000: java.util.List = this.getPriorityMap().get(priority);
-         if (var10000 != null) {
-            val `$this$filter$iv`: java.lang.Iterable = var10000;
-            val `destination$iv$iv`: java.util.Collection = new ArrayList();
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.PrioritizedList
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
 
-            for (Object element$iv$iv : $this$filter$iv) {
-               if ((`element$iv$iv` as PotentialAbility).isSatisfiedBy(aspects)) {
-                  `destination$iv$iv`.add(`element$iv$iv`);
-               }
+/**
+ * A pool of potential abilities, as a [PrioritizedList]. The added logic of this subclass
+ * is that it has selection logic. Given a species and a set of aspects, it will go through
+ * each priority group, and if it can then it will pick from that group and return it.
+ *
+ * @author Hiroku
+ * @since July 28th, 2022
+ */
+open class AbilityPool : PrioritizedList<PotentialAbility>() {
+    fun select(species: Species, aspects: Set<String>): Pair<Ability, Priority> {
+        for (priority in Priority.entries) {
+            val potentialAbilities = priorityMap[priority]?.filter { it.isSatisfiedBy(aspects) } ?: continue
+            if (potentialAbilities.isNotEmpty()) {
+                return potentialAbilities.random().template.create() to priority
             }
+        }
 
-            val potentialAbilities: java.util.List = `destination$iv$iv` as java.util.List;
-            if (!(`destination$iv$iv` as java.util.List).isEmpty()) {
-               return TuplesKt.to(
-                  AbilityTemplate.create$default(
-                     (CollectionsKt.random(potentialAbilities, Random.Default as Random) as PotentialAbility).getTemplate(), false, 1, null
-                  ),
-                  priority
-               );
-            }
-         }
-      }
-
-      Cobblemon.INSTANCE.getLOGGER().error("Unable to select an ability from the pool for $species and aspects: ${CollectionsKt.joinToString$default(aspects, null, null, null, 0, null, null, 63, null)}");
-      Cobblemon.INSTANCE.getLOGGER().error("Usually this happens when a client is doing logic it shouldn't. Please show this to the Cobblemon developers!");
-      new Exception().printStackTrace();
-      return TuplesKt.to(AbilityTemplate.create$default(Abilities.INSTANCE.first(), false, 1, null), Priority.LOWEST);
-   }
+        LOGGER.error("Unable to select an ability from the pool for $species and aspects: ${aspects.joinToString()}")
+        LOGGER.error("Please show this to the Cobblemon developers!")
+        Exception().printStackTrace()
+        return Abilities.first().create() to Priority.LOWEST
+    }
 }

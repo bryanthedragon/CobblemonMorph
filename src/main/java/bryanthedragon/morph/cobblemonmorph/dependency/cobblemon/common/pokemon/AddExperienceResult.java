@@ -1,70 +1,25 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
 
-public data AddExperienceResult(oldLevel: Int, newLevel: Int, newMoves: Set<MoveTemplate>, experienceAdded: Int) {
-   public final val experienceAdded: Int
-   public final val newLevel: Int
-   public final val newMoves: Set<MoveTemplate>
-   public final val oldLevel: Int
-
-   init {
-      this.oldLevel = oldLevel;
-      this.newLevel = newLevel;
-      this.newMoves = newMoves;
-      this.experienceAdded = experienceAdded;
-   }
-
-   public operator fun component1(): Int {
-      return this.oldLevel;
-   }
-
-   public operator fun component2(): Int {
-      return this.newLevel;
-   }
-
-   public operator fun component3(): Set<MoveTemplate> {
-      return this.newMoves;
-   }
-
-   public operator fun component4(): Int {
-      return this.experienceAdded;
-   }
-
-   public fun copy(
-      oldLevel: Int = this.oldLevel,
-      newLevel: Int = this.newLevel,
-      newMoves: Set<MoveTemplate> = this.newMoves,
-      experienceAdded: Int = this.experienceAdded
-   ): AddExperienceResult {
-      return new AddExperienceResult(oldLevel, newLevel, newMoves, experienceAdded);
-   }
-
-   public override fun toString(): String {
-      return "AddExperienceResult(oldLevel=${this.oldLevel}, newLevel=${this.newLevel}, newMoves=${this.newMoves}, experienceAdded=${this.experienceAdded})";
-   }
-
-   public override fun hashCode(): Int {
-      return ((Integer.hashCode(this.oldLevel) * 31 + Integer.hashCode(this.newLevel)) * 31 + this.newMoves.hashCode()) * 31
-         + Integer.hashCode(this.experienceAdded);
-   }
-
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is AddExperienceResult) {
-         return false;
-      } else {
-         val var2: AddExperienceResult = other as AddExperienceResult;
-         if (this.oldLevel != (other as AddExperienceResult).oldLevel) {
-            return false;
-         } else if (this.newLevel != var2.newLevel) {
-            return false;
-         } else if (!(this.newMoves == var2.newMoves)) {
-            return false;
-         } else {
-            return this.experienceAdded == var2.experienceAdded;
-         }
-      }
-   }
-}
+/**
+ * The result of adding experience to a [Pokemon]. This contains information
+ * about any level changes and any new moves that were learned.
+ *
+ * @author Hiroku
+ * @since April 18th, 2022
+ */
+record AddExperienceResult(
+    val oldLevel: Int,
+    val newLevel: Int,
+    val newMoves: Set<MoveTemplate>,
+    val experienceAdded: Int
+)

@@ -1,19 +1,62 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because "n.simpleName" is null
-  at org.vineflower.kotlin.KotlinWriter.lambda$writeClass$0(KotlinWriter.java:265)
-  at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:178)
-  at java.base/java.util.ArrayList$ArrayListSpliterator.tryAdvance(ArrayList.java:1602)
-  at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129)
-  at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527)
-  at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513)
-  at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
-  at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(FindOps.java:150)
-  at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-  at java.base/java.util.stream.ReferencePipeline.findAny(ReferencePipeline.java:652)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:266)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.resources.ResourceLocation
+
+/**
+ * A dialogue that could be sent to players.
+ *
+ * @author Hiroku
+ * @since December 27th, 2023
+ */
+class Dialogue(
+    val pages: List<DialoguePage> = mutableListOf(),
+    val background: ResourceLocation = DEFAULT_BACKGROUND,
+    val escapeAction: DialogueAction = FunctionDialogueAction { dialogue, _ -> dialogue.close() },
+    val speakers: Map<String, DialogueSpeaker> = emptyMap(),
+    val initializationAction: DialogueAction = FunctionDialogueAction { _, _ -> }
+) {
+    companion object {
+        val DEFAULT_BACKGROUND = cobblemonResource("textures/gui/dialogue/dialogue_box.png")
+
+        @JvmOverloads
+        fun of(
+            pages: Iterable<DialoguePage>,
+            background: ResourceLocation = DEFAULT_BACKGROUND,
+            escapeAction: ExpressionLike,
+            speakers: Map<String, DialogueSpeaker>
+        ): Dialogue {
+            return Dialogue(
+                pages = pages.toList(),
+                escapeAction = ExpressionLikeDialogueAction(escapeAction),
+                background = background,
+                speakers = speakers
+            )
+        }
+
+        @JvmOverloads
+        fun of(
+            pages: Iterable<DialoguePage>,
+            background: ResourceLocation = DEFAULT_BACKGROUND,
+            escapeAction: (ActiveDialogue) -> Unit,
+            speakers: Map<String, DialogueSpeaker>
+        ): Dialogue {
+            val dialogue = Dialogue(
+                pages = pages.toList(),
+                background = background,
+                escapeAction = FunctionDialogueAction { activeDialogue, _ -> escapeAction(activeDialogue) },
+                speakers = speakers
+            )
+            return dialogue
+        }
+    }
+}

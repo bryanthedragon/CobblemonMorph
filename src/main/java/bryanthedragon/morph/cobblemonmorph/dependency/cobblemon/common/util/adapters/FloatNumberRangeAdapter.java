@@ -1,22 +1,28 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
+import com.google.gson.*
+import com.mojang.serialization.JsonOps
+import net.minecraft.advancements.critereon.MinMaxBounds
 import java.lang.reflect.Type
-import net.minecraft.advancements.critereon.MinMaxBounds.Doubles
-import net.minecraft.predicate.NumberRange.FloatRange
 
-public object FloatNumberRangeAdapter : JsonDeserializer<Doubles>, JsonSerializer<Doubles> {
-   public open fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): FloatRange {
-      val var10000: Doubles = Doubles.m_154791_(element);
-      return var10000;
-   }
-
-   public open fun serialize(range: FloatRange, type: Type, context: JsonSerializationContext): JsonElement {
-      val var10000: JsonElement = range.m_55328_();
-      return var10000;
-   }
+/**
+ * A type adapter for [MinMaxBounds.Doubles].
+ *
+ * @author Licious
+ * @since November 28th, 2022
+ */final class FloatNumberRangeAdapter : JsonDeserializer<MinMaxBounds.Doubles>, JsonSerializer<MinMaxBounds.Doubles> {
+    override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): MinMaxBounds.Doubles {
+        return MinMaxBounds.Doubles.CODEC.decode(JsonOps.INSTANCE, element).result().get().first
+    }
+    override fun serialize(range: MinMaxBounds.Doubles, type: Type, context: JsonSerializationContext): JsonElement {
+        return MinMaxBounds.Doubles.CODEC.encode(range, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result().get()
+    }
 }

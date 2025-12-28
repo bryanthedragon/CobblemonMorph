@@ -1,52 +1,44 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMadeInvalidChoicePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
 
-public class ErrorInstruction(battleActor: BattleActor, message: BattleMessage) : InterpreterInstruction {
-   public final val battleActor: BattleActor
-   public final val message: BattleMessage
+/**
+ * Format: |error|(Invalid choice) ERROR
+ *
+ * The actor needs to send a different decision due to ERROR.
+ * @author Yaseen
+ * @since April 22nd, 2023
+ */
+class ErrorInstruction(val battleActor: BattleActor, val message: BattleMessage): InterpreterInstruction {
 
-   init {
-      this.battleActor = battleActor;
-      this.message = message;
-   }
-
-   public override operator fun invoke(battle: PokemonBattle) {
-      battle.log("Error Instruction");
-      battle.dispatchGo((new Function0<Unit>(this, battle) {
-         {
-            super(0);
-            this.this$0 = `$receiver`;
-            this.$battle = `$battle`;
-         }
-
-         public final void invoke() {
-            val var2: java.lang.String = this.this$0.getMessage().getRawMessage();
-            val var3: Component;
-            if (var2 == "|error|[Unavailable choice] Can't switch: The active Pokémon is trapped") {
-               val var10000: MutableComponent = LocalizationUtilsKt.battleLang("error.pokemon_is_trapped");
-               var3 = TextKt.red(var10000) as Component;
-            } else {
-               if (var2 == "|error|[Invalid choice] Can't choose for Team Preview: You're not in a Team Preview phase") {
-                  return;
-               }
-
-               var3 = this.$battle.createUnimplemented$common(this.this$0.getMessage());
+    override fun invoke(battle: PokemonBattle) {
+        battle.log("Error Instruction")
+        battle.dispatchGo {
+            //TODO: some lang stuff for the error messages (Whats the protocol for adding to other langs )
+            //Also is it okay to ignore the team preview error for now? - You bet!
+            val lang = when(message.rawMessage) {
+                "|error|[Unavailable choice] Can't switch: The active Pokémon is trapped" -> battleLang("error.pokemon_is_trapped").red()
+                "|error|[Invalid choice] Can't choose for Team Preview: You're not in a Team Preview phase" -> return@dispatchGo
+                "|error|[Invalid choice] Can't do anything: It's not your turn" -> return@dispatchGo
+                else -> battle.createUnimplemented(message)
             }
-
-            this.this$0.getBattleActor().sendMessage(var3);
-            this.this$0.getBattleActor().setMustChoose(true);
-            this.this$0.getBattleActor().sendUpdate(new BattleMadeInvalidChoicePacket());
-         }
-      }) as () -> Unit);
-   }
+            battleActor.sendMessage(lang)
+            battleActor.mustChoose = true
+            battleActor.sendUpdate(BattleMadeInvalidChoicePacket())
+        }
+    }
 }

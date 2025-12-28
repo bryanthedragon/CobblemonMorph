@@ -1,49 +1,29 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.dialogue
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class EscapeDialoguePacket : NetworkPacket<EscapeDialoguePacket> {
-   public open val id: ResourceLocation
+/**
+ * Sent by the client to the server when the player wants to escape the current dialogue.
+ *
+ * @author Hiroku
+ * @since December 29th, 2023
+ */
+class EscapeDialoguePacket : NetworkPacket<EscapeDialoguePacket> {
+    companion object {
+        val ID = cobblemonResource("escape_dialogue")
+        fun decode(buffer: RegistryFriendlyByteBuf) = EscapeDialoguePacket()
+    }
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): EscapeDialoguePacket {
-         return new EscapeDialoguePacket();
-      }
-   }
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {}
 }

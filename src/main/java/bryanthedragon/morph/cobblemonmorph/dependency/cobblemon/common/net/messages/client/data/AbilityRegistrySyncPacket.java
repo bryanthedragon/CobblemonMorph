@@ -1,43 +1,44 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Abilities
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.AbilityTemplate
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class AbilityRegistrySyncPacket(abilities: Collection<AbilityTemplate>) : DataRegistrySyncPacket(abilities) {
-   public open val id: ResourceLocation
+class AbilityRegistrySyncPacket(abilities: Collection<AbilityTemplate>) : DataRegistrySyncPacket<AbilityTemplate, AbilityRegistrySyncPacket>(abilities) {
 
-   init {
-      this.id = ID;
-   }
+    override val id = ID
 
-   public open fun encodeEntry(buffer: FriendlyByteBuf, entry: AbilityTemplate) {
-      buffer.m_130070_(entry.getName());
-      buffer.m_130070_(entry.getDisplayName());
-      buffer.m_130070_(entry.getDescription());
-   }
+    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: AbilityTemplate) {
+        buffer.writeString(entry.name)
+        buffer.writeString(entry.displayName)
+        buffer.writeString(entry.description)
+    }
 
-   public open fun decodeEntry(buffer: FriendlyByteBuf): AbilityTemplate {
-      val var10002: java.lang.String = buffer.m_130277_();
-      val var10004: java.lang.String = buffer.m_130277_();
-      val var10005: java.lang.String = buffer.m_130277_();
-      return new AbilityTemplate(var10002, null, var10004, var10005, 2, null);
-   }
+    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): AbilityTemplate {
+        return AbilityTemplate(
+            name = buffer.readString(),
+            displayName = buffer.readString(),
+            description = buffer.readString()
+        )
+    }
 
-   public override fun synchronizeDecoded(entries: Collection<AbilityTemplate>) {
-      Abilities.INSTANCE.receiveSyncPacket$common(entries);
-   }
+    override fun synchronizeDecoded(entries: Collection<AbilityTemplate>) {
+        Abilities.receiveSyncPacket(entries)
+    }
 
-   @SourceDebugExtension(["SMAP\nAbilityRegistrySyncPacket.kt\nKotlin\n*S Kotlin\n*F\n+ 1 AbilityRegistrySyncPacket.kt\ncom/cobblemon/mod/common/net/messages/client/data/AbilityRegistrySyncPacket$Companion\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,42:1\n1#2:43\n*E\n"])
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): AbilityRegistrySyncPacket {
-         val var2: AbilityRegistrySyncPacket = new AbilityRegistrySyncPacket(CollectionsKt.emptyList());
-         var2.decodeBuffer$common(buffer);
-         return var2;
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("ability_sync")
+        fun decode(buffer: RegistryFriendlyByteBuf): AbilityRegistrySyncPacket = AbilityRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+    }
 }

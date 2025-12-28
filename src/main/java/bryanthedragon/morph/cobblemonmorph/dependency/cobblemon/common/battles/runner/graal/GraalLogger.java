@@ -1,29 +1,32 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.graal
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import java.util.logging.Handler
 import java.util.logging.Level
 import java.util.logging.LogRecord
+final class GraalLogger : Handler() {
+    override fun publish(record: LogRecord?) {
+        if(record == null) {
+            return
+        }
 
-public object GraalLogger : Handler {
-   public override fun publish(record: LogRecord?) {
-      if (record != null) {
-         val var2: Level = record.getLevel();
-         if (var2 == Level.INFO) {
-            Cobblemon.INSTANCE.getLOGGER().info(record.getMessage());
-         } else if (var2 == Level.WARNING) {
-            Cobblemon.INSTANCE.getLOGGER().warn(record.getMessage());
-         } else if (var2 == Level.SEVERE) {
-            Cobblemon.INSTANCE.getLOGGER().error(record.getMessage());
-         } else {
-            Cobblemon.INSTANCE.getLOGGER().debug(record.getMessage());
-         }
-      }
-   }
+        when (record.level) {
+            Level.INFO -> Cobblemon.LOGGER.info(record.message)
+            Level.WARNING -> Cobblemon.LOGGER.warn(record.message)
+            Level.SEVERE -> Cobblemon.LOGGER.error(record.message)
+            else -> Cobblemon.LOGGER.debug(record.message)
+        }
+    }
 
-   public override fun flush() {
-   }
+    override fun flush() {}
 
-   public override fun close() {
-   }
+    override fun close() {}
 }

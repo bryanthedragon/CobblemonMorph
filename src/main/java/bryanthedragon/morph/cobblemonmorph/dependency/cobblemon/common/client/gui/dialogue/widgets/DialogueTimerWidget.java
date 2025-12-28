@@ -1,10 +1,69 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method isFocused ()Z in class com/cobblemon/mod/common/client/gui/dialogue/widgets/DialogueTimerWidget
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.dialogue.widgets
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.blitk
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonResources
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.CobblemonRenderable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.dialogue.DialogueScreen
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.Renderable
+import net.minecraft.client.gui.components.events.GuiEventListener
+
+class DialogueTimerWidget(
+    val dialogueScreen: DialogueScreen,
+    val x: Int,
+    val y: Int,
+    val width: Int,
+    val height: Int,
+) : CobblemonRenderable, GuiEventListener {
+    companion object {
+        val timerResource = cobblemonResource("textures/gui/dialogue/dialogue_timer_bar.png")
+    }
+
+    override fun isFocused() = false
+    override fun setFocused(focused: Boolean) {}
+
+    var ratio = 1F
+
+    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        if (!dialogueScreen.renderInput()) {
+            return
+        }
+        if (ratio < 0 || ratio > 1 || dialogueScreen.waitingForServerUpdate || !dialogueScreen.dialogueDTO.dialogueInput.showTimer) {
+            return
+        }
+
+        context.setColor(1F, 1F, 1F, 1F)
+        blitk(
+            texture = timerResource,
+            matrixStack = context.pose(),
+            x = x,
+            y = y,
+            width = width,
+            height = height,
+            blend = false
+        )
+        blitk(
+            texture = CobblemonResources.WHITE,
+            matrixStack = context.pose(),
+            x = x.toFloat() + 4,
+            y = y.toFloat() + 1,
+            width = width * ratio - 8,
+            height = height - 2,
+            textureWidth = 1,
+            textureHeight = 1,
+            blend = false,
+            red = 255F/255F,
+            green = 208F/255F,
+            blue = 64F/255F
+        )
+    }
+}

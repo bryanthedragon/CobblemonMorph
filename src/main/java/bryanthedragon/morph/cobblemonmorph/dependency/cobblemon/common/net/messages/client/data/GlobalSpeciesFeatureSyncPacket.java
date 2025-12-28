@@ -1,32 +1,31 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.GlobalSpeciesFeatures
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatureProvider
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
-import kotlin.collections.Map.Entry
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class GlobalSpeciesFeatureSyncPacket(speciesFeatures: Map<String, SpeciesFeatureProvider<*>>) : SpeciesFeatureSyncPacket(speciesFeatures) {
-   public open val id: ResourceLocation
+/**
+ * Syncs a species feature provider that was registered under [GlobalSpeciesFeatures].
+ *
+ * @author Hiroku
+ * @since November 13th, 2023
+ */
+class GlobalSpeciesFeatureSyncPacket(speciesFeatures: Map<String, SpeciesFeatureProvider<*>>) : SpeciesFeatureSyncPacket<GlobalSpeciesFeatureSyncPacket>(speciesFeatures) {
+    override val id = ID
 
-   init {
-      this.id = ID;
-   }
-
-   public override fun synchronizeDecoded(entries: Collection<Entry<String, SynchronizedSpeciesFeatureProvider<*>>>) {
-      GlobalSpeciesFeatures.INSTANCE.loadOnClient(entries);
-   }
-
-   @SourceDebugExtension(["SMAP\nGlobalSpeciesFeatureSyncPacket.kt\nKotlin\n*S Kotlin\n*F\n+ 1 GlobalSpeciesFeatureSyncPacket.kt\ncom/cobblemon/mod/common/net/messages/client/data/GlobalSpeciesFeatureSyncPacket$Companion\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,30:1\n1#2:31\n*E\n"])
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): GlobalSpeciesFeatureSyncPacket {
-         val var2: GlobalSpeciesFeatureSyncPacket = new GlobalSpeciesFeatureSyncPacket(MapsKt.emptyMap());
-         var2.decodeBuffer$common(buffer);
-         return var2;
-      }
-   }
+    override fun synchronizeDecoded(entries: Collection<Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>>) = GlobalSpeciesFeatures.loadOnClient(entries)
+    companion object {
+        val ID = cobblemonResource("global_species_feature_sync")
+        fun decode(buffer: RegistryFriendlyByteBuf) = GlobalSpeciesFeatureSyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
+    }
 }

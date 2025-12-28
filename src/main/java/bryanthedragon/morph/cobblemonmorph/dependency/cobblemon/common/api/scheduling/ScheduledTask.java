@@ -1,156 +1,180 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling
 
 import java.util.concurrent.CompletableFuture
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
+import kotlin.math.max
 
-@SourceDebugExtension(["SMAP\nScheduledTask.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ScheduledTask.kt\ncom/cobblemon/mod/common/api/scheduling/ScheduledTask\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,185:1\n1#2:186\n*E\n"])
-public class ScheduledTask(action: (ScheduledTask) -> Unit,
-   identifier: String? = null,
-   delaySeconds: Float,
-   intervalSeconds: Float = -1.0F,
-   iterations: Int = 1
+/**
+ * A task to be executed synchronously. The precision of tasks is such that the delay
+ * is never more than one tick from the scheduled time on the server, and bound to render
+ * speeds on the client. Pinched from Cable Libs and expanded.
+ *
+ * @author landonjw, Hiroku
+ */
+class ScheduledTask(
+    /** The action to run. */
+    val action: (ScheduledTask) -> Unit,
+    /** The identifier, optional. */
+    val identifier: String? = null,
+    /** How long until the task should execute. */
+    delaySeconds: Float,
+    /** The seconds between each execution, if this is repeated. */
+    val intervalSeconds: Float = -1F,
+    /** The number of times this task should iterate. */
+    val iterations: Int = 1
 ) {
-   public final val action: (ScheduledTask) -> Unit
+    companion object {
+        val BLANK = ScheduledTask({}, delaySeconds = 0F)
+    }
+    val future = CompletableFuture<Unit>()
+    var secondsPassed = 0F
+    var currentIteration: Int = 0
+        private set
+    var secondsRemaining: Float = 0F
+        private set
+    var expired = false
+        private set
+    var paused = false
+        set(value) {
+            field = value
+        }
 
-   public final var currentIteration: Int
-      private set
+    init {
+        if (delaySeconds > 0) {
+            secondsRemaining = delaySeconds
+        }
+    }
 
-   public final var expired: Boolean
-      private set
+    override fun toString(): String {
+        return identifier?.let { "Task-$it" } ?: super.toString()
+    }
 
-   public final val future: CompletableFuture<Unit>
-   public final val identifier: String?
-   public final val intervalSeconds: Float
-   public final val iterations: Int
-
-   public final var paused: Boolean
-      public final set(value) {
-         this.paused = value;
-      }
-
-
-   public final var secondsPassed: Float
-
-   public final var secondsRemaining: Float
-      private set
-
-   init {
-      this.action = action;
-      this.identifier = identifier;
-      this.intervalSeconds = intervalSeconds;
-      this.iterations = iterations;
-      this.future = new CompletableFuture<>();
-      if (delaySeconds > 0.0F) {
-         this.secondsRemaining = delaySeconds;
-      }
-   }
-
-   public override fun toString(): String {
-      if (this.identifier != null) {
-         val var10000: java.lang.String = "Task-${this.identifier}";
-         if (var10000 != null) {
-            return var10000;
-         }
-      }
-
-      return super.toString();
-   }
-
-   public fun update(deltaSeconds: Float) {
-      if (!this.expired && !this.paused) {
-         this.secondsPassed += deltaSeconds;
-         this.secondsRemaining = Math.max(0.0F, this.secondsRemaining - deltaSeconds);
-         if (this.secondsRemaining == 0.0F) {
-            this.action.invoke(this);
-            val var2: Int = this.currentIteration++;
-            if (this.intervalSeconds == -1.0F || this.currentIteration >= this.iterations && this.iterations != -1) {
-               this.expired = true;
-            } else {
-               this.secondsRemaining = this.intervalSeconds;
+    fun update(deltaSeconds: Float) {
+        if (!expired && !paused) {
+            secondsPassed += deltaSeconds
+            secondsRemaining = max(0F, secondsRemaining - deltaSeconds)
+            if (secondsRemaining == 0F) {
+                action(this)
+                currentIteration++
+                if (intervalSeconds != -1F && (currentIteration < iterations || iterations == -1)) {
+                    secondsRemaining = intervalSeconds
+                } else {
+                    expired = true
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   public fun expire() {
-      this.expired = true;
-      this.future.complete(Unit.INSTANCE);
-   }
+    fun expire() {
+        this.expired = true
+        future.complete(Unit)
+    }
 
-   @SourceDebugExtension(["SMAP\nScheduledTask.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ScheduledTask.kt\ncom/cobblemon/mod/common/api/scheduling/ScheduledTask$Builder\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,185:1\n1#2:186\n*E\n"])
-   public class Builder {
-      private final var action: ((ScheduledTask) -> Unit)?
-      private final var delaySeconds: Float
-      private final var identifier: String?
-      private final var interval: Float = -1.0F
-      private final var iterations: Int = 1
-      private final var tracker: SchedulingTracker?
+    class Builder {
+        private var action: ((ScheduledTask) -> Unit)? = null
 
-      public fun identifier(identifier: String): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ScheduledTask.Builder {
-         this.identifier = identifier;
-         return this;
-      }
+        /** The number of seconds before the task will first be executed. */
+        private var delaySeconds: Float = 0F
 
-      public fun execute(action: (ScheduledTask) -> Unit): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ScheduledTask.Builder {
-         this.action = action;
-         return this;
-      }
+        /** The number of seconds before the task will be executed after it's already executed. */
+        private var interval: Float = -1F
 
-      public fun delay(delaySeconds: Float): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ScheduledTask.Builder {
-         if (!(delaySeconds >= 0.0F)) {
-            throw new IllegalArgumentException("Delay must not be below 0".toString());
-         } else {
-            this.delaySeconds = delaySeconds;
-            return this;
-         }
-      }
+        /** The number of times the task will run. -1 to run indefinitely. */
+        private var iterations: Int = 1
+        
+        private var identifier: String? = null
 
-      public fun interval(interval: Float): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ScheduledTask.Builder {
-         if (!(interval >= 0.0F)) {
-            throw new IllegalArgumentException("Interval must not be below 0".toString());
-         } else {
-            this.interval = interval;
-            return this;
-         }
-      }
+        private var tracker: SchedulingTracker? = null
 
-      public fun iterations(iterations: Int): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ScheduledTask.Builder {
-         if (iterations < -1) {
-            throw new IllegalArgumentException("Iterations must not be below -1".toString());
-         } else {
-            this.iterations = iterations;
-            return this;
-         }
-      }
+        /**
+         * Sets the consumer to be executed by the task.
+         *
+         * @param action the consumer to be executed by the task
+         * @return builder with consumer set
+         */
+        fun execute(action: ((ScheduledTask) -> Unit)): Builder {
+            this.action = action
+            return this
+        }
 
-      public fun infiniteIterations(): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ScheduledTask.Builder {
-         return this.iterations(-1);
-      }
+        /**
+         * Sets the delay of the task.
+         *
+         * @param delaySeconds the number of seconds before the task will first be executed
+         * @return builder with delay set
+         * @throws IllegalArgumentException if delay is below 0
+         */
+        fun delay(delaySeconds: Float): Builder {
+            require(delaySeconds >= 0) { "Delay must not be below 0" }
+            this.delaySeconds = delaySeconds
+            return this
+        }
 
-      public fun tracker(schedulingTracker: SchedulingTracker): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ScheduledTask.Builder {
-         this.tracker = schedulingTracker;
-         return this;
-      }
+        /**
+         * Sets the interval between task executions.
+         *
+         * @param interval the number of seconds before the task will execute after already executing
+         * @return builder with interval set
+         * @throws IllegalArgumentException if interval is below 0
+         */
+        fun interval(interval: Float): Builder {
+            require(interval >= 0) { "Interval must not be below 0" }
+            this.interval = interval
+            return this
+        }
 
-      public fun build(): ScheduledTask {
-         if (this.action == null) {
-            throw new IllegalStateException("action must be set".toString());
-         } else {
-            val var10002: Function1 = this.action;
-            val task: ScheduledTask = new ScheduledTask(var10002, this.identifier, this.delaySeconds, this.interval, this.iterations);
-            var var10000: SchedulingTracker = this.tracker;
-            if (this.tracker == null) {
-               var10000 = ServerTaskTracker.INSTANCE;
-            }
+        /**
+         * Sets the number of times the task will run.
+         *
+         * @param iterations the number of times the task will run, -1 treated as indefinitely
+         * @return builder with number of iterations set
+         * @throws IllegalArgumentException if iterations is below -1
+         */
+        fun iterations(iterations: Int): Builder {
+            require(iterations >= -1) { "Iterations must not be below -1" }
+            this.iterations = iterations
+            return this
+        }
 
-            var10000.addTask(task);
-            return task;
-         }
-      }
-   }
+        /**
+         * Sets the task to run indefinitely.
+         *
+         * @return builder with infinite iterations set
+         */
+        fun infiniteIterations(): Builder {
+            return iterations(-1)
+        }
 
-   public companion object {
-      public final val BLANK: ScheduledTask
-   }
+        fun tracker(schedulingTracker: SchedulingTracker): Builder {
+            this.tracker = schedulingTracker
+            return this
+        }
+
+        /**
+         * Builds the task using the properties of the task builder.
+         * This will add the task to [TaskTickListener].
+         *
+         * @return a task with the task builder's properties
+         * @throws IllegalStateException if consumer is not set
+         */
+        fun build(): ScheduledTask {
+            checkNotNull(action) { "action must be set" }
+            val task = ScheduledTask(
+                action = action!!,
+                identifier = identifier,
+                delaySeconds = delaySeconds,
+                intervalSeconds = interval,
+                iterations = iterations
+            )
+            (tracker ?: ServerTaskTracker).addTask(task)
+            return task
+        }
+    }
 }

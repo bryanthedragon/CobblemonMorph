@@ -1,37 +1,44 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.ShowdownService
-import java.util.LinkedList
-import java.util.Queue
+import java.util.*
 import java.util.concurrent.CountDownLatch
-import kotlin.jvm.functions.Function1
 
-public class ShowdownThread : Thread("Cobblemon Showdown") {
-   private final val latch: CountDownLatch = new CountDownLatch(1)
-   private final val whenReady: Queue<(ShowdownService) -> Unit> = (new LinkedList()) as Queue
+class ShowdownThread : Thread("Cobblemon Showdown") {
 
-   public fun launch() {
-      this.start();
-      this.latch.await();
+    private val latch = CountDownLatch(1)
 
-      for (Function1 action : this.whenReady) {
-         action.invoke(ShowdownService.Companion.getService());
-      }
-   }
+    private val whenReady : Queue<(ShowdownService) -> Unit> = LinkedList()
 
-   public fun queue(action: (ShowdownService) -> Unit) {
-      if (this.latch.getCount() == 0L) {
-         action.invoke(ShowdownService.Companion.getService());
-      } else {
-         this.whenReady.add(action);
-      }
-   }
+    fun launch() {
+        this.start()
+        this.latch.await()
+        for (action in whenReady) {
+            action(ShowdownService.service)
+        }
+    }
 
-   public override fun run() {
-      Cobblemon.INSTANCE.getLOGGER().info("Starting showdown service...");
-      ShowdownService.Companion.getService().openConnection();
-      Cobblemon.INSTANCE.getLOGGER().info("Showdown has been started!");
-      this.latch.countDown();
-   }
+    fun queue(action: (ShowdownService) -> Unit) {
+        if (this.latch.count == 0L) {
+            action(ShowdownService.service)
+        } else {
+            this.whenReady.add(action)
+        }
+    }
+
+    override fun run() {
+        LOGGER.info("Starting showdown service...")
+        ShowdownService.service.openConnection()
+        LOGGER.info("Showdown has been started!")
+        this.latch.countDown()
+    }
 }

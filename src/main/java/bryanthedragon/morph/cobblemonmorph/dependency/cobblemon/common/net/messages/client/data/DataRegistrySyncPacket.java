@@ -1,63 +1,58 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import java.util.ArrayList;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import io.netty.buffer.Unpooled
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public abstract class DataRegistrySyncPacket<T, N extends NetworkPacket<N>> : NetworkPacket<N> {
-   public final var buffer: FriendlyByteBuf?
-   internal final val entries: ArrayList<Any>
-   private final val registryEntries: Collection<Any>
+abstract class DataRegistrySyncPacket<T, N : NetworkPacket<N>>(private val registryEntries: Collection<T>) : NetworkPacket<N> {
 
-   open fun DataRegistrySyncPacket(registryEntries: MutableCollection<T>) {
-      this.registryEntries = registryEntries;
-      this.entries = new ArrayList<>();
-   }
+    var buffer: RegistryFriendlyByteBuf? = null
+    internal val entries = arrayListOf<T>()
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_236828_(this.registryEntries, this::encodeEntry);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        val newBuffer = RegistryFriendlyByteBuf(Unpooled.buffer(), buffer.registryAccess())
+        newBuffer.writeCollection(registryEntries) { _, entry -> encodeEntry(newBuffer, entry) }
+        buffer.writeInt(newBuffer.readableBytes())
+        buffer.writeBytes(newBuffer)
+        // TODO (techdaan): should newBuffer be released here? I don't think writeBytes does that for us.
+    }
 
-   internal fun decodeBuffer(buffer: FriendlyByteBuf) {
-      this.buffer = buffer;
-      buffer.retain();
-   }
+    internal fun decodeBuffer(buffer: RegistryFriendlyByteBuf) {
+        val size = buffer.readInt()
+        val newBuffer = RegistryFriendlyByteBuf(buffer.readBytes(size), buffer.registryAccess())
+        this.buffer = newBuffer
+    }
 
-   public abstract fun encodeEntry(buffer: FriendlyByteBuf, entry: Any) {
-   }
+    /**
+     * Encodes an entry of type [T] to the [RegistryFriendlyByteBuf].
+     *
+     * @param buffer The [RegistryFriendlyByteBuf] being encoded to.
+     * @param entry The entry of type [T].
+     */
+    abstract fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: T)
 
-   public abstract fun decodeEntry(buffer: FriendlyByteBuf): Any? {
-   }
+    /**
+     * Attempts to decode this entry, if null it will be skipped.
+     * Any errors that result in a null entry should be logged.
+     *
+     * @param buffer The [RegistryFriendlyByteBuf] being decoded from.
+     * @return The entry of type [T].
+     */
+    abstract fun decodeEntry(buffer: RegistryFriendlyByteBuf): T?
 
-   public abstract fun synchronizeDecoded(entries: Collection<Any>) {
-   }
+    /**
+     * Synchronizes the final product the final product with the backing registry.
+     *
+     * @param entries The processed entries.
+     */
+    abstract fun synchronizeDecoded(entries: Collection<T>)
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
 }

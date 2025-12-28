@@ -1,61 +1,44 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import com.bedrockk.molang.runtime.value.MoValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
+import com.mojang.serialization.Codec
 
-public interface ExpressionLike {
-   public abstract fun resolve(runtime: MoLangRuntime): MoValue {
-   }
+/**
+ * An object that can be given a [MoLangRuntime] to produce a single [MoValue]. This abstracts
+ * the use of simple and complex [com.bedrockk.molang.Expression]s as MoLang can be a single line or multiple or
+ * a script reference etc.
+ *
+ * @author Hiroku
+ * @since October 22nd, 2023
+ */
+interface ExpressionLike {
+    override fun toString(): String
+    /** Produces a [MoValue] for a [MoLangRuntime] to supply an environment. */
+    fun resolve(runtime: MoLangRuntime, context: Map<String, MoValue> = runtime.environment.context?.map ?: hashMapOf()): MoValue
+    fun getString(): String = toString()
 
-   public open fun resolveDouble(runtime: MoLangRuntime): Double {
-   }
+    fun resolveDouble(runtime: MoLangRuntime) = resolve(runtime).asDouble()
+    fun resolveFloat(runtime: MoLangRuntime) = resolveDouble(runtime).toFloat()
+    fun resolveString(runtime: MoLangRuntime) = resolve(runtime).asString()
+    fun resolveInt(runtime: MoLangRuntime) = resolveDouble(runtime).toInt()
+    fun resolveBoolean(runtime: MoLangRuntime) = resolveDouble(runtime) == 1.0
+    fun resolveObject(runtime: MoLangRuntime) = resolve(runtime) as ObjectValue<*>
 
-   public open fun resolveFloat(runtime: MoLangRuntime): Float {
-   }
-
-   public open fun resolveString(runtime: MoLangRuntime): String {
-   }
-
-   public open fun resolveInt(runtime: MoLangRuntime): Int {
-   }
-
-   public open fun resolveBoolean(runtime: MoLangRuntime): Boolean {
-   }
-
-   public open fun resolveObject(runtime: MoLangRuntime): ObjectValue<*> {
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun resolveDouble(`$this`: ExpressionLike, runtime: MoLangRuntime): Double {
-         return `$this`.resolve(runtime).asDouble();
-      }
-
-      @JvmStatic
-      fun resolveFloat(`$this`: ExpressionLike, runtime: MoLangRuntime): Float {
-         return (float)`$this`.resolveDouble(runtime);
-      }
-
-      @JvmStatic
-      fun resolveString(`$this`: ExpressionLike, runtime: MoLangRuntime): java.lang.String {
-         return `$this`.resolve(runtime).asString();
-      }
-
-      @JvmStatic
-      fun resolveInt(`$this`: ExpressionLike, runtime: MoLangRuntime): Int {
-         return (int)`$this`.resolveDouble(runtime);
-      }
-
-      @JvmStatic
-      fun resolveBoolean(`$this`: ExpressionLike, runtime: MoLangRuntime): Boolean {
-         return `$this`.resolveDouble(runtime) == 1.0;
-      }
-
-      @JvmStatic
-      fun resolveObject(`$this`: ExpressionLike, runtime: MoLangRuntime): ObjectValue<?> {
-         val var10000: MoValue = `$this`.resolve(runtime);
-         return var10000 as ObjectValue<?>;
-      }
-   }
+    companion object {
+        val CODEC: Codec<ExpressionLike> = Codec.STRING.xmap({
+            it.asExpressionLike()
+        }) {
+            it.getString()
+        }
+    }
 }

@@ -1,75 +1,36 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events
 
 import net.minecraft.client.Minecraft
 
-public interface ClientTickEvent {
-   public val client: Minecraft
+/**
+ * Event fired whenever the game ticks on the client side.
+ *
+ * @author Licious
+ * @since February 15th, 2023
+ */
+interface ClientTickEvent {
 
-   public data Post(client: Minecraft) : ClientTickEvent {
-      public open val client: Minecraft
+    /**
+     * The [Minecraft] instance.
+     */
+    val client: Minecraft
 
-      init {
-         this.client = client;
-      }
+    /**
+     * Fired during the Pre tick phase.
+     */
+    record Pre(override val client: Minecraft) : ClientTickEvent
 
-      public operator fun component1(): Minecraft {
-         return this.client;
-      }
+    /**
+     * Fired during the Post tick phase.
+     */
+    record Post(override val client: Minecraft) : ClientTickEvent
 
-      public fun copy(client: Minecraft = this.client): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ClientTickEvent.Post {
-         return new ClientTickEvent.Post(client);
-      }
-
-      public override fun toString(): String {
-         return "Post(client=${this.client})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.client.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ClientTickEvent.Post) {
-            return false;
-         } else {
-            return this.client == (other as ClientTickEvent.Post).client;
-         }
-      }
-   }
-
-   public data Pre(client: Minecraft) : ClientTickEvent {
-      public open val client: Minecraft
-
-      init {
-         this.client = client;
-      }
-
-      public operator fun component1(): Minecraft {
-         return this.client;
-      }
-
-      public fun copy(client: Minecraft = this.client): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ClientTickEvent.Pre {
-         return new ClientTickEvent.Pre(client);
-      }
-
-      public override fun toString(): String {
-         return "Pre(client=${this.client})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.client.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ClientTickEvent.Pre) {
-            return false;
-         } else {
-            return this.client == (other as ClientTickEvent.Pre).client;
-         }
-      }
-   }
 }

@@ -1,23 +1,22 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.dialogue
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.dialogue.DialogueScreen
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.DialogueClosedPacket
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.screens.Screen
-
-public object DialogueClosedHandler : ClientNetworkPacketHandler<DialogueClosedPacket> {
-   public open fun handle(packet: DialogueClosedPacket, client: Minecraft) {
-      val var4: Screen = client.f_91080_;
-      val var10000: DialogueScreen = client.f_91080_ as? DialogueScreen;
-      if ((client.f_91080_ as? DialogueScreen) != null) {
-         if (packet.getDialogueId() == null || var10000.getDialogueId() == packet.getDialogueId()) {
-            client.m_91152_(null);
-         }
-      }
-   }
-
-   fun handleOnNettyThread(packet: DialogueClosedPacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
+final class DialogueClosedHandler : ClientNetworkPacketHandler<DialogueClosedPacket> {
+    override fun handle(packet: DialogueClosedPacket, client: Minecraft) {
+        val currentScreen = client.screen as? DialogueScreen ?: return
+        if (packet.dialogueId == null || currentScreen.dialogueId == packet.dialogueId) {
+            client.setScreen(null)
+        }
+    }
 }

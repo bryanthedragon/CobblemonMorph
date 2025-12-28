@@ -1,16 +1,49 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue
 
-import java.util.LinkedHashMap
+import com.bedrockk.molang.runtime.struct.QueryStruct
+import com.bedrockk.molang.runtime.value.StringValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolve
 
-public interface DialogueAction {
-   public abstract operator fun invoke(dialogue: ActiveDialogue, input: String? = ...) {
-   }
+/**
+ * Something that can happen in the context of an [ActiveDialogue]. The input field is nullable because I'm reusing
+ * this for dialogue input timeouts which don't have an input. It'll be fine.
+ *
+ * @author Hiroku
+ * @since December 29th, 2023
+ */
+interface DialogueAction {
+    companion object {
+        @JvmStatic
+        val types = mutableMapOf<String, Class<out DialogueAction>>()
+    }
 
-   public companion object {
-      @JvmStatic
-      public final val types: MutableMap<String, Class<out DialogueAction>> = (new LinkedHashMap()) as java.util.Map
-   }
+    operator fun invoke(dialogue: ActiveDialogue, input: String? = null)
+}
 
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls
+class FunctionDialogueAction(val consumer: (ActiveDialogue, String?) -> Unit) : DialogueAction {
+    override fun invoke(dialogue: ActiveDialogue, input: String?) {
+        consumer(dialogue, input)
+    }
+}
+
+class ExpressionLikeDialogueAction(val expression: ExpressionLike) : DialogueAction {
+    override fun invoke(dialogue: ActiveDialogue, input: String?) {
+        if (input != null) {
+            dialogue.runtime.environment.setSimpleVariable("selected_option", StringValue(input))
+        }
+        dialogue.runtime.resolve(
+            expression,
+            mapOf("player" to dialogue.playerStruct, "npc" to (dialogue.npc?.struct ?: QueryStruct(hashMapOf())))
+        )
+    }
 }

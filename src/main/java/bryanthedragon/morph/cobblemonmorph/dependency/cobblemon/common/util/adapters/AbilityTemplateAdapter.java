@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Abilities
@@ -9,15 +17,7 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-
-public object AbilityTemplateAdapter : JsonSerializer<AbilityTemplate>, JsonDeserializer<AbilityTemplate> {
-   public open fun serialize(src: AbilityTemplate, type: Type, ctx: JsonSerializationContext): JsonPrimitive {
-      return new JsonPrimitive(src.getName());
-   }
-
-   public open fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): AbilityTemplate {
-      val var10000: Abilities = Abilities.INSTANCE;
-      val var10001: java.lang.String = json.getAsString();
-      return var10000.getOrException(var10001);
-   }
+final class AbilityTemplateAdapter: JsonSerializer<AbilityTemplate>, JsonDeserializer<AbilityTemplate> {
+    override fun serialize(src: AbilityTemplate, type: Type, ctx: JsonSerializationContext) = JsonPrimitive(src.name)
+    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = Abilities.getOrException(json.asString)
 }

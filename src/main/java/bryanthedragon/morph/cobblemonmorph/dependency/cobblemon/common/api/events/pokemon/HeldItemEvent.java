@@ -1,153 +1,82 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
+import com.bedrockk.molang.runtime.value.DoubleValue
+import com.bedrockk.molang.runtime.value.MoValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.moLangFunctionMap
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.world.item.ItemStack
 
-public interface HeldItemEvent {
-   public val pokemon: Pokemon
+/**
+ * The base for all the events related to held items and cosmetic items.
+ *
+ * @see [Pre]
+ * @see [Post]
+ */
+interface HeldItemEvent {
 
-   public data Post(pokemon: Pokemon, received: ItemStack, returned: ItemStack, decremented: Boolean) : HeldItemEvent {
-      public final val decremented: Boolean
-      public open val pokemon: Pokemon
-      public final val received: ItemStack
-      public final val returned: ItemStack
+    /**
+     * The [Pokemon] triggering this event.
+     */
+    val pokemon: Pokemon
 
-      init {
-         this.pokemon = pokemon;
-         this.received = received;
-         this.returned = returned;
-         this.decremented = decremented;
-      }
+    /**
+     * Fired at the start of [Pokemon.swapHeldItem] and [Pokemon.swapCosmeticItem].
+     *
+     * This event should be used to mutate the results of this transaction.
+     *
+     * Canceling this event will prevent the operation and causes the return to be item attempted to be given originally.
+     *
+     * @property pokemon The [Pokemon] triggering this event.
+     * @property receiving The [ItemStack] being sent received from the transaction. By default, this is the item that triggered the interaction.
+     * @property returning The [ItemStack] being sent back from the transaction. By default, this is the currently held item.
+     * @property decrement If the operation should decrement the [receiving] [ItemStack.count], this is handled in the implementation.
+     *
+     * @see [Post]
+     */
+    record Pre(override val pokemon: Pokemon, var receiving: ItemStack, var returning: ItemStack, var decrement: Boolean) : HeldItemEvent, Cancelable() {
+        fun getContext(): MutableMap<String, MoValue> {
+            return mutableMapOf(
+                "pokemon" to pokemon.struct,
+                "receiving" to receiving.asMoLangValue(server()!!.registryAccess()),
+                "returning" to returning.asMoLangValue(server()!!.registryAccess()),
+                "decrement" to DoubleValue(if (decrement) 1.0 else 0.0)
+            )
+        }
+        val functions = moLangFunctionMap(
+            cancelFunc
+        )
+    }
 
-      public operator fun component1(): Pokemon {
-         return this.pokemon;
-      }
+    /**
+     * Fired at the end of [Pokemon.swapHeldItem] and [Pokemon.swapCosmeticItem].
+     *
+     * @property pokemon The [Pokemon] triggering this event.
+     * @property received The [ItemStack] considered as received and set to the [pokemon]. This is a copy and mutation will not be taken into account.
+     * @property returned The [ItemStack] returned by the method call. This is a copy and mutation will not be taken into account.
+     * @property decremented If the [received] [ItemStack] got decremented.
+     *
+     * @see [Pre]
+     */
+    record Post(override val pokemon: Pokemon, val received: ItemStack, val returned: ItemStack, val decremented: Boolean) : HeldItemEvent {
+        fun getContext(): MutableMap<String, MoValue> {
+            return mutableMapOf(
+                "pokemon" to pokemon.struct,
+                "received" to received.asMoLangValue(server()!!.registryAccess()),
+                "returned" to returned.asMoLangValue(server()!!.registryAccess()),
+                "decremented" to DoubleValue(if (decremented) 1.0 else 0.0)
+            )
+        }
+    }
 
-      public operator fun component2(): ItemStack {
-         return this.received;
-      }
-
-      public operator fun component3(): ItemStack {
-         return this.returned;
-      }
-
-      public operator fun component4(): Boolean {
-         return this.decremented;
-      }
-
-      public fun copy(
-         pokemon: Pokemon = this.pokemon,
-         received: ItemStack = this.received,
-         returned: ItemStack = this.returned,
-         decremented: Boolean = this.decremented
-      ): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.HeldItemEvent.Post {
-         return new HeldItemEvent.Post(pokemon, received, returned, decremented);
-      }
-
-      public override fun toString(): String {
-         return "Post(pokemon=${this.pokemon}, received=${this.received}, returned=${this.returned}, decremented=${this.decremented})";
-      }
-
-      public override fun hashCode(): Int {
-         val var10000: Int = ((this.pokemon.hashCode() * 31 + this.received.hashCode()) * 31 + this.returned.hashCode()) * 31;
-         var var10001: Byte = this.decremented;
-         if (this.decremented) {
-            var10001 = 1;
-         }
-
-         return var10000 + var10001;
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is HeldItemEvent.Post) {
-            return false;
-         } else {
-            val var2: HeldItemEvent.Post = other as HeldItemEvent.Post;
-            if (!(this.pokemon == (other as HeldItemEvent.Post).pokemon)) {
-               return false;
-            } else if (!(this.received == var2.received)) {
-               return false;
-            } else if (!(this.returned == var2.returned)) {
-               return false;
-            } else {
-               return this.decremented == var2.decremented;
-            }
-         }
-      }
-   }
-
-   public data Pre(pokemon: Pokemon, receiving: ItemStack, returning: ItemStack, decrement: Boolean) : Cancelable, HeldItemEvent {
-      public final var decrement: Boolean
-      public open val pokemon: Pokemon
-      public final var receiving: ItemStack
-      public final var returning: ItemStack
-
-      init {
-         this.pokemon = pokemon;
-         this.receiving = receiving;
-         this.returning = returning;
-         this.decrement = decrement;
-      }
-
-      public operator fun component1(): Pokemon {
-         return this.pokemon;
-      }
-
-      public operator fun component2(): ItemStack {
-         return this.receiving;
-      }
-
-      public operator fun component3(): ItemStack {
-         return this.returning;
-      }
-
-      public operator fun component4(): Boolean {
-         return this.decrement;
-      }
-
-      public fun copy(
-         pokemon: Pokemon = this.pokemon,
-         receiving: ItemStack = this.receiving,
-         returning: ItemStack = this.returning,
-         decrement: Boolean = this.decrement
-      ): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.HeldItemEvent.Pre {
-         return new HeldItemEvent.Pre(pokemon, receiving, returning, decrement);
-      }
-
-      public override fun toString(): String {
-         return "Pre(pokemon=${this.pokemon}, receiving=${this.receiving}, returning=${this.returning}, decrement=${this.decrement})";
-      }
-
-      public override fun hashCode(): Int {
-         val var10000: Int = ((this.pokemon.hashCode() * 31 + this.receiving.hashCode()) * 31 + this.returning.hashCode()) * 31;
-         var var10001: Byte = this.decrement;
-         if (this.decrement) {
-            var10001 = 1;
-         }
-
-         return var10000 + var10001;
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is HeldItemEvent.Pre) {
-            return false;
-         } else {
-            val var2: HeldItemEvent.Pre = other as HeldItemEvent.Pre;
-            if (!(this.pokemon == (other as HeldItemEvent.Pre).pokemon)) {
-               return false;
-            } else if (!(this.receiving == var2.receiving)) {
-               return false;
-            } else if (!(this.returning == var2.returning)) {
-               return false;
-            } else {
-               return this.decrement == var2.decrement;
-            }
-         }
-      }
-   }
 }

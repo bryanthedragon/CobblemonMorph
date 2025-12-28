@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
@@ -6,242 +14,249 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ActiveBattlePokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import java.util.ArrayList;
-import java.util.HashMap
-import java.util.Locale
 import java.util.UUID
-import kotlin.jvm.internal.SourceDebugExtension
 
-@SourceDebugExtension(["SMAP\nBattleMessage.kt\nKotlin\n*S Kotlin\n*F\n+ 1 BattleMessage.kt\ncom/cobblemon/mod/common/api/battles/interpreter/BattleMessage\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n+ 3 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,262:1\n1#2:263\n1360#3:264\n1446#3,5:265\n*S KotlinDebug\n*F\n+ 1 BattleMessage.kt\ncom/cobblemon/mod/common/api/battles/interpreter/BattleMessage\n*L\n123#1:264\n123#1:265,5\n*E\n"])
-public class BattleMessage(rawMessage: String) {
-   private final val args: ArrayList<String>
+/**
+ * A class responsible for parsing a raw simulator protocol message received from Showdown.
+ * For more information see the [Showdown protocol](https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md).
+ *
+ * @constructor Creates a battle message with the given raw message.
+ *
+ * @param rawMessage The raw message received from Showdown.
+ *
+ * @author Licious
+ * @since December 31st, 2022
+ */
+class BattleMessage(rawMessage: String) {
+    /**
+     * The ID of the action received in the message.
+     */
+    var id = ""
+        private set
 
-   public final var id: String = ""
-      private set
+    /**
+     * The raw message received.
+     */
+    var rawMessage: String = rawMessage
+        private set
 
-   private final val optionalArgumentMatcher: Regex
-   private final val optionalArguments: HashMap<String, String>
+    /**
+     * A collection of the individual arguments the message had.
+     */
+    private val args = arrayListOf<String>()
 
-   public final var rawMessage: String
-      private set
+    /**
+     * A collection of the optional arguments the message had.
+     */
+    private val optionalArguments = hashMapOf<String, String>()
 
-   init {
-      this.rawMessage = rawMessage;
-      this.args = new ArrayList<>();
-      this.optionalArguments = new HashMap<>();
-      this.optionalArgumentMatcher = new Regex("^\\[([^]]+)]");
-      this.parse(rawMessage);
-   }
+    /**
+     * Pattern to match the start of an optional argument.
+     */
+    private val optionalArgumentMatcher = Regex("^\\$OPTIONAL_ARG_START([^]]+)$OPTIONAL_ARG_END")
 
-   public fun argumentAt(index: Int): String? {
-      return CollectionsKt.getOrNull(this.args, index) as java.lang.String;
-   }
+    init {
+        this.parse(rawMessage)
+    }
 
-   public fun optionalArgument(name: String): String? {
-      val var10000: HashMap = this.optionalArguments;
-      val var10001: java.lang.String = name.toLowerCase(Locale.ROOT);
-      return var10000.get(var10001) as java.lang.String;
-   }
+    /**
+     * Get an argument at the given [index].
+     *
+     * @param index The index of the expected argument.
+     * @return The argument if existing or null.
+     */
+    fun argumentAt(index: Int): String? = this.args.getOrNull(index)
 
-   public fun hasOptionalArgument(name: String): Boolean {
-      return this.optionalArgument(name) != null;
-   }
+    /**
+     * Get an optional argument with the given [name].
+     * This returns the data of the argument only.
+     *
+     * @param name The name of the optional argument.
+     * @return The argument data if existing or null.
+     */
+    fun optionalArgument(name: String): String? = this.optionalArguments[name.lowercase()]
 
-   public fun parse(rawMessage: String): BattleMessage {
-      var message: java.lang.String = StringsKt.trim(rawMessage).toString();
-      this.id = "";
-      this.args.clear();
-      this.optionalArguments.clear();
-      this.rawMessage = message;
-      if (StringsKt.startsWith$default(message, "|", false, 2, null) && !(message == "|")) {
-         message = this.push(message);
-         this.id = StringsKt.substringBefore$default(message, "|", null, 2, null);
+    /**
+     * Checks if an optional argument is present.
+     * [optionalArgument] is null safe, this method is meant as a way to check 'flags' as some optional arguments contain no data.
+     *
+     * @param name The name of the optional argument.
+     * @return True if the argument is present.
+     */
+    fun hasOptionalArgument(name: String): Boolean = this.optionalArgument(name) != null
 
-         for (java.lang.String var8 = this.push(message); !StringsKt.isBlank(var8); var8 = this.push(var8)) {
-            val currentData: java.lang.String = StringsKt.substringBefore$default(var8, "|", null, 2, null);
-            val optionalArgumentID: MatchResult = Regex.find$default(this.optionalArgumentMatcher, currentData, 0, 2, null);
+    /**
+     * Clears the parsed arguments and parses the message again with the new given [rawMessage].
+     *
+     * @param rawMessage The raw message received from Showdown.
+     * @return This instance of the battle message updated.
+     */
+    fun parse(rawMessage: String): BattleMessage {
+        var message = rawMessage.trim()
+        this.id = ""
+        this.args.clear()
+        this.optionalArguments.clear()
+        this.rawMessage = message
+        if (!message.startsWith(SEPARATOR) || message == SEPARATOR) {
+            return this
+        }
+        message = this.push(message)
+        this.id = message.substringBefore(SEPARATOR)
+        message = this.push(message)
+        while (message.isNotBlank()) {
+            val currentData = message.substringBefore(SEPARATOR)
+            val optionalArgumentID = this.optionalArgumentMatcher.find(currentData)
             if (optionalArgumentID != null) {
-               val var10000: java.lang.String = StringsKt.removeSuffix(StringsKt.removePrefix(optionalArgumentID.getValue(), "["), "]")
-                  .toLowerCase(Locale.ROOT);
-               this.optionalArguments
-                  .put(var10000, StringsKt.trim(StringsKt.substringAfter$default(currentData, optionalArgumentID.getValue(), null, 2, null)).toString());
-            } else {
-               this.args.add(currentData);
+                val id = optionalArgumentID.value.removePrefix(OPTIONAL_ARG_START).removeSuffix(OPTIONAL_ARG_END).lowercase()
+                val value = currentData.substringAfter(optionalArgumentID.value).trim()
+                this.optionalArguments[id] = value
             }
-         }
-
-         return this;
-      } else {
-         return this;
-      }
-   }
-
-   public fun pokemonByUuid(index: Int, battle: PokemonBattle): BattlePokemon? {
-      var var10000: java.lang.String = this.argumentAt(index);
-      if (var10000 != null) {
-         val var21: UUID = UUID.fromString(var10000);
-         if (var21 != null) {
-            val var14: UUID = var21;
-            val `$this$flatMap$iv`: java.lang.Iterable = battle.getActors();
-            var `destination$iv$iv`: java.util.Collection = new ArrayList();
-
-            for (Object element$iv$iv : $this$flatMap$iv) {
-               CollectionsKt.addAll(`destination$iv$iv`, (`element$iv$iv` as BattleActor).getPokemonList());
+            else {
+                this.args.add(currentData)
             }
+            message = this.push(message)
+        }
+        return this
+    }
 
-            val `$this$flatMapTo$iv$iv`: java.util.Iterator = (`destination$iv$iv` as java.util.List).iterator();
+    fun pokemonByUuid(index: Int, battle: PokemonBattle): BattlePokemon? {
+        return this.argumentAt(index)?.let { UUID.fromString(it) }?.let { uuid -> battle.actors.flatMap { it.pokemonList }.find { it.uuid == uuid } }
+    }
 
-            while (true) {
-               if (!`$this$flatMapTo$iv$iv`.hasNext()) {
-                  var10000 = null;
-                  break;
-               }
+    /**
+     * Queries an argument at the given [index] for a 'pnx' that will be parsed into a [BattleActor] and [ActiveBattlePokemon].
+     *
+     * @param index The index of the argument containing the [BattleActor] and [ActiveBattlePokemon].
+     * @param battle The [PokemonBattle] being queried.
+     * @return A pair of [BattleActor] and [ActiveBattlePokemon] if the argument exists and successfully parses them otherwise null.
+     */
+    fun actorAndActivePokemon(index: Int, battle: PokemonBattle): Pair<BattleActor, ActiveBattlePokemon>? {
+        val (pnx, _) = this.pnxAndUuid(index) ?: return null
+        return this.actorAndActivePokemon(pnx, battle)
+    }
 
-               `destination$iv$iv` = (java.util.Collection)`$this$flatMapTo$iv$iv`.next();
-               if ((`destination$iv$iv` as BattlePokemon).getUuid() == var14) {
-                  var10000 = `destination$iv$iv`;
-                  break;
-               }
-            }
+    /**
+     * Queries an argument at the given [index] for a 'pnx' and uuid that will be parsed into a [BattlePokemon].
+     *
+     * @param index The index of the argument referencing the [BattlePokemon].
+     * @param battle The [PokemonBattle] being queried.
+     * @return The [BattlePokemon] if the argument exists and is successfully parsed; otherwise null.
+     */
+    fun battlePokemon(index: Int, battle: PokemonBattle): BattlePokemon? {
+        val (actorID, pokemonID) = this.pnxAndUuid(index) ?: return null
+        return this.battlePokemon(actorID, pokemonID, battle)
+    }
 
-            return var10000 as BattlePokemon;
-         }
-      }
+    /**
+     * Queries an optional argument identified by [optionalArg] for a 'pnx' and uuid that will be parsed into a [BattlePokemon].
+     *
+     * @param optionalArg The id of the optional argument referencing the [BattlePokemon].
+     * @param battle The [PokemonBattle] being queried.
+     * @return The [BattlePokemon] if the argument exists and is successfully parsed; otherwise null.
+     */
+    fun battlePokemonFromOptional(battle: PokemonBattle, optionalArg: String = "of"): BattlePokemon? {
+        val optional = this.optionalArguments.get(optionalArg) ?: return null
+        val pokemonID = optional.takeIf { it.length >= 2 }?.split(":")?.takeIf { it.size == 2 } ?: return null
+        val pnx = pokemonID[0].takeIf { it.matches(PNX_MATCHER) || it.matches(PN_MATCHER) } ?: return null
+        val uuid = pokemonID[1].trim()
+        return this.battlePokemon(pnx, uuid, battle)
+    }
 
-      return null;
-   }
+    /**
+     * Deconstructs the Showdown ID of a Pokemon at the given [index] into its 'pnx' and 'uuid' parts.
+     *
+     * @param index The index of the argument containing the Showdown ID of a Pokemon.
+     * @return A 'pnx' String representing position and a 'uuid' String representing the unique Pokemon if parsed correctly, otherwise null.
+     */
+    fun pnxAndUuid(index: Int): Pair<String, String>? {
+        val argument = this.argumentAt(index)?.takeIf { it.length >= 2 }?.split(":")?.takeIf { it.size == 2 } ?: return null
+        val pnx = argument[0].takeIf { it.matches(PNX_MATCHER) || it.matches(PN_MATCHER) } ?: return null
+        val uuid = argument[1].trim()
+        return pnx to uuid
+    }
 
-   public fun actorAndActivePokemon(index: Int, battle: PokemonBattle): Pair<BattleActor, ActiveBattlePokemon>? {
-      val var10000: Pair = this.pnxAndUuid(index);
-      return if (var10000 == null) null else this.actorAndActivePokemon(var10000.component1() as java.lang.String, battle);
-   }
 
-   public fun battlePokemon(index: Int, battle: PokemonBattle): BattlePokemon? {
-      val var10000: Pair = this.pnxAndUuid(index);
-      return if (var10000 == null) null else this.battlePokemon(var10000.component1() as java.lang.String, var10000.component2() as java.lang.String, battle);
-   }
 
-   public fun battlePokemonFromOptional(battle: PokemonBattle, optionalArg: String = "of"): BattlePokemon? {
-      var var10000: java.lang.String = this.optionalArguments.get(optionalArg);
-      if (var10000 == null) {
-         return null;
-      } else {
-         var10000 = if (var10000.length() >= 2) var10000 else null;
-         if (var10000 != null) {
-            val var16: java.util.List = StringsKt.split$default(var10000, new java.lang.String[]{":"}, false, 0, 6, null);
-            if (var16 != null) {
-               val var17: java.util.List = if (var16.size() == 2) var16 else null;
-               if (var17 != null) {
-                  val var11: Any = var17.get(0);
-                  var10000 = (if (PNX_MATCHER.matches(var11 as java.lang.String) || PN_MATCHER.matches(var11 as java.lang.String)) var11 else null) as java.lang.String;
-                  if (var10000 == null) {
-                     return null;
-                  }
+    /**
+     * Attempts to parse an [Effect] from an argument at the given [index].
+     *
+     * @param index The index of the expected argument.
+     * @return The parsed [Effect] or null.
+     */
+    fun effectAt(index: Int): Effect? {
+        val data = this.argumentAt(index) ?: return null
+        return Effect.parse(data)
+    }
 
-                  return this.battlePokemon(var10000, StringsKt.trim(var17.get(1) as java.lang.String).toString(), battle);
-               }
-            }
-         }
+    /**
+     * Attempts to parse an [Effect] from an optional argument.
+     *
+     * @param argumentName The name of the optional argument.
+     * @return The parsed [Effect] or null.
+     */
+    fun effect(argumentName: String = "from"): Effect? {
+        val data = this.optionalArgument(argumentName) ?: return null
+        return Effect.parse(data)
+    }
 
-         return null;
-      }
-   }
+    fun moveAt(index: Int): MoveTemplate? {
+        val argument = argumentAt(index)?.lowercase()?.replace("[^a-z0-9]".toRegex(), "") ?: return null
+        return Moves.getByName(argument)
+    }
 
-   public fun pnxAndUuid(index: Int): Pair<String, String>? {
-      var var10000: java.lang.String = this.argumentAt(index);
-      if (var10000 != null) {
-         var10000 = if (var10000.length() >= 2) var10000 else null;
-         if (var10000 != null) {
-            val var16: java.util.List = StringsKt.split$default(var10000, new java.lang.String[]{":"}, false, 0, 6, null);
-            if (var16 != null) {
-               val var17: java.util.List = if (var16.size() == 2) var16 else null;
-               if (var17 != null) {
-                  val var10: Any = var17.get(0);
-                  var10000 = (if (PNX_MATCHER.matches(var10 as java.lang.String) || PN_MATCHER.matches(var10 as java.lang.String)) var10 else null) as java.lang.String;
-                  if (var10000 == null) {
-                     return null;
-                  }
+    /**
+     * Queries an optional argument with given [argumentName] for a 'pnx' that will be parsed into a [BattleActor] and [ActiveBattlePokemon].
+     *
+     * @param battle The [PokemonBattle] being queried.
+     * @param argumentName The name of the optional argument.
+     * @return A pair of [BattleActor] and [ActiveBattlePokemon] if the argument exists and successfully parses them otherwise null.
+     */
+    fun actorAndActivePokemonFromOptional(battle: PokemonBattle, argumentName: String = "of"): Pair<BattleActor, ActiveBattlePokemon>? {
+        val pnx = this.optionalArgument(argumentName)?.takeIf { it.length >= 3 }?.substring(0, 3) ?: return null
+        return this.actorAndActivePokemon(pnx, battle)
+    }
 
-                  return TuplesKt.to(var10000, StringsKt.trim(var17.get(1) as java.lang.String).toString());
-               }
-            }
-         }
-      }
+    /**
+     * Pushes the given string down into the next argument.
+     *
+     * @param message The current state of the message.
+     * @return A substring of [message] after the first [SEPARATOR] or empty if no [SEPARATOR] remains.
+     */
+    private fun push(message: String): String = message.substringAfter(SEPARATOR, "")
 
-      return null;
-   }
+    /**
+     * A utility to wrap [PokemonBattle.getActorAndActiveSlotFromPNX] to make it nullable instead of throwing an exception.
+     *
+     * @param pnx The raw pnx.
+     * @param battle The [PokemonBattle] being queried.
+     * @returnA pair of [BattleActor] and [ActiveBattlePokemon] if [PokemonBattle.getActorAndActiveSlotFromPNX] executes without any exception being thrown or else null.
+     */
+    private fun actorAndActivePokemon(pnx: String, battle: PokemonBattle): Pair<BattleActor, ActiveBattlePokemon>? = try {
+        battle.getActorAndActiveSlotFromPNX(pnx)
+    } catch (_: Exception) {
+        null
+    }
 
-   public fun effectAt(index: Int): Effect? {
-      val var10000: java.lang.String = this.argumentAt(index);
-      return if (var10000 == null) null else Effect.Companion.parse(var10000);
-   }
+    private fun battlePokemon(pnx: String, pokemonID: String, battle: PokemonBattle): BattlePokemon? = try {
+        battle.getBattlePokemon(pnx, pokemonID)
+    } catch (_: Exception) {
+        null
+    }
 
-   public fun effect(argumentName: String = "from"): Effect? {
-      val var10000: java.lang.String = this.optionalArgument(argumentName);
-      return if (var10000 == null) null else Effect.Companion.parse(var10000);
-   }
+    companion object {
 
-   public fun moveAt(index: Int): MoveTemplate? {
-      var var10000: java.lang.String = this.argumentAt(index);
-      if (var10000 != null) {
-         var10000 = var10000.toLowerCase(Locale.ROOT);
-         if (var10000 != null) {
-            var10000 = new Regex("[^a-z0-9]").replace(var10000, "");
-            if (var10000 != null) {
-               return Moves.INSTANCE.getByName(var10000);
-            }
-         }
-      }
+        private const val SEPARATOR = "|"
+        private const val OPTIONAL_ARG_START = "["
+        private const val OPTIONAL_ARG_END = "]"
 
-      return null;
-   }
+        /**
+         * Pattern to match a Showdown position e.g. p2a, p1b
+         */
+        val PNX_MATCHER = Regex("p\\d[a-c]")
 
-   public fun actorAndActivePokemonFromOptional(battle: PokemonBattle, argumentName: String = "of"): Pair<BattleActor, ActiveBattlePokemon>? {
-      var var10000: java.lang.String = this.optionalArgument(argumentName);
-      if (var10000 != null) {
-         var10000 = if (var10000.length() >= 3) var10000 else null;
-         if (var10000 != null) {
-            var10000 = var10000.substring(0, 3);
-            if (var10000 != null) {
-               return this.actorAndActivePokemon(var10000, battle);
-            }
-         }
-      }
-
-      return null;
-   }
-
-   private fun push(message: String): String {
-      return StringsKt.substringAfter(message, "|", "");
-   }
-
-   private fun actorAndActivePokemon(pnx: String, battle: PokemonBattle): Pair<BattleActor, ActiveBattlePokemon>? {
-      var var3: Pair;
-      try {
-         var3 = battle.getActorAndActiveSlotFromPNX(pnx);
-      } catch (var5: Exception) {
-         var3 = null;
-      }
-
-      return var3;
-   }
-
-   private fun battlePokemon(pnx: String, pokemonID: String, battle: PokemonBattle): BattlePokemon? {
-      var var4: BattlePokemon;
-      try {
-         var4 = battle.getBattlePokemon(pnx, pokemonID);
-      } catch (var6: Exception) {
-         var4 = null;
-      }
-
-      return var4;
-   }
-
-   public companion object {
-      private const val OPTIONAL_ARG_END: String
-      private const val OPTIONAL_ARG_START: String
-      public final val PNX_MATCHER: Regex
-      public final val PN_MATCHER: Regex
-      private const val SEPARATOR: String
-   }
+        /**
+         * Pattern to match a Showdown side position e.g. p2, p1
+         */
+        val PN_MATCHER = Regex("p\\d")
+    }
 }

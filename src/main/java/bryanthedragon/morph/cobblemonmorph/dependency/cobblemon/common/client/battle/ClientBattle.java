@@ -1,166 +1,117 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.ActorType
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.PokedexEntryProgress
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleFormat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownActionResponse
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ForcePassActionResponse
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.PassActionResponse
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleSelectActionsPacket
-import java.util.ArrayList;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
 import java.util.UUID
-import kotlin.jvm.internal.SourceDebugExtension
 
-@SourceDebugExtension(["SMAP\nClientBattle.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ClientBattle.kt\ncom/cobblemon/mod/common/client/battle/ClientBattle\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n+ 4 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,58:1\n288#2,2:59\n1549#2:61\n1620#2,3:62\n10242#3:65\n10664#3,5:66\n10242#3:72\n10664#3,5:73\n1#4:71\n*S KotlinDebug\n*F\n+ 1 ClientBattle.kt\ncom/cobblemon/mod/common/client/battle/ClientBattle\n*L\n33#1:59,2\n39#1:61\n39#1:62,3\n47#1:65\n47#1:66,5\n56#1:72\n56#1:73,5\n*E\n"])
-public class ClientBattle(battleId: UUID, battleFormat: BattleFormat) {
-   public final val battleFormat: BattleFormat
-   public final val battleId: UUID
-   public final val messages: ClientBattleMessageQueue
-   public final var minimised: Boolean
-   public final var mustChoose: Boolean
-   public final var pendingActionRequests: MutableList<SingleActionRequest>
-   public final val side1: ClientBattleSide
-   public final val side2: ClientBattleSide
+class ClientBattle(
+    val battleId: UUID,
+    val battleFormat: BattleFormat
+) {
+    var minimised = true
+    var spectating = false
 
-   public final val sides: Array<ClientBattleSide>
-      public final get() {
-         return new ClientBattleSide[]{this.side1, this.side2};
-      }
-
-
-   public final var spectating: Boolean
-
-   init {
-      this.battleId = battleId;
-      this.battleFormat = battleFormat;
-      this.minimised = true;
-      this.side1 = new ClientBattleSide();
-      this.side2 = new ClientBattleSide();
-      this.pendingActionRequests = new ArrayList<>();
-      this.messages = new ClientBattleMessageQueue();
-   }
-
-   public fun getFirstUnansweredRequest(): SingleActionRequest? {
-      val var3: java.util.Iterator = this.pendingActionRequests.iterator();
-
-      var var10000: Any;
-      while (true) {
-         if (var3.hasNext()) {
-            val `element$iv`: Any = var3.next();
-            if ((`element$iv` as SingleActionRequest).getResponse() != null) {
-               continue;
+    val side1 = ClientBattleSide()
+    val side2 = ClientBattleSide()
+    var wildActor: ClientBattleActor? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                val wildMonSpecies = value.activePokemon[0].battlePokemon?.properties?.species?.asIdentifierDefaultingNamespace()
+                knowledge = wildMonSpecies?.let {
+                    //FIXME: Better knowledge checking based on aspects/form and such
+                    CobblemonClient.clientPokedexData.getKnowledgeForSpecies(it)
+                } ?: PokedexEntryProgress.NONE
             }
-
-            var10000 = `element$iv`;
-            break;
-         }
-
-         var10000 = null;
-         break;
-      }
-
-      return var10000 as SingleActionRequest;
-   }
-
-   public fun checkForFinishedChoosing() {
-      if (this.getFirstUnansweredRequest() == null) {
-         val `$this$map$iv`: java.lang.Iterable = this.pendingActionRequests;
-         val var11: UUID = this.battleId;
-         val var10: CobblemonNetwork = CobblemonNetwork.INSTANCE;
-         val `destination$iv$iv`: java.util.Collection = new ArrayList(CollectionsKt.collectionSizeOrDefault(`$this$map$iv`, 10));
-
-         for (Object item$iv$iv : $this$map$iv) {
-            val var10000: ShowdownActionResponse = (`item$iv$iv` as SingleActionRequest).getResponse();
-            `destination$iv$iv`.add(var10000);
-         }
-
-         var10.sendPacketToServer(new BattleSelectActionsPacket(var11, `destination$iv$iv` as MutableList<ShowdownActionResponse>));
-         this.mustChoose = false;
-      }
-   }
-
-   public fun getPokemonFromPNX(pnx: String): Pair<ClientBattleActor, ActiveClientBattlePokemon> {
-      val pokemon: Array<Any> = this.getSides();
-      var `destination$iv$iv`: java.util.Collection = new ArrayList();
-
-      for (Object element$iv$iv : $this$flatMap$iv) {
-         CollectionsKt.addAll(`destination$iv$iv`, ((ClientBattleSide)var11).getActors());
-      }
-
-      val var16: java.util.Iterator = (`destination$iv$iv` as java.util.List).iterator();
-
-      var var10000: Any;
-      while (true) {
-         if (var16.hasNext()) {
-            `destination$iv$iv` = (java.util.Collection)var16.next();
-            var10000 = (`destination$iv$iv` as ClientBattleActor).getShowdownId();
-            val var10001: java.lang.String = pnx.substring(0, 2);
-            if (!(var10000 == var10001)) {
-               continue;
+            else {
+                knowledge = PokedexEntryProgress.NONE
             }
+        }
+    var knowledge = PokedexEntryProgress.NONE
 
-            var10000 = `destination$iv$iv`;
-            break;
-         }
+    val sides: Array<ClientBattleSide>
+        get() = arrayOf(side1, side2)
 
-         var10000 = null;
-         break;
-      }
+    var pendingActionRequests = mutableListOf<SingleActionRequest>()
+    val messages = ClientBattleMessageQueue()
+    var mustChoose = false
 
-      var10000 = var10000 as ClientBattleActor;
-      if (var10000 as ClientBattleActor == null) {
-         throw new IllegalStateException("Invalid pnx: $pnx - unknown actor");
-      } else {
-         val letter: Char = pnx.charAt(2);
-         val var20: java.util.Iterator = ((ClientBattleActor)var10000).getSide().getActiveClientBattlePokemon().iterator();
+    fun getFirstUnansweredRequest() = pendingActionRequests.firstOrNull { it.response == null }
 
-         while (true) {
-            if (var20.hasNext()) {
-               val var22: Any = var20.next();
-               if ((var22 as ActiveClientBattlePokemon).getLetter() != letter) {
-                  continue;
-               }
+    fun getLastAnsweredRequest() = pendingActionRequests.lastOrNull { it.response != null && it.response != PassActionResponse && it.response !is ForcePassActionResponse }
 
-               var10000 = var22;
-               break;
+    fun cancelLastAnsweredRequest() {
+        var index = pendingActionRequests.indexOfLast { it.response != null && it.response != PassActionResponse && it.response !is ForcePassActionResponse }
+        if (index != -1) {
+           while(index < pendingActionRequests.size) {
+               val request = pendingActionRequests[index]
+               if (request.response != PassActionResponse && request.response !is ForcePassActionResponse)
+                   request.response = null
+               index++
+           }
+        }
+    }
+
+    fun checkForFinishedChoosing() {
+        if (getFirstUnansweredRequest() == null) {
+            CobblemonNetwork.sendToServer(
+                BattleSelectActionsPacket(
+                    battleId = battleId,
+                    pendingActionRequests.map { it.response!! }
+                )
+            )
+            mustChoose = false
+        }
+    }
+
+    fun getPokemonFromPNX(pnx: String): Pair<ClientBattleActor, ActiveClientBattlePokemon> {
+        val actor = sides.flatMap { it.actors }.find { it.showdownId == pnx.substring(0, 2) }
+            ?: throw IllegalStateException("Invalid pnx: $pnx - unknown actor")
+        val letter = pnx[2]
+        val pokemon = actor.side.activeClientBattlePokemon.find { it.getLetter() == letter }
+            ?: throw IllegalStateException("Invalid pnx: $pnx - unknown pokemon")
+        return actor to pokemon
+    }
+
+    fun getParticipatingActor(uuid: UUID): ClientBattleActor? {
+        return sides.flatMap { it.actors }.find { it.uuid == uuid }
+    }
+
+    /** Whether or not there is one side with at least one player, and the other only has wild Pokémon. */
+    val isPvW: Boolean
+        get() {
+            val playerSide = sides.find { it.actors.any { it.type == ActorType.PLAYER } } ?: return false
+            if (playerSide.actors.any { it.type != ActorType.PLAYER }) {
+                return false
             }
+            val otherSide = sides.find { it != playerSide }!!
+            return otherSide.actors.all { it.type == ActorType.WILD }
+        }
 
-            var10000 = null;
-            break;
-         }
-
-         var10000 = var10000 as ActiveClientBattlePokemon;
-         if (var10000 as ActiveClientBattlePokemon == null) {
-            throw new IllegalStateException("Invalid pnx: $pnx - unknown pokemon");
-         } else {
-            return TuplesKt.to(var10000, var10000);
-         }
-      }
-   }
-
-   public fun getParticipatingActor(uuid: UUID): ClientBattleActor? {
-      val `$this$flatMap$iv`: Array<Any> = this.getSides();
-      var `destination$iv$iv`: java.util.Collection = new ArrayList();
-
-      for (Object element$iv$iv : $this$flatMap$iv) {
-         CollectionsKt.addAll(`destination$iv$iv`, ((ClientBattleSide)`element$iv$iv`).getActors());
-      }
-
-      val var13: java.util.Iterator = (`destination$iv$iv` as java.util.List).iterator();
-
-      var var10000: Any;
-      while (true) {
-         if (var13.hasNext()) {
-            `destination$iv$iv` = (java.util.Collection)var13.next();
-            if (!((`destination$iv$iv` as ClientBattleActor).getUuid() == uuid)) {
-               continue;
+    fun findWildActor(): ClientBattleActor? {
+        sides.forEach {
+            it.actors.forEach { actor ->
+                if (actor.type == ActorType.WILD) {
+                    return actor
+                }
             }
-
-            var10000 = `destination$iv$iv`;
-            break;
-         }
-
-         var10000 = null;
-         break;
-      }
-
-      return var10000 as ClientBattleActor;
-   }
+        }
+        return null
+    }
 }

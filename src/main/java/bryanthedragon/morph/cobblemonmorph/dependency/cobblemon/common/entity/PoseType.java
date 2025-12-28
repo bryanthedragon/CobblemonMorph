@@ -1,47 +1,60 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity
 
-import java.util.EnumSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import java.util.*
+import net.minecraft.resources.ResourceLocation
 
-public enum PoseType {
-   STAND,
-   WALK,
-   SLEEP,
-   HOVER,
-   FLY,
-   FLOAT,
-   SWIM,
-   SHOULDER_LEFT,
-   SHOULDER_RIGHT,
-   PROFILE,
-   PORTRAIT,
-   OPEN,
-   NONE   @JvmStatic
-   public PoseType.Companion Companion = new PoseType.Companion(null);
-   @JvmStatic
-   private EnumSet<PoseType> ALL_POSES = EnumSet.allOf(PoseType.class);
-   @JvmStatic
-   private EnumSet<PoseType> FLYING_POSES = EnumSet.of(PoseType.FLY, PoseType.HOVER);
-   @JvmStatic
-   private EnumSet<PoseType> SWIMMING_POSES = EnumSet.of(PoseType.SWIM, PoseType.FLOAT);
-   @JvmStatic
-   private EnumSet<PoseType> STANDING_POSES = EnumSet.of(PoseType.STAND, PoseType.WALK);
-   @JvmStatic
-   private EnumSet<PoseType> SHOULDER_POSES = EnumSet.of(PoseType.SHOULDER_LEFT, PoseType.SHOULDER_RIGHT);
-   @JvmStatic
-   private EnumSet<PoseType> UI_POSES = EnumSet.of(PoseType.PROFILE, PoseType.PORTRAIT);
-   @JvmStatic
-   private EnumSet<PoseType> MOVING_POSES = EnumSet.of(PoseType.WALK, PoseType.SWIM, PoseType.FLY);
-   @JvmStatic
-   private EnumSet<PoseType> STATIONARY_POSES = EnumSet.of(PoseType.STAND, PoseType.FLOAT, PoseType.HOVER);
+/**
+ * The type of a pose. Used for normalizing pose swapping for all models.
+ *
+ * @author Hiroku
+ * @since December 5th, 2021
+ */
+enum class PoseType {
+    STAND,
+    WALK,
+    SLEEP,
+    HOVER,
+    FLY,
+    FLOAT,
+    SWIM,
+    GLIDE,
+    /** A pose for rendering on the left shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */
+    SHOULDER_LEFT,
+    /** A pose for rendering on the right shoulder. Pose animations are given the player head yaw, pitch, and ageInTicks. */
+    SHOULDER_RIGHT,
+    /** A pose for rendering in the SummaryUI */
+    PROFILE,
+    /** A pose for rendering in the party overlay and in minor spaces like the battle tiles. */
+    PORTRAIT,
+    /** For gilded chest */
+    OPEN,
+    /** A simple type for non-living entities or errant cases. */
+    NONE;
 
-   public companion object {
-      public final val ALL_POSES: EnumSet<PoseType>
-      public final val FLYING_POSES: EnumSet<PoseType>
-      public final val MOVING_POSES: EnumSet<PoseType>
-      public final val SHOULDER_POSES: EnumSet<PoseType>
-      public final val STANDING_POSES: EnumSet<PoseType>
-      public final val STATIONARY_POSES: EnumSet<PoseType>
-      public final val SWIMMING_POSES: EnumSet<PoseType>
-      public final val UI_POSES: EnumSet<PoseType>
-   }
+    companion object {
+        val ALL_POSES = EnumSet.allOf(PoseType::class.java)
+        val FLYING_POSES = EnumSet.of(FLY, HOVER)
+        val SWIMMING_POSES = EnumSet.of(SWIM, FLOAT)
+        val STANDING_POSES = EnumSet.of(STAND, WALK)
+        val SHOULDER_POSES = EnumSet.of(SHOULDER_LEFT, SHOULDER_RIGHT)
+        val UI_POSES = EnumSet.of(PROFILE, PORTRAIT)
+        val MOVING_POSES = EnumSet.of(WALK, SWIM, FLY)
+        val STATIONARY_POSES = EnumSet.of(STAND, FLOAT, HOVER)
+        val NO_GRAV_POSES = EnumSet.of(FLY, HOVER, SWIM)
+
+        fun identified() : List<ResourceLocation> {
+            return ALL_POSES.stream()
+                .map { cobblemonResource(it.name.lowercase(Locale.getDefault())) }
+                .toList()
+        }
+    }
 }

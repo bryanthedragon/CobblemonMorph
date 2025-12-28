@@ -1,20 +1,32 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pc.PCGUI
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.ClosePasturePacket
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.screens.Screen
 
-public object ClosePastureHandler : ClientNetworkPacketHandler<ClosePasturePacket> {
-   public open fun handle(packet: ClosePasturePacket, client: Minecraft) {
-      if (client.f_91080_ is PCGUI) {
-         val var10000: Screen = client.f_91080_;
-         (var10000 as PCGUI).getConfiguration().getExitFunction().invoke(var10000 as PCGUI);
-      }
-   }
+/**
+ * Handles the request to close the pasture GUI.
+ *
+ * @author Deltric
+ * @since May 17th, 2023
+ */final class ClosePastureHandler: ClientNetworkPacketHandler<ClosePasturePacket> {
 
-   fun handleOnNettyThread(packet: ClosePasturePacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
+    override fun handle(packet: ClosePasturePacket, client: Minecraft) {
+        if (client.screen !is PCGUI) {
+            return
+        }
+
+        val pc = client.screen as PCGUI
+        pc.configuration.exitFunction.invoke(pc)
+    }
+
 }

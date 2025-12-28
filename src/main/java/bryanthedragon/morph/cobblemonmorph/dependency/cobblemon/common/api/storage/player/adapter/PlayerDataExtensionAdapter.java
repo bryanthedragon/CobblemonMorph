@@ -1,45 +1,47 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.adapter
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.DummyPlayerDataExtension
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.PlayerDataExtension
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.PlayerDataExtensionRegistry
-
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
-
 import java.lang.reflect.Type
+final class PlayerDataExtensionAdapter: JsonSerializer<PlayerDataExtension>, JsonDeserializer<PlayerDataExtension> {
+    override fun serialize(
+        src: PlayerDataExtension,
+        typeOfSrc: Type,
+        context: JsonSerializationContext
+    ): JsonElement {
+        return src.serialize()
+    }
 
-public object PlayerDataExtensionAdapter : JsonSerializer<PlayerDataExtension>, JsonDeserializer<PlayerDataExtension> {
-   public open fun serialize(src: PlayerDataExtension, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-      return src.serialize() as JsonElement;
-   }
+    override fun deserialize(
+        json: JsonElement,
+        typeOfT: Type,
+        context: JsonDeserializationContext
+    ): PlayerDataExtension {
+        val jObject = json.asJsonObject
+        val name = jObject.get(PlayerDataExtension.NAME_KEY)
+            ?: throw IllegalStateException("PlayerDataExtension without name")
+        val extension = PlayerDataExtensionRegistry.get(name.asString)
 
-   public open fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): PlayerDataExtension {
-      val jObject: JsonObject = json.getAsJsonObject();
-      val extension: JsonElement = jObject.get(PlayerDataExtension.Companion.getNAME_KEY());
-      if (extension == null) {
-         throw new IllegalStateException("PlayerDataExtension without name");
-      } 
-      else {
-         val var10000: PlayerDataExtensionRegistry = PlayerDataExtensionRegistry.INSTANCE;
-         val var10001: java.lang.String = extension.getAsString();
-         val var7: Class = var10000.get(var10001);
-         val var9: PlayerDataExtension;
-         if (var7 != null) {
-            val var8: PlayerDataExtension = var7.getDeclaredConstructor().newInstance() as PlayerDataExtension;
-            var9 = var8.deserialize(jObject);
-         } 
-         else {
-            Cobblemon.INSTANCE.getLOGGER().info("No PlayerDataExtension registered with name ${extension.getAsString()}, loading data with a dummy extension.");
-            var9 = new DummyPlayerDataExtension(jObject);
-         }
-
-         return var9;
-      }
-   }
+        return if (extension != null) {
+            extension.getDeclaredConstructor().newInstance().deserialize(jObject)
+        } else {
+            Cobblemon.LOGGER.info("No PlayerDataExtension registered with name ${name.asString}, loading data with a dummy extension.")
+            DummyPlayerDataExtension(jObject)
+        }
+    }
 }

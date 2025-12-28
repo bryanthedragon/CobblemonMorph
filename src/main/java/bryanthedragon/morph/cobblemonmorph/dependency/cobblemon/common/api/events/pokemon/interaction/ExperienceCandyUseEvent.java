@@ -1,53 +1,89 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.interaction
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.interactive.CandyItem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.AddExperienceResult
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerPlayer
 
-public interface ExperienceCandyUseEvent {
-   public val item: CandyItem
-   public val player: ServerPlayer
-   public val pokemon: Pokemon
+/**
+ * The base of the [CandyItem] related events.
+ * For the generic experience gain event see [CobblemonEvents.EXPERIENCE_GAINED_EVENT_PRE] and [CobblemonEvents.EXPERIENCE_GAINED_EVENT_POST]
+ *
+ * @author Licious
+ * @since May 5th, 2022
+ */
+interface ExperienceCandyUseEvent {
 
-   public class Post(player: ServerPlayer, pokemon: Pokemon, item: CandyItem, experienceResult: AddExperienceResult) : ExperienceCandyUseEvent {
-      public final val experienceResult: AddExperienceResult
-      public open val item: CandyItem
-      public open val player: ServerPlayer
-      public open val pokemon: Pokemon
+    /**
+     * The [ServerPlayer] that fired the interaction.
+     */
+    val player: ServerPlayer
 
-      init {
-         this.player = player;
-         this.pokemon = pokemon;
-         this.item = item;
-         this.experienceResult = experienceResult;
-      }
+    /**
+     * The [Pokemon] being targeted.
+     */
+    val pokemon: Pokemon
 
-      public fun wasExperienceGiven(): Boolean {
-         return this.experienceResult.getExperienceAdded() > 0;
-      }
+    /**
+     * item The [CandyItem] variant being used.
+     */
+    val item: CandyItem
 
-      public fun wasCandyConsumed(): Boolean {
-         return this.experienceResult.getExperienceAdded() > 0 && !this.getPlayer().m_7500_();
-      }
-   }
+    /**
+     * Fired when a player attempts to use an experience candy on a Pokémon.
+     * Canceling this event will prevent the consumption of the item and the experience yield.
+     * For the event that is fired after all the calculations took place see [ExperienceCandyUseEvent.Post].
+     *
+     * @property baseExperienceYield The default amount of experience the [pokemon] would earn.
+     * @property experienceYield The current amount of experience the [pokemon] will earn.
+     */
+    class Pre(
+        override val player: ServerPlayer,
+        override val pokemon: Pokemon,
+        override val item: CandyItem,
+        val baseExperienceYield: Int,
+        var experienceYield: Int
+    ) : ExperienceCandyUseEvent, Cancelable()
 
-   public class Pre(player: ServerPlayer, pokemon: Pokemon, item: CandyItem, baseExperienceYield: Int, experienceYield: Int)
-      : Cancelable,
-      ExperienceCandyUseEvent {
-      public final val baseExperienceYield: Int
-      public final var experienceYield: Int
-      public open val item: CandyItem
-      public open val player: ServerPlayer
-      public open val pokemon: Pokemon
+    /**
+     * Fired after a player used an experience candy on Pokémon and the experience yield was processed.
+     *
+     * @property experienceResult The resulting [AddExperienceResult] of the interaction.
+     */
+    class Post(
+        override val player: ServerPlayer,
+        override val pokemon: Pokemon,
+        override val item: CandyItem,
+        val experienceResult: AddExperienceResult
+    ) : ExperienceCandyUseEvent {
 
-      init {
-         this.player = player;
-         this.pokemon = pokemon;
-         this.item = item;
-         this.baseExperienceYield = baseExperienceYield;
-         this.experienceYield = experienceYield;
-      }
-   }
+        /**
+         * Checks if the candy use resulted in any experience gain.
+         * This will nearly always be true unless the Pokémon is at level cap.
+         * This does not confirm the candy was consumed as the player may be in creative mode for that use [wasCandyConsumed].
+         *
+         * @return If any experience was gained from the candy.
+         */
+        fun wasExperienceGiven() = this.experienceResult.experienceAdded > 0
+
+        /**
+         * Checks if the candy use resulted in any experience gain and if it was consumed.
+         * This will nearly always be true unless the Pokémon is at level cap and/or the player is in creative mode.
+         * If you just want to know if the candy yielded experience use [wasExperienceGiven].
+         *
+         * @return If any experience was gained from the candy and if it was consumed.
+         */
+        fun wasCandyConsumed() = this.experienceResult.experienceAdded > 0 && !player.hasInfiniteMaterials()
+    }
+
 }

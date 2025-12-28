@@ -1,92 +1,67 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission.CobblemonPermissions
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.argument.PokemonPropertiesArgumentType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.CommandContextExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.CommandUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PermissionUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.alias
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.commandLang
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.permission
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.player
+import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.arguments.ArgumentType
-import com.mojang.brigadier.builder.ArgumentBuilder
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.tree.LiteralCommandNode
 import net.minecraft.commands.CommandSourceStack
-import net.minecraft.commands.Commands
+import net.minecraft.commands.Commands.argument
+import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.server.level.ServerPlayer
+final class GivePokemon {
 
-public object GivePokemon {
-   private const val ALIAS: String = "pokegive"
-   private const val ALIAS_OTHER: String = "pokegiveother"
-   private const val NAME: String = "givepokemon"
-   private const val NAME_OTHER: String = "givepokemonother"
-   private const val PLAYER: String = "player"
-   private const val PROPERTIES: String = "properties"
+    private const val NAME = "givepokemon"
+    private const val ALIAS = "pokegive"
+    private const val NAME_OTHER = "${NAME}other"
+    private const val ALIAS_OTHER = "${ALIAS}other"
+    private const val PLAYER = "player"
+    private const val PROPERTIES = "properties"
 
-   public fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-      var var10001: LiteralArgumentBuilder = Commands.m_82127_("givepokemon");
-      val selfCommand: LiteralCommandNode = dispatcher.register(
-         (PermissionUtilsKt.permission$default(var10001 as ArgumentBuilder, CobblemonPermissions.INSTANCE.getGIVE_POKEMON_SELF(), false, 2, null) as LiteralArgumentBuilder)
-            .then(Commands.m_82129_("properties", PokemonPropertiesArgumentType.Companion.properties()).executes(GivePokemon::register$lambda$0)) as LiteralArgumentBuilder
-      );
-      dispatcher.register(CommandUtilsKt.alias(selfCommand, "pokegive"));
-      var10001 = Commands.m_82127_("givepokemonother");
-      val otherCommand: LiteralCommandNode = dispatcher.register(
-         (PermissionUtilsKt.permission$default(var10001 as ArgumentBuilder, CobblemonPermissions.INSTANCE.getGIVE_POKEMON_OTHER(), false, 2, null) as LiteralArgumentBuilder)
-            .then(
-               Commands.m_82129_("player", EntityArgument.m_91466_() as ArgumentType)
-                  .then(Commands.m_82129_("properties", PokemonPropertiesArgumentType.Companion.properties()).executes(GivePokemon::register$lambda$1))
-            ) as LiteralArgumentBuilder
-      );
-      dispatcher.register(CommandUtilsKt.alias(otherCommand, "pokegiveother"));
-   }
+    fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
+        val selfCommand = dispatcher.register(literal(NAME)
+            .permission(CobblemonPermissions.GIVE_POKEMON_SELF)
+            .then(argument(PROPERTIES, PokemonPropertiesArgumentType.properties())
+                .executes { execute(it, it.source.playerOrException) }))
+        dispatcher.register(selfCommand.alias(ALIAS))
 
-   private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer): Int {
-      try {
-         val e: PokemonProperties = PokemonPropertiesArgumentType.Companion.getPokemonProperties(context, "properties");
-         if (e.getSpecies() == null) {
-            val var10001: MutableComponent = LocalizationUtilsKt.commandLang("givepokemon.nospecies");
-            player.m_213846_(TextKt.red(var10001) as Component);
-            return 1;
-         }
+        val otherCommand = dispatcher.register(literal(NAME_OTHER)
+            .permission(CobblemonPermissions.GIVE_POKEMON_OTHER)
+            .then(argument(PLAYER, EntityArgument.player())
+                .then(argument(PROPERTIES, PokemonPropertiesArgumentType.properties())
+                    .executes { execute(it, it.player()) })))
+        dispatcher.register(otherCommand.alias(ALIAS_OTHER))
+    }
 
-         val pokemon: Pokemon = e.create();
-         Cobblemon.INSTANCE.getStorage().getParty(player).add(pokemon);
-         (context.getSource() as CommandSourceStack).m_288197_(GivePokemon::execute$lambda$2, true);
-      } catch (var6: Exception) {
-         var6.printStackTrace();
-      }
-
-      return 1;
-   }
-
-   @JvmStatic
-   fun `register$lambda$0`(it: CommandContext): Int {
-      val var10000: GivePokemon = INSTANCE;
-      val var10002: ServerPlayer = (it.getSource() as CommandSourceStack).m_81375_();
-      return var10000.execute(it, var10002);
-   }
-
-   @JvmStatic
-   fun `register$lambda$1`(it: CommandContext): Int {
-      val var10000: GivePokemon = INSTANCE;
-      val var10002: ServerPlayer = CommandContextExtensionsKt.player$default(it, null, 1, null);
-      return var10000.execute(it, var10002);
-   }
-
-   @JvmStatic
-   fun `execute$lambda$2`(`$pokemon`: Pokemon, `$player`: ServerPlayer): Component {
-      val var2: Array<Any> = new Object[]{`$pokemon`.getSpecies().getTranslatedName(), null};
-      val var10003: Component = `$player`.m_7755_();
-      var2[1] = var10003;
-      return LocalizationUtilsKt.commandLang("givepokemon.give", var2) as Component;
-   }
+    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer): Int {
+        try {
+            val pokemonProperties = PokemonPropertiesArgumentType.getPokemonProperties(context, PROPERTIES)
+            if (pokemonProperties.species == null) {
+                player.sendSystemMessage(commandLang("${NAME}.nospecies").red())
+                return Command.SINGLE_SUCCESS
+            }
+            val pokemon = pokemonProperties.create()
+            val party = Cobblemon.storage.getParty(player)
+            party.add(pokemon)
+            context.source.sendSuccess({ commandLang("${NAME}.give", pokemon.species.translatedName, player.name) }, true)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return Command.SINGLE_SUCCESS
+    }
 }

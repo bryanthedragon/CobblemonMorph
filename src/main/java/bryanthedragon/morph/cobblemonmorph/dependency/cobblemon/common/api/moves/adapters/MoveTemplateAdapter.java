@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.adapters
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
@@ -10,19 +18,12 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
 
-public object MoveTemplateAdapter : JsonSerializer<MoveTemplate>, JsonDeserializer<MoveTemplate> {
-   public open fun serialize(template: MoveTemplate, type: Type?, ctx: JsonSerializationContext): JsonPrimitive {
-      return new JsonPrimitive(template.getName());
-   }
-
-   public open fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): MoveTemplate {
-      val var10000: Moves = Moves.INSTANCE;
-      val var10001: java.lang.String = json.getAsString();
-      var var4: MoveTemplate = var10000.getByName(var10001);
-      if (var4 == null) {
-         var4 = Moves.INSTANCE.getExceptional();
-      }
-
-      return var4;
-   }
+/**
+ * Adapter for serializing [MoveTemplate]s by name.
+ *
+ * @author Hiroku
+ * @since April 1st, 2022
+ */final class MoveTemplateAdapter : JsonSerializer<MoveTemplate>, JsonDeserializer<MoveTemplate> {
+    override fun serialize(template: MoveTemplate, type: Type?, ctx: JsonSerializationContext) = JsonPrimitive(template.name)
+    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = Moves.getByName(json.asString) ?: Moves.getExceptional()
 }

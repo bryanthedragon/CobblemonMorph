@@ -1,34 +1,37 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readItemStack
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeItemStack
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.item.ItemStack
 
-public class HeldItemUpdatePacket(pokemon: () -> Pokemon, value: ItemStack) : SingleUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
+class HeldItemUpdatePacket(pokemon: () -> Pokemon?, value: ItemStack): SingleUpdatePacket<ItemStack, HeldItemUpdatePacket>(pokemon, value) {
 
-   init {
-      this.id = ID;
-   }
+    override val id = ID
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      buffer.m_130055_(this.getValue());
-   }
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeItemStack(this.value)
+    }
 
-   public open fun set(pokemon: Pokemon, value: ItemStack) {
-      pokemon.swapHeldItem(this.getValue(), false);
-   }
+    override fun set(pokemon: Pokemon, value: ItemStack) { pokemon.swapHeldItem(this.value, false) }
 
-   public companion object {
-      public final val ID: ResourceLocation
+    companion object {
+        val ID = cobblemonResource("held_item_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): HeldItemUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val stack = buffer.readItemStack()
+            return HeldItemUpdatePacket(pokemon, stack)
+        }
+    }
 
-      public fun decode(buffer: FriendlyByteBuf): HeldItemUpdatePacket {
-         val pokemon: Function0 = PokemonUpdatePacket.Companion.decodePokemon(buffer);
-         val stack: ItemStack = buffer.m_130267_();
-         return new HeldItemUpdatePacket(pokemon, stack);
-      }
-   }
 }

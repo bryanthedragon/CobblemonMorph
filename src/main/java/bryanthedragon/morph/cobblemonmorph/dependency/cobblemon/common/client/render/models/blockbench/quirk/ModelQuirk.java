@@ -1,46 +1,38 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.world.entity.Entity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext
 
-@SourceDebugExtension(["SMAP\nModelQuirk.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ModelQuirk.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/quirk/ModelQuirk\n+ 2 Maps.kt\nkotlin/collections/MapsKt__MapsKt\n*L\n1#1,26:1\n361#2,7:27\n*S KotlinDebug\n*F\n+ 1 ModelQuirk.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/quirk/ModelQuirk\n*L\n24#1:27,7\n*E\n"])
-public abstract class ModelQuirk<T extends Entity, D extends QuirkData<T>> {
-   public abstract fun createData(): Any {
-   }
+/**
+ * An active 'quirk' of a model that performs some combination of behaviours on a rendered model. This is mainly
+ * implemented via [SimpleQuirk] where a set of animations play at random times, but technically can be any quirky
+ * behaviour of a model.
+ *
+ * It is parameterized by what kind of [QuirkData] is needed once a quirk is started.
+ *
+ * @author Hiroku
+ * @since September 30th, 2022
+ */
+abstract class ModelQuirk<D : QuirkData> {
+    abstract fun createData(): D
+    protected abstract fun apply(context: RenderContext, state: PosableState, data: D)
 
-   protected abstract fun tick(state: PoseableEntityState<Any>, data: Any) {
-   }
+    fun apply(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {
+        val data = getOrCreateData(state)
+        apply(context, state, data)
+        data.run(context, model, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, intensity)
+    }
 
-   public fun tick(
-      entity: Any?,
-      model: PoseableEntityModel<Any>,
-      state: PoseableEntityState<Any>,
-      limbSwing: Float,
-      limbSwingAmount: Float,
-      ageInTicks: Float,
-      headYaw: Float,
-      headPitch: Float,
-      intensity: Float
-   ) {
-      val data: QuirkData = this.getOrCreateData(state);
-      this.tick(state, (D)data);
-      data.run(entity, model, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, intensity);
-   }
-
-   public fun getOrCreateData(state: PoseableEntityState<Any>): Any {
-      val `$this$getOrPut$iv`: java.util.Map = state.getQuirks();
-      val `value$iv`: Any = `$this$getOrPut$iv`.get(this);
-      val var10000: Any;
-      if (`value$iv` == null) {
-         val var6: Any = this.createData();
-         `$this$getOrPut$iv`.put(this, var6);
-         var10000 = var6;
-      } else {
-         var10000 = `value$iv`;
-      }
-
-      return (D)var10000;
-   }
+    fun getOrCreateData(state: PosableState): D {
+        return state.quirks.getOrPut(this, this::createData) as D
+    }
 }

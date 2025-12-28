@@ -1,12 +1,19 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.keyframes
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
 import java.util.concurrent.CompletableFuture
 
-public class CanInterruptActionEffectKeyframe : ConditionalActionEffectKeyframe {
-   public override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
-      context.setCanBeInterrupted(true);
-      val var10000: CompletableFuture = CompletableFuture.completedFuture(Unit.INSTANCE);
-      return var10000;
-   }
+class CanInterruptActionEffectKeyframe : ConditionalActionEffectKeyframe() {
+    override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
+        context.canBeInterrupted = true
+        return CompletableFuture.completedFuture(Unit)
+    }
 }

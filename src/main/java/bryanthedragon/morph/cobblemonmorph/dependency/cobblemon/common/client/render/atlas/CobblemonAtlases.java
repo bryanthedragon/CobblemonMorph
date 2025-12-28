@@ -1,19 +1,28 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.atlas
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import java.util.LinkedHashSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.texture.TextureManager
 import net.minecraft.client.resources.TextureAtlasHolder
+final class CobblemonAtlases {
+    val atlases = mutableSetOf<TextureAtlasHolder>()
 
-public object CobblemonAtlases {
-   public final val BERRY_SPRITE_ATLAS: TextureAtlasHolder = INSTANCE.register("textures/atlas/berries.png", "berries")
-   public final val atlases: MutableSet<TextureAtlasHolder> = (new LinkedHashSet()) as java.util.Set
+    val BERRY_SPRITE_ATLAS = register("textures/atlas/berries.png", "berries")
+    fun register(atlasId: String, sourcePath: String): TextureAtlasHolder {
+        val atlas = CobblemonAtlas(
+            Minecraft.getInstance().textureManager,
+            cobblemonResource(atlasId),
+            cobblemonResource(sourcePath)
+        )
+        atlases.add(atlas)
+        return atlas
+    }
 
-   public fun register(atlasId: String, sourcePath: String): TextureAtlasHolder {
-      val var10002: TextureManager = Minecraft.m_91087_().m_91097_();
-      val atlas: CobblemonAtlas = new CobblemonAtlas(var10002, MiscUtilsKt.cobblemonResource(atlasId), MiscUtilsKt.cobblemonResource(sourcePath));
-      atlases.add(atlas);
-      return atlas;
-   }
 }

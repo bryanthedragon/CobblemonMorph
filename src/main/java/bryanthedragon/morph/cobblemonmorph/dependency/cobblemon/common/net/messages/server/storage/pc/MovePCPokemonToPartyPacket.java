@@ -1,80 +1,43 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyPosition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCPosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.pc.MovePCPokemonToPartyHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readPCPosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readPartyPosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writePCPosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writePartyPosition
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class MovePCPokemonToPartyPacket(pokemonID: UUID, pcPosition: PCPosition, partyPosition: PartyPosition?) : NetworkPacket<MovePCPokemonToPartyPacket> {
-   public open val id: ResourceLocation
-   public final val partyPosition: PartyPosition?
-   public final val pcPosition: PCPosition
-   public final val pokemonID: UUID
-
-   init {
-      this.pokemonID = pokemonID;
-      this.pcPosition = pcPosition;
-      this.partyPosition = partyPosition;
-      this.id = ID;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.pokemonID);
-      PCPosition.Companion.writePCPosition(buffer, this.pcPosition);
-      buffer.m_236821_(this.partyPosition, MovePCPokemonToPartyPacket::encode$lambda$0);
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$0`(pb: FriendlyByteBuf, value: PartyPosition) {
-      val var10000: PartyPosition.Companion = PartyPosition.Companion;
-      var10000.writePartyPosition(pb, value);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): MovePCPokemonToPartyPacket {
-         val var10002: UUID = buffer.m_130259_();
-         return new MovePCPokemonToPartyPacket(
-            var10002, PCPosition.Companion.readPCPosition(buffer), buffer.m_236868_(MovePCPokemonToPartyPacket.Companion::decode$lambda$0) as PartyPosition
-         );
-      }
-
-      @JvmStatic
-      fun `decode$lambda$0`(it: FriendlyByteBuf): PartyPosition {
-         val var10000: PartyPosition.Companion = PartyPosition.Companion;
-         return var10000.readPartyPosition(it);
-      }
-   }
+/**
+ * Tells the server to move a Pokémon from a player's linked PC to their party. If the party position is
+ * not specified, it will attempt to put the Pokémon in the first available space.
+ *
+ * Handled by [MovePCPokemonToPartyHandler].
+ *
+ * @author Hiroku
+ * @since June 20th, 2022
+ */
+class MovePCPokemonToPartyPacket(val pokemonID: UUID, val pcPosition: PCPosition, val partyPosition: PartyPosition?) : NetworkPacket<MovePCPokemonToPartyPacket> {
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(pokemonID)
+        buffer.writePCPosition(pcPosition)
+        buffer.writeNullable(partyPosition) { pb, value -> pb.writePartyPosition(value) }
+    }
+    companion object {
+        val ID = cobblemonResource("move_pc_pokemon_to_party")
+        fun decode(buffer: RegistryFriendlyByteBuf) = MovePCPokemonToPartyPacket(buffer.readUUID(), buffer.readPCPosition(), buffer.readNullable { it.readPartyPosition() })
+    }
 }

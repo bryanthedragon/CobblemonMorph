@@ -1,8 +1,14 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk
 
-import net.minecraft.world.entity.Entity
-
-public class SimpleQuirkData<T extends Entity> : QuirkData<T> {
-   public final var nextOccurrenceSeconds: Float = -1.0F
-   public final var remainingLoops: Int
+class SimpleQuirkData : QuirkData() {
+    var nextOccurrenceSeconds = -1F
+    var remainingLoops = 0
 }

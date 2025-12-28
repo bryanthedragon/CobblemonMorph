@@ -1,66 +1,59 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.SpawnSnowstormEntityParticleHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class SpawnSnowstormEntityParticlePacket(effectId: ResourceLocation, entityId: Int, locator: String = "root") :
-   NetworkPacket<SpawnSnowstormEntityParticlePacket> {
-   public final val effectId: ResourceLocation
-   public final val entityId: Int
-   public open val id: ResourceLocation
-   public final val locator: String
+/**
+ * Packet that spawns a snowstorm particle effect on a specified entity and specified locator.
+ * Can specify an optional target+locator to pass through to the spawned particle
+ *
+ * Handled by [SpawnSnowstormEntityParticleHandler]
+ *
+ * @author Hiroku
+ * @since January 21st, 2024
+ */
+class SpawnSnowstormEntityParticlePacket(
+    val effectId: ResourceLocation,
+    val sourceEntityId: Int,
+    val sourceLocators: List<String> = listOf("root"),
+    val targetedEntityId: Int? = null,
+    val targetLocators: List<String>? = null
+) : NetworkPacket<SpawnSnowstormEntityParticlePacket> {
+    companion object {
+        val ID = cobblemonResource("spawn_snowstorm_entity_particle")
 
-   init {
-      this.effectId = effectId;
-      this.entityId = entityId;
-      this.locator = locator;
-      this.id = ID;
-   }
+        fun decode(buffer: RegistryFriendlyByteBuf): SpawnSnowstormEntityParticlePacket {
+            val effectId = buffer.readIdentifier()
+            val sourceEntityId = buffer.readInt()
+            val sourceLocators = buffer.readList { buffer.readString() }
+            val targetedEntityId = buffer.readNullable { it.readInt() }
+            val targetLocators = buffer.readNullable { buffer.readList { buffer.readString() }}
+            return SpawnSnowstormEntityParticlePacket(effectId, sourceEntityId, sourceLocators, targetedEntityId, targetLocators)
+        }
+    }
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130085_(this.effectId);
-      buffer.writeInt(this.entityId);
-      buffer.m_130070_(this.locator);
-   }
+    override val id = ID
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): SpawnSnowstormEntityParticlePacket {
-         val var10002: ResourceLocation = buffer.m_130281_();
-         val var10003: Int = buffer.readInt();
-         val var10004: java.lang.String = buffer.m_130277_();
-         return new SpawnSnowstormEntityParticlePacket(var10002, var10003, var10004);
-      }
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeIdentifier(effectId)
+        buffer.writeInt(sourceEntityId)
+        buffer.writeCollection(sourceLocators) { _, value -> buffer.writeString(value) }
+        buffer.writeNullable(targetedEntityId) { _, value -> buffer.writeInt(value) }
+        buffer.writeNullable(targetLocators) { _, value ->
+            buffer.writeCollection(value) { _, locator ->
+                buffer.writeString(locator)
+            }
+        }
+    }
 }

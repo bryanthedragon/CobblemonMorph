@@ -1,69 +1,46 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import io.netty.buffer.ByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeSizedInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeUUID
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class InitializePCPacket internal constructor(storeID: UUID, boxCount: Int, hasOverflowed: Boolean) : NetworkPacket<InitializePCPacket> {
-   public final val boxCount: Int
-   public final val hasOverflowed: Boolean
-   public open val id: ResourceLocation
-   public final val storeID: UUID
+/**
+ * Initializes a client side representation of a PC. It is given the ID, the number of boxes,
+ * and whether overflow has occurred.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.pc.InitializePCHandler].
+ *
+ * @author Hiroku
+ * @since June 18th, 2022
+ */
+class InitializePCPacket internal constructor(val storeID: UUID, val boxCount: Int, val hasOverflowed: Boolean) : NetworkPacket<InitializePCPacket> {
 
-   init {
-      this.storeID = storeID;
-      this.boxCount = boxCount;
-      this.hasOverflowed = hasOverflowed;
-      this.id = ID;
-   }
+    override val id = ID
 
-   public constructor(pc: PCStore) : this(pc.getUuid(), pc.getBoxes().size(), CollectionsKt.any(pc.getBackupStore()))
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.storeID);
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_SHORT, this.boxCount);
-      buffer.writeBoolean(this.hasOverflowed);
-   }
+    constructor(pc: PCStore): this(pc.uuid, pc.boxes.size, pc.backupStore.any())
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(storeID)
+        buffer.writeSizedInt(IntSize.U_SHORT, boxCount)
+        buffer.writeBoolean(hasOverflowed)
+    }
 
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): InitializePCPacket {
-         val var10002: UUID = buffer.m_130259_();
-         return new InitializePCPacket(var10002, NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_SHORT), buffer.readBoolean());
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("initialize_pc")
+        fun decode(buffer: RegistryFriendlyByteBuf) = InitializePCPacket(buffer.readUUID(), buffer.readSizedInt(IntSize.U_SHORT), buffer.readBoolean())
+    }
 }

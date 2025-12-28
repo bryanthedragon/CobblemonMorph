@@ -1,23 +1,27 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.keyframes
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
-import java.util.LinkedHashSet
 import java.util.concurrent.CompletableFuture
 
-public class AddHoldsActionEffectKeyframe : ActionEffectKeyframe {
-   public final val holds: MutableSet<String> = (new LinkedHashSet()) as java.util.Set
-
-   public override fun play(context: ActionEffectContext): CompletableFuture<Unit> {
-      context.getHolds().addAll(this.holds);
-      val var10000: CompletableFuture = CompletableFuture.completedFuture(Unit.INSTANCE);
-      return var10000;
-   }
-
-   override fun interrupt(context: ActionEffectContext) {
-      ActionEffectKeyframe.DefaultImpls.interrupt(this, context);
-   }
-
-   override fun skip(): CompletableFuture<Unit> {
-      return ActionEffectKeyframe.DefaultImpls.skip(this);
-   }
+/**
+ * An [ActionEffectKeyframe] that adds some holds from the context for future code to recognize as blocking some
+ * functionality from proceeding.
+ *
+ * @author Hiroku
+ * @since October 27th, 2023
+ */
+class AddHoldsActionEffectKeyframe : ActionEffectKeyframe {
+    val holds = mutableSetOf<String>()
+    override fun play(context: ActionEffectContext): CompletableFuture<Unit> {
+        context.holds.addAll(holds)
+        return CompletableFuture.completedFuture(Unit)
+    }
 }

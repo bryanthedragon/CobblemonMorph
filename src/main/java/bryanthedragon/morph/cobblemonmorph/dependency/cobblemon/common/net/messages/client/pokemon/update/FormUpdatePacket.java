@@ -1,74 +1,38 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.FriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-public class FormUpdatePacket(pokemon: () -> Pokemon, form: FormData) : SingleUpdatePacket(pokemon, form) {
-   public open val id: ResourceLocation
+class FormUpdatePacket(pokemon: () -> Pokemon?, form: FormData) : SingleUpdatePacket<FormData, FormUpdatePacket>(pokemon, form) {
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        this.value.encode(buffer)
+    }
 
-   init {
-      this.id = ID;
-   }
+    override fun set(pokemon: Pokemon, value: FormData) {
+        pokemon.form = value
+    }
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      this.getValue().encode(buffer);
-   }
+    override val id: ResourceLocation = ID
 
-   public open fun set(pokemon: Pokemon, value: FormData) {
-      pokemon.setForm(value);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): FormUpdatePacket {
-         val pokemon: Function0 = PokemonUpdatePacket.Companion.decodePokemon(buffer);
-         val form: FormData = new FormData(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            -1,
-            3,
-            null
-         );
-         form.setSpecies((pokemon.invoke() as Pokemon).getSpecies());
-         form.decode(buffer);
-         return new FormUpdatePacket(pokemon, form);
-      }
-   }
+    companion object {
+        val ID: ResourceLocation = cobblemonResource("packets/form-update")
+        fun decode(buffer: RegistryFriendlyByteBuf): FormUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val form = FormData()
+            form.species = pokemon()!!.species
+            form.decode(buffer)
+            return FormUpdatePacket(pokemon, form)
+        }
+    }
 }

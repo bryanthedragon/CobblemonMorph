@@ -1,76 +1,61 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission.CobblemonPermissions
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PermissionUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.requiresWithPermission
+import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType
-import com.mojang.brigadier.builder.ArgumentBuilder
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
-import net.minecraft.world.phys.Vec3
+import net.minecraft.world.entity.MobSpawnType
+final class SpawnAllPokemon {
+    fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
+        dispatcher.register(
+            Commands.literal("spawnallpokemon")
+                .requiresWithPermission(CobblemonPermissions.SPAWN_ALL_POKEMON) { it.player != null }
+                .then(
+                    Commands.argument("min", IntegerArgumentType.integer(1))
+                        .then(
+                            Commands.argument("max", IntegerArgumentType.integer(1))
+                                .executes {
+                                    execute(it, IntegerArgumentType.getInteger(it, "min")..IntegerArgumentType.getInteger(it, "max"))
+                                }
+                        )
+                        .executes { execute(it, IntegerArgumentType.getInteger(it, "min")..Int.MAX_VALUE) }
+                )
+                .executes { execute(it, 1..Int.MAX_VALUE) }
+        )
+    }
 
-public object SpawnAllPokemon {
-   public fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-      val var10001: LiteralArgumentBuilder = Commands.m_82127_("spawnallpokemon");
-      dispatcher.register(
-         ((PermissionUtilsKt.requiresWithPermission(
-                  var10001 as ArgumentBuilder, CobblemonPermissions.INSTANCE.getSPAWN_ALL_POKEMON(), <unrepresentable>.INSTANCE
-               ) as LiteralArgumentBuilder)
-               .then(
-                  (Commands.m_82129_("min", IntegerArgumentType.integer(1) as ArgumentType)
-                        .then(Commands.m_82129_("max", IntegerArgumentType.integer(1) as ArgumentType).executes(SpawnAllPokemon::register$lambda$0)) as RequiredArgumentBuilder)
-                     .executes(SpawnAllPokemon::register$lambda$1)
-               ) as LiteralArgumentBuilder)
-            .executes(SpawnAllPokemon::register$lambda$2) as LiteralArgumentBuilder
-      );
-   }
+    private fun execute(context: CommandContext<CommandSourceStack>, range: IntRange) : Int {
+        val player = context.source.playerOrException
+        val world = context.source.level
+        for (species in PokemonSpecies.implemented) {
+            if (species.nationalPokedexNumber in range) {
+                LOGGER.debug(species.name)
+                val pokemonEntity = PokemonProperties.parse("species=${species.name} level=10").createEntity(context.source.level)
+                val blockPos = player.blockPosition()
+                pokemonEntity.moveTo(player.x, player.y, player.z, pokemonEntity.yRot, pokemonEntity.xRot)
+                pokemonEntity.entityData.set(PokemonEntity.SPAWN_DIRECTION, pokemonEntity.random.nextFloat() * 360F)
+                pokemonEntity.finalizeSpawn(world, world.getCurrentDifficultyAt(blockPos), MobSpawnType.COMMAND, null)
+                context.source.level.addFreshEntity(pokemonEntity)
+            }
+        }
 
-   private fun execute(context: CommandContext<CommandSourceStack>, range: IntRange): Int {
-      val player: ServerPlayer = (context.getSource() as CommandSourceStack).m_81375_();
-
-      for (Species species : PokemonSpecies.INSTANCE.getImplemented()) {
-         val var6: Int = range.getFirst();
-         val var7: Int = range.getLast();
-         val var8: Int = species.getNationalPokedexNumber();
-         if (var6 <= var8 && var8 <= var7) {
-            Cobblemon.INSTANCE.getLOGGER().debug(species.getName());
-            val var10000: Pokemon = Species.create$default(species, 0, 1, null);
-            val var10001: Level = player.m_9236_();
-            val var9: ServerLevel = var10001 as ServerLevel;
-            val var10002: Vec3 = player.m_20182_();
-            Pokemon.sendOut$default(var10000, var9, var10002, null, null, 8, null);
-         }
-      }
-
-      return 1;
-   }
-
-   @JvmStatic
-   fun `register$lambda$0`(it: CommandContext): Int {
-      val var10000: SpawnAllPokemon = INSTANCE;
-      return var10000.execute(it, new IntRange(IntegerArgumentType.getInteger(it, "min"), IntegerArgumentType.getInteger(it, "max")));
-   }
-
-   @JvmStatic
-   fun `register$lambda$1`(it: CommandContext): Int {
-      val var10000: SpawnAllPokemon = INSTANCE;
-      return var10000.execute(it, new IntRange(IntegerArgumentType.getInteger(it, "min"), Integer.MAX_VALUE));
-   }
-
-   @JvmStatic
-   fun `register$lambda$2`(it: CommandContext): Int {
-      val var10000: SpawnAllPokemon = INSTANCE;
-      return var10000.execute(it, new IntRange(1, Integer.MAX_VALUE));
-   }
+        return Command.SINGLE_SUCCESS
+    }
 }

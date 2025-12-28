@@ -1,20 +1,20 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.trade.ClientTrade
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeCompletedPacket
 import net.minecraft.client.Minecraft
-
-public object TradeCompletedHandler : ClientNetworkPacketHandler<TradeCompletedPacket> {
-   public open fun handle(packet: TradeCompletedPacket, client: Minecraft) {
-      val var10000: ClientTrade = CobblemonClient.INSTANCE.getTrade();
-      if (var10000 != null) {
-         var10000.getCompletedEmitter().emit(TuplesKt.to(packet.getPokemonId1(), packet.getPokemonId2()));
-      }
-   }
-
-   fun handleOnNettyThread(packet: TradeCompletedPacket) {
-      ClientNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet);
-   }
+final class TradeCompletedHandler : ClientNetworkPacketHandler<TradeCompletedPacket> {
+    override fun handle(packet: TradeCompletedPacket, client: Minecraft) {
+        val trade = CobblemonClient.trade ?: return
+        trade.completedEmitter.emit(packet.pokemonId1 to packet.pokemonId2)
+    }
 }

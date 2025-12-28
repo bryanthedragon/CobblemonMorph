@@ -1,106 +1,53 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.ActiveAnimation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.PoseAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import java.util.ArrayList;
-import java.util.LinkedHashMap
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.world.entity.Entity
 
-@SourceDebugExtension(["SMAP\nPose.kt\nKotlin\n*S Kotlin\n*F\n+ 1 Pose.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/pose/Pose\n+ 2 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n+ 3 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,48:1\n13579#2,2:49\n3792#2:51\n4307#2,2:52\n1855#3,2:54\n*S KotlinDebug\n*F\n+ 1 Pose.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/pose/Pose\n*L\n40#1:49,2\n44#1:51\n44#1:52,2\n44#1:54,2\n*E\n"])
-public class Pose<T extends Entity, F extends ModelFrame>(poseName: String,
-   poseTypes: Set<PoseType>,
-   condition: ((Any) -> Boolean)?,
-   onTransitionedInto: (PoseableEntityState<Any>?) -> Unit = <unrepresentable>.INSTANCE as Function1,
-   transformTicks: Int,
-   animations: MutableMap<String, ExpressionLike> = (new LinkedHashMap()) as java.util.Map,
-   vararg idleAnimations: Any,
-   vararg transformedParts: Any,
-   vararg quirks: Any
+typealias CobblemonPose = Pose
+
+/**
+ * A pose for a model. This is a collection of [animations] and [transformedParts] that should be applied to a model.
+ * It also contains any number of [namedAnimations], [ModelQuirk]s, a [condition] for the pose to ever be triggered,
+ * and the different [poseTypes] for which this pose is appropriate for.
+ *
+ * @author Hiroku
+ * @since December 5th, 2021
+ */
+class Pose(
+    var poseName: String,
+    val poseTypes: Set<PoseType>,
+    val condition: ((PosableState) -> Boolean)?,
+    /** What to do after the pose is transitioned into completely. */
+    val onTransitionedInto: (PosableState) -> Unit = {},
+    /** If there are no dedicated transition animations, the interpolation animation will take this many ticks. */
+    val transformTicks: Int,
+    val transformToTicks: Int?,
+    val namedAnimations: MutableMap<String, ExpressionLike> = mutableMapOf(),
+    val animations: Array<PoseAnimation>,
+    val transformedParts: Array<ModelPartTransformation>,
+    val quirks: Array<ModelQuirk<*>>
 ) {
-   public final val animations: MutableMap<String, ExpressionLike>
-   public final val condition: ((Any) -> Boolean)?
-   public final val idleAnimations: Array<StatelessAnimation<Any, out Any>>
-   public final val onTransitionedInto: (PoseableEntityState<Any>?) -> Unit
-   public final var poseName: String
-   public final val poseTypes: Set<PoseType>
-   public final val quirks: Array<ModelQuirk<Any, *>>
-   public final val transformTicks: Int
-   public final val transformedParts: Array<ModelPartTransformation>
-   public final val transitions: MutableMap<String, (Pose<Any, out ModelFrame>, Pose<Any, out ModelFrame>) -> StatefulAnimation<Any, ModelFrame>>
+    fun isSuitable(state: PosableState) = condition?.invoke(state) ?: true
 
-   init {
-      this.poseName = poseName;
-      this.poseTypes = poseTypes;
-      this.condition = condition;
-      this.onTransitionedInto = onTransitionedInto;
-      this.transformTicks = transformTicks;
-      this.animations = animations;
-      this.idleAnimations = idleAnimations;
-      this.transformedParts = transformedParts;
-      this.quirks = quirks;
-      this.transitions = new LinkedHashMap<>();
-   }
+    val transitions = mutableMapOf<String, (Pose, Pose) -> ActiveAnimation>()
 
-   public fun isSuitable(entity: Any): Boolean {
-      return this.condition == null || this.condition.invoke(entity) as java.lang.Boolean;
-   }
-
-   public fun idleStateless(
-      model: PoseableEntityModel<Any>,
-      state: PoseableEntityState<Any>?,
-      limbSwing: Float = 0.0F,
-      limbSwingAmount: Float = 0.0F,
-      ageInTicks: Float = 0.0F,
-      headYaw: Float = 0.0F,
-      headPitch: Float = 0.0F,
-      intensity: Float
-   ) {
-      val `$this$forEach$iv`: Any;
-      for (Object element$iv : $this$forEach$iv) {
-         ((StatelessAnimation)`element$iv`).apply(null, model, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, intensity);
-      }
-   }
-
-   public fun idleStateful(
-      entity: Any?,
-      model: PoseableEntityModel<Any>,
-      state: PoseableEntityState<Any>,
-      limbSwing: Float,
-      limbSwingAmount: Float,
-      ageInTicks: Float,
-      headYaw: Float,
-      headPitch: Float
-   ) {
-      val `$this$forEach$iv`: Array<Any> = this.idleAnimations;
-      val `element$iv`: java.util.Collection = new ArrayList();
-
-      for (Object element$iv$iv : $this$filter$iv) {
-         if (state.shouldIdleRun((StatelessAnimation<T, ?>)`element$iv$iv`, 0.0F)) {
-            `element$iv`.add(`element$iv$iv`);
-         }
-      }
-
-      for (Object element$ivx : $this$filter$iv) {
-         (`element$ivx` as StatelessAnimation)
-            .apply(
-               entity,
-               model,
-               state,
-               limbSwing,
-               limbSwingAmount,
-               ageInTicks,
-               headYaw,
-               headPitch,
-               state.getIdleIntensity(`element$ivx` as StatelessAnimation<T, ?>)
-            );
-      }
-   }
+    fun apply(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float) {
+        animations.filter { state.shouldIdleRun(it, 0F) }.forEach { animation ->
+            animation.apply(context, model, state, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch, state.getIdleIntensity(animation))
+        }
+    }
 }

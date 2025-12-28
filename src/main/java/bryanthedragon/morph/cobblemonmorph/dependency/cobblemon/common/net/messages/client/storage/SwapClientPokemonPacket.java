@@ -1,74 +1,45 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStore
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyStore
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readUUID
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeUUID
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class SwapClientPokemonPacket internal constructor(storeIsParty: Boolean, storeID: UUID, pokemonID1: UUID, pokemonID2: UUID) :
-   NetworkPacket<SwapClientPokemonPacket> {
-   public open val id: ResourceLocation
-   public final val pokemonID1: UUID
-   public final val pokemonID2: UUID
-   public final val storeID: UUID
-   public final val storeIsParty: Boolean
+/**
+ * Swaps two Pokémon in the client side representation of a store. Works for party and PCs.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.SwapClientPokemonHandler].
+ *
+ * @author Hiroku
+ * @since June 18th, 2022
+ */
+class SwapClientPokemonPacket internal constructor(val storeIsParty: Boolean, val storeID: UUID, val pokemonID1: UUID, val pokemonID2: UUID) : NetworkPacket<SwapClientPokemonPacket> {
 
-   init {
-      this.storeIsParty = storeIsParty;
-      this.storeID = storeID;
-      this.pokemonID1 = pokemonID1;
-      this.pokemonID2 = pokemonID2;
-      this.id = ID;
-   }
+    override val id = ID
 
-   public constructor(store: PokemonStore<*>, pokemonID1: UUID, pokemonID2: UUID) : this(store is PartyStore, store.getUuid(), pokemonID1, pokemonID2)
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.writeBoolean(this.storeIsParty);
-      buffer.m_130077_(this.storeID);
-      buffer.m_130077_(this.pokemonID1);
-      buffer.m_130077_(this.pokemonID2);
-   }
+    constructor(store: PokemonStore<*>, pokemonID1: UUID, pokemonID2: UUID): this(store is PartyStore, store.uuid, pokemonID1, pokemonID2)
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeBoolean(storeIsParty)
+        buffer.writeUUID(storeID)
+        buffer.writeUUID(pokemonID1)
+        buffer.writeUUID(pokemonID2)
+    }
 
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): SwapClientPokemonPacket {
-         val var10002: Boolean = buffer.readBoolean();
-         val var10003: UUID = buffer.m_130259_();
-         val var10004: UUID = buffer.m_130259_();
-         val var10005: UUID = buffer.m_130259_();
-         return new SwapClientPokemonPacket(var10002, var10003, var10004, var10005);
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("swap_client_pokemon")
+        fun decode(buffer: RegistryFriendlyByteBuf) = SwapClientPokemonPacket(buffer.readBoolean(), buffer.readUUID(), buffer.readUUID(), buffer.readUUID())
+    }
 }

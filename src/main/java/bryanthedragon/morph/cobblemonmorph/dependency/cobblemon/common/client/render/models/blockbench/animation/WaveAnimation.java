@@ -1,101 +1,99 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.ModelPartExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Bone
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.addPosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.addRotation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.WaveFunction
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
+import kotlin.math.atan
 
-@SourceDebugExtension(["SMAP\nWaveAnimation.kt\nKotlin\n*S Kotlin\n*F\n+ 1 WaveAnimation.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/animation/WaveAnimation\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n+ 3 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n*L\n1#1,103:1\n1#2:104\n11335#3:105\n11670#3,3:106\n*S KotlinDebug\n*F\n+ 1 WaveAnimation.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/animation/WaveAnimation\n*L\n64#1:105\n64#1:106,3\n*E\n"])
-public class WaveAnimation<T extends Entity>(frame: ModelFrame,
-   waveFunction: (Float) -> Float,
-   oscillationsScalar: Float,
-   head: ModelPart,
-   headLength: Float,
-   moveHead: Boolean = false,
-   rotationAxis: Int,
-   motionAxis: Int,
-   basedOnLimbSwing: Boolean = false,
-   vararg segments: Any
-) : StatelessAnimation(frame) {
-   public final val basedOnLimbSwing: Boolean
-   public final val head: ModelPart
-   public final val headLength: Float
-   public final val motionAxis: Int
-   public final val moveHead: Boolean
-   public final val oscillationsScalar: Float
-   public final val rotationAxis: Int
-   public final val segments: Array<WaveSegment>
-   public open val targetFrame: Class<ModelFrame>
-   public final val waveFunction: (Float) -> Float
+/**
+ * An animation that interpolates some segment of limbs onto a given wave function. This wave function
+ * will probably be a sine or cosine wave in most cases, but any wave can be used.
+ *
+ * @param frame The frame this is for, but this is not really used meaningfully.
+ * @param waveFunction The wave to match the limbs to.
+ * @param oscillationsScalar A multiplier used to control how many oscillations will occur across the length of the body
+ *                           at once. If this value is multiple times the wave function period, the wave will play out
+ *                           multiple times in a single frame along the length of the body.
+ * @param head The part representing the head of the wave.
+ * @param headLength The length of the head in model terms.
+ * @param moveHead Whether the head of the body will move along the wave.
+ * @param rotationAxis The axis that will be rotated around to act out the wave.
+ * @param motionAxis The axis along which the head will move, if you chose for it to move. This is never the rotation axis.
+ * @param basedOnLimbSwing Whether the time variable will be provided by the limb swing. If true, the animation will
+ *                         only progress in time when the entity is moving. It also means you need to change the wave
+ *                         function as limb swing is based on ticks whereas other methods use seconds.
+ * @param segments The array of [WaveSegment]s that make up the wave.
+ *
+ * @author Hiroku
+ * @since December 13, 2021
+ */
+class WaveAnimation(
+    val waveFunction: WaveFunction,
+    val oscillationsScalar: Float,
+    val head: ModelPart,
+    val headLength: Float,
+    val moveHead: Boolean = false,
+    val rotationAxis: Int,
+    val motionAxis: Int,
+    val basedOnLimbSwing: Boolean = false,
+    val segments: Array<WaveSegment>
+): PoseAnimation() {
+    override fun setupAnim(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {
+        val t = if (basedOnLimbSwing) {
+            limbSwing
+        } else {
+            state.animationSeconds
+        }
 
-   init {
-      this.waveFunction = waveFunction;
-      this.oscillationsScalar = oscillationsScalar;
-      this.head = head;
-      this.headLength = headLength;
-      this.moveHead = moveHead;
-      this.rotationAxis = rotationAxis;
-      this.motionAxis = motionAxis;
-      this.basedOnLimbSwing = basedOnLimbSwing;
-      this.segments = segments;
-      this.targetFrame = ModelFrame::class.java;
-   }
+        var totalTimeDisplacement = (headLength + segments.map { it.length }.sum()) / oscillationsScalar
+        if (moveHead) {
+            val headDisplacement = waveFunction(t + totalTimeDisplacement - headLength / oscillationsScalar) * 16
+            head.addPosition(motionAxis, -headDisplacement * intensity)
+        }
 
-   protected override fun setAngles(
-      entity: Any?,
-      model: PoseableEntityModel<Any>,
-      state: PoseableEntityState<Any>?,
-      limbSwing: Float,
-      limbSwingAmount: Float,
-      ageInTicks: Float,
-      headYaw: Float,
-      headPitch: Float,
-      intensity: Float
-   ) {
-      val t: Float = if (this.basedOnLimbSwing) limbSwing else (if (entity != null) model.getState(entity).getAnimationSeconds() else 0.0F);
-      val previousSegmentLength: Array<WaveSegment> = this.segments;
-      val var24: Float = this.headLength;
-      val `destination$iv$iv`: java.util.Collection = new ArrayList(this.segments.length);
+        totalTimeDisplacement -= headLength / oscillationsScalar
+        var previousSegmentLength = headLength
+        var previousTheta = 0F
 
-      for (Object item$iv$iv : previousSegmentLength) {
-         `destination$iv$iv`.add(((WaveSegment)t1).getLength());
-      }
+        for (segment in segments) {
+            val t2 = totalTimeDisplacement + previousSegmentLength / 2 / oscillationsScalar
+            val t1 = totalTimeDisplacement - segment.length / 2 / oscillationsScalar
 
-      var totalTimeDisplacement: Float = (var24 + CollectionsKt.sumOfFloat(`destination$iv$iv` as java.util.List)) / this.oscillationsScalar;
-      if (this.moveHead) {
-         ModelPartExtensionsKt.addPosition(
-            this.head,
-            this.motionAxis,
-            -((this.waveFunction.invoke(t + totalTimeDisplacement - this.headLength / this.oscillationsScalar) as java.lang.Number).floatValue() * (float)16)
-               * intensity
-         );
-      }
+            val yAfter = waveFunction(t + t1)
+            val yBefore = waveFunction(t + t2)
 
-      totalTimeDisplacement = totalTimeDisplacement - this.headLength / this.oscillationsScalar;
-      var var28: Float = this.headLength;
-      var var29: Float = 0.0F;
+            val ratio = (yAfter - yBefore) / (t2 - t1)
+            val theta = atan(ratio)
 
-      for (WaveSegment segment : this.segments) {
-         val var35: Float = totalTimeDisplacement + var28 / 2 / this.oscillationsScalar;
-         val var36: Float = totalTimeDisplacement - var34.getLength() / 2 / this.oscillationsScalar;
-         val theta: Float = (float)Math.atan(
-            (double)(
-               ((this.waveFunction.invoke(t + var36) as java.lang.Number).floatValue() - (this.waveFunction.invoke(t + var35) as java.lang.Number).floatValue())
-                  / (var35 - var36)
-            )
-         );
-         ModelPartExtensionsKt.addRotation(var34.getModelPart() as Bone, this.rotationAxis, (theta - var29) * intensity);
-         var29 = theta;
-         var28 = var34.getLength();
-         totalTimeDisplacement -= var34.getLength() / this.oscillationsScalar;
-         if (totalTimeDisplacement < 0.0F) {
-            totalTimeDisplacement = 0.0F;
-         }
-      }
-   }
+            /*
+             * This reversing of the angle by previousTheta is actually just a crude guess.
+             * The joint it rotated around previously was a little distance away from this joint, meaning this is wrong.
+             * To do this perfectly, we need to calculate the error of this action and apply a
+             * translation to this part so that it counters the error. In most cases the error is insignificant.
+             */
+            segment.modelPart.addRotation(rotationAxis, (theta - previousTheta) * intensity)
+            previousTheta = theta
+            previousSegmentLength = segment.length
+            totalTimeDisplacement -= segment.length / oscillationsScalar
+            if (totalTimeDisplacement < 0) {
+                totalTimeDisplacement = 0F
+            }
+        }
+    }
 }
+class WaveSegment(
+    val modelPart: ModelPart,
+    val length: Float
+)

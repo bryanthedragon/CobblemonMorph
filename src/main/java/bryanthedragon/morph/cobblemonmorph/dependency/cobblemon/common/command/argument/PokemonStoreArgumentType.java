@@ -1,19 +1,39 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.argument
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.pc
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.serialization.Codec
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.arguments.StringRepresentableArgument
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.StringRepresentable
 
-public class PokemonStoreArgumentType : StringRepresentableArgument(StoreType.Companion.getCODEC() as Codec, StoreType::values) {
-   public companion object {
-      public fun pokemonStore(): PokemonStoreArgumentType {
-         return new PokemonStoreArgumentType();
-      }
+class PokemonStoreArgumentType : StringRepresentableArgument<StoreType>(StoreType.CODEC, StoreType::values) {
+    companion object {
+        fun pokemonStore() = PokemonStoreArgumentType()
+        fun pokemonStoreFrom(context: CommandContext<CommandSourceStack>, id: String): StoreType = context.getArgument(id, StoreType::class.java)
+    }
+}
 
-      public fun pokemonStoreFrom(context: CommandContext<CommandSourceStack>, id: String): StoreType {
-         val var10000: Any = context.getArgument(id, StoreType.class);
-         return var10000 as StoreType;
-      }
-   }
+enum class StoreType(val storeFetcher: (ServerPlayer) -> Collection<Pokemon>) : StringRepresentable {
+
+    PARTY({ player -> player.party().filterNotNull() }),
+    PC({ player -> player.pc().filterNotNull() }),
+    ALL({ player -> PARTY.storeFetcher(player) + PC.storeFetcher(player) });
+
+    override fun getSerializedName(): String = name.lowercase()
+
+    companion object {
+        val CODEC = StringRepresentable.fromEnum(::values)
+    }
+
 }

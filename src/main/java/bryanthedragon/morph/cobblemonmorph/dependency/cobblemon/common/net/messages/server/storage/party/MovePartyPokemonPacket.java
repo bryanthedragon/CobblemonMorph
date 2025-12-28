@@ -1,65 +1,39 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.party
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyPosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.party.MovePartyPokemonHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readPartyPosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writePartyPosition
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class MovePartyPokemonPacket(pokemonID: UUID, oldPosition: PartyPosition, newPosition: PartyPosition) : NetworkPacket<MovePartyPokemonPacket> {
-   public open val id: ResourceLocation
-   public final val newPosition: PartyPosition
-   public final val oldPosition: PartyPosition
-   public final val pokemonID: UUID
-
-   init {
-      this.pokemonID = pokemonID;
-      this.oldPosition = oldPosition;
-      this.newPosition = newPosition;
-      this.id = ID;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.pokemonID);
-      PartyPosition.Companion.writePartyPosition(buffer, this.oldPosition);
-      PartyPosition.Companion.writePartyPosition(buffer, this.newPosition);
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): MovePartyPokemonPacket {
-         val var10002: UUID = buffer.m_130259_();
-         return new MovePartyPokemonPacket(var10002, PartyPosition.Companion.readPartyPosition(buffer), PartyPosition.Companion.readPartyPosition(buffer));
-      }
-   }
+/**
+ * Tells the server to move a party Pokémon from one position of the player's party to another.
+ *
+ * Handled by [MovePartyPokemonHandler].
+ *
+ * @author Hiroku
+ * @since June 20th, 2022
+ */
+class MovePartyPokemonPacket(val pokemonID: UUID, val oldPosition: PartyPosition, val newPosition: PartyPosition) : NetworkPacket<MovePartyPokemonPacket> {
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(pokemonID)
+        buffer.writePartyPosition(oldPosition)
+        buffer.writePartyPosition(newPosition)
+    }
+    companion object {
+        val ID = cobblemonResource("move_party_pokemon")
+        fun decode(buffer: RegistryFriendlyByteBuf) = MovePartyPokemonPacket(buffer.readUUID(), buffer.readPartyPosition(), buffer.readPartyPosition())
+    }
 }

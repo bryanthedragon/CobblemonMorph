@@ -1,122 +1,67 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatusContainer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-public fun interface PokemonPropertyExtractor {
-   public abstract operator fun invoke(pokemon: Pokemon, properties: PokemonProperties) {
-   }
+/**
+ * A simple functional interface for extracting a property from a [Pokemon] and putting it into a [PokemonProperties].
+ *
+ * This mainly exists for the purposes of [Pokemon.createPokemonProperties] specifically.
+ *
+ * @author Hiroku
+ * @since May 12th, 2022
+ */
+fun interface PokemonPropertyExtractor {
+    companion object {
+        @JvmField
+        val ALL = mutableListOf<PokemonPropertyExtractor>()
 
-   public companion object {
-      public final val ABILITY: PokemonPropertyExtractor
-      public final val ALL: MutableList<PokemonPropertyExtractor>
-      public final val ASPECTS: PokemonPropertyExtractor
-      public final val EVS: PokemonPropertyExtractor
-      public final val FORM: PokemonPropertyExtractor
-      public final val FRIENDSHIP: PokemonPropertyExtractor
-      public final val GENDER: PokemonPropertyExtractor
-      public final val ILLUSION: MutableList<PokemonPropertyExtractor>
-      public final val IVS: PokemonPropertyExtractor
-      public final val LEVEL: PokemonPropertyExtractor
-      public final val NATURE: PokemonPropertyExtractor
-      public final val NICKNAME: PokemonPropertyExtractor
-      public final val POKEBALL: PokemonPropertyExtractor
-      public final val SHINY: PokemonPropertyExtractor
-      public final val SPECIES: PokemonPropertyExtractor
-      public final val STATUS: PokemonPropertyExtractor
-      public final val TRANSFORM: MutableList<PokemonPropertyExtractor>
+        @JvmField
+        val SPECIES = add { pokemon, properties -> properties.species = pokemon.species.resourceIdentifier.toString() }
+        @JvmField
+        val FORM = add { pokemon, properties -> properties.form = pokemon.form.formOnlyShowdownId() }
+        @JvmField
+        val SHINY = add { pokemon, properties -> properties.shiny = pokemon.shiny }
+        @JvmField
+        val ASPECTS = add { pokemon, properties -> properties.aspects = pokemon.aspects }
+        @JvmField
+        val LEVEL = add { pokemon, properties -> properties.level = pokemon.level }
+        @JvmField
+        val GENDER = add { pokemon, properties -> properties.gender = pokemon.gender }
+        @JvmField
+        val FRIENDSHIP = add { pokemon, properties -> properties.friendship = pokemon.friendship }
+        @JvmField
+        val POKEBALL = add { pokemon, properties ->  properties.pokeball = pokemon.caughtBall.name.toString() }
+        @JvmField
+        val NATURE = add { pokemon, properties ->  properties.nature = pokemon.nature.name.toString() }
+        @JvmField
+        val ABILITY = add { pokemon, properties ->  properties.ability = pokemon.ability.name }
+        @JvmField
+        val NICKNAME = add { pokemon, properties -> properties.nickname = pokemon.nickname }
+        @JvmField
+        val STATUS = add { pokemon, properties -> properties.status = pokemon.status?.status?.showdownName }
+        @JvmField
+        val IVS = add { pokemon, properties -> properties.ivs = pokemon.ivs }
+        @JvmField
+        val EVS = add { pokemon, properties -> properties.evs = pokemon.evs }
 
-      public fun add(extractor: PokemonPropertyExtractor): PokemonPropertyExtractor {
-         PokemonPropertyExtractor.ALL.add(extractor);
-         return extractor;
-      }
-   }
+        @JvmField
+        val ILLUSION = mutableListOf(SPECIES, FORM, ASPECTS, GENDER, NICKNAME, SHINY, POKEBALL)
+        @JvmField
+        val TRANSFORM = mutableListOf(SPECIES, FORM, ASPECTS, GENDER)
 
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun `SPECIES$lambda$0`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setSpecies(pokemon.getSpecies().getResourceIdentifier().toString());
-      }
+        fun add(extractor: PokemonPropertyExtractor): PokemonPropertyExtractor {
+            ALL.add(extractor)
+            return extractor
+        }
+    }
 
-      @JvmStatic
-      fun `FORM$lambda$1`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setForm(pokemon.getForm().formOnlyShowdownId());
-      }
-
-      @JvmStatic
-      fun `SHINY$lambda$2`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setShiny(pokemon.getShiny());
-      }
-
-      @JvmStatic
-      fun `ASPECTS$lambda$3`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setAspects(pokemon.getAspects());
-      }
-
-      @JvmStatic
-      fun `LEVEL$lambda$4`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setLevel(pokemon.getLevel());
-      }
-
-      @JvmStatic
-      fun `GENDER$lambda$5`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setGender(pokemon.getGender());
-      }
-
-      @JvmStatic
-      fun `FRIENDSHIP$lambda$6`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setFriendship(pokemon.getFriendship());
-      }
-
-      @JvmStatic
-      fun `POKEBALL$lambda$7`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setPokeball(pokemon.getCaughtBall().getName().toString());
-      }
-
-      @JvmStatic
-      fun `NATURE$lambda$8`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setNature(pokemon.getNature().getName().toString());
-      }
-
-      @JvmStatic
-      fun `ABILITY$lambda$9`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setAbility(pokemon.getAbility().getName());
-      }
-
-      @JvmStatic
-      fun `NICKNAME$lambda$10`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setNickname(pokemon.getNickname());
-      }
-
-      @JvmStatic
-      fun `STATUS$lambda$11`(pokemon: Pokemon, properties: PokemonProperties) {
-         var var3: java.lang.String;
-         label12: {
-            val var10001: PersistentStatusContainer = pokemon.getStatus();
-            if (var10001 != null) {
-               val var2: PersistentStatus = var10001.getStatus();
-               if (var2 != null) {
-                  var3 = var2.getShowdownName();
-                  break label12;
-               }
-            }
-
-            var3 = null;
-         }
-
-         properties.setStatus(var3);
-      }
-
-      @JvmStatic
-      fun `IVS$lambda$12`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setIvs(pokemon.getIvs());
-      }
-
-      @JvmStatic
-      fun `EVS$lambda$13`(pokemon: Pokemon, properties: PokemonProperties) {
-         properties.setEvs(pokemon.getEvs());
-      }
-   }
+    operator fun invoke(pokemon: Pokemon, properties: PokemonProperties)
 }

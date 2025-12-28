@@ -1,46 +1,55 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.berry
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.GrowthFactor
-import kotlin.random.Random
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.advancements.critereon.MinMaxBounds
 import net.minecraft.core.BlockPos
-import net.minecraft.predicate.NumberRange.FloatRange
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.LevelReader
-import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.state.BlockState
 
-public class BiomeTemperatureGrowthFactor(range: FloatRange, bonusYield: IntRange) : GrowthFactor {
-   public final val bonusYield: IntRange
-   public final val range: FloatRange
+/**
+ * A [GrowthFactor] that is active based on the temperature property of a [Biome].
+ *
+ * @property range The range of possible [Biome.getTemperature] values.
+ * @property bonusYield The range of possible bonus values.
+ *
+ * @author Licious
+ * @since December 2nd, 2022
+ */
+class BiomeTemperatureGrowthFactor(
+    val range: MinMaxBounds.Doubles,
+    val bonusYield: IntRange
+) : GrowthFactor {
 
-   init {
-      this.range = range;
-      this.bonusYield = bonusYield;
-   }
+    override fun validateArguments() {
+        if (this.bonusYield.first < 0 || this.bonusYield.last < 0) {
+            throw IllegalArgumentException("$ID bonusYield must be a positive range")
+        }
+    }
 
-   public override fun validateArguments() {
-      if (this.bonusYield.getFirst() < 0 || this.bonusYield.getLast() < 0) {
-         throw new IllegalArgumentException("${ID} bonusYield must be a positive range");
-      }
-   }
+    override fun isValid(world: LevelReader, state: BlockState, pos: BlockPos): Boolean {
+        val biome = world.getBiome(pos).value()
+        return this.range.matches(biome.baseTemperature.toDouble())
+    }
 
-   public override fun isValid(world: LevelReader, state: BlockState, pos: BlockPos): Boolean {
-      return this.range.m_154810_((double)(world.m_204166_(pos).m_203334_() as Biome).m_47554_());
-   }
+    override fun yield() = this.bonusYield.random()
 
-   public override fun yield(): Int {
-      return RangesKt.random(this.bonusYield, Random.Default as Random);
-   }
+    override fun minYield() = this.bonusYield.first
 
-   public override fun minYield(): Int {
-      return this.bonusYield.getFirst();
-   }
+    override fun maxYield() = this.bonusYield.last
 
-   public override fun maxYield(): Int {
-      return this.bonusYield.getLast();
-   }
+    companion object {
 
-   public companion object {
-      public final val ID: ResourceLocation
-   }
+        val ID = cobblemonResource("biome_temperature")
+
+    }
+
 }

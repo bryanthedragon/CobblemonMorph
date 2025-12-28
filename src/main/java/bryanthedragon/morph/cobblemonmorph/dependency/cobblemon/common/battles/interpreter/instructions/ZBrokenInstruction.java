@@ -1,42 +1,34 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
 
-public class ZBrokenInstruction(message: BattleMessage) : InterpreterInstruction {
-   public final val message: BattleMessage
+/**
+ * Format: |-zbroken|POKEMON
+ *
+ * A z-move has broken through protect and hit POKEMON.
+ * @author Segfault Guy
+ * @since September 10th, 2023
+ */
+class ZBrokenInstruction(val message: BattleMessage): InterpreterInstruction {
 
-   init {
-      this.message = message;
-   }
-
-   public override operator fun invoke(battle: PokemonBattle) {
-      val var10000: BattlePokemon = this.message.battlePokemon(0, battle);
-      if (var10000 != null) {
-         val battlePokemon: BattlePokemon = var10000;
-         PokemonBattle.dispatchWaiting$default(battle, 0.0F, (new Function0<Unit>(battlePokemon, battle, this) {
-            {
-               super(0);
-               this.$battlePokemon = `$battlePokemon`;
-               this.$battle = `$battle`;
-               this.this$0 = `$receiver`;
-            }
-
-            public final void invoke() {
-               val pokemonName: MutableComponent = this.$battlePokemon.getName();
-               val var10000: PokemonBattle = this.$battle;
-               val var10001: MutableComponent = LocalizationUtilsKt.battleLang("zbroken", pokemonName);
-               var10000.broadcastChatMessage(TextKt.red(var10001) as Component);
-               this.$battle.getMinorBattleActions().put(this.$battlePokemon.getUuid(), this.this$0.getMessage());
-            }
-         }) as Function0, 1, null);
-      }
-   }
+    override fun invoke(battle: PokemonBattle) {
+        val battlePokemon = message.battlePokemon(0, battle) ?: return
+        battle.dispatchWaiting {
+            val pokemonName = battlePokemon.getName()
+            battle.broadcastChatMessage(battleLang("zbroken", pokemonName).red())
+            battle.minorBattleActions[battlePokemon.uuid] = message
+        }
+    }
 }

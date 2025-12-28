@@ -1,233 +1,142 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen6
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.ModelPartExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockStatefulAnimation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.createTransformation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BimanualFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BipedFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.SimpleQuirk
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
-import kotlin.jvm.functions.Function1
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBattling
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.jetbrains.annotations.NotNull
 
-public class GreninjaModel(root: ModelPart) : PokemonPoseableModel, HeadedFrame, BipedFrame, BimanualFrame {
-   public final lateinit var battleidle: Pose<PokemonEntity, ModelFrame>
-   public open val cryAnimation: CryProvider
-   public final lateinit var float: Pose<PokemonEntity, ModelFrame>
-   public open val head: ModelPart
-   public open val leftArm: ModelPart
-   public open val leftLeg: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rightArm: ModelPart
-   public open val rightLeg: ModelPart
-   public open val rootPart: ModelPart
-   public final val shurikenleft: ModelPart
-   public final val shurikenright: ModelPart
-   public final lateinit var sleep: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var swim: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class GreninjaModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BimanualFrame {
+    override val rootPart = root.registerChildWithAllChildren("greninja")
+    override val head = getPart("head")
+    override val rightArm = getPart("arm_right")
+    override val leftArm = getPart("arm_left")
+    override val rightLeg = getPart("leg_right")
+    override val leftLeg = getPart("leg_left")
+    val shurikenright = getPart("hand_shuriken_right")
+    val shurikenleft = getPart("hand_shuriken_left")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "greninja");
-      this.head = this.getPart("head");
-      this.rightArm = this.getPart("arm_right");
-      this.leftArm = this.getPart("arm_left");
-      this.rightLeg = this.getPart("leg_right");
-      this.leftLeg = this.getPart("leg_left");
-      this.shurikenright = this.getPart("hand_shuriken_right");
-      this.shurikenleft = this.getPart("hand_shuriken_left");
-      this.portraitScale = 2.2F;
-      this.portraitTranslation = new Vec3(-0.1, 1.34, 0.0);
-      this.profileScale = 0.7F;
-      this.profileTranslation = new Vec3(0.0, 0.7, 0.0);
-      this.cryAnimation = GreninjaModel::cryAnimation$lambda$0;
-   }
+    override var portraitScale = 2.2F
+    override var portraitTranslation = Vec3(-0.1, 1.34, 0.0)
 
-   public override fun registerPoses() {
-      val blink: SimpleQuirk = PoseableEntityModel.quirk$default(
-         this, null, null, null, (new Function1<PoseableEntityState<PokemonEntity>, StatefulAnimation<PokemonEntity, ?>>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
-            }
+    override var profileScale = 0.7F
+    override var profileTranslation = Vec3(0.0, 0.7, 0.0)
 
-            @NotNull
-            public final StatefulAnimation<PokemonEntity, ?> invoke(@NotNull PoseableEntityState<PokemonEntity> it) {
-               return PoseableEntityModel.bedrockStateful$default(this.this$0, "greninja", "blink", null, 4, null);
-            }
-         }) as Function1, 7, null
-      );
-      this.setSleep(
-         PoseableEntityModel.registerPose$default(
-            this,
-            PoseType.SLEEP,
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "greninja", "sleep", null, 4, null)},
-            new ModelPartTransformation[]{
-               ModelPartExtensionsKt.createTransformation(this.shurikenleft).withVisibility(false),
-               ModelPartExtensionsKt.createTransformation(this.shurikenright).withVisibility(false)
-            },
-            null,
-            154,
-            null
-         )
-      );
-      val var10001: EnumSet = PoseType.Companion.getUI_POSES();
-      val var27: java.util.Set = var10001;
-      val var10002: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "standing",
-            SetsKt.minus(SetsKt.plus(var27, var10002), PoseType.FLOAT),
-            <unrepresentable>.INSTANCE,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "greninja", "ground_idle", null, 4, null)
-            },
-            new ModelPartTransformation[]{
-               ModelPartExtensionsKt.createTransformation(this.shurikenleft).withVisibility(false),
-               ModelPartExtensionsKt.createTransformation(this.shurikenright).withVisibility(false)
-            },
-            new ModelQuirk[]{blink},
-            48,
-            null
-         )
-      );
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "walk",
-            PoseType.WALK,
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "greninja", "ground_walk", null, 4, null)
-            },
-            new ModelPartTransformation[]{
-               ModelPartExtensionsKt.createTransformation(this.shurikenleft).withVisibility(false),
-               ModelPartExtensionsKt.createTransformation(this.shurikenright).withVisibility(false)
-            },
-            new ModelQuirk[]{blink},
-            52,
-            null
-         )
-      );
-      this.setFloat(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "swim_idle",
-            SetsKt.setOf(new PoseType[]{PoseType.FLOAT, PoseType.HOVER}),
-            <unrepresentable>.INSTANCE,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "greninja", "water_idle", null, 4, null)
-            },
-            new ModelPartTransformation[]{
-               ModelPartExtensionsKt.createTransformation(this.shurikenleft).withVisibility(false),
-               ModelPartExtensionsKt.createTransformation(this.shurikenright).withVisibility(false)
-            },
-            new ModelQuirk[]{blink},
-            48,
-            null
-         )
-      );
-      this.setSwim(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "swim",
-            SetsKt.setOf(new PoseType[]{PoseType.SWIM, PoseType.FLY}),
-            <unrepresentable>.INSTANCE,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "greninja", "water_swim", null, 4, null)
-            },
-            new ModelPartTransformation[]{
-               ModelPartExtensionsKt.createTransformation(this.shurikenleft).withVisibility(false),
-               ModelPartExtensionsKt.createTransformation(this.shurikenright).withVisibility(false)
-            },
-            new ModelQuirk[]{blink},
-            48,
-            null
-         )
-      );
-      val var11: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var17: Array<ModelQuirk> = new ModelQuirk[]{blink};
-      val var22: Array<ModelPartTransformation> = new ModelPartTransformation[]{
-         ModelPartExtensionsKt.createTransformation(this.shurikenleft).withVisibility(false),
-         ModelPartExtensionsKt.createTransformation(this.shurikenright).withVisibility(false)
-      };
-      val var26: Array<StatelessAnimation> = new StatelessAnimation[]{
-         HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-         PoseableEntityModel.bedrock$default(this, "greninja", "battle_idle", null, 4, null)
-      };
-      val var28: PoseableEntityModel = this;
-      this.setBattleidle(
-         PoseableEntityModel.registerPose$default(var28, "battle_idle", var11, <unrepresentable>.INSTANCE, 10, null, null, var26, var22, var17, 48, null)
-      );
-   }
+    lateinit var sleep: Pose
+    lateinit var standing: Pose
+    lateinit var float: Pose
+    lateinit var swim: Pose
+    lateinit var walk: Pose
+    lateinit var battleidle: Pose
 
-   public open fun getFaintAnimation(pokemonEntity: PokemonEntity, state: PoseableEntityState<PokemonEntity>): BedrockStatefulAnimation<PokemonEntity>? {
-      return if (state.isPosedIn(this.getStanding(), this.getWalk(), this.getBattleidle(), this.getSwim(), this.getFloat(), this.getSleep()))
-         PoseableEntityModel.bedrockStateful$default(this, "greninja", "faint", null, 4, null)
-         else
-         null;
-   }
+    override val cryAnimation = CryProvider { bedrockStateful("greninja", "cry") }
 
-   override fun <T extends Entity> singleBoneLook(
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: java.lang.Float?,
-      yawMultiplier: java.lang.Float?,
-      maxPitch: java.lang.Float?,
-      minPitch: java.lang.Float?,
-      maxYaw: java.lang.Float?,
-      minYaw: java.lang.Float?
-   ): SingleBoneLookAnimation<T> {
-      return HeadedFrame.DefaultImpls.singleBoneLook(
-         this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw
-      );
-   }
+    override fun registerPoses() {
+        val blink = quirk { bedrockStateful("greninja", "blink")}
+        sleep = registerPose(
+            poseType = PoseType.SLEEP,
+            transformTicks = 10,
+            transformedParts = arrayOf(
+                shurikenleft.createTransformation().withVisibility(visibility = false),
+                shurikenright.createTransformation().withVisibility(visibility = false)
+            ),
+            animations = arrayOf(bedrock("greninja", "sleep"))
+        )
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: GreninjaModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "greninja", "cry", null, 4, null);
-   }
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = PoseType.UI_POSES + PoseType.STATIONARY_POSES - PoseType.FLOAT,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            condition = { !it.isBattling },
+            transformedParts = arrayOf(
+                shurikenleft.createTransformation().withVisibility(visibility = false),
+                shurikenright.createTransformation().withVisibility(visibility = false)
+            ),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("greninja", "ground_idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseType = PoseType.WALK,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            transformedParts = arrayOf(
+                shurikenleft.createTransformation().withVisibility(visibility = false),
+                shurikenright.createTransformation().withVisibility(visibility = false)
+            ),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("greninja", "ground_walk")
+            )
+        )
+
+        float = registerPose(
+            poseName = "swim_idle",
+            poseTypes = setOf(PoseType.FLOAT, PoseType.HOVER),
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            condition = { !it.isBattling },
+            transformedParts = arrayOf(
+                shurikenleft.createTransformation().withVisibility(visibility = false),
+                shurikenright.createTransformation().withVisibility(visibility = false)
+            ),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("greninja", "water_idle")
+            )
+        )
+
+        swim = registerPose(
+            poseName = "swim",
+            poseTypes = setOf(PoseType.SWIM, PoseType.FLY),
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            condition = { !it.isBattling },
+            transformedParts = arrayOf(
+                shurikenleft.createTransformation().withVisibility(visibility = false),
+                shurikenright.createTransformation().withVisibility(visibility = false)
+            ),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("greninja", "water_swim")
+            )
+        )
+
+        battleidle = registerPose(
+            poseName = "battle_idle",
+            poseTypes = PoseType.STATIONARY_POSES,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            condition = { it.isBattling },
+            transformedParts = arrayOf(
+                shurikenleft.createTransformation().withVisibility(visibility = false),
+                shurikenright.createTransformation().withVisibility(visibility = false)
+            ),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("greninja", "battle_idle")
+            )
+        )
+    }
+
+    override fun getFaintAnimation(state: PosableState) = if (state.isPosedIn(standing, walk, battleidle, swim, float, sleep)) bedrockStateful("greninja", "faint") else null
 }

@@ -1,58 +1,51 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.ModelPartExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.addRotation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BipedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Bone
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.X_AXIS
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext
 import net.minecraft.util.Mth
-import net.minecraft.world.entity.Entity
 
-public class BipedWalkAnimation<T extends Entity>(frame: ModelFrame,
-   periodMultiplier: Float = 0.6662F,
-   amplitudeMultiplier: Float = 1.4F,
-   leftLeg: Bone?,
-   rightLeg: Bone?
-) : StatelessAnimation(frame) {
-   public final val amplitudeMultiplier: Float
-   public final val leftLeg: Bone?
-   public final val periodMultiplier: Float
-   public final val rightLeg: Bone?
-   public open val targetFrame: Class<ModelFrame>
+/**
+ * A biped animation that will have zero-rotations on all legs at
+ * zero and otherwise does simple predictable walking like Minecraft
+ * quadrupeds.
+ *
+ * @author Deltric
+ * @since December 21st, 2021
+ */
+class BipedWalkAnimation(
+    /** The multiplier to apply to the cosine movement of the legs. The smaller this value, the quicker the legs move. */
+    val periodMultiplier: Float = 0.6662F,
+    /** The multiplier to apply to the stride of the entity. The larger this is, the further the legs move. */
+    val amplitudeMultiplier: Float = 1.4F,
+    val leftLeg: Bone?,
+    val rightLeg: Bone?
+) : PoseAnimation() {
+    constructor(
+        frame: BipedFrame,
+        periodMultiplier: Float = 0.6662F,
+        amplitudeMultiplier: Float = 1.4F
+    ): this(
+        periodMultiplier = periodMultiplier,
+        amplitudeMultiplier = amplitudeMultiplier,
+        leftLeg = frame.leftLeg,
+        rightLeg = frame.rightLeg
+    )
 
-   init {
-      this.periodMultiplier = periodMultiplier;
-      this.amplitudeMultiplier = amplitudeMultiplier;
-      this.leftLeg = leftLeg;
-      this.rightLeg = rightLeg;
-      this.targetFrame = ModelFrame::class.java;
-   }
-
-   public constructor(frame: BipedFrame, periodMultiplier: Float = 0.6662F, amplitudeMultiplier: Float = 1.4F) : this(
-         frame, periodMultiplier, amplitudeMultiplier, frame.getLeftLeg() as Bone, frame.getRightLeg() as Bone
-      )
-   protected override fun setAngles(
-      entity: Any?,
-      model: PoseableEntityModel<Any>,
-      state: PoseableEntityState<Any>?,
-      limbSwing: Float,
-      limbSwingAmount: Float,
-      ageInTicks: Float,
-      headYaw: Float,
-      headPitch: Float,
-      intensity: Float
-   ) {
-      if (this.rightLeg != null) {
-         ModelPartExtensionsKt.addRotation(
-            this.rightLeg, 0, Mth.m_14089_(limbSwing * this.periodMultiplier + (float) Math.PI) * limbSwingAmount * this.amplitudeMultiplier * intensity
-         );
-      }
-
-      if (this.leftLeg != null) {
-         ModelPartExtensionsKt.addRotation(
-            this.leftLeg, 0, Mth.m_14089_(limbSwing * this.periodMultiplier) * limbSwingAmount * this.amplitudeMultiplier * intensity
-         );
-      }
-   }
+    override fun setupAnim(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {
+        rightLeg?.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier + Math.PI.toFloat()) * limbSwingAmount * amplitudeMultiplier * intensity)
+        leftLeg?.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier) * limbSwingAmount * amplitudeMultiplier * intensity)
+    }
 }

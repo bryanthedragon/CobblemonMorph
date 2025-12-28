@@ -1,11 +1,17 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.animations
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ActiveClientBattlePokemon
 
-public interface TileAnimation {
-   public abstract operator fun invoke(activeBattlePokemon: ActiveClientBattlePokemon, deltaTicks: Float): Boolean {
-   }
-
-   public abstract fun shouldHoldUntilNextAnimation(): Boolean {
-   }
+interface TileAnimation {
+    /** Returns true if the animation is done. */
+    operator fun invoke(activeBattlePokemon: ActiveClientBattlePokemon, deltaTicks: Float): Boolean
+    fun shouldHoldUntilNextAnimation(): Boolean
 }

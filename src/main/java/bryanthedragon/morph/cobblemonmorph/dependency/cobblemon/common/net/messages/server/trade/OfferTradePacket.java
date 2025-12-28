@@ -1,58 +1,37 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.OfferTradeHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class OfferTradePacket(offeredPlayerId: UUID) : NetworkPacket<OfferTradePacket> {
-   public open val id: ResourceLocation
-   public final val offeredPlayerId: UUID
+/**
+ * Packet fired when a player makes an interaction request to trade with another player.
+ *
+ * Handled by [OfferTradeHandler].
+ *
+ * @param targetedEntityId The ID of the player who's the target of this interaction request.
+ *
+ * @author Hiroku
+ * @since March 12th, 2023
+ */
+class OfferTradePacket(val offeredPlayerId: UUID) : NetworkPacket<OfferTradePacket> {
+    companion object {
+        val ID = cobblemonResource("offer_trade")
+        fun decode(buffer: RegistryFriendlyByteBuf) = OfferTradePacket(buffer.readUUID())
+    }
+    override val id = ID
 
-   init {
-      this.offeredPlayerId = offeredPlayerId;
-      this.id = ID;
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.offeredPlayerId);
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): OfferTradePacket {
-         val var10002: UUID = buffer.m_130259_();
-         return new OfferTradePacket(var10002);
-      }
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(offeredPlayerId)
+    }
 }

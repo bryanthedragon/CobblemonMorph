@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.starter
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
@@ -5,13 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.SelectStarterPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-
-public object SelectStarterPacketHandler : ServerNetworkPacketHandler<SelectStarterPacket> {
-   public open fun handle(packet: SelectStarterPacket, server: MinecraftServer, player: ServerPlayer) {
-      Cobblemon.INSTANCE.getStarterHandler().chooseStarter(player, packet.getCategoryName(), packet.getSelected());
-   }
-
-   fun handleOnNettyThread(packet: SelectStarterPacket, server: MinecraftServer, player: ServerPlayer) {
-      ServerNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet, server, player);
-   }
+final class SelectStarterPacketHandler : ServerNetworkPacketHandler<SelectStarterPacket> {
+    override fun handle(packet: SelectStarterPacket, server: MinecraftServer, player: ServerPlayer) {
+        Cobblemon.starterHandler.chooseStarter(player, packet.categoryName, packet.selected)
+    }
 }

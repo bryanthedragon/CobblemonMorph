@@ -1,247 +1,185 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Observable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSortMode
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Transform
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.InvalidSpeciesException
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.StoreCoordinates
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.StorePosition
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.SetPCBoxPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import com.google.gson.JsonElement
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.SetPCBoxPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import com.google.gson.JsonObject
-import java.util.ArrayList;
-import java.util.LinkedHashMap
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
-import kotlin.jvm.internal.markers.KMappedMarker
+import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-import org.jetbrains.annotations.NotNull
 
-@SourceDebugExtension(["SMAP\nPCBox.kt\nKotlin\n*S Kotlin\n*F\n+ 1 PCBox.kt\ncom/cobblemon/mod/common/api/storage/pc/PCBox\n+ 2 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n+ 3 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,150:1\n13644#2,3:151\n766#3:154\n857#3,2:155\n1271#3,2:157\n1285#3,4:159\n*S KotlinDebug\n*F\n+ 1 PCBox.kt\ncom/cobblemon/mod/common/api/storage/pc/PCBox\n*L\n80#1:151,3\n149#1:154\n149#1:155,2\n149#1:157,2\n149#1:159,4\n*E\n"])
-public open class PCBox(pc: PCStore) : java.lang.Iterable<Pokemon>, KMappedMarker {
-   public final val boxChangeEmitter: SimpleObservable<Unit>
+/**
+ * A single box of a PC. The list of Pokémon is strictly sized at [POKEMON_PER_BOX] - 30.
+ * Any change to any contained Pokémon is emitted through the [boxChangeEmitter].
+ *
+ * @author Hiroku
+ * @since April 26th, 2022
+ */
+open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
+    override fun iterator() = pokemon.filterNotNull().iterator()
 
-   public final val boxNumber: Int
-      public final get() {
-         return this.pc.getBoxes().indexOf(this);
-      }
+    val boxChangeEmitter = SimpleObservable<Unit>()
 
+    protected var emit = true
 
-   protected final var emit: Boolean
-   public final val pc: PCStore
-   protected final val pokemon: Array<Pokemon?>
+    var name : String? = null
+        set(value) {
+            field = value
+            if (emit) boxChangeEmitter.emit(Unit)
+        }
 
-   public final val unoccupiedSlots: Int
-      public final get() {
-         return 30 - ArraysKt.filterNotNull(this.pokemon).size();
-      }
+    var wallpaper : ResourceLocation = cobblemonResource("textures/gui/pc/pc_screen_overlay.png")
+        set(value) {
+            field = value
+            if (emit) boxChangeEmitter.emit(Unit)
+        }
 
+    protected val pokemon = Array<Pokemon?>(POKEMON_PER_BOX) { null }
 
-   init {
-      this.pc = pc;
-      this.boxChangeEmitter = new SimpleObservable<>();
-      this.emit = true;
-      var var2: Int = 0;
+    open operator fun get(index: Int): Pokemon? {
+        return if (index in 0 until POKEMON_PER_BOX) {
+            pokemon[index]
+        } else {
+            null
+        }
+    }
 
-      val var3: Array<Pokemon>;
-      for (var3 = new Pokemon[30]; var2 < 30; var2++) {
-         var3[var2] = null;
-      }
-
-      this.pokemon = var3;
-   }
-
-   public override operator fun iterator(): Iterator<Pokemon> {
-      return ArraysKt.filterNotNull(this.pokemon).iterator();
-   }
-
-   public open operator fun get(index: Int): Pokemon? {
-      return if (0 <= index && index < 30) this.pokemon[index] else null;
-   }
-
-   public open operator fun set(index: Int, pokemon: Pokemon?) {
-      if (0 <= index && index < 30) {
-         this.pokemon[index] = pokemon;
-         label34:
-         if (pokemon != null) {
-            val previousCoordinates: StoreCoordinates = pokemon.getStoreCoordinates().get();
-            val position: StorePosition = if (previousCoordinates != null) previousCoordinates.getPosition() else null;
-            pokemon.getStoreCoordinates().set(new StoreCoordinates<>(this.pc, new PCPosition(this.getBoxNumber(), index)));
-            if ((if (previousCoordinates != null) previousCoordinates.getStore() else null) == this) {
-               if ((position as PCPosition).getBox() == this.getBoxNumber()) {
-                  break label34;
-               }
+    open operator fun set(index: Int, pokemon: Pokemon?) {
+        if (index in 0 until POKEMON_PER_BOX) {
+            this.pokemon[index] = pokemon
+            pokemon?.storeCoordinates?.set(StoreCoordinates(pc, PCPosition(boxNumber, index)))
+            if (emit) {
+                boxChangeEmitter.emit(Unit)
             }
+        }
+    }
 
-            this.trackPokemon(pokemon);
-         }
+    val boxNumber: Int
+        get() = this.pc.boxes.indexOf(this)
 
-         if (this.emit) {
-            this.boxChangeEmitter.emit(Unit.INSTANCE);
-         }
-      }
-   }
+    val unoccupiedSlots: Int
+        get() = POKEMON_PER_BOX - this.pokemon.filterNotNull().count()
 
-   public fun getFirstAvailablePosition(): PCPosition? {
-      for (int index = 0; index < 30; index++) {
-         if (this.pokemon[index] == null) {
-            return new PCPosition(this.getBoxNumber(), index);
-         }
-      }
-
-      return null;
-   }
-
-   public open fun initialize() {
-      val box: Int = this.getBoxNumber();
-      var `index$iv`: Int = 0;
-
-      val `$this$forEachIndexed$iv`: Any;
-      for (Object item$iv : $this$forEachIndexed$iv) {
-         val slot: Int = `index$iv`++;
-         if (`item$iv` != null) {
-            ((Pokemon)`item$iv`).getStoreCoordinates().set(new StoreCoordinates<>(this.pc, new PCPosition(box, slot)));
-            this.trackPokemon((Pokemon)`item$iv`);
-         }
-      }
-
-      Observable.DefaultImpls.subscribe$default(this.boxChangeEmitter, null, (new Function1<Unit, Unit>(this) {
-         {
-            super(1);
-            this.this$0 = `$receiver`;
-         }
-
-         public final void invoke(@NotNull Unit it) {
-            this.this$0.getPc().getPcChangeObservable().emit(Unit.INSTANCE);
-         }
-      }) as Function1, 1, null);
-   }
-
-   public fun trackPokemon(pokemon: Pokemon) {
-      Observable.DefaultImpls.subscribe$default(
-         pokemon.getChangeObservable().pipe(Observable.Companion.stopAfter((new Function1<Pokemon, java.lang.Boolean>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
+    fun getFirstAvailablePosition(): PCPosition? {
+        for (index in 0 until POKEMON_PER_BOX) {
+            if (this.pokemon[index] == null) {
+                return PCPosition(boxNumber, index)
             }
+        }
+        return null
+    }
 
-            @NotNull
-            public final java.lang.Boolean invoke(@NotNull Pokemon it) {
-               val var10000: StoreCoordinates = it.getStoreCoordinates().get();
-               if (var10000 == null) {
-                  return true;
-               } else {
-                  if (var10000.getStore() == this.this$0) {
-                     val var3: StorePosition = var10000.getPosition();
-                     if ((var3 as PCPosition).getBox() == this.this$0.getBoxNumber()) {
-                        return false;
-                     }
-                  }
-
-                  return true;
-               }
+    open fun initialize() {
+        val box = boxNumber
+        pokemon.forEachIndexed { slot, pokemon ->
+            if (pokemon != null) {
+                val position = PCPosition(box, slot)
+                pokemon.storeCoordinates.set(StoreCoordinates(pc, position))
             }
-         }) as (Pokemon?) -> java.lang.Boolean) as Transform<Pokemon, Pokemon>), null, (new Function1<Pokemon, Unit>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
+        }
+        boxChangeEmitter.subscribe { pc.pcChangeObservable.emit(Unit) }
+    }
+
+    fun sort(sortMode: PokemonSortMode, descending: Boolean) {
+        pokemon.sortWith(sortMode.comparator(descending))
+        pokemon.forEachIndexed { slot, pokemon ->
+            pokemon?.storeCoordinates?.set(StoreCoordinates(pc, PCPosition(boxNumber, slot)))
+        }
+        boxChangeEmitter.emit(Unit)
+    }
+
+    fun sendTo(player: ServerPlayer) {
+        SetPCBoxPacket(this).sendToPlayer(player)
+    }
+
+    open fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag {
+        name?.let {
+            nbt.putString(DataKeys.STORE_BOX_NAME, it)
+        }
+        nbt.putString(DataKeys.STORE_BOX_WALLPAPER, wallpaper.toString())
+        for (slot in 0 until POKEMON_PER_BOX) {
+            val pokemon = pokemon[slot] ?: continue
+            nbt.put(DataKeys.STORE_SLOT + slot, pokemon.saveToNBT(registryAccess))
+        }
+        return nbt
+    }
+
+    open fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject {
+        name?.let {
+            json.addProperty(DataKeys.STORE_BOX_NAME, it)
+        }
+        json.addProperty(DataKeys.STORE_BOX_WALLPAPER, wallpaper.toString())
+        for (slot in 0 until POKEMON_PER_BOX) {
+            val pokemon = pokemon[slot] ?: continue
+            json.add(DataKeys.STORE_SLOT + slot, pokemon.saveToJSON(registryAccess))
+        }
+        return json
+    }
+
+
+    open fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PCBox {
+        if (json.has(DataKeys.STORE_BOX_NAME)) {
+            name = json.getAsJsonPrimitive(DataKeys.STORE_BOX_NAME).asString
+        }
+
+        if (json.has(DataKeys.STORE_BOX_WALLPAPER)) {
+            wallpaper = ResourceLocation.parse(json.getAsJsonPrimitive(DataKeys.STORE_BOX_WALLPAPER).asString)
+        }
+
+        for (slot in 0 until POKEMON_PER_BOX) {
+            if (json.has(DataKeys.STORE_SLOT + slot)) {
+                val pokemonJson = json.getAsJsonObject(DataKeys.STORE_SLOT + slot)
+                try {
+                    pokemon[slot] = Pokemon.loadFromJSON(registryAccess, pokemonJson)
+                } catch (_: InvalidSpeciesException) {
+                    pc.handleInvalidSpeciesJSON(pokemonJson)
+                } catch (e: Exception) {
+                    LOGGER.error("Failed to read a pokémon: $pokemonJson", e)
+                }
             }
+        }
+        return this
+    }
 
-            public final void invoke(@NotNull Pokemon it) {
-               this.this$0.getBoxChangeEmitter().emit(Unit.INSTANCE);
+    open fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PCBox {
+        if (nbt.contains(DataKeys.STORE_BOX_NAME)) {
+            name = nbt.getString(DataKeys.STORE_BOX_NAME)
+        }
+
+        if (nbt.contains(DataKeys.STORE_BOX_WALLPAPER)) {
+            wallpaper = ResourceLocation.parse(nbt.getString(DataKeys.STORE_BOX_WALLPAPER))
+        }
+
+        for (slot in 0 until POKEMON_PER_BOX) {
+            if (nbt.contains(DataKeys.STORE_SLOT + slot)) {
+                val pokemonNBT = nbt.getCompound(DataKeys.STORE_SLOT + slot)
+                try {
+                    pokemon[slot] = Pokemon.loadFromNBT(registryAccess, pokemonNBT)
+                } catch (_: InvalidSpeciesException) {
+                    pc.handleInvalidSpeciesNBT(pokemonNBT)
+                } catch (e: Exception) {
+                    LOGGER.error("Failed to read a pokémon: $pokemonNBT", e)
+                }
             }
-         }) as Function1, 1, null
-      );
-   }
+        }
+        return this
+    }
 
-   public fun sendTo(player: ServerPlayer) {
-      new SetPCBoxPokemonPacket(this).sendToPlayer(player);
-   }
-
-   public open fun saveToNBT(nbt: CompoundTag): CompoundTag {
-      for (int slot = 0; slot < 30; slot++) {
-         val var10000: Pokemon = this.pokemon[slot];
-         if (this.pokemon[slot] != null) {
-            nbt.m_128365_("Slot$slot", var10000.saveToNBT(new CompoundTag()) as Tag);
-         }
-      }
-
-      return nbt;
-   }
-
-   public open fun saveToJSON(json: JsonObject): JsonObject {
-      for (int slot = 0; slot < 30; slot++) {
-         val var10000: Pokemon = this.pokemon[slot];
-         if (this.pokemon[slot] != null) {
-            json.add("Slot$slot", var10000.saveToJSON(new JsonObject()) as JsonElement);
-         }
-      }
-
-      return json;
-   }
-
-   public open fun loadFromJSON(json: JsonObject): PCBox {
-      for (int slot = 0; slot < 30; slot++) {
-         if (json.has("Slot$slot")) {
-            val pokemonJson: JsonObject = json.getAsJsonObject("Slot$slot");
-
-            try {
-               val var6: Array<Pokemon> = this.pokemon;
-               val var10002: Pokemon = new Pokemon();
-               var6[slot] = var10002.loadFromJSON(pokemonJson);
-            } catch (var5: InvalidSpeciesException) {
-               val var10000: PCStore = this.pc;
-               var10000.handleInvalidSpeciesJSON(pokemonJson);
-            }
-         }
-      }
-
-      return this;
-   }
-
-   public open fun loadFromNBT(nbt: CompoundTag): PCBox {
-      for (int slot = 0; slot < 30; slot++) {
-         if (nbt.m_128441_("Slot$slot")) {
-            val pokemonNBT: CompoundTag = nbt.m_128469_("Slot$slot");
-
-            try {
-               val var6: Array<Pokemon> = this.pokemon;
-               val var10002: Pokemon = new Pokemon();
-               var6[slot] = var10002.loadFromNBT(pokemonNBT);
-            } catch (var5: InvalidSpeciesException) {
-               val var10000: PCStore = this.pc;
-               var10000.handleInvalidSpeciesNBT(pokemonNBT);
-            }
-         }
-      }
-
-      return this;
-   }
-
-   public fun getNonEmptySlots(): Map<Int, Pokemon> {
-      var `$this$associateWith$iv`: java.lang.Iterable = RangesKt.until(0, 30) as java.lang.Iterable;
-      val `$this$associateWithTo$iv$iv`: java.util.Collection = new ArrayList();
-
-      for (Object element$iv$iv : $this$filter$iv) {
-         if (this.get((`element$iv$iv` as java.lang.Number).intValue()) != null) {
-            `$this$associateWithTo$iv$iv`.add(`element$iv$iv`);
-         }
-      }
-
-      `$this$associateWith$iv` = `$this$associateWithTo$iv$iv` as java.util.List;
-      val `result$iv`: LinkedHashMap = new LinkedHashMap(
-         RangesKt.coerceAtLeast(MapsKt.mapCapacity(CollectionsKt.collectionSizeOrDefault(`$this$associateWithTo$iv$iv` as java.util.List, 10)), 16)
-      );
-
-      for (Object element$iv$ivx : $this$filter$iv) {
-         val var10000: java.util.Map = `result$iv`;
-         val var20: Pokemon = this.get((`element$iv$ivx` as java.lang.Number).intValue());
-         var10000.put(`element$iv$ivx`, var20);
-      }
-
-      return `result$iv`;
-   }
+    open fun getNonEmptySlots() = (0 until POKEMON_PER_BOX).filter { get(it) != null }.associateWith { get(it)!! }
+    open fun getNonEmptySlotsForPackets() = getNonEmptySlots().mapValues { (_, pokemon) -> { _: RegistryAccess -> pokemon } }
 }

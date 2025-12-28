@@ -1,140 +1,275 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 
-import java.util.ArrayList;
-import java.util.NoSuchElementException
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 
-@SourceDebugExtension(["SMAP\nElementalTypes.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ElementalTypes.kt\ncom/cobblemon/mod/common/api/types/ElementalTypes\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,175:1\n288#2,2:176\n223#2,2:178\n*S KotlinDebug\n*F\n+ 1 ElementalTypes.kt\ncom/cobblemon/mod/common/api/types/ElementalTypes\n*L\n164#1:176,2\n168#1:178,2\n*E\n"])
-public object ElementalTypes {
-   public final val BUG: ElementalType
-   public final val DARK: ElementalType
-   public final val DRAGON: ElementalType
-   public final val ELECTRIC: ElementalType
-   public final val FAIRY: ElementalType
-   public final val FIGHTING: ElementalType
-   public final val FIRE: ElementalType
-   public final val FLYING: ElementalType
-   public final val GHOST: ElementalType
-   public final val GRASS: ElementalType
-   public final val GROUND: ElementalType
-   public final val ICE: ElementalType
-   public final val NORMAL: ElementalType
-   public final val POISON: ElementalType
-   public final val PSYCHIC: ElementalType
-   public final val ROCK: ElementalType
-   public final val STEEL: ElementalType
-   public final val WATER: ElementalType
-   private final val allTypes: MutableList<ElementalType> = (new ArrayList()) as java.util.List
+/**
+ * Registry for all known ElementalTypes
+ */final class ElementalTypes {
 
-   public fun register(name: String, displayName: MutableComponent, hue: Int, textureXMultiplier: Int): ElementalType {
-      val var5: ElementalType = new ElementalType(name, displayName, hue, textureXMultiplier, null, 16, null);
-      allTypes.add(var5);
-      return var5;
-   }
+    private val allTypes = mutableListOf<ElementalType>()
 
-   public fun register(elementalType: ElementalType): ElementalType {
-      allTypes.add(elementalType);
-      return elementalType;
-   }
+    @JvmField
+    val NORMAL = register(
+        name = "Normal",
+        displayName = Component.translatable("cobblemon.type.normal"),
+        hue = 0xE8E8DA,
+        textureXMultiplier = 0
+    )
 
-   public fun get(name: String): ElementalType? {
-      val var4: java.util.Iterator = allTypes.iterator();
+    @JvmField
+    val FIRE = register(
+        name = "Fire",
+        displayName = Component.translatable("cobblemon.type.fire"),
+        hue = 0xFF6E21,
+        textureXMultiplier = 1
+    )
 
-      var var10000: Any;
-      while (true) {
-         if (var4.hasNext()) {
-            val `element$iv`: Any = var4.next();
-            if (!StringsKt.equals((`element$iv` as ElementalType).getName(), name, true)) {
-               continue;
-            }
+    @JvmField
+    val WATER = register(
+        name = "Water",
+        displayName = Component.translatable("cobblemon.type.water"),
+        hue = 0x3FA5FF,
+        textureXMultiplier = 2
+    )
 
-            var10000 = `element$iv`;
-            break;
-         }
+    @JvmField
+    val GRASS = register(
+        name = "Grass",
+        displayName = Component.translatable("cobblemon.type.grass"),
+        hue = 0x62D14F,
+        textureXMultiplier = 3
+    )
 
-         var10000 = null;
-         break;
-      }
+    @JvmField
+    val ELECTRIC = register(
+        name = "Electric",
+        displayName = Component.translatable("cobblemon.type.electric"),
+        hue = 0xFFD314,
+        textureXMultiplier = 4
+    )
 
-      return var10000 as ElementalType;
-   }
+    @JvmField
+    val ICE = register(
+        name = "Ice",
+        displayName = Component.translatable("cobblemon.type.ice"),
+        hue = 0x54F2F2,
+        textureXMultiplier = 5
+    )
 
-   public fun getOrException(name: String): ElementalType {
-      val `$this$first$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$first$iv) {
-         if (StringsKt.equals((`element$iv` as ElementalType).getName(), name, true)) {
-            return `element$iv` as ElementalType;
-         }
-      }
+    @JvmField
+    val FIGHTING = register(
+        name = "Fighting",
+        displayName = Component.translatable("cobblemon.type.fighting"),
+        hue = 0xEF565D,
+        textureXMultiplier = 6
+    )
 
-      throw new NoSuchElementException("Collection contains no element matching the predicate.");
-   }
+    @JvmField
+    val POISON = register(
+        name = "Poison",
+        displayName = Component.translatable("cobblemon.type.poison"),
+        hue = 0xD651FF,
+        textureXMultiplier = 7
+    )
 
-   public fun count(): Int {
-      return allTypes.size();
-   }
+    @JvmField
+    val GROUND = register(
+        name = "Ground",
+        displayName = Component.translatable("cobblemon.type.ground"),
+        hue = 0xF4A453,
+        textureXMultiplier = 8
+    )
 
-   public fun all(): List<ElementalType> {
-      return CollectionsKt.toList(allTypes);
-   }
+    @JvmField
+    val FLYING = register(
+        name = "Flying",
+        displayName = Component.translatable("cobblemon.type.flying"),
+        hue = 0xB8B2FF,
+        textureXMultiplier = 9
+    )
 
-   @JvmStatic
-   fun {
-      var var10000: ElementalTypes = INSTANCE;
-      var var10002: MutableComponent = Component.m_237115_("cobblemon.type.normal");
-      NORMAL = var10000.register("normal", var10002, 14540239, 0);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.fire");
-      FIRE = var10000.register("fire", var10002, 15031346, 1);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.water");
-      WATER = var10000.register("water", var10002, 4889576, 2);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.grass");
-      GRASS = var10000.register("grass", var10002, 5094460, 3);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.electric");
-      ELECTRIC = var10000.register("electric", var10002, 15716648, 4);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.ice");
-      ICE = var10000.register("ice", var10002, 7062511, 5);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.fighting");
-      FIGHTING = var10000.register("fighting", var10002, 12864604, 6);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.poison");
-      POISON = var10000.register("poison", var10002, 10636248, 7);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.ground");
-      GROUND = var10000.register("ground", var10002, 14195024, 8);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.flying");
-      FLYING = var10000.register("flying", var10002, 12370431, 9);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.psychic");
-      PSYCHIC = var10000.register("psychic", var10002, 14183126, 10);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.bug");
-      BUG = var10000.register("bug", var10002, 10668081, 11);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.rock");
-      ROCK = var10000.register("rock", var10002, 11179622, 12);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.ghost");
-      GHOST = var10000.register("ghost", var10002, 9794277, 13);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.dragon");
-      DRAGON = var10000.register("dragon", var10002, 5463528, 14);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.dark");
-      DARK = var10000.register("dark", var10002, 6057138, 15);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.steel");
-      STEEL = var10000.register("steel", var10002, 12831968, 16);
-      var10000 = INSTANCE;
-      var10002 = Component.m_237115_("cobblemon.type.fairy");
-      FAIRY = var10000.register("fairy", var10002, 15364734, 17);
-   }
+    @JvmField
+    val PSYCHIC = register(
+        name = "Psychic",
+        displayName = Component.translatable("cobblemon.type.psychic"),
+        hue = 0xFF5E9E,
+        textureXMultiplier = 10
+    )
+
+    @JvmField
+    val BUG = register(
+        name = "Bug",
+        displayName = Component.translatable("cobblemon.type.bug"),
+        hue = 0xD3D319,
+        textureXMultiplier = 11
+    )
+
+    @JvmField
+    val ROCK = register(
+        name = "Rock",
+        displayName = Component.translatable("cobblemon.type.rock"),
+        hue = 0xB7A16E,
+        textureXMultiplier = 12
+    )
+
+    @JvmField
+    val GHOST = register(
+        name = "Ghost",
+        displayName = Component.translatable("cobblemon.type.ghost"),
+        hue = 0x9C80F7,
+        textureXMultiplier = 13
+    )
+
+    @JvmField
+    val DRAGON = register(
+        name = "Dragon",
+        displayName = Component.translatable("cobblemon.type.dragon"),
+        hue = 0x7580FF,
+        textureXMultiplier = 14
+    )
+
+    @JvmField
+    val DARK = register(
+        name = "Dark",
+        displayName = Component.translatable("cobblemon.type.dark"),
+        hue = 0x587DA0,
+        textureXMultiplier = 15
+    )
+
+    @JvmField
+    val STEEL = register(
+        name = "Steel",
+        displayName = Component.translatable("cobblemon.type.steel"),
+        hue = 0xABD1F4,
+        textureXMultiplier = 16
+    )
+
+    @JvmField
+    val FAIRY = register(
+        name = "Fairy",
+        displayName = Component.translatable("cobblemon.type.fairy"),
+        hue = 0xFF7FE5,
+        textureXMultiplier = 17
+    )
+
+    @JvmStatic
+    fun register(name: String, displayName: MutableComponent, hue: Int, textureXMultiplier: Int): ElementalType {
+        return ElementalType(
+            name = name,
+            displayName = displayName,
+            hue = hue,
+            textureXMultiplier = textureXMultiplier
+        ).also {
+            allTypes.add(it)
+        }
+    }
+
+    @JvmStatic
+    fun register(elementalType: ElementalType): ElementalType {
+        allTypes.add(elementalType)
+        return elementalType
+    }
+
+    @JvmStatic
+    fun get(name: String): ElementalType? {
+        return allTypes.firstOrNull { type -> type.name.equals(name, ignoreCase = true) }
+    }
+
+    @JvmStatic
+    fun getOrException(name: String): ElementalType {
+        return allTypes.first { type -> type.name.equals(name, ignoreCase = true) }
+    }
+
+    @JvmStatic
+    fun count() = allTypes.size
+
+    @JvmStatic
+    fun all() = this.allTypes.toList()
+
+    @JvmStatic
+    fun getRandomType(): ElementalType = this.allTypes.random()
+
+    /**
+     * Backwards compatibility getters
+     */
+    @JvmName("getNORMAL")
+    @Deprecated("Use ElementalTypes.NORMAL, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getNORMAL() = NORMAL
+
+    @JvmName("getFIRE")
+    @Deprecated("Use ElementalTypes.FIRE, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getFIRE() = FIRE
+
+    @JvmName("getWATER")
+    @Deprecated("Use ElementalTypes.WATER, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getWATER() = WATER
+
+    @JvmName("getGRASS")
+    @Deprecated("Use ElementalTypes.GRASS, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getGRASS() = GRASS
+
+    @JvmName("getELECTRIC")
+    @Deprecated("Use ElementalTypes.ELECTRIC, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getELECTRIC() = ELECTRIC
+
+    @JvmName("getICE")
+    @Deprecated("Use ElementalTypes.ICE, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getICE() = ICE
+
+    @JvmName("getFIGHTING")
+    @Deprecated("Use ElementalTypes.FIGHTING, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getFIGHTING() = FIGHTING
+
+    @JvmName("getPOISON")
+    @Deprecated("Use ElementalTypes.POISON, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getPOISON() = POISON
+
+    @JvmName("getGROUND")
+    @Deprecated("Use ElementalTypes.GROUND, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getGROUND() = GROUND
+
+    @JvmName("getFLYING")
+    @Deprecated("Use ElementalTypes.FLYING, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getFLYING() = FLYING
+
+    @JvmName("getPSYCHIC")
+    @Deprecated("Use ElementalTypes.PSYCHIC, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getPSYCHIC() = PSYCHIC
+
+    @JvmName("getBUG")
+    @Deprecated("Use ElementalTypes.BUG, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getBUG() = BUG
+
+    @JvmName("getROCK")
+    @Deprecated("Use ElementalTypes.ROCK, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getROCK() = ROCK
+
+    @JvmName("getGHOST")
+    @Deprecated("Use ElementalTypes.GHOST, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getGHOST() = GHOST
+
+    @JvmName("getDRAGON")
+    @Deprecated("Use ElementalTypes.DRAGON, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getDRAGON() = DRAGON
+
+    @JvmName("getDARK")
+    @Deprecated("Use ElementalTypes.DARK, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getDARK() = DARK
+
+    @JvmName("getSTEEL")
+    @Deprecated("Use ElementalTypes.STEEL, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getSTEEL() = STEEL
+
+    @JvmName("getFAIRY")
+    @Deprecated("Use ElementalTypes.FAIRY, provided for backwards compatibility until Cobblemon 1.8.")
+    fun getFAIRY() = FAIRY
 }

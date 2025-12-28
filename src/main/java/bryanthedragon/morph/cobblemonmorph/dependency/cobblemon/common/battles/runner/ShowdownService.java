@@ -1,52 +1,41 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.graal.GraalShowdownService
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.socket.SocketShowdownService
 import com.google.gson.JsonArray
 import java.util.UUID
 
-public interface ShowdownService {
-   public abstract fun openConnection() {
-   }
+/**
+ * Mediator service for communicating between the Cobblemon Minecraft mod and Cobblemon showdown service.
+ *
+ * All outgoing calls to showdown should be done through this layer to decouple the mod from a specific implementation.
+ * To get an instance of the service, use the singleton provided via `ShowdownService.get()`
+ *
+ * @since February 27th, 2023
+ * @author landonjw
+ */
+interface ShowdownService {
+    fun openConnection()
+    fun closeConnection()
+    fun startBattle(battle: PokemonBattle, messages: Array<String>)
+    fun send(battleId: UUID, messages: Array<String>)
+    fun getRegistryData(type: String): JsonArray
+    fun sendRegistryData(data: Map<String, String>, type: String)
+    fun sendRegistryEntry(data: String, type: String)
+    fun resetRegistryData(type: String)
+    fun resetAllRegistries()
+    fun indicateSpeciesInitialized() {}
 
-   public abstract fun closeConnection() {
-   }
-
-   public abstract fun startBattle(battle: PokemonBattle, messages: Array<String>) {
-   }
-
-   public abstract fun send(battleId: UUID, messages: Array<String>) {
-   }
-
-   public abstract fun getAbilityIds(): JsonArray {
-   }
-
-   public abstract fun getMoves(): JsonArray {
-   }
-
-   public abstract fun getItemIds(): JsonArray {
-   }
-
-   public abstract fun registerSpecies() {
-   }
-
-   public abstract fun registerBagItems() {
-   }
-
-   public open fun indicateSpeciesInitialized() {
-   }
-
-   public companion object {
-      public final val service: ShowdownService by LazyKt.lazy(<unrepresentable>.INSTANCE)
-         public final get() {
-            return service$delegate.getValue() as ShowdownService;
-         }
-
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun indicateSpeciesInitialized(`$this`: ShowdownService) {
-      }
-   }
+    companion object {
+        val service: ShowdownService by lazy { GraalShowdownService() }
+    }
 }

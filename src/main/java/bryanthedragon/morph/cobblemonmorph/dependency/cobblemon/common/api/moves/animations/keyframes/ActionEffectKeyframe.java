@@ -1,33 +1,34 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.keyframes
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
-import java.util.LinkedHashMap
 import java.util.concurrent.CompletableFuture
 
-public interface ActionEffectKeyframe {
-   public abstract fun play(context: ActionEffectContext): CompletableFuture<Unit> {
-   }
+/**
+ * A single component of an action effect. When played it must return a completable future that completes
+ * when the action this keyframe represents is finished. [interrupt] is provided for when something successfully
+ * interrupts the effect so that if any cancellation logic is necessary, it can be provided.
+ *
+ * @author Hiroku
+ * @since October 26th, 2023
+ */
+interface ActionEffectKeyframe {
+    companion object {
+        val types = mutableMapOf<String, Class<out ActionEffectKeyframe>>()
 
-   public open fun interrupt(context: ActionEffectContext) {
-   }
+        inline fun <reified T : ActionEffectKeyframe> register(type: String) {
+            types[type] = T::class.java
+        }
+    }
 
-   public open fun skip(): CompletableFuture<Unit> {
-   }
-
-   public companion object {
-      public final val types: MutableMap<String, Class<out ActionEffectKeyframe>> = (new LinkedHashMap()) as java.util.Map
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun interrupt(`$this`: ActionEffectKeyframe, context: ActionEffectContext) {
-      }
-
-      @JvmStatic
-      fun skip(`$this`: ActionEffectKeyframe): CompletableFuture<Unit> {
-         val var10000: CompletableFuture = CompletableFuture.completedFuture(Unit.INSTANCE);
-         return var10000;
-      }
-   }
+    fun play(context: ActionEffectContext): CompletableFuture<Unit>
+    fun interrupt(context: ActionEffectContext) {}
+    fun skip(): CompletableFuture<Unit> = CompletableFuture.completedFuture(Unit)
 }

@@ -1,69 +1,93 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.config
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnCause
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnerManager
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnPool
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt
-import java.util.UUID
-import kotlin.random.Random
-import kotlin.random.Random.Default
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.nextBetween
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.util.Mth
-import net.minecraft.world.level.Level
-import net.minecraft.world.phys.Vec3
+import net.minecraft.util.Mth.PI
+import net.minecraft.util.Mth.ceil
+import java.util.*
+import kotlin.math.atan
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.random.Random
 
-public class PlayerSpawner(player: ServerPlayer, spawns: SpawnPool, manager: SpawnerManager) : AreaSpawner {
-   public open var ticksBetweenSpawns: Float
-   public final val uuid: UUID
+/**
+ * A spawner that works around a single player. It will do basic tracking of a player's speed
+ * and project that into the future and spawn in that direction.
+ *
+ * @author Hiroku
+ * @since February 14th, 2022
+ */
+open class PlayerSpawner(
+    player: ServerPlayer,
+    spawnPool: SpawnPool
+) : BasicSpawner(
+    name = player.name.string,
+    spawnPool = spawnPool
+) {
+    val uuid: UUID = player.uuid
 
-   init {
-      val var10001: java.lang.String = player.m_7755_().getString();
-      super(var10001, spawns, manager);
-      val var4: UUID = player.m_20148_();
-      this.uuid = var4;
-      this.ticksBetweenSpawns = Cobblemon.INSTANCE.getConfig().getTicksBetweenSpawnAttempts();
-   }
+    fun getZoneInput(cause: SpawnCause): SpawningZoneInput? {
+        val player = uuid.getPlayer() ?: return null
+        val zoneDiameter = config.spawningZoneDiameter
+        val zoneHeight = config.spawningZoneHeight
 
-   public open fun getCauseEntity(): ServerPlayer? {
-      return PlayerExtensionsKt.getPlayer(this.uuid);
-   }
+        val rand = Random.Default
 
-   public override fun getArea(cause: SpawnCause): SpawningArea? {
-      val var10000: ServerPlayer = PlayerExtensionsKt.getPlayer(this.uuid);
-      if (var10000 == null) {
-         return null;
-      } else {
-         val sliceDiameter: Int = Cobblemon.INSTANCE.getConfig().getWorldSliceDiameter();
-         val sliceHeight: Int = Cobblemon.INSTANCE.getConfig().getWorldSliceHeight();
-         val rand: Default = Random.Default;
-         val center: Vec3 = var10000.m_20182_();
-         val r: Float = MiscUtilsKt.nextBetween(
-            rand as Random,
-            Cobblemon.INSTANCE.getConfig().getMinimumSliceDistanceFromPlayer(),
-            Cobblemon.INSTANCE.getConfig().getMaximumSliceDistanceFromPlayer()
-         );
-         val thetatemp: Double = Math.atan(var10000.m_20184_().f_82481_ / var10000.m_20184_().f_82479_)
-            + MiscUtilsKt.nextBetween(rand as Random, (float) (-Math.PI / 2), (float) (Math.PI / 2));
-         val theta: Double = if (var10000.m_20184_().m_165924_() < 0.1)
-            rand.nextDouble() * 2 * (float) Math.PI
-            else
-            (if (var10000.m_20184_().f_82479_ < 0.0) (float) Math.PI - thetatemp else thetatemp);
-         val x: Double = center.f_82479_ + r * Math.cos(theta);
-         val z: Double = center.f_82481_ + r * Math.sin(theta);
-         val var10003: Level = var10000.m_9236_();
-         return new SpawningArea(
-            cause,
-            var10003 as ServerLevel,
-            Mth.m_14165_(x - (double)((float)sliceDiameter / 2.0F)),
-            Mth.m_14165_(center.f_82480_ - (double)((float)sliceHeight / 2.0F)),
-            Mth.m_14165_(z - (double)((float)sliceDiameter / 2.0F)),
-            sliceDiameter,
-            sliceHeight,
-            sliceDiameter
-         );
-      }
-   }
+        val center = player.position()
+
+        val r = rand.nextBetween(config.minimumSpawningZoneDistanceFromPlayer, config.maximumSpawningZoneDistanceFromPlayer)
+        val thetatemp = atan(player.deltaMovement.z / player.deltaMovement.x) + rand.nextBetween(-PI/2, PI/2 )
+        val theta = if (player.deltaMovement.horizontalDistance() < 0.1) {
+            rand.nextDouble() * 2 * PI
+        } else if (player.deltaMovement.x < 0) {
+            PI - thetatemp
+        } else {
+            thetatemp
+        }
+
+        val x = center.x + r * cos(theta)
+        val z = center.z + r * sin(theta)
+
+        return SpawningZoneInput(
+            cause = cause,
+            world = player.level() as ServerLevel,
+            baseX = ceil(x - zoneDiameter / 2F),
+            baseY = ceil(center.y - zoneHeight / 2F),
+            baseZ = ceil(z - zoneDiameter / 2F),
+            length = zoneDiameter,
+            height = zoneHeight,
+            width = zoneDiameter
+        )
+    }
+
+    var active = true
+    var ticksUntilNextSpawn = 100F
+    var ticksBetweenSpawns: Float = config.ticksBetweenSpawnAttempts
+    var tickTimerMultiplier = 1F
+
+    fun tick() {
+        if (!active) {
+            return
+        }
+
+        ticksUntilNextSpawn -= tickTimerMultiplier
+        if (ticksUntilNextSpawn <= 0) {
+            val zoneInput = getZoneInput(cause = SpawnCause(spawner = this, entity = uuid.getPlayer()))
+            zoneInput?.let(::runForArea)
+            ticksUntilNextSpawn = ticksBetweenSpawns
+        }
+    }
 }

@@ -1,37 +1,39 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pasture
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.PrioritizedList
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.PokemonPastureBlockEntity
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.server.level.ServerPlayer
 
-@SourceDebugExtension(["SMAP\nPasturePermissionControllers.kt\nKotlin\n*S Kotlin\n*F\n+ 1 PasturePermissionControllers.kt\ncom/cobblemon/mod/common/api/pasture/PasturePermissionControllers\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,39:1\n1#2:40\n*E\n"])
-public object PasturePermissionControllers {
-   public final val controllers: PrioritizedList<PasturePermissionController> = new PrioritizedList()
+/**
+ * Contains a list of [PasturePermissionController]s to control what kind of access a player
+ * has with particular pasture blocks. Controllers are checked in order of priority according
+ * to the rules of [PrioritizedList]s, and the first non-null [PasturePermissions] returned
+ * for a given player and pasture block entity will be used.
+ *
+ * The fallback of [PasturePermissionControllers.permit] will return permissions that allow
+ * the player to pasture their own Pokémon, unpasture others', and will have as many slots
+ * to pasture Pokémon as slots exist on the block entity.
+ *
+ * @author Hiroku
+ * @since July 2nd, 2023
+ */final class PasturePermissionControllers {
+    val controllers = PrioritizedList<PasturePermissionController>()
 
-   public fun permit(player: ServerPlayer, pastureBlockEntity: PokemonPastureBlockEntity): PasturePermissions {
-      val var3: java.util.Iterator = controllers.iterator();
-
-      var var10000: PasturePermissions;
-      while (true) {
-         if (var3.hasNext()) {
-            val var6: PasturePermissions = (var3.next() as PasturePermissionController).permit(player, pastureBlockEntity);
-            if (var6 == null) {
-               continue;
-            }
-
-            var10000 = var6;
-            break;
-         }
-
-         var10000 = null;
-         break;
-      }
-
-      if (var10000 == null) {
-         var10000 = new PasturePermissions(true, true, pastureBlockEntity.getMaxTethered());
-      }
-
-      return var10000;
-   }
+    @JvmStatic
+    fun permit(player: ServerPlayer, pastureBlockEntity: PokemonPastureBlockEntity): PasturePermissions {
+        return controllers.firstNotNullOfOrNull { it.permit(player, pastureBlockEntity) }
+            ?: PasturePermissions(
+                canUnpastureOthers = true,
+                canPasture = true,
+                maxPokemon = pastureBlockEntity.getMaxTethered()
+            )
+    }
 }

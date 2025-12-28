@@ -1,53 +1,41 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.link
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
-import java.util.LinkedHashMap
 import java.util.UUID
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.server.level.ServerPlayer
-import org.jetbrains.annotations.NotNull
 
-@SourceDebugExtension(["SMAP\nPCLinkManager.kt\nKotlin\n*S Kotlin\n*F\n+ 1 PCLinkManager.kt\ncom/cobblemon/mod/common/api/storage/pc/link/PCLinkManager\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,42:1\n1#2:43\n*E\n"])
-public object PCLinkManager {
-   private final val links: MutableMap<UUID, PCLink> = (new LinkedHashMap()) as java.util.Map
+/**
+ * Manages the [PCLink]s for the server. This is a memory of IDs that map to a PC which also
+ * dictates whether a player is able to modify that PC.
+ *
+ * @author Hiroku
+ * @since June 19th, 2022
+ */final class PCLinkManager {
+    private val links = mutableMapOf<UUID, PCLink>()
 
-   public fun getLink(playerID: UUID): PCLink? {
-      return links.get(playerID);
-   }
+    fun getLink(playerID: UUID) = links[playerID]
 
-   public fun addLink(pcLink: PCLink) {
-      links.put(pcLink.getPlayerID(), pcLink);
-   }
+    fun addLink(pcLink: PCLink) {
+        links[pcLink.playerID] = pcLink
+    }
 
-   public fun addLink(playerID: UUID, pcStore: PCStore, condition: (ServerPlayer) -> Boolean = <unrepresentable>.INSTANCE as Function1) {
-      links.put(playerID, new PCLink(pcStore, playerID, condition) {
-         {
-            super(`$pcStore`, `$playerID`);
-            this.$condition = `$condition`;
-         }
+    fun addLink(playerID: UUID, pcStore: PCStore, condition: (ServerPlayer) -> Boolean = { true }) {
+        links[playerID] = object : PCLink(playerID = playerID, pc = pcStore) {
+            override fun isPermitted(player: ServerPlayer) = condition(player)
+        }
+    }
 
-         @Override
-         public boolean isPermitted(@NotNull ServerPlayer player) {
-            return this.$condition.invoke(player) as java.lang.Boolean;
-         }
-      });
-   }
+    fun removeLink(playerID: UUID) {
+        links.remove(playerID)
+    }
 
-   public fun removeLink(playerID: UUID) {
-      links.remove(playerID);
-   }
-
-   public fun getPC(player: ServerPlayer): PCStore? {
-      val var10001: UUID = player.m_20148_();
-      var var10000: PCLink = this.getLink(var10001);
-      if (var10000 != null) {
-         var10000 = if (var10000.isPermitted(player)) var10000 else null;
-         if (var10000 != null) {
-            return var10000.getPc();
-         }
-      }
-
-      return null;
-   }
+    fun getPC(player: ServerPlayer) = getLink(player.uuid)?.takeIf { it.isPermitted(player) }?.pc
 }

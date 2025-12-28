@@ -1,10 +1,90 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder; in class com/cobblemon/mod/common/item/interactive/ElixirItem
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.interactive
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.item.PokemonSelectingItem
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.CobblemonItem
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.battle.BagItem
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.giveOrDropItemStack
+import kotlin.math.min
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResultHolder
+import net.minecraft.world.item.Rarity
+import net.minecraft.world.level.Level
+
+/**
+ * Items for recovering PP in all moves at once.
+ *
+ * @author Hiroku
+ * @since June 30th, 2023
+ */
+class ElixirItem(
+    val max: Boolean
+) : CobblemonItem(Properties().apply {
+    if (max) rarity(Rarity.UNCOMMON)
+}), PokemonSelectingItem {
+    override val bagItem = object : BagItem {
+        override val itemName = "item.cobblemon.${ if (max) "max_elixir" else "elixir" }"
+        override val returnItem = Items.GLASS_BOTTLE
+        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
+        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "elixir".let { if (!max) "$it 10" else it }
+    }
+
+    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { it.currentPp < it.maxPp }
+    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack> {
+        var changed = false
+        pokemon.moveSet.doWithoutEmitting {
+            pokemon.moveSet.getMoves().forEach {
+                if (it.currentPp < it.maxPp) {
+                    if (max) {
+                        it.currentPp = it.maxPp
+                    } else {
+                        it.currentPp = min(it.currentPp + 10, it.maxPp)
+                    }
+                    changed = true
+                }
+            }
+        }
+
+        return if (changed) {
+            pokemon.moveSet.update()
+            if (!player.hasInfiniteMaterials()) {
+                stack.shrink(1)
+                player.giveOrDropItemStack(ItemStack(bagItem.returnItem))
+            }
+            pokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
+            InteractionResultHolder.success(stack)
+        } else {
+            InteractionResultHolder.fail(stack)
+        }
+    }
+
+    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+        super.applyToBattlePokemon(player, stack, battlePokemon)
+        battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
+    }
+
+    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+        if (world is ServerLevel && user is ServerPlayer) {
+            val stack = user.getItemInHand(hand)
+            return use(user, stack)
+        }
+        return InteractionResultHolder.success(user.getItemInHand(hand))
+    }
+}

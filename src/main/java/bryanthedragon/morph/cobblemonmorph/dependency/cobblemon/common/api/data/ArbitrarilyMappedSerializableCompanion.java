@@ -1,62 +1,51 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.codec.CodecMapped
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.codec.MappedCodec
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import com.mojang.serialization.Codec
-import java.util.LinkedHashMap
-import kotlin.jvm.functions.Function1
-import net.minecraft.network.FriendlyByteBuf
-import org.jetbrains.annotations.NotNull
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public abstract class ArbitrarilyMappedSerializableCompanion<T extends CodecMapped, K> {
-   public final val codec: MappedCodec<Any, Any>
-   public final val keyFromString: (String) -> Any
-   public final val keyFromValue: (Any) -> Any
-   public final val stringFromKey: (Any) -> String
-   private final val subtypes: MutableMap<Any, RegisteredSubtype<out Any>>
+/**
+ * A utility class to help give Codec support for map adapted class hierarchies.
+ *
+ * @author Hiroku
+ * @since January 21st, 2023
+ */
+abstract class ArbitrarilyMappedSerializableCompanion<T : CodecMapped, K>(
+    val keyFromString: (String) -> K,
+    val stringFromKey: (K) -> String,
+    val keyFromValue: (T) -> K
+) {
+    val codec: MappedCodec<T, K> = MappedCodec(codecRetriever = { subtypes[it]!!.codec }, keyFromString = keyFromString)
+    private val subtypes = mutableMapOf<K, RegisteredSubtype<out T>>()
 
-   open fun ArbitrarilyMappedSerializableCompanion(keyFromString: (java.lang.String?) -> K, stringFromKey: (K?) -> java.lang.String, keyFromValue: (T?) -> K) {
-      this.keyFromString = keyFromString;
-      this.stringFromKey = stringFromKey;
-      this.keyFromValue = keyFromValue;
-      this.codec = new MappedCodec<>((new Function1<K, Codec<? extends T>>(this) {
-         {
-            super(1);
-            this.this$0 = `$receiver`;
-         }
+    fun <E : T> registerSubtype(key: K, clazz: Class<E>, codec: Codec<E>) {
+        subtypes[key] = RegisteredSubtype(clazz, codec)
+    }
 
-         @NotNull
-         public final Codec<? extends T> invoke(K it) {
-            val var10000: Any = ArbitrarilyMappedSerializableCompanion.access$getSubtypes$p(this.this$0).get(it);
-            return (var10000 as RegisteredSubtype).getCodec();
-         }
-      }) as Function1, null, this.keyFromString, 2, null);
-      this.subtypes = new LinkedHashMap<>();
-   }
+    fun writeToBuffer(buffer: RegistryFriendlyByteBuf, value: T) {
+        val typeString = stringFromKey(keyFromValue(value))
+        buffer.writeString(typeString)
+        value.writeToBuffer(buffer)
+    }
 
-   public fun <E : Any> registerSubtype(key: Any, clazz: Class<Any>, codec: Codec<Any>) {
-      this.subtypes.put((K)key, new RegisteredSubtype<>(clazz, codec));
-   }
-
-   public fun writeToBuffer(buffer: FriendlyByteBuf, value: Any) {
-      buffer.m_130070_(this.stringFromKey.invoke(this.keyFromValue.invoke(value)) as java.lang.String);
-      value.writeToBuffer(buffer);
-   }
-
-   public fun readFromBuffer(buffer: FriendlyByteBuf): Any {
-      val typeString: java.lang.String = buffer.m_130277_();
-      val var10000: java.util.Map = this.subtypes;
-      val var10001: Function1 = this.keyFromString;
-      val var5: RegisteredSubtype = var10000.get(var10001.invoke(typeString)) as RegisteredSubtype;
-      if (var5 != null) {
-         val var6: Class = var5.getClazz();
-         if (var6 != null) {
-            val value: CodecMapped = var6.getDeclaredConstructor().newInstance() as CodecMapped;
-            value.readFromBuffer(buffer);
-            return (T)value;
-         }
-      }
-
-      throw new IllegalArgumentException("Unrecognized subtype: $typeString");
-   }
+    fun readFromBuffer(buffer: RegistryFriendlyByteBuf): T {
+        val typeString = buffer.readString()
+        val clazz = subtypes[keyFromString(typeString)]?.clazz ?: throw IllegalArgumentException("Unrecognized subtype: $typeString")
+        val value = clazz.getDeclaredConstructor().newInstance()
+        value.readFromBuffer(buffer)
+        return value
+    }
 }
+
+class RegisteredSubtype<T>(val clazz: Class<out T>, val codec: Codec<out T>)

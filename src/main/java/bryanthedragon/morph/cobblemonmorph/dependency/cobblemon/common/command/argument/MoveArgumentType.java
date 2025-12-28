@@ -1,60 +1,50 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.argument
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves
-import com.mojang.brigadier.ImmutableStringReader
-import com.mojang.brigadier.Message
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
-import java.util.concurrent.CompletableFuture
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import java.util.concurrent.CompletableFuture
 
-public class MoveArgumentType : ArgumentType<MoveTemplate> {
-   public open fun parse(reader: StringReader): MoveTemplate {
-      val var10000: Moves = Moves.INSTANCE;
-      val var10001: java.lang.String = reader.readString();
-      val var2: MoveTemplate = var10000.getByName(var10001);
-      if (var2 == null) {
-         val var3: CommandSyntaxException = new SimpleCommandExceptionType(INVALID_MOVE as Message).createWithContext(reader as ImmutableStringReader);
-         throw var3 as java.lang.Throwable;
-      } else {
-         return var2;
-      }
-   }
+class MoveArgumentType: ArgumentType<MoveTemplate> {
 
-   public open fun <S : Any> listSuggestions(context: CommandContext<Any>, builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
-      val var10000: CompletableFuture = SharedSuggestionProvider.m_82970_(Moves.INSTANCE.names(), builder);
-      return var10000;
-   }
+    override fun parse(reader: StringReader): MoveTemplate = Moves.getByName(reader.readString()) ?: throw SimpleCommandExceptionType(INVALID_MOVE).createWithContext(reader)
 
-   public open fun getExamples(): List<String> {
-      return EXAMPLES;
-   }
+    override fun <S : Any> listSuggestions(
+        context: CommandContext<S>,
+        builder: SuggestionsBuilder
+    ): CompletableFuture<Suggestions> {
+        return SharedSuggestionProvider.suggest(Moves.names(), builder)
+    }
 
-   @JvmStatic
-   fun {
-      val var10000: MutableComponent = Component.m_237115_("cobblemon.command.pokespawn.invalid-move");
-      INVALID_MOVE = var10000;
-   }
+    override fun getExamples() = EXAMPLES
 
-   public companion object {
-      public final val EXAMPLES: List<String>
-      public final val INVALID_MOVE: MutableComponent
+    companion object {
 
-      public fun move(): MoveArgumentType {
-         return new MoveArgumentType();
-      }
+        val EXAMPLES: List<String> = listOf("tackle")
+        val INVALID_MOVE: MutableComponent = Component.translatable("cobblemon.command.pokespawn.invalid-move")
 
-      public fun <S> getMove(context: CommandContext<Any>, name: String): MoveTemplate {
-         val var10000: Any = context.getArgument(name, MoveTemplate.class);
-         return var10000 as MoveTemplate;
-      }
-   }
+        fun move() = MoveArgumentType()
+
+        fun <S> getMove(context: CommandContext<S>, name: String): MoveTemplate {
+            return context.getArgument(name, MoveTemplate::class.java)
+        }
+
+    }
+
 }

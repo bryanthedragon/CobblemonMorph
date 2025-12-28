@@ -1,152 +1,94 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen3
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.ModelPartExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.createTransformation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BimanualFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BipedFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.MOVING_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.STATIONARY_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.UI_POSES
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
-public class SableyeModel(root: ModelPart) : PokemonPoseableModel, HeadedFrame, BipedFrame, BimanualFrame {
-   public open val head: ModelPart
-   public open val leftArm: ModelPart
-   public open val leftLeg: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rightArm: ModelPart
-   public open val rightLeg: ModelPart
-   public open val rootPart: ModelPart
-   public final lateinit var shoulderLeft: Pose<PokemonEntity, ModelFrame>
-   public final val shoulderOffset: Int
-   public final lateinit var shoulderRight: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class SableyeModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BimanualFrame {
+    override val rootPart = root.registerChildWithAllChildren("sableye")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "sableye");
-      this.head = this.getPart("head");
-      this.leftArm = this.getPart("arm_left");
-      this.rightArm = this.getPart("arm_right");
-      this.leftLeg = this.getPart("leg_left");
-      this.rightLeg = this.getPart("leg_right");
-      this.portraitScale = 2.2F;
-      this.portraitTranslation = new Vec3(-0.15, -0.5, 0.0);
-      this.profileScale = 1.0F;
-      this.profileTranslation = new Vec3(0.0, 0.28, 0.0);
-      this.shoulderOffset = 1;
-   }
+    override val head = getPart("head")
+    override val leftArm = getPart("arm_left")
+    override val rightArm = getPart("arm_right")
+    override val leftLeg = getPart("leg_left")
+    override val rightLeg = getPart("leg_right")
 
-   public override fun registerPoses() {
-      var var10001: PoseableEntityModel = this;
-      var var10003: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var11: java.util.Set = var10003;
-      val var10004: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            var10001,
-            "standing",
-            SetsKt.plus(var11, var10004),
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "sableye", "ground_idle", null, 4, null)
-            },
-            null,
-            null,
-            444,
-            null
-         )
-      );
-      var10001 = this;
-      var10003 = PoseType.Companion.getMOVING_POSES();
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            var10001,
-            "walk",
-            var10003,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "sableye", "ground_idle", null, 4, null),
-               PoseableEntityModel.bedrock$default(this, "sableye", "ground_walk", null, 4, null)
-            },
-            null,
-            null,
-            444,
-            null
-         )
-      );
-      this.setShoulderLeft(
-         PoseableEntityModel.registerPose$default(
-            this,
-            PoseType.SHOULDER_LEFT,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "sableye", "shoulder_left", null, 4, null)
-            },
-            new ModelPartTransformation[]{ModelPartExtensionsKt.createTransformation(this.getRootPart()).addPosition(0, this.shoulderOffset)},
-            null,
-            158,
-            null
-         )
-      );
-      this.setShoulderRight(
-         PoseableEntityModel.registerPose$default(
-            this,
-            PoseType.SHOULDER_RIGHT,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "sableye", "shoulder_right", null, 4, null)
-            },
-            new ModelPartTransformation[]{ModelPartExtensionsKt.createTransformation(this.getRootPart()).addPosition(0, -this.shoulderOffset)},
-            null,
-            158,
-            null
-         )
-      );
-   }
+    override var portraitScale = 2.2F
+    override var portraitTranslation = Vec3(-0.15, -0.5, 0.0)
 
-   override fun <T extends Entity> singleBoneLook(
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: java.lang.Float?,
-      yawMultiplier: java.lang.Float?,
-      maxPitch: java.lang.Float?,
-      minPitch: java.lang.Float?,
-      maxYaw: java.lang.Float?,
-      minYaw: java.lang.Float?
-   ): SingleBoneLookAnimation<T> {
-      return HeadedFrame.DefaultImpls.singleBoneLook(
-         this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw
-      );
-   }
+    override var profileScale = 1.0F
+    override var profileTranslation = Vec3(0.0, 0.28, 0.0)
+
+    lateinit var standing: Pose
+    lateinit var walk: Pose
+    lateinit var shoulderLeft: Pose
+    lateinit var shoulderRight: Pose
+
+    val shoulderOffset = 1
+
+    override fun registerPoses() {
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = STATIONARY_POSES + UI_POSES,
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("sableye", "ground_idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseTypes = MOVING_POSES,
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("sableye", "ground_idle"),
+                bedrock("sableye", "ground_walk")
+            )
+        )
+
+        shoulderLeft = registerPose(
+            poseType = PoseType.SHOULDER_LEFT,
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("sableye", "shoulder_left")
+            ),
+            transformedParts = arrayOf(
+                rootPart.createTransformation().addPosition(ModelPartTransformation.X_AXIS, shoulderOffset)
+            )
+        )
+
+        shoulderRight = registerPose(
+            poseType = PoseType.SHOULDER_RIGHT,
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("sableye", "shoulder_right")
+            ),
+            transformedParts = arrayOf(
+                rootPart.createTransformation().addPosition(ModelPartTransformation.X_AXIS, -shoulderOffset)
+            )
+        )
+    }
+
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing, walk)) bedrockStateful("sableye", "faint") else null
 }

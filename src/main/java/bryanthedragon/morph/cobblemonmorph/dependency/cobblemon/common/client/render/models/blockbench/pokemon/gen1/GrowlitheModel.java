@@ -1,123 +1,79 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen1
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.QuadrupedWalkAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.QuadrupedFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.SimpleQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
-import kotlin.jvm.functions.Function1
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.CobblemonPose
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.MOVING_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.STATIONARY_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.UI_POSES
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.jetbrains.annotations.NotNull
 
-public class GrowlitheModel(root: ModelPart) : PokemonPoseableModel, HeadedFrame, QuadrupedFrame {
-   public open val cryAnimation: CryProvider
-   public open val foreLeftLeg: ModelPart
-   public open val foreRightLeg: ModelPart
-   public open val head: ModelPart
-   public open val hindLeftLeg: ModelPart
-   public open val hindRightLeg: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rootPart: ModelPart
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class GrowlitheModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+    override val rootPart = root.registerChildWithAllChildren("growlithe")
+    override val head = getPart("neck")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "growlithe");
-      this.head = this.getPart("neck");
-      this.foreLeftLeg = this.getPart("left_shoulder");
-      this.foreRightLeg = this.getPart("right_shoulder");
-      this.hindLeftLeg = this.getPart("left_thigh");
-      this.hindRightLeg = this.getPart("right_thigh");
-      this.portraitScale = 2.1F;
-      this.portraitTranslation = new Vec3(-0.2, -0.6, 0.0);
-      this.profileScale = 0.9F;
-      this.profileTranslation = new Vec3(0.0, 0.4, 0.0);
-      this.cryAnimation = GrowlitheModel::cryAnimation$lambda$0;
-   }
+    override val foreLeftLeg= getPart("left_shoulder")
+    override val foreRightLeg = getPart("right_shoulder")
+    override val hindLeftLeg = getPart("left_thigh")
+    override val hindRightLeg = getPart("right_thigh")
 
-   public override fun registerPoses() {
-      val blink: SimpleQuirk = PoseableEntityModel.quirk$default(
-         this, null, null, null, (new Function1<PoseableEntityState<PokemonEntity>, StatefulAnimation<PokemonEntity, ?>>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
-            }
+    override var portraitScale = 2.1F
+    override var portraitTranslation = Vec3(-0.2, -0.6, 0.0)
 
-            @NotNull
-            public final StatefulAnimation<PokemonEntity, ?> invoke(@NotNull PoseableEntityState<PokemonEntity> it) {
-               return PoseableEntityModel.bedrockStateful$default(this.this$0, "growlithe", "blink", null, 4, null);
-            }
-         }) as Function1, 7, null
-      );
-      val var10001: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var9: java.util.Set = var10001;
-      val var10002: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "standing",
-            SetsKt.plus(var9, var10002),
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "growlithe", "idle", null, 4, null)
-            },
-            null,
-            new ModelQuirk[]{blink},
-            180,
-            null
-         )
-      );
-      val var6: EnumSet = PoseType.Companion.getMOVING_POSES();
-      val var7: Array<ModelQuirk> = new ModelQuirk[]{blink};
-      val var8: Array<StatelessAnimation> = new StatelessAnimation[]{
-         HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-         PoseableEntityModel.bedrock$default(this, "growlithe", "idle", null, 4, null),
-         new QuadrupedWalkAnimation(this, 0.6F, 0.9F)
-      };
-      val var10: PoseableEntityModel = this;
-      this.setWalk(PoseableEntityModel.registerPose$default(var10, "walk", var6, null, 10, null, null, var8, null, var7, 180, null));
-   }
+    override var profileScale = 0.9F
+    override var profileTranslation = Vec3(0.0, 0.4, 0.0)
 
-   override fun <T extends Entity> singleBoneLook(
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: java.lang.Float?,
-      yawMultiplier: java.lang.Float?,
-      maxPitch: java.lang.Float?,
-      minPitch: java.lang.Float?,
-      maxYaw: java.lang.Float?,
-      minYaw: java.lang.Float?
-   ): SingleBoneLookAnimation<T> {
-      return HeadedFrame.DefaultImpls.singleBoneLook(
-         this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw
-      );
-   }
+//    lateinit var sleep: CobblemonPose
+    lateinit var standing: CobblemonPose
+    lateinit var walk: CobblemonPose
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: GrowlitheModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "growlithe", "cry", null, 4, null);
-   }
+    override val cryAnimation = CryProvider { bedrockStateful("growlithe", "cry") }
+
+    override fun registerPoses() {
+        val blink = quirk { bedrockStateful("growlithe", "blink") }
+//        sleep = registerPose(
+//            poseType = PoseType.SLEEP,
+//            animations = arrayOf(bedrock("growlithe", "sleep"))
+//        )
+
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = STATIONARY_POSES + UI_POSES,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("growlithe", "idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseTypes = MOVING_POSES,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("growlithe", "idle"),
+                QuadrupedWalkAnimation(this, periodMultiplier = 0.6F, amplitudeMultiplier = 0.9F)
+            )
+        )
+    }
+
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing, walk)) bedrockStateful("growlithe", "faint") else null
 }

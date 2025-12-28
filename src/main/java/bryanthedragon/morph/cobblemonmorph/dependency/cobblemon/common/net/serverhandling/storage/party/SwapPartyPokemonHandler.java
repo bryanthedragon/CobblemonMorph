@@ -1,30 +1,27 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.party
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ServerNetworkPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PlayerPartyStore
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.party.SwapPartyPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
+final class SwapPartyPokemonHandler : ServerNetworkPacketHandler<SwapPartyPokemonPacket> {
+    override fun handle(packet: SwapPartyPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
+        val party = player.party()
+        val pokemon1 = party[packet.position1] ?: return
+        val pokemon2 = party[packet.position2] ?: return
 
-public object SwapPartyPokemonHandler : ServerNetworkPacketHandler<SwapPartyPokemonPacket> {
-   public open fun handle(packet: SwapPartyPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
-      val party: PlayerPartyStore = PlayerExtensionsKt.party(player);
-      var var10000: Pokemon = party.get(packet.getPosition1());
-      if (var10000 != null) {
-         var10000 = party.get(packet.getPosition2());
-         if (var10000 != null) {
-            if (var10000.getUuid() == packet.getPokemon1ID()
-               && var10000.getUuid() == packet.getPokemon2ID()
-               && !(packet.getPosition1() == packet.getPosition2())) {
-               party.swap(packet.getPosition1(), packet.getPosition2());
-            }
-         }
-      }
-   }
-
-   fun handleOnNettyThread(packet: SwapPartyPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
-      ServerNetworkPacketHandler.DefaultImpls.handleOnNettyThread(this, packet, server, player);
-   }
+        if (pokemon1.uuid != packet.pokemon1ID || pokemon2.uuid != packet.pokemon2ID || packet.position1 == packet.position2) {
+            return
+        }
+        party.swap(packet.position1, packet.position2)
+    }
 }

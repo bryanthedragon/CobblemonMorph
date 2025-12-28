@@ -1,47 +1,76 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonItemTags
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import java.util.ArrayList;
-import java.util.HashMap
-import java.util.Map.Entry
-import kotlin.jvm.internal.SourceDebugExtension
 
-public interface EvCalculator {
-   public open fun calculate(battlePokemon: BattlePokemon): Map<Stat, Int> {
-   }
+/**
+ * Responsible for resolving EV yield after each battle.
+ * For default implementation see [Generation8EvCalculator].
+ *
+ * @author Licious
+ * @since October 31st, 2022
+ */
+interface EvCalculator {
 
-   public abstract fun calculate(battlePokemon: BattlePokemon, opponentPokemon: BattlePokemon): Map<Stat, Int> {
-   }
-
-   // $VF: Class flags could not be determined
-   @SourceDebugExtension(["SMAP\nEvCalculator.kt\nKotlin\n*S Kotlin\n*F\n+ 1 EvCalculator.kt\ncom/cobblemon/mod/common/api/pokemon/stats/EvCalculator$DefaultImpls\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 _Maps.kt\nkotlin/collections/MapsKt___MapsKt\n*L\n1#1,77:1\n766#2:78\n857#2,2:79\n1855#2:81\n1856#2:84\n215#3,2:82\n*S KotlinDebug\n*F\n+ 1 EvCalculator.kt\ncom/cobblemon/mod/common/api/pokemon/stats/EvCalculator$DefaultImpls\n*L\n32#1:78\n32#1:79,2\n33#1:81\n33#1:84\n35#1:82,2\n*E\n"])
-   internal class DefaultImpls {
-      @JvmStatic
-      fun calculate(`$this`: EvCalculator, battlePokemon: BattlePokemon): MutableMap<Stat, Int> {
-         val total: HashMap = new HashMap();
-         val `$this$forEach$iv`: java.lang.Iterable = battlePokemon.getFacedOpponents();
-         val `element$iv`: java.util.Collection = new ArrayList();
-
-         for (Object element$iv$iv : $this$forEach$iv) {
-            if ((results as BattlePokemon).getHealth() == 0) {
-               `element$iv`.add(results);
+    /**
+     * TODO
+     *
+     * @param battlePokemon
+     * @return
+     */
+    fun calculate(battlePokemon: BattlePokemon): Map<Stat, Int> {
+        val total = hashMapOf<Stat, Int>()
+        battlePokemon.facedOpponents
+            .filter { it.health == 0 }
+            .forEach { opponent ->
+                val results = this.calculate(battlePokemon, opponent)
+                results.forEach { (stat, value) ->
+                    var newValue = total[stat] ?: 0
+                    newValue += value
+                    total[stat] = newValue
+                }
             }
-         }
+        return total
+    }
 
-         for (Object element$ivx : $this$forEach$iv) {
-            for (Entry element$ivxx : $this.calculate(battlePokemon, (BattlePokemon)element$ivx).entrySet()) {
-               val stat: Stat = `element$ivxx`.getKey() as Stat;
-               val value: Int = (`element$ivxx`.getValue() as java.lang.Number).intValue();
-               var var10000: Int = total.get(stat) as Int;
-               if (var10000 == null) {
-                  var10000 = 0;
-               }
+    /**
+     * TODO
+     *
+     * @param battlePokemon
+     * @param opponentPokemon
+     * @return
+     */
+    fun calculate(battlePokemon: BattlePokemon, opponentPokemon: BattlePokemon): Map<Stat, Int>
 
-               total.put(stat, var10000.intValue() + value);
-            }
-         }
+}
+final class Generation8EvCalculator : EvCalculator {
 
-         return total;
-      }
-   }
+    private val powerItems = mapOf(
+        Stats.SPEED to CobblemonItemTags.POWER_ANKLET,
+        Stats.SPECIAL_DEFENCE to CobblemonItemTags.POWER_BAND,
+        Stats.DEFENCE to CobblemonItemTags.POWER_BELT,
+        Stats.ATTACK to CobblemonItemTags.POWER_BRACER,
+        Stats.SPECIAL_ATTACK to CobblemonItemTags.POWER_LENS,
+        Stats.HP to CobblemonItemTags.POWER_WEIGHT
+    )
+
+    override fun calculate(battlePokemon: BattlePokemon, opponentPokemon: BattlePokemon): Map<Stat, Int> {
+        val heldItem = battlePokemon.effectedPokemon.heldItemNoCopy()
+        val evYield = mutableMapOf<Stat, Int>()
+
+        for ((stat, value) in opponentPokemon.originalPokemon.form.evYield) {
+            val boost = if (!heldItem.isEmpty && heldItem.`is`(powerItems[stat])) 8 else 0
+            evYield[stat] = evYield.getOrDefault(stat, 0) + value + boost
+        }
+        return evYield
+    }
+
 }

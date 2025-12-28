@@ -1,72 +1,45 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ActiveBattlePokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleInitializePacket.ActiveBattlePokemonDTO
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class BattleReplacePokemonPacket(pnx: String, realPokemon: ActiveBattlePokemonDTO, isAlly: Boolean) : NetworkPacket<BattleReplacePokemonPacket> {
-   public open val id: ResourceLocation
-   public final val isAlly: Boolean
-   public final val pnx: String
-   public final val realPokemon: ActiveBattlePokemonDTO
+/**
+ * Updates the client about an [ActiveBattlePokemon] that was hidden by an illusion and has just been revealed during a battle.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.battle.BattleReplacePokemonHandler].
+ *
+ * @param realPokemon The
+ * @author Segfault Guy
+ * @since March 30th, 2024
+ */
+class BattleReplacePokemonPacket(val pnx: String, val realPokemon: BattleInitializePacket.ActiveBattlePokemonDTO, val isAlly: Boolean) : NetworkPacket<BattleReplacePokemonPacket> {
 
-   init {
-      this.pnx = pnx;
-      this.realPokemon = realPokemon;
-      this.isAlly = isAlly;
-      this.id = ID;
-   }
+    override val id = ID
 
-   public constructor(pnx: String, realPokemon: BattlePokemon, isAlly: Boolean) : this(
-         pnx,
-         BattleInitializePacket.ActiveBattlePokemonDTO.Companion.fromPokemon$default(
-            BattleInitializePacket.ActiveBattlePokemonDTO.Companion, realPokemon, isAlly, null, 4, null
-         ),
-         isAlly
-      )
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130070_(this.pnx);
-      this.realPokemon.saveToBuffer(buffer);
-      buffer.writeBoolean(this.isAlly);
-   }
+    constructor(pnx: String, realPokemon: BattlePokemon, isAlly: Boolean) :
+        this(pnx, BattleInitializePacket.ActiveBattlePokemonDTO.fromPokemon(realPokemon, isAlly), isAlly)
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(pnx)
+        realPokemon.saveToBuffer(buffer)
+        buffer.writeBoolean(isAlly)
+    }
 
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): BattleReplacePokemonPacket {
-         val var10002: java.lang.String = buffer.m_130277_();
-         return new BattleReplacePokemonPacket(var10002, BattleInitializePacket.ActiveBattlePokemonDTO.Companion.loadFromBuffer(buffer), buffer.readBoolean());
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("battle_replace_pokemon")
+        fun decode(buffer: RegistryFriendlyByteBuf) = BattleReplacePokemonPacket(buffer.readString(), BattleInitializePacket.ActiveBattlePokemonDTO.loadFromBuffer(buffer), buffer.readBoolean())
+    }
 }

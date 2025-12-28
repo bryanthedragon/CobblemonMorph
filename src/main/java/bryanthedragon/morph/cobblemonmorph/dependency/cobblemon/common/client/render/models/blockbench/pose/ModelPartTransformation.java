@@ -1,199 +1,183 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.AngleExtensionsKt
-import kotlin.jvm.internal.SourceDebugExtension
+import com.bedrockk.molang.runtime.MoLangRuntime
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.toRadians
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveBoolean
+import kotlin.math.absoluteValue
+import kotlin.math.sign
 import net.minecraft.client.model.geom.ModelPart
 
-@SourceDebugExtension(["SMAP\nModelPartTransformation.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ModelPartTransformation.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/pose/ModelPartTransformation\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,165:1\n1#2:166\n*E\n"])
-public class ModelPartTransformation(modelPart: ModelPart) {
-   public final val modelPart: ModelPart
+/**
+ * Represents a [ModelPart] with some changes to position and rotation. This is to take a snapshot
+ * and store mutations for the purpose of poses.
+ *
+ * @author Hiroku
+ * @since December 5th, 2021
+ */
+class ModelPartTransformation(val modelPart: ModelPart) {
+    companion object {
+        const val X_AXIS = 0
+        const val Y_AXIS = 1
+        const val Z_AXIS = 2
+        val defaultRuntime = MoLangRuntime()
 
-   public final var pitch: Float
-      public final get() {
-         return this.rotation[0];
-      }
+        fun derive(modelPart: ModelPart) = ModelPartTransformation(modelPart)
+            .withPosition(modelPart.x, modelPart.y, modelPart.z)
+            .withRotation(modelPart.xRot, modelPart.yRot, modelPart.zRot)
+            .withScale(modelPart.xScale, modelPart.yScale, modelPart.zScale)
+            .withVisibility(modelPart.visible)
+    }
 
-      public final set(value) {
-         this.rotation[0] = value;
-      }
+    var position = floatArrayOf(0F, 0F, 0F)
+    var rotation = floatArrayOf(0F, 0F, 0F)
+    val scale = floatArrayOf(1F, 1F, 1F)
 
+    var visibility: ExpressionLike? = null
 
-   public final var position: FloatArray
+    /** Applies the transformation to the model part. */
+    fun apply(state: PosableState? = null, intensity: Float = 1f) {
+        modelPart.x += position[0] * intensity
+        modelPart.y += position[1] * intensity
+        modelPart.z += position[2] * intensity
+        modelPart.xRot += rotation[0] * intensity
+        modelPart.yRot += rotation[1] * intensity
+        modelPart.zRot += rotation[2] * intensity
+        modelPart.xScale *= ((1 - scale[0]).absoluteValue * intensity) * (scale[0] - 1).sign + 1
+        modelPart.yScale *= ((1 - scale[1]).absoluteValue * intensity) * (scale[1] - 1).sign + 1
+        modelPart.zScale *= ((1 - scale[2]).absoluteValue * intensity) * (scale[2] - 1).sign + 1
+        visibility?.let { modelPart.visible = state?.runtime?.resolveBoolean(it)?: defaultRuntime.resolveBoolean(it) }
+    }
 
-   public final var roll: Float
-      public final get() {
-         return this.rotation[2];
-      }
+    fun set() {
+        modelPart.x = position[0]
+        modelPart.y = position[1]
+        modelPart.z = position[2]
+        modelPart.xRot = rotation[0]
+        modelPart.yRot = rotation[1]
+        modelPart.zRot = rotation[2]
+        modelPart.xScale = scale[0]
+        modelPart.yScale = scale[1]
+        modelPart.zScale = scale[2]
+        // Default runtime is fine because this being run means we're using a default state which is purely a snapshot of the .geo, no complex molang applies
+        visibility?.let { modelPart.visible = defaultRuntime.resolveBoolean(it) }
+    }
 
-      public final set(value) {
-         this.rotation[2] = value;
-      }
+    fun withVisibility(visibility: Boolean): ModelPartTransformation {
+        if (visibility == true) {
+            this.visibility = "true".asExpressionLike()
+        } else {
+            this.visibility = "0.0".asExpressionLike()
+        }
+        return this
+    }
 
+    fun withVisibility(visibility: ExpressionLike): ModelPartTransformation {
+        this.visibility = visibility
+        return this
+    }
 
-   public final var rotation: FloatArray
-   public final val scale: FloatArray
-   public final var visibility: Boolean?
+    var xPos: Float
+        get() = position[0]
+        set(value) {
+            position[0] = value
+        }
+    var yPos: Float
+        get() = position[1]
+        set(value) {
+            position[1] = value
+        }
+    var zPos: Float
+        get() = position[2]
+        set(value) {
+            position[2] = value
+        }
+    var pitch: Float
+        get() = rotation[0]
+        set(value) {
+            rotation[0] = value
+        }
+    var yaw: Float
+        get() = rotation[1]
+        set(value) {
+            rotation[1] = value
+        }
+    var roll: Float
+        get() = rotation[2]
+        set(value) {
+            rotation[2] = value
+        }
 
-   public final var xPos: Float
-      public final get() {
-         return this.position[0];
-      }
+    fun withPosition(axis: Int, position: Number): ModelPartTransformation {
+        this.position[axis] = position.toFloat()
+        return this
+    }
 
-      public final set(value) {
-         this.position[0] = value;
-      }
+    fun withPosition(xPos: Number, yPos: Number, zPos: Number): ModelPartTransformation {
+        return withPosition(X_AXIS, xPos).withPosition(Y_AXIS, yPos).withPosition(Z_AXIS, zPos)
+    }
 
+    fun withRotation(axis: Int, angleRadians: Number): ModelPartTransformation {
+        this.rotation[axis] = angleRadians.toFloat()
+        return this
+    }
 
-   public final var yPos: Float
-      public final get() {
-         return this.position[1];
-      }
+    fun withRotation(pitch: Number, yaw: Number, roll: Number): ModelPartTransformation {
+        return withRotation(X_AXIS, pitch).withRotation(Y_AXIS, yaw).withRotation(Z_AXIS, roll)
+    }
 
-      public final set(value) {
-         this.position[1] = value;
-      }
+    fun addPosition(axis: Int, distance: Number): ModelPartTransformation {
+        return withPosition(axis, position[axis] + distance.toFloat())
+    }
 
+    fun addPosition(xDist: Number, yDist: Number, zDist: Number): ModelPartTransformation {
+        return addPosition(X_AXIS, xDist).addPosition(Y_AXIS, yDist).addPosition(Z_AXIS, zDist)
+    }
 
-   public final var yaw: Float
-      public final get() {
-         return this.rotation[1];
-      }
+    fun addRotation(axis: Int, angleRadians: Number): ModelPartTransformation {
+        return withRotation(axis, rotation[axis] + angleRadians.toFloat())
+    }
 
-      public final set(value) {
-         this.rotation[1] = value;
-      }
+    fun addRotation(pitchRadians: Number, yawRadians: Number, rollRadians: Number): ModelPartTransformation {
+        return addRotation(X_AXIS, pitchRadians).addRotation(Y_AXIS, yawRadians).addRotation(Z_AXIS, rollRadians)
+    }
 
+    fun addRotationDegrees(pitch: Number, yaw: Number, roll: Number): ModelPartTransformation {
+        return addRotation(X_AXIS, pitch.toFloat().toRadians()).addRotation(Y_AXIS, yaw.toFloat().toRadians()).addRotation(Z_AXIS, roll.toFloat().toRadians())
+    }
 
-   public final var zPos: Float
-      public final get() {
-         return this.position[2];
-      }
+    fun multiplyScale(axis: Int, scale: Number): ModelPartTransformation {
+        return withScale(axis, scale.toFloat() * this.scale[axis])
+    }
 
-      public final set(value) {
-         this.position[2] = value;
-      }
+    fun multiplyScale(scaleX: Number, scaleY: Number, scaleZ: Number): ModelPartTransformation {
+        return multiplyScale(X_AXIS, scaleX).multiplyScale(Y_AXIS, scaleY).multiplyScale(Z_AXIS, scaleZ)
+    }
 
+    fun withRotationDegrees(pitch: Number, yaw: Number, roll: Number): ModelPartTransformation {
+        return withRotation(pitch.toFloat().toRadians(), yaw.toFloat().toRadians(), roll.toFloat().toRadians())
+    }
 
-   init {
-      this.modelPart = modelPart;
-      this.position = new float[]{0.0F, 0.0F, 0.0F};
-      this.rotation = new float[]{0.0F, 0.0F, 0.0F};
-      this.scale = new float[]{1.0F, 1.0F, 1.0F};
-   }
+    fun addRotationDegrees(axis: Int, angle: Number): ModelPartTransformation {
+        return addRotation(axis, rotation[axis] + angle.toFloat().toRadians())
+    }
 
-   public fun apply(intensity: Float) {
-      this.modelPart.f_104200_ = this.modelPart.f_104200_ + this.position[0] * intensity;
-      this.modelPart.f_104201_ = this.modelPart.f_104201_ + this.position[1] * intensity;
-      this.modelPart.f_104202_ = this.modelPart.f_104202_ + this.position[2] * intensity;
-      this.modelPart.f_104203_ = this.modelPart.f_104203_ + this.rotation[0] * intensity;
-      this.modelPart.f_104204_ = this.modelPart.f_104204_ + this.rotation[1] * intensity;
-      this.modelPart.f_104205_ = this.modelPart.f_104205_ + this.rotation[2] * intensity;
-      this.modelPart.f_233553_ = this.modelPart.f_233553_ * ((1 - this.scale[0]) * intensity + 1);
-      this.modelPart.f_233554_ = this.modelPart.f_233554_ * ((1 - this.scale[1]) * intensity + 1);
-      this.modelPart.f_233555_ = this.modelPart.f_233555_ * ((1 - this.scale[2]) * intensity + 1);
-      if (this.visibility != null) {
-         this.modelPart.f_104207_ = this.visibility;
-      }
-   }
+    fun withScale(axis: Int, scale: Number): ModelPartTransformation {
+        this.scale[axis] = scale.toFloat()
+        return this
+    }
 
-   public fun set() {
-      this.modelPart.f_104200_ = this.position[0];
-      this.modelPart.f_104201_ = this.position[1];
-      this.modelPart.f_104202_ = this.position[2];
-      this.modelPart.f_104203_ = this.rotation[0];
-      this.modelPart.f_104204_ = this.rotation[1];
-      this.modelPart.f_104205_ = this.rotation[2];
-      this.modelPart.f_233553_ = this.scale[0];
-      this.modelPart.f_233554_ = this.scale[1];
-      this.modelPart.f_233555_ = this.scale[2];
-      if (this.visibility != null) {
-         this.modelPart.f_104207_ = this.visibility;
-      }
-   }
-
-   public fun withVisibility(visibility: Boolean): ModelPartTransformation {
-      this.visibility = visibility;
-      return this;
-   }
-
-   public fun withPosition(axis: Int, position: Number): ModelPartTransformation {
-      this.position[axis] = position.floatValue();
-      return this;
-   }
-
-   public fun withPosition(xPos: Number, yPos: Number, zPos: Number): ModelPartTransformation {
-      return this.withPosition(0, xPos).withPosition(1, yPos).withPosition(2, zPos);
-   }
-
-   public fun withRotation(axis: Int, angleRadians: Number): ModelPartTransformation {
-      this.rotation[axis] = angleRadians.floatValue();
-      return this;
-   }
-
-   public fun withRotation(pitch: Number, yaw: Number, roll: Number): ModelPartTransformation {
-      return this.withRotation(0, pitch).withRotation(1, yaw).withRotation(2, roll);
-   }
-
-   public fun addPosition(axis: Int, distance: Number): ModelPartTransformation {
-      return this.withPosition(axis, this.position[axis] + distance.floatValue());
-   }
-
-   public fun addPosition(xDist: Number, yDist: Number, zDist: Number): ModelPartTransformation {
-      return this.addPosition(0, xDist).addPosition(1, yDist).addPosition(2, zDist);
-   }
-
-   public fun addRotation(axis: Int, angleRadians: Number): ModelPartTransformation {
-      return this.withRotation(axis, this.rotation[axis] + angleRadians.floatValue());
-   }
-
-   public fun addRotation(pitchRadians: Number, yawRadians: Number, rollRadians: Number): ModelPartTransformation {
-      return this.addRotation(0, pitchRadians).addRotation(1, yawRadians).addRotation(2, rollRadians);
-   }
-
-   public fun addRotationDegrees(pitch: Number, yaw: Number, roll: Number): ModelPartTransformation {
-      return this.addRotation(0, AngleExtensionsKt.toRadians(pitch.floatValue()))
-         .addRotation(1, AngleExtensionsKt.toRadians(yaw.floatValue()))
-         .addRotation(2, AngleExtensionsKt.toRadians(roll.floatValue()));
-   }
-
-   public fun multiplyScale(axis: Int, scale: Number): ModelPartTransformation {
-      return this.withScale(axis, scale.floatValue() * this.scale[axis]);
-   }
-
-   public fun multiplyScale(scaleX: Number, scaleY: Number, scaleZ: Number): ModelPartTransformation {
-      return this.multiplyScale(0, scaleX).multiplyScale(1, scaleY).multiplyScale(2, scaleZ);
-   }
-
-   public fun withRotationDegrees(pitch: Number, yaw: Number, roll: Number): ModelPartTransformation {
-      return this.withRotation(
-         AngleExtensionsKt.toRadians(pitch.floatValue()), AngleExtensionsKt.toRadians(yaw.floatValue()), AngleExtensionsKt.toRadians(roll.floatValue())
-      );
-   }
-
-   public fun addRotationDegrees(axis: Int, angle: Number): ModelPartTransformation {
-      return this.addRotation(axis, this.rotation[axis] + AngleExtensionsKt.toRadians(angle.floatValue()));
-   }
-
-   public fun withScale(axis: Int, scale: Number): ModelPartTransformation {
-      this.scale[axis] = scale.floatValue();
-      return this;
-   }
-
-   public fun withScale(scaleX: Number, scaleY: Number, scaleZ: Number): ModelPartTransformation {
-      return this.withScale(0, scaleX).withScale(1, scaleY).withScale(2, scaleZ);
-   }
-
-   public companion object {
-      public const val X_AXIS: Int
-      public const val Y_AXIS: Int
-      public const val Z_AXIS: Int
-
-      public fun derive(modelPart: ModelPart): ModelPartTransformation {
-         return new ModelPartTransformation(modelPart)
-            .withPosition(modelPart.f_104200_, modelPart.f_104201_, modelPart.f_104202_)
-            .withRotation(modelPart.f_104203_, modelPart.f_104204_, modelPart.f_104205_)
-            .withScale(modelPart.f_233553_, modelPart.f_233554_, modelPart.f_233555_)
-            .withVisibility(modelPart.f_104207_);
-      }
-   }
+    fun withScale(scaleX: Number, scaleY: Number, scaleZ: Number): ModelPartTransformation {
+        return withScale(X_AXIS, scaleX).withScale(Y_AXIS, scaleY).withScale(Z_AXIS, scaleZ)
+    }
 }

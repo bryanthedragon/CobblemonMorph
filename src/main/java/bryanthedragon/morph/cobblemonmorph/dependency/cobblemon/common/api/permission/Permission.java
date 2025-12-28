@@ -1,9 +1,21 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission
 
 import net.minecraft.resources.ResourceLocation
 
-public interface Permission {
-   public val identifier: ResourceLocation
-   public val level: PermissionLevel
-   public val literal: String
+interface Permission {
+
+    val identifier: ResourceLocation
+
+    val literal: String
+
+    val level: PermissionLevel
+
 }

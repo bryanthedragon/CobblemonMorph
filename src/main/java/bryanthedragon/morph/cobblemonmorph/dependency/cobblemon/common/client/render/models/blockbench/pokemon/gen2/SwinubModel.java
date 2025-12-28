@@ -1,81 +1,62 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen2
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.CobblemonPose
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.MOVING_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.STATIONARY_POSES
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType.Companion.UI_POSES
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-public class SwinubModel(root: ModelPart) : PokemonPoseableModel {
-   public open val cryAnimation: CryProvider
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rootPart: ModelPart
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class SwinubModel(root: ModelPart) : PokemonPosableModel(root) {
+    override val rootPart = root.registerChildWithAllChildren("swinub")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "swinub");
-      this.portraitScale = 2.6800003F;
-      this.portraitTranslation = new Vec3(-0.2, -2.5200000000000102, 0.0);
-      this.profileScale = 1.2300003F;
-      this.profileTranslation = new Vec3(0.0, -0.13999999999999968, 0.0);
-      this.cryAnimation = SwinubModel::cryAnimation$lambda$0;
-   }
+    override var portraitScale = 2.6800003F
+    override var portraitTranslation = Vec3(-0.2, -2.5200000000000102, 0.0)
 
-   public override fun registerPoses() {
-      var var10001: PoseableEntityModel = this;
-      var var10003: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var4: java.util.Set = var10003;
-      val var10004: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            var10001,
-            "standing",
-            SetsKt.plus(var4, var10004),
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "swinub", "ground_idle", null, 4, null)},
-            null,
-            null,
-            444,
-            null
-         )
-      );
-      var10001 = this;
-      var10003 = PoseType.Companion.getMOVING_POSES();
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            var10001,
-            "walk",
-            var10003,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "swinub", "ground_idle", null, 4, null)},
-            null,
-            null,
-            444,
-            null
-         )
-      );
-   }
+    override var profileScale = 1.2300003F
+    override var profileTranslation = Vec3(0.0, -0.13999999999999968, 0.0)
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: SwinubModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "swinub", "cry", null, 4, null);
-   }
+//    lateinit var sleep: CobblemonPose
+    lateinit var standing: CobblemonPose
+    lateinit var walk: CobblemonPose
+
+    override val cryAnimation = CryProvider { bedrockStateful("swinub", "cry") }
+
+    override fun registerPoses() {
+//        sleep = registerPose(
+//            poseType = PoseType.SLEEP,
+//            animations = arrayOf(bedrock("swinub", "sleep"))
+//        )
+
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = STATIONARY_POSES + UI_POSES,
+            animations = arrayOf(
+                bedrock("swinub", "ground_idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseTypes = MOVING_POSES,
+            animations = arrayOf(
+                bedrock("swinub", "ground_idle")
+            )
+        )
+    }
+
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing, walk)) bedrockStateful("swinub", "faint") else null
 }

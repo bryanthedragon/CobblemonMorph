@@ -1,43 +1,43 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.LevelUpEvolution
 
-public interface PassiveEvolution : Evolution {
-   public val permanent: Boolean
+/**
+ * Represents an evolution of a [Pokemon] that can occur without any additional context or actions.
+ * For the default implementation see [LevelUpEvolution].
+ *
+ * @author Licious
+ * @since March 19th, 2022
+ */
+interface PassiveEvolution : Evolution {
 
-   public open fun attemptEvolution(pokemon: Pokemon): Boolean {
-   }
+    /**
+     * Checks if the given [Pokemon] satisfies the requirements.
+     * If yes the evolution will attempt to start.
+     *
+     * @param pokemon The [Pokemon] being tested.
+     * @return If the [Pokemon] will evolve.
+     */
+    fun attemptEvolution(pokemon: Pokemon): Boolean {
+        if (super.test(pokemon)) {
+            return super.evolve(pokemon)
+        }
+        return false
+    }
 
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun attemptEvolution(`$this`: PassiveEvolution, pokemon: Pokemon): Boolean {
-         return Evolution.DefaultImpls.test(`$this`, pokemon) && Evolution.DefaultImpls.evolve(`$this`, pokemon);
-      }
+    /**
+     * If the evolution will disappear once the conditions are no longer met.
+     */
+    val permanent: Boolean
 
-      @JvmStatic
-      fun test(`$this`: PassiveEvolution, pokemon: Pokemon): Boolean {
-         return Evolution.DefaultImpls.test(`$this`, pokemon);
-      }
 
-      @JvmStatic
-      fun evolve(`$this`: PassiveEvolution, pokemon: Pokemon): Boolean {
-         return Evolution.DefaultImpls.evolve(`$this`, pokemon);
-      }
-
-      @JvmStatic
-      fun forceEvolve(`$this`: PassiveEvolution, pokemon: Pokemon) {
-         Evolution.DefaultImpls.forceEvolve(`$this`, pokemon);
-      }
-
-      @JvmStatic
-      fun evolutionMethod(`$this`: PassiveEvolution, pokemon: Pokemon) {
-         Evolution.DefaultImpls.evolutionMethod(`$this`, pokemon);
-      }
-
-      @JvmStatic
-      fun applyTo(`$this`: PassiveEvolution, pokemon: Pokemon) {
-         Evolution.DefaultImpls.applyTo(`$this`, pokemon);
-      }
-   }
 }

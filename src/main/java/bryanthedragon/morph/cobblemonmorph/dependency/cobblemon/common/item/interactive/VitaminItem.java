@@ -1,10 +1,17 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method use (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResultHolder; in class com/cobblemon/mod/common/item/interactive/VitaminItem
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.interactive
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
+import net.minecraft.sounds.SoundEvent
+
+class VitaminItem(stat: Stats) : EVIncreaseItem(stat, 10) {
+    override val sound: SoundEvent = CobblemonSounds.MEDICINE_PILLS_USE
+}

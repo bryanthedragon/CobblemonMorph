@@ -1,94 +1,74 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import java.util.UUID
 
-public class ActiveTrade(player1: TradeParticipant, player2: TradeParticipant) {
-   public final val player1: TradeParticipant
-   public final val player1Offer: TradeOffer
-   public final val player2: TradeParticipant
-   public final val player2Offer: TradeOffer
+class ActiveTrade(val player1: TradeParticipant, val player2: TradeParticipant) {
+    val player1Offer = TradeOffer()
+    val player2Offer = TradeOffer()
 
-   init {
-      this.player1 = player1;
-      this.player2 = player2;
-      this.player1Offer = new TradeOffer();
-      this.player2Offer = new TradeOffer();
-   }
+    fun getTradeParticipant(uuid: UUID) = if (player1.uuid == uuid) player1 else player2
+    fun getOffer(tradeParticipant: TradeParticipant) = if (tradeParticipant == player1) player1Offer else player2Offer
+    fun getOpposingOffer(tradeParticipant: TradeParticipant) = if (tradeParticipant == player1) player2Offer else player1Offer
 
-   public fun getTradeParticipant(uuid: UUID): TradeParticipant {
-      return if (this.player1.getUuid() == uuid) this.player1 else this.player2;
-   }
+    fun updateOffer(tradeParticipant: TradeParticipant, pokemon: Pokemon?) {
+        getOffer(tradeParticipant).updateOffer(pokemon)
+        getOffer(getOppositePlayer(tradeParticipant)).accepted = false
+        player1.updateOffer(this, tradeParticipant, pokemon)
+        player2.updateOffer(this, tradeParticipant, pokemon)
+    }
 
-   public fun getOffer(tradeParticipant: TradeParticipant): TradeOffer {
-      return if (tradeParticipant == this.player1) this.player1Offer else this.player2Offer;
-   }
+    fun updateAcceptance(tradeParticipant: TradeParticipant, acceptance: Boolean) {
+        val offer = getOpposingOffer(tradeParticipant)
+        if (offer.accepted != acceptance) {
+            offer.accepted = acceptance
+            getOppositePlayer(tradeParticipant).changeTradeAcceptance(this, offer.pokemon!!.uuid, acceptance)
+            tradeParticipant.changeTradeAcceptance(this, offer.pokemon!!.uuid, acceptance)
+        }
 
-   public fun getOpposingOffer(tradeParticipant: TradeParticipant): TradeOffer {
-      return if (tradeParticipant == this.player1) this.player2Offer else this.player1Offer;
-   }
+        if (offer.accepted && getOffer(tradeParticipant).accepted) {
+            //performTrade
+            player1.startTradeProcess(this, tradeParticipant == player1)
+            player2.startTradeProcess(this, tradeParticipant == player2)
+        }
+    }
 
-   public fun updateOffer(tradeParticipant: TradeParticipant, pokemon: Pokemon?) {
-      this.getOffer(tradeParticipant).updateOffer(pokemon);
-      this.getOffer(this.getOppositePlayer(tradeParticipant)).setAccepted(false);
-      this.player1.updateOffer(this, tradeParticipant, pokemon);
-      this.player2.updateOffer(this, tradeParticipant, pokemon);
-   }
+    fun getOppositePlayer(tradeParticipant: TradeParticipant) = if (tradeParticipant == player1) player2 else player1
 
-   public fun updateAcceptance(tradeParticipant: TradeParticipant, acceptance: Boolean) {
-      val offer: TradeOffer = this.getOpposingOffer(tradeParticipant);
-      if (offer.getAccepted() != acceptance) {
-         offer.setAccepted(acceptance);
-         val var10000: TradeParticipant = this.getOppositePlayer(tradeParticipant);
-         var var10002: Pokemon = offer.getPokemon();
-         val var4: UUID = var10002.getUuid();
-         var10000.changeTradeAcceptance(this, var4, acceptance);
-         var10002 = offer.getPokemon();
-         val var6: UUID = var10002.getUuid();
-         tradeParticipant.changeTradeAcceptance(this, var6, acceptance);
-      }
+    fun performTrade(tradeParticipant: TradeParticipant) {
+        val offer = getOpposingOffer(tradeParticipant)
+        if (offer.accepted && getOffer(tradeParticipant).accepted) {
+            TradeManager.performTrade(
+                player1 = player1,
+                player2 = player2,
+                pokemon1 = player1Offer.pokemon!!,
+                pokemon2 = player2Offer.pokemon!!
+            )
+            completeTrade()
+        }
+    }
 
-      if (offer.getAccepted() && this.getOffer(tradeParticipant).getAccepted()) {
-         this.performTrade();
-      }
-   }
+    fun cancelTrade() {
+        player1.cancelTrade(this)
+        player2.cancelTrade(this)
+        TradeManager.removeActiveTrade(this)
+    }
 
-   public fun getOppositePlayer(tradeParticipant: TradeParticipant): TradeParticipant {
-      return if (tradeParticipant == this.player1) this.player2 else this.player1;
-   }
+    fun completeTrade() {
+        player1.completeTrade(this, player1Offer.pokemon!!.uuid, player2Offer.pokemon!!.uuid)
+        player2.completeTrade(this, player2Offer.pokemon!!.uuid, player1Offer.pokemon!!.uuid)
 
-   public fun performTrade() {
-      val var1: TradeManager = TradeManager.INSTANCE;
-      val var2: TradeParticipant = this.player1;
-      val var3: TradeParticipant = this.player2;
-      val var10000: Pokemon = this.player1Offer.getPokemon();
-      val var6: Pokemon = this.player2Offer.getPokemon();
-      var1.performTrade(var2, var10000, var3, var6);
-      this.completeTrade();
-   }
-
-   public fun cancelTrade() {
-      this.player1.cancelTrade(this);
-      this.player2.cancelTrade(this);
-      TradeManager.INSTANCE.getActiveTrades().remove(this);
-   }
-
-   public fun completeTrade() {
-      var var10000: TradeParticipant = this.player1;
-      var var10002: Pokemon = this.player1Offer.getPokemon();
-      val var2: UUID = var10002.getUuid();
-      var var10003: Pokemon = this.player2Offer.getPokemon();
-      val var5: UUID = var10003.getUuid();
-      var10000.completeTrade(this, var2, var5);
-      var10000 = this.player2;
-      var10002 = this.player2Offer.getPokemon();
-      val var4: UUID = var10002.getUuid();
-      var10003 = this.player1Offer.getPokemon();
-      val var7: UUID = var10003.getUuid();
-      var10000.completeTrade(this, var4, var7);
-      this.player1Offer.setPokemon(null);
-      this.player1Offer.setAccepted(false);
-      this.player2Offer.setPokemon(null);
-      this.player2Offer.setAccepted(false);
-   }
+        player1Offer.pokemon = null
+        player1Offer.accepted = false
+        player2Offer.pokemon = null
+        player2Offer.accepted = false
+    }
 }

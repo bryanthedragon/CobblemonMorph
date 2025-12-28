@@ -4,8 +4,13 @@ import java.net.URL;
 import java.util.Optional;
 
 import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
+import bryanthedragon.morph.cobblemonmorph.helper.dependency.cobblemon.CobblemonMorphCobblemonHelper;
+import bryanthedragon.morph.cobblemonmorph.helper.dependency.craftedcore.CobblemonMorphCraftedcoreHelper;
+import bryanthedragon.morph.cobblemonmorph.helper.dependency.minecraft.CobblemonMorphMinecraftHelper;
+import bryanthedragon.morph.cobblemonmorph.helper.dependency.remorph.CobblemonMorphRemorphHelper;
+import bryanthedragon.morph.cobblemonmorph.helper.dependency.kotlin.CobblemonMorphKotlinHelper;
+import bryanthedragon.morph.cobblemonmorph.helper.dependency.walkers.CobblemonMorphWalkersHelper;
 
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class CobblemonMorphDependencyHelper extends CobblemonMorph
@@ -65,29 +70,21 @@ public class CobblemonMorphDependencyHelper extends CobblemonMorph
      */
     public static void dependencyCheck() 
     {
-        if (!ModList.get().isLoaded("kotlinforforge")) 
+        if (!isModLoaded("kotlin") || !isModLoaded("craftedcore") || !isModLoaded("remorphed") || !isModLoaded("cobblemon") || !isModLoaded("minecraft") || !isModLoaded("walkers")) 
         {
-            throw new IllegalStateException("KotlinForForge is required but not loaded!");
-        }
-        if (!ModList.get().isLoaded("remorphed")) 
-        {
-            throw new IllegalStateException("Remorphed is required but not loaded!");
-        }
-        if (!ModList.get().isLoaded("walkers")) 
-        {
-            throw new IllegalStateException("Walkers is required but not loaded!");
-        }
-        if (!ModList.get().isLoaded("craftedcore")) 
-        {
-            throw new IllegalStateException("CraftedCore is required but not loaded!");
-        }
-        if (!ModList.get().isLoaded("cobblemon")) 
-        {
-            throw new IllegalStateException("Cobblemon is required but not loaded!");
-        }
-        if (!ModList.get().isLoaded("minecraft")) 
-        {
-            throw new IllegalStateException("Minecraft is required but not loaded!");
+            CobblemonMorphKotlinHelper.GetHelper();
+            CobblemonMorphCraftedcoreHelper.GetHelper();
+            CobblemonMorphRemorphHelper.GetHelper();
+            CobblemonMorphCobblemonHelper.GetHelper();
+            CobblemonMorphMinecraftHelper.GetHelper();
+            CobblemonMorphWalkersHelper.GetHelper();
+            try {
+                throw new IllegalStateException("One or more dependencies are missing!");
+            } 
+            catch (IllegalStateException e) {
+                CobblemonMorph.LOGGER.error("Dependency check failed: " + e.getMessage());
+                throw e;
+            }
         }
         else 
         {

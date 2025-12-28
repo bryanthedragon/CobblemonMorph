@@ -1,21 +1,21 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.item
 
 import net.minecraft.resources.ResourceLocation
+class Berry(
+    val name: ResourceLocation,
+    val spicy: Int,
+    val dry: Int,
+    val sweet: Int,
+    val bitter: Int,
+    val sour: Int
+) {
 
-public class Berry(name: ResourceLocation, spicy: Int, dry: Int, sweet: Int, bitter: Int, sour: Int) {
-   public final val bitter: Int
-   public final val dry: Int
-   public final val name: ResourceLocation
-   public final val sour: Int
-   public final val spicy: Int
-   public final val sweet: Int
-
-   init {
-      this.name = name;
-      this.spicy = spicy;
-      this.dry = dry;
-      this.sweet = sweet;
-      this.bitter = bitter;
-      this.sour = sour;
-   }
 }

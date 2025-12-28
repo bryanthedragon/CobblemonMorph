@@ -1,40 +1,60 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.calculators
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokeball.PokemonCatchRateEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CaptureContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.EventObservable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.Arrays
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall
 import net.minecraft.world.entity.LivingEntity
 
-public interface CaptureCalculator {
-   public abstract fun id(): String {
-   }
+/**
+ * Used to process Pokémon captures.
+ * This interface is here with the intention that several capture calculators can be created,
+ * i.e. supporting an earlier generation capture system.
+ *
+ * To register a calculator in order to be used in the Cobblemon config use [CaptureCalculators.register].
+ *
+ * @author landonjw
+ * @since November 30, 2021
+ */
+interface CaptureCalculator {
+    /**
+     * The literal ID of this calculator.
+     * Used when registering the calculator to the registry in order to be used by the game rule.
+     *
+     * @return The literal ID of this calculator.
+     */
+    fun id(): String
 
-   public abstract fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
-   }
+    /**
+     * Processes a capture attempt with the given params.
+     *
+     * @param thrower The [LivingEntity] that threw the [PokeBall].
+     * @param pokeBallEntity The [EmptyPokeBallEntity] used.
+     * @param target The target [PokemonEntity] attempting to be captured.
+     * @return a [CaptureContext] that is the result of the capture attempt.
+     */
+    fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity) : CaptureContext
 
-   public open fun getCatchRate(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity, catchRate: Float): Float {
-   }
+    fun getCatchRate(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity, catchRate: Float): Float {
+        val event = PokemonCatchRateEvent(
+            thrower = thrower,
+            pokemonEntity = target,
+            pokeBallEntity = pokeBallEntity,
+            catchRate = catchRate
+        )
 
-   // $VF: Class flags could not be determined
-   @SourceDebugExtension(["SMAP\nCaptureCalculator.kt\nKotlin\n*S Kotlin\n*F\n+ 1 CaptureCalculator.kt\ncom/cobblemon/mod/common/api/pokeball/catching/calculators/CaptureCalculator$DefaultImpls\n+ 2 EventObservables.kt\ncom/cobblemon/mod/common/api/reactive/EventObservable\n+ 3 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n+ 4 EventObservables.kt\ncom/cobblemon/mod/common/api/reactive/EventObservable$post$1\n*L\n1#1,60:1\n14#2,5:61\n19#2:69\n13579#3:66\n13580#3:68\n14#4:67\n*S KotlinDebug\n*F\n+ 1 CaptureCalculator.kt\ncom/cobblemon/mod/common/api/pokeball/catching/calculators/CaptureCalculator$DefaultImpls\n*L\n56#1:61,5\n56#1:69\n56#1:66\n56#1:68\n56#1:67\n*E\n"])
-   internal class DefaultImpls {
-      @JvmStatic
-      fun getCatchRate(`$this`: CaptureCalculator, thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity, catchRate: Float): Float {
-         val event: PokemonCatchRateEvent = new PokemonCatchRateEvent(thrower, pokeBallEntity, target, catchRate);
-         val `$this$iv`: EventObservable = CobblemonEvents.POKEMON_CATCH_RATE;
-         val `events$iv`: Array<PokemonCatchRateEvent> = new PokemonCatchRateEvent[]{event};
-         `$this$iv`.emit(Arrays.copyOf(`events$iv`, `events$iv`.length));
+        CobblemonEvents.POKEMON_CATCH_RATE.post(event)
 
-         for (Object element$iv$iv : events$iv) {
-            ;
-         }
-
-         return event.getCatchRate();
-      }
-   }
+        return event.catchRate
+    }
 }

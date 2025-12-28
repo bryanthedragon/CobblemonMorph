@@ -1,190 +1,112 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen5
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.ModelPartExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.BimanualSwingAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.BipedWalkAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.createTransformation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BimanualFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BipedFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.CobblemonPose
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.SimpleQuirk
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
-import kotlin.jvm.functions.Function1
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBattling
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.jetbrains.annotations.NotNull
 
-public class OshawottModel(root: ModelPart) : PokemonPoseableModel, HeadedFrame, BipedFrame, BimanualFrame {
-   public final lateinit var battleidle: Pose<PokemonEntity, ModelFrame>
-   public open val cryAnimation: CryProvider
-   public open val head: ModelPart
-   public open val leftArm: ModelPart
-   public open val leftLeg: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rightArm: ModelPart
-   public open val rightLeg: ModelPart
-   public open val rootPart: ModelPart
-   public final val scalchop: ModelPart
-   public final val scalchopbody: ModelPart
-   public final lateinit var sleep: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class OshawottModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BimanualFrame {
+    override val rootPart = root.registerChildWithAllChildren("oshawott")
+    override val head = getPart("head")
+    override val rightArm = getPart("arm_right")
+    override val leftArm = getPart("arm_left")
+    override val rightLeg = getPart("leg_right")
+    override val leftLeg = getPart("leg_left")
+    val scalchop = getPart("scalchop_hand")
+    val scalchopbody = getPart("scalchop_torso")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "oshawott");
-      this.head = this.getPart("head");
-      this.rightArm = this.getPart("arm_right");
-      this.leftArm = this.getPart("arm_left");
-      this.rightLeg = this.getPart("leg_right");
-      this.leftLeg = this.getPart("leg_left");
-      this.scalchop = this.getPart("scalchop_hand");
-      this.scalchopbody = this.getPart("scalchop_torso");
-      this.portraitScale = 2.0F;
-      this.portraitTranslation = new Vec3(-0.2, -0.15, 0.0);
-      this.profileScale = 0.7F;
-      this.profileTranslation = new Vec3(0.0, 0.69, 0.0);
-      this.cryAnimation = OshawottModel::cryAnimation$lambda$0;
-   }
+    override var portraitScale = 2.0F
+    override var portraitTranslation = Vec3(-0.2, -0.15, 0.0)
+    override var profileScale = 0.7F
+    override var profileTranslation = Vec3(0.0, 0.69, 0.0)
 
-   public override fun registerPoses() {
-      val blink: SimpleQuirk = PoseableEntityModel.quirk$default(
-         this, null, null, null, (new Function1<PoseableEntityState<PokemonEntity>, StatefulAnimation<PokemonEntity, ?>>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
-            }
+    lateinit var battleidle: CobblemonPose
+    lateinit var sleep: CobblemonPose
+    lateinit var standing: CobblemonPose
+    lateinit var walk: CobblemonPose
 
-            @NotNull
-            public final StatefulAnimation<PokemonEntity, ?> invoke(@NotNull PoseableEntityState<PokemonEntity> it) {
-               return PoseableEntityModel.bedrockStateful$default(this.this$0, "oshawott", "blink", null, 4, null);
-            }
-         }) as Function1, 7, null
-      );
-      this.setSleep(
-         PoseableEntityModel.registerPose$default(
-            this,
-            PoseType.SLEEP,
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "oshawott", "sleep", null, 4, null)},
-            new ModelPartTransformation[]{
-               ModelPartExtensionsKt.createTransformation(this.scalchop).withVisibility(false),
-               ModelPartExtensionsKt.createTransformation(this.scalchopbody).withVisibility(true),
-               ModelPartExtensionsKt.createTransformation(this.getRootPart()).addPosition(1, -7)
-            },
-            null,
-            154,
-            null
-         )
-      );
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "standing",
-            SetsKt.setOf(new PoseType[]{PoseType.NONE, PoseType.STAND, PoseType.PORTRAIT, PoseType.PROFILE}),
-            <unrepresentable>.INSTANCE,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "oshawott", "ground_idle", null, 4, null)
-            },
-            new ModelPartTransformation[]{
-               ModelPartExtensionsKt.createTransformation(this.scalchop).withVisibility(false),
-               ModelPartExtensionsKt.createTransformation(this.scalchopbody).withVisibility(true)
-            },
-            new ModelQuirk[]{blink},
-            48,
-            null
-         )
-      );
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "walking",
-            SetsKt.setOf(new PoseType[]{PoseType.SWIM, PoseType.WALK}),
-            <unrepresentable>.INSTANCE,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "oshawott", "ground_idle", null, 4, null),
-               new BipedWalkAnimation(this, 0.6F, 0.9F),
-               new BimanualSwingAnimation(this, 0.6F, 0.9F)
-            },
-            new ModelPartTransformation[]{
-               ModelPartExtensionsKt.createTransformation(this.scalchop).withVisibility(false),
-               ModelPartExtensionsKt.createTransformation(this.scalchopbody).withVisibility(true)
-            },
-            new ModelQuirk[]{blink},
-            48,
-            null
-         )
-      );
-      val var10001: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      this.setBattleidle(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "battle_idle",
-            SetsKt.plus(var10001, PoseType.FLOAT),
-            <unrepresentable>.INSTANCE,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "oshawott", "ground_idle", null, 4, null)
-            },
-            new ModelPartTransformation[]{
-               ModelPartExtensionsKt.createTransformation(this.scalchop).withVisibility(true),
-               ModelPartExtensionsKt.createTransformation(this.scalchopbody).withVisibility(false)
-            },
-            new ModelQuirk[]{blink},
-            48,
-            null
-         )
-      );
-   }
+    override val cryAnimation = CryProvider { bedrockStateful("oshawott", "cry") }
 
-   override fun <T extends Entity> singleBoneLook(
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: java.lang.Float?,
-      yawMultiplier: java.lang.Float?,
-      maxPitch: java.lang.Float?,
-      minPitch: java.lang.Float?,
-      maxYaw: java.lang.Float?,
-      minYaw: java.lang.Float?
-   ): SingleBoneLookAnimation<T> {
-      return HeadedFrame.DefaultImpls.singleBoneLook(
-         this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw
-      );
-   }
+    override fun registerPoses() {
+        val blink = quirk { bedrockStateful("oshawott", "blink") }
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: OshawottModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "oshawott", "cry", null, 4, null);
-   }
+        sleep = registerPose(
+                poseType = PoseType.SLEEP,
+                transformTicks = 10,
+                transformedParts = arrayOf(
+                        scalchop.createTransformation().withVisibility(visibility = false),
+                        scalchopbody.createTransformation().withVisibility(visibility = true),
+                        rootPart.createTransformation().addPosition(ModelPartTransformation.Y_AXIS, -7)
+                ),
+                animations = arrayOf(bedrock("oshawott", "sleep"))
+        )
+
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = setOf(PoseType.NONE, PoseType.STAND, PoseType.PORTRAIT, PoseType.PROFILE),
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            condition = { !it.isBattling },
+            transformedParts = arrayOf(
+                scalchop.createTransformation().withVisibility(visibility = false),
+                scalchopbody.createTransformation().withVisibility(visibility = true)
+            ),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("oshawott", "ground_idle")
+            )
+        )
+
+        walk = registerPose(
+            poseName = "walking",
+            poseTypes = setOf(PoseType.SWIM, PoseType.WALK),
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            condition = { !it.isBattling },
+            transformedParts = arrayOf(
+                scalchop.createTransformation().withVisibility(visibility = false),
+                scalchopbody.createTransformation().withVisibility(visibility = true)
+            ),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("oshawott", "ground_idle"),
+                BipedWalkAnimation(this, periodMultiplier = 0.6F, amplitudeMultiplier = 0.9F),
+                BimanualSwingAnimation(this, swingPeriodMultiplier = 0.6F, amplitudeMultiplier = 0.9F)
+            )
+        )
+
+        battleidle = registerPose(
+            poseName = "battle_idle",
+            poseTypes = PoseType.STATIONARY_POSES + PoseType.FLOAT,
+            transformTicks = 10,
+            quirks = arrayOf(blink),
+            condition = { it.isBattling },
+            transformedParts = arrayOf(
+                scalchop.createTransformation().withVisibility(visibility = true),
+                scalchopbody.createTransformation().withVisibility(visibility = false)
+            ),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("oshawott", "ground_idle")
+            )
+        )
+    }
 }

@@ -1,64 +1,103 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity.pokemon
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.PokeBalls
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.effects.IllusionEffect
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.effects.TransformEffect
-import java.util.LinkedHashMap
-import java.util.concurrent.CompletableFuture
-import kotlin.jvm.functions.Function0
-import kotlin.jvm.internal.SourceDebugExtension
-import kotlin.reflect.KClass
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import java.util.concurrent.CompletableFuture
+import kotlin.reflect.KClass
 
-public interface EntityEffect {
-   public abstract fun start(entity: PokemonEntity): CompletableFuture<PokemonEntity>? {
-   }
+/**
+ * Represents a temporary alteration to how a [PokemonEntity] is rendered and behaves. May include a temporary visual effect
+ * when applied.
+ *
+ * @author Segfault Guy
+ * @since March 5th, 2024
+ */
+interface EntityEffect {
 
-   public abstract fun end(entity: PokemonEntity): CompletableFuture<PokemonEntity>? {
-   }
+    /**
+     * Starts this effect for the provided [PokemonEntity].
+     *
+     * @return A [CompletableFuture] that completes after the effect has been applied. Or null if the effect failed to start.
+     */
+    fun start(entity: PokemonEntity): CompletableFuture<PokemonEntity>?
 
-   public abstract fun saveToNbt(): CompoundTag {
-   }
+    /**
+     * Ends this effect for the provided [PokemonEntity].
+     *
+     * @return A [CompletableFuture] that completes after the effect has been reverted. Or null if the effect failed to end.
+     */
+    fun end(entity: PokemonEntity): CompletableFuture<PokemonEntity>?
 
-   public abstract fun loadFromNBT(nbt: CompoundTag) {
-   }
+    /** Saves this effect to NBT. */
+    fun saveToNbt(registryLookup: HolderLookup.Provider): CompoundTag
 
-   @SourceDebugExtension(["SMAP\nEntityEffect.kt\nKotlin\n*S Kotlin\n*F\n+ 1 EntityEffect.kt\ncom/cobblemon/mod/common/api/entity/pokemon/EntityEffect$Companion\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,98:1\n1#2:99\n*E\n"])
-   public companion object {
-      private final val defaults: MutableMap<String, () -> EntityEffect> = (new LinkedHashMap()) as java.util.Map
-      private final val effects: MutableMap<String, KClass<out EntityEffect>> = (new LinkedHashMap()) as java.util.Map
+    /** Loads this effect from NBT. */
+    fun loadFromNBT(nbt: CompoundTag, registryLookup: HolderLookup.Provider)
 
-      public fun <T : EntityEffect> register(id: String, type: KClass<Any>, default: () -> Any) {
-         effects.put(id, type);
-         defaults.put(id, default);
-      }
+    companion object {
 
-      public fun createDefault(id: String): EntityEffect? {
-         val var10000: Function0 = defaults.get(id);
-         return if (var10000 != null) var10000.invoke() as EntityEffect else null;
-      }
+        private val effects = mutableMapOf<String, KClass<out EntityEffect>>()
+        private val defaults = mutableMapOf<String, () -> EntityEffect>()
 
-      public fun loadFromNbt(nbt: CompoundTag): EntityEffect? {
-         if (nbt.m_128441_("EntityEffectID")) {
-            val id: java.lang.String = nbt.m_128461_("EntityEffectID");
-            var var10000: EntityEffect = this.createDefault(id);
-            if (var10000 != null) {
-               var10000.loadFromNBT(nbt);
-               var10000 = var10000;
-            } else {
-               var10000 = null;
+        init {
+            register(IllusionEffect.ID, IllusionEffect::class, ::IllusionEffect)
+            register(TransformEffect.ID, TransformEffect::class, ::TransformEffect)
+        }
+
+        fun <T : EntityEffect> register(id: String, type: KClass<T>, default: () -> T) {
+            effects[id] = type
+            defaults[id] = default
+        }
+
+        fun createDefault(id: String): EntityEffect? = defaults[id]?.invoke()
+
+        fun loadFromNbt(nbt: CompoundTag, registryLookup: HolderLookup.Provider): EntityEffect? {
+            if (nbt.contains(DataKeys.ENTITY_EFFECT_ID)) {
+                val id = nbt.getString(DataKeys.ENTITY_EFFECT_ID)
+                return createDefault(id)?.also { it.loadFromNBT(nbt, registryLookup) }
             }
+            return null
+        }
+    }
+}
 
-            return var10000;
-         } else {
-            return null;
-         }
-      }
 
-      @JvmStatic
-      fun {
-         $$INSTANCE.register(IllusionEffect.Companion.getID(), IllusionEffect::class, <unrepresentable>.INSTANCE);
-         $$INSTANCE.register(TransformEffect.Companion.getID(), TransformEffect::class, <unrepresentable>.INSTANCE);
-      }
-   }
+/** An [EntityEffect] that modifies the dimensions of a [PokemonEntity]. */
+interface PhysicalEffect : EntityEffect {
+    val scale: Float
+}
+
+/** An [EntityEffect] that alters the physical appearance of a [PokemonEntity] to match a [mock]. */
+interface MocKEffect : PhysicalEffect {
+    val mock: PokemonProperties
+
+    val exposedSpecies: Species?
+        get() = this.mock.species?.let { PokemonSpecies.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
+
+    val exposedForm: FormData?
+        get() = this.mock.form?.let {
+            formID -> this.exposedSpecies?.forms?.firstOrNull { it.formOnlyShowdownId().equals(formID, true) } }
+                ?: this.exposedSpecies?.standardForm
+
+    val exposedBall: PokeBall?
+        get() = this.mock.pokeball?.let { PokeBalls.getPokeBall(it.asIdentifierDefaultingNamespace()) }
 }

@@ -1,76 +1,93 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ResourceLocationExtensionsKt
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.advancements.critereon.EntityPredicate
 import net.minecraft.server.level.ServerPlayer
+import java.util.Optional
 
-public class TradePokemonCriterionCondition(id: ResourceLocation, entity: ContextAwarePredicate) : SimpleCriterionCondition(id, entity) {
-   public final var received: String = "any"
-   public final var receivedHeldItem: String = "any"
-   public final var traded: String = "any"
-   public final var tradedHeldItem: String = "any"
+class TradePokemonContext(val traded: Pokemon, val received: Pokemon)
 
-   public override fun toJson(json: JsonObject) {
-      json.addProperty("traded", this.traded);
-      json.addProperty("received", this.received);
-      json.addProperty("traded_held_item", this.tradedHeldItem);
-      json.addProperty("received_held_item", this.receivedHeldItem);
-   }
+class TradePokemonCriterion(
+    playerCtx: Optional<ContextAwarePredicate>,
+    val traded: String,
+    val received: String,
+    val tradedHeldItem: String,
+    val receivedHeldItem: String
+): SimpleCriterionCondition<TradePokemonContext>(playerCtx) {
 
-   public override fun fromJson(json: JsonObject) {
-      var var10001: JsonElement = json.get("traded");
-      var var2: java.lang.String = if (var10001 != null) var10001.getAsString() else null;
-      if (var2 == null) {
-         var2 = "any";
-      }
+    companion object {
+        val CODEC: Codec<TradePokemonCriterion> = RecordCodecBuilder.create { it.group(
+            EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(TradePokemonCriterion::playerCtx),
+            Codec.STRING.optionalFieldOf("traded", "any").forGetter(TradePokemonCriterion::traded),
+            Codec.STRING.optionalFieldOf("received", "any").forGetter(TradePokemonCriterion::received),
+            Codec.STRING.optionalFieldOf("traded_held_item", "minecraft:air").forGetter(TradePokemonCriterion::tradedHeldItem),
+            Codec.STRING.optionalFieldOf("received_held_item", "minecraft:air").forGetter(TradePokemonCriterion::receivedHeldItem)
+        ).apply(it, ::TradePokemonCriterion) }
+    }
 
-      this.traded = var2;
-      var10001 = json.get("received");
-      var var4: java.lang.String = if (var10001 != null) var10001.getAsString() else null;
-      if (var4 == null) {
-         var4 = "any";
-      }
+    override fun matches(player: ServerPlayer, context: TradePokemonContext): Boolean {
+        val heldItem1 = context.traded.heldItem().item.builtInRegistryHolder().key().location()
+        val heldItem2 = context.received.heldItem().item.builtInRegistryHolder().key().location()
 
-      this.received = var4;
-      var10001 = json.get("traded_held_item");
-      var var6: java.lang.String = if (var10001 != null) var10001.getAsString() else null;
-      if (var6 == null) {
-         var6 = "minecraft:air";
-      }
+        if (traded != "any" && context.traded.species.resourceIdentifier != traded.asIdentifierDefaultingNamespace()) {
+            return false
+        }
 
-      this.tradedHeldItem = var6;
-      var10001 = json.get("received_held_item");
-      var var8: java.lang.String = if (var10001 != null) var10001.getAsString() else null;
-      if (var8 == null) {
-         var8 = "minecraft:air";
-      }
+        if (received != "any" && context.received.species.resourceIdentifier != received.asIdentifierDefaultingNamespace()) {
+            return false
+        }
 
-      this.receivedHeldItem = var8;
-   }
+        if (heldItem1 != tradedHeldItem.asIdentifierDefaultingNamespace() && heldItem1 != "minecraft:air".asIdentifierDefaultingNamespace()) {
+            return false
+        }
 
-   public open fun matches(player: ServerPlayer, context: TradePokemonContext): Boolean {
-      val heldItem1: ResourceLocation = context.getTraded().heldItem().m_41720_().m_204114_().m_205785_().m_135782_();
-      val heldItem2: ResourceLocation = context.getReceived().heldItem().m_41720_().m_204114_().m_205785_().m_135782_();
-      return (
-            context.getTraded().getSpecies().getResourceIdentifier()
-                  == ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(this.traded, null, 1, null)
-               || this.traded == "any"
-         )
-         && (
-            context.getReceived().getSpecies().getResourceIdentifier()
-                  == ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(this.received, null, 1, null)
-               || this.received == "any"
-         )
-         && (
-            heldItem1 == ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(this.tradedHeldItem, null, 1, null)
-               || heldItem1 == ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default("minecraft:air", null, 1, null)
-         )
-         && (
-            heldItem2 == ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default(this.receivedHeldItem, null, 1, null)
-               || heldItem2 == ResourceLocationExtensionsKt.asIdentifierDefaultingNamespace$default("minecraft:air", null, 1, null)
-         );
-   }
+        if (heldItem2 != receivedHeldItem.asIdentifierDefaultingNamespace() && heldItem2 != "minecraft:air".asIdentifierDefaultingNamespace()) {
+            return false
+        }
+
+        return true
+    }
 }
+
+/*class TradePokemonCriterionCondition(id: Identifier, entity: LootContextPredicate) : SimpleCriterionCondition<TradePokemonContext>(id, entity) {
+    var traded = "any"
+    var received = "any"
+    var tradedHeldItem = "any"
+    var receivedHeldItem = "any"
+    override fun toJson(json: JsonObject) {
+        json.addProperty("traded", traded)
+        json.addProperty("received", received)
+        json.addProperty("traded_held_item", tradedHeldItem)
+        json.addProperty("received_held_item", receivedHeldItem)
+    }
+
+    override fun fromJson(json: JsonObject) {
+        traded = json.get("traded")?.asString ?: "any"
+        received = json.get("received")?.asString ?: "any"
+        tradedHeldItem = json.get("traded_held_item")?.asString ?: "minecraft:air"
+        receivedHeldItem = json.get("received_held_item")?.asString ?: "minecraft:air"
+    }
+
+    override fun matches(player: ServerPlayer, context: TradePokemonContext): Boolean {
+        val heldItem1 = context.traded.heldItem().item.registryEntry.ResourceKey().value
+        val heldItem2 = context.received.heldItem().item.registryEntry.ResourceKey().value
+        return (context.traded.species.resourceIdentifier == traded.asIdentifierDefaultingNamespace() || traded == "any") &&
+                (context.received.species.resourceIdentifier == received.asIdentifierDefaultingNamespace() || received == "any") &&
+                (heldItem1 == tradedHeldItem.asIdentifierDefaultingNamespace() || heldItem1 == "minecraft:air".asIdentifierDefaultingNamespace()) &&
+                (heldItem2 == receivedHeldItem.asIdentifierDefaultingNamespace() || heldItem2 == "minecraft:air".asIdentifierDefaultingNamespace())
+    }
+}
+
+open class TradePokemonContext(val traded: Pokemon, val received: Pokemon)*/

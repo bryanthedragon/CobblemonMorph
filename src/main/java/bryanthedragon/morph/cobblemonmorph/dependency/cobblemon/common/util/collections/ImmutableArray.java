@@ -1,13 +1,16 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.collections
+class ImmutableArray<T>(private vararg val values: T) {
 
-public class ImmutableArray<T>(vararg values: Any) {
-   private final val values: Array<out Any>
+    operator fun get(index: Int) = values[index]
 
-   init {
-      this.values = (T[])values;
-   }
-
-   public operator fun get(index: Int): Any {
-      return this.values[index];
-   }
 }
+
+inline fun <reified T> immutableArrayOf(vararg values: T) = ImmutableArray(*values)

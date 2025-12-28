@@ -1,37 +1,46 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
-import java.util.ArrayList;
-import java.util.Arrays
-import kotlin.jvm.internal.SourceDebugExtension
 
-@SourceDebugExtension(["SMAP\nSingularObservable.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SingularObservable.kt\ncom/cobblemon/mod/common/api/reactive/SingularObservable\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,46:1\n1855#2,2:47\n*S KotlinDebug\n*F\n+ 1 SingularObservable.kt\ncom/cobblemon/mod/common/api/reactive/SingularObservable\n*L\n30#1:47,2\n*E\n"])
-public open class SingularObservable<T> : SimpleObservable<T> {
-   private final var completed: Boolean
-   private final var completedValue: MutableList<Any> = (new ArrayList()) as java.util.List
+/**
+ * A simple implementation of [Observable] that can only emit a singular set of values. Attempts at emitting
+ * a second time throws an exception. Subscribing to a completed [SingularObservable] immediately processes
+ * the values that were emitted and doesn't bother subscribing as new values will not be emitted.
+ *
+ * This is similar in function to a [java.util.concurrent.CompletableFuture].
+ *
+ * @author Hiroku
+ * @since November 26th, 2021
+ */
+open class SingularObservable<T> : SimpleObservable<T>() {
+    private var completed = false
+    private var completedValue = mutableListOf<T>()
 
-   public override fun subscribe(priority: Priority, handler: (Any) -> Unit): ObservableSubscription<Any> {
-      val subscription: ObservableSubscription = new ObservableSubscription<>(this, handler);
-      if (this.completed) {
-         val `$this$forEach$iv`: java.lang.Iterable;
-         for (Object element$iv : $this$forEach$iv) {
-            handler.invoke(`element$iv`);
-         }
-      } else {
-         this.getSubscriptions().add(priority, subscription);
-      }
+    override fun subscribe(priority: Priority, handler: (T) -> Unit): ObservableSubscription<T> {
+        val subscription = ObservableSubscription(this, handler)
+        if (completed) {
+            completedValue.forEach { handler(it) }
+        } else {
+            subscriptions.add(priority, subscription)
+        }
+        return subscription
+    }
 
-      return subscription;
-   }
-
-   public override fun emit(vararg values: Any) {
-      if (this.completed) {
-         throw new IllegalStateException("This observable is already completed!");
-      } else {
-         this.completed = true;
-         CollectionsKt.addAll(this.completedValue, values);
-         super.emit((T[])Arrays.copyOf(values, values.length));
-         this.getSubscriptions().clear();
-      }
-   }
+    override fun emit(vararg values: T) {
+        if (completed) {
+            throw IllegalStateException("This observable is already completed!")
+        }
+        completed = true
+        completedValue.addAll(values)
+        super.emit(*values)
+        subscriptions.clear()
+    }
 }

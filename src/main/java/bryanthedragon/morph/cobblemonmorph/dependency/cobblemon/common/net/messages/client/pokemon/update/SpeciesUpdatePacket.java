@@ -1,37 +1,38 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readIdentifier
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeIdentifier
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class SpeciesUpdatePacket(pokemon: () -> Pokemon, value: Species) : SingleUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
+class SpeciesUpdatePacket(pokemon: () -> Pokemon?, value: Species) : SingleUpdatePacket<Species, SpeciesUpdatePacket>(pokemon, value) {
+    override val id = ID
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeIdentifier(this.value.resourceIdentifier)
+    }
 
-   init {
-      this.id = ID;
-   }
+    override fun set(pokemon: Pokemon, value: Species) {
+        pokemon.species = value
+    }
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      buffer.m_130085_(this.getValue().getResourceIdentifier());
-   }
+    companion object {
+        val ID = cobblemonResource("species_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): SpeciesUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val species = PokemonSpecies.getByIdentifier(buffer.readIdentifier())!!
+            return SpeciesUpdatePacket(pokemon, species)
+        }
+    }
 
-   public open fun set(pokemon: Pokemon, value: Species) {
-      pokemon.setSpecies(value);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): SpeciesUpdatePacket {
-         val pokemon: Function0 = PokemonUpdatePacket.Companion.decodePokemon(buffer);
-         val var10000: PokemonSpecies = PokemonSpecies.INSTANCE;
-         val var10001: ResourceLocation = buffer.m_130281_();
-         val var4: Species = var10000.getByIdentifier(var10001);
-         return new SpeciesUpdatePacket(pokemon, var4);
-      }
-   }
 }

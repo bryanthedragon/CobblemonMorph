@@ -1,37 +1,46 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Abilities
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.AbilityTemplate
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class AbilityUpdatePacket(pokemon: () -> Pokemon, ability: AbilityTemplate) : SingleUpdatePacket(pokemon, ability) {
-   public open val id: ResourceLocation
+/**
+ * Packet sent when the ability of a Pokémon has changed. Only sends the template.
+ *
+ * @author Hiroku
+ * @since November 1st, 2022
+ */
+class AbilityUpdatePacket(pokemon: () -> Pokemon?, ability: AbilityTemplate) : SingleUpdatePacket<AbilityTemplate, AbilityUpdatePacket>(pokemon, ability) {
 
-   init {
-      this.id = ID;
-   }
+    override val id = ID
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      buffer.m_130070_(this.getValue().getName());
-   }
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(this.value.name)
+    }
 
-   public open fun set(pokemon: Pokemon, value: AbilityTemplate) {
-      pokemon.setAbility$common(AbilityTemplate.create$default(value, false, 1, null));
-   }
+    override fun set(pokemon: Pokemon, value: AbilityTemplate) {
+        pokemon.ability = value.create()
+    }
 
-   public companion object {
-      public final val ID: ResourceLocation
+    companion object {
+        val ID = cobblemonResource("ability_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): AbilityUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val ability = Abilities.get(buffer.readString())!!
+            return AbilityUpdatePacket(pokemon, ability)
+        }
+    }
 
-      public fun decode(buffer: FriendlyByteBuf): AbilityUpdatePacket {
-         val pokemon: Function0 = PokemonUpdatePacket.Companion.decodePokemon(buffer);
-         val var10000: Abilities = Abilities.INSTANCE;
-         val var10001: java.lang.String = buffer.m_130277_();
-         val var4: AbilityTemplate = var10000.get(var10001);
-         return new AbilityUpdatePacket(pokemon, var4);
-      }
-   }
 }

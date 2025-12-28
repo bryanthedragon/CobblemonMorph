@@ -1,154 +1,166 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.keybinds
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.CobblemonKeyBinding
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.PokemonModelRepository
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import com.mojang.blaze3d.platform.InputConstants.Type
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.KeybindCategories
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.FloatingState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.VaryingModelRepository
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
+import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
-import net.minecraft.client.player.LocalPlayer
 import net.minecraft.network.chat.Component
-import net.minecraft.world.phys.Vec3
+final class DebugKeybindings {
+    val keybindings = listOf(
+        ScaleUpKeybinding(),
+        ScaleDownKeybinding(),
+        TranslateLeftKeybinding(),
+        TranslateRightKeybinding(),
+        TranslateUpKeybinding(),
+        TranslateDownKeybinding(),
+        PrintModelSettingsKeybinding(),
+        ToggleRidingStatsDebugGUIKeybinding()
+    )
 
-public object DebugKeybindings {
-   public final val keybindings: List<CobblemonKeyBinding> =
-      CollectionsKt.listOf(
-         new CobblemonKeyBinding[]{
-            new DebugKeybindings.ScaleUpKeybinding(),
-            new DebugKeybindings.ScaleDownKeybinding(),
-            new DebugKeybindings.TranslateLeftKeybinding(),
-            new DebugKeybindings.TranslateRightKeybinding(),
-            new DebugKeybindings.TranslateUpKeybinding(),
-            new DebugKeybindings.TranslateDownKeybinding(),
-            new DebugKeybindings.PrintModelSettingsKeybinding()
-         }
-      )
-
-   public class PrintModelSettingsKeybinding : CobblemonKeyBinding(
-         "key.cobblemon.printmodelsettings", Type.KEYSYM, 46, "key.cobblemon.categories.cobblemon.debug"
-      ) {
-      public override fun onPress() {
-         val currentlySelectedPokemon: Pokemon = CobblemonClient.INSTANCE
-            .getStorage()
-            .getMyParty()
-            .get(CobblemonClient.INSTANCE.getStorage().getSelectedSlot());
-         if (currentlySelectedPokemon != null) {
-            val model: PokemonPoseableModel = PokemonModelRepository.INSTANCE
-               .getPoser(currentlySelectedPokemon.getSpecies().getResourceIdentifier(), currentlySelectedPokemon.getAspects());
-            var var10000: LocalPlayer = Minecraft.m_91087_().f_91074_;
-            if (var10000 != null) {
-               var10000.m_213846_(Component.m_130674_("Portrait Translation: ${model.getPortraitTranslation()}"));
+    class ScaleUpKeybinding: CobblemonKeyBinding(
+        "key.cobblemon.scaleportraitup",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_EQUALS,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+            if (currentlySelectedPokemon != null) {
+                val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
+                val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
+                model.portraitScale += 0.01F
             }
 
-            var10000 = Minecraft.m_91087_().f_91074_;
-            if (var10000 != null) {
-               var10000.m_213846_(Component.m_130674_("Portrait Scale: ${model.getPortraitScale()}"));
+        }
+    }
+    class ScaleDownKeybinding: CobblemonKeyBinding(
+        "key.cobblemon.scaleportraitdown",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_MINUS,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+            if (currentlySelectedPokemon != null) {
+                val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
+                val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
+                model.portraitScale -= 0.01F
             }
 
-            Cobblemon.INSTANCE
-               .getLOGGER()
-               .info(
-                  "override var portraitTranslation = Vec3d(${model.getPortraitTranslation().f_82479_}, ${model.getPortraitTranslation().f_82480_}, ${model.getPortraitTranslation()
-                     .f_82481_})"
-               );
-            Cobblemon.INSTANCE.getLOGGER().info("override var portraitScale = ${model.getPortraitScale()}F");
-         }
-      }
-   }
+        }
+    }
 
-   public class ScaleDownKeybinding : CobblemonKeyBinding("key.cobblemon.scaleportraitdown", Type.KEYSYM, 45, "key.cobblemon.categories.cobblemon.debug") {
-      public override fun onPress() {
-         val currentlySelectedPokemon: Pokemon = CobblemonClient.INSTANCE
-            .getStorage()
-            .getMyParty()
-            .get(CobblemonClient.INSTANCE.getStorage().getSelectedSlot());
-         if (currentlySelectedPokemon != null) {
-            val model: PokemonPoseableModel = PokemonModelRepository.INSTANCE
-               .getPoser(currentlySelectedPokemon.getSpecies().getResourceIdentifier(), currentlySelectedPokemon.getAspects());
-            model.setPortraitScale(model.getPortraitScale() - 0.01F);
-         }
-      }
-   }
+    class TranslateUpKeybinding: CobblemonKeyBinding(
+        "key.cobblemon.translateportraitup",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_I,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+            if (currentlySelectedPokemon != null) {
+                val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
+                val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
+                model.portraitTranslation = model.portraitTranslation.add(0.0, -0.01, 0.0)
+            }
 
-   public class ScaleUpKeybinding : CobblemonKeyBinding("key.cobblemon.scaleportraitup", Type.KEYSYM, 61, "key.cobblemon.categories.cobblemon.debug") {
-      public override fun onPress() {
-         val currentlySelectedPokemon: Pokemon = CobblemonClient.INSTANCE
-            .getStorage()
-            .getMyParty()
-            .get(CobblemonClient.INSTANCE.getStorage().getSelectedSlot());
-         if (currentlySelectedPokemon != null) {
-            val model: PokemonPoseableModel = PokemonModelRepository.INSTANCE
-               .getPoser(currentlySelectedPokemon.getSpecies().getResourceIdentifier(), currentlySelectedPokemon.getAspects());
-            model.setPortraitScale(model.getPortraitScale() + 0.01F);
-         }
-      }
-   }
+        }
+    }
+    class TranslateDownKeybinding: CobblemonKeyBinding(
+        "key.cobblemon.translateportraitdown",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_K,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+            if (currentlySelectedPokemon != null) {
+                val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
+                val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
+                model.portraitTranslation = model.portraitTranslation.add(0.0, 0.01, 0.0)
+            }
 
-   public class TranslateDownKeybinding : CobblemonKeyBinding(
-         "key.cobblemon.translateportraitdown", Type.KEYSYM, 75, "key.cobblemon.categories.cobblemon.debug"
-      ) {
-      public override fun onPress() {
-         val currentlySelectedPokemon: Pokemon = CobblemonClient.INSTANCE
-            .getStorage()
-            .getMyParty()
-            .get(CobblemonClient.INSTANCE.getStorage().getSelectedSlot());
-         if (currentlySelectedPokemon != null) {
-            val model: PokemonPoseableModel = PokemonModelRepository.INSTANCE
-               .getPoser(currentlySelectedPokemon.getSpecies().getResourceIdentifier(), currentlySelectedPokemon.getAspects());
-            val var10001: Vec3 = model.getPortraitTranslation().m_82520_(0.0, 0.01, 0.0);
-            model.setPortraitTranslation(var10001);
-         }
-      }
-   }
+        }
+    }
 
-   public class TranslateLeftKeybinding : CobblemonKeyBinding(
-         "key.cobblemon.translateportraitleft", Type.KEYSYM, 74, "key.cobblemon.categories.cobblemon.debug"
-      ) {
-      public override fun onPress() {
-         val currentlySelectedPokemon: Pokemon = CobblemonClient.INSTANCE
-            .getStorage()
-            .getMyParty()
-            .get(CobblemonClient.INSTANCE.getStorage().getSelectedSlot());
-         if (currentlySelectedPokemon != null) {
-            val model: PokemonPoseableModel = PokemonModelRepository.INSTANCE
-               .getPoser(currentlySelectedPokemon.getSpecies().getResourceIdentifier(), currentlySelectedPokemon.getAspects());
-            val var10001: Vec3 = model.getPortraitTranslation().m_82520_(-0.01, 0.0, 0.0);
-            model.setPortraitTranslation(var10001);
-         }
-      }
-   }
+    class TranslateLeftKeybinding: CobblemonKeyBinding(
+        "key.cobblemon.translateportraitleft",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_J,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+            if (currentlySelectedPokemon != null) {
+                val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
+                val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
+                model.portraitTranslation = model.portraitTranslation.add(-0.01, 0.0, 0.0)
+            }
 
-   public class TranslateRightKeybinding : CobblemonKeyBinding(
-         "key.cobblemon.translateportraitright", Type.KEYSYM, 76, "key.cobblemon.categories.cobblemon.debug"
-      ) {
-      public override fun onPress() {
-         val currentlySelectedPokemon: Pokemon = CobblemonClient.INSTANCE
-            .getStorage()
-            .getMyParty()
-            .get(CobblemonClient.INSTANCE.getStorage().getSelectedSlot());
-         if (currentlySelectedPokemon != null) {
-            val model: PokemonPoseableModel = PokemonModelRepository.INSTANCE
-               .getPoser(currentlySelectedPokemon.getSpecies().getResourceIdentifier(), currentlySelectedPokemon.getAspects());
-            val var10001: Vec3 = model.getPortraitTranslation().m_82520_(0.01, 0.0, 0.0);
-            model.setPortraitTranslation(var10001);
-         }
-      }
-   }
+        }
+    }
 
-   public class TranslateUpKeybinding : CobblemonKeyBinding("key.cobblemon.translateportraitup", Type.KEYSYM, 73, "key.cobblemon.categories.cobblemon.debug") {
-      public override fun onPress() {
-         val currentlySelectedPokemon: Pokemon = CobblemonClient.INSTANCE
-            .getStorage()
-            .getMyParty()
-            .get(CobblemonClient.INSTANCE.getStorage().getSelectedSlot());
-         if (currentlySelectedPokemon != null) {
-            val model: PokemonPoseableModel = PokemonModelRepository.INSTANCE
-               .getPoser(currentlySelectedPokemon.getSpecies().getResourceIdentifier(), currentlySelectedPokemon.getAspects());
-            val var10001: Vec3 = model.getPortraitTranslation().m_82520_(0.0, -0.01, 0.0);
-            model.setPortraitTranslation(var10001);
-         }
-      }
-   }
+    class TranslateRightKeybinding: CobblemonKeyBinding(
+        "key.cobblemon.translateportraitright",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_J,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+            if (currentlySelectedPokemon != null) {
+                val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
+                val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
+                model.portraitTranslation = model.portraitTranslation.add(0.01, 0.0, 0.0)
+            }
+        }
+    }
+
+    class PrintModelSettingsKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.printmodelsettings",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_PERIOD,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val currentlySelectedPokemon = CobblemonClient.storage.party.get(CobblemonClient.storage.selectedSlot)
+            if (currentlySelectedPokemon != null) {
+                val state = FloatingState().also { it.currentAspects = currentlySelectedPokemon.aspects }
+                val model = VaryingModelRepository.getPoser(currentlySelectedPokemon.species.resourceIdentifier, state)
+                Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Portrait Translation: ${model.portraitTranslation}"))
+                Minecraft.getInstance().player?.sendSystemMessage(Component.literal("Portrait Scale: ${model.portraitScale}"))
+                Cobblemon.LOGGER.info("override var portraitTranslation = Vec3d(${model.portraitTranslation.x}, ${model.portraitTranslation.y}, ${model.portraitTranslation.z})")
+                Cobblemon.LOGGER.info("override var portraitScale = ${model.portraitScale}F")
+            }
+        }
+    }
+
+    class ToggleRidingStatsDebugGUIKeybinding : CobblemonKeyBinding(
+        "key.cobblemon.toggleridingstatsgui",
+        InputConstants.Type.KEYSYM,
+        InputConstants.KEY_SEMICOLON,
+        KeybindCategories.COBBLEMON_DEBUG_CATEGORY
+    ) {
+        override fun onPress() {
+            val vehicle = Minecraft.getInstance().player?.vehicle ?: return
+            if (vehicle is PokemonEntity) {
+                RequestOpenRidingStatsDebugGUIPacket().sendToServer()
+            }
+        }
+    }
+
 }

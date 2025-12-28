@@ -1,17 +1,26 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.chest
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.SchedulingTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import net.minecraft.world.entity.Entity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
 
-public class GildedState : PoseableEntityState<Entity> {
-   public open val schedulingTracker: SchedulingTracker
+class GildedState : PosableState() {
+    override fun getEntity() = null
 
-   public open fun getEntity(): Nothing? {
-      return null;
-   }
+    init {
+        setPose("closed")
+    }
 
-   public override fun updatePartialTicks(partialTicks: Float) {
-      this.setCurrentPartialTicks(this.getCurrentPartialTicks() + partialTicks);
-   }
+    override fun updatePartialTicks(partialTicks: Float) {
+        this.currentPartialTicks += partialTicks
+    }
+
+    override val schedulingTracker = SchedulingTracker()
 }

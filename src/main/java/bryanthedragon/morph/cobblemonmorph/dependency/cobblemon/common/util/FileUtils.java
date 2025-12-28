@@ -1,56 +1,74 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
 
-import java.io.Closeable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import java.io.FileInputStream
 import java.io.IOException
+import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+final class FileUtils {
 
-public object FileUtils {
-   public fun unzipFile(source: Path, target: Path) {
-      label39: {
-         val var3: Closeable = new ZipInputStream(new FileInputStream(source.toFile()));
-         var var4: java.lang.Throwable = null;
+    private fun getResourceStream(internal: String): InputStream {
+        return Cobblemon::class.java.getResourceAsStream(internal)
+            ?: throw Exception("Could not read $internal")
+    }
 
-         try {
-            try {
-               val zis: ZipInputStream = var3 as ZipInputStream;
+    fun copyInternalToExternal(internal: String, external: Path) {
+        getResourceStream(internal).use { stream ->
+            Files.copy(stream, external, StandardCopyOption.REPLACE_EXISTING)
+        }
+    }
 
-               for (ZipEntry zipEntry = ((ZipInputStream)var3).getNextEntry(); zipEntry != null; zipEntry = zis.getNextEntry()) {
-                  val newPath: Path = INSTANCE.checkPath(zipEntry, target);
-                  if (!zipEntry.isDirectory()) {
-                     if (newPath.getParent() != null && Files.notExists(newPath.getParent())) {
-                        Files.createDirectories(newPath.getParent());
-                     }
+    /**
+     * Unzips a file to the target path
+     */
+    fun unzipFile(source: Path, target: Path) {
+        ZipInputStream(FileInputStream(source.toFile())).use { zis ->
+            var zipEntry = zis.nextEntry
 
-                     Files.copy(zis, newPath, StandardCopyOption.REPLACE_EXISTING);
-                  } else {
-                     Files.createDirectories(newPath);
-                  }
-               }
+            // While the zip has more entries in it
+            while (zipEntry != null) {
 
-               zis.closeEntry();
-            } catch (var10: java.lang.Throwable) {
-               var4 = var10;
-               throw var10;
+                // Verify the path to protect from "zip slip" exploit
+                val newPath = checkPath(zipEntry, target)
+
+                if (!zipEntry.isDirectory) {
+                    // Check if a parent directory needs to be created
+                    if (newPath.parent != null) {
+                        if (Files.notExists(newPath.parent)) {
+                            Files.createDirectories(newPath.parent)
+                        }
+                    }
+                    Files.copy(zis, newPath, StandardCopyOption.REPLACE_EXISTING)
+                } else {
+                    Files.createDirectories(newPath)
+                }
+                // Next entry
+                zipEntry = zis.nextEntry
             }
-         } catch (var11: java.lang.Throwable) {
-            CloseableKt.closeFinally(var3, var4);
-         }
+            zis.closeEntry()
+        }
+    }
 
-         CloseableKt.closeFinally(var3, null);
-      }
-   }
+    private fun checkPath(zipEntry: ZipEntry, targetDir: Path): Path {
+        val targetDirResolved = targetDir.resolve(zipEntry.name)
+        val normalizePath = targetDirResolved.normalize().toAbsolutePath()
+        val targetDirPath = targetDir.normalize().toAbsolutePath()
+        if (!normalizePath.startsWith(targetDirPath)) {
+            throw IOException("Bad zip entry: " + zipEntry.name)
+        }
+        return normalizePath
+    }
 
-   private fun checkPath(zipEntry: ZipEntry, targetDir: Path): Path {
-      val normalizePath: Path = targetDir.resolve(zipEntry.getName()).normalize().toAbsolutePath();
-      if (!normalizePath.startsWith(targetDir.normalize().toAbsolutePath())) {
-         throw new IOException("Bad zip entry: ${zipEntry.getName()}");
-      } else {
-         return normalizePath;
-      }
-   }
 }

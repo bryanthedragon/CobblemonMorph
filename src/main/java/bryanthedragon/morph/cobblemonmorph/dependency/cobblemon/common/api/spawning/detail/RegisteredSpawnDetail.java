@@ -1,17 +1,24 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 
-public class RegisteredSpawnDetail<T extends SpawnDetail>(detailClass: Class<Any>) {
-   public final val detailClass: Class<Any>
-
-   init {
-      this.detailClass = detailClass;
-   }
-
-   public fun deserializeDetail(element: JsonElement, ctx: JsonDeserializationContext): Any {
-      val var10000: Any = ctx.deserialize(element, this.detailClass);
-      return (T)var10000;
-   }
+/**
+ * A [SpawnDetail] implementation that has been registered.
+ *
+ * @author Hiroku
+ * @since January 31st, 2022
+ */
+class RegisteredSpawnDetail<T : SpawnDetail>(
+    val detailClass: Class<T>
+) {
+    fun deserializeDetail(element: JsonElement, spawnablePosition: JsonDeserializationContext): T = spawnablePosition.deserialize(element, detailClass)
 }

@@ -1,42 +1,52 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.modifiers
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CatchRateModifier
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CatchRateModifier.Behavior
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.world.entity.LivingEntity
 
-public class BaseStatModifier(stat: Stat, comparator: (Int) -> Boolean, multiplier: Float) : CatchRateModifier {
-   public final val comparator: (Int) -> Boolean
-   public final val multiplier: Float
-   public final val stat: Stat
+/**
+ * A [CatchRateModifier] based on the value of a [Stat].
+ *
+ * @property stat The [Stat] being queried.
+ * @property comparator A higher order function that determines if the catch rate should be boosted.
+ * @property multiplier The multiplier that will be applied if [comparator] returns true.
+ * @throws IllegalArgumentException if the provided [stat] is not of type [Stat.Type.PERMANENT].
+ *
+ * @author Licious
+ * @since May 7th, 2022
+ */
+class BaseStatModifier(
+    val stat: Stat,
+    val comparator: (value: Int) -> Boolean,
+    val multiplier: Float
+) : CatchRateModifier {
 
-   init {
-      this.stat = stat;
-      this.comparator = comparator;
-      this.multiplier = multiplier;
-      if (this.stat.getType() != Stat.Type.PERMANENT) {
-         throw new IllegalArgumentException("${this.stat.getIdentifier()} is not of type PERMANENT");
-      }
-   }
+    init {
+        if (stat.type != Stat.Type.PERMANENT) {
+            throw IllegalArgumentException("${stat.identifier} is not of type PERMANENT")
+        }
+    }
 
-   public override fun isGuaranteed(): Boolean {
-      return false;
-   }
+    override fun isGuaranteed(): Boolean = false
 
-   public override fun value(thrower: LivingEntity, pokemon: Pokemon): Float {
-      return this.multiplier;
-   }
+    override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = this.multiplier
 
-   public override fun behavior(thrower: LivingEntity, pokemon: Pokemon): Behavior {
-      return CatchRateModifier.Behavior.MULTIPLY;
-   }
+    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
 
-   public override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean {
-      return pokemon.getForm().getBaseStats().get(this.stat) != null;
-   }
+    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean {
+        val valStat = pokemon.form.baseStats[this.stat] ?: return false
+        return comparator(valStat)
+    }
 
-   public override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float {
-      return (this.behavior(thrower, pokemon).getMutator().invoke(currentCatchRate, this.value(thrower, pokemon)) as java.lang.Number).floatValue();
-   }
+    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
+
 }

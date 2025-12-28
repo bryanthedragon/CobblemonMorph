@@ -1,280 +1,398 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation
 
-import com.bedrockk.molang.runtime.MoLangEnvironment
+import com.bedrockk.molang.Expression
 import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.MoParams
 import com.bedrockk.molang.runtime.value.DoubleValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.snowstorm.BedrockParticleOptions
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.ParticleStorm
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Bone
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.AngleExtensionsKt
-import java.util.ArrayList;
-import java.util.Map.Entry
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.effectiveName
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.genericRuntime
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.geometry.toRadians
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveDouble
+import java.util.SortedMap
+import java.util.TreeMap
 import net.minecraft.CrashReport
-import net.minecraft.CrashReportCategory
 import net.minecraft.ReportedException
+import net.minecraft.client.Minecraft
 import net.minecraft.client.model.geom.ModelPart
+import net.minecraft.client.multiplayer.ClientLevel
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.jetbrains.annotations.NotNull
 
-@SourceDebugExtension(["SMAP\nBedrockAnimation.kt\nKotlin\n*S Kotlin\n*F\n+ 1 BedrockAnimation.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/bedrock/animation/BedrockAnimation\n+ 2 _Maps.kt\nkotlin/collections/MapsKt___MapsKt\n+ 3 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,346:1\n215#2,2:347\n766#3:349\n857#3,2:350\n1855#3,2:352\n*S KotlinDebug\n*F\n+ 1 BedrockAnimation.kt\ncom/cobblemon/mod/common/client/render/models/blockbench/bedrock/animation/BedrockAnimation\n*L\n161#1:347,2\n215#1:349\n215#1:350,2\n215#1:352,2\n*E\n"])
-public data BedrockAnimation(shouldLoop: Boolean,
-   animationLength: Double,
-   effects: List<BedrockEffectKeyframe>,
-   boneTimelines: Map<String, BedrockBoneTimeline>
-) {
-   public final val animationLength: Double
-   public final val boneTimelines: Map<String, BedrockBoneTimeline>
-   public final val effects: List<BedrockEffectKeyframe>
-   public final val shouldLoop: Boolean
+record BedrockAnimationGroup(
+    val formatVersion: String,
+    val animations: Map<String, BedrockAnimation>
+)
 
-   init {
-      this.shouldLoop = shouldLoop;
-      this.animationLength = animationLength;
-      this.effects = effects;
-      this.boneTimelines = boneTimelines;
-   }
+abstract class BedrockEffectKeyframe(val seconds: Float) {
+    abstract fun run(entity: Entity?, state: PosableState)
+}
 
-   public fun run(model: PoseableEntityModel<*>, state: PoseableEntityState<*>?, animationSeconds: Float, intensity: Float): Boolean {
-      var var22: Float = animationSeconds;
-      if (this.shouldLoop) {
-         var22 = animationSeconds % (float)this.animationLength;
-      } else if (animationSeconds > this.animationLength && this.animationLength > 0.0) {
-         return false;
-      }
+class BedrockParticleKeyframe(
+    seconds: Float,
+    val effect: BedrockParticleOptions,
+    val locator: String,
+    val scripts: List<Expression>
+) : BedrockEffectKeyframe(seconds) {
+    fun isSameAs(other: BedrockParticleKeyframe): Boolean {
+        return if (seconds != other.seconds) {
+            false
+        } else if (effect != other.effect) {
+            false
+        } else if (locator != other.locator) {
+            false
+        } else if (scripts.map { it.getString() }.toSet() != other.scripts.map { it.getString() }.toSet()) {
+            false
+        } else {
+            true
+        }
+    }
 
-      for (Entry element$iv : this.boneTimelines.entrySet()) {
-         val boneName: java.lang.String = `element$iv`.getKey() as java.lang.String;
-         val timeline: BedrockBoneTimeline = `element$iv`.getValue() as BedrockBoneTimeline;
-         var var10000: ModelPart = model.getRelevantPartsByName().get(boneName);
-         if (var10000 == null) {
-            if (boneName == "root_part") {
-               val var29: Bone = model.getRootPart();
-               var10000 = var29 as ModelPart;
+    override fun run(entity: Entity?, state: PosableState) {
+        entity ?: return
+        val world = entity.level() as? ClientLevel ?: return
+
+        val rootMatrix = state.locatorStates["root"]!!
+        val locatorMatrix = state.locatorStates[locator] ?: state.locatorStates["root"]!!
+        val particleMatrix = effect.emitter.space.initializeEmitterMatrix(rootMatrix, locatorMatrix)
+
+        if (this in state.poseParticles) {
+            return
+        }
+
+        val particleRuntime = MoLangRuntime()
+
+        // Share the query struct from the entity so the particle can query entity properties
+        particleRuntime.environment.query = state.runtime.environment.query
+
+        val storm = ParticleStorm(
+            effect = effect,
+            emitterSpaceMatrix = particleMatrix,
+            attachedMatrix = locatorMatrix,
+            world = world,
+            runtime = particleRuntime,
+            sourceVelocity = { entity.deltaMovement },
+            sourceAlive = { !entity.isRemoved && this in state.poseParticles },
+            sourceVisible = { !entity.isInvisible },
+            entity = entity,
+            onDespawn = { state.poseParticles.remove(this) }
+        )
+
+        state.poseParticles.add(this)
+        storm.runtime.execute(this.scripts)
+        storm.spawn()
+    }
+}
+
+class BedrockSoundKeyframe(
+    seconds: Float,
+    val sound: ResourceLocation
+): BedrockEffectKeyframe(seconds) {
+    override fun run(entity: Entity?, state: PosableState) {
+        val soundEvent = SoundEvent.createVariableRangeEvent(sound) // Means we don't need to setup a sound registry entry for every single thing
+        if (soundEvent != null) {
+            if (entity != null) {
+                if (!entity.isSilent) {
+                    entity.level().playLocalSound(entity, soundEvent, entity.soundSource, 1F, 1F)
+                }
             } else {
-               var10000 = null;
+                Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1F, 1F))
             }
-         }
+        }
+    }
+}
 
-         val part: ModelPart = var10000;
-         if (var10000 != null) {
-            if (!timeline.getPosition().isEmpty()) {
-               var var10001: Double;
-               var var10002: MoLangRuntime;
-               label74: {
-                  var30 = timeline.getPosition();
-                  var10001 = var22;
-                  if (state != null) {
-                     var10002 = state.getRuntime();
-                     if (var10002 != null) {
-                        break label74;
-                     }
-                  }
+class BedrockInstructionKeyframe(
+    seconds: Float,
+    val expressions: ExpressionLike
+): BedrockEffectKeyframe(seconds) {
+    override fun run(entity: Entity?, state: PosableState) {
+        expressions.resolve(state.runtime) // Risky doing this with a nullable entity
+    }
+}
 
-                  var10002 = sharedRuntime;
-               }
-
-               val scale: Vec3 = var30.resolve(var10001, var10002).m_82490_((double)intensity);
-               var10000.f_104200_ = var10000.f_104200_ + (float)scale.f_82479_;
-               var10000.f_104201_ = var10000.f_104201_ + (float)scale.f_82480_;
-               var10000.f_104202_ = var10000.f_104202_ + (float)scale.f_82481_;
+record BedrockAnimation(
+    val shouldLoop: Boolean,
+    val animationLength: Double,
+    val effects: List<BedrockEffectKeyframe>,
+    val boneTimelines: Map<String, BedrockBoneTimeline>
+) {
+    fun checkForErrors() {
+        boneTimelines.forEach { (_, timeline) ->
+            if (!timeline.position.isEmpty()) {
+                timeline.position.resolve(2.0, genericRuntime)
             }
+            if (!timeline.rotation.isEmpty()) {
+                timeline.rotation.resolve(2.0, genericRuntime)
+            }
+            if (!timeline.scale.isEmpty()) {
+                timeline.scale.resolve(2.0, genericRuntime)
+            }
+        }
+    }
 
-            if (!timeline.getRotation().isEmpty()) {
-               try {
-                  var var34: Double;
-                  var var38: MoLangRuntime;
-                  label64: {
-                     var31 = timeline.getRotation();
-                     var34 = var22;
-                     if (state != null) {
-                        var38 = state.getRuntime();
-                        if (var38 != null) {
-                           break label64;
+    /** Useful to have, gets set after loading the animation. */
+    var name: String = ""
+
+
+    fun run(
+        model: PosableModel,
+        state: PosableState,
+        animationSeconds: Float,
+        limbSwing: Float,
+        limbSwingAmount: Float,
+        ageInTicks: Float,
+        intensity: Float
+    ): Boolean {
+        return run(
+            model.context,
+            model.relevantPartsByName,
+            model.rootPart,
+            state,
+            animationSeconds,
+            limbSwing,
+            limbSwingAmount,
+            ageInTicks,
+            intensity
+        )
+    }
+
+    fun run(
+        context: RenderContext?,
+        relevantPartsByName: Map<String, ModelPart>,
+        rootPart: Bone?,
+        state: PosableState,
+        animationSeconds: Float,
+        limbSwing: Float,
+        limbSwingAmount: Float,
+        ageInTicks: Float,
+        intensity: Float
+    ): Boolean {
+        var animationSeconds = animationSeconds
+        if (shouldLoop) {
+            animationSeconds %= animationLength.toFloat()
+        } else if (animationSeconds > animationLength && animationLength > 0) {
+            return false
+        }
+
+        val runtime = state.runtime
+
+        runtime.environment.setSimpleVariable("limb_swing", DoubleValue(limbSwing.toDouble()))
+        runtime.environment.setSimpleVariable("limb_swing_amount", DoubleValue(limbSwingAmount.toDouble()))
+        runtime.environment.setSimpleVariable("age_in_ticks", DoubleValue(ageInTicks.toDouble()))
+
+        boneTimelines.forEach { (boneName, timeline) ->
+            val part = relevantPartsByName[boneName] ?: if (boneName == "root_part") (rootPart as? ModelPart) else null
+            if (part !== null) {
+                if (!timeline.position.isEmpty()) {
+                    val position = timeline.position.resolve(animationSeconds.toDouble(), runtime).scale(intensity.toDouble())
+                    part.apply {
+                        x += position.x.toFloat()
+                        y += position.y.toFloat()
+                        z += position.z.toFloat()
+                    }
+                }
+
+                if (!timeline.rotation.isEmpty()) {
+                    try {
+                        val rotation = timeline.rotation.resolve(animationSeconds.toDouble(), runtime).scale(intensity.toDouble())
+                        part.apply {
+                            xRot += rotation.x.toFloat().toRadians()
+                            yRot += rotation.y.toFloat().toRadians()
+                            zRot += rotation.z.toFloat().toRadians()
                         }
-                     }
+                    } catch (e: Exception) {
+                        val exception = IllegalStateException("Bad animation for entity: ${(context?.request(RenderContext.ENTITY))?.effectiveName()?.string ?: "unknown entity (riding animation?)"}", e)
+                        val crash = CrashReport("Cobblemon encountered an unexpected crash", exception)
+                        val section = crash.addCategory("Animation Details")
+                        section.setDetail("Pose", state.currentPose!!)
+                        section.setDetail("Bone", boneName)
 
-                     var38 = sharedRuntime;
-                  }
+                        throw ReportedException(crash)
+                    }
+                }
 
-                  val var24: Vec3 = var31.resolve(var34, var38).m_82490_((double)intensity);
-                  part.f_104203_ = part.f_104203_ + AngleExtensionsKt.toRadians((float)var24.f_82479_);
-                  part.f_104204_ = part.f_104204_ + AngleExtensionsKt.toRadians((float)var24.f_82480_);
-                  part.f_104205_ = part.f_104205_ + AngleExtensionsKt.toRadians((float)var24.f_82481_);
-               } catch (var21: Exception) {
-                  var var36: Any = model.getContext().request(RenderContext.Companion.getENTITY());
-                  val crash: CrashReport = new CrashReport(
-                     "Cobblemon encountered an unexpected crash",
-                     new IllegalStateException("Bad animation for species: ${(var36 as PokemonEntity).getPokemon().getSpecies().getName()}", var21)
-                  );
-                  val var27: CrashReportCategory = crash.m_127514_("Animation Details");
-                  if (state != null) {
-                     var36 = state.getCurrentPose();
-                     var27.m_128159_("Pose", var36);
-                  }
+                if (!timeline.scale.isEmpty()) {
+                    var scale = timeline.scale.resolve(animationSeconds.toDouble(), runtime)
+                    // If the goal is to make the invisible then kick that into gear after or on 0.5. Maybe could work better somehow else.
+                    if (scale == Vec3.ZERO && intensity >= 0.5) {
+                        part.xScale *= scale.x.toFloat()
+                        part.yScale *= scale.y.toFloat()
+                        part.zScale *= scale.z.toFloat()
+                    } else {
+                        // The deviation from 1 is what we want to multiply by the intensity of the animation.
+                        val deviation = scale.scale(-1.0).add(1.0, 1.0, 1.0)
+                        val weakenedDeviation = deviation.scale(intensity.toDouble())
+                        scale = weakenedDeviation.subtract(1.0, 1.0, 1.0).scale(-1.0)
+                        part.xScale *= scale.x.toFloat()
+                        part.yScale *= scale.y.toFloat()
+                        part.zScale *= scale.z.toFloat()
+                    }
+                }
+            }
+        }
+        return true
+    }
 
-                  var27.m_128159_("Bone", boneName);
-                  throw new ReportedException(crash);
-               }
+    fun applyEffects(entity: Entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
+        val effectCondition: (effectKeyframe: BedrockEffectKeyframe) -> Boolean =
+            if (previousSeconds > newSeconds) {
+                { it.seconds >= previousSeconds || it.seconds <= newSeconds }
+            } else {
+                { it.seconds in previousSeconds..newSeconds }
             }
 
-            if (!timeline.getScale().isEmpty()) {
-               var var35: Double;
-               var var39: MoLangRuntime;
-               label56: {
-                  var32 = timeline.getScale();
-                  var35 = var22;
-                  if (state != null) {
-                     var39 = state.getRuntime();
-                     if (var39 != null) {
-                        break label56;
-                     }
-                  }
+        effects.filter(effectCondition).forEach { it.run(entity, state) }
+    }
+}
 
-                  var39 = sharedRuntime;
-               }
+interface BedrockBoneValue {
+    fun resolve(time: Double, runtime: MoLangRuntime): Vec3
+    fun isEmpty(): Boolean
+}
+final class EmptyBoneValue : BedrockBoneValue {
+    override fun resolve(time: Double, runtime: MoLangRuntime) = Vec3.ZERO
+    override fun isEmpty() = true
+}
 
-               val var33: Vec3 = var32.resolve(var35, var39)
-                  .m_82490_(-1.0)
-                  .m_82520_(1.0, 1.0, 1.0)
-                  .m_82490_((double)intensity)
-                  .m_82492_(1.0, 1.0, 1.0)
-                  .m_82490_(-1.0);
-               var10000.f_233553_ = var10000.f_233553_ * (float)var33.f_82479_;
-               var10000.f_233554_ = var10000.f_233554_ * (float)var33.f_82480_;
-               var10000.f_233555_ = var10000.f_233555_ * (float)var33.f_82481_;
+record BedrockBoneTimeline (
+    val position: BedrockBoneValue,
+    val rotation: BedrockBoneValue,
+    val scale: BedrockBoneValue
+)
+class MolangBoneValue(
+    val x: Expression,
+    val y: Expression,
+    val z: Expression,
+    transformation: Transformation
+) : BedrockBoneValue {
+    val yMul = if (transformation == Transformation.POSITION) -1 else 1
+    override fun isEmpty() = false
+    override fun resolve(time: Double, runtime: MoLangRuntime): Vec3 {
+        val environment = runtime.environment
+        environment.setSimpleVariable("anim_time", DoubleValue(time))
+        environment.setSimpleVariable("camera_rotation_x", DoubleValue(Minecraft.getInstance().gameRenderer.mainCamera.rotation().x.toDouble()))
+        environment.setSimpleVariable("camera_rotation_y", DoubleValue(Minecraft.getInstance().gameRenderer.mainCamera.rotation().y.toDouble()))
+        return Vec3(
+            runtime.resolveDouble(x),
+            runtime.resolveDouble(y) * yMul,
+            runtime.resolveDouble(z)
+        )
+    }
+
+}
+class BedrockKeyFrameBoneValue : TreeMap<Double, BedrockAnimationKeyFrame>(), BedrockBoneValue {
+    fun SortedMap<Double, BedrockAnimationKeyFrame>.getAtIndex(index: Int?): BedrockAnimationKeyFrame? {
+        if (index == null) return null
+        val key = this.keys.elementAtOrNull(index)
+        return if (key != null) this[key] else null
+    }
+
+    override fun resolve(time: Double, runtime: MoLangRuntime): Vec3 {
+        var afterIndex : Int? = keys.indexOfFirst { it > time }
+        if (afterIndex == -1) afterIndex = null
+        val beforeIndex = when (afterIndex) {
+            null -> size - 1
+            0 -> null
+            else -> afterIndex - 1
+        }
+        val after = getAtIndex(afterIndex)
+        val before = getAtIndex(beforeIndex)
+
+        val afterData = after?.pre?.resolve(time, runtime) ?: Vec3.ZERO
+        val beforeData = before?.post?.resolve(time, runtime) ?: Vec3.ZERO
+
+        if (before != null || after != null) {
+            if (before != null && before.interpolationType == InterpolationType.SMOOTH || after != null && after.interpolationType == InterpolationType.SMOOTH) {
+                when {
+                    before != null && after != null -> {
+                        val beforePlusIndex = if (beforeIndex == null || beforeIndex == 0) null else beforeIndex - 1
+                        val beforePlus = getAtIndex(beforePlusIndex)
+                        val afterPlusIndex = if (afterIndex == null || afterIndex == size - 1) null else afterIndex + 1
+                        val afterPlus = getAtIndex(afterPlusIndex)
+                        return catmullromLerp(beforePlus, before, after, afterPlus, time, runtime)
+                    }
+                    before != null -> return beforeData
+                    else -> return afterData
+                }
             }
-         }
-      }
-
-      return true;
-   }
-
-   public fun <T : Entity> applyEffects(entity: Any, state: PoseableEntityState<Any>, previousSeconds: Float, newSeconds: Float) {
-      val effectCondition: Function1 = if (previousSeconds > newSeconds)
-         (new Function1<BedrockEffectKeyframe, java.lang.Boolean>(previousSeconds, newSeconds) {
-            {
-               super(1);
-               this.$previousSeconds = `$previousSeconds`;
-               this.$newSeconds = `$newSeconds`;
+            else {
+                when {
+                    before != null && after != null -> {
+                        return Vec3(
+                            beforeData.x + (afterData.x - beforeData.x) * linearLerpAlpha(
+                                before.time,
+                                after.time,
+                                time
+                            ),
+                            beforeData.y + (afterData.y - beforeData.y) * linearLerpAlpha(
+                                before.time,
+                                after.time,
+                                time
+                            ),
+                            beforeData.z + (afterData.z - beforeData.z) * linearLerpAlpha(before.time, after.time, time)
+                        )
+                    }
+                    before != null -> return beforeData
+                    else -> return afterData
+                }
             }
+        }
+        else {
+            return Vec3(0.0, 0.0, 0.0)
+        }
+    }
 
-            @NotNull
-            public final java.lang.Boolean invoke(@NotNull BedrockEffectKeyframe it) {
-               return it.getSeconds() >= this.$previousSeconds || it.getSeconds() <= this.$newSeconds;
-            }
-         }) as Function1
-         else
-         (new Function1<BedrockEffectKeyframe, java.lang.Boolean>(previousSeconds, newSeconds) {
-            {
-               super(1);
-               this.$previousSeconds = `$previousSeconds`;
-               this.$newSeconds = `$newSeconds`;
-            }
+}
 
-            @NotNull
-            public final java.lang.Boolean invoke(@NotNull BedrockEffectKeyframe it) {
-               val var2: Float = it.getSeconds();
-               return this.$previousSeconds <= var2 && var2 <= this.$newSeconds;
-            }
-         }) as Function1;
-      val `$this$forEach$iv`: java.lang.Iterable = this.effects;
-      val `element$iv`: java.util.Collection = new ArrayList();
+abstract class BedrockAnimationKeyFrame(
+    val time: Double,
+    val transformation: Transformation,
+    val interpolationType: InterpolationType
+) {
+    abstract val pre: MolangBoneValue
+    abstract val post: MolangBoneValue
+}
 
-      for (Object element$iv$iv : $this$filter$iv) {
-         if (effectCondition.invoke(`element$iv$iv`) as java.lang.Boolean) {
-            `element$iv`.add(`element$iv$iv`);
-         }
-      }
+class SimpleBedrockAnimationKeyFrame(
+    time: Double,
+    transformation: Transformation,
+    interpolationType: InterpolationType,
+    val data: MolangBoneValue
+): BedrockAnimationKeyFrame(time, transformation, interpolationType) {
+    override val pre = data
+    override val post = data
+}
 
-      for (Object element$ivx : $this$filter$iv) {
-         (`element$ivx` as BedrockEffectKeyframe).run(entity, state);
-      }
-   }
+class JumpBedrockAnimationKeyFrame(
+    time: Double,
+    transformation: Transformation,
+    interpolationType: InterpolationType,
+    override val pre: MolangBoneValue,
+    override val post: MolangBoneValue
+): BedrockAnimationKeyFrame(time, transformation, interpolationType)
 
-   public operator fun component1(): Boolean {
-      return this.shouldLoop;
-   }
+enum class InterpolationType {
+    SMOOTH, LINEAR
+}
 
-   public operator fun component2(): Double {
-      return this.animationLength;
-   }
-
-   public operator fun component3(): List<BedrockEffectKeyframe> {
-      return this.effects;
-   }
-
-   public operator fun component4(): Map<String, BedrockBoneTimeline> {
-      return this.boneTimelines;
-   }
-
-   public fun copy(
-      shouldLoop: Boolean = this.shouldLoop,
-      animationLength: Double = this.animationLength,
-      effects: List<BedrockEffectKeyframe> = this.effects,
-      boneTimelines: Map<String, BedrockBoneTimeline> = this.boneTimelines
-   ): BedrockAnimation {
-      return new BedrockAnimation(shouldLoop, animationLength, effects, boneTimelines);
-   }
-
-   public override fun toString(): String {
-      return "BedrockAnimation(shouldLoop=${this.shouldLoop}, animationLength=${this.animationLength}, effects=${this.effects}, boneTimelines=${this.boneTimelines})";
-   }
-
-   public override fun hashCode(): Int {
-      var var10000: Byte = this.shouldLoop;
-      if (this.shouldLoop) {
-         var10000 = 1;
-      }
-
-      return ((var10000 * 31 + java.lang.Double.hashCode(this.animationLength)) * 31 + this.effects.hashCode()) * 31 + this.boneTimelines.hashCode();
-   }
-
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is BedrockAnimation) {
-         return false;
-      } else {
-         val var2: BedrockAnimation = other as BedrockAnimation;
-         if (this.shouldLoop != (other as BedrockAnimation).shouldLoop) {
-            return false;
-         } else if (java.lang.Double.compare(this.animationLength, var2.animationLength) != 0) {
-            return false;
-         } else if (!(this.effects == var2.effects)) {
-            return false;
-         } else {
-            return this.boneTimelines == var2.boneTimelines;
-         }
-      }
-   }
-
-   @JvmStatic
-   fun `sharedRuntime$lambda$6$lambda$5`(`$zero`: DoubleValue, it: MoParams): Any {
-      return `$zero`;
-   }
-
-   @JvmStatic
-   fun {
-      val var0: MoLangRuntime = new MoLangRuntime();
-      val zero: DoubleValue = new DoubleValue(0.0);
-      val var10000: MoLangFunctions = MoLangFunctions.INSTANCE;
-      val var10001: MoLangFunctions = MoLangFunctions.INSTANCE;
-      val var10002: MoLangEnvironment = var0.getEnvironment();
-      var10000.addFunctions(
-         MoLangFunctions.getQueryStruct$default(var10001, var10002, null, 1, null),
-         MapsKt.mapOf(TuplesKt.to("anim_time", BedrockAnimation::sharedRuntime$lambda$6$lambda$5))
-      );
-      sharedRuntime = var0;
-   }
-
-   public companion object {
-      public final val sharedRuntime: MoLangRuntime
-   }
+enum class Transformation {
+    POSITION, ROTATION, SCALE
 }

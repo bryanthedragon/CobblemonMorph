@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.catching.calculators
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CaptureContext
@@ -5,17 +13,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.entity.LivingEntity
+final class DebugCaptureCalculator : CaptureCalculator {
 
-public object DebugCaptureCalculator : CaptureCalculator {
-   public override fun id(): String {
-      return "debug";
-   }
+    override fun id(): String = "debug"
 
-   public override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
-      return new CaptureContext(1, true, true);
-   }
+    override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext = CaptureContext(numberOfShakes = 1, isSuccessfulCapture = true, isCriticalCapture = true)
 
-   override fun getCatchRate(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity, catchRate: Float): Float {
-      return CaptureCalculator.DefaultImpls.getCatchRate(this, thrower, pokeBallEntity, target, catchRate);
-   }
 }

@@ -1,57 +1,33 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.OpenPasturePacket.PasturePokemonDataDTO
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class PokemonPasturedPacket(pasturePokemonDTO: PasturePokemonDataDTO) : NetworkPacket<PokemonPasturedPacket> {
-   public open val id: ResourceLocation
-   public final val pasturePokemonDTO: PasturePokemonDataDTO
+/**
+ * Packet fired when a Pokémon is added to a pasture block and a player has the menu open. This is so GUI updates are
+ * applied.
+ *
+ * @author Hiroku
+ * @since April 16th, 2023
+ */
+class PokemonPasturedPacket(val pasturePokemonDTO: OpenPasturePacket.PasturePokemonDataDTO) : NetworkPacket<PokemonPasturedPacket> {
+    companion object {
+        val ID = cobblemonResource("pasture_pokemon_added")
+        fun decode(buffer: RegistryFriendlyByteBuf) = PokemonPasturedPacket(OpenPasturePacket.PasturePokemonDataDTO.decode(buffer))
+    }
 
-   init {
-      this.pasturePokemonDTO = pasturePokemonDTO;
-      this.id = ID;
-   }
+    override val id = ID
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      this.pasturePokemonDTO.encode(buffer);
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): PokemonPasturedPacket {
-         return new PokemonPasturedPacket(OpenPasturePacket.PasturePokemonDataDTO.Companion.decode(buffer));
-      }
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        pasturePokemonDTO.encode(buffer)
+    }
 }

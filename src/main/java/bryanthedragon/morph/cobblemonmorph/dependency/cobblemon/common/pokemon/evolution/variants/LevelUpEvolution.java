@@ -1,74 +1,64 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.DropTable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.PassiveEvolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.requirement.EvolutionRequirement
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import java.util.LinkedHashSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement.Requirement
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-public open class LevelUpEvolution(id: String,
-      result: PokemonProperties,
-      optional: Boolean,
-      consumeHeldItem: Boolean,
-      requirements: MutableSet<EvolutionRequirement>,
-      learnableMoves: MutableSet<MoveTemplate>,
-      permanent: Boolean
-   ) :
-   PassiveEvolution {
-   public open var consumeHeldItem: Boolean
-   public open val id: String
-   public open val learnableMoves: MutableSet<MoveTemplate>
-   public open var optional: Boolean
-   public open val permanent: Boolean
-   public open val requirements: MutableSet<EvolutionRequirement>
-   public open val result: PokemonProperties
+/**
+ * Represents a [PassiveEvolution].
+ * This can be triggered at any check as long as the [Pokemon] passes [LevelUpEvolution.isValid].
+ *
+ * @property levels The level range the [Pokemon] is expected to be in, if the range only has a single number the [Pokemon.level] will need to be equal or greater then it instead.
+ * @author Licious
+ * @since March 20th, 2022
+ */
+open class LevelUpEvolution(
+    override val id: String,
+    override val result: PokemonProperties,
+    override val shedder: PokemonProperties?,
+    override var optional: Boolean,
+    override var consumeHeldItem: Boolean,
+    override val requirements: MutableSet<Requirement>,
+    override val learnableMoves: MutableSet<MoveTemplate>,
+    override val drops: DropTable,
+    override val permanent: Boolean
+) : PassiveEvolution {
 
-   init {
-      this.id = id;
-      this.result = result;
-      this.optional = optional;
-      this.consumeHeldItem = consumeHeldItem;
-      this.requirements = requirements;
-      this.learnableMoves = learnableMoves;
-      this.permanent = permanent;
-   }
+    /* Needed for old Gson versions that MC ships with */
+    constructor(): this(
+        id = "id",
+        result = PokemonProperties(),
+        shedder = null,
+        optional = true,
+        consumeHeldItem = true,
+        requirements = mutableSetOf(),
+        learnableMoves = mutableSetOf(),
+        drops = DropTable(),
+        permanent = false,
+    )
 
-   public constructor() : this("id", new PokemonProperties(), true, true, new LinkedHashSet<>(), new LinkedHashSet<>(), false)
-   public override operator fun equals(other: Any?): Boolean {
-      return other is LevelUpEvolution && StringsKt.equals((other as LevelUpEvolution).getId(), this.getId(), true);
-   }
+    override fun equals(other: Any?) = other is LevelUpEvolution && other.id.equals(this.id, true)
 
-   public override fun hashCode(): Int {
-      return 31 * this.getId().hashCode() + "level_up".hashCode();
-   }
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + ADAPTER_VARIANT.hashCode()
+        return result
+    }
 
-   override fun attemptEvolution(pokemon: Pokemon): Boolean {
-      return PassiveEvolution.DefaultImpls.attemptEvolution(this, pokemon);
-   }
-
-   override fun test(pokemon: Pokemon): Boolean {
-      return PassiveEvolution.DefaultImpls.test(this, pokemon);
-   }
-
-   override fun evolve(pokemon: Pokemon): Boolean {
-      return PassiveEvolution.DefaultImpls.evolve(this, pokemon);
-   }
-
-   override fun forceEvolve(pokemon: Pokemon) {
-      PassiveEvolution.DefaultImpls.forceEvolve(this, pokemon);
-   }
-
-   override fun evolutionMethod(pokemon: Pokemon) {
-      PassiveEvolution.DefaultImpls.evolutionMethod(this, pokemon);
-   }
-
-   override fun applyTo(pokemon: Pokemon) {
-      PassiveEvolution.DefaultImpls.applyTo(this, pokemon);
-   }
-
-   public companion object {
-      public const val ADAPTER_VARIANT: String
-      public const val ALTERNATIVE_ADAPTER_VARIANT: String
-   }
+    companion object {
+        const val ADAPTER_VARIANT = "level_up"
+        // Just for user convenience sake as we may have passive evolutions not backed by level ups
+        const val ALTERNATIVE_ADAPTER_VARIANT = "passive"
+    }
 }

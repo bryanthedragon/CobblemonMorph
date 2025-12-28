@@ -1,16 +1,24 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.BerryBlockEntity
 import com.mojang.blaze3d.vertex.VertexBuffer
-import com.mojang.blaze3d.vertex.VertexBuffer.Usage
 
-public class BerryBlockEntityRenderState : BerryBlockEntity.RenderState {
-   public final val lastRenderFrame: Int = -1
-   public open var needsRebuild: Boolean = true
-   public final val vbo: VertexBuffer = new VertexBuffer(Usage.STATIC)
-   public final var vboLightLevel: Int
+class BerryBlockEntityRenderState : BerryBlockEntity.RenderState {
+    val lastRenderFrame = -1
+    override var needsRebuild = true
+    val vbo: VertexBuffer = VertexBuffer(VertexBuffer.Usage.STATIC)
+    var vboLightLevel: Int = 0
+    var drawVbo: Boolean = false
 
-   public override fun close() {
-      this.vbo.close();
-   }
+    override fun close() {
+        vbo.close()
+    }
 }

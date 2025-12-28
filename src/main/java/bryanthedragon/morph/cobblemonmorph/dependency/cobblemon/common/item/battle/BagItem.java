@@ -1,73 +1,47 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.battle
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BagItems
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.ItemStack
-import org.jetbrains.annotations.NotNull
-import org.jetbrains.annotations.Nullable
+import net.minecraft.server.level.ServerPlayer
 
-public interface BagItem {
-   public val itemName: String
+/**
+ * A bag item effect that links to a script in Showdown. Implementations must be added to
+ * [BagItems.bagItems].
+ *
+ * @author Hiroku
+ * @since June 26th, 2023
+ */
+interface BagItem {
+    companion object {
+        val EMPTY: BagItem = object : BagItem {
+            override val itemName = "name"
+            override val returnItem: Item = Items.AIR
+            override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = true
+            override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "none"
+        }
+    }
 
-   public abstract fun canUse(battle: PokemonBattle, target: BattlePokemon): Boolean {
-   }
+    /** The name provided to Showdown so that battle messages include the name of the effect for lang. */
+    val itemName: String
 
-   public abstract fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
-   }
+    /** The return item given when the item is consumed. */
+    val returnItem: Item
 
-   public open fun canStillUse(player: ServerPlayer, battle: PokemonBattle, actor: BattleActor, target: BattlePokemon, stack: ItemStack): Boolean {
-   }
-
-   public companion object {
-      public final val EMPTY: BagItem =
-         (
-            new BagItem() {
-               @NotNull
-               private final java.lang.String itemName;
-
-               {
-                  this.itemName = "name";
-               }
-
-               @NotNull
-               @Override
-               public java.lang.String getItemName() {
-                  return this.itemName;
-               }
-
-               @Override
-               public boolean canUse(@NotNull PokemonBattle battle, @NotNull BattlePokemon target) {
-                  return true;
-               }
-
-               @NotNull
-               @Override
-               public java.lang.String getShowdownInput(@NotNull BattleActor actor, @NotNull BattlePokemon battlePokemon, @Nullable java.lang.String data) {
-                  return "none";
-               }
-
-               @Override
-               public boolean canStillUse(
-                  @NotNull ServerPlayer player,
-                  @NotNull PokemonBattle battle,
-                  @NotNull BattleActor actor,
-                  @NotNull BattlePokemon target,
-                  @NotNull ItemStack stack
-               ) {
-                  return BagItem.DefaultImpls.canStillUse(this, player, battle, actor, target, stack);
-               }
-            }
-         ) as BagItem
-      }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun canStillUse(`$this`: BagItem, player: ServerPlayer, battle: PokemonBattle, actor: BattleActor, target: BattlePokemon, stack: ItemStack): Boolean {
-         val var10000: java.lang.Iterable = player.m_6167_();
-         return CollectionsKt.contains(var10000, stack) && stack.m_41613_() > 0 && `$this`.canUse(battle, target) && actor.canFitForcedAction();
-      }
-   }
+    /** Whether or not the item can probably be used right now, based on the mod-side version of battle state. */
+    fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon): Boolean
+    /** Gets the itemId and data for inputting to Showdown. Hyper potion is `potion 200` for example. */
+    fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String
 }

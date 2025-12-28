@@ -1,64 +1,57 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.Natures
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Nature
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readIdentifier
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeIdentifier
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeNullable
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class NatureUpdatePacket(pokemon: () -> Pokemon, nature: Nature?, minted: Boolean) : PokemonUpdatePacket(pokemon) {
-   public open val id: ResourceLocation
-   public final val minted: Boolean
-   public final val nature: Nature?
+class NatureUpdatePacket(pokemon: () -> Pokemon?, val nature: Nature?, val minted: Boolean) : PokemonUpdatePacket<NatureUpdatePacket>(pokemon) {
 
-   init {
-      this.nature = nature;
-      this.minted = minted;
-      this.id = ID;
-   }
+    override val id = ID
 
-   public override fun encodeDetails(buffer: FriendlyByteBuf) {
-      buffer.m_236821_(this.nature, NatureUpdatePacket::encodeDetails$lambda$0);
-      buffer.writeBoolean(this.minted);
-   }
+    override fun encodeDetails(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeNullable(nature) { _, v -> buffer.writeIdentifier(v.name) }
+        buffer.writeBoolean(this.minted)
+    }
 
-   public override fun applyToPokemon() {
-      if (this.minted && this.nature == null) {
-         (this.getPokemon().invoke() as Pokemon).setMintedNature(null);
-      } else if (this.nature == null) {
-         Cobblemon.INSTANCE.getLOGGER().warn("A null nature was attempted to be put onto: '${this.getPokemon()}'");
-      } else {
-         if (!this.minted) {
-            (this.getPokemon().invoke() as Pokemon).setNature(this.nature);
-         } else {
-            (this.getPokemon().invoke() as Pokemon).setMintedNature(this.nature);
-         }
-      }
-   }
+    override fun applyToPokemon() {
+        // Check for removing mint
+        if (minted && nature == null) {
+            pokemon()!!.mintedNature = null
+            return
+        } else {
+            // Validate the nature locally
+            if (nature == null) {
+                LOGGER.warn("A null nature was attempted to be put onto: '$pokemon'")
+                return
+            }
 
-   @JvmStatic
-   fun `encodeDetails$lambda$0`(`$buffer`: FriendlyByteBuf, var1: FriendlyByteBuf, v: Nature) {
-      `$buffer`.m_130085_(v.getName());
-   }
+            // Check which nature to modify
+            if (!minted) {
+                pokemon()!!.nature = nature
+            } else {
+                pokemon()!!.mintedNature = nature
+            }
+        }
+    }
 
-   public companion object {
-      public final val ID: ResourceLocation
+    companion object {
+        val ID = cobblemonResource("nature_update")
+        fun decode(buffer: RegistryFriendlyByteBuf) = NatureUpdatePacket(decodePokemon(buffer), buffer.readNullable { Natures.getNature(buffer.readIdentifier()) }, buffer.readBoolean())
+    }
 
-      public fun decode(buffer: FriendlyByteBuf): NatureUpdatePacket {
-         return new NatureUpdatePacket(
-            PokemonUpdatePacket.Companion.decodePokemon(buffer),
-            buffer.m_236868_(NatureUpdatePacket.Companion::decode$lambda$0) as Nature,
-            buffer.readBoolean()
-         );
-      }
-
-      @JvmStatic
-      fun `decode$lambda$0`(`$buffer`: FriendlyByteBuf, it: FriendlyByteBuf): Nature {
-         val var10000: Natures = Natures.INSTANCE;
-         val var10001: ResourceLocation = `$buffer`.m_130281_();
-         return var10000.getNature(var10001);
-      }
-   }
 }

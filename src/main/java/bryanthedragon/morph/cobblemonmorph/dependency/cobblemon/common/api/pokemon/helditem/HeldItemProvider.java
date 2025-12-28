@@ -1,76 +1,80 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.helditem
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.PrioritizedList
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-@SourceDebugExtension(["SMAP\nHeldItemProvider.kt\nKotlin\n*S Kotlin\n*F\n+ 1 HeldItemProvider.kt\ncom/cobblemon/mod/common/api/pokemon/helditem/HeldItemProvider\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,73:1\n288#2,2:74\n1#3:76\n*S KotlinDebug\n*F\n+ 1 HeldItemProvider.kt\ncom/cobblemon/mod/common/api/pokemon/helditem/HeldItemProvider\n*L\n32#1:74,2\n*E\n"])
-public object HeldItemProvider {
-   private final val managers: PrioritizedList<HeldItemManager> = new PrioritizedList()
+/**
+ * A registry responsible for providing [HeldItemManager]s.
+ *
+ * @author Licious
+ * @since December 30th, 2022
+ */final class HeldItemProvider {
 
-   public fun provide(pokemon: BattlePokemon): HeldItemManager {
-      val var4: java.util.Iterator = managers.iterator();
+    private val managers = PrioritizedList<HeldItemManager>()
 
-      var var10000: Any;
-      while (true) {
-         if (var4.hasNext()) {
-            val `element$iv`: Any = var4.next();
-            if ((`element$iv` as HeldItemManager).showdownId(pokemon) == null) {
-               continue;
-            }
+    /**
+     * Finds a [HeldItemManager] if any whose [HeldItemManager.showdownId] is not null for the provided [pokemon].
+     *
+     * @param pokemon The [Pokemon] being queried.
+     * @return The [HeldItemManager] that can provide for the given [pokemon], if non match returns the [HeldItemManager.EMPTY].
+     */
+    @JvmStatic
+    fun provide(pokemon: BattlePokemon): HeldItemManager = this.managers.firstOrNull { manager -> manager.showdownId(pokemon) != null } ?: HeldItemManager.EMPTY
 
-            var10000 = (HeldItemManager)`element$iv`;
-            break;
-         }
+    /**
+     * Finds the first non-null showdownId provided by a [HeldItemManager] in [managers].
+     *
+     * @param pokemon The [Pokemon] being queried.
+     * @return The showdownId string that [pokemon] is holding, otherwise null.
+     */
+    @JvmStatic
+    fun provideShowdownId(pokemon: BattlePokemon) = this.managers.firstNotNullOfOrNull { manager -> manager.showdownId(pokemon) }
 
-         var10000 = null;
-         break;
-      }
+    /**
+     * Registers a new [HeldItemManager].
+     *
+     * @param manager The [HeldItemManager] being registered.
+     * @param priority The [Priority] to register it under.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun register(manager: HeldItemManager, priority: Priority = Priority.NORMAL) {
+        this.managers.add(priority, manager)
+    }
 
-      var10000 = var10000;
-      if (var10000 == null) {
-         var10000 = HeldItemManager.Companion.getEMPTY();
-      }
+    /**
+     * Unregisters a [HeldItemManager].
+     *
+     * @param manager The [HeldItemManager] being unregistered.
+     * @param priority The [Priority] to specifically remove the instance from, if null it will remove from all.
+     */
+    @Suppress("unused")
+    @JvmStatic
+    @JvmOverloads
+    fun unregister(manager: HeldItemManager, priority: Priority? = null) {
+        if (priority != null) {
+            this.managers.remove(priority, manager)
+            return
+        }
+        this.managers.remove(manager)
+    }
 
-      return var10000;
-   }
+    /**
+     * A read-only copy of the registered [HeldItemManager]s ordered following the backing priority of [PrioritizedList].
+     *
+     * @return The read-only copy of the registered [HeldItemManager]s.
+     */
+    @JvmStatic
+    fun managers(): List<HeldItemManager> = this.managers.toList()
 
-   public fun provideShowdownId(pokemon: BattlePokemon): String? {
-      val var2: java.util.Iterator = managers.iterator();
-
-      var var10000: java.lang.String;
-      while (true) {
-         if (var2.hasNext()) {
-            val var5: java.lang.String = (var2.next() as HeldItemManager).showdownId(pokemon);
-            if (var5 == null) {
-               continue;
-            }
-
-            var10000 = var5;
-            break;
-         }
-
-         var10000 = null;
-         break;
-      }
-
-      return var10000;
-   }
-
-   public fun register(manager: HeldItemManager, priority: Priority = Priority.NORMAL) {
-      managers.add(priority, manager);
-   }
-
-   public fun unregister(manager: HeldItemManager, priority: Priority? = null) {
-      if (priority != null) {
-         managers.remove(priority, manager);
-      } else {
-         managers.remove(manager);
-      }
-   }
-
-   public fun managers(): List<HeldItemManager> {
-      return CollectionsKt.toList(managers);
-   }
 }

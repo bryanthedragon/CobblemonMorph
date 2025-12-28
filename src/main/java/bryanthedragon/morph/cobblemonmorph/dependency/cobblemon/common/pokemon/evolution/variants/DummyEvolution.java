@@ -1,37 +1,34 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.DropTable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.requirement.EvolutionRequirement
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import java.util.LinkedHashSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement.Requirement
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
+// Used only to comply with pokemon update packet structure
 internal class DummyEvolution : Evolution {
-   public open var consumeHeldItem: Boolean
-   public open val id: String = "dummy"
-   public open val learnableMoves: MutableSet<MoveTemplate> = (new LinkedHashSet()) as java.util.Set
-   public open var optional: Boolean
-   public open val requirements: MutableSet<EvolutionRequirement> = (new LinkedHashSet()) as java.util.Set
-   public open val result: PokemonProperties = new PokemonProperties()
 
-   public override fun test(pokemon: Pokemon): Boolean {
-      return false;
-   }
+    override val id = "dummy"
+    override val result: PokemonProperties = PokemonProperties()
+    override val shedder: PokemonProperties? = null
+    override var optional = false
+    override var consumeHeldItem = false
+    override val requirements: MutableSet<Requirement> = mutableSetOf()
+    override val learnableMoves: MutableSet<MoveTemplate> = mutableSetOf()
+    override val drops: DropTable = DropTable()
 
-   public override fun evolve(pokemon: Pokemon): Boolean {
-      return false;
-   }
+    override fun test(pokemon: Pokemon) = false
 
-   override fun forceEvolve(pokemon: Pokemon) {
-      Evolution.DefaultImpls.forceEvolve(this, pokemon);
-   }
+    override fun evolve(pokemon: Pokemon) = false
 
-   override fun evolutionMethod(pokemon: Pokemon) {
-      Evolution.DefaultImpls.evolutionMethod(this, pokemon);
-   }
-
-   override fun applyTo(pokemon: Pokemon) {
-      Evolution.DefaultImpls.applyTo(this, pokemon);
-   }
 }

@@ -1,50 +1,134 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat.Type
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.EVs
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.IVs
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
-import net.minecraft.network.FriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.stat.CobblemonStatProvider
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-public interface StatProvider {
-   public val typeAdapter: StatTypeAdapter
+/**
+ * A provider for various things stat related.
+ * This should only provide stats with the type of [Stat.Type.PERMANENT].
+ * The base implementation can be found in [CobblemonStatProvider].
+ * To replace the base implementation see [Cobblemon.statProvider].
+ *
+ * @author Licious
+ * @since November 6th, 2022
+ */
+interface StatProvider {
 
-   public abstract fun all(): Collection<Stat> {
-   }
+    /**
+     * The [StatTypeAdapter] implementation.
+     */
+    val typeAdapter: StatTypeAdapter
 
-   public abstract fun ofType(type: Type): Collection<Stat> {
-   }
+    /**
+     * Collects all the stats currently implemented.
+     *
+     * @return A collection of stats.
+     */
+    fun all(): Collection<Stat>
 
-   public abstract fun provide(species: Species) {
-   }
+    /**
+     * Collects all stats of the given type.
+     *
+     * @param type The [Stat.Type] being queried.
+     * @return A collection of stats that match the given [type].
+     */
+    fun ofType(type: Stat.Type): Collection<Stat>
 
-   public abstract fun provide(form: FormData) {
-   }
+    /**
+     * Populate a [Species] with base stats during initialization.
+     * This should only provide stats with the type of [Stat.Type.PERMANENT].
+     *
+     * @param species The [Species] requesting provision.
+     */
+    fun provide(species: Species)
 
-   public abstract fun createEmptyEVs(): EVs {
-   }
+    /**
+     * Populate a [FormData] with base stats during initialization.
+     * This should only provide stats with the type of [Stat.Type.PERMANENT].
+     *
+     * @param form The [FormData] requesting provision.
+     */
+    fun provide(form: FormData)
 
-   public abstract fun createEmptyIVs(minPerfectIVs: Int): IVs {
-   }
+    /**
+     * Generates an empty IVs stat holder.
+     *
+     * @return The [EVs] generated.
+     */
+    fun createEmptyEVs(): EVs
 
-   public abstract fun toShowdown(species: Species, form: FormData?): String {
-   }
+    /**
+     * Generates an empty IVs stat holder.
+     *
+     * @param minPerfectIVs The minimal amount of perfect IVs.
+     * @return The [IVs] generated.
+     */
+    fun createEmptyIVs(minPerfectIVs: Int): IVs
 
-   public abstract fun getStatForPokemon(pokemon: Pokemon, stat: Stat): Int {
-   }
+    /**
+     * Creates a literal representation of the stats in showdown format.
+     *
+     * @param species The [Species] being created in a showdown format.
+     * @param form The form being used if any, if it's still writing the base species this will be null.
+     * @return The literal representation.
+     */
+    fun toShowdown(species: Species, form: FormData?): String
 
-   public abstract fun fromIdentifier(identifier: ResourceLocation): Stat? {
-   }
+    /**
+     * Resolves the value of a stat for Pokémon.
+     *
+     * @param pokemon The [Pokemon] being queried.
+     * @param stat The [Stat] being queried.
+     * @return The stat numerical value.
+     */
+    fun getStatForPokemon(pokemon: Pokemon, stat: Stat): Int
 
-   public abstract fun fromIdentifierOrThrow(identifier: ResourceLocation): Stat {
-   }
+    /**
+     * Provides the [Stat] for the given identifier.
+     *
+     * @param identifier The identifier being queried.
+     * @return The [Stat] if existing otherwise null.
+     */
+    fun fromIdentifier(identifier: ResourceLocation): Stat?
 
-   public abstract fun decode(buffer: FriendlyByteBuf): Stat {
-   }
+    /**
+     * Provides the [Stat] for the given identifier.
+     *
+     * @throws IllegalArgumentException if the identifier isn't associate with any stat.
+     * @param identifier The identifier being queried.
+     * @return The [Stat] if existing otherwise throws exception.
+     */
+    fun fromIdentifierOrThrow(identifier: ResourceLocation): Stat
 
-   public abstract fun encode(buffer: FriendlyByteBuf, stat: Stat) {
-   }
+    /**
+     * Decode a [Stat] from the given [buffer].
+     *
+     * @param buffer The [ByteBuf].
+     * @return The decoded [Stat].
+     */
+    fun decode(buffer: RegistryFriendlyByteBuf): Stat
+
+    /**
+     * Encode the given [stat] to the [buffer].
+     *
+     * @param buffer The [ByteBuf].
+     * @param stat The [Stat] being encoded.
+     */
+    fun encode(buffer: RegistryFriendlyByteBuf, stat: Stat)
+
 }

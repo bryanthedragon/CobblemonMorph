@@ -1,10 +1,145 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method close ()V in class com/cobblemon/mod/common/client/gui/interact/moveselect/MoveSelectGUI
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.moveselect
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.callback.MoveSelectDTO
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.blitk
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.CobblemonRenderable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.ExitButton
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectCancelledPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectedPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.sounds.SoundEvent
+import java.util.*
+
+class MoveSelectConfiguration(
+    val title: MutableComponent,
+    val moves: List<MoveSelectDTO>,
+    val onCancel: (MoveSelectGUI) -> Unit,
+    val onBack: (MoveSelectGUI) -> Unit,
+    val onSelect: (MoveSelectGUI, MoveSelectDTO) -> Unit,
+)
+
+class MoveSelectGUI(
+    val config: MoveSelectConfiguration
+) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")), CobblemonRenderable {
+    companion object {
+        const val WIDTH = 122
+        const val HEIGHT = 133
+
+        private val baseBackgroundResource = cobblemonResource("textures/gui/interact/move_select.png")
+    }
+
+    var closed = false
+
+    constructor(
+        title: MutableComponent,
+        moves: List<MoveSelectDTO>,
+        uuid: UUID
+    ): this(
+        MoveSelectConfiguration(
+            title = title,
+            moves = moves,
+            onSelect = { gui, it ->
+                CobblemonNetwork.sendToServer(MoveSelectedPacket(uuid = uuid, moves.indexOf(it)))
+                gui.closeProperly()
+            },
+            onCancel = { CobblemonNetwork.sendToServer(MoveSelectCancelledPacket(uuid = uuid)) },
+            onBack = MoveSelectGUI::onClose
+        )
+    )
+
+    fun closeProperly() {
+        closed = true
+        onClose()
+    }
+
+    override fun init() {
+        val x = (width - WIDTH) / 2
+        val y = (height - HEIGHT) / 2
+
+        config.moves.forEachIndexed { index, move ->
+            addRenderableWidget(
+                MoveSlotButton(
+                    x = x + 7,
+                    y = y + 7 + ((MoveSlotButton.HEIGHT + 3) * index),
+                    move = move.moveTemplate,
+                    pp = move.pp,
+                    ppMax = move.ppMax,
+                    enabled = move.enabled
+                ) { onPress(move) }
+            )
+        }
+
+        // Add Exit Button
+        addRenderableWidget(
+            ExitButton(
+                pX = x + 92,
+                pY = y + 115
+            ) {
+                playSound(CobblemonSounds.GUI_CLICK)
+                config.onBack(this)
+            }
+        )
+
+        super.init()
+    }
+
+    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
+        val x = (width - WIDTH) / 2
+        val y = (height - HEIGHT) / 2
+
+        blitk(
+            matrixStack = context.pose(),
+            texture = baseBackgroundResource,
+            x = x,
+            y = y,
+            width = WIDTH,
+            height = HEIGHT
+        )
+
+        // Render all added Widgets
+        super.render(context, mouseX, mouseY, partialTicks)
+    }
+
+    private fun onPress(move: MoveSelectDTO) {
+        if (!move.enabled) {
+            return
+        }
+        playSound(CobblemonSounds.GUI_CLICK)
+        config.onSelect(this, move)
+    }
+
+    override fun onClose() {
+        if (!closed) {
+            config.onCancel(this)
+        }
+        super.onClose()
+    }
+
+    override fun shouldCloseOnEsc() = true
+
+    override fun isPauseScreen() = false
+
+    override fun renderBlurredBackground(delta: Float) {}
+
+    override fun renderMenuBackground(context: GuiGraphics) {}
+
+    fun playSound(soundEvent: SoundEvent) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
+    }
+}

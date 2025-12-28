@@ -1,0 +1,22 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.npc
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.npc.NPCEditorScreen
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.npc.CloseNPCEditorPacket
+import net.minecraft.client.Minecraft
+final class CloseNPCEditorHandler : ClientNetworkPacketHandler<CloseNPCEditorPacket> {
+    override fun handle(packet: CloseNPCEditorPacket, client: Minecraft) {
+        val screen = client.screen
+        if (screen is NPCEditorScreen) {
+            screen.onClose()
+        }
+    }
+}

@@ -1,78 +1,68 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.BerryBlock
-import com.google.gson.JsonArray
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
-import java.util.ArrayList;
-import java.util.LinkedHashMap
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.world.phys.AABB
+final class BoxCollectionAdapter : JsonDeserializer<Collection<AABB>> {
+    val boxesByName = mutableMapOf<String, Collection<AABB>>()
 
-@SourceDebugExtension(["SMAP\nBoxCollectionAdapter.kt\nKotlin\n*S Kotlin\n*F\n+ 1 BoxCollectionAdapter.kt\ncom/cobblemon/mod/common/util/adapters/BoxCollectionAdapter\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,69:1\n1549#2:70\n1620#2,3:71\n*S KotlinDebug\n*F\n+ 1 BoxCollectionAdapter.kt\ncom/cobblemon/mod/common/util/adapters/BoxCollectionAdapter\n*L\n66#1:70\n66#1:71,3\n*E\n"])
-public object BoxCollectionAdapter : JsonDeserializer<java.util.Collection<? extends AABB>> {
-   public final val boxesByName: MutableMap<String, Collection<AABB>> = (new LinkedHashMap()) as java.util.Map
+    init {
+        boxesByName["standard-sprout"] = BerryBlock.STANDARD_SPROUT
+        boxesByName["standard-mature"] = BerryBlock.STANDARD_MATURE
+        boxesByName["short-sprout"] = BerryBlock.SHORT_SPROUT
+        boxesByName["short-mature"] = BerryBlock.SHORT_MATURE
+        boxesByName["volcano-sprout"] = BerryBlock.VOLCANO_SPROUT
+        boxesByName["volcano-mature"] = BerryBlock.VOLCANO_MATURE
+        boxesByName["nest-sprout"] = BerryBlock.NEST_SPROUT
+        boxesByName["nest-mature"] = BerryBlock.NEST_MATURE
+        boxesByName["frill-sprout"] = BerryBlock.FRILL_SPROUT
+        boxesByName["frill-mature"] = BerryBlock.FRILL_MATURE
+        boxesByName["block-sprout"] = BerryBlock.BLOCK_SPROUT
+        boxesByName["block-mature"] = BerryBlock.BLOCK_MATURE
+        boxesByName["pyramid-sprout"] = BerryBlock.PYRAMID_SPROUT
+        boxesByName["pyramid-mature"] = BerryBlock.PYRAMID_MATURE
+        boxesByName["tail-sprout"] = BerryBlock.TAIL_SPROUT
+        boxesByName["tail-mature"] = BerryBlock.TAIL_MATURE
+        boxesByName["sword-sprout"] = BerryBlock.SWORD_SPROUT
+        boxesByName["sword-mature"] = BerryBlock.SWORD_MATURE
+        boxesByName["platform-sprout"] = BerryBlock.PLATFORM_SPROUT
+        boxesByName["platform-mature"] = BerryBlock.PLATFORM_MATURE
+        boxesByName["stand-sprout"] = BerryBlock.STAND_SPROUT
+        boxesByName["stand-mature"] = BerryBlock.STAND_MATURE
+        boxesByName["cone-sprout"] = BerryBlock.CONE_SPROUT
+        boxesByName["cone-mature"] = BerryBlock.CONE_MATURE
+        boxesByName["squat-sprout"] = BerryBlock.SQUAT_SPROUT
+        boxesByName["squat-mature"] = BerryBlock.SQUAT_MATURE
+        boxesByName["lantern-sprout"] = BerryBlock.LANTERN_SPROUT
+        boxesByName["lantern-mature"] = BerryBlock.LANTERN_MATURE
+        boxesByName["box-sprout"] = BerryBlock.BOX_SPROUT
+        boxesByName["box-mature"] = BerryBlock.BOX_MATURE
+        boxesByName["blossom-sprout"] = BerryBlock.BLOSSOM_SPROUT
+        boxesByName["blossom-mature"] = BerryBlock.BLOSSOM_MATURE
+        boxesByName["lilypad-sprout"] = BerryBlock.LILYPAD_SPROUT
+        boxesByName["lilypad-mature"] = BerryBlock.LILYPAD_MATURE
+        boxesByName["tall-sprout"] = BerryBlock.TALL_SPROUT
+        boxesByName["tall-mature"] = BerryBlock.TALL_MATURE
 
-   public open fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): Collection<AABB> {
-      if (json.isJsonPrimitive()) {
-         val var14: java.util.Collection = boxesByName.get(json.getAsString());
-         if (var14 == null) {
-            throw new IllegalArgumentException("Unrecognized box collection name: ${json.getAsString()}");
-         } else {
-            return var14;
-         }
-      } else {
-         val var10000: JsonArray = json.getAsJsonArray();
-         val `$this$map$iv`: java.lang.Iterable = var10000 as java.lang.Iterable;
-         val `destination$iv$iv`: java.util.Collection = new ArrayList(CollectionsKt.collectionSizeOrDefault(var10000 as java.lang.Iterable, 10));
 
-         for (Object item$iv$iv : $this$map$iv) {
-            `destination$iv$iv`.add(ctx.deserialize(`item$iv$iv` as JsonElement, AABB::class.java) as AABB);
-         }
+    }
 
-         return CollectionsKt.toList(`destination$iv$iv` as java.util.List);
-      }
-   }
-
-   @JvmStatic
-   fun {
-      boxesByName.put("standard-sprout", BerryBlock.Companion.getSTANDARD_SPROUT());
-      boxesByName.put("standard-mature", BerryBlock.Companion.getSTANDARD_MATURE());
-      boxesByName.put("short-sprout", BerryBlock.Companion.getSHORT_SPROUT());
-      boxesByName.put("short-mature", BerryBlock.Companion.getSHORT_MATURE());
-      boxesByName.put("volcano-sprout", BerryBlock.Companion.getVOLCANO_SPROUT());
-      boxesByName.put("volcano-mature", BerryBlock.Companion.getVOLCANO_MATURE());
-      boxesByName.put("nest-sprout", BerryBlock.Companion.getNEST_SPROUT());
-      boxesByName.put("nest-mature", BerryBlock.Companion.getNEST_MATURE());
-      boxesByName.put("frill-sprout", BerryBlock.Companion.getFRILL_SPROUT());
-      boxesByName.put("frill-mature", BerryBlock.Companion.getFRILL_MATURE());
-      boxesByName.put("block-sprout", BerryBlock.Companion.getBLOCK_SPROUT());
-      boxesByName.put("block-mature", BerryBlock.Companion.getBLOCK_MATURE());
-      boxesByName.put("pyramid-sprout", BerryBlock.Companion.getPYRAMID_SPROUT());
-      boxesByName.put("pyramid-mature", BerryBlock.Companion.getPYRAMID_MATURE());
-      boxesByName.put("tail-sprout", BerryBlock.Companion.getTAIL_SPROUT());
-      boxesByName.put("tail-mature", BerryBlock.Companion.getTAIL_MATURE());
-      boxesByName.put("sword-sprout", BerryBlock.Companion.getSWORD_SPROUT());
-      boxesByName.put("sword-mature", BerryBlock.Companion.getSWORD_MATURE());
-      boxesByName.put("platform-sprout", BerryBlock.Companion.getPLATFORM_SPROUT());
-      boxesByName.put("platform-mature", BerryBlock.Companion.getPLATFORM_MATURE());
-      boxesByName.put("stand-sprout", BerryBlock.Companion.getSTAND_SPROUT());
-      boxesByName.put("stand-mature", BerryBlock.Companion.getSTAND_MATURE());
-      boxesByName.put("cone-sprout", BerryBlock.Companion.getCONE_SPROUT());
-      boxesByName.put("cone-mature", BerryBlock.Companion.getCONE_MATURE());
-      boxesByName.put("squat-sprout", BerryBlock.Companion.getSQUAT_SPROUT());
-      boxesByName.put("squat-mature", BerryBlock.Companion.getSQUAT_MATURE());
-      boxesByName.put("lantern-sprout", BerryBlock.Companion.getLANTERN_SPROUT());
-      boxesByName.put("lantern-mature", BerryBlock.Companion.getLANTERN_MATURE());
-      boxesByName.put("box-sprout", BerryBlock.Companion.getBOX_SPROUT());
-      boxesByName.put("box-mature", BerryBlock.Companion.getBOX_MATURE());
-      boxesByName.put("blossom-sprout", BerryBlock.Companion.getBLOSSOM_SPROUT());
-      boxesByName.put("blossom-mature", BerryBlock.Companion.getBLOSSOM_MATURE());
-      boxesByName.put("lilypad-sprout", BerryBlock.Companion.getLILYPAD_SPROUT());
-      boxesByName.put("lilypad-mature", BerryBlock.Companion.getLILYPAD_MATURE());
-      boxesByName.put("tall-sprout", BerryBlock.Companion.getTALL_SPROUT());
-      boxesByName.put("tall-mature", BerryBlock.Companion.getTALL_MATURE());
-   }
+    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): Collection<AABB> {
+        if (json.isJsonPrimitive)  {
+            return boxesByName[json.asString] ?: throw IllegalArgumentException("Unrecognized box collection name: ${json.asString}")
+        } else {
+            return json.asJsonArray.map { ctx.deserialize<AABB>(it, AABB::class.java) }.toList()
+        }
+    }
 }

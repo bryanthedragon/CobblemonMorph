@@ -1,678 +1,694 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.apricorn.Apricorn
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.ApricornBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.ApricornSaplingBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.BerryBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.BigRootBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.CoinPouchBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.DisplayCaseBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.EnergyRootBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.FossilAnalyzerBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.HealingMachineBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.MedicinalLeekBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.MintBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.MonitorBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.PCBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.PastureBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.RestorationTankBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.RevivalHerbBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.TumblestoneBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.VivichokeBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.chest.GildedChestBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonHangingSignBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonSignBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonWallHangingSignBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonWallSignBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.invoker.BlocksInvoker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.invoker.DoorBlockInvoker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.invoker.FireBlockInvoker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.invoker.PressurePlateBlockInvoker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.invoker.StairsBlockInvoker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.invoker.TrapdoorBlockInvoker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.PlatformRegistry
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
 
-import java.util.LinkedHashMap
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.apricorn.Apricorn;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.campfirepot.CampfireBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.LecternBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.MintBlock.MintType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.campfirepot.CampfirePotBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.chest.GildedChestBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.general.BaleBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.grower.SaccharineTreeGrower;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonHangingSignBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonSignBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonWallHangingSignBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.sign.CobblemonWallSignBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.general.HorizontalRotationCarpetBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.general.HorizontalRotationalBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.PlatformRegistry;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource;
 
-import net.minecraft.block.AbstractBlock.Settings
-import net.minecraft.core.BlockPos
-import net.minecraft.core.DefaultedRegistry
-import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.util.valueproviders.IntProvider
-import net.minecraft.util.valueproviders.UniformInt
-import net.minecraft.world.effect.MobEffects
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.level.BlockGetter
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.ButtonBlock
-import net.minecraft.world.level.block.DoorBlock
-import net.minecraft.world.level.block.DropExperienceBlock
-import net.minecraft.world.level.block.FenceBlock
-import net.minecraft.world.level.block.FenceGateBlock
-import net.minecraft.world.level.block.FireBlock
-import net.minecraft.world.level.block.FlowerBlock
-import net.minecraft.world.level.block.FlowerPotBlock
-import net.minecraft.world.level.block.LeavesBlock
-import net.minecraft.world.level.block.PressurePlateBlock
-import net.minecraft.world.level.block.RotatedPillarBlock
-import net.minecraft.world.level.block.SlabBlock
-import net.minecraft.world.level.block.SoundType
-import net.minecraft.world.level.block.StairBlock
-import net.minecraft.world.level.block.TrapDoorBlock
-import net.minecraft.world.level.block.PressurePlateBlock.Sensitivity
-import net.minecraft.world.level.block.state.BlockBehaviour
-import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.BlockBehaviour.OffsetType
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties
-import net.minecraft.world.level.block.state.properties.BlockSetType
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
-import net.minecraft.world.level.block.state.properties.Property
-import net.minecraft.world.level.block.state.properties.WoodType
-import net.minecraft.world.level.material.MapColor
-import net.minecraft.world.level.material.PushReaction
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
-public object CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<Block>>, Block> {
-   public final val AGUAV_BERRY: BerryBlock = INSTANCE.berryBlock("aguav")
-   public final val APICOT_BERRY: BerryBlock = INSTANCE.berryBlock("apicot")
-   public final val APRICORN_BLOCK_SET_TYPE: BlockSetType = new BlockSetType("apricorn")
-   public final val APRICORN_BUTTON: ButtonBlock =
-      INSTANCE.create("apricorn_button", BlocksInvoker.createWoodenButtonBlock(BlockSetType.f_271198_)) as ButtonBlock
-      public final val APRICORN_DOOR: DoorBlock =
-      INSTANCE.create(
-         "apricorn_door",
-         DoorBlockInvoker.cobblemon$create(
-            Properties.m_284310_()
-               .m_284180_(APRICORN_PLANKS.m_284356_())
-               .m_280658_(NoteBlockInstrument.BASS)
-               .m_60978_(3.0F)
-               .m_60918_(SoundType.f_56736_)
-               .m_60955_(),
-            APRICORN_BLOCK_SET_TYPE
-         )
-      ) as DoorBlock
-      public final val APRICORN_FENCE: FenceBlock =
-      INSTANCE.create(
-         "apricorn_fence",
-         new FenceBlock(
-            Properties.m_284310_().m_284180_(APRICORN_PLANKS.m_284356_()).m_280658_(NoteBlockInstrument.BASS).m_60913_(2.0F, 3.0F).m_60918_(SoundType.f_56736_)
-         )
-      ) as FenceBlock
-      public final val APRICORN_FENCE_GATE: FenceGateBlock =
-      INSTANCE.create(
-         "apricorn_fence_gate",
-         new FenceGateBlock(
-            Properties.m_284310_().m_284180_(APRICORN_PLANKS.m_284356_()).m_280658_(NoteBlockInstrument.BASS).m_60913_(2.0F, 3.0F).m_60918_(SoundType.f_56736_),
-            APRICORN_WOOD_TYPE
-         )
-      ) as FenceGateBlock
-      public final val APRICORN_HANGING_SIGN: CobblemonHangingSignBlock
-   public final val APRICORN_LEAVES: LeavesBlock = INSTANCE.leaves("apricorn_leaves")
-   public final val APRICORN_LOG: RotatedPillarBlock
-   public final val APRICORN_PLANKS: Block =
-      INSTANCE.create(
-         "apricorn_planks",
-         new Block(Properties.m_284310_().m_284180_(MapColor.f_283762_).m_280658_(NoteBlockInstrument.BASS).m_60913_(2.0F, 3.0F).m_60918_(SoundType.f_56736_))
-      ) as Block
-      public final val APRICORN_PRESSURE_PLATE: PressurePlateBlock =
-      INSTANCE.create(
-         "apricorn_pressure_plate",
-         PressurePlateBlockInvoker.cobblemon$create(
-            Sensitivity.EVERYTHING,
-            Properties.m_284310_()
-               .m_284180_(APRICORN_PLANKS.m_284356_())
-               .m_280658_(NoteBlockInstrument.BASS)
-               .m_60910_()
-               .m_60978_(0.5F)
-               .m_60918_(SoundType.f_56736_),
-            APRICORN_BLOCK_SET_TYPE
-         )
-      ) as PressurePlateBlock
-      public final val APRICORN_SIGN: CobblemonSignBlock
-   public final val APRICORN_SLAB: SlabBlock =
-      INSTANCE.create(
-         "apricorn_slab",
-         new SlabBlock(
-            Properties.m_284310_().m_284180_(MapColor.f_283825_).m_280658_(NoteBlockInstrument.BASS).m_60913_(2.0F, 3.0F).m_60918_(SoundType.f_56736_)
-         )
-      ) as SlabBlock
-      public final val APRICORN_STAIRS: StairBlock =
-      INSTANCE.create(
-         "apricorn_stairs", StairsBlockInvoker.cobblemon$create(APRICORN_PLANKS.m_49966_(), Properties.m_60926_(APRICORN_PLANKS as BlockBehaviour))
-      ) as StairBlock
-      public final val APRICORN_TRAPDOOR: TrapDoorBlock =
-      INSTANCE.create(
-         "apricorn_trapdoor",
-         TrapdoorBlockInvoker.cobblemon$create(
-            Properties.m_284310_()
-               .m_284180_(MapColor.f_283825_)
-               .m_280658_(NoteBlockInstrument.BASS)
-               .m_60978_(3.0F)
-               .m_60918_(SoundType.f_56736_)
-               .m_60955_()
-               .m_60922_(CobblemonBlocks::APRICORN_TRAPDOOR$lambda$0),
-            APRICORN_BLOCK_SET_TYPE
-         )
-      ) as TrapDoorBlock
-      public final val APRICORN_WALL_HANGING_SIGN: CobblemonWallHangingSignBlock
-   public final val APRICORN_WALL_SIGN: CobblemonWallSignBlock
-   public final val APRICORN_WOOD: RotatedPillarBlock = log$default(INSTANCE, "apricorn_wood", null, null, 6, null)
-   public final val APRICORN_WOOD_TYPE: WoodType = WoodType.m_61844_(new WoodType("apricorn", APRICORN_BLOCK_SET_TYPE))
-   public final val ASPEAR_BERRY: BerryBlock = INSTANCE.berryBlock("aspear")
-   public final val BABIRI_BERRY: BerryBlock = INSTANCE.berryBlock("babiri")
-   public final val BELUE_BERRY: BerryBlock = INSTANCE.berryBlock("belue")
-   public final val BIG_ROOT: BigRootBlock
-   public final val BLACK_APRICORN: ApricornBlock = INSTANCE.apricornBlock("black_apricorn", Apricorn.BLACK)
-   public final val BLACK_APRICORN_SAPLING: ApricornSaplingBlock
-   public final val BLACK_GILDED_CHEST: GildedChestBlock
-   public final val BLACK_TUMBLESTONE_BLOCK: Block =
-      INSTANCE.create(
-         "black_tumblestone_block",
-         new Block(
-            Properties.m_284310_()
-               .m_284180_(MapColor.f_283771_)
-               .m_60978_(1.0F)
-               .m_60918_(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS)
-               .m_60999_()
-               .m_280658_(NoteBlockInstrument.BASEDRUM)
-         )
-      ) as Block
-      public final val BLACK_TUMBLESTONE_CLUSTER: Block = INSTANCE.tumblestoneBlock("black_tumblestone_cluster", 3, 7, 3, null)
-   public final val BLUE_APRICORN: ApricornBlock = INSTANCE.apricornBlock("blue_apricorn", Apricorn.BLUE)
-   public final val BLUE_APRICORN_SAPLING: ApricornSaplingBlock
-   public final val BLUE_GILDED_CHEST: GildedChestBlock
-   public final val BLUE_MINT: MintBlock
-   public final val BLUK_BERRY: BerryBlock = INSTANCE.berryBlock("bluk")
-   public final val CHARTI_BERRY: BerryBlock = INSTANCE.berryBlock("charti")
-   public final val CHERI_BERRY: BerryBlock = INSTANCE.berryBlock("cheri")
-   public final val CHESTO_BERRY: BerryBlock = INSTANCE.berryBlock("chesto")
-   public final val CHILAN_BERRY: BerryBlock = INSTANCE.berryBlock("chilan")
-   public final val CHOPLE_BERRY: BerryBlock = INSTANCE.berryBlock("chople")
-   public final val COBA_BERRY: BerryBlock = INSTANCE.berryBlock("coba")
-   public final val COLBUR_BERRY: BerryBlock = INSTANCE.berryBlock("colbur")
-   public final val CORNN_BERRY: BerryBlock = INSTANCE.berryBlock("cornn")
-   public final val CUSTAP_BERRY: BerryBlock = INSTANCE.berryBlock("custap")
-   public final val CYAN_MINT: MintBlock
-   public final val DAWN_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("dawn_stone_ore")
-   public final val DEEPSLATE_DAWN_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_dawn_stone_ore")
-   public final val DEEPSLATE_DUSK_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_dusk_stone_ore")
-   public final val DEEPSLATE_FIRE_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_fire_stone_ore")
-   public final val DEEPSLATE_ICE_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_ice_stone_ore")
-   public final val DEEPSLATE_LEAF_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_leaf_stone_ore")
-   public final val DEEPSLATE_MOON_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_moon_stone_ore")
-   public final val DEEPSLATE_SHINY_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_shiny_stone_ore")
-   public final val DEEPSLATE_SUN_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_sun_stone_ore")
-   public final val DEEPSLATE_THUNDER_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_thunder_stone_ore")
-   public final val DEEPSLATE_WATER_STONE_ORE: DropExperienceBlock = INSTANCE.deepslateEvolutionStoneOre("deepslate_water_stone_ore")
-   public final val DISPLAY_CASE: DisplayCaseBlock
-   public final val DRIPSTONE_MOON_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("dripstone_moon_stone_ore")
-   public final val DURIN_BERRY: BerryBlock = INSTANCE.berryBlock("durin")
-   public final val DUSK_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("dusk_stone_ore")
-   public final val ENERGY_ROOT: EnergyRootBlock
-   public final val ENIGMA_BERRY: BerryBlock = INSTANCE.berryBlock("enigma")
-   public final val FIGY_BERRY: BerryBlock = INSTANCE.berryBlock("figy")
-   public final val FIRE_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("fire_stone_ore")
-   public final val FOSSIL_ANALYZER: FossilAnalyzerBlock
-   public final val GANLON_BERRY: BerryBlock = INSTANCE.berryBlock("ganlon")
-   public final val GILDED_CHEST: GildedChestBlock
-   public final val GIMMIGHOUL_CHEST: GildedChestBlock
-   public final val GREEN_APRICORN: ApricornBlock = INSTANCE.apricornBlock("green_apricorn", Apricorn.GREEN)
-   public final val GREEN_APRICORN_SAPLING: ApricornSaplingBlock
-   public final val GREEN_GILDED_CHEST: GildedChestBlock
-   public final val GREEN_MINT: MintBlock
-   public final val GREPA_BERRY: BerryBlock = INSTANCE.berryBlock("grepa")
-   public final val HABAN_BERRY: BerryBlock = INSTANCE.berryBlock("haban")
-   public final val HEALING_MACHINE: HealingMachineBlock
-   public final val HONDEW_BERRY: BerryBlock = INSTANCE.berryBlock("hondew")
-   public final val HOPO_BERRY: BerryBlock = INSTANCE.berryBlock("hopo")
-   public final val IAPAPA_BERRY: BerryBlock = INSTANCE.berryBlock("iapapa")
-   public final val ICE_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("ice_stone_ore")
-   public final val JABOCA_BERRY: BerryBlock = INSTANCE.berryBlock("jaboca")
-   public final val KASIB_BERRY: BerryBlock = INSTANCE.berryBlock("kasib")
-   public final val KEBIA_BERRY: BerryBlock = INSTANCE.berryBlock("kebia")
-   public final val KEE_BERRY: BerryBlock = INSTANCE.berryBlock("kee")
-   public final val KELPSY_BERRY: BerryBlock = INSTANCE.berryBlock("kelpsy")
-   public final val LANSAT_BERRY: BerryBlock = INSTANCE.berryBlock("lansat")
-   public final val LARGE_BUDDING_BLACK_TUMBLESTONE: Block = INSTANCE.tumblestoneBlock("large_budding_black_tumblestone", 2, 5, 3, BLACK_TUMBLESTONE_CLUSTER)
-   public final val LARGE_BUDDING_SKY_TUMBLESTONE: Block = INSTANCE.tumblestoneBlock("large_budding_sky_tumblestone", 2, 5, 3, SKY_TUMBLESTONE_CLUSTER)
-   public final val LARGE_BUDDING_TUMBLESTONE: Block = INSTANCE.tumblestoneBlock("large_budding_tumblestone", 2, 5, 3, TUMBLESTONE_CLUSTER)
-   public final val LEAF_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("leaf_stone_ore")
-   public final val LEPPA_BERRY: BerryBlock = INSTANCE.berryBlock("leppa")
-   public final val LIECHI_BERRY: BerryBlock = INSTANCE.berryBlock("liechi")
-   public final val LUM_BERRY: BerryBlock = INSTANCE.berryBlock("lum")
-   public final val MAGOST_BERRY: BerryBlock = INSTANCE.berryBlock("magost")
-   public final val MAGO_BERRY: BerryBlock = INSTANCE.berryBlock("mago")
-   public final val MARANGA_BERRY: BerryBlock = INSTANCE.berryBlock("maranga")
-   public final val MEDICINAL_LEEK: MedicinalLeekBlock
-   public final val MEDIUM_BUDDING_BLACK_TUMBLESTONE: Block =
-      INSTANCE.tumblestoneBlock("medium_budding_black_tumblestone", 1, 4, 3, LARGE_BUDDING_BLACK_TUMBLESTONE)
-      public final val MEDIUM_BUDDING_SKY_TUMBLESTONE: Block =
-      INSTANCE.tumblestoneBlock("medium_budding_sky_tumblestone", 1, 4, 3, LARGE_BUDDING_SKY_TUMBLESTONE)
-      public final val MEDIUM_BUDDING_TUMBLESTONE: Block = INSTANCE.tumblestoneBlock("medium_budding_tumblestone", 1, 4, 3, LARGE_BUDDING_TUMBLESTONE)
-   public final val MICLE_BERRY: BerryBlock = INSTANCE.berryBlock("micle")
-   public final val MONITOR: MonitorBlock
-   public final val MOON_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("moon_stone_ore")
-   public final val NANAB_BERRY: BerryBlock = INSTANCE.berryBlock("nanab")
-   public final val NETHER_FIRE_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("nether_fire_stone_ore")
-   public final val NOMEL_BERRY: BerryBlock = INSTANCE.berryBlock("nomel")
-   public final val OCCA_BERRY: BerryBlock = INSTANCE.berryBlock("occa")
-   public final val ORAN_BERRY: BerryBlock = INSTANCE.berryBlock("oran")
-   public final val PAMTRE_BERRY: BerryBlock = INSTANCE.berryBlock("pamtre")
-   public final val PASSHO_BERRY: BerryBlock = INSTANCE.berryBlock("passho")
-   public final val PASTURE: PastureBlock
-   public final val PAYAPA_BERRY: BerryBlock = INSTANCE.berryBlock("payapa")
-   public final val PC: PCBlock
-   public final val PECHA_BERRY: BerryBlock = INSTANCE.berryBlock("pecha")
-   public final val PEP_UP_FLOWER: FlowerBlock =
-      INSTANCE.create(
-         "pep_up_flower",
-         new FlowerBlock(
-            MobEffects.f_19620_,
-            10,
-            Properties.m_284310_()
-               .m_284180_(MapColor.f_283915_)
-               .m_60910_()
-               .m_60966_()
-               .m_60918_(SoundType.f_56740_)
-               .m_222979_(OffsetType.XZ)
-               .m_278166_(PushReaction.DESTROY)
-         )
-      ) as FlowerBlock
-      public final val PERSIM_BERRY: BerryBlock = INSTANCE.berryBlock("persim")
-   public final val PETAYA_BERRY: BerryBlock = INSTANCE.berryBlock("petaya")
-   public final val PINAP_BERRY: BerryBlock = INSTANCE.berryBlock("pinap")
-   public final val PINK_APRICORN: ApricornBlock = INSTANCE.apricornBlock("pink_apricorn", Apricorn.PINK)
-   public final val PINK_APRICORN_SAPLING: ApricornSaplingBlock
-   public final val PINK_GILDED_CHEST: GildedChestBlock
-   public final val PINK_MINT: MintBlock
-   private final val PLANT_PROPERTIES: Settings
-   public final val POMEG_BERRY: BerryBlock = INSTANCE.berryBlock("pomeg")
-   public final val POTTED_PEP_UP_FLOWER: FlowerPotBlock =
-      INSTANCE.create("potted_pep_up_flower", BlocksInvoker.createFlowerPotBlock(PEP_UP_FLOWER as Block)) as FlowerPotBlock
-      public final val QUALOT_BERRY: BerryBlock = INSTANCE.berryBlock("qualot")
-   public final val RABUTA_BERRY: BerryBlock = INSTANCE.berryBlock("rabuta")
-   public final val RAWST_BERRY: BerryBlock = INSTANCE.berryBlock("rawst")
-   public final val RAZZ_BERRY: BerryBlock = INSTANCE.berryBlock("razz")
-   public final val RED_APRICORN: ApricornBlock = INSTANCE.apricornBlock("red_apricorn", Apricorn.RED)
-   public final val RED_APRICORN_SAPLING: ApricornSaplingBlock
-   public final val RED_MINT: MintBlock
-   public final val RELIC_COIN_POUCH: CoinPouchBlock
-   public final val RELIC_COIN_SACK: CoinPouchBlock
-   public final val RESTORATION_TANK: RestorationTankBlock
-   public final val REVIVAL_HERB: RevivalHerbBlock
-   public final val RINDO_BERRY: BerryBlock = INSTANCE.berryBlock("rindo")
-   public final val ROSELI_BERRY: BerryBlock = INSTANCE.berryBlock("roseli")
-   public final val ROWAP_BERRY: BerryBlock = INSTANCE.berryBlock("rowap")
-   public final val SALAC_BERRY: BerryBlock = INSTANCE.berryBlock("salac")
-   public final val SHINY_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("shiny_stone_ore")
-   public final val SHUCA_BERRY: BerryBlock = INSTANCE.berryBlock("shuca")
-   public final val SITRUS_BERRY: BerryBlock = INSTANCE.berryBlock("sitrus")
-   public final val SKY_TUMBLESTONE_BLOCK: Block =
-      INSTANCE.create(
-         "sky_tumblestone_block",
-         new Block(
-            Properties.m_284310_()
-               .m_284180_(MapColor.f_283869_)
-               .m_60978_(1.0F)
-               .m_60918_(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS)
-               .m_60999_()
-               .m_280658_(NoteBlockInstrument.BASEDRUM)
-         )
-      ) as Block
-      public final val SKY_TUMBLESTONE_CLUSTER: Block = INSTANCE.tumblestoneBlock("sky_tumblestone_cluster", 3, 7, 3, null)
-   public final val SMALL_BUDDING_BLACK_TUMBLESTONE: Block =
-      INSTANCE.tumblestoneBlock("small_budding_black_tumblestone", 0, 3, 4, MEDIUM_BUDDING_BLACK_TUMBLESTONE)
-      public final val SMALL_BUDDING_SKY_TUMBLESTONE: Block =
-      INSTANCE.tumblestoneBlock("small_budding_sky_tumblestone", 0, 3, 4, MEDIUM_BUDDING_SKY_TUMBLESTONE)
-      public final val SMALL_BUDDING_TUMBLESTONE: Block = INSTANCE.tumblestoneBlock("small_budding_tumblestone", 0, 3, 4, MEDIUM_BUDDING_TUMBLESTONE)
-   public final val SPELON_BERRY: BerryBlock = INSTANCE.berryBlock("spelon")
-   public final val STARF_BERRY: BerryBlock = INSTANCE.berryBlock("starf")
-   public final val STRIPPED_APRICORN_LOG: RotatedPillarBlock = log$default(INSTANCE, "stripped_apricorn_log", null, null, 6, null)
-   public final val STRIPPED_APRICORN_WOOD: RotatedPillarBlock = log$default(INSTANCE, "stripped_apricorn_wood", null, null, 6, null)
-   public final val SUN_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("sun_stone_ore")
-   public final val TAMATO_BERRY: BerryBlock = INSTANCE.berryBlock("tamato")
-   public final val TANGA_BERRY: BerryBlock = INSTANCE.berryBlock("tanga")
-   public final val TERRACOTTA_SUN_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("terracotta_sun_stone_ore")
-   public final val THUNDER_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("thunder_stone_ore")
-   public final val TOUGA_BERRY: BerryBlock = INSTANCE.berryBlock("touga")
-   public final val TUMBLESTONE_BLOCK: Block =
-      INSTANCE.create(
-         "tumblestone_block",
-         new Block(
-            Properties.m_284310_()
-               .m_284180_(MapColor.f_283895_)
-               .m_60978_(1.0F)
-               .m_60918_(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS)
-               .m_60999_()
-               .m_280658_(NoteBlockInstrument.BASEDRUM)
-         )
-      ) as Block
-      public final val TUMBLESTONE_CLUSTER: Block = INSTANCE.tumblestoneBlock("tumblestone_cluster", 3, 7, 3, null)
-   public final val VIVICHOKE_SEEDS: VivichokeBlock
-   public final val WACAN_BERRY: BerryBlock = INSTANCE.berryBlock("wacan")
-   public final val WATER_STONE_ORE: DropExperienceBlock = INSTANCE.evolutionStoneOre("water_stone_ore")
-   public final val WATMEL_BERRY: BerryBlock = INSTANCE.berryBlock("watmel")
-   public final val WEPEAR_BERRY: BerryBlock = INSTANCE.berryBlock("wepear")
-   public final val WHITE_APRICORN: ApricornBlock = INSTANCE.apricornBlock("white_apricorn", Apricorn.WHITE)
-   public final val WHITE_APRICORN_SAPLING: ApricornSaplingBlock
-   public final val WHITE_GILDED_CHEST: GildedChestBlock
-   public final val WHITE_MINT: MintBlock
-   public final val WIKI_BERRY: BerryBlock = INSTANCE.berryBlock("wiki")
-   public final val YACHE_BERRY: BerryBlock = INSTANCE.berryBlock("yache")
-   public final val YELLOW_APRICORN: ApricornBlock = INSTANCE.apricornBlock("yellow_apricorn", Apricorn.YELLOW)
-   public final val YELLOW_APRICORN_SAPLING: ApricornSaplingBlock
-   public final val YELLOW_GILDED_CHEST: GildedChestBlock
-   private final val berries: MutableMap<ResourceLocation, BerryBlock> = (new LinkedHashMap()) as java.util.Map
-   public open val registry: Registry<Block>
-   public open val registryKey: ResourceKey<Registry<Block>>
+@Suppress("SameParametervalue", "HasPlatformType", "MemberVisibilityCanBePrivate", "unused");
+public final class CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceKey<Registry<Block>>, Block>() {
 
-   public fun strippedBlocks(): Map<Block, Block> {
-      return MapsKt.mapOf(new Pair[]{TuplesKt.to(APRICORN_WOOD, STRIPPED_APRICORN_WOOD), TuplesKt.to(APRICORN_LOG, STRIPPED_APRICORN_LOG)});
-   }
+    @Override public static final registry: Registry<Block> = BuiltInRegistries.BLOCK;
+    @Override public static final resourceKey: ResourceKey<Registry<Block>> = Registries.BLOCK;
 
-   private fun apricornBlock(name: String, apricorn: Apricorn): ApricornBlock {
-      val var10004: Properties = Properties.m_284310_()
-         .m_284180_(apricorn.mapColor())
-         .m_60977_()
-         .m_60913_(Blocks.f_49999_.m_155943_(), Blocks.f_49999_.m_7325_())
-         .m_60918_(SoundType.f_56736_)
-         .m_60955_();
-      return this.create(name, new ApricornBlock(var10004, apricorn));
-   }
+    public static final APRICORN_BLOCK_SET_TYPE = BlockSetType("apricorn");
+    public static final APRICORN_WOOD_TYPE = WoodType.register(WoodType("apricorn", APRICORN_BLOCK_SET_TYPE));
+    public static final SACCHARINE_BLOCK_SET_TYPE = BlockSetType("saccharine");
+    public static final SACCHARINE_WOOD_TYPE = WoodType.register(WoodType("saccharine", SACCHARINE_BLOCK_SET_TYPE));
 
-   private fun tumblestoneBlock(name: String, stage: Int, height: Int, xzOffset: Int, nextStage: Block?): Block {
-      val var10004: Properties = Properties.m_284310_().m_278166_(PushReaction.DESTROY).m_60955_().m_60978_(1.5F).m_60918_(CobblemonSounds.TUMBLESTONE_SOUNDS);
-      return this.create(name, new TumblestoneBlock(var10004, stage, height, xzOffset, nextStage));
-   }
+    // Evolution Ores
+    public static final DAWN_STONE_ORE = evolutionStoneOre("dawn_stone_ore", 7);
 
-   public fun berries(): Map<ResourceLocation, BerryBlock> {
-      return MapsKt.toMap(berries);
-   }
+    public static final DUSK_STONE_ORE = evolutionStoneOre("dusk_stone_ore");
 
-   private fun berryBlock(name: String): BerryBlock {
-      val identifier: ResourceLocation = MiscUtilsKt.cobblemonResource("$name_berry");
-      val var10001: java.lang.String = identifier.m_135815_();
-      val var10005: Properties = Properties.m_60926_(Blocks.f_50092_ as BlockBehaviour).m_60988_().m_60918_(CobblemonSounds.BERRY_BUSH_SOUNDS).m_60978_(0.2F);
-      val block: BerryBlock = this.create(var10001, new BerryBlock(identifier, var10005));
-      berries.put(identifier, block);
-      return block;
-   }
+    public static final FIRE_STONE_ORE = evolutionStoneOre("fire_stone_ore", 10);
 
-   private fun log(name: String, arg: MapColor = MapColor.f_283762_, arg2: MapColor = MapColor.f_283762_): RotatedPillarBlock {
-      val var10000: Any = this.create(name, BlocksInvoker.createLogBlock(arg, arg2));
-      return var10000 as RotatedPillarBlock;
-   }
+    public static final NETHER_FIRE_STONE_ORE = this.create("nether_fire_stone_ore", DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).sound(SoundType.NETHER_ORE).lightLevel{10}));
 
-   private fun <E> setFlammable(block: Any, burnChance: Int, spreadChance: Int): Any {
-      if (block !is Block) {
-         return (E)block;
-      } else {
-         val var10000: Block = Blocks.f_50083_;
-         ((var10000 as FireBlock) as FireBlockInvoker).registerNewFlammableBlock(block as Block, burnChance, spreadChance);
-         return (E)block;
-      }
-   }
+    public static final ICE_STONE_ORE = evolutionStoneOre("ice_stone_ore");
 
-   private fun evolutionStoneOre(name: String): DropExperienceBlock {
-      return this.create(name, new DropExperienceBlock(Properties.m_60926_(Blocks.f_49996_ as BlockBehaviour), UniformInt.m_146622_(1, 2) as IntProvider));
-   }
+    public static final LEAF_STONE_ORE = evolutionStoneOre("leaf_stone_ore");
 
-   private fun deepslateEvolutionStoneOre(name: String): DropExperienceBlock {
-      return this.create(name, new DropExperienceBlock(Properties.m_60926_(Blocks.f_152468_ as BlockBehaviour), UniformInt.m_146622_(1, 2) as IntProvider));
-   }
+    public static final MOON_STONE_ORE = evolutionStoneOre("moon_stone_ore");
 
-   private fun leaves(name: String): LeavesBlock {
-      val var10000: Any = this.create(name, BlocksInvoker.createLeavesBlock(SoundType.f_56740_));
-      return var10000 as LeavesBlock;
-   }
+    public static final DRIPSTONE_MOON_STONE_ORE = this.create("dripstone_moon_stone_ore", DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).sound(SoundType.DRIPSTONE_BLOCK)));
 
-   @JvmStatic
-   fun `APRICORN_TRAPDOOR$lambda$0`(var0: BlockState, var1: BlockGetter, var2: BlockPos, var3: EntityType): Boolean {
-      return false;
-   }
+    public static final SHINY_STONE_ORE = evolutionStoneOre("shiny_stone_ore", 12);
 
-   @JvmStatic
-   fun `MONITOR$lambda$1`(it: BlockState): Int {
-      return if (it.m_61143_(MonitorBlock.Companion.getSCREEN() as Property) != MonitorBlock.MonitorScreen.OFF) 15 else 0;
-   }
+    public static final SUN_STONE_ORE = evolutionStoneOre("sun_stone_ore", 2);
 
-   @JvmStatic
-   fun `HEALING_MACHINE$lambda$2`(it: BlockState): Int {
-      val var10000: java.lang.Comparable = it.m_61143_(HealingMachineBlock.Companion.getCHARGE_LEVEL() as Property);
-      return if ((var10000 as java.lang.Number).intValue() >= 5) 7 else 2;
-   }
+    public static final TERRACOTTA_SUN_STONE_ORE = this.create("terracotta_sun_stone_ore", DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).lightLevel{2}));
 
-   @JvmStatic
-   fun `PC$lambda$3`(it: BlockState): Int {
-      val var10000: java.lang.Comparable = it.m_61143_(PCBlock.Companion.getON() as Property);
-      return if (var10000 as java.lang.Boolean && it.m_61143_(PCBlock.Companion.getPART() as Property) === PCBlock.PCPart.TOP) 10 else 0;
-   }
+    public static final THUNDER_STONE_ORE = evolutionStoneOre("thunder_stone_ore", 6);
 
-   @JvmStatic
-   fun `PASTURE$lambda$4`(it: BlockState): Int {
-      val var10000: java.lang.Comparable = it.m_61143_(PastureBlock.Companion.getON() as Property);
-      return if (var10000 as java.lang.Boolean && it.m_61143_(PastureBlock.Companion.getPART() as Property) === PastureBlock.PasturePart.TOP) 10 else 0;
-   }
+    public static final WATER_STONE_ORE = evolutionStoneOre("water_stone_ore");
 
-   @JvmStatic
-   fun {
-      val var10000: DefaultedRegistry = BuiltInRegistries.f_256975_;
-      registry = var10000 as Registry<Block>;
-      val var7: ResourceKey = Registries.f_256747_;
-      registryKey = var7;
-      val var8: CobblemonBlocks = INSTANCE;
-      val var10003: MapColor = MapColor.f_283748_;
-      APRICORN_LOG = log$default(var8, "apricorn_log", null, var10003, 2, null);
-      val var9: CobblemonBlocks = INSTANCE;
-      var var10004: Properties = Properties.m_60926_(Blocks.f_50095_ as BlockBehaviour);
-      var var10005: WoodType = APRICORN_WOOD_TYPE;
-      APRICORN_SIGN = var9.create("apricorn_sign", new CobblemonSignBlock(var10004, var10005));
-      val var10: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_50158_ as BlockBehaviour);
-      var10005 = APRICORN_WOOD_TYPE;
-      APRICORN_WALL_SIGN = var10.create("apricorn_wall_sign", new CobblemonWallSignBlock(var10004, var10005));
-      val var11: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_244093_ as BlockBehaviour);
-      var10005 = APRICORN_WOOD_TYPE;
-      APRICORN_HANGING_SIGN = var11.create("apricorn_hanging_sign", new CobblemonHangingSignBlock(var10004, var10005));
-      val var12: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_244319_ as BlockBehaviour);
-      var10005 = APRICORN_WOOD_TYPE;
-      APRICORN_WALL_HANGING_SIGN = var12.create("apricorn_wall_hanging_sign", new CobblemonWallHangingSignBlock(var10004, var10005));
-      val var13: CobblemonBlocks = INSTANCE;
-      var10004 = PLANT_PROPERTIES;
-      BLACK_APRICORN_SAPLING = var13.create("black_apricorn_sapling", new ApricornSaplingBlock(var10004, Apricorn.BLACK));
-      val var14: CobblemonBlocks = INSTANCE;
-      var10004 = PLANT_PROPERTIES;
-      BLUE_APRICORN_SAPLING = var14.create("blue_apricorn_sapling", new ApricornSaplingBlock(var10004, Apricorn.BLUE));
-      val var15: CobblemonBlocks = INSTANCE;
-      var10004 = PLANT_PROPERTIES;
-      GREEN_APRICORN_SAPLING = var15.create("green_apricorn_sapling", new ApricornSaplingBlock(var10004, Apricorn.GREEN));
-      val var16: CobblemonBlocks = INSTANCE;
-      var10004 = PLANT_PROPERTIES;
-      PINK_APRICORN_SAPLING = var16.create("pink_apricorn_sapling", new ApricornSaplingBlock(var10004, Apricorn.PINK));
-      val var17: CobblemonBlocks = INSTANCE;
-      var10004 = PLANT_PROPERTIES;
-      RED_APRICORN_SAPLING = var17.create("red_apricorn_sapling", new ApricornSaplingBlock(var10004, Apricorn.RED));
-      val var18: CobblemonBlocks = INSTANCE;
-      var10004 = PLANT_PROPERTIES;
-      WHITE_APRICORN_SAPLING = var18.create("white_apricorn_sapling", new ApricornSaplingBlock(var10004, Apricorn.WHITE));
-      val var19: CobblemonBlocks = INSTANCE;
-      var10004 = PLANT_PROPERTIES;
-      YELLOW_APRICORN_SAPLING = var19.create("yellow_apricorn_sapling", new ApricornSaplingBlock(var10004, Apricorn.YELLOW));
-      val var20: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_278166_(PushReaction.DESTROY)
-         .m_278183_()
-         .m_284180_(MapColor.f_283909_)
-         .m_60910_()
-         .m_60977_()
-         .m_60966_()
-         .m_60918_(CobblemonSounds.MEDICINAL_LEEK_SOUNDS);
-      MEDICINAL_LEEK = var20.create("medicinal_leek", new MedicinalLeekBlock(var10004));
-      val var21: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_278166_(PushReaction.DESTROY)
-         .m_278183_()
-         .m_284180_(MapColor.f_283762_)
-         .m_60910_()
-         .m_60977_()
-         .m_60966_()
-         .m_60918_(CobblemonSounds.ENERGY_ROOT_SOUNDS);
-      ENERGY_ROOT = var21.create("energy_root", new EnergyRootBlock(var10004));
-      val var22: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_278166_(PushReaction.DESTROY)
-         .m_278183_()
-         .m_284180_(MapColor.f_283915_)
-         .m_60910_()
-         .m_60977_()
-         .m_60966_()
-         .m_60918_(CobblemonSounds.BIG_ROOT_SOUNDS);
-      BIG_ROOT = var22.create("big_root", new BigRootBlock(var10004));
-      val var23: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_278166_(PushReaction.DESTROY)
-         .m_284180_(MapColor.f_283915_)
-         .m_278183_()
-         .m_60910_()
-         .m_60966_()
-         .m_60918_(CobblemonSounds.REVIVAL_HERB_SOUNDS);
-      REVIVAL_HERB = var23.create("revival_herb", new RevivalHerbBlock(var10004));
-      val var24: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_().m_60918_(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).m_278166_(PushReaction.DESTROY).m_60978_(0.4F).m_60955_();
-      RELIC_COIN_POUCH = var24.create("relic_coin_pouch", new CoinPouchBlock(var10004, true));
-      val var25: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_().m_60918_(CobblemonSounds.RELIC_COIN_SACK_SOUNDS).m_278166_(PushReaction.DESTROY).m_60978_(0.4F);
-      RELIC_COIN_SACK = var25.create("relic_coin_sack", new CoinPouchBlock(var10004, false));
-      val var26: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_50087_ as BlockBehaviour).m_60955_().m_60918_(CobblemonSounds.GILDED_CHEST_SOUNDS);
-      GILDED_CHEST = var26.create("gilded_chest", new GildedChestBlock(var10004, GildedChestBlock.Type.RED));
-      val var27: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_50087_ as BlockBehaviour).m_60955_().m_60918_(CobblemonSounds.GILDED_CHEST_SOUNDS);
-      BLUE_GILDED_CHEST = var27.create("blue_gilded_chest", new GildedChestBlock(var10004, GildedChestBlock.Type.BLUE));
-      val var28: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_50087_ as BlockBehaviour).m_60955_().m_60918_(CobblemonSounds.GILDED_CHEST_SOUNDS);
-      BLACK_GILDED_CHEST = var28.create("black_gilded_chest", new GildedChestBlock(var10004, GildedChestBlock.Type.BLACK));
-      val var29: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_50087_ as BlockBehaviour).m_60955_().m_60918_(CobblemonSounds.GILDED_CHEST_SOUNDS);
-      YELLOW_GILDED_CHEST = var29.create("yellow_gilded_chest", new GildedChestBlock(var10004, GildedChestBlock.Type.YELLOW));
-      val var30: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_50087_ as BlockBehaviour).m_60955_().m_60918_(CobblemonSounds.GILDED_CHEST_SOUNDS);
-      WHITE_GILDED_CHEST = var30.create("white_gilded_chest", new GildedChestBlock(var10004, GildedChestBlock.Type.WHITE));
-      val var31: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_50087_ as BlockBehaviour).m_60955_().m_60918_(CobblemonSounds.GILDED_CHEST_SOUNDS);
-      GREEN_GILDED_CHEST = var31.create("green_gilded_chest", new GildedChestBlock(var10004, GildedChestBlock.Type.GREEN));
-      val var32: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_50087_ as BlockBehaviour).m_60955_().m_60918_(CobblemonSounds.GILDED_CHEST_SOUNDS);
-      PINK_GILDED_CHEST = var32.create("pink_gilded_chest", new GildedChestBlock(var10004, GildedChestBlock.Type.PINK));
-      val var33: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_60926_(Blocks.f_50087_ as BlockBehaviour).m_60955_().m_60918_(CobblemonSounds.GILDED_CHEST_SOUNDS);
-      GIMMIGHOUL_CHEST = var33.create("gimmighoul_chest", new GildedChestBlock(var10004, GildedChestBlock.Type.FAKE));
-      val var34: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_284180_(MapColor.f_283906_)
-         .m_60918_(SoundType.f_56743_)
-         .m_278166_(PushReaction.BLOCK)
-         .m_60999_()
-         .m_60913_(5.0F, 6.0F)
-         .m_60953_(CobblemonBlocks::MONITOR$lambda$1);
-      MONITOR = var34.create("monitor", new MonitorBlock(var10004));
-      val var35: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_284180_(MapColor.f_283906_)
-         .m_60918_(SoundType.f_56743_)
-         .m_278166_(PushReaction.BLOCK)
-         .m_60999_()
-         .m_60913_(5.0F, 6.0F)
-         .m_60955_();
-      FOSSIL_ANALYZER = var35.create("fossil_analyzer", new FossilAnalyzerBlock(var10004));
-      val var36: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_284180_(MapColor.f_283906_)
-         .m_60918_(SoundType.f_56744_)
-         .m_278166_(PushReaction.BLOCK)
-         .m_60999_()
-         .m_60913_(5.0F, 6.0F)
-         .m_60955_();
-      RESTORATION_TANK = var36.create("restoration_tank", new RestorationTankBlock(var10004));
-      val var37: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_284180_(MapColor.f_283906_)
-         .m_60918_(SoundType.f_56743_)
-         .m_278166_(PushReaction.BLOCK)
-         .m_60978_(2.0F)
-         .m_60955_()
-         .m_60953_(CobblemonBlocks::HEALING_MACHINE$lambda$2);
-      HEALING_MACHINE = var37.create("healing_machine", new HealingMachineBlock(var10004));
-      val var38: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_284180_(MapColor.f_283906_)
-         .m_60918_(SoundType.f_56743_)
-         .m_278166_(PushReaction.BLOCK)
-         .m_60978_(2.0F)
-         .m_60955_()
-         .m_60953_(CobblemonBlocks::PC$lambda$3);
-      PC = var38.create("pc", new PCBlock(var10004));
-      val var39: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_60918_(CobblemonSounds.DISPLAY_CASE_SOUNDS)
-         .m_60955_()
-         .m_278166_(PushReaction.BLOCK)
-         .m_284180_(MapColor.f_283947_)
-         .m_60978_(0.3F);
-      DISPLAY_CASE = var39.create("display_case", new DisplayCaseBlock(var10004));
-      val var40: CobblemonBlocks = INSTANCE;
-      val var78: MintBlock.MintType = MintBlock.MintType.RED;
-      val var89: Properties = Properties.m_284310_().m_284180_(MapColor.f_283913_).m_60910_().m_60977_().m_60966_().m_60918_(CobblemonSounds.MINT_SOUNDS);
-      RED_MINT = var40.create("red_mint", new MintBlock(var78, var89));
-      val var41: CobblemonBlocks = INSTANCE;
-      val var79: MintBlock.MintType = MintBlock.MintType.BLUE;
-      val var90: Properties = Properties.m_284310_().m_284180_(MapColor.f_283743_).m_60910_().m_60977_().m_60966_().m_60918_(CobblemonSounds.MINT_SOUNDS);
-      BLUE_MINT = var41.create("blue_mint", new MintBlock(var79, var90));
-      val var42: CobblemonBlocks = INSTANCE;
-      val var80: MintBlock.MintType = MintBlock.MintType.CYAN;
-      val var91: Properties = Properties.m_284310_().m_284180_(MapColor.f_283772_).m_60910_().m_60977_().m_60966_().m_60918_(CobblemonSounds.MINT_SOUNDS);
-      CYAN_MINT = var42.create("cyan_mint", new MintBlock(var80, var91));
-      val var43: CobblemonBlocks = INSTANCE;
-      val var81: MintBlock.MintType = MintBlock.MintType.PINK;
-      val var92: Properties = Properties.m_284310_().m_284180_(MapColor.f_283765_).m_60910_().m_60977_().m_60966_().m_60918_(CobblemonSounds.MINT_SOUNDS);
-      PINK_MINT = var43.create("pink_mint", new MintBlock(var81, var92));
-      val var44: CobblemonBlocks = INSTANCE;
-      val var82: MintBlock.MintType = MintBlock.MintType.GREEN;
-      val var93: Properties = Properties.m_284310_().m_284180_(MapColor.f_283784_).m_60910_().m_60977_().m_60966_().m_60918_(CobblemonSounds.MINT_SOUNDS);
-      GREEN_MINT = var44.create("green_mint", new MintBlock(var82, var93));
-      val var45: CobblemonBlocks = INSTANCE;
-      val var83: MintBlock.MintType = MintBlock.MintType.WHITE;
-      val var94: Properties = Properties.m_284310_().m_284180_(MapColor.f_283811_).m_60910_().m_60977_().m_60966_().m_60918_(CobblemonSounds.MINT_SOUNDS);
-      WHITE_MINT = var45.create("white_mint", new MintBlock(var83, var94));
-      val var46: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_284180_(MapColor.f_283748_)
-         .m_60918_(SoundType.f_56736_)
-         .m_60978_(2.0F)
-         .m_60955_()
-         .m_278166_(PushReaction.BLOCK)
-         .m_60953_(CobblemonBlocks::PASTURE$lambda$4);
-      PASTURE = var46.create("pasture", new PastureBlock(var10004));
-      val var47: CobblemonBlocks = INSTANCE;
-      var10004 = Properties.m_284310_()
-         .m_278166_(PushReaction.DESTROY)
-         .m_278183_()
-         .m_284180_(MapColor.f_283915_)
-         .m_60910_()
-         .m_60977_()
-         .m_60966_()
-         .m_60918_(CobblemonSounds.VIVICHOKE_SOUNDS);
-      VIVICHOKE_SEEDS = var47.create("vivichoke_seeds", new VivichokeBlock(var10004));
+    public static final DEEPSLATE_DAWN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_dawn_stone_ore", 7);
 
-      val var0: Array<Triple>;
-      for (Triple data : var0) {
-         INSTANCE.setFlammable(data.getFirst(), (data.getSecond() as java.lang.Number).intValue(), (data.getThird() as java.lang.Number).intValue());
-      }
-   }
+    public static final DEEPSLATE_DUSK_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_dusk_stone_ore");
+
+    public static final DEEPSLATE_FIRE_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_fire_stone_ore", 10);
+
+    public static final DEEPSLATE_ICE_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_ice_stone_ore");
+
+    public static final DEEPSLATE_LEAF_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_leaf_stone_ore");
+
+    public static final DEEPSLATE_MOON_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_moon_stone_ore");
+
+    public static final DEEPSLATE_SHINY_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_shiny_stone_ore", 12);
+
+    public static final DEEPSLATE_SUN_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_sun_stone_ore", 2);
+
+    public static final DEEPSLATE_THUNDER_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_thunder_stone_ore", 6);
+
+    public static final DEEPSLATE_WATER_STONE_ORE = this.deepslateEvolutionStoneOre("deepslate_water_stone_ore");
+
+    // Apricorns
+
+    public static final APRICORN_LOG = log("apricorn_log", arg2 = MapColor.COLOR_BROWN);
+
+    public static final STRIPPED_APRICORN_LOG = log("stripped_apricorn_log");
+
+    public static final APRICORN_WOOD = log("apricorn_wood");
+
+    public static final STRIPPED_APRICORN_WOOD = log("stripped_apricorn_wood");
+
+    public static final APRICORN_PLANKS = this.create("apricorn_planks", Block(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
+
+    public static final APRICORN_LEAVES = leaves("apricorn_leaves");
+
+    public static final APRICORN_FENCE = this.create("apricorn_fence", FenceBlock(BlockBehaviour.Properties.of().mapColor(APRICORN_PLANKS.defaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
+
+    public static final APRICORN_FENCE_GATE = this.create("apricorn_fence_gate", FenceGateBlock(APRICORN_WOOD_TYPE, BlockBehaviour.Properties.of().mapColor(APRICORN_PLANKS.defaultMapColor()).strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava().forceSolidOn()));
+
+    public static final APRICORN_BUTTON = this.create("apricorn_button", BlocksInvoker.createWoodenButtonBlock(APRICORN_BLOCK_SET_TYPE));
+
+    public static final APRICORN_PRESSURE_PLATE = this.create("apricorn_pressure_plate", PressurePlateBlockInvoker.cobblemon.create(APRICORN_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(APRICORN_PLANKS.defaultMapColor()).noCollission().strength(0.5f).sound(SoundType.WOOD)));
+
+    public static final APRICORN_SIGN = this.create("apricorn_sign", CobblemonSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SIGN), APRICORN_WOOD_TYPE));
+
+ //if you wonder why we don't copy of OAK_WALL_SIGN, then I can tell you its because it uses Properties#dropsLike point the SIGN loot table, but we cant use that in our setup due a deeper rooted issue, so falling back this and writing dedicated (duplicated) loot tables
+    public static final APRICORN_WALL_SIGN = this.create("apricorn_wall_sign", CobblemonWallSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SIGN), APRICORN_WOOD_TYPE));
+
+    public static final APRICORN_HANGING_SIGN = this.create("apricorn_hanging_sign", CobblemonHangingSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_HANGING_SIGN), APRICORN_WOOD_TYPE));
+
+    public static final APRICORN_WALL_HANGING_SIGN = this.create("apricorn_wall_hanging_sign", CobblemonWallHangingSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_HANGING_SIGN), APRICORN_WOOD_TYPE));
+
+    public static final APRICORN_SLAB = this.create("apricorn_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
+
+    public static final APRICORN_STAIRS = this.create("apricorn_stairs", StairsBlockInvoker.cobblemon.create(APRICORN_PLANKS.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(APRICORN_PLANKS)));
+
+    public static final APRICORN_DOOR = this.create("apricorn_door", DoorBlockInvoker.cobblemon.create(APRICORN_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(APRICORN_PLANKS.defaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
+
+    public static final APRICORN_TRAPDOOR = this.create("apricorn_trapdoor", TrapdoorBlockInvoker.cobblemon.create(APRICORN_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(3.0F).sound(SoundType.WOOD).noOcclusion().ispublic static finalidSpawn { _, _, _, _ -> false }));
+
+    private public static final PLANT_PROPERTIES = BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY);
+
+    public static final BLACK_APRICORN_SAPLING = this.create("black_apricorn_sapling", ApricornSaplingBlock(PLANT_PROPERTIES, Apricorn.BLACK));
+
+    public static final BLUE_APRICORN_SAPLING = this.create("blue_apricorn_sapling", ApricornSaplingBlock(PLANT_PROPERTIES, Apricorn.BLUE));
+
+    public static final GREEN_APRICORN_SAPLING = this.create("green_apricorn_sapling", ApricornSaplingBlock(PLANT_PROPERTIES, Apricorn.GREEN));
+
+    public static final PINK_APRICORN_SAPLING = this.create("pink_apricorn_sapling", ApricornSaplingBlock(PLANT_PROPERTIES, Apricorn.PINK));
+
+    public static final RED_APRICORN_SAPLING = this.create("red_apricorn_sapling", ApricornSaplingBlock(PLANT_PROPERTIES, Apricorn.RED));
+
+    public static final WHITE_APRICORN_SAPLING = this.create("white_apricorn_sapling", ApricornSaplingBlock(PLANT_PROPERTIES, Apricorn.WHITE));
+
+    public static final YELLOW_APRICORN_SAPLING = this.create("yellow_apricorn_sapling", ApricornSaplingBlock(PLANT_PROPERTIES, Apricorn.YELLOW));
+
+    // Saccharines
+
+    public static final SACCHARINE_LOG = this.create("saccharine_log", SaccharineLogBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava()));
+
+    public static final SACCHARINE_LOG_SLATHERED = this.create("saccharine_log_slathered", SaccharineLogSlatheredBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava()));
+
+    public static final STRIPPED_SACCHARINE_LOG = this.create("stripped_saccharine_log", RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava())); //log("stripped_saccharine_log");
+
+    public static final SACCHARINE_WOOD = log("saccharine_wood");
+
+    public static final STRIPPED_SACCHARINE_WOOD = this.create("stripped_saccharine_wood", RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD).ignitedByLava())); //log("stripped_saccharine_log");
+
+    public static final SACCHARINE_PLANKS = this.create("saccharine_planks", Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
+
+    public static final SACCHARINE_LEAVES = this.create("saccharine_leaves", SaccharineLeafBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.2f).randomTicks().sound(SoundType.GRASS).noOcclusion().ispublic static finalidSpawn { _: BlockState?, _: BlockGetter?, _: BlockPos?, entity: EntityType<*>? -> entity === EntityType.OCELOT || entity === EntityType.PARROT}.isSuffocating { _: BlockState?, _: BlockGetter?, _: BlockPos? -> false}.isViewBlocking { _: BlockState?, _: BlockGetter?, _: BlockPos? -> false}.ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor { _: BlockState?, _: BlockGetter?, _: BlockPos? -> false}));
+
+    public static final SACCHARINE_FENCE = this.create("saccharine_fence", FenceBlock(BlockBehaviour.Properties.of().mapColor(SACCHARINE_PLANKS.defaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
+
+    public static final SACCHARINE_FENCE_GATE = this.create("saccharine_fence_gate", FenceGateBlock(SACCHARINE_WOOD_TYPE, BlockBehaviour.Properties.of().mapColor(SACCHARINE_PLANKS.defaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava().forceSolidOn()));
+
+    public static final SACCHARINE_BUTTON = this.create("saccharine_button", BlocksInvoker.createWoodenButtonBlock(BlockSetType.OAK));
+
+    public static final SACCHARINE_PRESSURE_PLATE = this.create("saccharine_pressure_plate", PressurePlateBlockInvoker.cobblemon.create(SACCHARINE_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(SACCHARINE_PLANKS.defaultMapColor()).instrument(NoteBlockInstrument.BASS).noCollission().strength(0.5f).sound(SoundType.WOOD)));
+
+    public static final SACCHARINE_SIGN = this.create("saccharine_sign", CobblemonSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SIGN), SACCHARINE_WOOD_TYPE));
+
+    public static final SACCHARINE_WALL_SIGN = this.create("saccharine_wall_sign", CobblemonWallSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SIGN), SACCHARINE_WOOD_TYPE));
+
+    public static final SACCHARINE_HANGING_SIGN = this.create("saccharine_hanging_sign", CobblemonHangingSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_HANGING_SIGN), SACCHARINE_WOOD_TYPE));
+
+    public static final SACCHARINE_WALL_HANGING_SIGN = this.create("saccharine_wall_hanging_sign", CobblemonWallHangingSignBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_HANGING_SIGN), SACCHARINE_WOOD_TYPE));
+
+    public static final SACCHARINE_SLAB = this.create("saccharine_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
+
+    public static final SACCHARINE_STAIRS = this.create("saccharine_stairs", StairsBlockInvoker.cobblemon.create(SACCHARINE_PLANKS.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(SACCHARINE_PLANKS)));
+
+    public static final SACCHARINE_DOOR = this.create("saccharine_door", DoorBlockInvoker.cobblemon.create(SACCHARINE_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(SACCHARINE_PLANKS.defaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
+
+    public static final SACCHARINE_TRAPDOOR = this.create("saccharine_trapdoor", TrapdoorBlockInvoker.cobblemon.create(SACCHARINE_BLOCK_SET_TYPE, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(3.0F).sound(SoundType.WOOD).noOcclusion()));
+
+    public static final SACCHARINE_SAPLING = this.create("saccharine_sapling", SaplingBlock(SaccharineTreeGrower(), PLANT_PROPERTIES));
+
+    public static final MEDICINAL_LEEK = this.create("medicinal_leek", MedicinalLeekBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.CRIMSON_NYLIUM).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MEDICINAL_LEEK_SOUNDS)));
+
+    public static final BUGWORT = this.create("bugwort", BugwortBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.COLOR_PURPLE).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MEDICINAL_LEEK_SOUNDS)));
+
+    public static final ENERGY_ROOT = this.create("energy_root", EnergyRootBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.DIRT).noCollission().randomTicks().instabreak().sound(CobblemonSounds.ENERGY_ROOT_SOUNDS)));
+
+    public static final BIG_ROOT = this.create("big_root", BigRootBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(CobblemonSounds.BIG_ROOT_SOUNDS)));
+
+    public static final REVIVAL_HERB = this.create("revival_herb", RevivalHerbBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).mapColor(MapColor.PLANT).ignitedByLava().noCollission().instabreak().sound(CobblemonSounds.REVIVAL_HERB_SOUNDS)));
+
+    public static final POKE_CAKE = this.create("poke_cake", PokeSnackBlock(BlockBehaviour.Properties.of().forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY).lightLevel { if (it.getvalue(LIT)) 3 else 0 }, false));
+
+    public static final POKE_SNACK = this.create("poke_snack", PokeSnackBlock(BlockBehaviour.Properties.of().forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.DESTROY).lightLevel { if (it.getvalue(LIT)) 3 else 0 }, true));
+
+    public static final TUMBLESTONE_CLUSTER = tumblestoneBlock("tumblestone_cluster", GrowableStoneBlock.STAGE_3, 7, 3, null);
+
+    public static final LARGE_BUDDING_TUMBLESTONE = tumblestoneBlock("large_budding_tumblestone", GrowableStoneBlock.STAGE_2, 5, 3, TUMBLESTONE_CLUSTER);
+
+    public static final MEDIUM_BUDDING_TUMBLESTONE = tumblestoneBlock("medium_budding_tumblestone", GrowableStoneBlock.STAGE_1, 4, 3, LARGE_BUDDING_TUMBLESTONE);
+
+    public static final SMALL_BUDDING_TUMBLESTONE = tumblestoneBlock("small_budding_tumblestone", GrowableStoneBlock.STAGE_0, 3, 4, MEDIUM_BUDDING_TUMBLESTONE);
+
+    public static final SKY_TUMBLESTONE_CLUSTER = tumblestoneBlock("sky_tumblestone_cluster", GrowableStoneBlock.STAGE_3, 7, 3, null);
+
+    public static final LARGE_BUDDING_SKY_TUMBLESTONE = tumblestoneBlock("large_budding_sky_tumblestone", GrowableStoneBlock.STAGE_2, 5, 3, SKY_TUMBLESTONE_CLUSTER);
+
+    public static final MEDIUM_BUDDING_SKY_TUMBLESTONE = tumblestoneBlock("medium_budding_sky_tumblestone", GrowableStoneBlock.STAGE_1, 4, 3, LARGE_BUDDING_SKY_TUMBLESTONE);
+
+    public static final SMALL_BUDDING_SKY_TUMBLESTONE = tumblestoneBlock("small_budding_sky_tumblestone", GrowableStoneBlock.STAGE_0, 3, 4, MEDIUM_BUDDING_SKY_TUMBLESTONE);
+
+    public static final BLACK_TUMBLESTONE_CLUSTER = tumblestoneBlock("black_tumblestone_cluster", GrowableStoneBlock.STAGE_3, 7, 3, null);
+
+    public static final LARGE_BUDDING_BLACK_TUMBLESTONE = tumblestoneBlock("large_budding_black_tumblestone", GrowableStoneBlock.STAGE_2, 5, 3, BLACK_TUMBLESTONE_CLUSTER);
+
+    public static final MEDIUM_BUDDING_BLACK_TUMBLESTONE = tumblestoneBlock("medium_budding_black_tumblestone", GrowableStoneBlock.STAGE_1, 4, 3, LARGE_BUDDING_BLACK_TUMBLESTONE);
+
+    public static final SMALL_BUDDING_BLACK_TUMBLESTONE = tumblestoneBlock("small_budding_black_tumblestone", GrowableStoneBlock.STAGE_0, 3, 4, MEDIUM_BUDDING_BLACK_TUMBLESTONE);
+
+    public static final TUMBLESTONE_BLOCK = this.create("tumblestone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SKY_TUMBLESTONE_BLOCK = this.create("sky_tumblestone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final BLACK_TUMBLESTONE_BLOCK = this.create("black_tumblestone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final POLISHED_TUMBLESTONE = this.create("polished_tumblestone", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final POLISHED_TUMBLESTONE_STAIRS = this.create("polished_tumblestone_stairs", StairsBlockInvoker.cobblemon.create(POLISHED_TUMBLESTONE.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(POLISHED_TUMBLESTONE)));
+
+    public static final POLISHED_TUMBLESTONE_SLAB = this.create("polished_tumblestone_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final POLISHED_TUMBLESTONE_WALL = this.create("polished_tumblestone_wall", WallBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final CHISELED_POLISHED_TUMBLESTONE = this.create("chiseled_polished_tumblestone", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SMOOTH_TUMBLESTONE = this.create("smooth_tumblestone", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SMOOTH_TUMBLESTONE_STAIRS = this.create("smooth_tumblestone_stairs", StairsBlockInvoker.cobblemon.create(SMOOTH_TUMBLESTONE.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(SMOOTH_TUMBLESTONE)));
+
+    public static final SMOOTH_TUMBLESTONE_SLAB = this.create("smooth_tumblestone_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final TUMBLESTONE_BRICKS = this.create("tumblestone_bricks", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final TUMBLESTONE_BRICK_STAIRS = this.create("tumblestone_brick_stairs", StairsBlockInvoker.cobblemon.create(TUMBLESTONE_BRICKS.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(TUMBLESTONE_BRICKS)));
+
+    public static final TUMBLESTONE_BRICK_SLAB = this.create("tumblestone_brick_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final TUMBLESTONE_BRICK_WALL = this.create("tumblestone_brick_wall", WallBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final CHISELED_TUMBLESTONE_BRICKS = this.create("chiseled_tumblestone_bricks", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final POLISHED_SKY_TUMBLESTONE = this.create("polished_sky_tumblestone", Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final POLISHED_SKY_TUMBLESTONE_STAIRS = this.create("polished_sky_tumblestone_stairs", StairsBlockInvoker.cobblemon.create(POLISHED_SKY_TUMBLESTONE.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(POLISHED_SKY_TUMBLESTONE)));
+
+    public static final POLISHED_SKY_TUMBLESTONE_SLAB = this.create("polished_sky_tumblestone_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final POLISHED_SKY_TUMBLESTONE_WALL = this.create("polished_sky_tumblestone_wall", WallBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final CHISELED_POLISHED_SKY_TUMBLESTONE = this.create("chiseled_polished_sky_tumblestone", Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SMOOTH_SKY_TUMBLESTONE = this.create("smooth_sky_tumblestone", Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SMOOTH_SKY_TUMBLESTONE_STAIRS = this.create("smooth_sky_tumblestone_stairs", StairsBlockInvoker.cobblemon.create(SMOOTH_SKY_TUMBLESTONE.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(SMOOTH_SKY_TUMBLESTONE)));
+
+    public static final SMOOTH_SKY_TUMBLESTONE_SLAB = this.create("smooth_sky_tumblestone_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SKY_TUMBLESTONE_BRICKS = this.create("sky_tumblestone_bricks", Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SKY_TUMBLESTONE_BRICK_STAIRS = this.create("sky_tumblestone_brick_stairs", StairsBlockInvoker.cobblemon.create(SKY_TUMBLESTONE_BRICKS.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(SKY_TUMBLESTONE_BRICKS)));
+
+    public static final SKY_TUMBLESTONE_BRICK_SLAB = this.create("sky_tumblestone_brick_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SKY_TUMBLESTONE_BRICK_WALL = this.create("sky_tumblestone_brick_wall", WallBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final CHISELED_SKY_TUMBLESTONE_BRICKS = this.create("chiseled_sky_tumblestone_bricks", Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final POLISHED_BLACK_TUMBLESTONE = this.create("polished_black_tumblestone", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final POLISHED_BLACK_TUMBLESTONE_STAIRS = this.create("polished_black_tumblestone_stairs", StairsBlockInvoker.cobblemon.create(POLISHED_BLACK_TUMBLESTONE.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(POLISHED_BLACK_TUMBLESTONE)));
+
+    public static final POLISHED_BLACK_TUMBLESTONE_SLAB = this.create("polished_black_tumblestone_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final POLISHED_BLACK_TUMBLESTONE_WALL = this.create("polished_black_tumblestone_wall", WallBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final CHISELED_POLISHED_BLACK_TUMBLESTONE = this.create("chiseled_polished_black_tumblestone", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SMOOTH_BLACK_TUMBLESTONE = this.create("smooth_black_tumblestone", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final SMOOTH_BLACK_TUMBLESTONE_STAIRS = this.create("smooth_black_tumblestone_stairs", StairsBlockInvoker.cobblemon.create(SMOOTH_BLACK_TUMBLESTONE.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(SMOOTH_BLACK_TUMBLESTONE)));
+
+    public static final SMOOTH_BLACK_TUMBLESTONE_SLAB = this.create("smooth_black_tumblestone_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final BLACK_TUMBLESTONE_BRICKS = this.create("black_tumblestone_bricks", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final BLACK_TUMBLESTONE_BRICK_STAIRS = this.create("black_tumblestone_brick_stairs", StairsBlockInvoker.cobblemon.create(BLACK_TUMBLESTONE_BRICKS.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(BLACK_TUMBLESTONE_BRICKS)));
+
+    public static final BLACK_TUMBLESTONE_BRICK_SLAB = this.create("black_tumblestone_brick_slab", SlabBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final BLACK_TUMBLESTONE_BRICK_WALL = this.create("black_tumblestone_brick_wall", WallBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final CHISELED_BLACK_TUMBLESTONE_BRICKS = this.create("chiseled_black_tumblestone_bricks", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BLACK).strength(1.0F).sound(CobblemonSounds.TUMBLESTONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASEDRUM)));
+
+    public static final FIRE_STONE_BLOCK = this.create("fire_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT).lightLevel{13}));
+
+    public static final WATER_STONE_BLOCK = this.create("water_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.WATER).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT)));
+
+    public static final THUNDER_STONE_BLOCK = this.create("thunder_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.GLOW_LICHEN).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT).lightLevel{8}));
+
+    public static final LEAF_STONE_BLOCK = this.create("leaf_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT)));
+
+    public static final ICE_STONE_BLOCK = this.create("ice_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.ICE).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT)));
+
+    public static final SUN_STONE_BLOCK = this.create("sun_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT).lightLevel{5}));
+
+    public static final MOON_STONE_BLOCK = this.create("moon_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT)));
+
+    public static final SHINY_STONE_BLOCK = this.create("shiny_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.QUARTZ).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT).lightLevel{15}));
+
+    public static final DAWN_STONE_BLOCK = this.create("dawn_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.DIAMOND).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT).lightLevel{15}));
+
+    public static final DUSK_STONE_BLOCK = this.create("dusk_stone_block", Block(BlockBehaviour.Properties.of().mapColor(MapColor.WARPED_HYPHAE).strength(1.0F).sound(CobblemonSounds.EVOLUTION_STONE_BLOCK_SOUNDS).requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BIT)));
+
+    public static final BLACK_APRICORN = apricornBlock("black_apricorn", Apricorn.BLACK);
+
+    public static final BLUE_APRICORN = apricornBlock("blue_apricorn", Apricorn.BLUE);
+
+    public static final GREEN_APRICORN = apricornBlock("green_apricorn", Apricorn.GREEN);
+
+    public static final PINK_APRICORN = apricornBlock("pink_apricorn", Apricorn.PINK);
+
+    public static final RED_APRICORN = apricornBlock("red_apricorn", Apricorn.RED);
+
+    public static final WHITE_APRICORN = apricornBlock("white_apricorn", Apricorn.WHITE);
+
+    public static final YELLOW_APRICORN = apricornBlock("yellow_apricorn", Apricorn.YELLOW);
+
+    public static final BLACK_CAMPFIRE_POT = create("campfire_pot_black", CampfirePotBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()));
+
+    public static final BLUE_CAMPFIRE_POT = create("campfire_pot_blue", CampfirePotBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()));
+
+    public static final GREEN_CAMPFIRE_POT = create("campfire_pot_green", CampfirePotBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()));
+
+    public static final PINK_CAMPFIRE_POT = create("campfire_pot_pink", CampfirePotBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()));
+
+    public static final RED_CAMPFIRE_POT = create("campfire_pot_red", CampfirePotBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()));
+
+    public static final WHITE_CAMPFIRE_POT = create("campfire_pot_white", CampfirePotBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()));
+
+    public static final YELLOW_CAMPFIRE_POT = create("campfire_pot_yellow", CampfirePotBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).sound(CobblemonSounds.CAMPFIRE_POT_SOUNDS).strength(0.5F).pushReaction(PushReaction.BLOCK).noOcclusion()));
+
+    public static final CAMPFIRE = create("campfire", CampfireBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.PODZOL).strength(2.0F).lightLevel{14}, false));
+
+    public static final SOUL_CAMPFIRE = create("soul_campfire", CampfireBlock(BlockBehaviour.Properties.of().sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.PODZOL).strength(2.0F).lightLevel{9}, true));
+
+    public static final RELIC_COIN_POUCH = create("relic_coin_pouch", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_POUCH_SOUNDS).pushReaction(PushReaction.DESTROY).noOcclusion(), true));
+
+    public static final RELIC_COIN_SACK = create("relic_coin_sack", CoinPouchBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.RELIC_COIN_SACK_SOUNDS).pushReaction(PushReaction.DESTROY).strength(0.4f), false));
+
+    public static final GILDED_CHEST = create("gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.RED));
+
+    public static final BLUE_GILDED_CHEST = create("blue_gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.BLUE));
+
+    public static final BLACK_GILDED_CHEST = create("black_gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.BLACK));
+
+    public static final YELLOW_GILDED_CHEST = create("yellow_gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.YELLOW));
+
+    public static final WHITE_GILDED_CHEST = create("white_gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.WHITE));
+
+    public static final GREEN_GILDED_CHEST = create("green_gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.GREEN));
+
+    public static final PINK_GILDED_CHEST = create("pink_gilded_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.PINK));
+
+    public static final GIMMIGHOUL_CHEST = create("gimmighoul_chest", GildedChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).noOcclusion().sound(CobblemonSounds.GILDED_CHEST_SOUNDS), GildedChestBlock.Type.FAKE));
+
+    public static final MONITOR = create("monitor", MonitorBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(5.0F, 6.0F).lightLevel { if (it.getvalue(MonitorBlock.SCREEN) != MonitorBlock.MonitorScreen.OFF) 13 else 0 }));
+
+    public static final FOSSIL_ANALYZER = create("fossil_analyzer", FossilAnalyzerBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(5.0F, 6.0F).noOcclusion()));
+
+    public static final RESTORATION_TANK = create("restoration_tank", RestorationTankBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.GLASS).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(5.0F, 6.0F).noOcclusion()));
+
+    public static final HEALING_MACHINE = create("healing_machine", HealingMachineBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).strength(2f).noOcclusion().lightLevel { if (it.getvalue(HealingMachineBlock.CHARGE_LEVEL) >= HealingMachineBlock.MAX_CHARGE_LEVEL) 12 else 5 }));
+
+    public static final PC = create("pc", PCBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).sound(SoundType.METAL).pushReaction(PushReaction.BLOCK).strength(2F).noOcclusion().lightLevel { if ((it.getvalue(PCBlock.ON) as Boolean) && (it.getvalue(PCBlock.PART) == PCBlock.PCPart.TOP)) 13 else 0 }));
+
+    public static final LECTERN = create("lectern", LecternBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(2.5F).ignitedByLava().lightLevel { if (it.getvalue(LecternBlock.EMIT_LIGHT) as Boolean) 13 else 0 }));
+
+    public static final DISPLAY_CASE = create("display_case", DisplayCaseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3F).requiresCorrectToolForDrops()));
+
+    public static final INCENSE_SWEET = create("incense_sweet", SweetIncenseBlock(BlockBehaviour.Properties.of().sound(CobblemonSounds.DISPLAY_CASE_SOUNDS).noOcclusion().pushReaction(PushReaction.BLOCK).mapColor(MapColor.STONE).strength(0.3f)));
+
+    public static final PASTURE = create("pasture", PastureBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).sound(SoundType.WOOD).strength(2F).noOcclusion().pushReaction(PushReaction.BLOCK).lightLevel { if ((it.getvalue(PastureBlock.ON) as Boolean) && (it.getvalue(PastureBlock.PART) == PastureBlock.PasturePart.TOP)) 13 else 0 }));
+
+    public static final RED_MINT = create("red_mint", MintBlock(MintType.RED, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)));
+
+    public static final BLUE_MINT = create("blue_mint", MintBlock(MintType.BLUE, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)));
+
+    public static final CYAN_MINT = create("cyan_mint", MintBlock(MintType.CYAN, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)));
+
+    public static final PINK_MINT = create("pink_mint", MintBlock(MintType.PINK, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)));
+
+    public static final GREEN_MINT = create("green_mint", MintBlock(MintType.GREEN, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)));
+
+    public static final WHITE_MINT = create("white_mint", MintBlock(MintType.WHITE, BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).noCollission().randomTicks().instabreak().sound(CobblemonSounds.MINT_SOUNDS).pushReaction(PushReaction.DESTROY)));
+
+    public static final VIVICHOKE_SEEDS = this.create("vivichoke_seeds", VivichokeBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(CobblemonSounds.VIVICHOKE_SOUNDS)));
+
+    public static final PEP_UP_FLOWER = this.create("pep_up_flower", FlowerBlock(MobEffects.LEVITATION, 10F, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)));
+
+    public static final POTTED_PEP_UP_FLOWER = this.create("potted_pep_up_flower", BlocksInvoker.createFlowerPotBlock(PEP_UP_FLOWER));
+
+    public static final HEARTY_GRAINS = this.create("hearty_grains", HeartyGrainsBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak()));
+
+    public static final GALARICA_NUT_BUSH = this.create("galarica_nut_bush", NutBushBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).randomTicks().noCollission().sound(SoundType.SWEET_BERRY_BUSH).pushReaction(PushReaction.DESTROY)));
+
+    public static final POTTED_RED_APRICORN_SAPLING = this.create("potted_red_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(RED_APRICORN_SAPLING));
+
+    public static final POTTED_YELLOW_APRICORN_SAPLING = this.create("potted_yellow_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(YELLOW_APRICORN_SAPLING));
+
+    public static final POTTED_GREEN_APRICORN_SAPLING = this.create("potted_green_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(GREEN_APRICORN_SAPLING));
+
+    public static final POTTED_BLUE_APRICORN_SAPLING = this.create("potted_blue_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(BLUE_APRICORN_SAPLING));
+
+    public static final POTTED_PINK_APRICORN_SAPLING = this.create("potted_pink_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(PINK_APRICORN_SAPLING));
+
+    public static final POTTED_BLACK_APRICORN_SAPLING = this.create("potted_black_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(BLACK_APRICORN_SAPLING));
+
+    public static final POTTED_WHITE_APRICORN_SAPLING = this.create("potted_white_apricorn_sapling", BlocksInvoker.createFlowerPotBlock(WHITE_APRICORN_SAPLING));
+
+    public static final POTTED_SACCHARINE_SAPLING = this.create("potted_saccharine_sapling", BlocksInvoker.createFlowerPotBlock(SACCHARINE_SAPLING));
+
+    public static final HEARTY_GRAIN_BALE = this.create("hearty_grain_bale", BaleBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).instrument(NoteBlockInstrument.BANJO).strength(0.5F).sound(CobblemonSounds.HEARTY_GRAIN_BALE_SOUNDS)));
+
+    public static final TATAMI_BLOCK = this.create("tatami_block", HorizontalRotationalBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.1F).sound(CobblemonSounds.TATAMI_BLOCK_SOUNDS)));
+
+    public static final TATAMI_MAT = this.create("tatami_mat", HorizontalRotationCarpetBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.1F).sound(CobblemonSounds.TATAMI_MAT_SOUNDS)));
+
+    /**
+     * Returns a map of all the blocks that can be stripped with an axe in the format of input - output.
+     *
+     * @return A map of all the blocks that can be stripped with an axe in the format of input - output.
+     */
+    fun strippedBlocks(): Map<Block, Block> = mapOf(APRICORN_WOOD STRIPPED_APRICORN_WOOD, APRICORN_LOG STRIPPED_APRICORN_LOG, SACCHARINE_WOOD STRIPPED_SACCHARINE_WOOD, SACCHARINE_LOG STRIPPED_SACCHARINE_LOG, SACCHARINE_LOG_SLATHERED STRIPPED_SACCHARINE_LOG)
+
+    private fun apricornBlock(name: String, apricorn: Apricorn): ApricornBlock = this.create(name, ApricornBlock(BlockBehaviour.Properties.of().mapColor(apricorn.mapColor()).randomTicks().strength(Blocks.OAK_LOG.defaultDestroyTime(), Blocks.OAK_LOG.explosionResistance).sound(SoundType.WOOD).noOcclusion(), apricorn))
+
+    private fun tumblestoneBlock(name: String, stage: Int, height: Int, xzOffset: Int, nextStage: Block?) : Block {
+        return this.create(name, TumblestoneBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).noOcclusion().strength(1.5F).sound(CobblemonSounds.TUMBLESTONE_SOUNDS), stage, height, xzOffset, nextStage));
+    }
+
+    private public static final berries = mutableMapOf<ResourceLocation, BerryBlock>();
+
+
+    public static final AGUAV_BERRY = this.berryBlock("aguav");
+
+    public static final APICOT_BERRY = this.berryBlock("apicot");
+
+    public static final ASPEAR_BERRY = this.berryBlock("aspear");
+
+    public static final BABIRI_BERRY = this.berryBlock("babiri");
+
+    public static final BELUE_BERRY = this.berryBlock("belue");
+
+    public static final BLUK_BERRY = this.berryBlock("bluk");
+
+    public static final CHARTI_BERRY = this.berryBlock("charti");
+
+    public static final CHERI_BERRY = this.berryBlock("cheri");
+
+    public static final CHESTO_BERRY = this.berryBlock("chesto");
+
+    public static final CHILAN_BERRY = this.berryBlock("chilan");
+
+    public static final CHOPLE_BERRY = this.berryBlock("chople");
+
+    public static final COBA_BERRY = this.berryBlock("coba");
+
+    public static final COLBUR_BERRY = this.berryBlock("colbur");
+
+    public static final CORNN_BERRY = this.berryBlock("cornn");
+
+    public static final CUSTAP_BERRY = this.berryBlock("custap");
+
+    public static final DURIN_BERRY = this.berryBlock("durin");
+
+    public static final EGGANT_BERRY = this.berryBlock("eggant");
+
+    public static final ENIGMA_BERRY = this.berryBlock("enigma");
+
+    public static final FIGY_BERRY = this.berryBlock("figy");
+
+    public static final GANLON_BERRY = this.berryBlock("ganlon");
+
+    public static final GREPA_BERRY = this.berryBlock("grepa");
+
+    public static final HABAN_BERRY = this.berryBlock("haban");
+
+    public static final HONDEW_BERRY = this.berryBlock("hondew");
+
+    public static final HOPO_BERRY = this.berryBlock("hopo");
+
+    public static final IAPAPA_BERRY = this.berryBlock("iapapa");
+
+    public static final JABOCA_BERRY = this.berryBlock("jaboca");
+
+    public static final KASIB_BERRY = this.berryBlock("kasib");
+
+    public static final KEBIA_BERRY = this.berryBlock("kebia");
+
+    public static final KEE_BERRY = this.berryBlock("kee");
+
+    public static final KELPSY_BERRY = this.berryBlock("kelpsy");
+
+    public static final LANSAT_BERRY = this.berryBlock("lansat");
+
+    public static final LEPPA_BERRY = this.berryBlock("leppa");
+
+    public static final LIECHI_BERRY = this.berryBlock("liechi");
+
+    public static final LUM_BERRY = this.berryBlock("lum");
+
+    public static final MAGO_BERRY = this.berryBlock("mago");
+
+    public static final MAGOST_BERRY = this.berryBlock("magost");
+
+    public static final MARANGA_BERRY = this.berryBlock("maranga");
+
+    public static final MICLE_BERRY = this.berryBlock("micle");
+
+    public static final NANAB_BERRY = this.berryBlock("nanab");
+
+    public static final NOMEL_BERRY = this.berryBlock("nomel");
+
+    public static final OCCA_BERRY = this.berryBlock("occa");
+
+    public static final ORAN_BERRY = this.berryBlock("oran");
+
+    public static final PAMTRE_BERRY = this.berryBlock("pamtre");
+
+    public static final PASSHO_BERRY = this.berryBlock("passho");
+
+    public static final PAYAPA_BERRY = this.berryBlock("payapa");
+
+    public static final PECHA_BERRY = this.berryBlock("pecha");
+
+    public static final PERSIM_BERRY = this.berryBlock("persim");
+
+    public static final PETAYA_BERRY = this.berryBlock("petaya");
+
+    public static final PINAP_BERRY = this.berryBlock("pinap");
+
+    public static final POMEG_BERRY = this.berryBlock("pomeg");
+
+    public static final QUALOT_BERRY = this.berryBlock("qualot");
+
+    public static final RABUTA_BERRY = this.berryBlock("rabuta");
+
+    public static final RAWST_BERRY = this.berryBlock("rawst");
+
+    public static final RAZZ_BERRY = this.berryBlock("razz");
+
+    public static final RINDO_BERRY = this.berryBlock("rindo");
+
+    public static final ROSELI_BERRY = this.berryBlock("roseli");
+
+    public static final ROWAP_BERRY = this.berryBlock("rowap");
+
+    public static final SALAC_BERRY = this.berryBlock("salac");
+
+    public static final SHUCA_BERRY = this.berryBlock("shuca");
+
+    public static final SITRUS_BERRY = this.berryBlock("sitrus");
+
+    public static final SPELON_BERRY = this.berryBlock("spelon");
+
+    public static final STARF_BERRY = this.berryBlock("starf");
+
+    public static final TAMATO_BERRY = this.berryBlock("tamato");
+
+    public static final TANGA_BERRY = this.berryBlock("tanga");
+
+    public static final TOUGA_BERRY = this.berryBlock("touga");
+
+    public static final WACAN_BERRY = this.berryBlock("wacan");
+
+    public static final WATMEL_BERRY = this.berryBlock("watmel");
+
+    public static final WEPEAR_BERRY = this.berryBlock("wepear");
+
+    public static final WIKI_BERRY = this.berryBlock("wiki");
+
+    public static final YACHE_BERRY = this.berryBlock("yache");
+    //public static final BINDING_SOIL = this.create("binding_soil", BindingSoilBlock(BlockBehaviour.Properties.of()));
+
+    init {
+        /**
+         * Makes all blocks in array flammable by adding them FireBlock's flammableRegistry.
+         * second public static finalue is burn chance and third public static finalue is spread chance
+         */
+        arrayOf(
+            Triple(APRICORN_LOG, 5, 5),
+            Triple(STRIPPED_APRICORN_LOG, 5, 5),
+            Triple(APRICORN_WOOD, 5, 5),
+            Triple(STRIPPED_APRICORN_WOOD, 5, 5),
+            Triple(APRICORN_PLANKS, 5, 20),
+            Triple(APRICORN_LEAVES, 30, 60),
+            Triple(APRICORN_FENCE, 5, 20),
+            Triple(APRICORN_FENCE_GATE, 5, 20),
+            Triple(APRICORN_SLAB, 5, 20),
+            Triple(APRICORN_STAIRS, 5, 20),
+            Triple(SACCHARINE_LOG, 5, 5),
+            Triple(SACCHARINE_LOG_SLATHERED, 5, 5),
+            Triple(STRIPPED_SACCHARINE_LOG, 5, 5),
+            Triple(SACCHARINE_WOOD, 5, 5),
+            Triple(STRIPPED_SACCHARINE_WOOD, 5, 5),
+            Triple(SACCHARINE_PLANKS, 5, 20),
+            Triple(SACCHARINE_LEAVES, 30, 60),
+            Triple(SACCHARINE_FENCE, 5, 20),
+            Triple(SACCHARINE_FENCE_GATE, 5, 20),
+            Triple(SACCHARINE_SLAB, 5, 20),
+            Triple(SACCHARINE_STAIRS, 5, 20);
+
+        ).onEach{ data -> setFlammable(data.first, data.second, data.third) }
+    }
+
+    fun berries() = this.berries.toMap();
+
+    private fun berryBlock(name: String): BerryBlock {
+        public static final identifier = cobblemonResource("${name}_berry");
+        public static final block = this.create(identifier.path, BerryBlock(identifier, BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).dynamicShape().sound(CobblemonSounds.BERRY_BUSH_SOUNDS).strength(0.2F)));
+        this.berries[identifier] = block
+        return block
+    }
+
+    /**
+     * Calls helper method from Vanilla
+     */
+    private fun log(name: String, arg: MapColor = MapColor.DIRT, arg2: MapColor = MapColor.DIRT): Block {
+        public static final block = BlocksInvoker.createLogBlock(arg, arg2);
+        return this.create(name, block);
+    }
+
+    /**
+     * Method uses generic E in order keep the block as the same return type.
+     * If E is not a block then it will not be set as flammable.
+     * Calls Vanilla implementation of registering a flammable block.
+     * Mixins looks cursed but it is java's fault.
+     */
+    private fun <E> setFlammable(block: E, burnChance: Int, spreadChance: Int): E {
+        if(block !is Block) return block
+
+        var fireBlock: FireBlock =  Blocks.FIRE as FireBlock
+        //Cursed Mixin stuff
+        (fireBlock as FireBlockInvoker).registerNewFlammableBlock(block as Block, burnChance, spreadChance);
+        return block
+    }
+
+    private fun evolutionStoneOre(name: String) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
+    private fun evolutionStoneOre(name: String, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE).lightLevel { lightLevel }));
+
+    private fun deepslateEvolutionStoneOre(name: String) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
+    private fun deepslateEvolutionStoneOre(name: String, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE).lightLevel { lightLevel }));
+
+    /**
+     * Helper method for creating leaves
+     * copied over from Vanilla
+     */
+    private fun leaves(name: String): Block {
+        public static final block = BlocksInvoker.createLeavesBlock(SoundType.GRASS);
+        return this.create(name, block);
+    }
 }

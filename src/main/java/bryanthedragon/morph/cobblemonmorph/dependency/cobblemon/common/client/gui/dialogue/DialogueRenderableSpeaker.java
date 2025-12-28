@@ -1,13 +1,18 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.dialogue
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.dto.DialogueGibberDTO
 import net.minecraft.network.chat.MutableComponent
 
-public class DialogueRenderableSpeaker(name: MutableComponent?, face: RenderableFace?) {
-   public final val face: RenderableFace?
-   public final val name: MutableComponent?
-
-   init {
-      this.name = name;
-      this.face = face;
-   }
-}
+class DialogueRenderableSpeaker(
+    val name: MutableComponent?,
+    val face: RenderableFace?,
+    val gibber: DialogueGibberDTO? = null
+)

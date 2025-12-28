@@ -1,31 +1,35 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.PokemonState
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class PokemonStateUpdatePacket(pokemon: () -> Pokemon, value: PokemonState) : SingleUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
+class PokemonStateUpdatePacket(pokemon: () -> Pokemon?, value: PokemonState): SingleUpdatePacket<PokemonState, PokemonStateUpdatePacket>(pokemon, value) {
 
-   init {
-      this.id = ID;
-   }
+    override val id = ID
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      this.getValue().writeToBuffer(buffer);
-   }
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        value.writeToBuffer(buffer)
+    }
 
-   public open fun set(pokemon: Pokemon, value: PokemonState) {
-      pokemon.setState(value);
-   }
+    override fun set(pokemon: Pokemon, value: PokemonState) { pokemon.state = value }
 
-   public companion object {
-      public final val ID: ResourceLocation
+    companion object {
+        val ID = cobblemonResource("state_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): PokemonStateUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val state = PokemonState.fromBuffer(buffer)
+            return PokemonStateUpdatePacket(pokemon, state)
+        }
+    }
 
-      public fun decode(buffer: FriendlyByteBuf): PokemonStateUpdatePacket {
-         return new PokemonStateUpdatePacket(PokemonUpdatePacket.Companion.decodePokemon(buffer), PokemonState.Companion.fromBuffer(buffer));
-      }
-   }
 }

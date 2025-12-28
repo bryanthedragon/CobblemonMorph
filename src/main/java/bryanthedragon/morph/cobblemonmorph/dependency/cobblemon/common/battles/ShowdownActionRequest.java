@@ -1,171 +1,475 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.battle.BagItem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt
-import io.netty.buffer.ByteBuf
-import java.util.ArrayList;
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
+import com.google.gson.*
+import com.google.gson.reflect.TypeToken
+import net.minecraft.network.RegistryFriendlyByteBuf
+import java.lang.Integer.max
+import java.lang.reflect.Type
+import java.util.*
 
-@SourceDebugExtension(["SMAP\nShowdownActionRequest.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ShowdownActionRequest.kt\ncom/cobblemon/mod/common/battles/ShowdownActionRequest\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n+ 3 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,452:1\n1#2:453\n1855#3,2:454\n1855#3,2:456\n1855#3:458\n1855#3,2:459\n1856#3:461\n*S KotlinDebug\n*F\n+ 1 ShowdownActionRequest.kt\ncom/cobblemon/mod/common/battles/ShowdownActionRequest\n*L\n49#1:454,2\n51#1:456,2\n77#1:458\n78#1:459,2\n77#1:461\n*E\n"])
-public class ShowdownActionRequest(wait: Boolean = false,
-   active: MutableList<ShowdownMoveset>? = null,
-   forceSwitch: List<Boolean> = CollectionsKt.emptyList(),
-   noCancel: Boolean = false,
-   side: ShowdownSide? = null
+class ShowdownActionRequest(
+    var wait: Boolean = false,
+    var active: MutableList<ShowdownMoveset>? = null,
+    var forceSwitch: List<Boolean> = emptyList(),
+    var noCancel: Boolean = false,
+    var side: ShowdownSide? = null
 ) {
-   public final var active: MutableList<ShowdownMoveset>?
-   public final var forceSwitch: List<Boolean>
-   public final var noCancel: Boolean
-   public final var side: ShowdownSide?
-   public final var wait: Boolean
+    fun <T, E : Targetable> iterate(activePokemon: List<E>, iterator: (E, ShowdownMoveset?, forceSwitch: Boolean) -> T): List<T> {
+        val size = max(active?.size ?: 0, forceSwitch.size)
+        val responses = mutableListOf<T>()
+        repeat(times = size) { index ->
+            val activeBattlePokemon = activePokemon.let { if (it.size > index) it[index] else throw IllegalStateException("No active Pokémon for slot $index but needed to choose action for it?") }
+            val moveset = active?.let { if (it.size > index) it[index] else null }
+            val forceSwitch = forceSwitch.let { if (it.size > index) it[index] else false }
+            responses.add(iterator(activeBattlePokemon, moveset, forceSwitch))
+        }
+        return responses
+    }
 
-   init {
-      this.wait = wait;
-      this.active = active;
-      this.forceSwitch = forceSwitch;
-      this.noCancel = noCancel;
-      this.side = side;
-   }
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeBoolean(wait)
+        buffer.writeSizedInt(IntSize.U_BYTE, active?.size ?: 0)
+        active?.forEach { it.saveToBuffer(buffer) }
+        buffer.writeSizedInt(IntSize.U_BYTE, forceSwitch.size)
+        forceSwitch.forEach(buffer::writeBoolean)
+        buffer.writeBoolean(noCancel)
+        buffer.writeBoolean(side != null)
+        side?.saveToBuffer(buffer)
+    }
 
-   public fun <T, E : Targetable> iterate(activePokemon: List<Any>, iterator: (Any, ShowdownMoveset?, Boolean) -> Any): List<Any> {
-      val size: Int = Integer.max(if (this.active != null) this.active.size() else 0, this.forceSwitch.size());
-      val responses: java.util.List = new ArrayList();
+    fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownActionRequest {
+        wait = buffer.readBoolean()
+        val activeSize = buffer.readSizedInt(IntSize.U_BYTE)
+        if (activeSize > 0) {
+            val active = mutableListOf<ShowdownMoveset>()
+            repeat(times = activeSize) { active.add(ShowdownMoveset().loadFromBuffer(buffer)) }
+            this.active = active
+        }
+        val forceSwitch = mutableListOf<Boolean>()
+        repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) { forceSwitch.add(buffer.readBoolean()) }
+        this.forceSwitch = forceSwitch
+        noCancel = buffer.readBoolean()
+        if (buffer.readBoolean()) {
+            side = ShowdownSide().loadFromBuffer(buffer)
+        }
+        return this
+    }
 
-      for (int var5 = 0; var5 < size; var5++) {
-         if (activePokemon.size() <= var5) {
-            throw new IllegalStateException("No active Pokémon for slot $var5 but needed to choose action for it?");
-         }
-
-         val activeBattlePokemon: Targetable = activePokemon.get(var5) as Targetable;
-         val var10000: ShowdownMoveset;
-         if (this.active != null) {
-            val it: java.util.List = this.active;
-            var10000 = if (this.active.size() > var5) it.get(var5) as ShowdownMoveset else null;
-         } else {
-            var10000 = null;
-         }
-
-         val var14: java.util.List = this.forceSwitch;
-         responses.add(iterator.invoke(activeBattlePokemon, var10000, this.forceSwitch.size() > var5 && var14.get(var5) as java.lang.Boolean));
-      }
-
-      return responses;
-   }
-
-   public fun saveToBuffer(buffer: FriendlyByteBuf) {
-      buffer.writeBoolean(this.wait);
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, if (this.active != null) this.active.size() else 0);
-      if (this.active != null) {
-         val `$i$f$forEach`: java.lang.Iterable;
-         for (Object element$iv : $i$f$forEach) {
-            (p0 as ShowdownMoveset).saveToBuffer(buffer);
-         }
-      }
-
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, this.forceSwitch.size());
-
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         buffer.writeBoolean(var11 as java.lang.Boolean);
-      }
-
-      buffer.writeBoolean(this.noCancel);
-      buffer.writeBoolean(this.side != null);
-      if (this.side != null) {
-         this.side.saveToBuffer(buffer);
-      }
-   }
-
-   public fun loadFromBuffer(buffer: FriendlyByteBuf): ShowdownActionRequest {
-      this.wait = buffer.readBoolean();
-      val activeSize: Int = NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE);
-      if (activeSize > 0) {
-         val forceSwitch: java.util.List = new ArrayList();
-
-         for (int var4 = 0; var4 < activeSize; var4++) {
-            forceSwitch.add(new ShowdownMoveset().loadFromBuffer(buffer));
-         }
-
-         this.active = forceSwitch;
-      }
-
-      val var8: java.util.List = new ArrayList();
-      val var9: Int = NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE);
-
-      for (int it = 0; it < var9; it++) {
-         var8.add(buffer.readBoolean());
-      }
-
-      this.forceSwitch = var8;
-      this.noCancel = buffer.readBoolean();
-      if (buffer.readBoolean()) {
-         this.side = new ShowdownSide().loadFromBuffer(buffer);
-      }
-
-      return this;
-   }
-
-   public fun sanitize(battle: PokemonBattle, battleActor: BattleActor) {
-      val var6: java.util.Iterator = battle.getPlayers().iterator();
-
-      var var10000: Any;
-      while (true) {
-         if (var6.hasNext()) {
-            val `element$iv`: Any = var6.next();
-            if (!((`element$iv` as ServerPlayer).m_20148_() == battleActor.getUuid())) {
-               continue;
+    fun sanitize(battle: PokemonBattle, battleActor: BattleActor) {
+        val player = battle.players.find { it.uuid == battleActor.uuid } ?: return
+        this.active?.forEach { moveset ->
+            moveset.getGimmicks().forEach { gimmick ->
+                // TODO: use the Identifiers of actual items
+                val triggerItem = when(gimmick) {
+                    ShowdownMoveset.Gimmick.MEGA_EVOLUTION -> cobblemonResource("key_stone")
+                    ShowdownMoveset.Gimmick.DYNAMAX -> cobblemonResource("dynamax_band")
+                    ShowdownMoveset.Gimmick.TERASTALLIZATION -> cobblemonResource("tera_orb")
+                    else -> cobblemonResource("z_ring")
+                }
+                if (!player.hasKeyItem(triggerItem)) moveset.blockGimmick(gimmick)
             }
+        }
+    }
+}
 
-            var10000 = `element$iv`;
-            break;
-         }
+enum class ShowdownActionResponseType(val loader: (RegistryFriendlyByteBuf) -> ShowdownActionResponse) {
+    SWITCH({ SwitchActionResponse(UUID.randomUUID()) }),
+    MOVE({ MoveActionResponse("", null) }),
+    DEFAULT({ DefaultActionResponse() }),
+    FORCE_PASS({ ForcePassActionResponse() }),
+    PASS({ PassActionResponse }),
+    SHIFT({ ShiftActionResponse()}),
+    HEAL_ITEM({ HealItemActionResponse("potion") }),
+    FORFEIT({ ForfeitActionResponse() });
+}
 
-         var10000 = null;
-         break;
-      }
+abstract class ShowdownActionResponse(val type: ShowdownActionResponseType) {
+    companion object {
+        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownActionResponse {
+            val type = ShowdownActionResponseType.values()[buffer.readSizedInt(IntSize.U_BYTE)]
+            return type.loader(buffer).loadFromBuffer(buffer)
+        }
+    }
 
-      var10000 = var10000 as ServerPlayer;
-      if (var10000 as ServerPlayer != null) {
-         val player: ServerPlayer = (ServerPlayer)var10000;
-         if (this.active != null) {
-            val `$this$forEach$iv`: java.lang.Iterable;
-            for (Object element$iv : $this$forEach$iv) {
-               val var20: ShowdownMoveset = var19 as ShowdownMoveset;
+    open fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeSizedInt(IntSize.U_BYTE, type.ordinal)
+    }
 
-               val `$this$forEach$ivx`: java.lang.Iterable;
-               for (Object element$ivx : $this$forEach$ivx) {
-                  val gimmick: ShowdownMoveset.Gimmick = `element$ivx` as ShowdownMoveset.Gimmick;
-                  switch (ShowdownActionRequest.WhenMappings.$EnumSwitchMapping$0[((ShowdownMoveset.Gimmick)element$ivx).ordinal()]) {
-                     case 1:
-                        var10000 = MiscUtilsKt.cobblemonResource("key_stone");
-                        break;
-                     case 2:
-                        var10000 = MiscUtilsKt.cobblemonResource("dynamax_band");
-                        break;
-                     case 3:
-                        var10000 = MiscUtilsKt.cobblemonResource("tera_orb");
-                        break;
-                     default:
-                        var10000 = MiscUtilsKt.cobblemonResource("z_ring");
-                  }
+    open fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownActionResponse = this
+    abstract fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean): Boolean
+    abstract fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String
+}
 
-                  if (!PlayerExtensionsKt.hasKeyItem(player, (ResourceLocation)var10000)) {
-                     var20.blockGimmick(gimmick);
-                  }
-               }
+record MoveActionResponse(var moveName: String, var targetPnx: String? = null, var gimmickID: String? = null): ShowdownActionResponse(ShowdownActionResponseType.MOVE) {
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean): Boolean {
+        if (forceSwitch || showdownMoveSet == null) {
+            return false
+        }
+
+        val move = showdownMoveSet.moves.find { it.id == moveName } ?: return false
+        val gimmickMove = move.gimmickMove
+        val validGimmickMove = gimmickMove != null && !gimmickMove.disabled
+        if (!validGimmickMove && !move.canBeUsed()) {
+            // No PP or disabled or something
+            return false
+        }
+        val availableTargets = (if (gimmickID != null && validGimmickMove) gimmickMove.target else move.target)
+            .targetList(activeBattlePokemon)?.takeIf { it.isNotEmpty() } ?: return true
+
+        val pnx = targetPnx ?: return false // If the targets list is non-null then they need to have specified a target
+        val (_, targetPokemon) = activeBattlePokemon.actor.battle.getActorAndActiveSlotFromPNX(pnx)
+        if (targetPokemon !in availableTargets) {
+            return false // It's not a possible target.
+        }
+
+        return true
+    }
+
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
+        val pnx = targetPnx
+        showdownMoveSet!!
+        val moveIndex = showdownMoveSet.moves.indexOfFirst { it.id == moveName } + 1
+
+        return if (pnx != null) {
+            val (_, targetPokemon) = activeBattlePokemon.actor.battle.getActorAndActiveSlotFromPNX(pnx)
+            val digit = targetPokemon.getSignedDigitRelativeTo(activeBattlePokemon)
+            "move $moveIndex $digit"
+        } else {
+            "move $moveIndex"
+        }.plus(gimmickID?.let { " $gimmickID" } ?: "")
+    }
+
+    override fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        super.saveToBuffer(buffer)
+        buffer.writeString(moveName)
+        buffer.writeNullable(targetPnx) { _, targetPnx -> buffer.writeString(targetPnx) }
+        buffer.writeNullable(gimmickID) { _, gimmickID -> buffer.writeString(gimmickID) }
+    }
+
+    override fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownActionResponse {
+        super.loadFromBuffer(buffer)
+        moveName = buffer.readString()
+        targetPnx = buffer.readNullable { buffer.readString() }
+        gimmickID = buffer.readNullable { buffer.readString() }
+        return this
+    }
+}
+
+record HealItemActionResponse(var item: String) : ShowdownActionResponse(ShowdownActionResponseType.FORCE_PASS) {
+    override fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        super.saveToBuffer(buffer)
+        buffer.writeString(item)
+    }
+
+    override fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownActionResponse {
+        super.loadFromBuffer(buffer)
+        item = buffer.readString()
+        return this
+    }
+
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean): Boolean {
+        return !forceSwitch
+    }
+
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
+        return "healitem ${activeBattlePokemon.getPNX()} $item"
+    }
+}
+
+class ShiftActionResponse() : ShowdownActionResponse(ShowdownActionResponseType.SHIFT) {
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean): Boolean {
+        return !forceSwitch && activeBattlePokemon.getPNX()[1] != 'b' && activeBattlePokemon.battle.format.battleType.pokemonPerSide == 3
+    }
+
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
+        return "shift"
+    }
+
+}
+record SwitchActionResponse(var newPokemonId: UUID) : ShowdownActionResponse(ShowdownActionResponseType.SWITCH) {
+    override fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        super.saveToBuffer(buffer)
+        buffer.writeUUID(newPokemonId)
+    }
+
+    override fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownActionResponse {
+        super.loadFromBuffer(buffer)
+        newPokemonId = buffer.readUUID()
+        return this
+    }
+
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean): Boolean {
+        val pokemon = activeBattlePokemon.actor.pokemonList.find { it.uuid == newPokemonId }
+        return when {
+            pokemon == null -> false // No such Pokémon
+            (!activeBattlePokemon.actor.request?.side?.pokemon?.any{ it.uuid == activeBattlePokemon.battlePokemon?.uuid && it.reviving }!! && pokemon.health <= 0) -> false // Checks if the active Pokémon is reviving, if so ignore this check. If not, return false if dead
+            showdownMoveSet != null && showdownMoveSet.trapped -> false // You're not allowed to switch
+            activeBattlePokemon.actor.getSide().activePokemon.any { it.battlePokemon?.uuid == newPokemonId } -> false // Pokémon is already sent out
+            else -> true
+        }
+    }
+
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
+        return "switch ${activeBattlePokemon.actor.pokemonList.indexOfFirst { it.uuid == newPokemonId } + 1}"
+    }
+}
+
+class DefaultActionResponse: ShowdownActionResponse(ShowdownActionResponseType.DEFAULT) {
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean) = true
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "default"
+}
+final class PassActionResponse : ShowdownActionResponse(ShowdownActionResponseType.PASS) {
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean) = true
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "pass"
+}
+
+/**
+ * Only meant to be used when the player is capturing or using an item - they are forced to pass
+ */
+class ForcePassActionResponse : ShowdownActionResponse(ShowdownActionResponseType.FORCE_PASS) {
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean): Boolean {
+        if (forceSwitch) {
+            return false
+        } else if (showdownMoveSet == null) {
+            return false
+        }
+
+        return activeBattlePokemon.actor.expectingPassActions.size > 0
+    }
+
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "pass"
+}
+
+class BagItemActionResponse(val bagItem: BagItem, val target: BattlePokemon, val data: String? = null): ShowdownActionResponse(ShowdownActionResponseType.FORCE_PASS) {
+    override fun isValid(
+        activeBattlePokemon: ActiveBattlePokemon,
+        showdownMoveSet: ShowdownMoveset?,
+        forceSwitch: Boolean
+    ): Boolean {
+        if (forceSwitch) {
+            return false
+        } else if (showdownMoveSet == null) {
+            return false
+        }
+
+        return activeBattlePokemon.actor.expectingPassActions.size > 0
+    }
+
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?): String {
+        return "useitem ${target.uuid} ${bagItem.itemName} ${bagItem.getShowdownInput(target.actor, target, data)}"
+    }
+}
+
+class ForfeitActionResponse : ShowdownActionResponse(ShowdownActionResponseType.FORFEIT) {
+    override fun isValid(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?, forceSwitch: Boolean) = true
+    override fun toShowdownString(activeBattlePokemon: ActiveBattlePokemon, showdownMoveSet: ShowdownMoveset?) = "forfeit"
+}
+
+class ShowdownMoveset {
+    lateinit var moves: List<InBattleMove>
+    var trapped = false
+    var canMegaEvo = false
+    var canUltraBurst = false
+    var canZMove: List<InBattleGimmickMove?>? = null
+    var canDynamax = false
+    var maxMoves: List<InBattleGimmickMove?>? = null
+    var canTerastallize: String? = null
+
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeSizedInt(IntSize.U_BYTE, moves.size)
+        moves.forEach { it.saveToBuffer(buffer) }
+        buffer.writeBoolean(trapped)
+        buffer.writeBoolean(canMegaEvo)
+        buffer.writeBoolean(canUltraBurst)
+        buffer.writeNullable(canZMove) { _, canZMove ->
+            canZMove.forEach {
+                buffer.writeNullable(it) { _, zmove -> zmove.saveToBuffer(buffer)}
             }
-         }
-      }
-   }
+        }
+        buffer.writeBoolean(canDynamax)
+        buffer.writeNullable(maxMoves) { _, maxMoves ->
+            maxMoves.forEach {
+                buffer.writeNullable(it) { _, maxMove -> maxMove.saveToBuffer(buffer)}
+            }
+        }
+        buffer.writeNullable(canTerastallize) { _, teraType -> buffer.writeString(teraType) }
+    }
 
-   fun ShowdownActionRequest() {
-      this(false, null, null, false, null, 31, null);
-   }
+    fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownMoveset {
+        val moves = mutableListOf<InBattleMove>()
+        repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
+            moves.add(InBattleMove.loadFromBuffer(buffer))
+        }
+        this.moves = moves
+        this.trapped = buffer.readBoolean()
+        this.canMegaEvo = buffer.readBoolean()
+        this.canUltraBurst = buffer.readBoolean()
+        this.canZMove = buffer.readNullable {
+            val zMoves = mutableListOf<InBattleGimmickMove?>()
+            repeat(moves.size) { zMoves.add(buffer.readNullable { InBattleGimmickMove.loadFromBuffer(buffer) }) }
+            return@readNullable zMoves
+        }
+        this.canDynamax = buffer.readBoolean()
+        this.maxMoves = buffer.readNullable {
+            val maxMoves = mutableListOf<InBattleGimmickMove?>()
+            repeat(moves.size) { maxMoves.add(buffer.readNullable { InBattleGimmickMove.loadFromBuffer(buffer) }) }
+            return@readNullable maxMoves
+        }
+        this.canTerastallize = buffer.readNullable{ buffer.readString() }
+        this.setGimmickMapping()
+        return this
+    }
+
+    /** Showdown IDs of battle gimmicks. */
+    enum class Gimmick(val id: String) {
+        MEGA_EVOLUTION("mega"),
+        ULTRA_BURST("ultra"),
+        Z_POWER("zmove"),
+        DYNAMAX("max"),
+        TERASTALLIZATION("terastal")
+    }
+
+    /** Check whether Dynamax/Gigantamax is already active. */
+    fun hasActiveGimmick() = !this.canDynamax && this.maxMoves != null
+
+    /** [Gimmick]s that can be activated with a [MoveActionResponse]. */
+    fun getGimmicks() = if (!hasActiveGimmick()) buildList{
+        if (canMegaEvo) add(Gimmick.MEGA_EVOLUTION)
+        if (canUltraBurst) add(Gimmick.ULTRA_BURST)
+        if (canZMove != null) add(Gimmick.Z_POWER)
+        if (canDynamax) add(Gimmick.DYNAMAX)
+        if (canTerastallize != null) add(Gimmick.TERASTALLIZATION)
+    }.toList() else listOf() // keep this immutable
+
+    /** Map each [InBattleMove] to their respective [InBattleGimmickMove] variant. */
+    fun setGimmickMapping() = (canZMove ?: maxMoves)?.let { gimmickMoves ->
+        moves.forEachIndexed { index, move -> move.gimmickMove = gimmickMoves[index] }
+    }
+
+    /** Sanitize Moveset by disabling gimmick. */
+    fun blockGimmick(gimmick: Gimmick) {
+        when (gimmick) {
+            Gimmick.MEGA_EVOLUTION -> this.canMegaEvo = false
+            Gimmick.DYNAMAX -> this.canDynamax = false
+            Gimmick.ULTRA_BURST -> this.canUltraBurst = false
+            Gimmick.Z_POWER -> this.canZMove = null
+            else -> this.canTerastallize = null
+        }
+    }
+}
+class ShowdownSide {
+    lateinit var name: UUID
+    lateinit var id: String
+    lateinit var pokemon: List<ShowdownPokemon>
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(name)
+        buffer.writeString(id)
+        buffer.writeSizedInt(IntSize.U_BYTE, pokemon.size)
+        pokemon.forEach { it.saveToBuffer(buffer) }
+    }
+    fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownSide {
+        name = buffer.readUUID()
+        id = buffer.readString()
+        val pokemon = mutableListOf<ShowdownPokemon>()
+        repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
+            pokemon.add(ShowdownPokemon().loadFromBuffer(buffer))
+        }
+        this.pokemon = pokemon
+        return this
+    }
+}
+class ShowdownPokemon {
+    lateinit var ident: String
+    lateinit var details: String
+    lateinit var condition: String
+    var active: Boolean = false
+    val moves = mutableListOf<String>()
+    lateinit var baseAbility: String
+    lateinit var pokeball: String
+    lateinit var ability: String
+    var baseTypes = mutableListOf<String>()
+    var types = mutableListOf<String>()
+    var commanding: Boolean = false
+    var reviving: Boolean = false
+
+    val uuid: UUID by lazy { UUID.fromString(details.split(",")[1].trim()) }
+    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(ident)
+        buffer.writeString(details)
+        buffer.writeString(condition)
+        buffer.writeBoolean(active)
+        buffer.writeBoolean(reviving)
+        buffer.writeBoolean(commanding)
+        buffer.writeSizedInt(IntSize.U_BYTE, moves.size)
+        moves.forEach(buffer::writeString)
+        buffer.writeString(baseAbility)
+        buffer.writeString(pokeball)
+        buffer.writeString(ability)
+        buffer.writeSizedInt(IntSize.U_BYTE, baseTypes.size)
+        baseTypes.forEach(buffer::writeString)
+        buffer.writeSizedInt(IntSize.U_BYTE, types.size)
+        types.forEach(buffer::writeString)
+
+    }
+    fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ShowdownPokemon {
+        ident = buffer.readString()
+        details = buffer.readString()
+        condition = buffer.readString()
+        active = buffer.readBoolean()
+        reviving = buffer.readBoolean()
+        commanding = buffer.readBoolean()
+        repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
+            moves.add(buffer.readString())
+        }
+        baseAbility = buffer.readString()
+        pokeball = buffer.readString()
+        ability = buffer.readString()
+        repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
+            baseTypes.add(buffer.readString())
+        }
+        repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
+            types.add(buffer.readString())
+        }
+
+        return this
+    }
+}
+/** Unwraps useless maxMoves object and initializes [ShowdownMoveset.gimmickMapping] */final class ShowdownMovesetAdapter : JsonDeserializer<ShowdownMoveset> {
+
+    val gson = GsonBuilder().addDeserializationExclusionStrategy(MovesetExclusionStrategy).create()
+
+    object MovesetExclusionStrategy : ExclusionStrategy {
+        override fun shouldSkipField(field: FieldAttributes?): Boolean {
+            return field?.name == "maxMoves"
+        }
+        override fun shouldSkipClass(p0: Class<*>?): Boolean {
+            return false;
+        }
+    }
+
+    override fun deserialize(jsonElement: JsonElement, type: Type, context: JsonDeserializationContext): ShowdownMoveset {
+        val json = jsonElement.asJsonObject
+        val moveset = gson.fromJson(json, ShowdownMoveset::class.java)
+
+        json.get("maxMoves")?.asJsonObject?.let { dynamaxOptions ->
+            val maxMovesToken = object: TypeToken<List<InBattleGimmickMove?>?>() {}.type
+            moveset.maxMoves = Gson().fromJson(dynamaxOptions.get("maxMoves"), maxMovesToken)
+        }
+        moveset.setGimmickMapping()
+        return moveset
+    }
 }

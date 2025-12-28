@@ -1,84 +1,62 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.ModelPartExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.addRotation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.QuadrupedFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Bone
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.X_AXIS
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext
 import net.minecraft.util.Mth
-import net.minecraft.world.entity.Entity
 
-public class QuadrupedWalkAnimation<T extends Entity>(frame: ModelFrame,
-   legFrontLeft: Bone?,
-   legFrontRight: Bone?,
-   legBackLeft: Bone?,
-   legBackRight: Bone?,
-   periodMultiplier: Float = 0.6662F,
-   amplitudeMultiplier: Float = 1.4F
-) : StatelessAnimation(frame) {
-   public final val amplitudeMultiplier: Float
-   public final val legBackLeft: Bone?
-   public final val legBackRight: Bone?
-   public final val legFrontLeft: Bone?
-   public final val legFrontRight: Bone?
-   public final val periodMultiplier: Float
-   public open val targetFrame: Class<ModelFrame>
+/**
+ * A quadruped animation that will have zero-rotations on all legs at
+ * zero and otherwise does simple predictable walking like Minecraft
+ * quadrupeds.
+ *
+ * @author Hiroku
+ * @since December 4th, 2021
+ */
+class QuadrupedWalkAnimation(
+    val legFrontLeft: Bone?,
+    val legFrontRight: Bone?,
+    val legBackLeft: Bone?,
+    val legBackRight: Bone?,
+    /** The multiplier to apply to the cosine movement of the legs. The smaller this value, the quicker the legs move. */
+    val periodMultiplier: Float = 0.6662F,
+    /** The multiplier to apply to the stride of the entity. The larger this is, the further the legs move. */
+    val amplitudeMultiplier: Float = 1.4F
+) : PoseAnimation() {
+    constructor(
+        frame: QuadrupedFrame,
+        periodMultiplier: Float = 0.6662F,
+        amplitudeMultiplier: Float = 1.4F
+    ): this(
+        legFrontLeft = frame.foreLeftLeg,
+        legFrontRight = frame.foreRightLeg,
+        legBackLeft = frame.hindLeftLeg,
+        legBackRight = frame.hindRightLeg,
+        periodMultiplier = periodMultiplier,
+        amplitudeMultiplier = amplitudeMultiplier
+    )
 
-   init {
-      this.legFrontLeft = legFrontLeft;
-      this.legFrontRight = legFrontRight;
-      this.legBackLeft = legBackLeft;
-      this.legBackRight = legBackRight;
-      this.periodMultiplier = periodMultiplier;
-      this.amplitudeMultiplier = amplitudeMultiplier;
-      this.targetFrame = ModelFrame::class.java;
-   }
+    override fun setupAnim(context: RenderContext, model: PosableModel, state: PosableState, limbSwing: Float, limbSwingAmount: Float, ageInTicks: Float, headYaw: Float, headPitch: Float, intensity: Float) {
+        val hindRightLeg = legBackRight ?: return
+        val hindLeftLeg = legBackLeft ?: return
+        val foreRightLeg = legFrontRight ?: return
+        val foreLeftLeg = legFrontLeft ?: return
 
-   public constructor(frame: QuadrupedFrame, periodMultiplier: Float = 0.6662F, amplitudeMultiplier: Float = 1.4F) : this(
-         frame,
-         frame.getForeLeftLeg() as Bone,
-         frame.getForeRightLeg() as Bone,
-         frame.getHindLeftLeg() as Bone,
-         frame.getHindRightLeg() as Bone,
-         periodMultiplier,
-         amplitudeMultiplier
-      )
-   protected override fun setAngles(
-      entity: Any?,
-      model: PoseableEntityModel<Any>,
-      state: PoseableEntityState<Any>?,
-      limbSwing: Float,
-      limbSwingAmount: Float,
-      ageInTicks: Float,
-      headYaw: Float,
-      headPitch: Float,
-      intensity: Float
-   ) {
-      if (this.legBackRight != null) {
-         if (this.legBackLeft != null) {
-            val hindLeftLeg: Bone = this.legBackLeft;
-            if (this.legFrontRight != null) {
-               val foreRightLeg: Bone = this.legFrontRight;
-               if (this.legFrontLeft != null) {
-                  val foreLeftLeg: Bone = this.legFrontLeft;
-                  ModelPartExtensionsKt.addRotation(
-                     this.legBackRight, 0, Mth.m_14089_(limbSwing * this.periodMultiplier) * limbSwingAmount * this.amplitudeMultiplier * intensity
-                  );
-                  ModelPartExtensionsKt.addRotation(
-                     hindLeftLeg, 0, Mth.m_14089_(limbSwing * this.periodMultiplier + (float) Math.PI) * limbSwingAmount * this.amplitudeMultiplier * intensity
-                  );
-                  ModelPartExtensionsKt.addRotation(
-                     foreRightLeg,
-                     0,
-                     Mth.m_14089_(limbSwing * this.periodMultiplier + (float) Math.PI) * limbSwingAmount * this.amplitudeMultiplier * intensity
-                  );
-                  ModelPartExtensionsKt.addRotation(
-                     foreLeftLeg, 0, Mth.m_14089_(limbSwing * this.periodMultiplier) * limbSwingAmount * this.amplitudeMultiplier * intensity
-                  );
-               }
-            }
-         }
-      }
-   }
+        hindRightLeg.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier) * limbSwingAmount * amplitudeMultiplier * intensity)
+        hindLeftLeg.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier + Math.PI.toFloat()) * limbSwingAmount * amplitudeMultiplier * intensity)
+        foreRightLeg.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier + Math.PI.toFloat()) * limbSwingAmount * amplitudeMultiplier * intensity)
+        foreLeftLeg.addRotation(X_AXIS, Mth.cos(limbSwing * periodMultiplier) * limbSwingAmount * amplitudeMultiplier * intensity)
+    }
 }

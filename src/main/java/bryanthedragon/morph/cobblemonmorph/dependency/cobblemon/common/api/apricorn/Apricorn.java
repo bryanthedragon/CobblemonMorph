@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.apricorn
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBlocks
@@ -5,170 +13,92 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.ApricornBlock
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.ApricornSaplingBlock
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.ApricornItem
-
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.feature.CobblemonConfiguredFeatures
+import com.mojang.serialization.Codec
+import net.minecraft.resources.ResourceKey
+import net.minecraft.util.StringRepresentable
 import net.minecraft.world.item.BlockItem
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature
 import net.minecraft.world.level.material.MapColor
 
-public enum Apricorn {
-   BLACK,
-   BLUE,
-   GREEN,
-   PINK,
-   RED,
-   WHITE,
-   YELLOW
-   public fun item(): ApricornItem {
-      var var10000: ApricornItem;
-      switch (Apricorn.WhenMappings.$EnumSwitchMapping$0[this.ordinal()]) {
-         case 1:
-            var10000 = CobblemonItems.BLACK_APRICORN;
-            break;
-         case 2:
-            var10000 = CobblemonItems.BLUE_APRICORN;
-            break;
-         case 3:
-            var10000 = CobblemonItems.GREEN_APRICORN;
-            break;
-         case 4:
-            var10000 = CobblemonItems.PINK_APRICORN;
-            break;
-         case 5:
-            var10000 = CobblemonItems.RED_APRICORN;
-            break;
-         case 6:
-            var10000 = CobblemonItems.WHITE_APRICORN;
-            break;
-         case 7:
-            var10000 = CobblemonItems.YELLOW_APRICORN;
-            break;
-         default:
-            throw new NoWhenBranchMatchedException();
-      }
+/**
+ * Contains the different Apricorn variants and util methods to get their item, block, seedling and sapling form.
+ *
+ * @author Licious
+ * @since October 29th, 2022
+ */
+enum class Apricorn : StringRepresentable {
+    BLACK,
+    BLUE,
+    GREEN,
+    PINK,
+    RED,
+    WHITE,
+    YELLOW;
 
-      return var10000;
-   }
+    fun item(): ApricornItem = when(this) {
+        BLACK -> CobblemonItems.BLACK_APRICORN
+        BLUE -> CobblemonItems.BLUE_APRICORN
+        GREEN -> CobblemonItems.GREEN_APRICORN
+        PINK -> CobblemonItems.PINK_APRICORN
+        RED -> CobblemonItems.RED_APRICORN
+        WHITE -> CobblemonItems.WHITE_APRICORN
+        YELLOW -> CobblemonItems.YELLOW_APRICORN
+    }
 
-   public fun seed(): BlockItem {
-      var var10000: BlockItem;
-      switch (Apricorn.WhenMappings.$EnumSwitchMapping$0[this.ordinal()]) {
-         case 1:
-            var10000 = CobblemonItems.BLACK_APRICORN_SEED as BlockItem;
-            break;
-         case 2:
-            var10000 = CobblemonItems.BLUE_APRICORN_SEED as BlockItem;
-            break;
-         case 3:
-            var10000 = CobblemonItems.GREEN_APRICORN_SEED as BlockItem;
-            break;
-         case 4:
-            var10000 = CobblemonItems.PINK_APRICORN_SEED as BlockItem;
-            break;
-         case 5:
-            var10000 = CobblemonItems.RED_APRICORN_SEED as BlockItem;
-            break;
-         case 6:
-            var10000 = CobblemonItems.WHITE_APRICORN_SEED as BlockItem;
-            break;
-         case 7:
-            var10000 = CobblemonItems.YELLOW_APRICORN_SEED as BlockItem;
-            break;
-         default:
-            throw new NoWhenBranchMatchedException();
-      }
+    fun seed(): BlockItem = when(this) {
+        BLACK -> CobblemonItems.BLACK_APRICORN_SEED
+        BLUE -> CobblemonItems.BLUE_APRICORN_SEED
+        GREEN -> CobblemonItems.GREEN_APRICORN_SEED
+        PINK -> CobblemonItems.PINK_APRICORN_SEED
+        RED -> CobblemonItems.RED_APRICORN_SEED
+        WHITE -> CobblemonItems.WHITE_APRICORN_SEED
+        YELLOW -> CobblemonItems.YELLOW_APRICORN_SEED
+    }
 
-      return var10000;
-   }
+    fun block(): ApricornBlock = when(this) {
+        BLACK -> CobblemonBlocks.BLACK_APRICORN
+        BLUE -> CobblemonBlocks.BLUE_APRICORN
+        GREEN -> CobblemonBlocks.GREEN_APRICORN
+        PINK -> CobblemonBlocks.PINK_APRICORN
+        RED -> CobblemonBlocks.RED_APRICORN
+        WHITE -> CobblemonBlocks.WHITE_APRICORN
+        YELLOW -> CobblemonBlocks.YELLOW_APRICORN
+    }
 
-   public fun block(): ApricornBlock {
-      var var10000: ApricornBlock;
-      switch (Apricorn.WhenMappings.$EnumSwitchMapping$0[this.ordinal()]) {
-         case 1:
-            var10000 = CobblemonBlocks.BLACK_APRICORN;
-            break;
-         case 2:
-            var10000 = CobblemonBlocks.BLUE_APRICORN;
-            break;
-         case 3:
-            var10000 = CobblemonBlocks.GREEN_APRICORN;
-            break;
-         case 4:
-            var10000 = CobblemonBlocks.PINK_APRICORN;
-            break;
-         case 5:
-            var10000 = CobblemonBlocks.RED_APRICORN;
-            break;
-         case 6:
-            var10000 = CobblemonBlocks.WHITE_APRICORN;
-            break;
-         case 7:
-            var10000 = CobblemonBlocks.YELLOW_APRICORN;
-            break;
-         default:
-            throw new NoWhenBranchMatchedException();
-      }
+    fun sapling(): ApricornSaplingBlock = when(this) {
+        BLACK -> CobblemonBlocks.BLACK_APRICORN_SAPLING
+        BLUE -> CobblemonBlocks.BLUE_APRICORN_SAPLING
+        GREEN -> CobblemonBlocks.GREEN_APRICORN_SAPLING
+        PINK -> CobblemonBlocks.PINK_APRICORN_SAPLING
+        RED -> CobblemonBlocks.RED_APRICORN_SAPLING
+        WHITE -> CobblemonBlocks.WHITE_APRICORN_SAPLING
+        YELLOW -> CobblemonBlocks.YELLOW_APRICORN_SAPLING
+    }
 
-      return var10000;
-   }
+    fun mapColor(): MapColor = when(this) {
+        BLACK -> MapColor.COLOR_BLACK
+        BLUE ->  MapColor.COLOR_BLUE
+        GREEN ->  MapColor.COLOR_GREEN
+        PINK ->  MapColor.COLOR_PINK
+        RED ->  MapColor.COLOR_RED
+        WHITE ->  MapColor.SNOW
+        YELLOW ->  MapColor.COLOR_YELLOW
+    }
 
-   public fun sapling(): ApricornSaplingBlock {
-      var var10000: ApricornSaplingBlock;
-      switch (Apricorn.WhenMappings.$EnumSwitchMapping$0[this.ordinal()]) {
-         case 1:
-            var10000 = CobblemonBlocks.BLACK_APRICORN_SAPLING;
-            break;
-         case 2:
-            var10000 = CobblemonBlocks.BLUE_APRICORN_SAPLING;
-            break;
-         case 3:
-            var10000 = CobblemonBlocks.GREEN_APRICORN_SAPLING;
-            break;
-         case 4:
-            var10000 = CobblemonBlocks.PINK_APRICORN_SAPLING;
-            break;
-         case 5:
-            var10000 = CobblemonBlocks.RED_APRICORN_SAPLING;
-            break;
-         case 6:
-            var10000 = CobblemonBlocks.WHITE_APRICORN_SAPLING;
-            break;
-         case 7:
-            var10000 = CobblemonBlocks.YELLOW_APRICORN_SAPLING;
-            break;
-         default:
-            throw new NoWhenBranchMatchedException();
-      }
+    fun configuredFeature(): ResourceKey<ConfiguredFeature<*, *>> = when(this) {
+        BLACK -> CobblemonConfiguredFeatures.BLACK_APRICORN_TREE_KEY
+        BLUE -> CobblemonConfiguredFeatures.BLUE_APRICORN_TREE_KEY
+        GREEN -> CobblemonConfiguredFeatures.GREEN_APRICORN_TREE_KEY
+        PINK -> CobblemonConfiguredFeatures.PINK_APRICORN_TREE_KEY
+        RED -> CobblemonConfiguredFeatures.RED_APRICORN_TREE_KEY
+        WHITE -> CobblemonConfiguredFeatures.WHITE_APRICORN_TREE_KEY
+        YELLOW -> CobblemonConfiguredFeatures.YELLOW_APRICORN_TREE_KEY
+    }
 
-      return var10000;
-   }
+    override fun getSerializedName() = this.name.lowercase()
 
-   public fun mapColor(): MapColor {
-      var var10000: MapColor;
-      switch (Apricorn.WhenMappings.$EnumSwitchMapping$0[this.ordinal()]) {
-         case 1:
-            var10000 = MapColor.f_283927_;
-            break;
-         case 2:
-            var10000 = MapColor.f_283743_;
-            break;
-         case 3:
-            var10000 = MapColor.f_283784_;
-            break;
-         case 4:
-            var10000 = MapColor.f_283765_;
-            break;
-         case 5:
-            var10000 = MapColor.f_283913_;
-            break;
-         case 6:
-            var10000 = MapColor.f_283811_;
-            break;
-         case 7:
-            var10000 = MapColor.f_283832_;
-            break;
-         default:
-            throw new NoWhenBranchMatchedException();
-      }
-
-      return var10000;
-   }
+    companion object {
+        val CODEC: Codec<Apricorn> = StringRepresentable.fromValues(::values)
+    }
 }

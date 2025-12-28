@@ -1,115 +1,271 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.spawner
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.entity.SpawnBucketChosenEvent
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.BestSpawner
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnBucket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.context.SpawningContext
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawnCause
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.SpawningZoneGenerator
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.EntitySpawnResult
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnAction
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnPool
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.SpawningInfluence
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.AreaSpawnablePositionResolver
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.calculators.SpawnablePositionCalculator.Companion.prioritizedAreaCalculators
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.selection.SpawningSelector
-import java.util.ArrayList;
-import java.util.LinkedHashMap
-import java.util.Random
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBoxLoaded
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.squeezeWithinBounds
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.toVec3f
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.weightedSelection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Float
+import kotlin.Int
+import kotlin.Pair
+import kotlin.String
+import kotlin.collections.plus
+import kotlin.math.max
+import net.minecraft.core.BlockPos
+import net.minecraft.core.SectionPos
+import net.minecraft.world.level.ChunkPos
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.chunk.ChunkAccess
+import net.minecraft.world.level.chunk.status.ChunkStatus
+import net.minecraft.world.level.pathfinder.PathComputationType
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
 
-public interface Spawner {
-   public val influences: MutableList<SpawningInfluence>
-   public val name: String
+/**
+ * Interface representing something that performs the action of spawning. Various functions
+ * exist to streamline the process of using the [BestSpawner].
+ *
+ * The simplest implementation is a [BasicSpawner]
+ *
+ * @author Hiroku
+ * @since January 24th, 2022
+ */
+interface Spawner {
+    val name: String
+    val influences: MutableList<SpawningInfluence>
+    var spawnPool: SpawnPool
+    var selector: SpawningSelector<*>
+    var generator: SpawningZoneGenerator
+    var resolver: AreaSpawnablePositionResolver
+    var maxPokemonPerChunk: Float
 
-   public abstract fun getSpawningSelector(): SpawningSelector {
-   }
+    fun <R> afterSpawn(action: SpawnAction<R>, result: R) {}
 
-   public abstract fun setSpawningSelector(selector: SpawningSelector) {
-   }
+    companion object {
+        /** The chunk range radius over which spawning will roughly keep the entity density under control. */
+        const val ENTITY_LIMIT_CHUNK_RANGE = 3
+    }
 
-   public abstract fun getSpawnPool(): SpawnPool {
-   }
-
-   public abstract fun setSpawnPool(spawnPool: SpawnPool) {
-   }
-
-   public open fun <R> afterSpawn(action: SpawnAction<Any>, result: Any) {
-   }
-
-   public abstract fun canSpawn(): Boolean {
-   }
-
-   public open fun getMatchingSpawns(ctx: SpawningContext): List<SpawnDetail> {
-   }
-
-   public open fun copyInfluences(): MutableList<SpawningInfluence> {
-   }
-
-   public open fun chooseBucket(): SpawnBucket {
-   }
-
-   public companion object
-
-   // $VF: Class flags could not be determined
-   @SourceDebugExtension(["SMAP\nSpawner.kt\nKotlin\n*S Kotlin\n*F\n+ 1 Spawner.kt\ncom/cobblemon/mod/common/api/spawning/spawner/Spawner$DefaultImpls\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,70:1\n766#2:71\n857#2,2:72\n766#2:74\n857#2,2:75\n*S KotlinDebug\n*F\n+ 1 Spawner.kt\ncom/cobblemon/mod/common/api/spawning/spawner/Spawner$DefaultImpls\n*L\n42#1:71\n42#1:72,2\n43#1:74\n43#1:75,2\n*E\n"])
-   internal class DefaultImpls {
-      @JvmStatic
-      fun <R> afterSpawn(`$this`: Spawner, action: SpawnAction<R>, result: R) {
-      }
-
-      @JvmStatic
-      fun getMatchingSpawns(`$this`: Spawner, ctx: SpawningContext): MutableList<SpawnDetail> {
-         val `$this$filter$iv`: java.lang.Iterable = `$this`.getSpawnPool().retrieve(ctx);
-         val `destination$iv$iv`: java.util.Collection = new ArrayList();
-
-         for (Object element$iv$iv : $this$filter$iv) {
-            if ((`element$iv$iv` as SpawnDetail).isSatisfiedBy(ctx)) {
-               `destination$iv$iv`.add(`element$iv$iv`);
+    fun getMatchingSpawns(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): List<SpawnDetail> {
+        val spawns = mutableListOf<SpawnDetail>()
+        spawns.addAll(spawnPool.retrieve(bucket, spawnablePosition).filter { it.isSatisfiedBy(spawnablePosition) })
+        spawnablePosition.influences.forEach { influence ->
+            val influencedSpawns = influence.injectSpawns(bucket, spawnablePosition)
+            if (influencedSpawns != null) {
+                spawns.addAll(influencedSpawns)
             }
-         }
+        }
+        return spawns
+    }
 
-         return `destination$iv$iv` as MutableList<SpawnDetail>;
-      }
+    /**
+     * Runs the spawner for a specific [SpawnablePosition] and calculates a [SpawnAction] that could spawn there.
+     * This does not trigger the resulting spawn. You can trigger the spawn in the same action by running
+     * [runForPosition] instead or manually complete the [SpawnAction] it returns using [SpawnAction.complete].
+     */
+    fun calculateSpawnActionForPosition(
+        cause: SpawnCause,
+        spawnablePosition: SpawnablePosition,
+    ): SpawnAction<*>? {
+        influences.removeIf { it.isExpired() }
+        spawnablePosition.influences.addAll(influences)
+        val bucket = chooseBucket(cause, spawnablePosition.influences)
+        return selector.select(
+            spawner = this,
+            bucket = bucket,
+            spawnablePositions = listOf(spawnablePosition),
+            maxSpawns = 1
+        ).firstOrNull()
+    }
 
-      @JvmStatic
-      fun copyInfluences(`$this`: Spawner): MutableList<SpawningInfluence> {
-         val `$this$filter$iv`: java.lang.Iterable = `$this`.getInfluences();
-         val `destination$iv$iv`: java.util.Collection = new ArrayList();
+    fun calculateSpawnActionsForArea(
+        zoneInput: SpawningZoneInput,
+        maxSpawns: Int?
+    ): List<SpawnAction<*>> {
+        val maxSpawns = maxSpawns ?: Cobblemon.config.maximumSpawnsPerPass
+        influences.removeIf { it.isExpired() }
 
-         for (Object element$iv$iv : $this$filter$iv) {
-            if (!(`element$iv$iv` as SpawningInfluence).isExpired()) {
-               `destination$iv$iv`.add(`element$iv$iv`);
+        val constrainedArea = constrainArea(zoneInput)
+            ?: return emptyList()
+
+        val areaBox = AABB.ofSize(
+            Vec3(constrainedArea.getCenter().toVec3f()),
+            ENTITY_LIMIT_CHUNK_RANGE * 16.0 * 2,
+            1000.0,
+            ENTITY_LIMIT_CHUNK_RANGE * 16.0 * 2
+        )
+
+        if (!constrainedArea.world.isBoxLoaded(areaBox)) {
+            return emptyList()
+        }
+
+        val numberNearby = constrainedArea.world.getEntitiesOfClass(
+            PokemonEntity::class.java,
+            areaBox,
+            PokemonEntity::countsTowardsSpawnCap
+        ).size
+
+        val chunksCovered = ENTITY_LIMIT_CHUNK_RANGE * ENTITY_LIMIT_CHUNK_RANGE
+        val maxPokemonPerChunk = max(Cobblemon.config.pokemonPerChunk, zoneInput.cause.spawner.maxPokemonPerChunk)
+        if (numberNearby.toFloat() / chunksCovered >= maxPokemonPerChunk) {
+            return emptyList()
+        }
+
+        val zone = generator.generate(this, constrainedArea)
+        val spawnablePositions = resolver.resolve(this, prioritizedAreaCalculators, zone)
+        val influences = influences + zone.unconditionalInfluences
+        val bucket = chooseBucket(zoneInput.cause, influences)
+
+        return selector.select(
+            spawner = this,
+            bucket = bucket,
+            spawnablePositions = spawnablePositions,
+            maxSpawns = maxSpawns
+        )
+    }
+
+    /**
+     * Runs the spawner at the given [SpawnablePosition] and returns whatever the calculated [SpawnAction] produces,
+     * if any spawn occurred. For most implementations of [SpawnAction], the resulting type is
+     * [EntitySpawnResult]. Technically you can make spawns for anything though.
+     */
+    fun runForPosition(
+        cause: SpawnCause,
+        spawnablePosition: SpawnablePosition
+    ): Any? {
+        val action = calculateSpawnActionForPosition(
+            cause = cause,
+            spawnablePosition = spawnablePosition
+        ) ?: return null
+
+        return action.complete()
+    }
+
+    fun runForArea(
+        zoneInput: SpawningZoneInput,
+        maxSpawns: Int? = null
+    ): List<Any> {
+        val spawnActions = calculateSpawnActionsForArea(zoneInput = zoneInput, maxSpawns = maxSpawns)
+        val results = mutableListOf<Any>()
+        for (spawnAction in spawnActions) {
+            spawnAction.complete()?.let(results::add)
+        }
+        return results
+    }
+
+    fun copyInfluences() = influences.filter { !it.isExpired() }.toMutableList()
+
+    fun chooseBucket(cause: SpawnCause, influences: List<SpawningInfluence>): SpawnBucket {
+        val buckets = Cobblemon.bestSpawner.config.buckets
+        val bucketWeights = buckets.associateWith { it.weight }.toMutableMap()
+        influences.forEach { it.affectBucketWeights(bucketWeights) }
+        val bucket = bucketWeights.entries.weightedSelection { it.value }?.key ?: buckets.first()
+        val event = SpawnBucketChosenEvent(
+            spawner = this,
+            spawnCause = cause,
+            bucket = bucket,
+            bucketWeights = bucketWeights
+        )
+        CobblemonEvents.SPAWN_BUCKET_CHOSEN.post(event)
+        return event.bucket
+    }
+
+    fun isValidStartPoint(world: Level, chunk: ChunkAccess, startPos: BlockPos.MutableBlockPos): Boolean {
+        val y = startPos.y
+        if (!world.isLoaded(startPos) || !world.isLoaded(startPos.setY(y + 1))) {
+            return false
+        }
+
+        val mid = chunk.getBlockState(startPos.setY(y))
+        val above = chunk.getBlockState(startPos.setY(y + 1))
+
+        // Above must be non-solid
+        if (!above.isPathfindable(PathComputationType.AIR)) {
+            return false
+        }
+
+        // Position must be non-air
+        if (mid.isAir) {
+            return false
+        }
+
+        return true
+    }
+
+    fun constrainArea(area: SpawningZoneInput): SpawningZoneInput? {
+        val basePos = BlockPos.MutableBlockPos(area.baseX, area.baseY, area.baseZ)
+        val originalY = area.baseY
+
+        val (chunkX, chunkZ) = Pair(SectionPos.blockToSectionCoord(area.baseX), SectionPos.blockToSectionCoord(area.baseZ))
+
+        // if the chunk isn't loaded, we don't want to go further & we don't want the getChunk function below to load/create the chunk.
+        if (!area.world.areEntitiesLoaded(ChunkPos.asLong(chunkX, chunkZ))) return null
+
+        val chunk = area.world.getChunk(chunkX, chunkZ, ChunkStatus.FULL) ?: return null
+
+        var valid = isValidStartPoint(area.world, chunk, basePos)
+
+        if (!valid) {
+            var offset = 1
+            do {
+                if (isValidStartPoint(area.world, chunk, basePos.setY(originalY + offset))) {
+                    valid = true
+                    basePos.y = originalY + offset
+                    break
+                } else if (isValidStartPoint(area.world, chunk, basePos.setY(originalY - offset))) {
+                    valid = true
+                    basePos.y = originalY - offset
+                    break
+                }
+                offset++
+            } while (offset <= Cobblemon.config.maxVerticalCorrectionBlocks)
+        }
+
+        if (valid) {
+            val min = area.world.squeezeWithinBounds(basePos)
+            val max = area.world.squeezeWithinBounds(basePos.move(area.length, area.height, area.width))
+            if (area.world.isLoaded(min) && area.world.isLoaded(max) &&
+                min.x < max.x && min.y < max.y && min.z < max.z
+            ) {
+                return SpawningZoneInput(
+                    cause = area.cause,
+                    world = area.world,
+                    baseX = min.x,
+                    baseY = min.y,
+                    baseZ = min.z,
+                    length = max.x - min.x,
+                    height = max.y - min.y,
+                    width = max.z - min.z
+                )
             }
-         }
+        }
 
-         return CollectionsKt.toMutableList(`destination$iv$iv` as java.util.List);
-      }
-
-      @JvmStatic
-      fun chooseBucket(`$this`: Spawner): SpawnBucket {
-         val buckets: java.util.List = Cobblemon.INSTANCE.getBestSpawner().getConfig().getBuckets();
-         val influences: java.util.List = `$this`.copyInfluences();
-         val weightMap: java.util.Map = new LinkedHashMap();
-
-         for (SpawnBucket bucket : buckets) {
-            var sum: Float = chosenSum.getWeight();
-
-            for (SpawningInfluence influence : influences) {
-               sum = bucket.affectBucketWeight(chosenSum, sum);
-            }
-
-            weightMap.put(chosenSum, sum);
-         }
-
-         val var9: Float = CollectionsKt.sumOfFloat(weightMap.values());
-         val var10: Float = var9 - new Random().nextFloat(var9);
-         var var11: Float = 0.0F;
-
-         for (SpawnBucket bucket : buckets) {
-            val var10001: Any = weightMap.get(var14);
-            var11 += (var10001 as java.lang.Number).floatValue();
-            if (var11 >= var10) {
-               return var14;
-            }
-         }
-
-         return CollectionsKt.first(buckets) as SpawnBucket;
-      }
-   }
+        return null
+    }
 }

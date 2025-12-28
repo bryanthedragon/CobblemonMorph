@@ -1,27 +1,33 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ModDependant
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
 import java.nio.file.Path
-import java.util.ArrayList;
-import kotlin.jvm.internal.markers.KMappedMarker
 
-public class SpawnSet : java.lang.Iterable<SpawnDetail>, ModDependant, KMappedMarker {
-   public final var enabled: Boolean = true
-   public open var neededInstalledMods: List<String> = CollectionsKt.emptyList()
-   public open var neededUninstalledMods: List<String> = CollectionsKt.emptyList()
-   public final lateinit var path: Path
-   public final var spawns: MutableList<SpawnDetail> = (new ArrayList()) as java.util.List
+/**
+ * A simple collection of spawns to make it more straightforward to read from
+ * a file.
+ *
+ * @author Hiroku
+ * @since January 27th, 2022
+ */
+class SpawnSet : Iterable<SpawnDetail>, ModDependant {
+    var enabled = true
+    override var neededInstalledMods = listOf<String>()
+    override var neededUninstalledMods = listOf<String>()
+    var spawns = mutableListOf<SpawnDetail>()
+    @Transient
+    lateinit var path: Path
 
-   public fun isEnabled(): Boolean {
-      return this.enabled && this.isModDependencySatisfied();
-   }
+    fun isEnabled(): Boolean = enabled && isModDependencySatisfied()
 
-   public override operator fun iterator(): MutableIterator<SpawnDetail> {
-      return this.spawns.iterator();
-   }
-
-   override fun isModDependencySatisfied(): Boolean {
-      return ModDependant.DefaultImpls.isModDependencySatisfied(this);
-   }
+    override fun iterator() = spawns.iterator()
 }

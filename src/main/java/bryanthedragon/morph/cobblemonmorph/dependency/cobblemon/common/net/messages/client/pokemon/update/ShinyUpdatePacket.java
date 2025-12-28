@@ -1,26 +1,22 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class ShinyUpdatePacket(pokemon: () -> Pokemon, value: Boolean) : BooleanUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
-
-   init {
-      this.id = ID;
-   }
-
-   public open fun set(pokemon: Pokemon, value: Boolean) {
-      pokemon.setShiny(value);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): ShinyUpdatePacket {
-         return new ShinyUpdatePacket(PokemonUpdatePacket.Companion.decodePokemon(buffer), buffer.readBoolean());
-      }
-   }
+class ShinyUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : BooleanUpdatePacket<ShinyUpdatePacket>(pokemon, value) {
+    override val id = ID
+    override fun set(pokemon: Pokemon, value: Boolean) { pokemon.shiny = value }
+    companion object {
+        val ID = cobblemonResource("shiny_update")
+        fun decode(buffer: RegistryFriendlyByteBuf) = ShinyUpdatePacket(decodePokemon(buffer), buffer.readBoolean())
+    }
 }

@@ -1,39 +1,27 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonProperty
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+class StringProperty(
+    val key: String,
+    val value: String,
+    private val applicator: (pokemon: Pokemon, value: String) -> Unit,
+    private val matcher: (pokemon: Pokemon, value: String) -> Boolean
+) : CustomPokemonProperty {
 
-public class StringProperty(key: String, value: String, applicator: (Pokemon, String) -> Unit, matcher: (Pokemon, String) -> Boolean) : CustomPokemonProperty {
-   private final val applicator: (Pokemon, String) -> Unit
-   public final val key: String
-   private final val matcher: (Pokemon, String) -> Boolean
-   public final val value: String
+    override fun apply(pokemon: Pokemon) {
+        this.applicator.invoke(pokemon, this.value)
+    }
 
-   init {
-      this.key = key;
-      this.value = value;
-      this.applicator = applicator;
-      this.matcher = matcher;
-   }
+    override fun matches(pokemon: Pokemon) = this.matcher.invoke(pokemon, this.value)
 
-   public override fun apply(pokemon: Pokemon) {
-      this.applicator.invoke(pokemon, this.value);
-   }
-
-   public override fun matches(pokemon: Pokemon): Boolean {
-      return this.matcher.invoke(pokemon, this.value) as java.lang.Boolean;
-   }
-
-   public override fun asString(): String {
-      return "${this.key}=${this.value}";
-   }
-
-   override fun apply(pokemonEntity: PokemonEntity) {
-      CustomPokemonProperty.DefaultImpls.apply(this, pokemonEntity);
-   }
-
-   override fun matches(pokemonEntity: PokemonEntity): Boolean {
-      return CustomPokemonProperty.DefaultImpls.matches(this, pokemonEntity);
-   }
+    override fun asString() = "${this.key}=${this.value}"
 }

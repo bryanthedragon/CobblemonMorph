@@ -1,123 +1,102 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.controller
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItems
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.EvolutionController
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.EvolutionDisplay
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.PreProcessor
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgress
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.green
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.PartyOverlayDataControl
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
-import java.util.HashSet
-import kotlin.jvm.internal.CollectionToArray
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
-import net.minecraft.network.FriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asTranslated
+import com.mojang.serialization.Codec
+import net.minecraft.client.Minecraft
 
-@SourceDebugExtension(["SMAP\nClientEvolutionController.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ClientEvolutionController.kt\ncom/cobblemon/mod/common/pokemon/evolution/controller/ClientEvolutionController\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,96:1\n1855#2,2:97\n*S KotlinDebug\n*F\n+ 1 ClientEvolutionController.kt\ncom/cobblemon/mod/common/pokemon/evolution/controller/ClientEvolutionController\n*L\n71#1:97,2\n*E\n"])
-public class ClientEvolutionController(pokemon: Pokemon) : EvolutionController<EvolutionDisplay> {
-   private final val evolutions: HashSet<EvolutionDisplay>
-   public open val pokemon: Pokemon
+class ClientEvolutionController(
+    private val pokemon: Pokemon,
+    evolutions: Set<EvolutionDisplay>,
+) : EvolutionController<EvolutionDisplay, ClientEvolutionController.Intermediate> {
+    private val evolutions = evolutions.toMutableSet()
 
-   public open val size: Int
-      public open get() {
-         return this.evolutions.size();
-      }
+    override val size: Int
+        get() = this.evolutions.size
 
+    override fun pokemon(): Pokemon = this.pokemon
 
-   init {
-      this.pokemon = pokemon;
-      this.evolutions = new HashSet<>();
-   }
+    override fun start(evolution: EvolutionDisplay) {
+        CobblemonNetwork.sendToServer(AcceptEvolutionPacket(this.pokemon, evolution))
+    }
 
-   public open fun start(evolution: EvolutionDisplay) {
-      CobblemonNetwork.INSTANCE.sendPacketToServer(new AcceptEvolutionPacket(this.getPokemon(), evolution));
-   }
+    override fun progress(): Collection<EvolutionProgress<*>> {
+        // Nothing is done on the client
+        return emptyList()
+    }
 
-   public override fun progress(): Collection<EvolutionProgress<*>> {
-      return CollectionsKt.emptyList();
-   }
+    override fun <P : EvolutionProgress<*>> trackProgress(progress: P): P {
+        // Nothing is done on the client
+        return progress
+    }
 
-   public override fun <P : EvolutionProgress<*>> trackProgress(progress: Any): Any {
-      return (P)progress;
-   }
+    override fun <P : EvolutionProgress<*>> progressFirstOrCreate(predicate: (progress: EvolutionProgress<*>) -> Boolean, progressFactory: () -> P): P {
+        // Nothing is done on the client
+        return progressFactory()
+    }
 
-   public override fun <P : EvolutionProgress<*>> progressFirstOrCreate(predicate: (EvolutionProgress<*>) -> Boolean, progressFactory: () -> Any): Any {
-      return (P)(progressFactory.invoke() as EvolutionProgress);
-   }
+    override fun add(element: EvolutionDisplay): Boolean {
+        val result = this.evolutions.add(element)
+        if (result) sendPlayerNotification()
+        return result
+    }
 
-   public override fun saveToNBT(): Tag {
-      return (new CompoundTag()) as Tag;
-   }
+    override fun addAll(elements: Collection<EvolutionDisplay>) = this.evolutions.addAll(elements)
 
-   public override fun loadFromNBT(nbt: Tag) {
-   }
+    override fun clear() {
+        this.evolutions.clear()
+    }
 
-   public override fun saveToJson(): JsonElement {
-      return (new JsonArray()) as JsonElement;
-   }
+    override fun iterator() = this.evolutions.iterator()
 
-   public override fun loadFromJson(json: JsonElement) {
-   }
+    override fun remove(element: EvolutionDisplay) = this.evolutions.remove(element)
 
-   public override fun saveToBuffer(buffer: FriendlyByteBuf, toClient: Boolean) {
-   }
+    override fun removeAll(elements: Collection<EvolutionDisplay>) = this.evolutions.removeAll(elements.toSet())
 
-   public override fun loadFromBuffer(buffer: FriendlyByteBuf) {
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         val it: EvolutionDisplay = `element$iv` as EvolutionDisplay;
-         this.add(it);
-      }
-   }
+    override fun retainAll(elements: Collection<EvolutionDisplay>) = this.evolutions.retainAll(elements.toSet())
 
-   public open fun add(element: EvolutionDisplay): Boolean {
-      return this.evolutions.add(element);
-   }
+    override fun contains(element: EvolutionDisplay) = this.evolutions.contains(element)
 
-   public override fun addAll(elements: Collection<EvolutionDisplay>): Boolean {
-      return this.evolutions.addAll(elements);
-   }
+    override fun containsAll(elements: Collection<EvolutionDisplay>) = this.evolutions.containsAll(elements)
 
-   public override fun clear() {
-      this.evolutions.clear();
-   }
+    override fun isEmpty() = this.evolutions.isEmpty()
 
-   public override operator fun iterator(): MutableIterator<EvolutionDisplay> {
-      val var10000: java.util.Iterator = this.evolutions.iterator();
-      return var10000;
-   }
+    override fun asIntermediate(): Intermediate = Intermediate(this.evolutions)
 
-   public open fun remove(element: EvolutionDisplay): Boolean {
-      return this.evolutions.remove(element);
-   }
+    fun sendPlayerNotification() {
+        if (pokemon.heldItem?.item != CobblemonItems.EVERSTONE) {
+            PartyOverlayDataControl.pokemonGainedEvo(pokemon.uuid, 1)
+        }
+    }
 
-   public override fun removeAll(elements: Collection<EvolutionDisplay>): Boolean {
-      return this.evolutions.removeAll(CollectionsKt.toSet(elements));
-   }
+    record Intermediate(val evolutions: Set<EvolutionDisplay>): PreProcessor {
+        override fun create(pokemon: Pokemon): ClientEvolutionController = ClientEvolutionController(pokemon, this.evolutions)
+    }
 
-   public override fun retainAll(elements: Collection<EvolutionDisplay>): Boolean {
-      return this.evolutions.retainAll(CollectionsKt.toSet(elements));
-   }
-
-   public open operator fun contains(element: EvolutionDisplay): Boolean {
-      return this.evolutions.contains(element);
-   }
-
-   public override fun containsAll(elements: Collection<EvolutionDisplay>): Boolean {
-      return this.evolutions.containsAll(elements);
-   }
-
-   public override fun isEmpty(): Boolean {
-      return this.evolutions.isEmpty();
-   }
-
-   override fun <T> toArray(array: Array<T>): Array<T> {
-      return (T[])CollectionToArray.toArray(this, array);
-   }
-
-   override fun toArray(): Array<Any> {
-      return CollectionToArray.toArray(this);
-   }
+    companion object {
+        @JvmStatic
+        val CODEC: Codec<Intermediate> = EvolutionDisplay.CODEC.listOf()
+            .xmap(
+                { displays -> Intermediate(displays.toSet()) },
+                { controller -> controller.evolutions.toMutableList() }
+            )
+    }
 }

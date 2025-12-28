@@ -1,0 +1,41 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.riding
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ServerNetworkPacketHandler
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.DismountPokemonPacket
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.level.ServerPlayer
+final class DismountPokemonPacketHandler : ServerNetworkPacketHandler<DismountPokemonPacket> {
+
+    override fun handle(
+        packet: DismountPokemonPacket,
+        server: MinecraftServer,
+        player: ServerPlayer
+    ) {
+        if (!(player.isPassenger && player.vehicle is PokemonEntity)) return
+
+        val pokemon = player.vehicle as PokemonEntity
+        if (!canPlayerStopRidingPokemon(pokemon, player)) return
+        if (pokemon.controllingPassenger == player) {
+            pokemon.passengers.forEach { it.stopRiding() }
+        }
+        else {
+            player.stopRiding()
+        }
+    }
+
+    private fun canPlayerStopRidingPokemon(pokemon: PokemonEntity, player: ServerPlayer): Boolean {
+        return pokemon.ifRidingAvailableSupply(false) { behaviour, settings, state ->
+            behaviour.canStopRiding(settings, state, pokemon, player)
+        }
+    }
+
+}

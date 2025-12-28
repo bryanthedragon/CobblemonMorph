@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
@@ -6,85 +14,83 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.ShowdownService
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.AbilityRegistrySyncPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.abilities.HiddenAbilityType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import com.google.gson.JsonArray
-import java.util.LinkedHashMap
-import java.util.Locale
-import kotlin.jvm.internal.SourceDebugExtension
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
+import java.io.File
+import kotlin.collections.set
 
-@SourceDebugExtension(["SMAP\nAbilities.kt\nKotlin\n*S Kotlin\n*F\n+ 1 Abilities.kt\ncom/cobblemon/mod/common/api/abilities/Abilities\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,70:1\n1855#2,2:71\n*S KotlinDebug\n*F\n+ 1 Abilities.kt\ncom/cobblemon/mod/common/api/abilities/Abilities\n*L\n67#1:71,2\n*E\n"])
-public object Abilities : DataRegistry {
-   public final val DUMMY: AbilityTemplate = new AbilityTemplate("dummy", null, null, null, 14, null)
-   private final val abilityMap: MutableMap<String, AbilityTemplate> = (new LinkedHashMap()) as java.util.Map
-   public open val id: ResourceLocation = MiscUtilsKt.cobblemonResource("abilities")
-   public open val observable: SimpleObservable<Abilities> = new SimpleObservable()
-   public open val type: PackType = PackType.SERVER_DATA
+/**
+ * Registry for all known Abilities
+ */final class Abilities : DataRegistry {
 
-   public override fun reload(manager: ResourceManager) {
-      PotentialAbility.Companion.getTypes().clear();
-      PotentialAbility.Companion.getTypes().add(CommonAbilityType.INSTANCE);
-      PotentialAbility.Companion.getTypes().add(HiddenAbilityType.INSTANCE);
-      abilityMap.clear();
-      val abilitiesJson: JsonArray = ShowdownService.Companion.getService().getAbilityIds();
-      var i: Int = 0;
+    override val id = cobblemonResource("abilities")
+    override val type = PackType.SERVER_DATA
+    override val observable = SimpleObservable<Abilities>()
 
-      for (int var4 = abilitiesJson.size(); i < var4; i++) {
-         val id: java.lang.String = abilitiesJson.get(i).getAsString();
-         this.register(new AbilityTemplate(id, null, null, null, 14, null));
-      }
+    val DUMMY = AbilityTemplate(name = "dummy")
 
-      Cobblemon.INSTANCE.getLOGGER().info("Loaded {} abilities", abilityMap.size());
-      this.getObservable().emit(this);
-   }
+    private val abilityMap = mutableMapOf<String, AbilityTemplate>()
+    internal val abilityScripts = mutableMapOf<String, String>() // abilityId to JavaScript
 
-   public override fun sync(player: ServerPlayer) {
-      new AbilityRegistrySyncPacket(this.all()).sendToPlayer(player);
-   }
+    override fun reload(manager: ResourceManager) {
+        PotentialAbility.types.clear()
+        PotentialAbility.types.add(CommonAbilityType)
+        PotentialAbility.types.add(HiddenAbilityType)
+        this.abilityMap.clear()
+        this.abilityScripts.clear()
 
-   public fun register(ability: AbilityTemplate): AbilityTemplate {
-      val var10000: java.util.Map = abilityMap;
-      val var10001: java.lang.String = ability.getName().toLowerCase(Locale.ROOT);
-      var10000.put(var10001, ability);
-      return ability;
-   }
+        ShowdownService.service.resetRegistryData("ability")
+        manager.listResources("abilities") { it.path.endsWith(".js") }.forEach { (identifier, resource) ->
+            resource.open().use { stream ->
+                stream.bufferedReader().use { reader ->
+                    val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
+                    val js = reader.readText()
+                    abilityScripts[resolvedIdentifier.path] = js
+                }
+            }
+        }
+        ShowdownService.service.sendRegistryData(abilityScripts, "ability")
 
-   public fun all(): List<AbilityTemplate> {
-      return CollectionsKt.toList(abilityMap.values());
-   }
+        val abilitiesJson = ShowdownService.service.getRegistryData("ability")
+        for (i in 0 until abilitiesJson.size()) {
+            val jsonAbility = abilitiesJson[i].asJsonObject
+            val id = jsonAbility.get("id").asString
+            val ability = AbilityTemplate(id)
+            this.register(ability)
+        }
+        Cobblemon.LOGGER.info("Loaded {} abilities", this.abilityMap.size)
+        this.observable.emit(this)
+    }
 
-   public fun first(): AbilityTemplate {
-      return CollectionsKt.first(abilityMap.values()) as AbilityTemplate;
-   }
+    override fun sync(player: ServerPlayer) {
+        AbilityRegistrySyncPacket(all()).sendToPlayer(player)
+    }
 
-   public fun get(name: String): AbilityTemplate? {
-      val var10000: java.util.Map = abilityMap;
-      val var10001: java.lang.String = name.toLowerCase(Locale.ROOT);
-      return var10000.get(var10001) as AbilityTemplate;
-   }
+    @JvmStatic
+    fun register(ability: AbilityTemplate): AbilityTemplate {
+        this.abilityMap[ability.name.lowercase()] = ability
+        return ability
+    }
 
-   public fun getOrException(name: String): AbilityTemplate {
-      val var10000: AbilityTemplate = this.get(name);
-      if (var10000 == null) {
-         throw new IllegalArgumentException("Unable to find ability of name: $name");
-      } else {
-         return var10000;
-      }
-   }
+    @JvmStatic
+    fun all() = this.abilityMap.values.toList()
+    @JvmStatic
+    fun first() = this.abilityMap.values.first()
+    @JvmStatic
+    fun get(name: String) = abilityMap[name.lowercase()]
+    @JvmStatic
+    fun getOrDummy(name: String) = get(name) ?: DUMMY
+    @JvmStatic
+    fun getOrException(name: String) = get(name) ?: throw IllegalArgumentException("Unable to find ability of name: $name")
+    @JvmStatic
+    fun count() = this.abilityMap.size
 
-   public fun count(): Int {
-      return abilityMap.size();
-   }
+    internal fun receiveSyncPacket(abilities: Collection<AbilityTemplate>) {
+        this.abilityMap.clear()
+        abilities.forEach { ability -> this.register(ability) }
+    }
 
-   internal fun receiveSyncPacket(abilities: Collection<AbilityTemplate>) {
-      abilityMap.clear();
-
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         this.register(`element$iv` as AbilityTemplate);
-      }
-   }
 }

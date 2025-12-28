@@ -1,29 +1,31 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class ClearEvolutionsPacket(pokemon: () -> Pokemon) : PokemonUpdatePacket(pokemon) {
-   public open val id: ResourceLocation
+class ClearEvolutionsPacket(pokemon: () -> Pokemon?) : PokemonUpdatePacket<ClearEvolutionsPacket>(pokemon) {
 
-   init {
-      this.id = ID;
-   }
+    override val id = ID
 
-   public override fun encodeDetails(buffer: FriendlyByteBuf) {
-   }
+    override fun encodeDetails(buffer: RegistryFriendlyByteBuf) {}
 
-   public override fun applyToPokemon() {
-      (this.getPokemon().invoke() as Pokemon).getEvolutionProxy().client().clear();
-   }
+    override fun applyToPokemon() {
+        this.pokemon()?.evolutionProxy?.client()?.clear()
+    }
 
-   public companion object {
-      public final val ID: ResourceLocation
+    companion object {
+        val ID = cobblemonResource("clear_evolutions")
+        fun decode(buffer: RegistryFriendlyByteBuf) = ClearEvolutionsPacket(decodePokemon(buffer))
+    }
 
-      public fun decode(buffer: FriendlyByteBuf): ClearEvolutionsPacket {
-         return new ClearEvolutionsPacket(PokemonUpdatePacket.Companion.decodePokemon(buffer));
-      }
-   }
 }

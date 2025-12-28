@@ -1,29 +1,29 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.spawncondition
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Berry
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.core.Holder
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.biome.Biome
 
-public class AllBiomeCondition(minGroveSize: Int, maxGroveSize: Int) : BerrySpawnCondition {
-   public final val maxGroveSize: Int
-   public final val minGroveSize: Int
+class AllBiomeCondition(val minGroveSize: Int, val maxGroveSize: Int) : BerrySpawnCondition{
+    override fun canSpawn(berry: Berry, biome: Holder<Biome>): Boolean {
+        return true
+    }
 
-   init {
-      this.minGroveSize = minGroveSize;
-      this.maxGroveSize = maxGroveSize;
-   }
+    override fun getGroveSize(random: RandomSource): Int {
+        return random.nextIntBetweenInclusive(minGroveSize, maxGroveSize)
+    }
 
-   public override fun canSpawn(berry: Berry, biome: Holder<Biome>): Boolean {
-      return true;
-   }
-
-   public override fun getGroveSize(random: RandomSource): Int {
-      return random.m_216332_(this.minGroveSize, this.maxGroveSize);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-   }
+    companion object {
+        val ID = cobblemonResource("all_biome")
+    }
 }

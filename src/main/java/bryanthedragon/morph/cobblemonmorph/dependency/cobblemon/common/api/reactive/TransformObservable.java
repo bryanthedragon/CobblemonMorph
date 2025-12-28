@@ -1,50 +1,52 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
 
-@SourceDebugExtension(["SMAP\nTransformObservable.kt\nKotlin\n*S Kotlin\n*F\n+ 1 TransformObservable.kt\ncom/cobblemon/mod/common/api/reactive/TransformObservable\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,52:1\n1#2:53\n*E\n"])
-public class TransformObservable<I, O>(observable: Observable<Any>, transform: Transform<Any, Any>) : SimpleObservable<O> {
-   private final val observable: Observable<Any>
-   public final var rootSubscription: ObservableSubscription<Any>?
-   private final val transform: Transform<Any, Any>
+/**
+ * An [SimpleObservable] implementation created by piping a root [Observable]. It will try to emit values
+ * whenever the root [Observable] emits a value by running the emitted value through the given [Transform].
+ * A [TransformObservable] must be subscribed to before any subscriptions are made on the root [Observable].
+ *
+ * This class handles [NoTransformThrowable] from the transform and will not propagate a value if that occurs.
+ * If [NoTransformThrowable.terminate] is true, all subscriptions to this [Observable] will be removed, including
+ * this subscription to the root [Observable].
+ *
+ * @author Hiroku
+ * @since November 26th, 2021
+ */
+class TransformObservable<I, O>(
+    private val observable: Observable<I>,
+    private val transform: Transform<I, O>
+) : SimpleObservable<O>() {
+    var rootSubscription: ObservableSubscription<I>? = null
 
-   init {
-      this.observable = observable;
-      this.transform = transform;
-   }
+    override fun subscribe(priority: Priority, handler: (O) -> Unit): ObservableSubscription<O> {
+        if (rootSubscription == null) {
+            rootSubscription = observable.subscribe(priority) { parentHandler(it) }
+        }
 
-   public override fun subscribe(priority: Priority, handler: (Any) -> Unit): ObservableSubscription<Any> {
-      if (this.rootSubscription == null) {
-         this.rootSubscription = this.observable.subscribe(priority, (new Function1<I, Unit>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
+        return super.subscribe(priority, handler)
+    }
+
+    fun terminate() {
+        rootSubscription?.let { observable.unsubscribe(it) }
+    }
+
+    fun parentHandler(input: I) {
+        try {
+            emit(transform(input))
+        } catch (throwable: NoTransformThrowable) {
+            if (throwable.terminate) {
+                terminate()
             }
-
-            public final void invoke(I it) {
-               this.this$0.parentHandler((I)it);
-            }
-         }) as (I?) -> Unit);
-      }
-
-      return super.subscribe(priority, handler);
-   }
-
-   public fun terminate() {
-      if (this.rootSubscription != null) {
-         this.observable.unsubscribe(this.rootSubscription);
-      }
-   }
-
-   public fun parentHandler(input: Any) {
-      try {
-         this.emit(this.transform.invoke((I)input));
-      } catch (var3: NoTransformThrowable) {
-         if (var3.getTerminate()) {
-            this.terminate();
-         }
-      }
-   }
+        }
+    }
 }

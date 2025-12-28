@@ -1,58 +1,65 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.link.PCLink
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readIdentifier
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeIdentifier
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class OpenPCPacket(storeID: UUID) : NetworkPacket<OpenPCPacket> {
-   public open val id: ResourceLocation
-   public final val storeID: UUID
+/**
+ * Notifies a player that they must open the PC GUI for the given PC store ID. This is assuming
+ * that a [PCLink] has been created that will allow them to make edits to it.
+ *
+ * A possible future improvement to this would be having a readOnly boolean field which will lock
+ * modifying actions on the client for read-only presentation of PCs.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.pc.OpenPCHandler]
+ *
+ * @author Hiroku
+ * @since June 20th, 2022
+ */
+class OpenPCPacket : NetworkPacket<OpenPCPacket> {
+    val storeID: UUID
+    val box: Int?
+    val unseenWallpapers: Set<ResourceLocation>
 
-   init {
-      this.storeID = storeID;
-      this.id = ID;
-   }
+    @JvmOverloads
+    @Deprecated("Use the constructor with the PCStore object instead, this will become private in a future title update", level = DeprecationLevel.WARNING)
+    constructor(storeID: UUID, box: Int? = null, unseenWallpapers: Set<ResourceLocation> = emptySet()) {
+        this.storeID = storeID
+        this.box = box
+        this.unseenWallpapers = unseenWallpapers
+    }
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.storeID);
-   }
+    @JvmOverloads
+    constructor(pc: PCStore, box: Int? = null): this(pc.uuid, box, pc.unseenWallpapers)
 
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
+    override val id = ID
 
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(storeID)
+        buffer.writeNullable(box) { buf, value -> buf.writeInt(value)}
+        buffer.writeCollection(unseenWallpapers) { _, it -> buffer.writeResourceLocation(it) }
+    }
 
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): OpenPCPacket {
-         val var10002: UUID = buffer.m_130259_();
-         return new OpenPCPacket(var10002);
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("open_pc")
+        fun decode(buffer: RegistryFriendlyByteBuf) = OpenPCPacket(
+            buffer.readUUID(),
+            buffer.readNullable { it.readInt() },
+            buffer.readList { buffer.readResourceLocation() }.toSet()
+        )
+    }
 }

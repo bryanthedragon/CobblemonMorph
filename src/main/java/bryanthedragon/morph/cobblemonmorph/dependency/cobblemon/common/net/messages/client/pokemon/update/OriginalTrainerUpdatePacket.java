@@ -1,42 +1,36 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class OriginalTrainerUpdatePacket(pokemon: () -> Pokemon, username: String?) : SingleUpdatePacket(pokemon, username) {
-   public open val id: ResourceLocation
+class OriginalTrainerUpdatePacket(pokemon: () -> Pokemon?, username: String?) : SingleUpdatePacket<String?, OriginalTrainerUpdatePacket>(pokemon, username) {
+    override val id = ID
 
-   init {
-      this.id = ID;
-   }
+    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeNullable(this.value) { _, v -> buffer.writeString(v) }
+    }
 
-   public override fun encodeValue(buffer: FriendlyByteBuf) {
-      buffer.m_236821_(this.getValue(), OriginalTrainerUpdatePacket::encodeValue$lambda$0);
-   }
+    override fun set(pokemon: Pokemon, value: String?) {
+        pokemon.originalTrainerName = value
+    }
 
-   public open fun set(pokemon: Pokemon, value: String?) {
-      pokemon.setOriginalTrainerName(value);
-   }
-
-   @JvmStatic
-   fun `encodeValue$lambda$0`(`$buffer`: FriendlyByteBuf, var1: FriendlyByteBuf, v: java.lang.String) {
-      `$buffer`.m_130070_(v);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): OriginalTrainerUpdatePacket {
-         return new OriginalTrainerUpdatePacket(
-            PokemonUpdatePacket.Companion.decodePokemon(buffer), buffer.m_236868_(OriginalTrainerUpdatePacket.Companion::decode$lambda$0) as java.lang.String
-         );
-      }
-
-      @JvmStatic
-      fun `decode$lambda$0`(`$buffer`: FriendlyByteBuf, it: FriendlyByteBuf): java.lang.String {
-         return `$buffer`.m_130277_();
-      }
-   }
+    companion object {
+        val ID = cobblemonResource("original_trainer_update")
+        fun decode(buffer: RegistryFriendlyByteBuf): OriginalTrainerUpdatePacket {
+            val pokemon = decodePokemon(buffer)
+            val originalTrainer = buffer.readNullable { buffer.readString() }
+            return OriginalTrainerUpdatePacket(pokemon, originalTrainer)
+        }
+    }
 }

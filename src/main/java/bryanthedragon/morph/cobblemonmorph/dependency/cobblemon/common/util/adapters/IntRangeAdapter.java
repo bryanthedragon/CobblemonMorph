@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
 import com.google.gson.JsonDeserializationContext
@@ -7,28 +15,32 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-import kotlin.text.MatchResult.Destructured
 
-public object IntRangeAdapter : JsonSerializer<IntRange>, JsonDeserializer<IntRange> {
-   private final val PATTERN: Regex = new Regex("(-?\\d+)-?(-?\\d+)?")
+/**
+ * Adapts an IntRange into a simple hyphenated integer pair string. IntRange(2, 4) is serialized as
+ * "2-4", and one-element ranges are serialized as single integers such that IntRange(10, 10)
+ * serializes as "10".
+ *
+ * @author Hiroku, Qu
+ * @since February 14th, 2022
+ */final class IntRangeAdapter : JsonSerializer<IntRange>, JsonDeserializer<IntRange> {
 
-   public open fun serialize(range: IntRange, type: Type, ctx: JsonSerializationContext): JsonElement {
-      return if (range.getFirst() == range.getLast())
-         (new JsonPrimitive(range.getFirst())) as JsonElement
-         else
-         (new JsonPrimitive("${range.getFirst()}-${range.getLast()}")) as JsonElement;
-   }
+    private val PATTERN = "(-?\\d+)-?(-?\\d+)?".toRegex()
 
-   public open fun deserialize(json: JsonElement, type: Type, context: JsonDeserializationContext): IntRange {
-      val var10000: Regex = PATTERN;
-      val var10001: java.lang.String = json.getAsString();
-      val var7: MatchResult = Regex.find$default(var10000, var10001, 0, 2, null);
-      val var4: Destructured = var7.getDestructured();
-      val start: java.lang.String = var4.getMatch().getGroupValues().get(1) as java.lang.String;
-      val end: java.lang.String = var4.getMatch().getGroupValues().get(2) as java.lang.String;
-      return if (end.length() == 0)
-         new IntRange(Integer.parseInt(start), Integer.parseInt(start))
-         else
-         new IntRange(Integer.parseInt(start), Integer.parseInt(end));
-   }
+    override fun serialize(range: IntRange, type: Type, ctx: JsonSerializationContext): JsonElement {
+        return if (range.first == range.last) {
+            JsonPrimitive(range.first)
+        } else {
+            JsonPrimitive("${range.first}-${range.last}")
+        }
+    }
+
+    override fun deserialize(json: JsonElement, type: Type, context: JsonDeserializationContext): IntRange {
+        val (start, end) = PATTERN.find(json.asString)!!.destructured
+        return if (end.isEmpty()) {
+            IntRange(start.toInt(), start.toInt())
+        } else {
+            IntRange(start.toInt(), end.toInt())
+        }
+    }
 }

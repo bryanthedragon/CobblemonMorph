@@ -1,12 +1,26 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Abilities
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.AbilityPool
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.CommonAbility
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.PotentialAbility
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ai.config.BehaviourConfig
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.ShowdownIdentifiable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.DropTable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.Decodable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.Encodable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.effect.ShoulderEffect
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.egg.EggGroup
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution
@@ -15,707 +29,341 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.experience.ExperienceGroups
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.Learnset
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.StatProvider
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.RidingProperties
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalTypes
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.abilities.HiddenAbility
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.ai.FormPokemonBehaviour
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.lighthing.LightingData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import io.netty.buffer.ByteBuf
-import java.util.ArrayList;
-import java.util.LinkedHashSet
-import java.util.Locale
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
+import com.google.gson.annotations.SerializedName
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.EntityDimensions
+import net.minecraft.resources.ResourceLocation
+
+class FormData(
+    name: String = "Normal",
+    // Internal for the sake of the base stat provider
+    @SerializedName("baseStats")
+    internal var _baseStats: MutableMap<Stat, Int>? = null,
+    @SerializedName("maleRatio")
+    private var _maleRatio: Float? = null,
+    @SerializedName("baseScale")
+    private var _baseScale: Float? = null,
+    @SerializedName("hitbox")
+    private var _hitbox: EntityDimensions? = null,
+    @SerializedName("catchRate")
+    private var _catchRate: Int? = null,
+    @SerializedName("experienceGroup")
+    private var _experienceGroup: ExperienceGroup? = null,
+    @SerializedName("baseExperienceYield")
+    private var _baseExperienceYield: Int? = null,
+    @SerializedName("_baseFriendship")
+    private var _baseFriendship: Int? = null,
+    @SerializedName("evYield")
+    private var _evYield: MutableMap<Stat, Int>? = null,
+    @SerializedName("primaryType")
+    private var _primaryType: ElementalType? = null,
+    @SerializedName("secondaryType")
+    private var _secondaryType: ElementalType? = null,
+    @SerializedName("shoulderMountable")
+    private val _shoulderMountable: Boolean? = null,
+    @SerializedName("shoulderEffects")
+    private val _shoulderEffects: MutableList<ShoulderEffect>? = null,
+    @SerializedName("moves")
+    private var _moves: Learnset? = null,
+    @SerializedName("evolutions")
+    private val _evolutions: MutableSet<Evolution>? = null,
+    @SerializedName("abilities")
+    private var _abilities: AbilityPool? = null,
+    @SerializedName("drops")
+    private var _drops: DropTable? = null,
+    @SerializedName("pokedex")
+    private var _pokedex: MutableList<String>? = null,
+    @SerializedName("preEvolution")
+    private val _preEvolution: PreEvolution? = null,
+    private var standingEyeHeight: Float? = null,
+    private var swimmingEyeHeight: Float? = null,
+    private var flyingEyeHeight: Float? = null,
+    @SerializedName("labels")
+    private val _labels: Set<String>? = null,
+    @SerializedName("dynamaxBlocked")
+    private var _dynamaxBlocked: Boolean? = null,
+    @SerializedName("eggGroups")
+    private val _eggGroups: Set<EggGroup>? = null,
+    @SerializedName("height")
+    private var _height: Float? = null,
+    @SerializedName("weight")
+    private var _weight: Float? = null,
+    @SerializedName("riding")
+    private var _riding: RidingProperties? = null,
+    @SerializedName("baseAI")
+    private var _baseAI: MutableList<BehaviourConfig>? = null,
+    @SerializedName("ai")
+    private var _ai: MutableList<BehaviourConfig>? = null,
+    val requiredMove: String? = null,
+    val requiredItem: String? = null,
+    /** For forms that can accept different items (e.g. Arceus-Grass: Meadow Plate or Grassium-Z). */
+    val requiredItems: List<String>? = null,
+    /**
+     * The [MoveTemplate] of the signature attack of the G-Max form.
+     * This is always null on any form aside G-Max.
+     */
+    val gigantamaxMove: MoveTemplate? = null,
+    @SerializedName("battleTheme")
+    private var _battleTheme: ResourceLocation? = null,
+    @SerializedName("lightingData")
+    private var _lightingData: LightingData? = null
+) : Decodable, Encodable, ShowdownIdentifiable {
+    @SerializedName("name")
+    var name: String = name
+        private set
+
+    val baseStats: Map<Stat, Int>
+        get() = _baseStats ?: species.baseStats
+
+    val maleRatio: Float
+        get() = _maleRatio ?: species.maleRatio
+    val baseScale: Float
+        get() = _baseScale ?: species.baseScale
+    val hitbox: EntityDimensions
+        get() = _hitbox ?: species.hitbox
+    val catchRate: Int
+        get() = _catchRate ?: species.catchRate
+    val experienceGroup: ExperienceGroup
+        get() = _experienceGroup ?: species.experienceGroup
+    val baseExperienceYield: Int
+        get() = _baseExperienceYield ?: species.baseExperienceYield
+    val baseFriendship: Int
+        get() = _baseFriendship ?: species.baseFriendship
+    val evYield: Map<Stat, Int>
+        get() = _evYield ?: species.evYield
+    val primaryType: ElementalType
+        get() = _primaryType ?: species.primaryType
 
-@SourceDebugExtension(["SMAP\nFormData.kt\nKotlin\n*S Kotlin\n*F\n+ 1 FormData.kt\ncom/cobblemon/mod/common/pokemon/FormData\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n+ 3 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,315:1\n1#2:316\n1855#3,2:317\n*S KotlinDebug\n*F\n+ 1 FormData.kt\ncom/cobblemon/mod/common/pokemon/FormData\n*L\n234#1:317,2\n*E\n"])
-public class FormData(name: String = "Normal",
-      _baseStats: MutableMap<Stat, Int>? = null,
-      _maleRatio: Float? = null,
-      _baseScale: Float? = null,
-      _hitbox: EntityDimensions? = null,
-      _catchRate: Int? = null,
-      _experienceGroup: ExperienceGroup? = null,
-      _baseExperienceYield: Int? = null,
-      _baseFriendship: Int? = null,
-      _evYield: MutableMap<Stat, Int>? = null,
-      _primaryType: ElementalType? = null,
-      _secondaryType: ElementalType? = null,
-      _shoulderMountable: Boolean? = null,
-      _shoulderEffects: MutableList<ShoulderEffect>? = null,
-      _moves: Learnset? = null,
-      _evolutions: MutableSet<Evolution>? = null,
-      _abilities: AbilityPool? = null,
-      _drops: DropTable? = null,
-      _pokedex: MutableList<String>? = null,
-      _preEvolution: PreEvolution? = null,
-      standingEyeHeight: Float? = null,
-      swimmingEyeHeight: Float? = null,
-      flyingEyeHeight: Float? = null,
-      _labels: Set<String>? = null,
-      _dynamaxBlocked: Boolean? = null,
-      _eggGroups: Set<EggGroup>? = null,
-      _height: Float? = null,
-      _weight: Float? = null,
-      requiredMove: String? = null,
-      requiredItem: String? = null,
-      requiredItems: List<String>? = null,
-      gigantamaxMove: MoveTemplate? = null,
-      _battleTheme: ResourceLocation? = null,
-      _lightingData: LightingData? = null
-   ) :
-   Decodable,
-   Encodable,
-   ShowdownIdentifiable {
-   private final val _abilities: AbilityPool?
-   private final var _baseExperienceYield: Int?
-   private final var _baseFriendship: Int?
-   private final var _baseScale: Float?
-   internal final var _baseStats: MutableMap<Stat, Int>?
-   private final var _battleTheme: ResourceLocation?
-   private final var _catchRate: Int?
-   private final val _drops: DropTable?
-   private final var _dynamaxBlocked: Boolean?
-   private final val _eggGroups: Set<EggGroup>?
-   private final var _evYield: MutableMap<Stat, Int>?
-   private final val _evolutions: MutableSet<Evolution>?
-   private final var _experienceGroup: ExperienceGroup?
-   private final var _height: Float?
-   private final var _hitbox: EntityDimensions?
-   private final val _labels: Set<String>?
-   private final var _lightingData: LightingData?
-   private final val _maleRatio: Float?
-   private final var _moves: Learnset?
-   private final var _pokedex: MutableList<String>?
-   private final val _preEvolution: PreEvolution?
-   private final var _primaryType: ElementalType?
-   private final var _secondaryType: ElementalType?
-   private final val _shoulderEffects: MutableList<ShoulderEffect>?
-   private final val _shoulderMountable: Boolean?
-   private final var _weight: Float?
-
-   public final val abilities: AbilityPool
-      public final get() {
-         var var10000: AbilityPool = this._abilities;
-         if (this._abilities == null) {
-            var10000 = this.getSpecies().getAbilities();
-         }
-
-         return var10000;
-      }
-
-
-   public final var aspects: MutableList<String>
-
-   public final val baseExperienceYield: Int
-      public final get() {
-         return if (this._baseExperienceYield != null) this._baseExperienceYield else this.getSpecies().getBaseExperienceYield();
-      }
-
-
-   public final val baseFriendship: Int
-      public final get() {
-         return if (this._baseFriendship != null) this._baseFriendship else this.getSpecies().getBaseFriendship();
-      }
-
-
-   public final val baseScale: Float
-      public final get() {
-         return if (this._baseScale != null) this._baseScale else this.getSpecies().getBaseScale();
-      }
-
-
-   public final val baseStats: Map<Stat, Int>
-      public final get() {
-         var var10000: java.util.Map = this._baseStats;
-         if (this._baseStats == null) {
-            var10000 = this.getSpecies().getBaseStats();
-         }
+    // Don't fall back to the species unless both types in the form are null
+    val secondaryType: ElementalType?
+        get() = if (_secondaryType == null && _primaryType == null) species.secondaryType else _secondaryType
 
-         return var10000;
-      }
+    val shoulderMountable: Boolean
+        get() = _shoulderMountable ?: species.shoulderMountable
 
+    val shoulderEffects: MutableList<ShoulderEffect>
+        get() = _shoulderEffects ?: species.shoulderEffects
 
-   public final val battleTheme: ResourceLocation
-      public final get() {
-         var var10000: ResourceLocation = this._battleTheme;
-         if (this._battleTheme == null) {
-            var10000 = this.getSpecies().getBattleTheme();
-         }
+    val pokedex
+        get() = _pokedex ?: species.pokedex
+    val moves: Learnset
+        get() = _moves ?: species.moves
 
-         return var10000;
-      }
+    val types: Iterable<ElementalType>
+        get() = secondaryType?.let { listOf(primaryType, it) } ?: listOf(primaryType)
 
+    val abilities: AbilityPool
+        get() = _abilities ?: species.abilities
 
-   public final val behaviour: FormPokemonBehaviour
+    val drops: DropTable
+        get() = _drops ?: species.drops
 
-   public final val catchRate: Int
-      public final get() {
-         return if (this._catchRate != null) this._catchRate else this.getSpecies().getCatchRate();
-      }
+    var aspects = mutableListOf<String>()
 
+    val preEvolution: PreEvolution?
+        get() = _preEvolution ?: species.preEvolution
 
-   public final val drops: DropTable
-      public final get() {
-         var var10000: DropTable = this._drops;
-         if (this._drops == null) {
-            var10000 = this.getSpecies().getDrops();
-         }
+    val behaviour = FormPokemonBehaviour()
 
-         return var10000;
-      }
+    val dynamaxBlocked: Boolean
+        get() = _dynamaxBlocked ?: species.dynamaxBlocked
 
+    val eggGroups: Set<EggGroup>
+        get() = _eggGroups ?: species.eggGroups
+    val riding: RidingProperties
+        get() = _riding ?: species.riding
 
-   public final val dynamaxBlocked: Boolean
-      public final get() {
-         return if (this._dynamaxBlocked != null) this._dynamaxBlocked else this.getSpecies().getDynamaxBlocked();
-      }
+    /**
+     * The height in decimeters
+     */
+    val height: Float
+        get() = _height ?: species.height
 
+    /**
+     * The weight in hectograms
+     */
+    val weight: Float
+        get() = _weight ?: species.weight
 
-   public final val eggGroups: Set<EggGroup>
-      public final get() {
-         var var10000: java.util.Set = this._eggGroups;
-         if (this._eggGroups == null) {
-            var10000 = this.getSpecies().getEggGroups();
-         }
+    val labels: Set<String>
+        get() = _labels ?: species.labels
 
-         return var10000;
-      }
+    /**
+     * Contains the evolutions of this form.
+     * Do not access this property immediately after a species is loaded, it requires all species in the game to be loaded.
+     * To be aware of this gamestage subscribe to [PokemonSpecies.observable].
+     */
+    val evolutions: MutableSet<Evolution>
+        get() = _evolutions ?: mutableSetOf()
 
+    val battleTheme: ResourceLocation
+        get() = _battleTheme ?: species.battleTheme
 
-   public final val evYield: Map<Stat, Int>
-      public final get() {
-         var var10000: java.util.Map = this._evYield;
-         if (this._evYield == null) {
-            var10000 = this.getSpecies().getEvYield();
-         }
-
-         return var10000;
-      }
-
-
-   public final val evolutions: MutableSet<Evolution>
-      public final get() {
-         var var10000: java.util.Set = this._evolutions;
-         if (this._evolutions == null) {
-            var10000 = new LinkedHashSet();
-         }
-
-         return var10000;
-      }
-
-
-   public final val experienceGroup: ExperienceGroup
-      public final get() {
-         var var10000: ExperienceGroup = this._experienceGroup;
-         if (this._experienceGroup == null) {
-            var10000 = this.getSpecies().getExperienceGroup();
-         }
-
-         return var10000;
-      }
-
-
-   private final var flyingEyeHeight: Float?
-   public final val gigantamaxMove: MoveTemplate?
-
-   public final val height: Float
-      public final get() {
-         return if (this._height != null) this._height else this.getSpecies().getHeight();
-      }
-
-
-   public final val hitbox: EntityDimensions
-      public final get() {
-         var var10000: EntityDimensions = this._hitbox;
-         if (this._hitbox == null) {
-            var10000 = this.getSpecies().getHitbox();
-         }
-
-         return var10000;
-      }
-
-
-   public final val labels: Set<String>
-      public final get() {
-         var var10000: java.util.Set = this._labels;
-         if (this._labels == null) {
-            var10000 = this.getSpecies().getLabels();
-         }
-
-         return var10000;
-      }
-
-
-   public final val lightingData: LightingData?
-      public final get() {
-         return if (this.getSpecies().getStandardForm() == this) this.getSpecies().getLightingData() else this._lightingData;
-      }
-
-
-   public final val maleRatio: Float
-      public final get() {
-         return if (this._maleRatio != null) this._maleRatio else this.getSpecies().getMaleRatio();
-      }
-
-
-   public final val moves: Learnset
-      public final get() {
-         var var10000: Learnset = this._moves;
-         if (this._moves == null) {
-            var10000 = this.getSpecies().getMoves();
-         }
-
-         return var10000;
-      }
-
-
-   public final var name: String
-      private set
-
-   public final val pokedex: MutableList<String>
-      public final get() {
-         var var10000: java.util.List = this._pokedex;
-         if (this._pokedex == null) {
-            var10000 = this.getSpecies().getPokedex();
-         }
-
-         return var10000;
-      }
-
-
-   public final val preEvolution: PreEvolution?
-      public final get() {
-         var var10000: PreEvolution = this._preEvolution;
-         if (this._preEvolution == null) {
-            var10000 = this.getSpecies().getPreEvolution();
-         }
-
-         return var10000;
-      }
-
-
-   public final val primaryType: ElementalType
-      public final get() {
-         var var10000: ElementalType = this._primaryType;
-         if (this._primaryType == null) {
-            var10000 = this.getSpecies().getPrimaryType();
-         }
-
-         return var10000;
-      }
-
-
-   public final val requiredItem: String?
-   public final val requiredItems: List<String>?
-   public final val requiredMove: String?
-
-   public final val secondaryType: ElementalType?
-      public final get() {
-         return if (this._secondaryType == null && this._primaryType == null) this.getSpecies().getSecondaryType() else this._secondaryType;
-      }
-
-
-   public final val shoulderEffects: MutableList<ShoulderEffect>
-      public final get() {
-         var var10000: java.util.List = this._shoulderEffects;
-         if (this._shoulderEffects == null) {
-            var10000 = this.getSpecies().getShoulderEffects();
-         }
-
-         return var10000;
-      }
-
-
-   public final val shoulderMountable: Boolean
-      public final get() {
-         return if (this._shoulderMountable != null) this._shoulderMountable else this.getSpecies().getShoulderMountable();
-      }
-
-
-   public final lateinit var species: Species
-   private final var standingEyeHeight: Float?
-   private final var swimmingEyeHeight: Float?
-
-   public final val types: Iterable<ElementalType>
-      public final get() {
-         val var10000: ElementalType = this.getSecondaryType();
-         if (var10000 != null) {
-            val var4: java.util.List = CollectionsKt.listOf(new ElementalType[]{this.getPrimaryType(), var10000});
-            if (var4 != null) {
-               return var4;
+    val lightingData: LightingData?
+        get() {
+            // Don't always return base species, this is that shitty scenario where forms need to specifically declare in order for null to be respected and intended
+            if (this.species.standardForm == this) {
+                return this.species.lightingData
             }
-         }
+            return this._lightingData
+        }
 
-         return CollectionsKt.listOf(this.getPrimaryType());
-      }
+    val possibleGenders: Set<Gender>
+        get() {
+            return if (maleRatio == -1F) {
+                setOf(Gender.GENDERLESS)
+            } else if (maleRatio == 0F) {
+                setOf(Gender.FEMALE)
+            } else if (maleRatio == 1F) {
+                setOf(Gender.MALE)
+            } else {
+                setOf(Gender.FEMALE, Gender.MALE)
+            }
+        }
 
+    val baseAI: List<BehaviourConfig>?
+        get() = _baseAI ?: species.baseAI
+    val ai: List<BehaviourConfig>
+        get() = _ai ?: species.ai
 
-   public final val weight: Float
-      public final get() {
-         return if (this._weight != null) this._weight else this.getSpecies().getWeight();
-      }
+    fun eyeHeight(entity: PokemonEntity): Float {
+        return this.resolveEyeHeight(entity) ?: return this.species.eyeHeight(entity)
+    }
 
+    private fun resolveEyeHeight(entity: PokemonEntity): Float? = when {
+        entity.getCurrentPoseType() in PoseType.SWIMMING_POSES -> this.swimmingEyeHeight ?: this.standingEyeHeight
+        entity.getCurrentPoseType() in PoseType.FLYING_POSES -> this.flyingEyeHeight ?: this.standingEyeHeight
+        else -> this.standingEyeHeight
+    }
 
-   init {
-      this._baseStats = _baseStats;
-      this._maleRatio = _maleRatio;
-      this._baseScale = _baseScale;
-      this._hitbox = _hitbox;
-      this._catchRate = _catchRate;
-      this._experienceGroup = _experienceGroup;
-      this._baseExperienceYield = _baseExperienceYield;
-      this._baseFriendship = _baseFriendship;
-      this._evYield = _evYield;
-      this._primaryType = _primaryType;
-      this._secondaryType = _secondaryType;
-      this._shoulderMountable = _shoulderMountable;
-      this._shoulderEffects = _shoulderEffects;
-      this._moves = _moves;
-      this._evolutions = _evolutions;
-      this._abilities = _abilities;
-      this._drops = _drops;
-      this._pokedex = _pokedex;
-      this._preEvolution = _preEvolution;
-      this.standingEyeHeight = standingEyeHeight;
-      this.swimmingEyeHeight = swimmingEyeHeight;
-      this.flyingEyeHeight = flyingEyeHeight;
-      this._labels = _labels;
-      this._dynamaxBlocked = _dynamaxBlocked;
-      this._eggGroups = _eggGroups;
-      this._height = _height;
-      this._weight = _weight;
-      this.requiredMove = requiredMove;
-      this.requiredItem = requiredItem;
-      this.requiredItems = requiredItems;
-      this.gigantamaxMove = gigantamaxMove;
-      this._battleTheme = _battleTheme;
-      this._lightingData = _lightingData;
-      this.name = name;
-      this.aspects = new ArrayList<>();
-      this.behaviour = new FormPokemonBehaviour();
-   }
+    @Transient
+    lateinit var species: Species
 
-   public fun eyeHeight(entity: PokemonEntity): Float {
-      val var10000: java.lang.Float = this.resolveEyeHeight(entity);
-      return if (var10000 != null) entity.m_20206_() * var10000 else this.getSpecies().eyeHeight(entity);
-   }
+    fun initialize(species: Species): FormData {
+        this.species = species
+        this.behaviour.parent = species.behaviour
+        Cobblemon.statProvider.provide(this)
+        // These properties are lazy, these need all species to be reloaded but SpeciesAdditions is what will eventually trigger this after all species have been loaded
+        this.preEvolution?.species
+        this.preEvolution?.form
+        this.evolutions.size
+        this._lightingData?.let { this._lightingData = it.copy(lightLevel = it.lightLevel.coerceIn(0, 15)) }
+        behaviour.herd.initialize()
+        return this
+    }
 
-   private fun resolveEyeHeight(entity: PokemonEntity): Float? {
-      var var10000: java.lang.Float;
-      if (PoseType.Companion.getSWIMMING_POSES().contains(entity.getCurrentPoseType())) {
-         var10000 = this.swimmingEyeHeight;
-         if (this.swimmingEyeHeight == null) {
-            var10000 = this.standingEyeHeight;
-         }
-      } else if (PoseType.Companion.getFLYING_POSES().contains(entity.getCurrentPoseType())) {
-         var10000 = this.flyingEyeHeight;
-         if (this.flyingEyeHeight == null) {
-            var10000 = this.standingEyeHeight;
-         }
-      } else {
-         var10000 = this.standingEyeHeight;
-      }
+    internal fun resolveEvolutionMoves() {
+        this.evolutions.forEach { evolution ->
+            if (evolution.learnableMoves.isNotEmpty() && evolution.result.species != null) {
+                val pokemon = evolution.result.create()
+                pokemon.form.moves.evolutionMoves += evolution.learnableMoves
+            }
+        }
+    }
 
-      return var10000;
-   }
+    override fun equals(other: Any?): Boolean = other is FormData && other.showdownId() == this.showdownId()
 
-   public fun initialize(species: Species): FormData {
-      this.setSpecies(species);
-      this.behaviour.setParent(species.getBehaviour());
-      Cobblemon.INSTANCE.getStatProvider().provide(this);
-      var var10000: PreEvolution = this.getPreEvolution();
-      if (var10000 != null) {
-         var10000.getSpecies();
-      }
+    override fun hashCode(): Int = this.showdownId().hashCode()
 
-      var10000 = this.getPreEvolution();
-      if (var10000 != null) {
-         var10000.getForm();
-      }
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeString(this.name)
+        buffer.writeCollection(this.aspects) { pb, aspect -> pb.writeString(aspect) }
+        buffer.writeNullable(this._baseStats) { statsBuffer, map ->
+            statsBuffer.writeMap(map,
+                { _, stat -> Cobblemon.statProvider.encode(buffer, stat)},
+                { _, value -> buffer.writeSizedInt(IntSize.U_SHORT, value) }
+            )
+        }
+        buffer.writeNullable(this._primaryType) { pb, type -> pb.writeString(type.showdownId) }
+        buffer.writeNullable(this._secondaryType) { pb, type -> pb.writeString(type.showdownId) }
+        buffer.writeNullable(this._experienceGroup) { pb, value -> pb.writeString(value.name) }
+        buffer.writeNullable(this._height) { pb, height -> pb.writeFloat(height) }
+        buffer.writeNullable(this._weight) { pb, weight -> pb.writeFloat(weight) }
+        buffer.writeNullable(this._maleRatio) { pb, ratio -> pb.writeFloat(ratio) }
+        buffer.writeNullable(this._baseScale) { buf, fl -> buf.writeFloat(fl) }
+        buffer.writeNullable(this._hitbox) { pb, hitbox ->
+            pb.writeFloat(hitbox.width)
+            pb.writeFloat(hitbox.height)
+            pb.writeBoolean(hitbox.fixed)
+        }
+        buffer.writeNullable(this._moves) { _, moves -> moves.encode(buffer)}
+        buffer.writeNullable(this._pokedex) { pb1, pokedex -> pb1.writeCollection(pokedex)  { pb2, line -> pb2.writeString(line) } }
+        buffer.writeNullable(this.lightingData) { pb, data ->
+            pb.writeInt(data.lightLevel)
+            pb.writeEnumConstant(data.liquidGlowMode)
+        }
+        buffer.writeNullable(_drops) { _, value -> value.encode(buffer) }
+        buffer.writeNullable(_abilities) { _, abilities ->
+            buffer.writeCollection<PotentialAbility>(abilities.toList()) { pb, ability ->
+                pb.writeBoolean(ability is CommonAbility)
+                pb.writeString(ability.template.name)
+            }
+        }
+        buffer.writeNullable(_riding) { pb, riding -> riding.encode(buffer) }
+    }
 
-      this.getEvolutions().size();
-      if (this._lightingData != null) {
-         this._lightingData = LightingData.copy$default(this._lightingData, RangesKt.coerceIn(this._lightingData.getLightLevel(), 0, 15), null, 2, null);
-      }
+    override fun decode(buffer: RegistryFriendlyByteBuf) {
+        this.name = buffer.readString()
+        this.aspects = buffer.readList { buffer.readString() }.toMutableList()
+        buffer.readNullable { mapBuffer ->
+            this._baseStats = mapBuffer.readMap(
+                { _ -> Cobblemon.statProvider.decode(buffer) },
+                { _ -> buffer.readSizedInt(IntSize.U_SHORT) }
+            ).toMutableMap()
+        }
+        this._primaryType = buffer.readNullable { pb -> ElementalTypes.get(pb.readString()) }
+        this._secondaryType = buffer.readNullable { pb -> ElementalTypes.get(pb.readString()) }
+        this._experienceGroup = buffer.readNullable { pb -> ExperienceGroups.findByName(pb.readString()) }
+        this._height = buffer.readNullable { pb -> pb.readFloat() }
+        this._weight = buffer.readNullable { pb -> pb.readFloat() }
+        this._maleRatio = buffer.readNullable { pb -> pb.readFloat() }
+        this._baseScale = buffer.readNullable { pb -> pb.readFloat() }
+        this._hitbox = buffer.readNullable { pb -> pb.readEntityDimensions() }
+        this._moves = buffer.readNullable { _ -> Learnset().apply { decode(buffer) }}
+        this._pokedex = buffer.readNullable { pb -> pb.readList { it.readString() } }?.toMutableList()
+        this._lightingData = buffer.readNullable { pb -> LightingData(pb.readInt(), pb.readEnumConstant(LightingData.LiquidGlowMode::class.java)) }
+        this._drops = buffer.readNullable { _ -> DropTable().apply { decode(buffer) }}
+        this._abilities = buffer.readNullable { pb ->
+            AbilityPool().apply {
+                pb.readList { _ ->
+                    val isCommon = pb.readBoolean()
+                    val template = pb.readString()
+                    if (isCommon) {
+                        CommonAbility(Abilities.getOrException(template))
+                    } else {
+                        HiddenAbility(Abilities.getOrException(template))
+                    }
+                }.forEach { add(Priority.NORMAL, it) }
+            }
+        }
+        this._riding = buffer.readNullable { pb -> RidingProperties.decode(buffer) }
+    }
 
-      return this;
-   }
+    /**
+     * The literal Showdown ID of this [formOnlyShowdownId] appended to [Species.showdownId].
+     * For example Alolan Vulpix becomes 'vulpixalola'
+     *
+     * @return The literal Showdown ID of this species and form.
+     */
+    override fun showdownId(): String = this.species.showdownId() + this.formOnlyShowdownId()
 
-   internal fun resolveEvolutionMoves() {
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         val evolution: Evolution = `element$iv` as Evolution;
-         if (!(`element$iv` as Evolution).getLearnableMoves().isEmpty() && (`element$iv` as Evolution).getResult().getSpecies() != null) {
-            CollectionsKt.addAll(evolution.getResult().create().getForm().getMoves().getEvolutionMoves(), evolution.getLearnableMoves());
-         }
-      }
-   }
+    /**
+     * The literal Showdown ID of this form [name].
+     * This will be a lowercase version of the [name] with all the non-alphanumeric characters removed.
+     * For example Alolan Vulpix becomes 'alola'
+     *
+     * @return The literal Showdown ID of this form only.
+     */
+    fun formOnlyShowdownId(): String = ShowdownIdentifiable.REGEX.replace(this.name.lowercase(), "")
 
-   public override operator fun equals(other: Any?): Boolean {
-      return other is FormData && (other as FormData).showdownId() == this.showdownId();
-   }
-
-   public override fun hashCode(): Int {
-      return this.showdownId().hashCode();
-   }
-
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130070_(this.name);
-      buffer.m_236828_(this.aspects, FormData::encode$lambda$3);
-      buffer.m_236821_(this._baseStats, FormData::encode$lambda$6);
-      buffer.m_236821_(this._primaryType, FormData::encode$lambda$7);
-      buffer.m_236821_(this._secondaryType, FormData::encode$lambda$8);
-      buffer.m_236821_(this._experienceGroup, FormData::encode$lambda$9);
-      buffer.m_236821_(this._height, FormData::encode$lambda$10);
-      buffer.m_236821_(this._weight, FormData::encode$lambda$11);
-      buffer.m_236821_(this._baseScale, FormData::encode$lambda$12);
-      buffer.m_236821_(this._hitbox, FormData::encode$lambda$13);
-      buffer.m_236821_(this._moves, FormData::encode$lambda$14);
-      buffer.m_236821_(this._pokedex, FormData::encode$lambda$16);
-      buffer.m_236821_(this.getLightingData(), FormData::encode$lambda$17);
-   }
-
-   public override fun decode(buffer: FriendlyByteBuf) {
-      val var10001: java.lang.String = buffer.m_130277_();
-      this.name = var10001;
-      val var2: java.util.List = buffer.m_236845_(FormData::decode$lambda$18);
-      this.aspects = CollectionsKt.toMutableList(var2);
-      buffer.m_236868_(FormData::decode$lambda$21);
-      this._primaryType = buffer.m_236868_(FormData::decode$lambda$22) as ElementalType;
-      this._secondaryType = buffer.m_236868_(FormData::decode$lambda$23) as ElementalType;
-      this._experienceGroup = buffer.m_236868_(FormData::decode$lambda$24) as ExperienceGroup;
-      this._height = buffer.m_236868_(FormData::decode$lambda$25) as java.lang.Float;
-      this._weight = buffer.m_236868_(FormData::decode$lambda$26) as java.lang.Float;
-      this._baseScale = buffer.m_236868_(FormData::decode$lambda$27) as java.lang.Float;
-      this._hitbox = buffer.m_236868_(FormData::decode$lambda$28) as EntityDimensions;
-      this._moves = buffer.m_236868_(FormData::decode$lambda$30) as Learnset;
-      this._pokedex = buffer.m_236868_(FormData::decode$lambda$32) as MutableList<java.lang.String>;
-      this._lightingData = buffer.m_236868_(FormData::decode$lambda$33) as LightingData;
-   }
-
-   public override fun showdownId(): String {
-      return "${this.getSpecies().showdownId()}${this.formOnlyShowdownId()}";
-   }
-
-   public fun formOnlyShowdownId(): String {
-      val var10000: Regex = ShowdownIdentifiable.Companion.getREGEX$common();
-      val var10001: java.lang.String = this.name.toLowerCase(Locale.ROOT);
-      return var10000.replace(var10001, "");
-   }
-
-   @JvmStatic
-   fun `encode$lambda$3`(pb: FriendlyByteBuf, aspect: java.lang.String) {
-      pb.m_130070_(aspect);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$6$lambda$4`(keyBuffer: FriendlyByteBuf, stat: Stat) {
-      val var10000: StatProvider = Cobblemon.INSTANCE.getStatProvider();
-      var10000.encode(keyBuffer, stat);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$6$lambda$5`(valueBuffer: FriendlyByteBuf, value: Int) {
-      val var10000: ByteBuf = valueBuffer as ByteBuf;
-      val var10001: IntSize = IntSize.U_SHORT;
-      NetExtensionsKt.writeSizedInt(var10000, var10001, value);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$6`(statsBuffer: FriendlyByteBuf, map: java.util.Map) {
-      statsBuffer.m_236831_(map, FormData::encode$lambda$6$lambda$4, FormData::encode$lambda$6$lambda$5);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$7`(pb: FriendlyByteBuf, type: ElementalType) {
-      pb.m_130070_(type.getName());
-   }
-
-   @JvmStatic
-   fun `encode$lambda$8`(pb: FriendlyByteBuf, type: ElementalType) {
-      pb.m_130070_(type.getName());
-   }
-
-   @JvmStatic
-   fun `encode$lambda$9`(pb: FriendlyByteBuf, value: ExperienceGroup) {
-      pb.m_130070_(value.getName());
-   }
-
-   @JvmStatic
-   fun `encode$lambda$10`(pb: FriendlyByteBuf, height: java.lang.Float) {
-      pb.writeFloat(height);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$11`(pb: FriendlyByteBuf, weight: java.lang.Float) {
-      pb.writeFloat(weight);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$12`(buf: FriendlyByteBuf, fl: java.lang.Float) {
-      buf.writeFloat(fl);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$13`(pb: FriendlyByteBuf, hitbox: EntityDimensions) {
-      pb.writeFloat(hitbox.f_20377_);
-      pb.writeFloat(hitbox.f_20378_);
-      pb.writeBoolean(hitbox.f_20379_);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$14`(buf: FriendlyByteBuf, moves: Learnset) {
-      moves.encode(buf);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$16$lambda$15`(pb2: FriendlyByteBuf, line: java.lang.String) {
-      pb2.m_130070_(line);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$16`(pb1: FriendlyByteBuf, pokedex: java.util.List) {
-      pb1.m_236828_(pokedex, FormData::encode$lambda$16$lambda$15);
-   }
-
-   @JvmStatic
-   fun `encode$lambda$17`(pb: FriendlyByteBuf, data: LightingData) {
-      pb.writeInt(data.getLightLevel());
-      pb.m_130068_(data.getLiquidGlowMode());
-   }
-
-   @JvmStatic
-   fun `decode$lambda$18`(`$buffer`: FriendlyByteBuf, it: FriendlyByteBuf): java.lang.String {
-      return `$buffer`.m_130277_();
-   }
-
-   @JvmStatic
-   fun `decode$lambda$21$lambda$19`(keyBuffer: FriendlyByteBuf): Stat {
-      val var10000: StatProvider = Cobblemon.INSTANCE.getStatProvider();
-      return var10000.decode(keyBuffer);
-   }
-
-   @JvmStatic
-   fun `decode$lambda$21$lambda$20`(valueBuffer: FriendlyByteBuf): Int {
-      return NetExtensionsKt.readSizedInt(valueBuffer as ByteBuf, IntSize.U_SHORT);
-   }
-
-   @JvmStatic
-   fun `decode$lambda$21`(`this$0`: FormData, mapBuffer: FriendlyByteBuf): Unit {
-      `this$0`._baseStats = mapBuffer.m_236847_(FormData::decode$lambda$21$lambda$19, FormData::decode$lambda$21$lambda$20);
-      return Unit.INSTANCE;
-   }
-
-   @JvmStatic
-   fun `decode$lambda$22`(pb: FriendlyByteBuf): ElementalType {
-      val var10000: ElementalTypes = ElementalTypes.INSTANCE;
-      val var10001: java.lang.String = pb.m_130277_();
-      return var10000.get(var10001);
-   }
-
-   @JvmStatic
-   fun `decode$lambda$23`(pb: FriendlyByteBuf): ElementalType {
-      val var10000: ElementalTypes = ElementalTypes.INSTANCE;
-      val var10001: java.lang.String = pb.m_130277_();
-      return var10000.get(var10001);
-   }
-
-   @JvmStatic
-   fun `decode$lambda$24`(pb: FriendlyByteBuf): ExperienceGroup {
-      val var10000: ExperienceGroups = ExperienceGroups.INSTANCE;
-      val var10001: java.lang.String = pb.m_130277_();
-      return var10000.findByName(var10001);
-   }
-
-   @JvmStatic
-   fun `decode$lambda$25`(pb: FriendlyByteBuf): java.lang.Float {
-      return pb.readFloat();
-   }
-
-   @JvmStatic
-   fun `decode$lambda$26`(pb: FriendlyByteBuf): java.lang.Float {
-      return pb.readFloat();
-   }
-
-   @JvmStatic
-   fun `decode$lambda$27`(pb: FriendlyByteBuf): java.lang.Float {
-      return pb.readFloat();
-   }
-
-   @JvmStatic
-   fun `decode$lambda$28`(pb: FriendlyByteBuf): EntityDimensions {
-      return new EntityDimensions(pb.readFloat(), pb.readFloat(), pb.readBoolean());
-   }
-
-   @JvmStatic
-   fun `decode$lambda$30`(pb: FriendlyByteBuf): Learnset {
-      val var1: Learnset = new Learnset();
-      var1.decode(pb);
-      return var1;
-   }
-
-   @JvmStatic
-   fun `decode$lambda$32$lambda$31`(it: FriendlyByteBuf): java.lang.String {
-      return it.m_130277_();
-   }
-
-   @JvmStatic
-   fun `decode$lambda$32`(pb: FriendlyByteBuf): java.util.List {
-      return pb.m_236845_(FormData::decode$lambda$32$lambda$31);
-   }
-
-   @JvmStatic
-   fun `decode$lambda$33`(pb: FriendlyByteBuf): LightingData {
-      val var10002: Int = pb.readInt();
-      val var10003: java.lang.Enum = pb.m_130066_(LightingData.LiquidGlowMode.class);
-      return new LightingData(var10002, var10003 as LightingData.LiquidGlowMode);
-   }
-
-   fun FormData() {
-      this(
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         null,
-         -1,
-         3,
-         null
-      );
-   }
 }

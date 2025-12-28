@@ -1,413 +1,454 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonEntities
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork.sendPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Abilities
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.callback.PartySelectCallbacks
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.callback.PartySelectPokemonDTO
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.item.ability.AbilityChanger
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.NPCClasses
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ClientTaskTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ScheduledTask
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.SchedulingFunctionsKt
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ServerTaskTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.taskBuilder
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.aqua
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.gray
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.green
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.text
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleFormat
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleSide
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PlayerBattleActor
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PokemonBattleActor
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.generic.GenericBedrockEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.animation.PlayPoseableAnimationPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeStartedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.ActiveTrade
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.DummyTradeParticipant
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.PlayerTradeParticipant
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.TradeParticipant
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.PlayerExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.StringExtensionsKt
-import com.google.gson.Gson
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asTranslated
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.toPokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.traceFirstEntityCollision
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import java.io.File
-import java.io.FileInputStream
-import java.io.InputStreamReader
-import java.io.PrintWriter
-import java.nio.charset.Charset
-import java.util.ArrayList;
-import java.util.Locale
-import java.util.UUID
-import kotlin.jvm.functions.Function0
-import kotlin.jvm.functions.Function1
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.entity.EntityTypeTest
+import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.AABB
-import org.jetbrains.annotations.NotNull
+import com.mojang.serialization.JsonOps
+import java.io.File
+import java.io.PrintWriter
 
-@SourceDebugExtension(["SMAP\nTestCommand.kt\nKotlin\n*S Kotlin\n*F\n+ 1 TestCommand.kt\ncom/cobblemon/mod/common/command/TestCommand\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,396:1\n1855#2,2:397\n*S KotlinDebug\n*F\n+ 1 TestCommand.kt\ncom/cobblemon/mod/common/command/TestCommand\n*L\n134#1:397,2\n*E\n"])
-public object TestCommand {
-   public final var lastDebugId: Int
-   public final var trade: ActiveTrade?
+@Suppress("unused")final class TestCommand {
 
-   public fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
-      dispatcher.register(
-         (Commands.m_82127_("testcommand").requires(TestCommand::register$lambda$0) as LiteralArgumentBuilder).executes(this::execute) as LiteralArgumentBuilder
-      );
-   }
+    fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
+        val command = Commands.literal("testcommand")
+            .requires { it.hasPermission(4) }
+            .executes(::execute)
+        dispatcher.register(command)
+    }
 
-   private fun execute(context: CommandContext<CommandSourceStack>): Int {
-      if ((context.getSource() as CommandSourceStack).m_81373_() !is ServerPlayer) {
-         return 1;
-      } else {
-         try {
-            val var10000: Entity = (context.getSource() as CommandSourceStack).m_81373_();
-            val e: ServerPlayer = var10000 as ServerPlayer;
-            val var10002: Level = (var10000 as ServerPlayer).m_9236_();
-            val evolutionEntity: GenericBedrockEntity = new GenericBedrockEntity(var10002);
-            evolutionEntity.setCategory(MiscUtilsKt.cobblemonResource("evolution"));
-            evolutionEntity.setColliderHeight(1.5F);
-            evolutionEntity.setColliderWidth(1.5F);
-            evolutionEntity.setScale(1.0F);
-            evolutionEntity.setSyncAge(true);
-            evolutionEntity.m_6034_(e.m_20185_(), e.m_20186_(), e.m_20189_() + (double)4);
-            e.m_9236_().m_7967_(evolutionEntity);
-            ClientTaskTracker.INSTANCE
-               .after(
-                  0.5F,
-                  (
-                     new Function0<Unit>(e, evolutionEntity) {
-                        {
-                           super(0);
-                           this.$player = `$player`;
-                           this.$evolutionEntity = `$evolutionEntity`;
-                        }
+    @Suppress("SameReturnValue")
+    private fun execute(context: CommandContext<CommandSourceStack>): Int {
+        if (context.source.entity !is ServerPlayer) {
+            return Command.SINGLE_SUCCESS
+        }
 
-                        public final void invoke() {
-                           CobblemonNetwork.INSTANCE
-                              .sendPacket(
-                                 this.$player,
-                                 new PlayPoseableAnimationPacket(
-                                    this.$evolutionEntity.m_19879_(), SetsKt.setOf("evolution:animation.evolution.evolution"), SetsKt.emptySet()
-                                 )
-                              );
-                        }
-                     }
-                  ) as () -> Unit
-               );
-         } catch (var7: Exception) {
-            var7.printStackTrace();
-         }
+        try {
+            //this.testCodecOutput(context)
+            val player = context.source.entity as ServerPlayer
+            //tryTamePokemon(player)
+            player.party().forEach { it.currentHealth = it.hp / 2 }
+            val npc = NPCEntity(player.level())
+            npc.setPos(player.x, player.y, player.z)
+            npc.npc = NPCClasses.getByName("standard")!!
+            npc.initialize(50)
+            player.level().addFreshEntity(npc)
+//            val evolutionEntity = GenericBedrockEntity(world = player.level())
+//            evolutionEntity.apply {
+//                category = cobblemonResource("evolution")
+//                colliderHeight = 1.5F
+//                colliderWidth = 1.5F
+//                scale = 1F
+//                syncAge = true // Otherwise particle animation will be starting from zero even if you come along partway through
+//                setPos(player.x, player.y, player.z + 4)
+//            }
+//            player.level().addFreshEntity(evolutionEntity)
+//            after(seconds = 0.5F) {
+//                player.sendPacket(PlayPoseableAnimationPacket(evolutionEntity.id, setOf("evolution:animation.evolution.evolution"), emptySet()))
+//            }
 
-         return 1;
-      }
-   }
 
-   private fun testClosestBattle(context: CommandContext<CommandSourceStack>) {
-      val player: ServerPlayer = (context.getSource() as CommandSourceStack).m_81375_();
+//            readBerryDataFromCSV()
 
-      val scanBox: java.lang.Iterable;
-      for (Object element$iv : scanBox) {
-         (`element$iv` as BattlePokemon).getEffectedPokemon().setLevel(100);
-      }
+//            this.testClosestBattle(context)
+            //testTrade(context.source.player!!)
+//            testParticles(context)
+//            extractMovesData()
+//            // Player variables
+//            val player = context.source.entity as ServerPlayerEntity
+//            val party = player.party()
+//            party.heal()
+//
+//            val playerActor = PlayerBattleActor(
+//                player.uuid,
+//                party.toBattleTeam()
+//            )
+//
+//            // Enemy variables
+//            val pokemon = Pokemon().apply { species = PokemonSpecies.random() }.also { it.initialize() }
+//            val enemyPokemon = BattlePokemon(pokemon)
+//
+//            val enemyPokemon2 = BattlePokemon(PokemonSpecies.random().create())
+//            val enemyPokemon3 = BattlePokemon(PokemonSpecies.random().create())
+//            val enemyPokemon4 = BattlePokemon(PokemonSpecies.random().create())
+//
+//            enemyPokemon.effectedPokemon.sendOut(player.level() as ServerLevel, player.pos.add(2.0, 0.0, 0.0))
+//            enemyPokemon2.effectedPokemon.sendOut(player.level() as ServerLevel, player.pos.add(-2.0, 0.0, 0.0))
+//            enemyPokemon3.effectedPokemon.sendOut(player.level() as ServerLevel, player.pos.add(0.0, 0.0, 2.0))
+//            enemyPokemon4.effectedPokemon.sendOut(player.level() as ServerLevel, player.pos.add(0.0, 0.0, -2.0))
+//
+//            // Start the battle
+//            BattleRegistry.startBattle(
+//                battleFormat = BattleFormat.GEN_8_DOUBLES,
+//                side1 = BattleSide(playerActor),
+//                side2 = BattleSide(MultiPokemonBattleActor(listOf(enemyPokemon, enemyPokemon2, enemyPokemon3, enemyPokemon4)))
+//            )
 
-      val var11: java.util.List = player.m_9236_()
-         .m_142425_(CobblemonEntities.POKEMON as EntityTypeTest, AABB.m_165882_(player.m_20182_(), 9.0, 9.0, 9.0), TestCommand::testClosestBattle$lambda$3);
-      val var12: PokemonEntity = CollectionsKt.firstOrNull(var11) as PokemonEntity;
-      if (var12 == null) {
-         (context.getSource() as CommandSourceStack).m_81352_(Component.m_237113_("Cannot find any wild Pokémon in a 9x9x9 area") as Component);
-      } else {
-         val var10000: BattleRegistry = BattleRegistry.INSTANCE;
-         val var10001: BattleFormat = BattleFormat.Companion.getGEN_9_SINGLES();
-         var var13: Array<BattleActor> = new BattleActor[1];
-         val var10008: UUID = player.m_20148_();
-         var13[0] = new PlayerBattleActor(var10008, PartyStore.toBattleTeam$default(PlayerExtensionsKt.party(player), true, false, null, 6, null));
-         val var10002: BattleSide = new BattleSide(var13);
-         var13 = new BattleActor[1];
-         val var10009: UUID = var12.getPokemon().getUuid();
-         var13[0] = new PokemonBattleActor(
-            var10009, new BattlePokemon(var12.getPokemon(), null, null, 6, null), Cobblemon.INSTANCE.getConfig().getDefaultFleeDistance(), null, 8, null
-         );
-         BattleRegistry.startBattle$default(var10000, var10001, var10002, new BattleSide(var13), false, 8, null);
-      }
-   }
+//            val player = context.source.entity as ServerPlayerEntity
+//            player.giveItemStack(PokemonItem.from(PokemonSpecies.random(), "alolan"))
+        } catch (e: Exception) {
+            Cobblemon.LOGGER.error(e)
+        }
+        return Command.SINGLE_SUCCESS
+    }
 
-   private fun testTrade(playerEntity: ServerPlayer) {
-      val trade: ActiveTrade = new ActiveTrade(
-         new PlayerTradeParticipant(playerEntity),
-         new DummyTradeParticipant(
-            CollectionsKt.mutableListOf(new Pokemon[]{StringExtensionsKt.toPokemon("pikachu level=30 shiny"), StringExtensionsKt.toPokemon("machop level=15")})
-         )
-      );
-      trade = trade;
-      val var10000: CobblemonNetwork = CobblemonNetwork.INSTANCE;
-      val var10004: UUID = trade.getPlayer2().getUuid();
-      val var10005: MutableComponent = trade.getPlayer2().getName().m_6881_();
-      var10000.sendPacket(playerEntity, new TradeStartedPacket(var10004, var10005, trade.getPlayer2().getParty().mapNullPreserving(<unrepresentable>.INSTANCE)));
-      SchedulingFunctionsKt.taskBuilder().interval(0.5F).execute((new Function1<ScheduledTask, Unit>(this, trade) {
-         {
-            super(1);
-            this.this$0 = `$receiver`;
-            this.$trade = `$trade`;
-         }
+    var trade: ActiveTrade? = null
+    var lastDebugId = 0
 
-         public final void invoke(@NotNull ScheduledTask task) {
-            if (!(this.this$0.getTrade() == this.$trade)) {
-               task.expire();
-            } else {
-               TestCommand.access$testUpdate(TestCommand.INSTANCE);
+    private fun testClosestBattle(context: CommandContext<CommandSourceStack>) {
+        val player = context.source.playerOrException
+        val cloneTeam = player.party().toBattleTeam(true)
+        cloneTeam.forEach { it.effectedPokemon.level = 100 }
+        val scanBox = AABB.ofSize(player.position(), 9.0, 9.0, 9.0)
+        val results = player.level().getEntities(CobblemonEntities.POKEMON, scanBox) { entityPokemon -> entityPokemon.pokemon.isWild() }
+        val pokemonEntity = results.firstOrNull()
+        if (pokemonEntity == null) {
+            context.source.sendFailure(Component.literal("Cannot find any wild Pokémon in a 9x9x9 area"))
+            return
+        }
+        BattleRegistry.startBattle(
+            BattleFormat.GEN_9_SINGLES,
+            BattleSide(PlayerBattleActor(player.uuid, cloneTeam)),
+            BattleSide(PokemonBattleActor(pokemonEntity.pokemon.uuid, BattlePokemon(pokemonEntity.pokemon), Cobblemon.config.defaultFleeDistance))
+        )
+    }
+
+    private fun testTrade(playerEntity: ServerPlayer) {
+        val trade = ActiveTrade(
+            player1 = PlayerTradeParticipant(playerEntity),
+            player2 = DummyTradeParticipant(
+                pokemonList = mutableListOf(
+                    "pikachu level=30 shiny".toPokemon(),
+                    "machop level=15".toPokemon()
+                )
+            )
+        )
+        this.trade = trade
+        playerEntity.sendPacket(TradeStartedPacket(trade.player2.uuid, trade.player2.name.copy(), trade.player2.party.mapNullPreserving(TradeStartedPacket::TradeablePokemon)))
+
+        taskBuilder()
+            .interval(0.5F) // Run every half second
+            .execute { task ->
+                if (this.trade != trade) {
+                    task.expire()
+                    return@execute
+                }
+
+                testUpdate()
             }
-         }
-      }) as (ScheduledTask?) -> Unit).tracker(ServerTaskTracker.INSTANCE).iterations(Integer.MAX_VALUE).build();
-   }
+            .tracker(ServerTaskTracker)
+            .iterations(Int.MAX_VALUE)
+            .build()
+    }
 
-   private fun testUpdate() {
-      if (trade != null) {
-         val var10000: TradeParticipant = trade.getPlayer2();
-         val dummy: DummyTradeParticipant = var10000 as DummyTradeParticipant;
-         if (lastDebugId != 0) {
-            lastDebugId = 0;
-         }
-      }
-   }
+    @Suppress("UNUSED_VARIABLE")
+    private fun testUpdate() {
+        val trade = this.trade ?: return
+        val dummy = trade.player2 as DummyTradeParticipant
 
-   public fun readBerryDataFromCSV() {
-      val gson: Gson = new GsonBuilder().setPrettyPrinting().create();
-      val iterator: java.util.Iterator = FilesKt.readLines$default(new File("scripty/berries.csv"), null, 1, null).iterator();
-      iterator.next();
-      iterator.next();
-      val var4: java.util.Iterator = iterator;
+        val currentDebugId = 0 // Change this number to some other number and hot reload when you want the later code block to run once.
 
-      while (var4.hasNext()) {
-         val cols: java.util.List = StringsKt.split$default(var4.next() as java.lang.String, new java.lang.String[]{","}, false, 0, 6, null);
-         val var28: java.lang.String = (cols.get(1) as java.lang.String).toLowerCase(Locale.ROOT);
-         val var20: java.lang.String = "$var28_berry";
-         val growthPoints: File = new File("scripty/old/$var20.json");
-         val index: Charset = Charsets.UTF_8;
-         val json: JsonObject = gson.fromJson(new InputStreamReader(new FileInputStream(growthPoints), index), JsonObject.class) as JsonObject;
-         val var21: java.util.List = new ArrayList();
+        if (lastDebugId != currentDebugId) {
+            // Some code here, when hotswapped, will immediately run.
+            // This is a trick so that if you want to fiddle with the GUI, then you want the dummy participant to do something,
+            // you can update the code here and the 'currentDebugId' value and this will run once.
 
-         for (int indexx = 7; cols.size() > indexx && !StringsKt.isBlank((java.lang.CharSequence)cols.get(indexx)); indexx += 6) {
-            val arr: Float = java.lang.Float.parseFloat(cols.get(indexx) as java.lang.String);
-            val var12: Float = java.lang.Float.parseFloat(cols.get(indexx + 1) as java.lang.String);
-            val pw: Float = java.lang.Float.parseFloat(cols.get(indexx + 2) as java.lang.String);
-            val rotX: Float = java.lang.Float.parseFloat(cols.get(indexx + 3) as java.lang.String);
-            val rotY: Float = java.lang.Float.parseFloat(cols.get(indexx + 4) as java.lang.String);
-            val rotZ: Float = java.lang.Float.parseFloat(cols.get(indexx + 5) as java.lang.String);
-            val position: JsonObject = new JsonObject();
-            position.addProperty("x", arr);
-            position.addProperty("y", var12);
-            position.addProperty("z", pw);
-            val rotation: JsonObject = new JsonObject();
-            rotation.addProperty("x", rotX);
-            rotation.addProperty("y", rotY);
-            rotation.addProperty("z", rotZ);
-            val obj: JsonObject = new JsonObject();
-            obj.add("position", position as JsonElement);
-            obj.add("rotation", rotation as JsonElement);
-            var21.add(obj);
-         }
+            // Something
 
-         val var23: JsonArray = json.getAsJsonArray("growthPoints");
-         CollectionsKt.removeAll(var23 as java.lang.Iterable, <unrepresentable>.INSTANCE);
+            this.lastDebugId = currentDebugId
+        }
+    }
 
-         for (JsonObject point : growthPoints) {
-            var23.add(var26 as JsonElement);
-         }
+    fun readBerryDataFromCSV() {
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val csv = File("scripty/berries.csv").readLines()
+        val iterator = csv.iterator()
+        iterator.next() // Skip heading
+        iterator.next() // Skip sub-heading thing
+        for (line in iterator) {
+            val cols = line.split(",")
+            val berryName = cols[1].lowercase() + "_berry"
+            val json = gson.fromJson(File("scripty/old/$berryName.json").reader(), JsonObject::class.java)
+            val growthPoints = mutableListOf<JsonObject>()
+            var index = 7
+            while (true) {
+                if (cols.size <= index || cols[index].isBlank()) {
+                    break
+                }
 
-         val var27: PrintWriter = new PrintWriter(new File("scripty/new/$var20.json"));
-         gson.toJson(json as JsonElement, var27);
-         var27.flush();
-         var27.close();
-      }
-   }
+                val posX = cols[index].toFloat()
+                val posY = cols[index+1].toFloat()
+                val posZ = cols[index+2].toFloat()
+                val rotX = cols[index+3].toFloat()
+                val rotY = cols[index+4].toFloat()
+                val rotZ = cols[index+5].toFloat()
 
-   private fun testAbilitiesBetweenEvolution(context: CommandContext<CommandSourceStack>) {
-      (context.getSource() as CommandSourceStack)
-         .m_243053_(
-            Component.m_237113_("Ability test results (Assumed default assets)")
-               .m_7220_(Component.m_237113_("\n") as Component)
-               .m_7220_(this.testHiddenAbilityThroughoutEvolutions())
-               .m_7220_(Component.m_237113_("\n") as Component)
-               .m_7220_(this.testMiddleStageSingleAbility())
-               .m_7220_(Component.m_237113_("\n") as Component)
-               .m_7220_(this.testForcedAbility())
-               .m_7220_(Component.m_237113_("\n") as Component)
-               .m_7220_(this.testIllegalAbilityNonForced())
-               .m_7220_(Component.m_237113_("\n") as Component)
-               .m_7220_(this.testAbilityCapsule())
-               .m_7220_(Component.m_237113_("\n") as Component)
-               .m_7220_(this.testAbilityPatch()) as Component
-         );
-   }
+                val position = JsonObject()
+                position.addProperty("x", posX)
+                position.addProperty("y", posY)
+                position.addProperty("z", posZ)
+                val rotation = JsonObject()
+                rotation.addProperty("x", rotX)
+                rotation.addProperty("y", rotY)
+                rotation.addProperty("z", rotZ)
 
-   private fun testHiddenAbilityThroughoutEvolutions(): Component {
-      val pokemon: Pokemon = PokemonProperties.Companion.parse$default(
-            PokemonProperties.Companion, "dragonair level=${Cobblemon.INSTANCE.getConfig().getMaxPokemonLevel()} hiddenability=true", null, null, 6, null
-         )
-         .create();
-      val var10000: Evolution = CollectionsKt.firstOrNull(pokemon.getEvolutions()) as Evolution;
-      if (var10000 == null) {
-         val var7: MutableComponent = Component.m_237113_("✖ Failed to find Dragonair » Dragonite evolution");
-         return TextKt.red(var7) as Component;
-      } else {
-         var10000.evolutionMethod(pokemon);
-         val failed: Boolean = pokemon.getAbility().getIndex() != 0 || pokemon.getAbility().getPriority() != Priority.LOW || pokemon.getAbility().getForced();
-         val result: MutableComponent = Component.m_237113_(
-            " ${if (failed) "✖" else "✔"} Dratini line final Ability(name=${pokemon.getAbility().getName()}, priority=${pokemon.getAbility().getPriority()}, index=${pokemon.getAbility()
-               .getIndex()}, forced=${pokemon.getAbility().getForced()})"
-         );
-         val var6: Component;
-         if (failed) {
-            var6 = TextKt.red(result) as Component;
-         } else {
-            var6 = TextKt.green(result) as Component;
-         }
-
-         return var6;
-      }
-   }
-
-   private fun testMiddleStageSingleAbility(): Component {
-      val pokemon: Pokemon = PokemonProperties.Companion.parse$default(
-            PokemonProperties.Companion, "scatterbug level=${Cobblemon.INSTANCE.getConfig().getMaxPokemonLevel()} ability=compoundeyes", null, null, 6, null
-         )
-         .create();
-      var var10000: Evolution = CollectionsKt.firstOrNull(pokemon.getEvolutions()) as Evolution;
-      if (var10000 == null) {
-         val var10: MutableComponent = Component.m_237113_("✖ Failed to find Scatterbug » Spewpa evolution");
-         return TextKt.red(var10) as Component;
-      } else {
-         var10000.evolutionMethod(pokemon);
-         var10000 = CollectionsKt.firstOrNull(pokemon.getEvolutions()) as Evolution;
-         if (var10000 == null) {
-            val var9: MutableComponent = Component.m_237113_("✖ Failed to find Spewpa » Vivillon evolution");
-            return TextKt.red(var9) as Component;
-         } else {
-            var10000.evolutionMethod(pokemon);
-            val failed: Boolean = pokemon.getAbility().getIndex() != 1
-               || pokemon.getAbility().getPriority() != Priority.LOWEST
-               || pokemon.getAbility().getForced();
-            val result: MutableComponent = Component.m_237113_(
-               " ${if (failed) "✖" else "✔"} Scatterbug line final Ability(name=${pokemon.getAbility().getName()}, priority=${pokemon.getAbility()
-                  .getPriority()}, index=${pokemon.getAbility().getIndex()}, forced=${pokemon.getAbility().getForced()})"
-            );
-            val var8: Component;
-            if (failed) {
-               var8 = TextKt.red(result) as Component;
-            } else {
-               var8 = TextKt.green(result) as Component;
+                val obj = JsonObject()
+                obj.add("position", position)
+                obj.add("rotation", rotation)
+                growthPoints.add(obj)
+                index += 6
             }
 
-            return var8;
-         }
-      }
-   }
+            val arr = json.getAsJsonArray("growthPoints")
+            arr.removeAll { true }
+            for (point in growthPoints) {
+                arr.add(point)
+            }
 
-   private fun testForcedAbility(): Component {
-      val pokemon: Pokemon = PokemonProperties.Companion.parse$default(
-            PokemonProperties.Companion, "magikarp level=${Cobblemon.INSTANCE.getConfig().getMaxPokemonLevel()} ability=adaptability", null, null, 6, null
-         )
-         .create();
-      val var10000: Evolution = CollectionsKt.firstOrNull(pokemon.getEvolutions()) as Evolution;
-      if (var10000 == null) {
-         val var7: MutableComponent = Component.m_237113_("✖ Failed to find Magikarp » Gyarados evolution");
-         return TextKt.red(var7) as Component;
-      } else {
-         var10000.evolutionMethod(pokemon);
-         val failed: Boolean = !pokemon.getAbility().getForced() || !(pokemon.getAbility().getTemplate().getName() == "adaptability");
-         val result: MutableComponent = Component.m_237113_(
-            " ${if (failed) "✖" else "✔"} Magikarp line forced Ability(name=${pokemon.getAbility().getName()}, priority=${pokemon.getAbility().getPriority()}, index=${pokemon.getAbility()
-               .getIndex()}, forced=${pokemon.getAbility().getForced()})"
-         );
-         val var6: Component;
-         if (failed) {
-            var6 = TextKt.red(result) as Component;
-         } else {
-            var6 = TextKt.green(result) as Component;
-         }
+            val new = File("scripty/new/$berryName.json")
+            val pw = PrintWriter(new)
+            gson.toJson(json, pw)
+            pw.flush()
+            pw.close()
+        }
+    }
 
-         return var6;
-      }
-   }
+//    private fun testParticles(context: CommandContext<ServerCommandSource>) {
+//        val file = File("particle.particle.json")
+//        val effect = SnowstormParticleReader.loadEffect(GsonBuilder().create().fromJson<JsonObject>(file.readText()))
+//
+//        val player = context.source.entity as ServerPlayerEntity
+//        val position = player.pos
+//        val pkt = SpawnSnowstormParticlePacket(effect, position, 0F, 0F)
+//        player.sendPacket(pkt)
+//    }
 
-   private fun testIllegalAbilityNonForced(): Component {
-      val pokemon: Pokemon = PokemonProperties.Companion.parse$default(PokemonProperties.Companion, "rattata", null, null, 6, null).create();
-      pokemon.updateAbility(Abilities.INSTANCE.getOrException("adaptability").create(false));
-      val failed: Boolean = !pokemon.getAbility().getForced();
-      val result: MutableComponent = Component.m_237113_(
-         " ${if (failed) "✖" else "✔"} Rattata illegal non-forced (name=${pokemon.getAbility().getName()}, priority=${pokemon.getAbility().getPriority()}, index=${pokemon.getAbility()
-            .getIndex()}, forced=${pokemon.getAbility().getForced()})"
-      );
-      val var10000: Component;
-      if (failed) {
-         var10000 = TextKt.red(result) as Component;
-      } else {
-         var10000 = TextKt.green(result) as Component;
-      }
+//    private fun extractMovesData() {
+//        val ctx = GraalShowdown.context
+//        ctx.eval("js", """
+//                const ShowdownMoves = require('pokemon-showdown/data/moves');
+//            """.trimIndent())
+//        val moves = ctx.getBindings("js").getMember("ShowdownMoves").getMember("Moves")
+//        val gson = GsonBuilder().setPrettyPrinting().create()
+//        for (moveName in moves.memberKeys) {
+//            try {
+//                val value = moves.getMember(moveName)
+//                val obj = JsonObject()
+//                obj.addProperty("name", moveName)
+//                obj.addProperty("type", value.getMember("type").asString())
+//                obj.addProperty("damageCategory", value.getMember("category").asString())
+//                obj.addProperty("target", value.getMember("target").asString())
+//                obj.addProperty("power", value.getMember("basePower").asInt())
+//                obj.addProperty("accuracy", value.getMember("accuracy").let { if (it.isBoolean) -1F else it.asFloat() })
+//                obj.addProperty("pp", value.getMember("pp").asInt())
+//                obj.addProperty("priority", value.getMember("priority").asInt())
+//                if (value.hasMember("secondary")) {
+//                    val secondary = value.getMember("secondary")
+//                    if (secondary.hasMember("chance")) {
+//                        obj.addProperty("effectChance", secondary.getMember("chance").asInt())
+//                    }
+//                }
+//                val file = File("outputmoves").also { it.mkdir() }
+//                val pw = PrintWriter(File(file, "$moveName.json"))
+//                pw.write(gson.toJson(obj))
+//                pw.close()
+//            } catch (e: Exception) {
+//                println("Issue when converting $moveName")
+//                e.printStackTrace()
+//            }
+//        }
+//    }
+//
+//    private fun extractAbilitiesData() {
+//        val ctx = GraalShowdown.context
+//        ctx.eval("js", """
+//            const ShowdownAbilities = require('pokemon-showdown/data/abilities');
+//        """.trimIndent())
+//        val abilities = ctx.getBindings("js").getMember("ShowdownAbilities").getMember("Abilities")
+//        val gson = GsonBuilder().setPrettyPrinting().create()
+//        for (abilityName in abilities.memberKeys) {
+//            try {
+//                val obj = JsonObject()
+//                obj.addProperty("name", abilityName)
+//                obj.addProperty("displayName", "cobblemon.ability.$abilityName")
+//                obj.addProperty("description", "cobblemon.ability.$abilityName.desc")
+//                val file = File("outputabilities").also { it.mkdir() }
+//                val pw = PrintWriter(File(file, "$abilityName.json"))
+//                pw.write(gson.toJson(obj))
+//                pw.close()
+//            } catch (e: Exception) {
+//                println("Issue when converting $abilityName")
+//                e.printStackTrace()
+//            }
+//        }
+//    }
 
-      return var10000;
-   }
+    private fun testAbilitiesBetweenEvolution(context: CommandContext<CommandSourceStack>) {
+        val results = Component.literal("Ability test results (Assumed default assets)")
+            .append(Component.literal("\n"))
+            .append(this.testHiddenAbilityThroughoutEvolutions())
+            .append(Component.literal("\n"))
+            .append(this.testMiddleStageSingleAbility())
+            .append(Component.literal("\n"))
+            .append(this.testForcedAbility())
+            .append(Component.literal("\n"))
+            .append(this.testIllegalAbilityNonForced())
+            .append(Component.literal("\n"))
+            .append(this.testAbilityCapsule())
+            .append(Component.literal("\n"))
+            .append(this.testAbilityPatch())
+        context.source.sendSystemMessage(results)
+    }
 
-   private fun testAbilityCapsule(): Component {
-      val pokemon: Pokemon = PokemonProperties.Companion.parse$default(PokemonProperties.Companion, "rattata", null, null, 6, null).create();
-      val failed: Boolean = !AbilityChanger.Companion.getCOMMON_ABILITY().performChange(pokemon);
-      val result: MutableComponent = Component.m_237113_(
-         " ${if (failed) "✖" else "✔"} Rattata capsule Ability(name=${pokemon.getAbility().getName()}, priority=${pokemon.getAbility().getPriority()}, index=${pokemon.getAbility()
-            .getIndex()}, forced=${pokemon.getAbility().getForced()})"
-      );
-      val var10000: Component;
-      if (failed) {
-         var10000 = TextKt.red(result) as Component;
-      } else {
-         var10000 = TextKt.green(result) as Component;
-      }
+    private fun testHiddenAbilityThroughoutEvolutions(): Component {
+        // Hidden ability test, Dragonite HA differs from Dratini/Dragonair we need to ensure he keeps that ability until the end
+        // Skip Dratini cause same HA irrelevant for this test
+        val pokemon = PokemonProperties.parse("dragonair level=${Cobblemon.config.maxPokemonLevel} hiddenability=true").create()
+        val dragonite = pokemon.evolutions.firstOrNull() ?: return Component.literal("✖ Failed to find Dragonair » Dragonite evolution").red()
+        dragonite.evolutionMethod(pokemon)
+        val failed = pokemon.ability.index != 0 || pokemon.ability.priority != Priority.LOW || pokemon.ability.forced
+        val symbol = if (failed) "✖" else "✔"
+        val result = Component.literal(" $symbol Dratini line final Ability(name=${pokemon.ability.name}, priority=${pokemon.ability.priority}, index=${pokemon.ability.index}, forced=${pokemon.ability.forced})")
+        return if (failed) result.red() else result.green()
+    }
 
-      return var10000;
-   }
+    private fun testMiddleStageSingleAbility(): Component {
+        val pokemon = PokemonProperties.parse("scatterbug level=${Cobblemon.config.maxPokemonLevel} ability=compoundeyes").create()
+        val spewpa = pokemon.evolutions.firstOrNull() ?: return Component.literal("✖ Failed to find Scatterbug » Spewpa evolution").red()
+        spewpa.evolutionMethod(pokemon)
+        val vivillon = pokemon.evolutions.firstOrNull() ?: return Component.literal("✖ Failed to find Spewpa » Vivillon evolution").red()
+        vivillon.evolutionMethod(pokemon)
+        val failed = pokemon.ability.index != 1 || pokemon.ability.priority != Priority.LOWEST || pokemon.ability.forced
+        val symbol = if (failed) "✖" else "✔"
+        val result = Component.literal(" $symbol Scatterbug line final Ability(name=${pokemon.ability.name}, priority=${pokemon.ability.priority}, index=${pokemon.ability.index}, forced=${pokemon.ability.forced})")
+        return if (failed) result.red() else result.green()
+    }
 
-   private fun testAbilityPatch(): Component {
-      val pokemon: Pokemon = PokemonProperties.Companion.parse$default(PokemonProperties.Companion, "magikarp ha=true", null, null, 6, null).create();
-      val failed: Boolean = AbilityChanger.Companion.getHIDDEN_ABILITY().performChange(pokemon);
-      val result: MutableComponent = Component.m_237113_(
-         " ${if (failed) "✖" else "✔"} Magikarp patch Ability(name=${pokemon.getAbility().getName()}, priority=${pokemon.getAbility().getPriority()}, index=${pokemon.getAbility()
-            .getIndex()}, forced=${pokemon.getAbility().getForced()})"
-      );
-      val var10000: Component;
-      if (failed) {
-         var10000 = TextKt.red(result) as Component;
-      } else {
-         var10000 = TextKt.green(result) as Component;
-      }
+    private fun testForcedAbility(): Component {
+        val pokemon = PokemonProperties.parse("magikarp level=${Cobblemon.config.maxPokemonLevel} ability=adaptability").create()
+        val gyarados = pokemon.evolutions.firstOrNull() ?: return Component.literal("✖ Failed to find Magikarp » Gyarados evolution").red()
+        gyarados.evolutionMethod(pokemon)
+        val failed = !pokemon.ability.forced || pokemon.ability.template.name != "adaptability"
+        val symbol = if (failed) "✖" else "✔"
+        val result = Component.literal(" $symbol Magikarp line forced Ability(name=${pokemon.ability.name}, priority=${pokemon.ability.priority}, index=${pokemon.ability.index}, forced=${pokemon.ability.forced})")
+        return if (failed) result.red() else result.green()
+    }
 
-      return var10000;
-   }
+    private fun testIllegalAbilityNonForced(): Component {
+        val pokemon = PokemonProperties.parse("rattata").create()
+        pokemon.updateAbility(Abilities.getOrException("adaptability").create(false))
+        val failed = !pokemon.ability.forced
+        val symbol = if (failed) "✖" else "✔"
+        val result = Component.literal(" $symbol Rattata illegal non-forced (name=${pokemon.ability.name}, priority=${pokemon.ability.priority}, index=${pokemon.ability.index}, forced=${pokemon.ability.forced})")
+        return if (failed) result.red() else result.green()
+    }
 
-   @JvmStatic
-   fun `register$lambda$0`(it: CommandSourceStack): Boolean {
-      return it.m_6761_(4);
-   }
+    private fun testAbilityCapsule(): Component {
+        val pokemon = PokemonProperties.parse("rattata").create()
+        val failed = !AbilityChanger.COMMON_ABILITY.performChange(pokemon)
+        val symbol = if (failed) "✖" else "✔"
+        val result = Component.literal(" $symbol Rattata capsule Ability(name=${pokemon.ability.name}, priority=${pokemon.ability.priority}, index=${pokemon.ability.index}, forced=${pokemon.ability.forced})")
+        return if (failed) result.red() else result.green()
+    }
 
-   @JvmStatic
-   fun `testClosestBattle$lambda$3`(`$tmp0`: Function1, p0: Any): Boolean {
-      return `$tmp0`.invoke(p0) as java.lang.Boolean;
-   }
+    private fun testAbilityPatch(): Component {
+        val pokemon = PokemonProperties.parse("magikarp ha=true").create()
+        // It shouldn't change
+        val failed = AbilityChanger.HIDDEN_ABILITY.performChange(pokemon)
+        val symbol = if (failed) "✖" else "✔"
+        val result = Component.literal(" $symbol Magikarp patch Ability(name=${pokemon.ability.name}, priority=${pokemon.ability.priority}, index=${pokemon.ability.index}, forced=${pokemon.ability.forced})")
+        return if (failed) result.red() else result.green()
+    }
+
+    private fun testCodecOutput(context: CommandContext<CommandSourceStack>) {
+        val pokemon = context.source.playerOrException.party().get(0) ?: Pokemon()
+        pokemon.nickname = pokemon.species.translatedName
+            .withStyle {
+                it.withColor(pokemon.form.primaryType.hue)
+                    .withBold(true)
+            }
+        val jsonElement = Pokemon.CODEC.encodeStart(JsonOps.INSTANCE, pokemon).orThrow
+        context.source.sendSystemMessage(Component.literal(jsonElement.toString()))
+    }
+
+    private fun testPartySelectHoverText(context: CommandContext<CommandSourceStack>) {
+        val player = context.source.playerOrException
+        val party = player.party()
+
+        PartySelectCallbacks.create(
+            player,
+            pokemon = party.toList().map {
+                PartySelectPokemonDTO(it, true, listOf(
+                    Component.literal("Nature: ").gray().append(it.nature.displayName.asTranslated().green()),
+                    Component.literal("Ability: ").gray().append(it.ability.displayName.asTranslated().aqua()),
+                ))
+            }.toList()
+        ) { player, index ->
+
+        }
+    }
+
+    private fun tryTamePokemon(player: ServerPlayer) {
+        val pokemon = player.traceFirstEntityCollision(entityClass = PokemonEntity::class.java)
+        if (pokemon == null)
+        {
+            player.sendSystemMessage("Not looking at pokemon".text())
+            return
+        }
+        if (pokemon.isTame) {
+            player.sendSystemMessage("Cant tame an owned pokemon".text())
+            return
+        }
+        pokemon.tame(player)
+        player.sendSystemMessage("Pokemon tamed".text())
+    }
+
 }

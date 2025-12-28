@@ -1,181 +1,100 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions
 
 import com.bedrockk.molang.runtime.MoLangRuntime
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.InvalidInstructionException
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.addBattleMessageFunctions
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectTimeline
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffects
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.UsersProvider
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownInterpreter
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.ActionEffectInstruction
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.DispatchResult
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.DispatchResultKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InstructionSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.GO
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.UntilDispatch
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
-import java.util.LinkedHashSet
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import java.util.concurrent.CompletableFuture
-import kotlin.jvm.functions.Function0
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
-import org.jetbrains.annotations.NotNull
 
-public class BoostInstruction(instructionSet: InstructionSet, message: BattleMessage, remainingLines: Iterator<BattleMessage>, isBoost: Boolean = true) :
-   ActionEffectInstruction {
-   public open var future: CompletableFuture<*>
-   public open var holds: MutableSet<String>
-   public open val id: ResourceLocation
-   public final val instructionSet: InstructionSet
-   public final val isBoost: Boolean
-   public final val message: BattleMessage
-   public final val remainingLines: Iterator<BattleMessage>
+/**
+ * Format: |-boost|POKEMON|STAT|AMOUNT or |-unboost|POKEMON|STAT|AMOUNT
+ *
+ * POKEMON has gained or lost AMOUNT in STAT, using the standard rules for stat changes in-battle.
+ * STAT is a standard three-letter abbreviation fot the stat in question.
+ * @author Hiroku
+ * @since August 20th, 2022
+ */
+class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val isBoost: Boolean = true): ActionEffectInstruction {
+    override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
+    override var holds = mutableSetOf<String>()
+    override val id = cobblemonResource("boost")
 
-   init {
-      this.instructionSet = instructionSet;
-      this.message = message;
-      this.remainingLines = remainingLines;
-      this.isBoost = isBoost;
-      val var10001: CompletableFuture = CompletableFuture.completedFuture(Unit.INSTANCE);
-      this.future = var10001;
-      this.holds = new LinkedHashSet<>();
-      this.id = MiscUtilsKt.cobblemonResource("boost");
-   }
+    val pokemon = message.battlePokemon(0, battle) ?: throw InvalidInstructionException(message)
+    val statKey = message.argumentAt(1) ?: throw InvalidInstructionException(message)
+    val stages = message.argumentAt(2)?.toInt() ?: throw InvalidInstructionException(message)
+    val stat = Stats.getStat(statKey).displayName
 
-   public override fun preActionEffect(battle: PokemonBattle) {
-   }
+    override fun addMolangQueries(runtime: MoLangRuntime) {
+        super.addMolangQueries(runtime)
+        runtime.environment.query.addBattleMessageFunctions(message)
+    }
 
-   public override fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime) {
-      battle.dispatch(
-         (
-            new Function0<DispatchResult>(this, battle, runtime) {
-               {
-                  super(0);
-                  this.this$0 = `$receiver`;
-                  this.$battle = `$battle`;
-                  this.$runtime = `$runtime`;
-               }
+    override fun preActionEffect(battle: PokemonBattle) {
 
-               @NotNull
-               public final DispatchResult invoke() {
-                  val actionEffect: ActionEffectTimeline = if (this.this$0.isBoost())
-                     BoostInstruction.Companion.getBOOST_EFFECT()
-                     else
-                     BoostInstruction.Companion.getUNBOOST_EFFECT();
-                  val providers: java.util.List = CollectionsKt.mutableListOf(new Object[]{this.$battle});
-                  val var10000: BattlePokemon = this.this$0.getMessage().battlePokemon(0, this.$battle);
-                  if (var10000 == null) {
-                     return DispatchResultKt.getGO();
-                  } else {
-                     val var11: PokemonEntity = var10000.getEffectedPokemon().getEntity();
-                     if (var11 != null) {
-                        providers.add(new UsersProvider(var11));
-                     }
+    }
 
-                     val context: ActionEffectContext = new ActionEffectContext(actionEffect, null, providers, this.$runtime, false, false, null, 114, null);
-                     this.this$0.setFuture(actionEffect.run(context));
-                     this.this$0.setHolds(context.getHolds());
-                     this.this$0.getFuture().thenApply(<unrepresentable>::invoke$lambda$1);
-                     return DispatchResultKt.getGO();
-                  }
-               }
+    override fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime) {
+        if (stages == 0) return // only play effect if there was a stat change
+        battle.dispatch {
+            val actionEffect = if (isBoost) BOOST_EFFECT else UNBOOST_EFFECT
+            val providers = mutableListOf<Any>(battle)
+            pokemon.effectedPokemon.entity?.let { UsersProvider(it) }?.let(providers::add)
+            val context = ActionEffectContext(
+                actionEffect = actionEffect,
+                runtime = runtime,
+                providers = providers,
+                level = battle.players.firstOrNull()?.level()
+            )
+            this.future = actionEffect.run(context)
+            holds = context.holds // Reference so future things can check on this action effect's holds
+            future.thenApply { holds.clear() }
+            return@dispatch GO
+        }
+    }
 
-               private static final Unit invoke$lambda$1(BoostInstruction this$0, Object it) {
-                  `this$0`.getHolds().clear();
-                  return Unit.INSTANCE;
-               }
+    override fun postActionEffect(battle: PokemonBattle) {
+        val severity = Stats.getSeverity(stages)
+        val rootKey = if (isBoost) "boost" else "unboost"
+
+        battle.dispatch {
+            val lang = when {
+                message.hasOptionalArgument("zeffect") -> battleLang("$rootKey.$severity.zeffect", pokemon.getName(), stat)
+                else -> battleLang("$rootKey.$severity", pokemon.getName(), stat)
             }
-         ) as () -> DispatchResult
-      );
-   }
+            battle.broadcastChatMessage(lang)
 
-   public override fun postActionEffect(battle: PokemonBattle) {
-      val var10000: BattlePokemon = this.message.battlePokemon(0, battle);
-      if (var10000 != null) {
-         val var8: java.lang.String = this.message.argumentAt(1);
-         if (var8 != null) {
-            val var9: java.lang.String = this.message.argumentAt(2);
-            if (var9 != null) {
-               val stages: Int = Integer.parseInt(var9);
-               val stat: Component = Stats.Companion.getStat(var8).getDisplayName();
-               val severity: java.lang.String = Stats.Companion.getSeverity(stages);
-               val rootKey: java.lang.String = if (this.isBoost) "boost" else "unboost";
-               battle.dispatch(
-                  (
-                     new Function0<DispatchResult>(this, rootKey, severity, var10000, stat, battle, stages) {
-                        {
-                           super(0);
-                           this.this$0 = `$receiver`;
-                           this.$rootKey = `$rootKey`;
-                           this.$severity = `$severity`;
-                           this.$pokemon = `$pokemon`;
-                           this.$stat = `$stat`;
-                           this.$battle = `$battle`;
-                           this.$stages = `$stages`;
-                        }
+            val boostBucket = if (isBoost) BattleContext.Type.BOOST else BattleContext.Type.UNBOOST
+            val context = ShowdownInterpreter.getContextFromAction(message, boostBucket, battle)
+            // TODO: replace with context that tracks detailed information such as # of stages
+            repeat(stages) { pokemon.contextManager.add(context) }
+            battle.minorBattleActions[pokemon.uuid] = message
+            return@dispatch UntilDispatch { "effects" !in holds }
+        }
+    }
 
-                        @NotNull
-                        public final DispatchResult invoke() {
-                           val var12: MutableComponent = if (this.this$0.getMessage().hasOptionalArgument("zeffect"))
-                              LocalizationUtilsKt.battleLang("${this.$rootKey}.${this.$severity}.zeffect", this.$pokemon.getName(), this.$stat)
-                              else
-                              LocalizationUtilsKt.battleLang("${this.$rootKey}.${this.$severity}", this.$pokemon.getName(), this.$stat);
-                           val var14: PokemonBattle = this.$battle;
-                           var14.broadcastChatMessage(var12 as Component);
-                           val var11: BattleContext.Type = if (this.this$0.isBoost()) BattleContext.Type.BOOST else BattleContext.Type.UNBOOST;
-                           val context: BattleContext = ShowdownInterpreter.INSTANCE.getContextFromAction(this.this$0.getMessage(), var11, this.$battle);
-                           val var4: Int = this.$stages;
-                           val var5: BattlePokemon = this.$pokemon;
+    companion object {
+        val BOOST_EFFECT = ActionEffects.actionEffects[cobblemonResource("boost")]!!
+        val UNBOOST_EFFECT = ActionEffects.actionEffects[cobblemonResource("unboost")]!!
+    }
 
-                           for (int var6 = 0; var6 < var4; var6++) {
-                              var5.getContextManager().add(context);
-                           }
-
-                           this.$battle.getMinorBattleActions().put(this.$pokemon.getUuid(), this.this$0.getMessage());
-                           return new UntilDispatch((new Function0<java.lang.Boolean>(this.this$0) {
-                              {
-                                 super(0);
-                                 this.this$0 = `$receiver`;
-                              }
-
-                              @NotNull
-                              public final java.lang.Boolean invoke() {
-                                 return !this.this$0.getHolds().contains("effects");
-                              }
-                           }) as () -> java.lang.Boolean);
-                        }
-                     }
-                  ) as () -> DispatchResult
-               );
-            }
-         }
-      }
-   }
-
-   override fun invoke(battle: PokemonBattle) {
-      ActionEffectInstruction.DefaultImpls.invoke(this, battle);
-   }
-
-   override fun addMolangQueries(runtime: MoLangRuntime) {
-      ActionEffectInstruction.DefaultImpls.addMolangQueries(this, runtime);
-   }
-
-   @JvmStatic
-   fun {
-      var var10000: Any = ActionEffects.INSTANCE.getActionEffects().get(MiscUtilsKt.cobblemonResource("boost"));
-      BOOST_EFFECT = var10000 as ActionEffectTimeline;
-      var10000 = ActionEffects.INSTANCE.getActionEffects().get(MiscUtilsKt.cobblemonResource("unboost"));
-      UNBOOST_EFFECT = var10000 as ActionEffectTimeline;
-   }
-
-   public companion object {
-      public final val BOOST_EFFECT: ActionEffectTimeline
-      public final val UNBOOST_EFFECT: ActionEffectTimeline
-   }
 }

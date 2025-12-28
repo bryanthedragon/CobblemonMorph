@@ -1,58 +1,40 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.TradeManager
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.Level
 
-public class TradeOfferExpiredPacket(tradeOfferId: UUID) : NetworkPacket<TradeOfferExpiredPacket> {
-   public open val id: ResourceLocation
-   public final val tradeOfferId: UUID
+/**
+ * Packet fired to tell the client that a trade offer expired.
+ *
+ * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeOfferExpiredHandler].
+ *
+ * @param senderID The unique identifier of the party that sent the request.
+ * @param expired Whether this cancellation is due to expiration.
+ *
+ * @author Hiroku
+ * @since March 11th, 2023
+ */
+class TradeOfferExpiredPacket(val senderID: UUID) : NetworkPacket<TradeOfferExpiredPacket> {
+    companion object {
+        val ID = cobblemonResource("trade_offer_canceled")
+        fun decode(buffer: RegistryFriendlyByteBuf) = TradeOfferExpiredPacket(buffer.readUUID())
+    }
 
-   init {
-      this.tradeOfferId = tradeOfferId;
-      this.id = ID;
-   }
+    override val id = ID
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeUUID(senderID)
+    }
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      buffer.m_130077_(this.tradeOfferId);
-   }
-
-   override fun sendToPlayer(player: ServerPlayer) {
-      NetworkPacket.DefaultImpls.sendToPlayer(this, player);
-   }
-
-   override fun sendToPlayers(players: MutableIterable<ServerPlayer>) {
-      NetworkPacket.DefaultImpls.sendToPlayers(this, players);
-   }
-
-   override fun sendToAllPlayers() {
-      NetworkPacket.DefaultImpls.sendToAllPlayers(this);
-   }
-
-   override fun sendToServer() {
-      NetworkPacket.DefaultImpls.sendToServer(this);
-   }
-
-   override fun sendToPlayersAround(
-      x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer?) -> java.lang.Boolean
-   ) {
-      NetworkPacket.DefaultImpls.sendToPlayersAround(this, x, y, z, distance, worldKey, exclusionCondition);
-   }
-
-   override fun toBuffer(): FriendlyByteBuf {
-      return NetworkPacket.DefaultImpls.toBuffer(this);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): TradeOfferExpiredPacket {
-         val var10002: UUID = buffer.m_130259_();
-         return new TradeOfferExpiredPacket(var10002);
-      }
-   }
+    constructor(request: TradeManager.TradeRequest) : this(request.senderID)
 }

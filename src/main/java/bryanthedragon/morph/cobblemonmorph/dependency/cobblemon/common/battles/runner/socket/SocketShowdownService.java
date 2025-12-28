@@ -1,317 +1,162 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.socket
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BagItems
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ShowdownInterpreter
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.ShowdownService
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.net.InetAddress
 import java.net.Socket
 import java.nio.charset.Charset
-import java.util.ArrayList;
 import java.util.UUID
-import java.util.Map.Entry
-import kotlin.jvm.functions.Function0
-import kotlin.jvm.internal.Intrinsics
-import kotlin.jvm.internal.SourceDebugExtension
+import kotlin.text.replace
 
-@SourceDebugExtension(["SMAP\nSocketShowdownService.kt\nKotlin\n*S Kotlin\n*F\n+ 1 SocketShowdownService.kt\ncom/cobblemon/mod/common/battles/runner/socket/SocketShowdownService\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,169:1\n1855#2,2:170\n1855#2:172\n1855#2,2:173\n1856#2:175\n*S KotlinDebug\n*F\n+ 1 SocketShowdownService.kt\ncom/cobblemon/mod/common/battles/runner/socket/SocketShowdownService\n*L\n72#1:170,2\n139#1:172\n141#1:173,2\n139#1:175\n*E\n"])
-public class SocketShowdownService(host: String = "localhost", port: Int = 18468, localPort: Int = 0) : ShowdownService {
-   public final val gson: Gson
-   public final val host: String
-   public final val localPort: Int
-   public final val port: Int
-   private final lateinit var reader: BufferedReader
-   private final lateinit var socket: Socket
-   private final lateinit var writer: OutputStreamWriter
+/**
+ * Mediator service for communicating between the Cobblemon Minecraft mod and Cobblemon showdown service via
+ * a socket client.
+ *
+ * This is primarily used for debugging purposes, but could be extended in the future to provide
+ * a means of connecting to a remote Showdown server. This does not provide any fault handling in the
+ * event that the server goes down.
+ *
+ * When messages are sent to showdown, this will await a response from showdown.
+ * The protocol for messages sent from showdown is <length of characters in payload><payload>,
+ * and a payload length of 0 indicates that there is no response.
+ *
+ * @see {@code sim/cobbled-debug-server.ts} within cobblemon-showdown repository
+ * @since February 27, 2023
+ * @author landonjw
+ */
+class SocketShowdownService(val host: String = "localhost", val port: Int = 18468, val localPort: Int = 0) : ShowdownService {
 
-   init {
-      this.host = host;
-      this.port = port;
-      this.localPort = localPort;
-      this.gson = new Gson();
-   }
+    private lateinit var socket: Socket
+    private lateinit var writer: OutputStreamWriter
+    private lateinit var reader: BufferedReader
+    val gson = Gson()
 
-   public override fun openConnection() {
-      this.socket = new Socket(InetAddress.getLocalHost(), this.port, InetAddress.getLocalHost(), this.localPort);
-      var var10001: Socket = this.socket;
-      if (this.socket == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("socket");
-         var10001 = null;
-      }
+    override fun openConnection() {
+        socket = Socket(InetAddress.getLocalHost(), port, InetAddress.getLocalHost(), localPort)
+        writer = socket.getOutputStream().writer(charset = Charset.forName("ascii"))
+        reader = BufferedReader(InputStreamReader(socket.getInputStream()))
+    }
 
-      val var3: OutputStream = var10001.getOutputStream();
-      val var4: Charset = Charset.forName("ascii");
-      this.writer = new OutputStreamWriter(var3, var4);
-      val var5: BufferedReader = new BufferedReader;
-      val var10003: InputStreamReader = new InputStreamReader;
-      var var10005: Socket = this.socket;
-      if (this.socket == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("socket");
-         var10005 = null;
-      }
+    override fun closeConnection() {
+        socket.close()
+    }
 
-      var10003./* $VF: Unable to resugar constructor */<init>(var10005.getInputStream());
-      var5./* $VF: Unable to resugar constructor */<init>(var10003);
-      this.reader = var5;
-   }
+    override fun startBattle(battle: PokemonBattle, messages: Array<String>) {
+        writer.write(">startbattle ${battle.battleId}\n")
+        acknowledge { Cobblemon.LOGGER.error("Failed to start battle!") }
+        send(battle.battleId, messages)
+    }
 
-   public override fun closeConnection() {
-      var var10000: Socket = this.socket;
-      if (this.socket == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("socket");
-         var10000 = null;
-      }
+    override fun send(battleId: UUID, messages: Array<String>) {
+        for (message in messages) {
+            writer.write("$battleId~$message\n")
+            writer.flush()
+            readBattleInput().forEach { interpretMessage(battleId, it) }
+        }
+    }
 
-      var10000.close();
-   }
+    private fun read(reader: BufferedReader, size: Int): String {
+        val buffer = CharArray(size)
+        while (true) {
+            if(reader.read(buffer) == 0) continue
+            return String(buffer)
+        }
+    }
 
-   public override fun startBattle(battle: PokemonBattle, messages: Array<String>) {
-      var var10000: OutputStreamWriter = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
+    private fun readMessage(): String {
+        val payloadSize = read(reader, 8).toInt()
+        val payload = read(reader, payloadSize)
+        return payload
+    }
 
-      var10000.write(">startbattle ${battle.getBattleId()}\n");
-      this.acknowledge(<unrepresentable>.INSTANCE);
-      val var10001: UUID = battle.getBattleId();
-      this.send(var10001, messages);
-   }
-
-   public override fun send(battleId: UUID, messages: Array<String>) {
-      for (java.lang.String message : messages) {
-         var var10000: OutputStreamWriter = this.writer;
-         if (this.writer == null) {
-            Intrinsics.throwUninitializedPropertyAccessException("writer");
-            var10000 = null;
-         }
-
-         var10000.write("$battleId~$message\n");
-         var10000 = this.writer;
-         if (this.writer == null) {
-            Intrinsics.throwUninitializedPropertyAccessException("writer");
-            var10000 = null;
-         }
-
-         var10000.flush();
-
-         val `$this$forEach$iv`: java.lang.Iterable;
-         for (Object element$iv : $this$forEach$iv) {
-            this.interpretMessage(battleId, `element$iv` as java.lang.String);
-         }
-      }
-   }
-
-   private fun read(reader: BufferedReader, size: Int): String {
-      val buffer: CharArray = new char[size];
-
-      while (reader.read(buffer) == 0) {
-      }
-
-      return new java.lang.String(buffer);
-   }
-
-   private fun readMessage(): String {
-      var var10001: BufferedReader = this.reader;
-      if (this.reader == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("reader");
-         var10001 = null;
-      }
-
-      val payloadSize: Int = Integer.parseInt(this.read(var10001, 8));
-      var10001 = this.reader;
-      if (this.reader == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("reader");
-         var10001 = null;
-      }
-
-      return this.read(var10001, payloadSize);
-   }
-
-   private fun readBattleInput(): List<String> {
-      val lines: java.util.List = new ArrayList();
-      var var10001: BufferedReader = this.reader;
-      if (this.reader == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("reader");
-         var10001 = null;
-      }
-
-      val numLines: Int = Integer.parseInt(this.read(var10001, 8));
-      if (numLines != 0) {
-         for (int i = 0; i < numLines; i++) {
-            lines.add(this.readMessage());
-         }
-      }
-
-      return lines;
-   }
-
-   private fun interpretMessage(battleId: UUID, message: String) {
-      ShowdownInterpreter.INSTANCE.interpretMessage(battleId, message);
-   }
-
-   public override fun getAbilityIds(): JsonArray {
-      var var10000: OutputStreamWriter = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
-
-      var10000.write(">getCobbledAbilityIds");
-      var10000 = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
-
-      var10000.flush();
-      val var3: Any = this.gson.fromJson(this.readMessage(), JsonArray.class);
-      return var3 as JsonArray;
-   }
-
-   public override fun getMoves(): JsonArray {
-      var var10000: OutputStreamWriter = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
-
-      var10000.write(">getCobbledMoves\n");
-      var10000 = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
-
-      var10000.flush();
-      val var3: Any = this.gson.fromJson(this.readMessage(), JsonArray.class);
-      return var3 as JsonArray;
-   }
-
-   public override fun getItemIds(): JsonArray {
-      var var10000: OutputStreamWriter = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
-
-      var10000.write(">getCobbledItemIds");
-      var10000 = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
-
-      var10000.flush();
-      val var3: Any = this.gson.fromJson(this.readMessage(), JsonArray.class);
-      return var3 as JsonArray;
-   }
-
-   private fun sendSpeciesData(species: Species, form: FormData?) {
-      var var10000: OutputStreamWriter = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
-
-      var10000.write(">receiveSpeciesData ${this.gson.toJson(new PokemonSpecies.ShowdownSpecies(species, form))}\n");
-      acknowledge$default(this, null, 1, null);
-   }
-
-   private fun sendBagItem(itemId: String, js: String) {
-      var var10000: OutputStreamWriter = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
-
-      var10000.write(">receiveBagItemData $itemId $js");
-      this.acknowledge((new Function0<Unit>(itemId) {
-         {
-            super(0);
-            this.$itemId = `$itemId`;
-         }
-
-         public final void invoke() {
-            Cobblemon.INSTANCE.getLOGGER().error("Failed to send bag item to Showdown: ${this.$itemId}");
-         }
-      }) as () -> Unit);
-   }
-
-   public override fun registerSpecies() {
-      var var10000: OutputStreamWriter = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
-
-      var10000.write(">resetSpeciesData\n");
-      acknowledge$default(this, null, 1, null);
-
-      val `$this$forEach$iv`: java.lang.Iterable;
-      for (Object element$iv : $this$forEach$iv) {
-         val species: Species = `element$iv` as Species;
-         this.sendSpeciesData(`element$iv` as Species, null);
-
-         val `$this$forEach$ivx`: java.lang.Iterable;
-         for (Object element$ivx : $this$forEach$ivx) {
-            val form: FormData = `element$ivx` as FormData;
-            if (!(`element$ivx` as FormData == species.getStandardForm())) {
-               this.sendSpeciesData(species, form);
+    private fun readBattleInput(): List<String> {
+        val lines = mutableListOf<String>()
+        val numLines = read(reader, 8).toInt()
+        if (numLines != 0) {
+            for (i in 0 until numLines) {
+                lines.add(readMessage())
             }
-         }
-      }
-   }
+        }
+        return lines
+    }
 
-   public fun acknowledge(ifFails: () -> Unit = <unrepresentable>.INSTANCE as Function0) {
-      var var10000: OutputStreamWriter = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
+    private fun interpretMessage(battleId: UUID, message: String) {
+        ShowdownInterpreter.interpretMessage(battleId, message)
+    }
 
-      var10000.flush();
-      val ack: CharArray = new char[3];
-      var var3: BufferedReader = this.reader;
-      if (this.reader == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("reader");
-         var3 = null;
-      }
+    override fun sendRegistryData(data: Map<String, String>, type: String) {
+        data.forEach { (key, value) -> sendRegistryEntry(key, value, type) }
+        // The code for sending bulk data is commented out below, because:
+        // 1) while debugging it's useful to have individual entries, and socket is only used for debug atm
+        // 2) the species JSONs are way too big to be handled as one line on the JS side (maybe both sides?)
+        // this can eventually be remedied if socket is intended to be used for any actual servers/etc.
+        // alternatively, you could get around this limitation by just having ONLY PokemonSpecies send individually,
+        // but it's likely that with enough custom data for moves/abilities/etc. you'd run into the same issue
 
-      var3.read(ack);
-      if (!(new java.lang.String(ack) == "ACK")) {
-         ifFails.invoke();
-      }
-   }
+        /*val payload = data.entries.joinToString(prefix = "{", postfix = "}") { (k, v) ->
+            val newV = v.replace(Regex("[\r\n]+"), " ")
+            "\"$k\": $newV"
+        }
+        writer.write(">receiveData $type payload")
+        acknowledge { Cobblemon.LOGGER.error("Failed to send $type data to Showdown: $data") }*/
+    }
 
-   public override fun registerBagItems() {
-      for (Entry var2 : BagItems.INSTANCE.getBagItemsScripts$common().entrySet()) {
-         this.sendBagItem(var2.getKey() as java.lang.String, StringsKt.replace$default(var2.getValue() as java.lang.String, "\n", " ", false, 4, null));
-      }
-   }
+    fun sendRegistryEntry(key: String, data: String, type: String) {
+        val payload = data.replace(Regex("[\r\n]+"), " ")
+        writer.write(">receiveEntry $type $key $payload")
+        acknowledge { Cobblemon.LOGGER.error("Failed to send $type data to Showdown: $payload") }
+    }
 
-   public override fun indicateSpeciesInitialized() {
-      var var10000: OutputStreamWriter = this.writer;
-      if (this.writer == null) {
-         Intrinsics.throwUninitializedPropertyAccessException("writer");
-         var10000 = null;
-      }
+    override fun sendRegistryEntry(data: String, type: String) {
+        val payload = data.replace(Regex("[\r\n]+"), " ")
+        writer.write(">receiveEntry $type $payload")
+        acknowledge { Cobblemon.LOGGER.error("Failed to send $type data to Showdown: $payload") }
+    }
 
-      var10000.write(">afterCobbledSpeciesInit");
-      acknowledge$default(this, null, 1, null);
-   }
+    override fun getRegistryData(type: String): JsonArray {
+        writer.write(">getData $type")
+        writer.flush()
+        val response = readMessage()
+        return gson.fromJson(response, JsonArray::class.java)
+    }
 
-   fun SocketShowdownService() {
-      this(null, 0, 0, 7, null);
-   }
+    override fun resetRegistryData(type: String) {
+        writer.write(">resetData $type")
+        acknowledge()
+    }
+
+    override fun resetAllRegistries() {
+        writer.write(">resetAll")
+        acknowledge()
+    }
+
+    fun acknowledge(ifFails: () -> Unit = {}) {
+        writer.flush()
+        val ack = CharArray(3)
+        reader.read(ack)
+        if (String(ack) != "ACK") {
+            ifFails()
+        }
+    }
+
+    override fun indicateSpeciesInitialized() {
+        writer.write(">afterSpeciesInit")
+        acknowledge()
+    }
+
 }

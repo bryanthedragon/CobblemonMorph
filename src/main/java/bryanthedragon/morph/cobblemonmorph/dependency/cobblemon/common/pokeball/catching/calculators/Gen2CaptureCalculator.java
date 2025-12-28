@@ -1,198 +1,93 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.catching.calculators
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CaptureContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.calculators.CaptureCalculator
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatusContainer
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.BurnStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.FrozenStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.ParalysisStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.PoisonBadlyStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.PoisonStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.statuses.persistent.SleepStatus
-import kotlin.math.MathKt
+import kotlin.math.max
+import kotlin.math.roundToInt
 import kotlin.random.Random
 import net.minecraft.world.entity.LivingEntity
 
-public class Gen2CaptureCalculator(bugsFixed: Boolean) : CaptureCalculator {
-   public final val bugsFixed: Boolean
+/**
+ * An implementation of the capture calculator used in the generation 1 games.
+ * For more information see the [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Catch_rate#Capture_method_.28Generation_II.29) page.
+ *
+ * @property bugsFixed Should the bug with the bonusStatus in the formula be fixed? Having this on false is how the games shipped out.
+ *
+ * @author Licious
+ * @since January 29th, 2022
+ */
+class Gen2CaptureCalculator(val bugsFixed: Boolean) : CaptureCalculator {
 
-   init {
-      this.bugsFixed = bugsFixed;
-   }
+    override fun id(): String = "generation_2" + if (this.bugsFixed) "_fixed" else ""
 
-   public override fun id(): String {
-      return "generation_2${if (this.bugsFixed) "_fixed" else ""}";
-   }
-
-   public override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
-      val pokeBall: PokeBall = pokeBallEntity.getPokeBall();
-      val pokemon: Pokemon = target.getPokemon();
-      if (pokeBall.getCatchRateModifier().isGuaranteed()) {
-         return CaptureContext.Companion.successful$default(CaptureContext.Companion, false, 1, null);
-      } else {
-         val catchRate: Float = this.getCatchRate(thrower, pokeBallEntity, target, (float)pokemon.getForm().getCatchRate());
-         val modifiedRate: Float = if (pokeBall.getCatchRateModifier().isValid(thrower, pokemon))
-            pokeBall.getCatchRateModifier().modifyCatchRate(catchRate, thrower, pokemon)
-            else
-            catchRate;
-         val var10000: PersistentStatusContainer = pokemon.getStatus();
-         val status: PersistentStatus = if (var10000 != null) var10000.getStatus() else null;
-         val bonusStatus: Int = if (status !is SleepStatus && status !is FrozenStatus)
-            (if (!this.bugsFixed || status !is ParalysisStatus && status !is BurnStatus && status !is PoisonStatus && status !is PoisonBadlyStatus) 1 else 5)
-            else
-            10;
-         val modifiedCatchRate: Int = MathKt.roundToInt(
-            RangesKt.coerceAtMost(
-               Math.max(
-                  (3.0F * (float)pokemon.getHp() - 2.0F * (float)pokemon.getCurrentHealth()) * modifiedRate / (3.0F * (float)pokemon.getHp())
-                     + (float)bonusStatus,
-                  1.0F
-               ),
-               255.0F
-            )
-         );
-         if (Random.Default.nextInt(256) <= modifiedCatchRate) {
-            return CaptureContext.Companion.successful$default(CaptureContext.Companion, false, 1, null);
-         } else {
-            val shakeProbability: Int = if (modifiedCatchRate <= 1)
-               63
-               else
-               (
-                  if (modifiedCatchRate == 2)
-                     75
-                     else
-                     (
-                        if (modifiedCatchRate == 3)
-                           84
-                           else
-                           (
-                              if (modifiedCatchRate == 4)
-                                 90
-                                 else
-                                 (
-                                    if (modifiedCatchRate == 5)
-                                       95
-                                       else
-                                       (
-                                          if (modifiedCatchRate <= 7)
-                                             103
-                                             else
-                                             (
-                                                if (modifiedCatchRate <= 10)
-                                                   113
-                                                   else
-                                                   (
-                                                      if (modifiedCatchRate <= 15)
-                                                         126
-                                                         else
-                                                         (
-                                                            if (modifiedCatchRate <= 20)
-                                                               134
-                                                               else
-                                                               (
-                                                                  if (modifiedCatchRate <= 30)
-                                                                     149
-                                                                     else
-                                                                     (
-                                                                        if (modifiedCatchRate <= 40)
-                                                                           160
-                                                                           else
-                                                                           (
-                                                                              if (modifiedCatchRate <= 50)
-                                                                                 169
-                                                                                 else
-                                                                                 (
-                                                                                    if (modifiedCatchRate <= 60)
-                                                                                       177
-                                                                                       else
-                                                                                       (
-                                                                                          if (modifiedCatchRate <= 80)
-                                                                                             191
-                                                                                             else
-                                                                                             (
-                                                                                                if (modifiedCatchRate <= 100)
-                                                                                                   201
-                                                                                                   else
-                                                                                                   (
-                                                                                                      if (modifiedCatchRate <= 120)
-                                                                                                         211
-                                                                                                         else
-                                                                                                         (
-                                                                                                            if (modifiedCatchRate <= 140)
-                                                                                                               200
-                                                                                                               else
-                                                                                                               (
-                                                                                                                  if (modifiedCatchRate <= 160)
-                                                                                                                     227
-                                                                                                                     else
-                                                                                                                     (
-                                                                                                                        if (modifiedCatchRate <= 180)
-                                                                                                                           234
-                                                                                                                           else
-                                                                                                                           (
-                                                                                                                              if (modifiedCatchRate <= 200)
-                                                                                                                                 240
-                                                                                                                                 else
-                                                                                                                                 (
-                                                                                                                                    if (modifiedCatchRate
-                                                                                                                                          <= 220)
-                                                                                                                                       246
-                                                                                                                                       else
-                                                                                                                                       (
-                                                                                                                                          if (modifiedCatchRate
-                                                                                                                                                <= 240)
-                                                                                                                                             251
-                                                                                                                                             else
-                                                                                                                                             (
-                                                                                                                                                if (modifiedCatchRate
-                                                                                                                                                      <= 254)
-                                                                                                                                                   253
-                                                                                                                                                   else
-                                                                                                                                                   255
-                                                                                                                                             )
-                                                                                                                                       )
-                                                                                                                                 )
-                                                                                                                           )
-                                                                                                                     )
-                                                                                                               )
-                                                                                                         )
-                                                                                                   )
-                                                                                             )
-                                                                                       )
-                                                                                 )
-                                                                           )
-                                                                     )
-                                                               )
-                                                         )
-                                                   )
-                                             )
-                                       )
-                                 )
-                           )
-                     )
-               );
-            var shakes: Int = 0;
-            val var13: Byte = 3;
-
-            for (int var14 = 0; var14 < var13; var14++) {
-               if (Random.Default.nextInt(256) >= shakeProbability) {
-                  return new CaptureContext(shakes, false, false);
-               }
-
-               shakes++;
+    override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
+        val pokeBall = pokeBallEntity.pokeBall
+        val pokemon = target.pokemon
+        if (pokeBall.catchRateModifier.isGuaranteed()) {
+            return CaptureContext.successful()
+        }
+        val catchRate = getCatchRate(thrower, pokeBallEntity, target, pokemon.form.catchRate.toFloat())
+        val modifiedRate = if (pokeBall.catchRateModifier.isValid(thrower, pokemon)) pokeBall.catchRateModifier.modifyCatchRate(catchRate, thrower, pokemon) else catchRate
+        val status = pokemon.status?.status
+        val bonusStatus = when {
+            status is SleepStatus || status is FrozenStatus -> 10
+            this.bugsFixed && (status is ParalysisStatus || status is BurnStatus || status is PoisonStatus || status is PoisonBadlyStatus) -> 5
+            else -> 1
+        }
+        val modifiedCatchRate = max((((3F * pokemon.maxHealth - 2F * pokemon.currentHealth) * modifiedRate) / (3F * pokemon.maxHealth)) + bonusStatus, 1F).coerceAtMost(255F).roundToInt()
+        if (Random.nextInt(256) <= modifiedCatchRate) {
+            return CaptureContext.successful()
+        }
+        val shakeProbability = when {
+            modifiedCatchRate <= 1 -> 63
+            modifiedCatchRate == 2 -> 75
+            modifiedCatchRate == 3 -> 84
+            modifiedCatchRate == 4 -> 90
+            modifiedCatchRate == 5 -> 95
+            modifiedCatchRate <= 7 -> 103
+            modifiedCatchRate <= 10 -> 113
+            modifiedCatchRate <= 15 -> 126
+            modifiedCatchRate <= 20 -> 134
+            modifiedCatchRate <= 30 -> 149
+            modifiedCatchRate <= 40 -> 160
+            modifiedCatchRate <= 50 -> 169
+            modifiedCatchRate <= 60 -> 177
+            modifiedCatchRate <= 80 -> 191
+            modifiedCatchRate <= 100 -> 201
+            modifiedCatchRate <= 120 -> 211
+            modifiedCatchRate <= 140 -> 200
+            modifiedCatchRate <= 160 -> 227
+            modifiedCatchRate <= 180 -> 234
+            modifiedCatchRate <= 200 -> 240
+            modifiedCatchRate <= 220 -> 246
+            modifiedCatchRate <= 240 -> 251
+            modifiedCatchRate <= 254 -> 253
+            else -> 255
+        }
+        var shakes = 0
+        repeat(3) {
+            if (Random.nextInt(256) >= shakeProbability) {
+                return CaptureContext(numberOfShakes = shakes, isSuccessfulCapture = false, isCriticalCapture = false)
             }
+            shakes++
+        }
+        return CaptureContext.successful()
+    }
 
-            return CaptureContext.Companion.successful$default(CaptureContext.Companion, false, 1, null);
-         }
-      }
-   }
-
-   override fun getCatchRate(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity, catchRate: Float): Float {
-      return CaptureCalculator.DefaultImpls.getCatchRate(this, thrower, pokeBallEntity, target, catchRate);
-   }
 }

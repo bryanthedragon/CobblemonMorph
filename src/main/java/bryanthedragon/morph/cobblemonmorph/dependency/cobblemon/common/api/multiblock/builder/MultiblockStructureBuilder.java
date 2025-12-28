@@ -1,34 +1,38 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.multiblock.builder
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.multiblock.condition.MultiblockCondition
-import kotlin.jvm.internal.SourceDebugExtension
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.shapes.VoxelShape
 
-public interface MultiblockStructureBuilder {
-   public val boundingBox: VoxelShape
-   public val conditions: List<MultiblockCondition>
+/**
+ * Represents an area that has a potential to form a MultiBlockStructure
+ * @property boundingBox The box that each condition checks in
+ * @property conditions The [MultiblockCondition]s that must be met for the multiblock to form. All must be true.
+ *
+ * @author Apion
+ * @since August 24, 2023
+ */
+interface MultiblockStructureBuilder {
+    val boundingBox: VoxelShape
+    val conditions: List<MultiblockCondition>
 
-   public open fun validate(world: ServerLevel): Boolean {
-   }
-
-   public abstract fun form(world: ServerLevel) {
-   }
-
-   // $VF: Class flags could not be determined
-   @SourceDebugExtension(["SMAP\nMultiblockStructureBuilder.kt\nKotlin\n*S Kotlin\n*F\n+ 1 MultiblockStructureBuilder.kt\ncom/cobblemon/mod/common/api/multiblock/builder/MultiblockStructureBuilder$DefaultImpls\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n*L\n1#1,40:1\n1855#2,2:41\n*S KotlinDebug\n*F\n+ 1 MultiblockStructureBuilder.kt\ncom/cobblemon/mod/common/api/multiblock/builder/MultiblockStructureBuilder$DefaultImpls\n*L\n29#1:41,2\n*E\n"])
-   internal class DefaultImpls {
-      @JvmStatic
-      fun validate(`$this`: MultiblockStructureBuilder, world: ServerLevel): Boolean {
-         val `$this$forEach$iv`: java.lang.Iterable;
-         for (Object element$iv : $this$forEach$iv) {
-            if (!(`element$iv` as MultiblockCondition).test(world, `$this`.getBoundingBox())) {
-               return false;
+    fun validate(world: ServerLevel): Boolean {
+        conditions.forEach {
+            if (!it.test(world, boundingBox)) {
+                return false
             }
-         }
+        }
+        form(world)
+        return true
+    }
 
-         `$this`.form(world);
-         return true;
-      }
-   }
+    fun form(world: ServerLevel)
 }

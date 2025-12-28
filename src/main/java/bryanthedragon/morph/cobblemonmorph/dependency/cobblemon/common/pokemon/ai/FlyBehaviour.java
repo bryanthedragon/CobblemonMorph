@@ -1,6 +1,26 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.ai
 
-public class FlyBehaviour {
-   public final val canFly: Boolean
-   public final val flySpeedHorizontal: Float = 0.3F
+import com.bedrockk.molang.runtime.value.DoubleValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpression
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.createDuplicateRuntime
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveFloat
+
+class FlyBehaviour {
+    val canFly = false
+    val flySpeedHorizontal = "0.3".asExpression()
+
+    @Transient
+    val struct = ObjectValue(this).also {
+        it.addFunction("can_fly") { DoubleValue(canFly) }
+        it.addFunction("fly_speed_horizontal") { it.environment.createDuplicateRuntime().resolveFloat(flySpeedHorizontal) }
+    }
 }

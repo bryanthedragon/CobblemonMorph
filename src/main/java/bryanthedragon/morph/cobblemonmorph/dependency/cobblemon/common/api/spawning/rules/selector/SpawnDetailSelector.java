@@ -1,13 +1,22 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
-import java.util.LinkedHashMap
 
-public interface SpawnDetailSelector {
-   public abstract fun selects(spawnDetail: SpawnDetail): Boolean {
-   }
+interface SpawnDetailSelector {
+    companion object {
+        val types = mutableMapOf<String, Class<out SpawnDetailSelector>>()
 
-   public companion object {
-      public final val types: MutableMap<String, Class<out SpawnDetailSelector>> = (new LinkedHashMap()) as java.util.Map
-   }
+        inline fun <reified T : SpawnDetailSelector> register(type: String) {
+            types[type] = T::class.java
+        }
+    }
+    fun selects(spawnDetail: SpawnDetail): Boolean
 }

@@ -1,434 +1,302 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BasicContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.Effect
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.MissingContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleContext.Type
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.*
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.TextKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.EntityBackedBattleActor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.yellow
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InstructionSet
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.InterpreterInstruction
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.ContextManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions.UnknownInstruction
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.instructions.*
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DistributionUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import java.util.ArrayList;
-import java.util.Arrays
-import java.util.LinkedHashMap
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.runOnServer
+import net.minecraft.world.level.ClipContext
+import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.Vec3
 import java.util.UUID
-import kotlin.jvm.functions.Function0
-import kotlin.jvm.functions.Function4
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
+import kotlin.collections.Iterator
+import kotlin.collections.filter
+import kotlin.collections.forEach
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
+import kotlin.collections.toMutableList
+import kotlin.collections.toTypedArray
+import kotlin.time.measureTime
 
-@SourceDebugExtension(["SMAP\nShowdownInterpreter.kt\nKotlin\n*S Kotlin\n*F\n+ 1 ShowdownInterpreter.kt\ncom/cobblemon/mod/common/battles/ShowdownInterpreter\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n+ 4 ArraysJVM.kt\nkotlin/collections/ArraysKt__ArraysJVMKt\n*L\n1#1,289:1\n1855#2,2:290\n1549#2:295\n1620#2,3:296\n1855#2,2:301\n3792#3:292\n4307#3,2:293\n37#4,2:299\n*S KotlinDebug\n*F\n+ 1 ShowdownInterpreter.kt\ncom/cobblemon/mod/common/battles/ShowdownInterpreter\n*L\n171#1:290,2\n232#1:295\n232#1:296,3\n60#1:301,2\n231#1:292\n231#1:293,2\n234#1:299,2\n*E\n"])
-public object ShowdownInterpreter {
-   public final val lastCauser: MutableMap<UUID, BattleMessage> = (new LinkedHashMap()) as java.util.Map
-   private final val sideInstructionParser: MutableMap<String, (PokemonBattle, BattleActor, InstructionSet, BattleMessage) -> InterpreterInstruction> =
-      (new LinkedHashMap()) as java.util.Map
-      private final val splitInstructionParser: MutableMap<
-      String,
-      (PokemonBattle, BattleActor, InstructionSet, BattleMessage, BattleMessage, Iterator<BattleMessage>) -> InterpreterInstruction
-   > = (new LinkedHashMap()) as java.util.Map
-   private final val updateInstructionParser: MutableMap<
-      String,
-      (PokemonBattle, InstructionSet, BattleMessage, Iterator<BattleMessage>) -> InterpreterInstruction
-   > = (new LinkedHashMap()) as java.util.Map
+@Suppress("KotlinPlaceholderCountMatchesArgumentCount", "UNUSED_PARAMETER")final class ShowdownInterpreter {
+    // Stores a reference to the previous ability, activate, or move message in a battle so a minor action can refer back to it (Battle UUID :  BattleMessage)
+    val lastCauser = mutableMapOf<UUID, BattleMessage>()
 
-   public fun interpretMessage(battleId: UUID, message: String) {
-      if (!StringsKt.startsWith$default(message, "{\"winner\":\"", false, 2, null)) {
-         val battle: PokemonBattle = BattleRegistry.INSTANCE.getBattle(battleId);
-         if (battle == null) {
-            Cobblemon.INSTANCE.getLOGGER().info("No battle could be found with the id: $battleId");
-         } else {
-            DistributionUtilsKt.runOnServer((new Function0<Unit>(battle, message) {
-               {
-                  super(0);
-                  this.$battle = `$battle`;
-                  this.$message = `$message`;
-               }
+    private val updateInstructionParser = mutableMapOf<String, (PokemonBattle, InstructionSet, BattleMessage, Iterator<BattleMessage>) -> InterpreterInstruction>()
+    private val splitInstructionParser = mutableMapOf<String, (PokemonBattle, BattleActor, InstructionSet, BattleMessage, BattleMessage, Iterator<BattleMessage>) -> InterpreterInstruction>()
+    private val sideInstructionParser = mutableMapOf<String, (PokemonBattle, BattleActor, InstructionSet, BattleMessage) -> InterpreterInstruction>()
 
-               public final void invoke() {
-                  this.$battle.getShowdownMessages().add(this.$message);
-                  ShowdownInterpreter.INSTANCE.interpret(this.$battle, this.$message);
-               }
-            }) as Function0);
-         }
-      }
-   }
+    init {
+        updateInstructionParser["split"] = { battle, instructionSet, message, messages ->
+            val privateMessage = messages.next()
+            val publicMessage = messages.next()
+            val targetActor = battle.getActor(message.argumentAt(0)!!)!!
+            val type = publicMessage.rawMessage.split("|")[1]
+            splitInstructionParser[type]?.invoke(battle, targetActor, instructionSet, publicMessage, privateMessage, messages) ?: IgnoredInstruction()
+        }
 
-   public fun interpret(battle: PokemonBattle, rawMessage: String) {
-      PokemonBattle.log$default(battle, null, 1, null);
-      battle.log(rawMessage);
-      PokemonBattle.log$default(battle, null, 1, null);
-      val instructionSet: InstructionSet = new InstructionSet();
-      val battleMessages: java.util.List = new ArrayList();
+        listOf(
+            "player", "teamsize", "gametype", "gen", "tier", "rated", "clearpoke", "poke", "teampreview", "start", "rule", "t:", "", "capture", "-anim"
+        ).forEach { updateInstructionParser[it] = { _, _, _, _ -> IgnoredInstruction() } }
 
-      try {
-         val e: java.util.List = CollectionsKt.toMutableList(StringsKt.split$default(rawMessage, new java.lang.String[]{"\n"}, false, 0, 6, null));
-         if (e.get(0) == "update") {
-            e.remove(0);
+        updateInstructionParser["-ability"]              = { _, instructionSet, message, _ -> AbilityInstruction(instructionSet, message) }
+        updateInstructionParser["-activate"]             = { _, instructionSet, message, _ -> ActivateInstruction(instructionSet, message) }
+        updateInstructionParser["bagitem"]               = { _, _, message, _ -> BagItemInstruction(message) }
+        updateInstructionParser["-boost"]                = { battle, _, message, _ -> BoostInstruction(battle, message, true) }
+        updateInstructionParser["-block"]                = { _, _, message, _ -> BlockInstruction(message) }
+        updateInstructionParser["cant"]                  = { _, _, message, _ -> CantInstruction(message) }
+        updateInstructionParser["-clearallboost"]        = { _, _, message, _ -> ClearAllBoostInstruction(message) }
+        updateInstructionParser["-clearnegativeboost"]   = { _, _, message, _ -> ClearNegativeBoostInstruction(message) }
+        updateInstructionParser["-clearboost"]           = {  _, _, message, _ -> ClearBoostInstruction(message) }
+        updateInstructionParser["-copyboost"]            = { _, _, message, _ -> CopyBoostInstruction(message) }
+        updateInstructionParser["-crit"]                 = { _, instructionSet, message, _ -> CritInstruction(message, instructionSet) }
+        updateInstructionParser["-curestatus"]           = { _, _, message, _ -> CureStatusInstruction(message) }
+        updateInstructionParser["detailschange"]         = { _, _, message, _ -> FormeChangeInstruction(message) }
+        updateInstructionParser["-endability"]           = { _, _, message, _ -> EndAbilityInstruction(message) }
+        updateInstructionParser["-end"]                  = { _, _, message, _ -> EndInstruction(message) }
+        updateInstructionParser["-enditem"]              = { _, _, message, _ -> EndItemInstruction(message) }
+        updateInstructionParser["-fail"]                 = { _, _, message, _ -> FailInstruction(message) }
+        updateInstructionParser["faint"]                 = { battle, _, message, _ -> FaintInstruction(battle, message) }
+        updateInstructionParser["-fieldactivate"]        = { _, _, message, _ -> FieldActivateInstruction(message) }
+        updateInstructionParser["-fieldend"]             = { _, _, message, _ -> FieldEndInstruction(message) }
+        updateInstructionParser["-fieldstart"]           = { _, _, message, _ -> FieldStartInstruction(message) }
+        updateInstructionParser["-formechange"]          = { _, _, message, _ -> FormeChangeInstruction(message) }
+        updateInstructionParser["-hitcount"]             = { _, _, message, _ -> HitCountInstruction(message) }
+        updateInstructionParser["-immune"]               = { _, _, message, _ -> ImmuneInstruction(message) }
+        updateInstructionParser["-invertboost"]          = { _, _, message, _ -> InvertBoostInstruction(message) }
+        updateInstructionParser["-item"]                 = { _, _, message, _ -> ItemInstruction(message) }
+        updateInstructionParser["-mega"]                 = { _, _, message, _ -> MegaInstruction(message) }
+        updateInstructionParser["-miss"]                 = { battle, _, message, _ -> MissInstruction(battle, message) }
+        updateInstructionParser["move"]                  = { _, instructionSet, message, _ -> MoveInstruction(instructionSet, message) }
+        updateInstructionParser["-nothing"]              = { _, _, _, _ -> NothingInstruction() }
+        updateInstructionParser["pp_update"]             = { _, _, message, _ -> PpUpdateInstruction(message) }
+        updateInstructionParser["-prepare"]              = { _, _, message, _ -> PrepareInstruction(message) }
+        updateInstructionParser["-mustrecharge"]         = { _, _, message, _ -> RechargeInstruction(message) }
+        updateInstructionParser["replace"]               = { _, _, message, _ -> ReplaceInstruction(message) }
+        updateInstructionParser["-resisted"]             = { _, instructionSet, message, _ -> ResistedInstruction(message, instructionSet) }
+        updateInstructionParser["-setboost"]             = { _, _, message, _ -> SetBoostInstruction(message) }
+        updateInstructionParser["-sideend"]              = { _, _, message, _ -> SideEndInstruction(message) }
+        updateInstructionParser["-sidestart"]            = { _, _, message, _ -> SideStartInstruction(message) }
+        updateInstructionParser["-singlemove"]           = { _, _, message, _ -> SingleMoveInstruction(message) }
+        updateInstructionParser["-singleturn"]           = { _, _, message, _ -> SingleTurnInstruction(message) }
+        updateInstructionParser["start"]                 = { _, instructionSet, message, _ -> InitializeInstruction(instructionSet, message) }
+        updateInstructionParser["-start"]                = { _, _, message, _ -> StartInstruction(message) }
+        updateInstructionParser["-status"]               = { _, _, message, _ -> StatusInstruction(message) }
+        updateInstructionParser["-supereffective"]       = { _, instructionSet, message, _ -> SuperEffectiveInstruction(message, instructionSet) }
+        updateInstructionParser["-swapboost"]            = { _, _, message, _ -> SwapBoostInstruction(message) }
+        updateInstructionParser["-swapsideconditions"]   = { _, _, message, _ -> SwapSideConditionsInstruction(message) }
+        updateInstructionParser["-terastallize"]         = { _, _, message, _ -> TerastallizeInstruction(message) }
+        updateInstructionParser["-transform"]            = { battle, _, message, _ -> TransformInstruction(battle, message) }
+        updateInstructionParser["turn"]                  = { _, _, message, _ -> TurnInstruction(message) }
+        updateInstructionParser["-unboost"]              = { battle, _, message, _ -> BoostInstruction(battle, message, false) }
+        updateInstructionParser["upkeep"]                = { _, _, _, _ -> UpkeepInstruction() }
+        updateInstructionParser["-weather"]              = { _, _, message, _ -> WeatherInstruction(message) }
+        updateInstructionParser["win"]                   = { _, _, message, _ -> WinInstruction(message) }
+        updateInstructionParser["-zbroken"]              = { _, _, message, _ -> ZBrokenInstruction(message) }
+        updateInstructionParser["-zpower"]               = { _, _, message, _ -> ZPowerInstruction(message) }
+        updateInstructionParser["swap"]                  = { _, instructionSet, message, _ -> SwapInstruction(message, instructionSet) }
+        updateInstructionParser["-center"]               = { _, _, message, _ -> CenterInstruction(message) }
 
-            val var14: java.lang.Iterable;
-            for (Object element$iv : var14) {
-               battleMessages.add(new BattleMessage(var20 as java.lang.String));
+        sideInstructionParser["error"]                   = { _, targetActor, _, message -> ErrorInstruction(targetActor, message) }
+        sideInstructionParser["request"]                 = { _, targetActor, _, message -> RequestInstruction(targetActor, message) }
+
+        splitInstructionParser["-damage"]                = { _, targetActor, instructionSet, publicMessage, privateMessage, _ ->
+                                                                DamageInstruction(instructionSet, targetActor, publicMessage, privateMessage)
+                                                           }
+        splitInstructionParser["drag"]                   = { _, targetActor, instructionSet, publicMessage, privateMessage, _ ->
+                                                                DragInstruction(instructionSet, targetActor, publicMessage, privateMessage)
+                                                           }
+        splitInstructionParser["-heal"]                  = { _, targetActor, _, publicMessage, privateMessage, _ ->
+                                                                HealInstruction(targetActor, publicMessage, privateMessage)
+                                                           }
+        splitInstructionParser["-sethp"]                 = { _, targetActor, _, publicMessage, privateMessage, _ ->
+                                                                SetHpInstruction(targetActor, publicMessage, privateMessage)
+                                                           }
+        splitInstructionParser["switch"]                 = { _, targetActor, instructionSet, publicMessage, privateMessage, _ ->
+                                                                SwitchInstruction(instructionSet, targetActor, publicMessage, privateMessage)
+                                                           }
+
+
+        // Note '-cureteam' is a legacy thing that is only used in generation 2 and 4 mods for heal bell and aromatherapy respectively as such we can just ignore that
+    }
+
+
+    fun interpretMessage(battleId: UUID, message: String) {
+        // Check key map and use function if matching
+        if (message.startsWith("{\"winner\":\"")) {
+            // The post-win message is something we don't care about just yet. It's basically a summary of what happened in the battle.
+            // Check /docs/example-post-win-message.json for its format.
+            return
+        }
+
+        val battle = BattleRegistry.getBattle(battleId)
+
+        if (battle == null) {
+            LOGGER.info("No battle could be found with the id: $battleId")
+            return
+        }
+
+        runOnServer {
+            battle.showdownMessages.add(message)
+            interpret(battle, message)
+        }
+    }
+
+    fun interpret(battle: PokemonBattle, rawMessage: String) {
+        battle.log()
+        battle.log(rawMessage)
+        battle.log()
+        val instructionSet = InstructionSet()
+        val battleMessages = mutableListOf<BattleMessage>()
+
+
+        try {
+            val lines = rawMessage.split("\n").toMutableList()
+            if (lines[0] == "update") {
+                lines.removeAt(0)
+                lines.forEach { battleMessages.add(BattleMessage(it)) }
+
+                val iterator = battleMessages.iterator()
+                while (iterator.hasNext()) {
+                    val message = iterator.next()
+                    val id = message.id.replace("|", "")
+                    val instruction = updateInstructionParser[id]?.invoke(battle, instructionSet, message, iterator) ?: UnknownInstruction(message)
+                    instructionSet.instructions.add(instruction)
+                }
+            }
+            else if (lines[0] == "sideupdate") {
+                val showdownId = lines[1]
+                val targetActor = battle.getActor(showdownId)
+                val message = BattleMessage(lines[2])
+                val id = message.id.replace("|", "")
+
+                if (targetActor == null) {
+                    battle.log("No actor could be found with the showdown id: $showdownId")
+                    return
+                }
+
+                val instruction = sideInstructionParser[id]?.invoke(battle, targetActor, instructionSet, message) ?: UnknownInstruction(message)
+                instructionSet.instructions.add(instruction)
+            }
+            instructionSet.execute(battle)
+        }
+        catch (e: InvalidInstructionException) {
+            e.message?.let {
+                battle.broadcastChatMessage(it.red())
+                LOGGER.error(it)
             }
 
-            val var15: java.util.Iterator = battleMessages.iterator();
+        }
+        catch (e: Exception) {
+            battle.broadcastChatMessage("A fatal error occurred. Please report to developers.".red())
+            LOGGER.error("Caught exception interpreting battle instructions.", e)
+        }
+    }
 
-            while (iterator.hasNext()) {
-               var var26: InterpreterInstruction;
-               label33: {
-                  val var17: BattleMessage = var15.next() as BattleMessage;
-                  val var25: Function4 = updateInstructionParser.get(StringsKt.replace$default(var17.getId(), "|", "", false, 4, null));
-                  if (var25 != null) {
-                     var26 = var25.invoke(battle, instructionSet, var17, var15) as InterpreterInstruction;
-                     if (var26 != null) {
-                        break label33;
-                     }
-                  }
+    fun broadcastOptionalAbility(battle: PokemonBattle, effect: Effect?, pokemon: BattlePokemon) {
+        if (effect == null || effect.type != Effect.Type.ABILITY) return
+        broadcastAbility(battle, effect, pokemon)
+    }
 
-                  var26 = new UnknownInstruction(var17);
-               }
+    // Broadcasts a generic lang to notify players of ability activations (effects are broadcasted separately)
+    fun broadcastAbility(battle: PokemonBattle, effect: Effect, pokemon: BattlePokemon) {
+        battle.dispatchWaiting(0.5F) {
+            val lang = battleLang("ability.generic", pokemon.getName(), effect.typelessData).yellow()
+            battle.broadcastChatMessage(lang)
+        }
+    }
 
-               instructionSet.getInstructions().add(var26);
+    fun getContextFromFaint(pokemon: BattlePokemon, battle: PokemonBattle): BattleContext {
+        val cause = battle.minorBattleActions[pokemon.uuid] ?: lastCauser[battle.battleId] ?: return MissingContext()
+        val side = pokemon.actor.getSide()
+
+        return when (cause.id) {
+            "-damage", "move" -> {
+                // damage from abilities
+                cause.effect("of")?.let {
+                    val effectID = cause.effect()?.id ?: it.id
+                    val originPnx = cause.optionalArgument("of")!!.substringBefore(':')
+                    val uuid = cause.optionalArgument("of")!!.substringAfter(':').trim()
+                    val origin = battle.getBattlePokemon(originPnx, uuid)
+                    BasicContext(effectID, battle.turn, BattleContext.Type.FAINT, origin)
+                } ?:
+                // damage from weather, statuses, entry hazards
+                cause.effect()?.let { effect ->
+                    val damagingContexts = BattleContext.Type.values().filter { it.damaging }
+                    val contextBuckets = damagingContexts.map { pokemon.contextManager.get(it) ?: side.contextManager.get(it)
+                        ?: battle.contextManager.get(it) }
+                    ContextManager.scoop(effect.id, *contextBuckets.toTypedArray())
+                } ?:
+                // damage from moves and suicide
+                lastCauser[battle.battleId]?.let {
+                    val move = it.effectAt(1)!!.id
+                    val origin = it.battlePokemon(0, battle)
+                    BasicContext(move, battle.turn, BattleContext.Type.FAINT, origin)
+                } ?:
+                MissingContext()
             }
-         } else if (e.get(0) == "sideupdate") {
-            val var13: java.lang.String = e.get(1) as java.lang.String;
-            val targetActor: BattleActor = battle.getActor(var13);
-            val message: BattleMessage = new BattleMessage(e.get(2) as java.lang.String);
-            val id: java.lang.String = StringsKt.replace$default(message.getId(), "|", "", false, 4, null);
-            if (targetActor == null) {
-               battle.log("No actor could be found with the showdown id: $var13");
-               return;
+            // perish song
+            "-start" -> {
+                cause.effectAt(1)?.let {
+                    val effectID = if (it.id.contains("perish")) "perishsong" else it.id
+                    ContextManager.scoop(effectID, pokemon.contextManager.get(BattleContext.Type.VOLATILE))
+                } ?:
+                MissingContext()
             }
-
-            var var24: InterpreterInstruction;
-            label51: {
-               val var23: Function4 = sideInstructionParser.get(id);
-               if (var23 != null) {
-                  var24 = var23.invoke(battle, targetActor, instructionSet, message) as InterpreterInstruction;
-                  if (var24 != null) {
-                     break label51;
-                  }
-               }
-
-               var24 = new UnknownInstruction(message);
+            // destiny bond
+            "-activate" -> {
+                cause.effectAt(1)?.let {
+                    val origin = cause.battlePokemon(0, battle)
+                    BasicContext(it.id, battle.turn, BattleContext.Type.FAINT, origin)
+                } ?:
+                MissingContext()
             }
+            else -> MissingContext()
+        }
+    }
 
-            instructionSet.getInstructions().add(var24);
-         }
-
-         instructionSet.execute(battle);
-      } catch (var12: Exception) {
-         Cobblemon.INSTANCE.getLOGGER().error("Caught exception interpreting {}", var12);
-      }
-   }
-
-   public fun broadcastOptionalAbility(battle: PokemonBattle, effect: Effect?, pokemon: BattlePokemon) {
-      if (effect != null && effect.getType() === Effect.Type.ABILITY) {
-         this.broadcastAbility(battle, effect, pokemon);
-      }
-   }
-
-   public fun broadcastAbility(battle: PokemonBattle, effect: Effect, pokemon: BattlePokemon) {
-      battle.dispatchGo((new Function0<Unit>(pokemon, effect, battle) {
-         {
-            super(0);
-            this.$pokemon = `$pokemon`;
-            this.$effect = `$effect`;
-            this.$battle = `$battle`;
-         }
-
-         public final void invoke() {
-            val var10000: MutableComponent = LocalizationUtilsKt.battleLang("ability.generic", this.$pokemon.getName(), this.$effect.getTypelessData());
-            this.$battle.broadcastChatMessage(TextKt.yellow(var10000) as Component);
-         }
-      }) as () -> Unit);
-   }
-
-   public fun getContextFromFaint(pokemon: BattlePokemon, battle: PokemonBattle): BattleContext {
-      var var10000: BattleMessage = battle.getMinorBattleActions().get(pokemon.getUuid());
-      if (var10000 == null) {
-         var10000 = lastCauser.get(battle.getBattleId());
-         if (var10000 == null) {
-            return new MissingContext(null, 0, null, null, 15, null);
-         }
-      }
-
-      val side: BattleSide = pokemon.getActor().getSide();
-      val var5: java.lang.String = var10000.getId();
-      switch (var5.hashCode()) {
-         case -1387046880:
-            if (var5.equals("-activate")) {
-               val var62: Effect = var10000.effectAt(1);
-               return if (var62 != null)
-                  new BasicContext(var62.getId(), battle.getTurn(), BattleContext.Type.FAINT, var10000.battlePokemon(0, battle))
-                  else
-                  new MissingContext(null, 0, null, null, 15, null);
-            }
-
-            return new MissingContext(null, 0, null, null, 15, null);
-         case -56166948:
-            if (!var5.equals("-damage")) {
-               return new MissingContext(null, 0, null, null, 15, null);
-            }
-            break;
-         case 3357649:
-            if (!var5.equals("move")) {
-               return new MissingContext(null, 0, null, null, 15, null);
-            }
-            break;
-         case 1398069333:
-            if (var5.equals("-start")) {
-               val var48: Effect = var10000.effectAt(1);
-               if (var48 != null) {
-                  val var50: BattleContext = ContextManager.Companion
-                     .scoop(
-                        if (StringsKt.contains$default(var48.getId(), "perish", false, 2, null)) "perishsong" else var48.getId(),
-                        pokemon.getContextManager().get(BattleContext.Type.VOLATILE)
-                     );
-                  if (var50 != null) {
-                     return var50;
-                  }
-               }
-
-               return new MissingContext(null, 0, null, null, 15, null);
-            }
-
-            return new MissingContext(null, 0, null, null, 15, null);
-         default:
-            return new MissingContext(null, 0, null, null, 15, null);
-      }
-
-      val var51: Effect = var10000.effect("of");
-      var var63: BattleContext;
-      if (var51 != null) {
-         label89: {
-            val var52: Effect = BattleMessage.effect$default(var10000, null, 1, null);
-            if (var52 != null) {
-               var53 = var52.getId();
-               if (var53 != null) {
-                  break label89;
-               }
-            }
-
-            var53 = var51.getId();
-         }
-
-         val var54: java.lang.String = var10000.optionalArgument("of");
-         val var29: java.lang.String = StringsKt.substringBefore$default(var54, ':', null, 2, null);
-         val var55: java.lang.String = var10000.optionalArgument("of");
-         var63 = new BasicContext(
-            var53,
-            battle.getTurn(),
-            BattleContext.Type.FAINT,
-            battle.getBattlePokemon(var29, StringsKt.trim(StringsKt.substringAfter$default(var55, ':', null, 2, null)).toString())
-         );
-      } else {
-         val var56: Effect = BattleMessage.effect$default(var10000, null, 1, null);
-         if (var56 == null) {
-            var63 = null;
-         } else {
-            var var32: Array<Any> = BattleContext.Type.values();
-            val `$i$f$toTypedArray`: java.util.Collection = new ArrayList();
-
-            for (Object element$iv$iv : $this$filter$iv) {
-               if (((BattleContext.Type)`item$iv$iv`).getDamaging()) {
-                  `$i$f$toTypedArray`.add(`item$iv$iv`);
-               }
-            }
-
-            val var36: java.lang.Iterable = `$i$f$toTypedArray` as java.util.List;
-            val `destination$iv$ivx`: java.util.Collection = new ArrayList(CollectionsKt.collectionSizeOrDefault(`$i$f$toTypedArray` as java.util.List, 10));
-
-            for (Object item$iv$iv : $this$map$iv) {
-               val it: BattleContext.Type = var46 as BattleContext.Type;
-               var var57: java.util.Collection = pokemon.getContextManager().get(var46 as BattleContext.Type);
-               if (var57 == null) {
-                  var57 = side.getContextManager().get(it);
-                  if (var57 == null) {
-                     var57 = battle.getContextManager().get(it);
-                  }
-               }
-
-               `destination$iv$ivx`.add(var57);
-            }
-
-            var32 = `destination$iv$ivx` as java.util.List;
-            val var58: ContextManager.Companion = ContextManager.Companion;
-            val var10001: java.lang.String = var56.getId();
-            val var37: Array<java.util.Collection> = (var32 as java.util.Collection).toArray(new java.util.Collection[0]);
-            var63 = var58.scoop(var10001, Arrays.copyOf(var37, var37.length));
-         }
-
-         if (var63 == null) {
-            var10000 = lastCauser.get(battle.getBattleId());
-            val var61: BasicContext;
-            if (var10000 != null) {
-               val var60: Effect = var10000.effectAt(1);
-               var61 = new BasicContext(var60.getId(), battle.getTurn(), BattleContext.Type.FAINT, var10000.battlePokemon(0, battle));
-            } else {
-               var61 = null;
-            }
-
-            var63 = if (var61 != null) var61 else new MissingContext(null, 0, null, null, 15, null);
-         }
-      }
-
-      return var63;
-   }
-
-   public fun getContextFromAction(message: BattleMessage, type: Type, battle: PokemonBattle): BattleContext {
-      val var10000: Pair = BattleMessage.actorAndActivePokemonFromOptional$default(message, battle, null, 2, null);
-      var var16: BattleContext;
-      if (var10000 != null) {
-         label67: {
-            val var13: Effect = message.effectAt(1);
-            if (var13 != null) {
-               var14 = var13.getId();
-               if (var14 != null) {
-                  break label67;
-               }
-            }
-
-            val var15: Effect = message.effectAt(0);
-            if (var15 == null) {
-               return new MissingContext(null, 0, null, null, 15, null);
-            }
-
-            var14 = var15.getId();
-         }
-
-         var16 = new BasicContext(var14, battle.getTurn(), type, (var10000.getSecond() as ActiveBattlePokemon).getBattlePokemon());
-      } else if (message.actorAndActivePokemon(0, battle) != null) {
-         val var17: Effect = message.effectAt(1);
-         if (var17 != null) {
-            val var18: java.lang.String = var17.getId();
-            if (var18 != null) {
-               val var19: BattleMessage = lastCauser.get(battle.getBattleId());
-               if (var19 != null) {
-                  val var20: BattlePokemon = var19.battlePokemon(0, battle);
-                  if (var20 != null) {
-                     return new BasicContext(var18, battle.getTurn(), type, var20);
-                  }
-               }
-
-               return new MissingContext(null, 0, null, null, 15, null);
-            }
-         }
-
-         var16 = new MissingContext(null, 0, null, null, 15, null);
-      } else {
-         val var21: BattleMessage = lastCauser.get(battle.getBattleId());
-         if (var21 == null) {
-            var16 = null;
-         } else {
-            label71: {
-               label69: {
-                  val var22: Effect = message.effectAt(1);
-                  if (var22 != null) {
-                     var23 = var22.getId();
-                     if (var23 != null) {
-                        break label69;
-                     }
-                  }
-
-                  val var24: Effect = message.effectAt(0);
-                  if (var24 == null) {
-                     var16 = new MissingContext(null, 0, null, null, 15, null);
-                     break label71;
-                  }
-
-                  var23 = var24.getId();
-               }
-
-               var16 = new BasicContext(var23, battle.getTurn(), type, var21.battlePokemon(0, battle));
-            }
-         }
-
-         if (var16 == null) {
-            var16 = new MissingContext(null, 0, null, null, 15, null);
-         }
-      }
-
-      return var16;
-   }
-
-   @JvmStatic
-   fun {
-      updateInstructionParser.put("split", <unrepresentable>.INSTANCE);
-
-      val var6: java.lang.Iterable;
-      for (Object element$iv : var6) {
-         updateInstructionParser.put(`element$iv` as java.lang.String, <unrepresentable>.INSTANCE);
-      }
-
-      updateInstructionParser.put("-ability", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-activate", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("bagitem", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-boost", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-block", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("cant", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-clearallboost", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-clearnegativeboost", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-copyboost", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-crit", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-curestatus", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("detailschange", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-endability", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-end", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-enditem", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-fail", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("faint", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-fieldactivate", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-fieldend", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-fieldstart", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-hitcount", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-immune", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-invertboost", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-item", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-mega", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-miss", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("move", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-nothing", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("pp_update", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-prepare", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-mustrecharge", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("replace", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-resisted", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-resisted", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-setboost", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-sideend", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-sidestart", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-singlemove", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-singleturn", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-start", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-status", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-supereffective", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-swapboost", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-swapsideconditions", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-terastallize", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-transform", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("turn", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-unboost", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("upkeep", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-weather", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("win", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-zbroken", <unrepresentable>.INSTANCE);
-      updateInstructionParser.put("-zpower", <unrepresentable>.INSTANCE);
-      sideInstructionParser.put("error", <unrepresentable>.INSTANCE);
-      sideInstructionParser.put("request", <unrepresentable>.INSTANCE);
-      splitInstructionParser.put("-damage", <unrepresentable>.INSTANCE);
-      splitInstructionParser.put("drag", <unrepresentable>.INSTANCE);
-      splitInstructionParser.put("-heal", <unrepresentable>.INSTANCE);
-      splitInstructionParser.put("-sethp", <unrepresentable>.INSTANCE);
-      splitInstructionParser.put("switch", <unrepresentable>.INSTANCE);
-   }
+    fun getContextFromAction(message: BattleMessage, type: BattleContext.Type, battle: PokemonBattle): BattleContext {
+        // |-action|POKEMON|EFFECT|[from]EFFECT|[of]POKEMON or |-action|EFFECT|[from]EFFECT|[of]POKEMON
+        return message.actorAndActivePokemonFromOptional(battle)?.let {
+            // ex: |-item|p2a: ###|Black Sludge|[from] ability: Pickpocket|[of] p1a: ###
+            val effectID = message.effectAt(1)?.id ?: message.effectAt(0)?.id ?: return@let MissingContext()
+            BasicContext(effectID, battle.turn, type, it.second.battlePokemon)
+        } ?:
+        // |-action|POKEMON|EFFECT| (caused by a move or another action)
+        message.actorAndActivePokemon(0, battle)?.let {
+            // ex: |-status|p2a: ###|par -> |move|p1a: ###|Glare|p2a: ###
+            // ex: |-unboost|p1a: ###|atk|1 -> |-ability|p2a: ###|Intimidate|boost
+            val effectID = message.effectAt(1)?.id ?: return@let MissingContext()
+            val origin = lastCauser[battle.battleId]?.battlePokemon(0, battle) ?: return@let MissingContext()
+            BasicContext(effectID, battle.turn, type, origin)
+        } ?:
+        // |-action|EFFECT
+        lastCauser[battle.battleId]?.let {
+            // ex: |-sidestart|p2: ###|move: Toxic Spikes -> |-activate|p1a: ###|ability: Toxic Debris
+            // ex: |-weather|Sandstorm -> |move|p1a: ###|Sandstorm|p1a: ###
+            val effectID = message.effectAt(1)?.id ?: message.effectAt(0)?.id ?: return@let MissingContext()
+            BasicContext(effectID, battle.turn, type, it.battlePokemon(0, battle))
+        } ?:
+        MissingContext()
+    }
 }

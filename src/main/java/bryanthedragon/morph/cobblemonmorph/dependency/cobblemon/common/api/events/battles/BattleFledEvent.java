@@ -1,49 +1,34 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles
 
+import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.value.StringValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.ActorType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PlayerBattleActor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asArrayValue
 
-public data BattleFledEvent(battle: PokemonBattle, player: PlayerBattleActor) : BattleEvent {
-   public open val battle: PokemonBattle
-   public final val player: PlayerBattleActor
-
-   init {
-      this.battle = battle;
-      this.player = player;
-   }
-
-   public operator fun component1(): PokemonBattle {
-      return this.battle;
-   }
-
-   public operator fun component2(): PlayerBattleActor {
-      return this.player;
-   }
-
-   public fun copy(battle: PokemonBattle = this.battle, player: PlayerBattleActor = this.player): BattleFledEvent {
-      return new BattleFledEvent(battle, player);
-   }
-
-   public override fun toString(): String {
-      return "BattleFledEvent(battle=${this.battle}, player=${this.player})";
-   }
-
-   public override fun hashCode(): Int {
-      return this.battle.hashCode() * 31 + this.player.hashCode();
-   }
-
-   public override operator fun equals(other: Any?): Boolean {
-      if (this === other) {
-         return true;
-      } else if (other !is BattleFledEvent) {
-         return false;
-      } else {
-         val var2: BattleFledEvent = other as BattleFledEvent;
-         if (!(this.battle == (other as BattleFledEvent).battle)) {
-            return false;
-         } else {
-            return this.player == var2.player;
-         }
-      }
-   }
+/**
+ * Event fired when a [PokemonBattle] is fled by a [PlayerBattleActor].
+ *
+ * @author Segfault Guy
+ * @since March 25th 2023
+ */
+record BattleFledEvent (
+    override val battle: PokemonBattle,
+    val player: PlayerBattleActor
+) : BattleEvent {
+    val context = mutableMapOf<String, MoValue>(
+        "battle" to battle.struct,
+        "players" to battle.actors.filter { it.type == ActorType.PLAYER }.asArrayValue { it.struct },
+        "npcs" to battle.actors.filter { it.type == ActorType.NPC }.asArrayValue { it.struct },
+        "wild_pokemon" to battle.actors.filter { it.type == ActorType.WILD }.asArrayValue { it.struct }
+    )
 }

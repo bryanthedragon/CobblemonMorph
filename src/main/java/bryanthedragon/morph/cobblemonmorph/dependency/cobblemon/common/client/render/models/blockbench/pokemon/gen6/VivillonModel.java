@@ -1,148 +1,79 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen6
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.ModelPartExtensionsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.WingFlapIdleAnimation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.createTransformation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.BiWingedFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.HeadedFrame
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.ModelPartTransformation.Companion.Y_AXIS
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.SimpleQuirk
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
-import kotlin.jvm.functions.Function1
 import net.minecraft.client.model.geom.ModelPart
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
-import org.jetbrains.annotations.NotNull
 
-public class VivillonModel(root: ModelPart) : PokemonPoseableModel, HeadedFrame, BiWingedFrame {
-   public open val cryAnimation: CryProvider
-   public open val head: ModelPart
-   public open val leftWing: ModelPart
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rightWing: ModelPart
-   public open val rootPart: ModelPart
-   public final lateinit var sleep: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class VivillonModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BiWingedFrame {
+    override val rootPart = root.registerChildWithAllChildren("vivillon")
+    override val head = getPart("head")
+    override val leftWing = getPart("wing_left")
+    override val rightWing = getPart("wing_right")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "vivillon");
-      this.head = this.getPart("head");
-      this.leftWing = this.getPart("wing_left");
-      this.rightWing = this.getPart("wing_right");
-      this.portraitScale = 2.8F;
-      this.portraitTranslation = new Vec3(-0.3, 0.2, 0.0);
-      this.profileScale = 0.7F;
-      this.profileTranslation = new Vec3(0.1, 0.8, 0.0);
-      this.cryAnimation = VivillonModel::cryAnimation$lambda$0;
-   }
+    override var portraitScale = 2.8F
+    override var portraitTranslation = Vec3(-0.3, 0.2, 0.0)
 
-   public override fun registerPoses() {
-      val blink: SimpleQuirk = PoseableEntityModel.quirk$default(
-         this, null, null, null, (new Function1<PoseableEntityState<PokemonEntity>, StatefulAnimation<PokemonEntity, ?>>(this) {
-            {
-               super(1);
-               this.this$0 = `$receiver`;
-            }
+    override var profileScale = 0.7F
+    override var profileTranslation = Vec3(0.1, 0.8, 0.0)
 
-            @NotNull
-            public final StatefulAnimation<PokemonEntity, ?> invoke(@NotNull PoseableEntityState<PokemonEntity> it) {
-               return PoseableEntityModel.bedrockStateful$default(this.this$0, "vivillon", "blink", null, 4, null);
-            }
-         }) as Function1, 7, null
-      );
-      this.setSleep(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "sleep",
-            PoseType.SLEEP,
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "vivillon", "sleep", null, 4, null)},
-            null,
-            null,
-            444,
-            null
-         )
-      );
-      val var12: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var13: java.util.Set = var12;
-      val var10002: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            this,
-            "standing",
-            SetsKt.plus(var13, var10002),
-            null,
-            0,
-            null,
-            null,
-            new StatelessAnimation[]{
-               HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-               PoseableEntityModel.bedrock$default(this, "vivillon", "air_idle", null, 4, null)
-            },
-            new ModelPartTransformation[]{ModelPartExtensionsKt.createTransformation(this.getRootPart()).addPosition(1, -10.0F)},
-            new ModelQuirk[]{blink},
-            60,
-            null
-         )
-      );
-      val var8: EnumSet = PoseType.Companion.getMOVING_POSES();
-      val var9: Array<ModelQuirk> = new ModelQuirk[]{blink};
-      val var10: Array<StatelessAnimation> = new StatelessAnimation[]{
-         HeadedFrame.DefaultImpls.singleBoneLook$default(this, false, false, false, false, null, null, null, null, null, null, 1023, null),
-         PoseableEntityModel.bedrock$default(this, "vivillon", "air_fly", null, 4, null)
-      };
-      val var11: Array<ModelPartTransformation> = new ModelPartTransformation[]{
-         ModelPartExtensionsKt.createTransformation(this.getRootPart()).addPosition(1, -10.0F)
-      };
-      val var14: PoseableEntityModel = this;
-      this.setWalk(PoseableEntityModel.registerPose$default(var14, "walk", var8, null, 0, null, null, var10, var11, var9, 60, null));
-   }
+    lateinit var standing: Pose
+    lateinit var walk: Pose
+    lateinit var sleep: Pose
 
-   override fun <T extends Entity> singleBoneLook(
-      invertX: Boolean,
-      invertY: Boolean,
-      disableX: Boolean,
-      disableY: Boolean,
-      pitchMultiplier: java.lang.Float?,
-      yawMultiplier: java.lang.Float?,
-      maxPitch: java.lang.Float?,
-      minPitch: java.lang.Float?,
-      maxYaw: java.lang.Float?,
-      minYaw: java.lang.Float?
-   ): SingleBoneLookAnimation<T> {
-      return HeadedFrame.DefaultImpls.singleBoneLook(
-         this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw
-      );
-   }
+    override val cryAnimation = CryProvider { bedrockStateful("vivillon", "cry") }
 
-   override fun <T extends Entity> wingFlap(
-      flapFunction: (java.lang.Float?) -> java.lang.Float,
-      timeVariable: (PoseableEntityState<T>?, java.lang.Float?, java.lang.Float?) -> java.lang.Float,
-      axis: Int
-   ): WingFlapIdleAnimation<T> {
-      return BiWingedFrame.DefaultImpls.wingFlap(this, flapFunction, timeVariable, axis);
-   }
+    override fun registerPoses() {
+        val blink = quirk { bedrockStateful("vivillon", "blink")}
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: VivillonModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "vivillon", "cry", null, 4, null);
-   }
+        sleep = registerPose(
+            poseName = "sleep",
+            poseType = PoseType.SLEEP,
+            animations = arrayOf(
+                bedrock("vivillon", "sleep")
+            )
+        )
+
+        standing = registerPose(
+            poseName = "standing",
+            poseTypes = PoseType.STATIONARY_POSES + PoseType.UI_POSES,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("vivillon", "air_idle")
+            ),
+            transformedParts = arrayOf(rootPart.createTransformation().addPosition(Y_AXIS, -10F))
+        )
+
+        walk = registerPose(
+            poseName = "walk",
+            poseTypes = PoseType.MOVING_POSES,
+            quirks = arrayOf(blink),
+            animations = arrayOf(
+                singleBoneLook(),
+                bedrock("vivillon", "air_fly")
+            ),
+            transformedParts = arrayOf(rootPart.createTransformation().addPosition(Y_AXIS, -10F))
+        )
+    }
+//    override fun getFaintAnimation(
+//        pokemonEntity: PokemonEntity,
+//        state: PosableState<PokemonEntity>
+//    ) = if (state.isPosedIn(standing, walk))
+//        bedrockStateful("vivillon", "faint")
+//    else null
 }

@@ -1,13 +1,13 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch
-
-public class WaitDispatch(delaySeconds: Float) : DispatchResult {
-   public final val readyTime: Long
-
-   init {
-      this.readyTime = System.currentTimeMillis() + (int)(delaySeconds * 1000);
-   }
-
-   public override fun canProceed(): Boolean {
-      return System.currentTimeMillis() >= this.readyTime;
-   }
+class WaitDispatch(delaySeconds: Float) : DispatchResult {
+    val readyTime = System.currentTimeMillis() + (delaySeconds * 1000).toInt()
+    override fun canProceed() = System.currentTimeMillis() >= readyTime
 }

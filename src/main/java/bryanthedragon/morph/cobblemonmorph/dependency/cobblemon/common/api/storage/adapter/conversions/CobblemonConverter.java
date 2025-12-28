@@ -1,38 +1,34 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.adapter.conversions
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.adapter.CobblemonAdapter
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PlayerPartyStore
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import java.nio.file.Files
-import java.nio.file.LinkOption
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import java.nio.file.Path
-import java.util.Arrays
 import java.util.UUID
+import kotlin.io.path.exists
 import net.minecraft.nbt.CompoundTag
 
-public interface CobblemonConverter<S> : CobblemonAdapter<S> {
-   public abstract fun root(): Path {
-   }
+interface CobblemonConverter<S> : CobblemonAdapter<S> {
 
-   public open fun exists(target: Path): Boolean {
-   }
+    fun root(): Path
 
-   public abstract fun party(user: UUID, nbt: CompoundTag): PlayerPartyStore {
-   }
+    fun exists(target: Path): Boolean {
+        return target.exists()
+    }
 
-   public abstract fun pc(user: UUID, nbt: CompoundTag): PCStore {
-   }
+    fun party(user: UUID, nbt: CompoundTag): PlayerPartyStore
 
-   public abstract fun translate(nbt: CompoundTag): Pokemon {
-   }
+    fun pc(user: UUID, nbt: CompoundTag): PCStore
 
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun <S> exists(`$this`: CobblemonConverter<S>, target: Path): Boolean {
-         val var10001: Array<LinkOption> = new LinkOption[0];
-         return Files.exists(target, Arrays.copyOf(var10001, var10001.length));
-      }
-   }
+    fun translate(nbt: CompoundTag): Pokemon
+
 }

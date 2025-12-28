@@ -1,105 +1,60 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.gen5
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PoseableEntityState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.StatelessAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockStatefulAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.frame.ModelFrame
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.PosableState
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.CryProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPoseableModel
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pokemon.PokemonPosableModel
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.CobblemonPose
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import java.util.EnumSet
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-public class KlinkModel(root: ModelPart) : PokemonPoseableModel {
-   public open val cryAnimation: CryProvider
-   public open var portraitScale: Float
-   public open var portraitTranslation: Vec3
-   public open var profileScale: Float
-   public open var profileTranslation: Vec3
-   public open val rootPart: ModelPart
-   public final lateinit var sleep: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var standing: Pose<PokemonEntity, ModelFrame>
-   public final lateinit var walk: Pose<PokemonEntity, ModelFrame>
+class KlinkModel(root: ModelPart) : PokemonPosableModel(root) {
+    override val rootPart = root.registerChildWithAllChildren("klink")
 
-   init {
-      this.rootPart = this.registerChildWithAllChildren(root, "klink");
-      this.portraitScale = 1.7F;
-      this.portraitTranslation = new Vec3(0.0, -0.4, 0.0);
-      this.profileScale = 0.9F;
-      this.profileTranslation = new Vec3(0.0, 0.5, 0.0);
-      this.cryAnimation = KlinkModel::cryAnimation$lambda$0;
-   }
+    override var portraitScale = 1.7F
+    override var portraitTranslation = Vec3(0.0, -0.4, 0.0)
 
-   public override fun registerPoses() {
-      this.setSleep(
-         PoseableEntityModel.registerPose$default(
-            this,
-            PoseType.SLEEP,
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "klink", "sleep", null, 4, null)},
-            null,
-            null,
-            218,
-            null
-         )
-      );
-      var var4: PoseableEntityModel = this;
-      var var10003: EnumSet = PoseType.Companion.getSTATIONARY_POSES();
-      val var6: java.util.Set = var10003;
-      val var10004: EnumSet = PoseType.Companion.getUI_POSES();
-      this.setStanding(
-         PoseableEntityModel.registerPose$default(
-            var4,
-            "standing",
-            SetsKt.plus(var6, var10004),
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "klink", "ground_idle", null, 4, null)},
-            null,
-            null,
-            436,
-            null
-         )
-      );
-      var4 = this;
-      var10003 = PoseType.Companion.getMOVING_POSES();
-      this.setWalk(
-         PoseableEntityModel.registerPose$default(
-            var4,
-            "walk",
-            var10003,
-            null,
-            10,
-            null,
-            null,
-            new StatelessAnimation[]{PoseableEntityModel.bedrock$default(this, "klink", "ground_walk", null, 4, null)},
-            null,
-            null,
-            436,
-            null
-         )
-      );
-   }
+    override var profileScale = 0.9F
+    override var profileTranslation = Vec3(0.0, 0.5, 0.0)
 
-   public open fun getFaintAnimation(pokemonEntity: PokemonEntity, state: PoseableEntityState<PokemonEntity>): BedrockStatefulAnimation<PokemonEntity>? {
-      return if (state.isPosedIn(this.getStanding(), this.getWalk(), this.getSleep()))
-         PoseableEntityModel.bedrockStateful$default(this, "klink", "faint", null, 4, null)
-         else
-         null;
-   }
+    lateinit var sleep: CobblemonPose
+    lateinit var standing: CobblemonPose
+    lateinit var walk: CobblemonPose
 
-   @JvmStatic
-   fun `cryAnimation$lambda$0`(`this$0`: KlinkModel, var1: PokemonEntity, var2: PoseableEntityState): StatefulAnimation {
-      return PoseableEntityModel.bedrockStateful$default(`this$0`, "klink", "cry", null, 4, null);
-   }
+    override val cryAnimation = CryProvider { bedrockStateful("klink", "cry") }
+
+    override fun registerPoses() {
+        sleep = registerPose(
+            poseType = PoseType.SLEEP,
+            transformTicks = 10,
+            animations = arrayOf(bedrock("klink", "sleep"))
+        )
+
+        standing = registerPose(
+                poseName = "standing",
+                poseTypes = PoseType.STATIONARY_POSES + PoseType.UI_POSES,
+                transformTicks = 10,
+                animations = arrayOf(
+                        bedrock("klink", "ground_idle")
+                )
+        )
+
+        walk = registerPose(
+                poseName = "walk",
+                poseTypes = PoseType.MOVING_POSES,
+                transformTicks = 10,
+                animations = arrayOf(
+                        bedrock("klink", "ground_walk")
+                )
+        )
+    }
+    override fun getFaintAnimation(state: PosableState) = if (state.isPosedIn(standing, walk, sleep)) bedrockStateful("klink", "faint") else null
 }

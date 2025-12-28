@@ -1,38 +1,46 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.experience
 
-public interface ExperienceSource {
-   public open fun isBattle(): Boolean {
-   }
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.ItemStack
 
-   public open fun isInteraction(): Boolean {
-   }
-
-   public open fun isCommand(): Boolean {
-   }
-
-   public open fun isSidemod(): Boolean {
-   }
-
-   // $VF: Class flags could not be determined
-   internal class DefaultImpls {
-      @JvmStatic
-      fun isBattle(`$this`: ExperienceSource): Boolean {
-         return `$this` is BattleExperienceSource;
-      }
-
-      @JvmStatic
-      fun isInteraction(`$this`: ExperienceSource): Boolean {
-         return `$this` is CandyExperienceSource;
-      }
-
-      @JvmStatic
-      fun isCommand(`$this`: ExperienceSource): Boolean {
-         return `$this` is CommandExperienceSource;
-      }
-
-      @JvmStatic
-      fun isSidemod(`$this`: ExperienceSource): Boolean {
-         return `$this` is SidemodExperienceSource;
-      }
-   }
+/**
+ * A source of experience gain for a Pokémon. This could be a battle, a command, something like a level-up item, etc.
+ *
+ * @author Hiroku
+ * @since August 5th, 2022
+ */
+interface ExperienceSource {
+    fun isBattle() = this is BattleExperienceSource
+    fun isInteraction() = this is CandyExperienceSource
+    fun isCommand() = this is CommandExperienceSource
+    fun isSidemod() = this is SidemodExperienceSource
 }
+
+open class SidemodExperienceSource(
+    val sidemodId: String
+) : ExperienceSource
+
+open class CandyExperienceSource(
+    val player: ServerPlayer,
+    val stack: ItemStack
+) : ExperienceSource
+
+open class CommandExperienceSource(
+    val source: CommandSourceStack
+) : ExperienceSource
+
+open class BattleExperienceSource(
+    val battle: PokemonBattle,
+    val facedPokemon: List<BattlePokemon>
+) : ExperienceSource

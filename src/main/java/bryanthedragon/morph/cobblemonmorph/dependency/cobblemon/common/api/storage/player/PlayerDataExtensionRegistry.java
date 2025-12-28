@@ -1,41 +1,28 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player
+final class PlayerDataExtensionRegistry {
 
-import java.util.LinkedHashMap
+    private val allExtensions = mutableMapOf<String, Class<out PlayerDataExtension>>()
 
-public object PlayerDataExtensionRegistry {
-   private final val allExtensions: MutableMap<String, Class<out PlayerDataExtension>> = (new LinkedHashMap()) as java.util.Map
+    fun register(name: String, extension: Class<out PlayerDataExtension>, overwrite: Boolean = false): Boolean {
+        if (allExtensions.contains(name) && !overwrite)
+            return false
+        allExtensions[name] = extension
+        return true
+    }
 
-   public fun register(name: String, extension: Class<out PlayerDataExtension>, overwrite: Boolean = false): Boolean {
-      if (allExtensions.containsKey(name) && !overwrite) {
-         return false;
-      } else {
-         allExtensions.put(name, extension);
-         return true;
-      }
-   }
+    fun get(name: String) = allExtensions[name]
+    fun getOrException(name: String) = get(name)
+        ?: throw IllegalStateException("PlayerDataExtension with name $name was not found.")
+    fun count() = allExtensions.size
+    fun remove(name: String) = allExtensions.remove(name)
+    fun contains(name: String) = allExtensions.containsKey(name)
 
-   public fun get(name: String): Class<out PlayerDataExtension>? {
-      return allExtensions.get(name);
-   }
-
-   public fun getOrException(name: String): Class<out PlayerDataExtension> {
-      val var10000: Class = this.get(name);
-      if (var10000 == null) {
-         throw new IllegalStateException("PlayerDataExtension with name $name was not found.");
-      } else {
-         return var10000;
-      }
-   }
-
-   public fun count(): Int {
-      return allExtensions.size();
-   }
-
-   public fun remove(name: String): Class<out PlayerDataExtension>? {
-      return allExtensions.remove(name);
-   }
-
-   public fun contains(name: String): Boolean {
-      return allExtensions.containsKey(name);
-   }
 }

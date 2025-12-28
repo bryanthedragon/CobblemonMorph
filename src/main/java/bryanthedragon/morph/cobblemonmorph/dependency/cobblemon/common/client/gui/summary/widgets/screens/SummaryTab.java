@@ -1,10 +1,77 @@
 /*
-$VF: Unable to decompile class
-Please report this to the Vineflower issue tracker, at https://github.com/Vineflower/vineflower/issues with a copy of the class file (if you have the rights to distribute it!)
-java.lang.IllegalStateException: Couldn't find method playDownSound (Lnet/minecraft/client/sounds/SoundManager;)V in class com/cobblemon/mod/common/client/gui/summary/widgets/screens/SummaryTab
-  at org.vineflower.kotlin.struct.KFunction.parse(KFunction.java:112)
-  at org.vineflower.kotlin.KotlinWriter.writeClass(KotlinWriter.java:221)
-  at org.jetbrains.java.decompiler.main.ClassesProcessor.writeClass(ClassesProcessor.java:500)
-  at org.jetbrains.java.decompiler.main.Fernflower.getClassContent(Fernflower.java:196)
-  at org.jetbrains.java.decompiler.struct.ContextUnit.lambda$save$3(ContextUnit.java:195)
-*/
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.widgets.screens
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.blitk
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.CobblemonRenderable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.components.Button
+import net.minecraft.client.resources.sounds.SimpleSoundInstance
+import net.minecraft.client.sounds.SoundManager
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
+import net.minecraft.resources.ResourceLocation
+
+class SummaryTab(
+    pX: Int, pY: Int,
+    val label: MutableComponent? = null,
+    val icon: ResourceLocation? = null,
+    onPress: OnPress
+): Button(pX, pY, WIDTH, HEIGHT, label ?: Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
+    companion object {
+        private const val WIDTH = 39
+        private const val HEIGHT = 13
+        private const val SCALE = 0.5F
+
+        private val tabResource = cobblemonResource("textures/gui/summary/summary_tab.png")
+    }
+
+    private var isActive = false
+
+    override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
+        val matrices = context.pose()
+        if (isActive) {
+            blitk(
+                matrixStack = matrices,
+                texture = tabResource,
+                x = x,
+                y = y,
+                width = width,
+                height = height
+            )
+        }
+
+        if (icon !== null) {
+            blitk(
+                matrixStack = matrices,
+                texture = icon,
+                x = (x + 15.5) / SCALE,
+                y = (y + 3.5) / SCALE,
+                width = 17,
+                height = 17,
+                scale = SCALE
+            )
+        }
+
+        if (label !== null && isMouseOver(pMouseX.toDouble(), pMouseY.toDouble())) {
+            context.renderTooltip(Minecraft.getInstance().font, label, pMouseX, pMouseY)
+        }
+    }
+
+    override fun playDownSound(soundManager: SoundManager) {
+        Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(CobblemonSounds.GUI_CLICK, 1.0F))
+    }
+
+    fun toggleTab(state: Boolean = true) {
+        isActive = state
+    }
+}

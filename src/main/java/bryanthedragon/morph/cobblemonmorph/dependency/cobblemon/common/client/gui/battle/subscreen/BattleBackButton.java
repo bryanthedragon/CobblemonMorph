@@ -1,49 +1,39 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.subscreen
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.GuiUtilsKt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.MiscUtilsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.blitk
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.CobblemonRenderable
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import com.mojang.blaze3d.vertex.PoseStack
+import net.minecraft.client.gui.GuiGraphics
 
-public class BattleBackButton(x: Float, y: Float) {
-   public final val x: Float
-   public final val y: Float
+class BattleBackButton(val x: Float, val y: Float) : CobblemonRenderable {
+    companion object {
+        const val WIDTH = 58
+        const val HEIGHT = 34
+        const val SCALE = 0.5F
+    }
 
-   init {
-      this.x = x;
-      this.y = y;
-   }
+    override fun render(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+        blitk(
+            matrixStack = context.pose(),
+            texture = cobblemonResource("textures/gui/battle/battle_back.png"),
+            x = x * 2,
+            y = y * 2,
+            height = HEIGHT,
+            width = WIDTH,
+            vOffset = if (isHovered(mouseX.toDouble(), mouseY.toDouble())) HEIGHT else 0,
+            textureHeight = HEIGHT * 2,
+            scale = SCALE
+        )
+    }
 
-   public fun render(matrices: PoseStack, mouseX: Int, mouseY: Int, delta: Float) {
-      GuiUtilsKt.blitk$default(
-         matrices,
-         MiscUtilsKt.cobblemonResource("textures/gui/battle/battle_back.png"),
-         this.x * (float)2,
-         this.y * (float)2,
-         34,
-         58,
-         null,
-         if (this.isHovered((double)mouseX, (double)mouseY)) 34 else 0,
-         null,
-         68,
-         null,
-         null,
-         null,
-         null,
-         null,
-         false,
-         0.5F,
-         64832,
-         null
-      );
-   }
-
-   public fun isHovered(mouseX: Double, mouseY: Double): Boolean {
-      return this.x <= (float)mouseX && (float)mouseX <= this.x + 29.0F && this.y <= (float)mouseY && (float)mouseY <= this.y + 17.0F;
-   }
-
-   public companion object {
-      public const val HEIGHT: Int
-      public const val SCALE: Float
-      public const val WIDTH: Int
-   }
+    fun isHovered(mouseX: Double, mouseY: Double) = mouseX.toFloat() in (x..(x + (WIDTH * SCALE))) && mouseY.toFloat() in (y..(y + (HEIGHT * SCALE)))
 }

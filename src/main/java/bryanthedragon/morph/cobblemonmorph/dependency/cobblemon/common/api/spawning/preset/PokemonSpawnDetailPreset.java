@@ -1,38 +1,41 @@
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset;
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.PokemonSpawnDetail;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail;
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset
 
-public class PokemonSpawnDetailPreset : SpawnDetailPreset {
-   public final var levelRange: IntRange?
-   public final var pokemon: PokemonProperties?
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.PokemonSpawnDetail
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
 
-   public override fun apply(spawnDetail: SpawnDetail) {
-      super.apply(spawnDetail);
-      if (spawnDetail is PokemonSpawnDetail) {
-         val pokemon: PokemonProperties = this.pokemon;
-         if (this.pokemon != null) {
-            (spawnDetail as PokemonSpawnDetail)
-               .setPokemon(
-                  PokemonProperties.Companion.parse$default(
-                     PokemonProperties.Companion,
-                     "${(spawnDetail as PokemonSpawnDetail).getPokemon().getOriginalString()} ${pokemon.getOriginalString()}",
-                     null,
-                     null,
-                     6,
-                     null
-                  )
-               );
-         }
+/**
+ * A [SpawnDetailPreset] that has extra fields that can apply specifically to [PokemonSpawnDetail]s.
+ *
+ * @author Hiroku
+ * @since July 8th, 2022
+ */
+class PokemonSpawnDetailPreset : SpawnDetailPreset() {
+    companion object {
+        const val NAME = "pokemon"
+    }
 
-         if (this.levelRange != null) {
-            (spawnDetail as PokemonSpawnDetail).setLevelRange(this.levelRange);
-         }
-      }
-   }
+    var pokemon: PokemonProperties? = null
+    var levelRange: IntRange? = null
 
-   public companion object {
-      public const val NAME: String
-   }
+    override fun apply(spawnDetail: SpawnDetail) {
+        super.apply(spawnDetail)
+        if (spawnDetail is PokemonSpawnDetail) {
+            val pokemon = pokemon
+            if (pokemon != null) {
+                spawnDetail.pokemon = PokemonProperties.parse(spawnDetail.pokemon.originalString + " " + pokemon.originalString)
+            }
+            if (levelRange != null) {
+                spawnDetail.levelRange = levelRange
+            }
+        }
+    }
 }

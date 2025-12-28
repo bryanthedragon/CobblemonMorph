@@ -1,162 +1,250 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution
 
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.playerDataManager
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItems
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.CobblemonCriteria
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion.EvolvePokemonContext
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.DropTable
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonGainedEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution.EvolutionCompleteEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution.EvolutionTestedEvent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.BenchedMove
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.requirement.EvolutionRequirement
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.EventObservable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement.Requirement
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonItemTags
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.PokeBallItem
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.animation.PlayPosableAnimationPacket
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.ShoulderedState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtilsKt
-import java.util.ArrayList;
-import java.util.Arrays
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.chat.Component
-import net.minecraft.server.level.ServerPlayer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.ItemInteractionEvolution
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.LevelUpEvolution
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.TradeEvolution
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.gamerules.CobblemonGameRules
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 
-public interface Evolution : EvolutionLike {
-   public var consumeHeldItem: Boolean
-   public val learnableMoves: MutableSet<MoveTemplate>
-   public var optional: Boolean
-   public val requirements: MutableSet<EvolutionRequirement>
-   public val result: PokemonProperties
+/**
+ * Represents an evolution of a [Pokemon], this is the server side counterpart of [EvolutionDisplay].
+ * Following Pokémon these can be triggered by 3 possible events, level ups, trades or using an item.
+ * For the default implementations see [LevelUpEvolution], [TradeEvolution] & [ItemInteractionEvolution].
+ * Also see [PassiveEvolution] & [ContextEvolution].
+ *
+ * @author Licious
+ * @since March 19th, 2022
+ */
+interface Evolution : EvolutionLike {
 
-   public open fun test(pokemon: Pokemon): Boolean {
-   }
+    /**
+     * The result of this evolution.
+     */
+    val result: PokemonProperties
 
-   public open fun evolve(pokemon: Pokemon): Boolean {
-   }
+    /**
+     * The shed result of this evolution.
+     */
+    val shedder: PokemonProperties?
 
-   public open fun forceEvolve(pokemon: Pokemon) {
-   }
+    /**
+     * If this evolution allows the user to choose when to start it or not.
+     */
+    var optional: Boolean
 
-   public open fun evolutionMethod(pokemon: Pokemon) {
-   }
+    /**
+     * If this [Evolution] will consume the [Pokemon.heldItem]
+     */
+    var consumeHeldItem: Boolean
 
-   public open fun applyTo(pokemon: Pokemon) {
-   }
+    /**
+     * The [Requirement]s behind this evolution.
+     */
+    val requirements: MutableSet<Requirement>
 
-   // $VF: Class flags could not be determined
-   @SourceDebugExtension(["SMAP\nEvolution.kt\nKotlin\n*S Kotlin\n*F\n+ 1 Evolution.kt\ncom/cobblemon/mod/common/api/pokemon/evolution/Evolution$DefaultImpls\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 EventObservables.kt\ncom/cobblemon/mod/common/api/reactive/EventObservable\n+ 4 _Arrays.kt\nkotlin/collections/ArraysKt___ArraysKt\n+ 5 EventObservables.kt\ncom/cobblemon/mod/common/api/reactive/EventObservable$post$1\n+ 6 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,164:1\n1726#2,3:165\n1855#2,2:178\n800#2,11:180\n1855#2,2:191\n14#3,5:168\n19#3:176\n14#3,5:193\n19#3:201\n13579#4:173\n13580#4:175\n13579#4:198\n13580#4:200\n14#5:174\n14#5:199\n1#6:177\n*S KotlinDebug\n*F\n+ 1 Evolution.kt\ncom/cobblemon/mod/common/api/pokemon/evolution/Evolution$DefaultImpls\n*L\n74#1:165,3\n147#1:178,2\n156#1:180,11\n156#1:191,2\n76#1:168,5\n76#1:176\n158#1:193,5\n158#1:201\n76#1:173\n76#1:175\n158#1:198\n158#1:200\n76#1:174\n158#1:199\n*E\n"])
-   internal class DefaultImpls {
-      @JvmStatic
-      fun test(`$this`: Evolution, pokemon: Pokemon): Boolean {
-         val event: java.lang.Iterable = `$this`.getRequirements();
-         var var10000: Boolean;
-         if (event is java.util.Collection && (event as java.util.Collection).isEmpty()) {
-            var10000 = true;
-         } else {
-            val `events$iv`: java.util.Iterator = event.iterator();
+    /**
+     * The [MoveTemplate]s that will be offered to be learnt upon evolving.
+     */
+    val learnableMoves: MutableSet<MoveTemplate>
 
-            while (true) {
-               if (!`events$iv`.hasNext()) {
-                  var10000 = true;
-                  break;
-               }
+    /**
+     * The items that will drop once the evolution finishes.
+     */
+    val drops: DropTable
 
-               if (!(`events$iv`.next() as EvolutionRequirement).check(pokemon)) {
-                  var10000 = false;
-                  break;
-               }
+    /**
+     * Checks if the given [Pokemon] passes all the conditions and is ready to evolve.
+     *
+     * @param pokemon The [Pokemon] being queried.
+     * @return If the [Evolution] can start.
+     */
+    fun test(pokemon: Pokemon): Boolean {
+        val result = this.requirements.all { requirement -> requirement.check(pokemon) }
+        val event = EvolutionTestedEvent(pokemon, this, result, result)
+        CobblemonEvents.EVOLUTION_TESTED.post(event)
+        return event.result
+    }
+
+    /**
+     * Starts this evolution or queues it if [optional] is true.
+     * Side effects may occur based on [consumeHeldItem].
+     *
+     * @param pokemon The [Pokemon] being evolved.
+     */
+    fun evolve(pokemon: Pokemon): Boolean {
+        if (this.consumeHeldItem) {
+            pokemon.swapHeldItem(ItemStack.EMPTY)
+        }
+        if (this.optional) {
+            // All the networking is handled under the hood, see EvolutionController.
+            return pokemon.evolutionProxy.server().add(this)
+        }
+        this.forceEvolve(pokemon)
+        return true
+    }
+
+    fun shed(pokemon: Pokemon): Boolean {
+        val innerShedder = shedder ?: return false
+
+        val owner = pokemon.getOwnerPlayer() ?: return false
+        // If the player has at least one Pokeball in their inventory.
+        var pokeballStack: ItemStack? = null
+        if (!owner.hasInfiniteMaterials()) {
+            for (i in 0 until owner.inventory.containerSize) {
+                val stackI = owner.inventory.getItem(i)
+                if (stackI.`is`(CobblemonItemTags.POKE_BALLS)) {
+                    pokeballStack = stackI
+                }
             }
-         }
+            if (pokeballStack == null) return false
+        }
+        // If the player has at least one empty spot in their party.
+        owner.party().getFirstAvailablePosition() ?: return false
 
-         val var15: EvolutionTestedEvent = new EvolutionTestedEvent(pokemon, `$this`, var10000, var10000);
-         val var16: EventObservable = CobblemonEvents.EVOLUTION_TESTED;
-         val var17: Array<EvolutionTestedEvent> = new EvolutionTestedEvent[]{var15};
-         var16.emit(Arrays.copyOf(var17, var17.length));
+        // Add shed Pokemon to player's party
+        val shedPokemon = pokemon.clone(registryAccess = owner.registryAccess())
+        shedPokemon.removeHeldItem()
+        innerShedder.apply(shedPokemon)
+        shedPokemon.caughtBall = ((pokeballStack?.item ?: CobblemonItems.POKE_BALL) as PokeBallItem).pokeBall
+        pokemon.storeCoordinates.get()?.store?.add(shedPokemon)
+        CobblemonCriteria.EVOLVE_POKEMON.trigger(owner, EvolvePokemonContext(pokemon.preEvolution!!.species.resourceIdentifier, shedPokemon.species.resourceIdentifier, playerDataManager.getGenericData(owner).advancementData.totalEvolvedCount))
+        // Consume one of the balls (if the player isn't creative)
+        pokeballStack?.consume(1, owner)
 
-         for (Object element$iv$iv : var17) {
-            ;
-         }
+        return true
+    }
 
-         return var15.getResult();
-      }
+    /**
+     * Starts this evolution as soon as possible.
+     * This will not present a choice to the client regardless of [optional].
+     *
+     * @param pokemon The [Pokemon] being evolved.
+     */
+    fun forceEvolve(pokemon: Pokemon) {
+        // This is a switch to enable/disable the evolution effect while we get particles improved
+        val useEvolutionEffect = true
 
-      @JvmStatic
-      fun evolve(`$this`: Evolution, pokemon: Pokemon): Boolean {
-         if (`$this`.getConsumeHeldItem()) {
-            val var10001: ItemStack = ItemStack.f_41583_;
-            Pokemon.swapHeldItem$default(pokemon, var10001, false, 2, null);
-         }
+        if (pokemon.state is ShoulderedState) {
+            pokemon.tryRecallWithAnimation()
+        }
 
-         if (`$this`.getOptional()) {
-            return pokemon.getEvolutionProxy().server().add(`$this`);
-         } else {
-            `$this`.forceEvolve(pokemon);
-            return true;
-         }
-      }
-
-      @JvmStatic
-      fun forceEvolve(`$this`: Evolution, pokemon: Pokemon) {
-         if (pokemon.getState() is ShoulderedState) {
-            pokemon.tryRecallWithAnimation();
-         }
-
-         if (pokemon.getEntity() != null) {
-         }
-
-         `$this`.evolutionMethod(pokemon);
-      }
-
-      @JvmStatic
-      fun evolutionMethod(`$this`: Evolution, pokemon: Pokemon) {
-         `$this`.getResult().apply(pokemon);
-
-         val `$this$iv`: java.lang.Iterable;
-         for (Object element$iv : $this$filterIsInstance$iv) {
-            val `$this$forEach$iv$iv`: MoveTemplate = `$i$f$post` as MoveTemplate;
-            if (pokemon.getMoveSet().hasSpace()) {
-               pokemon.getMoveSet().add(`$this$forEach$iv$iv`.create());
-            } else {
-               pokemon.getBenchedMoves().add(new BenchedMove(`$this$forEach$iv$iv`, 0));
+        val preEvoName = pokemon.getDisplayName()
+        val pokemonEntity = pokemon.entity
+        if (pokemonEntity == null || !useEvolutionEffect) {
+            pokemon.getOwnerPlayer()?.playNotifySound(CobblemonSounds.EVOLUTION_UI, SoundSource.PLAYERS, 1F, 1F)
+            evolutionMethod(pokemon)
+            pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
+        } else {
+            pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, true)
+            pokemonEntity.navigation.stop()
+            pokemonEntity.after(1F) {
+                evolutionAnimation(pokemonEntity)
             }
-
-            val var10000: ServerPlayer = pokemon.getOwnerPlayer();
-            if (var10000 != null) {
-               var10000.m_213846_(
-                  LocalizationUtilsKt.lang("experience.learned_move", pokemon.getDisplayName(), `$this$forEach$iv$iv`.getDisplayName()) as Component
-               );
+            pokemonEntity.after(11.2F) {
+                evolutionMethod(pokemon)
             }
-         }
-
-         `$this$iv` = pokemon.getLockedEvolutions();
-         val var20: java.util.Collection = new ArrayList();
-
-         for (Object element$iv$iv : $this$filterIsInstance$iv) {
-            if (var29 is PassiveEvolution) {
-               var20.add(var29);
+            pokemonEntity.after(seconds = 12F) {
+                cryAnimation(pokemonEntity)
+                pokemonEntity.entityData.set(PokemonEntity.EVOLUTION_STARTED, false)
+                pokemon.getOwnerPlayer()?.sendSystemMessage(lang("ui.evolve.into", preEvoName, pokemon.species.translatedName))
             }
-         }
+        }
+    }
 
-         for (Object element$iv : $this$filterIsInstance$iv) {
-            (var21 as PassiveEvolution).attemptEvolution(pokemon);
-         }
+    private fun evolutionAnimation(pokemon: Entity) {
+        val playPoseableAnimationPacket = PlayPosableAnimationPacket(pokemon.id, setOf("q.bedrock_stateful('evolution', 'evolution', 'endures_primary_animations');"), listOf())
+        playPoseableAnimationPacket.sendToPlayersAround(pokemon.x, pokemon.y, pokemon.z, 128.0, pokemon.level().dimension())
+    }
 
-         val var31: ServerPlayer = pokemon.getOwnerPlayer();
-         if (var31 != null) {
-            var31.m_6330_(CobblemonSounds.EVOLVING, SoundSource.NEUTRAL, 1.0F, 1.0F);
-         }
+    private fun cryAnimation(pokemon: Entity) {
+        val playPoseableAnimationPacket = PlayPosableAnimationPacket(pokemon.id, setOf("cry"), emptyList())
+        playPoseableAnimationPacket.sendToPlayersAround(pokemon.x, pokemon.y, pokemon.z, 128.0, pokemon.level().dimension())
+    }
 
-         val var15: EventObservable = CobblemonEvents.EVOLUTION_COMPLETE;
-         val var18: Array<EvolutionCompleteEvent> = new EvolutionCompleteEvent[]{new EvolutionCompleteEvent(pokemon, `$this`)};
-         var15.emit(Arrays.copyOf(var18, var18.length));
+    fun evolutionMethod(pokemon: Pokemon) {
+        // This ensures the Pokémon doesn't lose moves during evolution
+        // (e.g., Oshawott evolving at level 17 knowing Razor Shell, while Dewott only learns it at level 18).
+        val previousSpeciesLearnableMoves = pokemon.relearnableMoves
 
-         for (Object element$iv$ivx : var18) {
-            ;
-         }
-      }
+        val sourcePokemon = pokemon.clone()
+        
+        this.result.apply(pokemon)
 
-      @JvmStatic
-      fun applyTo(`$this`: Evolution, pokemon: Pokemon) {
-         `$this`.getResult().apply(pokemon);
-      }
-   }
+        val movesToLearn = previousSpeciesLearnableMoves + this.learnableMoves
+        // This adds moves the BenchedMoves piecemeal, so unless we add doWithoutEmitting this will send a *lot* of BenchedMovesUpdate packets.
+        pokemon.benchedMoves.doWithoutEmitting {
+            movesToLearn.forEach { move ->
+                val couldAddMove =
+                    if (pokemon.moveSet.hasSpace()) {
+                        pokemon.moveSet.add(move.create())
+                    } else {
+                        pokemon.benchedMoves.add(BenchedMove(move, 0))
+                    }
+
+                val previousSpeciesKnewMove = previousSpeciesLearnableMoves.any { move.name == it.name }
+
+                if (couldAddMove && !previousSpeciesKnewMove) {
+                    pokemon.getOwnerPlayer()?.sendSystemMessage(lang("experience.learned_move", pokemon.getDisplayName(), move.displayName))
+                }
+            }
+        }
+        pokemon.benchedMoves.update()
+
+        // we want to instantly tick for example you might only evolve your Bulbasaur at level 34 so Venusaur should be immediately available
+        pokemon.evolutions.filterIsInstance<PassiveEvolution>().forEach { evolution -> evolution.attemptEvolution(pokemon) }
+        pokemon.lockedEvolutions.filterIsInstance<PassiveEvolution>().forEach { evolution -> evolution.attemptEvolution(pokemon) }
+
+        this.shed(pokemon)
+
+        val ownerPlayer = pokemon.getOwnerPlayer()
+        if (ownerPlayer != null && ownerPlayer.level().gameRules.getBoolean(CobblemonGameRules.DO_POKEMON_LOOT)) {
+            drops.drop(
+                pokemon.entity,
+                ownerPlayer.level() as ServerLevel,
+                pokemon.entity?.position() ?: ownerPlayer.position(),
+                ownerPlayer,
+                pokemon = pokemon
+            )
+        }
+
+        CobblemonEvents.EVOLUTION_COMPLETE.post(EvolutionCompleteEvent(pokemon, sourcePokemon, this))
+        CobblemonEvents.POKEMON_GAINED.post(PokemonGainedEvent(pokemon.getOwnerUUID()!!, pokemon))
+    }
+
+    fun applyTo(pokemon: Pokemon) {
+        result.apply(pokemon)
+    }
 }

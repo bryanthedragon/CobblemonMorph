@@ -1,25 +1,32 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.toast
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast.ToastPacket
-import java.util.HashMap
-import java.util.UUID
 import net.minecraft.client.Minecraft
+import java.util.UUID
+final class ToastTracker {
 
-public object ToastTracker {
-   private final val toasts: HashMap<UUID, CobblemonToast> = new HashMap()
+    private val toasts = hashMapOf<UUID, CobblemonToast>()
 
-   public fun handle(packet: ToastPacket, client: Minecraft) {
-      var needsQueue: Boolean = false;
-      var toast: CobblemonToast = toasts.get(packet.getUuid());
-      if (toast == null) {
-         toast = new CobblemonToast(packet);
-         toasts.put(packet.getUuid(), toast);
-         needsQueue = true;
-      }
+    fun handle(packet: ToastPacket, client: Minecraft) {
+        var needsQueue = false
+        var toast = this.toasts[packet.uuid]
+        if (toast == null) {
+            toast = CobblemonToast(packet)
+            this.toasts[packet.uuid] = toast
+            needsQueue = true
+        }
+        toast.updateFrom(packet)
+        if (needsQueue) {
+            client.toasts.addToast(toast)
+        }
+    }
 
-      toast.updateFrom$common(packet);
-      if (needsQueue) {
-         client.m_91300_().m_94922_(toast);
-      }
-   }
 }

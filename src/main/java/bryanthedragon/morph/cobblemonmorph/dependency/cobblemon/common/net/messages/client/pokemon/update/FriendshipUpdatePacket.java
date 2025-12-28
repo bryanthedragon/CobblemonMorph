@@ -1,33 +1,27 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
-import io.netty.buffer.ByteBuf
-import net.minecraft.network.FriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-public class FriendshipUpdatePacket(pokemon: () -> Pokemon, value: Int) : IntUpdatePacket(pokemon, value) {
-   public open val id: ResourceLocation
-
-   init {
-      this.id = ID;
-   }
-
-   public override fun getSize(): IntSize {
-      return IntSize.U_BYTE;
-   }
-
-   public open fun set(pokemon: Pokemon, value: Int) {
-      Pokemon.setFriendship$default(pokemon, value, false, 2, null);
-   }
-
-   public companion object {
-      public final val ID: ResourceLocation
-
-      public fun decode(buffer: FriendlyByteBuf): FriendshipUpdatePacket {
-         return new FriendshipUpdatePacket(PokemonUpdatePacket.Companion.decodePokemon(buffer), NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE));
-      }
-   }
+class FriendshipUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<FriendshipUpdatePacket>(pokemon, value) {
+    override val id = ID
+    override fun getSize() = IntSize.U_BYTE
+    override fun set(pokemon: Pokemon, value: Int) {
+        pokemon.setFriendship(value)
+    }
+    companion object {
+        val ID = cobblemonResource("friendship_update")
+        fun decode(buffer: RegistryFriendlyByteBuf) = FriendshipUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.U_BYTE))
+    }
 }

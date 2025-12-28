@@ -1,75 +1,41 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events
 
+import com.bedrockk.molang.runtime.value.MoValue
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
 import net.minecraft.server.MinecraftServer
 
-public interface ServerTickEvent {
-   public val server: MinecraftServer
+/**
+ * Event fired each time the server ticks.
+ *
+ * @author Licious
+ * @since February 15th, 2023
+ */
+interface ServerTickEvent {
 
-   public data Post(server: MinecraftServer) : ServerTickEvent {
-      public open val server: MinecraftServer
+    /**
+     * The [MinecraftServer] instance.
+     */
+    val server: MinecraftServer
 
-      init {
-         this.server = server;
-      }
+    val context: MutableMap<String, MoValue>
+        get() = mutableMapOf("server" to server.asMoLangValue())
 
-      public operator fun component1(): MinecraftServer {
-         return this.server;
-      }
+    /**
+     * Fired during the Pre tick phase.
+     */
+    record Pre(override val server: MinecraftServer) : ServerTickEvent
 
-      public fun copy(server: MinecraftServer = this.server): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerTickEvent.Post {
-         return new ServerTickEvent.Post(server);
-      }
+    /**
+     * Fired during the Post tick phase.
+     */
+    record Post(override val server: MinecraftServer) : ServerTickEvent
 
-      public override fun toString(): String {
-         return "Post(server=${this.server})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.server.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerTickEvent.Post) {
-            return false;
-         } else {
-            return this.server == (other as ServerTickEvent.Post).server;
-         }
-      }
-   }
-
-   public data Pre(server: MinecraftServer) : ServerTickEvent {
-      public open val server: MinecraftServer
-
-      init {
-         this.server = server;
-      }
-
-      public operator fun component1(): MinecraftServer {
-         return this.server;
-      }
-
-      public fun copy(server: MinecraftServer = this.server): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerTickEvent.Pre {
-         return new ServerTickEvent.Pre(server);
-      }
-
-      public override fun toString(): String {
-         return "Pre(server=${this.server})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.server.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerTickEvent.Pre) {
-            return false;
-         } else {
-            return this.server == (other as ServerTickEvent.Pre).server;
-         }
-      }
-   }
 }

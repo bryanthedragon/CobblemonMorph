@@ -1,143 +1,46 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events
 
 import net.minecraft.server.MinecraftServer
 
-public interface ServerEvent {
-   public val server: MinecraftServer
+/**
+ * Events fired during the life cycle of a [MinecraftServer].
+ *
+ * @author Licious
+ * @since February 15th, 2023
+ */
+interface ServerEvent {
 
-   public data Started(server: MinecraftServer) : ServerEvent {
-      public open val server: MinecraftServer
+    /**
+     * The [MinecraftServer] backing the event trigger.
+     */
+    val server: MinecraftServer
 
-      init {
-         this.server = server;
-      }
+    /**
+     * Fired when the server is starting.
+     */
+    record Starting(override val server: MinecraftServer) : ServerEvent
 
-      public operator fun component1(): MinecraftServer {
-         return this.server;
-      }
+    /**
+     * Fired when the server has started.
+     */
+    record Started(override val server: MinecraftServer) : ServerEvent
 
-      public fun copy(server: MinecraftServer = this.server): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerEvent.Started {
-         return new ServerEvent.Started(server);
-      }
+    /**
+     * Fired when the server is stopping.
+     */
+    record Stopping(override val server: MinecraftServer) : ServerEvent
 
-      public override fun toString(): String {
-         return "Started(server=${this.server})";
-      }
+    /**
+     * Fired when the server has stopped.
+     */
+    record Stopped(override val server: MinecraftServer) : ServerEvent
 
-      public override fun hashCode(): Int {
-         return this.server.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerEvent.Started) {
-            return false;
-         } else {
-            return this.server == (other as ServerEvent.Started).server;
-         }
-      }
-   }
-
-   public data Starting(server: MinecraftServer) : ServerEvent {
-      public open val server: MinecraftServer
-
-      init {
-         this.server = server;
-      }
-
-      public operator fun component1(): MinecraftServer {
-         return this.server;
-      }
-
-      public fun copy(server: MinecraftServer = this.server): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerEvent.Starting {
-         return new ServerEvent.Starting(server);
-      }
-
-      public override fun toString(): String {
-         return "Starting(server=${this.server})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.server.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerEvent.Starting) {
-            return false;
-         } else {
-            return this.server == (other as ServerEvent.Starting).server;
-         }
-      }
-   }
-
-   public data Stopped(server: MinecraftServer) : ServerEvent {
-      public open val server: MinecraftServer
-
-      init {
-         this.server = server;
-      }
-
-      public operator fun component1(): MinecraftServer {
-         return this.server;
-      }
-
-      public fun copy(server: MinecraftServer = this.server): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerEvent.Stopped {
-         return new ServerEvent.Stopped(server);
-      }
-
-      public override fun toString(): String {
-         return "Stopped(server=${this.server})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.server.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerEvent.Stopped) {
-            return false;
-         } else {
-            return this.server == (other as ServerEvent.Stopped).server;
-         }
-      }
-   }
-
-   public data Stopping(server: MinecraftServer) : ServerEvent {
-      public open val server: MinecraftServer
-
-      init {
-         this.server = server;
-      }
-
-      public operator fun component1(): MinecraftServer {
-         return this.server;
-      }
-
-      public fun copy(server: MinecraftServer = this.server): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.ServerEvent.Stopping {
-         return new ServerEvent.Stopping(server);
-      }
-
-      public override fun toString(): String {
-         return "Stopping(server=${this.server})";
-      }
-
-      public override fun hashCode(): Int {
-         return this.server.hashCode();
-      }
-
-      public override operator fun equals(other: Any?): Boolean {
-         if (this === other) {
-            return true;
-         } else if (other !is ServerEvent.Stopping) {
-            return false;
-         } else {
-            return this.server == (other as ServerEvent.Stopping).server;
-         }
-      }
-   }
 }

@@ -1,25 +1,31 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.permission
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission.Permission
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission.PermissionValidator
-import net.minecraft.commands.SharedSuggestionProvider
+import net.minecraft.commands.CommandSourceStack
 import net.minecraft.server.level.ServerPlayer
 
-public class LaxPermissionValidator : PermissionValidator {
-   public override fun initialize() {
-      Cobblemon.INSTANCE
-         .getLOGGER()
-         .info(
-            "Booting LaxPermissionValidator, permissions will be checked using Minecrafts permission level system, see https://minecraft.fandom.com/wiki/Permission_level"
-         );
-   }
+/**
+ * A [PermissionValidator] that uses the permission level vanilla system.
+ * This is only used when the platform has no concept of permissions.
+ */
+class LaxPermissionValidator : PermissionValidator {
 
-   public override fun hasPermission(player: ServerPlayer, permission: Permission): Boolean {
-      return player.m_20310_(permission.getLevel().getNumericalValue());
-   }
+    override fun initialize() {
+        Cobblemon.LOGGER.info("Booting LaxPermissionValidator, permissions will be checked using Minecrafts permission level system, see https://minecraft.fandom.com/wiki/Permission_level")
+    }
 
-   public override fun hasPermission(source: SharedSuggestionProvider, permission: Permission): Boolean {
-      return source.m_6761_(permission.getLevel().getNumericalValue());
-   }
+    override fun hasPermission(player: ServerPlayer, permission: Permission) = player.hasPermissions(permission.level.numericalValue)
+    override fun hasPermission(source: CommandSourceStack, permission: Permission) = source.hasPermission(permission.level.numericalValue)
+    override fun hasPermission(player: ServerPlayer, permission: String, level: Int) = player.hasPermissions(level)
+    override fun hasPermission(source: CommandSourceStack, permission: String, level: Int) = source.hasPermission(level)
 }

@@ -1,134 +1,136 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.ClientDataSynchronizer
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveTemplate
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.NetExtensionsKt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeSizedInt
 import com.google.gson.JsonElement
-import io.netty.buffer.ByteBuf
-import java.util.ArrayList;
-import java.util.LinkedHashMap
-import java.util.LinkedHashSet
-import java.util.Map.Entry
-import kotlin.jvm.functions.Function2
-import kotlin.jvm.internal.SourceDebugExtension
-import net.minecraft.network.FriendlyByteBuf
-import org.jetbrains.annotations.NotNull
+import net.minecraft.network.RegistryFriendlyByteBuf
 
-@SourceDebugExtension(["SMAP\nLearnset.kt\nKotlin\n*S Kotlin\n*F\n+ 1 Learnset.kt\ncom/cobblemon/mod/common/api/pokemon/moves/Learnset\n+ 2 _Collections.kt\nkotlin/collections/CollectionsKt___CollectionsKt\n+ 3 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,121:1\n766#2:122\n857#2,2:123\n1045#2:125\n1360#2:126\n1446#2,5:127\n1#3:132\n*S KotlinDebug\n*F\n+ 1 Learnset.kt\ncom/cobblemon/mod/common/api/pokemon/moves/Learnset\n*L\n91#1:122\n91#1:123,2\n92#1:125\n93#1:126\n93#1:127,5\n*E\n"])
-public open class Learnset : ClientDataSynchronizer<Learnset> {
-   public final val eggMoves: MutableList<MoveTemplate> = (new ArrayList()) as java.util.List
-   public final val evolutionMoves: MutableSet<MoveTemplate> = (new LinkedHashSet()) as java.util.Set
-   public final val formChangeMoves: MutableList<MoveTemplate> = (new ArrayList()) as java.util.List
-   public final val levelUpMoves: MutableMap<Int, MutableList<MoveTemplate>> = (new LinkedHashMap()) as java.util.Map
-   public final val tmMoves: MutableList<MoveTemplate> = (new ArrayList()) as java.util.List
-   public final val tutorMoves: MutableList<MoveTemplate> = (new ArrayList()) as java.util.List
-
-   public fun getLevelUpMovesUpTo(level: Int): Set<MoveTemplate> {
-      var `$this$flatMap$iv`: java.lang.Iterable = this.levelUpMoves.entrySet();
-      var `destination$iv$iv`: java.util.Collection = new ArrayList();
-
-      for (Object element$iv$iv : $this$flatMap$iv) {
-         if (((`element$iv$iv` as Entry).getKey() as java.lang.Number).intValue() <= level) {
-            `destination$iv$iv`.add(`element$iv$iv`);
-         }
-      }
-
-      `$this$flatMap$iv` = CollectionsKt.sortedWith(`destination$iv$iv` as java.util.List, new Learnset$getLevelUpMovesUpTo$$inlined$sortedBy$1());
-      `destination$iv$iv` = new ArrayList();
-
-      for (Object element$iv$ivx : $this$flatMap$iv) {
-         CollectionsKt.addAll(`destination$iv$iv`, (`element$iv$ivx` as Entry).getValue() as java.util.List);
-      }
-
-      return CollectionsKt.toSet(`destination$iv$iv` as java.util.List);
-   }
-
-   public open fun shouldSynchronize(other: Learnset): Boolean {
-      return !(other.levelUpMoves == this.levelUpMoves);
-   }
-
-   public override fun decode(buffer: FriendlyByteBuf) {
-      this.levelUpMoves.clear();
-      val var2: Int = NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_BYTE);
-
-      for (int var3 = 0; var3 < var2; var3++) {
-         val level: Int = NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_SHORT);
-         val moves: java.util.List = new ArrayList();
-         val var8: Int = NetExtensionsKt.readSizedInt(buffer as ByteBuf, IntSize.U_SHORT);
-
-         for (int var9 = 0; var9 < var8; var9++) {
-            val var10000: MoveTemplate = Moves.INSTANCE.getByNumericalId(buffer.readInt());
-            if (var10000 != null) {
-               moves.add(var10000);
+open class Learnset : ClientDataSynchronizer<Learnset> {
+    class Interpreter(
+        val loadMove: (JsonElement, Learnset) -> Boolean
+    ) {
+        companion object {
+            fun parseFromPrefixIntoList(prefix: String, list: (Learnset) -> MutableList<MoveTemplate>): Interpreter {
+                return Interpreter { element, learnset ->
+                    val str = element.takeIf { it.isJsonPrimitive }?.asString ?: return@Interpreter false
+                    if (str.startsWith(prefix)) {
+                        Moves.getByName(str.substringAfter(":"))
+                            ?.let {
+                                list(learnset).add(it)
+                                return@Interpreter true
+                            }
+                    }
+                    return@Interpreter false
+                }
             }
-         }
+        }
+    }
 
-         this.levelUpMoves.put(level, moves);
-      }
-   }
+    companion object {
+        val tmInterpreter = Interpreter.parseFromPrefixIntoList("tm") { it.tmMoves }
+        val eggInterpreter = Interpreter.parseFromPrefixIntoList("egg") { it.eggMoves }
+        val tutorInterpreter = Interpreter.parseFromPrefixIntoList("tutor") { it.tutorMoves }
+        val legacyInterpreter = Interpreter.parseFromPrefixIntoList("legacy") { it.legacyMoves }
+        val specialInterpreter = Interpreter.parseFromPrefixIntoList("special") { it.specialMoves }
+        val formChangeInterpreter = Interpreter.parseFromPrefixIntoList("form_change") { it.formChangeMoves }
+        val levelUpInterpreter = Interpreter { element, learnset ->
+            val str = element.takeIf { it.isJsonPrimitive }?.asString ?: return@Interpreter false
+            val splits = str.split(":")
+            if (splits.size != 2) {
+                return@Interpreter false
+            } else if (!splits[0].isInt()) {
+                return@Interpreter false
+            }
 
-   public override fun encode(buffer: FriendlyByteBuf) {
-      NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_BYTE, this.levelUpMoves.size());
+            val level = splits[0].toInt()
+            val moveName = splits[1]
+            val move = Moves.getByName(moveName) ?: return@Interpreter false
 
-      for (Entry var3 : this.levelUpMoves.entrySet()) {
-         val level: Int = (var3.getKey() as java.lang.Number).intValue();
-         val moves: java.util.List = var3.getValue() as java.util.List;
-         NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_SHORT, level);
-         NetExtensionsKt.writeSizedInt(buffer as ByteBuf, IntSize.U_SHORT, moves.size());
+            val levelLearnset = learnset.levelUpMoves.getOrPut(level) { mutableListOf() }
+            if (move !in levelLearnset) {
+                levelLearnset.add(move)
+            }
 
-         for (MoveTemplate move : moves) {
-            buffer.writeInt(move.getNum());
-         }
-      }
-   }
+            return@Interpreter true
 
-   public companion object {
-      public final val eggInterpreter: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.Learnset.Interpreter
-      public final val formChangeInterpreter: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.Learnset.Interpreter
-      public final val interpreters: MutableList<bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.Learnset.Interpreter>
-      public final val levelUpInterpreter: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.Learnset.Interpreter
-      public final val tmInterpreter: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.Learnset.Interpreter
-      public final val tutorInterpreter: bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.Learnset.Interpreter
-   }
+        }
 
-   public class Interpreter(loadMove: (JsonElement, Learnset) -> Boolean) {
-      public final val loadMove: (JsonElement, Learnset) -> Boolean
+        val interpreters = mutableListOf(
+            tmInterpreter,
+            eggInterpreter,
+            tutorInterpreter,
+            legacyInterpreter,
+            specialInterpreter,
+            levelUpInterpreter,
+            formChangeInterpreter
+        )
+    }
 
-      init {
-         this.loadMove = loadMove;
-      }
+    val levelUpMoves = mutableMapOf<Int, MutableList<MoveTemplate>>()
+    val eggMoves = mutableListOf<MoveTemplate>()
+    val tutorMoves = mutableListOf<MoveTemplate>()
+    val legacyMoves = mutableListOf<MoveTemplate>()
+    val specialMoves = mutableListOf<MoveTemplate>()
+    val tmMoves = mutableListOf<MoveTemplate>()
+    /**
+     * Moves the species/form will have learnt when evolving into itself.
+     * These are dynamically resolved each boot.
+     */
+    val evolutionMoves = mutableSetOf<MoveTemplate>()
+    val formChangeMoves = mutableListOf<MoveTemplate>()
 
-      public companion object {
-         public fun parseFromPrefixIntoList(prefix: String, list: (Learnset) -> MutableList<MoveTemplate>): bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.Learnset.Interpreter {
-            return new Learnset.Interpreter((new Function2<JsonElement, Learnset, java.lang.Boolean>(prefix, list) {
-               {
-                  super(2);
-                  this.$prefix = `$prefix`;
-                  this.$list = `$list`;
-               }
+    fun getLevelUpMovesUpTo(level: Int) = levelUpMoves
+        .entries
+        .filter { it.key <= level }
+        .sortedBy { it.key }
+        .flatMap { it.value }
+        .toSet()
 
-               @NotNull
-               public final java.lang.Boolean invoke(@NotNull JsonElement element, @NotNull Learnset learnset) {
-                  val var10000: JsonElement = if (element.isJsonPrimitive()) element else null;
-                  val var10: java.lang.String = if (var10000 != null) var10000.getAsString() else null;
-                  if (var10 == null) {
-                     return false;
-                  } else {
-                     if (StringsKt.startsWith$default(var10, this.$prefix, false, 2, null)) {
-                        val var4: MoveTemplate = Moves.INSTANCE.getByName(StringsKt.substringAfter$default(var10, ":", null, 2, null));
-                        if (var4 != null) {
-                           (this.$list.invoke(learnset) as java.util.List).add(var4);
-                           return true;
-                        }
-                     }
+    fun getAllLegalMoves(): Set<MoveTemplate> {
+        return levelUpMoves.values.flatten().toSet() +
+                eggMoves +
+                tutorMoves +
+                tmMoves +
+                formChangeMoves +
+                evolutionMoves
+    }
 
-                     return false;
-                  }
-               }
-            }) as (JsonElement?, Learnset?) -> java.lang.Boolean);
-         }
-      }
-   }
+    // We only sync level up moves atm
+    override fun shouldSynchronize(other: Learnset) = other.levelUpMoves != this.levelUpMoves
+
+    override fun decode(buffer: RegistryFriendlyByteBuf) {
+        this.levelUpMoves.clear()
+        repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
+            val level = buffer.readSizedInt(IntSize.U_SHORT)
+            val moves = mutableListOf<MoveTemplate>()
+            repeat(times = buffer.readSizedInt(IntSize.U_SHORT)) {
+                Moves.getByNumericalId(buffer.readInt())?.let(moves::add)
+            }
+            levelUpMoves[level] = moves
+        }
+    }
+
+    override fun encode(buffer: RegistryFriendlyByteBuf) {
+        buffer.writeSizedInt(IntSize.U_BYTE, levelUpMoves.size)
+        for ((level, moves) in levelUpMoves) {
+            buffer.writeSizedInt(IntSize.U_SHORT, level)
+            buffer.writeSizedInt(IntSize.U_SHORT, moves.size)
+            for (move in moves) {
+                buffer.writeInt(move.num)
+            }
+        }
+    }
 }

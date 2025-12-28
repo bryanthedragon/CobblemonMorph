@@ -1,27 +1,19 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pc
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.StorePosition
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import kotlin.jvm.functions.Function1
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-public open class PCGUIConfiguration(exitFunction: (PCGUI) -> Unit = <unrepresentable>.INSTANCE as Function1,
-   selectOverride: ((PCGUI, StorePosition, Pokemon?) -> Unit)? = null,
-   showParty: Boolean = true,
-   canSelect: (Pokemon) -> Boolean = <unrepresentable>.INSTANCE as Function1
-) {
-   public final val canSelect: (Pokemon) -> Boolean
-   public final val exitFunction: (PCGUI) -> Unit
-   public final val selectOverride: ((PCGUI, StorePosition, Pokemon?) -> Unit)?
-   public final val showParty: Boolean
-
-   init {
-      this.exitFunction = exitFunction;
-      this.selectOverride = selectOverride;
-      this.showParty = showParty;
-      this.canSelect = canSelect;
-   }
-
-   open fun PCGUIConfiguration() {
-      this(null, null, false, null, 15, null);
-   }
-}
+open class PCGUIConfiguration(
+    val exitFunction: (PCGUI) -> Unit = { it.closeNormally(unlink = true) },
+    val selectOverride: ((PCGUI, StorePosition, Pokemon?) -> Unit)? = null,
+    var showParty: Boolean = true,
+    val canSelect: (Pokemon) -> Boolean = { true }
+)
