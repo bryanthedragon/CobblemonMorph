@@ -51,7 +51,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
 
     protected val pokemon = Array<Pokemon?>(POKEMON_PER_BOX) { null }
 
-    open operator fun get(index: Int): Pokemon? {
+    open operator fun get(Int index): Pokemon? {
         return if (index in 0 until POKEMON_PER_BOX) {
             pokemon[index]
         } else {
@@ -59,7 +59,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
         }
     }
 
-    open operator fun set(index: Int, pokemon: Pokemon?) {
+    open operator fun set(Int index, Pokemon pokemon?) {
         if (index in 0 until POKEMON_PER_BOX) {
             this.pokemon[index] = pokemon
             pokemon?.storeCoordinates?.set(StoreCoordinates(pc, PCPosition(boxNumber, index)))
@@ -69,7 +69,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
         }
     }
 
-    val boxNumber: Int
+    val Int boxNumber
         get() = this.pc.boxes.indexOf(this)
 
     val unoccupiedSlots: Int
@@ -103,11 +103,11 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
         boxChangeEmitter.emit(Unit)
     }
 
-    fun sendTo(player: ServerPlayer) {
+    fun sendTo(ServerPlayer player) {
         SetPCBoxPacket(this).sendToPlayer(player)
     }
 
-    open fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag {
+    open fun saveToNBT(CompoundTag nbt, RegistryAccess registryAccess): CompoundTag {
         name?.let {
             nbt.putString(DataKeys.STORE_BOX_NAME, it)
         }
@@ -119,7 +119,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
         return nbt
     }
 
-    open fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject {
+    open fun saveToJSON(JsonObject json, RegistryAccess registryAccess): JsonObject {
         name?.let {
             json.addProperty(DataKeys.STORE_BOX_NAME, it)
         }
@@ -132,7 +132,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
     }
 
 
-    open fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PCBox {
+    open fun loadFromJSON(JsonObject json, RegistryAccess registryAccess): PCBox {
         if (json.has(DataKeys.STORE_BOX_NAME)) {
             name = json.getAsJsonPrimitive(DataKeys.STORE_BOX_NAME).asString
         }
@@ -148,7 +148,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
                     pokemon[slot] = Pokemon.loadFromJSON(registryAccess, pokemonJson)
                 } catch (_: InvalidSpeciesException) {
                     pc.handleInvalidSpeciesJSON(pokemonJson)
-                } catch (e: Exception) {
+                } catch (Exception e) {
                     LOGGER.error("Failed to read a pokémon: $pokemonJson", e)
                 }
             }
@@ -156,7 +156,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
         return this
     }
 
-    open fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PCBox {
+    open fun loadFromNBT(CompoundTag nbt, RegistryAccess registryAccess): PCBox {
         if (nbt.contains(DataKeys.STORE_BOX_NAME)) {
             name = nbt.getString(DataKeys.STORE_BOX_NAME)
         }
@@ -172,7 +172,7 @@ open class PCBox(val pc: PCStore) : Iterable<Pokemon> {
                     pokemon[slot] = Pokemon.loadFromNBT(registryAccess, pokemonNBT)
                 } catch (_: InvalidSpeciesException) {
                     pc.handleInvalidSpeciesNBT(pokemonNBT)
-                } catch (e: Exception) {
+                } catch (Exception e) {
                     LOGGER.error("Failed to read a pokémon: $pokemonNBT", e)
                 }
             }

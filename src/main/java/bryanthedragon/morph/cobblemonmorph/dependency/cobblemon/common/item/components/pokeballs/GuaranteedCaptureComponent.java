@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.com
 import com.mojang.serialization.Codec
 
 record GuaranteedCaptureComponent(val guaranteed: Boolean) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<GuaranteedCaptureComponent> = Codec.BOOL.xmap(
             { GuaranteedCaptureComponent(it) },
             { it.guaranteed }

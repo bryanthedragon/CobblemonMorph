@@ -21,8 +21,9 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since July 24th, 2022
- */final class DropEntryAdapter : JsonDeserializer<DropEntry> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): DropEntry {
+ */
+public final class DropEntryAdapter : JsonDeserializer<DropEntry> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): DropEntry {
         json as JsonObject
         val entryClass = json.get("type")?.asString
             ?.let { DropEntry.getByName(it) ?: throw IllegalArgumentException("Unrecognized drop entry type: $it") }

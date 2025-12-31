@@ -19,7 +19,7 @@ import net.minecraft.world.entity.LivingEntity
  * @author landonjw
  * @since  November 30, 2021
  */
-interface CatchRateModifier {
+public interface CatchRateModifier {
 
     /**
      * Checks if this modifier guarantees a capture.
@@ -35,7 +35,7 @@ interface CatchRateModifier {
      * @param pokemon The target [Pokemon] attempting to be captured.
      * @return The value of this modifier.
      */
-    fun value(thrower: LivingEntity, pokemon: Pokemon): Float
+    fun value(LivingEntity thrower, Pokemon pokemon): Float
 
     /**
      * Returns the [Behavior] of this modifier.
@@ -44,7 +44,7 @@ interface CatchRateModifier {
      * @param pokemon The target [Pokemon] attempting to be captured.
      * @return The [Behavior] of this modifier.
      */
-    fun behavior(thrower: LivingEntity, pokemon: Pokemon): Behavior
+    fun behavior(LivingEntity thrower, Pokemon pokemon): Behavior
 
     /**
      * Checks if this modifier can be used with the given params.
@@ -53,7 +53,7 @@ interface CatchRateModifier {
      * @param pokemon The target [Pokemon] attempting to be captured.
      * @return If this multiplier can be used with the given params.
      */
-    fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean
+    fun isValid(LivingEntity thrower, Pokemon pokemon): Boolean
 
     /**
      * Directly mutates a catch rate value with this modifier.
@@ -65,7 +65,7 @@ interface CatchRateModifier {
      * @param pokemon The target [Pokemon] attempting to be captured.
      * @return The modified catch rate.
      */
-    fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float
+    fun modifyCatchRate(currentFloat catchRate, LivingEntity thrower, Pokemon pokemon): Float
 
     /**
      * The behavior of a [CatchRateModifier] when being used in a [CaptureCalculator].
@@ -84,17 +84,17 @@ interface CatchRateModifier {
 
     }
 
-    companion object {
+    final class Companion {
 
         /**
          * A dummy implementation that never allows the application to succeed.
          * This is just used for a default value to work with GSON.
          */
         internal val DUMMY = object : CatchRateModifier {
-            override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = 1F
-            override fun behavior(thrower: LivingEntity, pokemon: Pokemon): Behavior = Behavior.ADD
-            override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean = false
-            override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = 1F
+            override fun value(LivingEntity thrower, Pokemon pokemon): Float = 1F
+            override fun behavior(LivingEntity thrower, Pokemon pokemon): Behavior = Behavior.ADD
+            override fun isValid(LivingEntity thrower, Pokemon pokemon): Boolean = false
+            override fun modifyCatchRate(currentFloat catchRate, LivingEntity thrower, Pokemon pokemon): Float = 1F
         }
 
     }

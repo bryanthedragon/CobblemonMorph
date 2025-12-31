@@ -30,7 +30,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator
-final class MoveToOwnerTask {
+public final class MoveToOwnerTask {
     fun create(condition: Expression, completionRange: Expression, maxDistance: Expression, teleportDistance: Expression, speedMultiplier: Expression): OneShot<PokemonEntity> = BehaviorBuilder.create {
         it.group(
             it.registered(MemoryModuleType.WALK_TARGET)
@@ -100,7 +100,7 @@ final class MoveToOwnerTask {
         }
     }
 
-    private fun canTeleportTo(entity: PokemonEntity, pos: BlockPos): Boolean {
+    private fun canTeleportTo(entity: PokemonEntity, (BlockPos pos): Boolean {
         val pathNodeType = WalkNodeEvaluator.getPathTypeStatic(entity, pos.mutable())
         if (pathNodeType != PathType.WALKABLE) {
             return false // Could be more complex to support fliers and swimmers
@@ -110,5 +110,5 @@ final class MoveToOwnerTask {
         }
     }
 
-    private fun getRandomInt(random: RandomSource, min: Int, max: Int) = random.nextInt(max - min + 1) + min
+    private fun getRandomInt(random: RandomSource, Int min, Int max) = random.nextInt(max - min + 1) + min
 }

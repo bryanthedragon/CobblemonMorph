@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class LotadModel (root: ModelPart) : PokemonPosableModel(root), QuadrupedFrame {
+public class LotadModel (root: ModelPart) : PokemonPosableModel(root), QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("lotad")
 
     override val foreLeftLeg = getPart("leg_left")

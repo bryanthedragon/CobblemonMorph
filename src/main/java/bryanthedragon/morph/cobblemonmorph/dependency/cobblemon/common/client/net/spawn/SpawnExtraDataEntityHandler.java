@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import net.minecraft.client.Minecraft
 import net.minecraft.world.entity.Entity
 
-class SpawnExtraDataEntityHandler<T : SpawnExtraDataEntityPacket<T, E>, E : Entity> : ClientNetworkPacketHandler<T> {
-    override fun handle(packet: T, client: Minecraft) {
+public class SpawnExtraDataEntityHandler<T : SpawnExtraDataEntityPacket<T, E>, E : Entity> : ClientNetworkPacketHandler<T> {
+    override fun handle(packet: T, Minecraft client) {
         packet.spawnAndApply(client)
     }
 

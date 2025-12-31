@@ -26,7 +26,7 @@ open class Status(
 ) {
     fun getActionEffect() = ActionEffects.actionEffects[name]
 
-    companion object {
+    final class Companion {
         /**
          * A [Codec] for [Status].
          */

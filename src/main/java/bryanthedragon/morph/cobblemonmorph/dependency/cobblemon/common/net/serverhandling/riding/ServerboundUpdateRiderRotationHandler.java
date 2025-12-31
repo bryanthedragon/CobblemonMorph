@@ -13,12 +13,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.duck.Ride
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.ServerboundUpdateRiderRotationPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class ServerboundUpdateRiderRotationHandler : ServerNetworkPacketHandler<ServerboundUpdateRiderRotationPacket> {
+public final class ServerboundUpdateRiderRotationHandler : ServerNetworkPacketHandler<ServerboundUpdateRiderRotationPacket> {
 
     override fun handle(
         packet: ServerboundUpdateRiderRotationPacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         if (player is RidePassenger) {
             player.`cobblemon$setRideXRot`(packet.riderXRot)

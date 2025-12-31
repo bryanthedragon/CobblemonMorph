@@ -20,11 +20,11 @@ import net.minecraft.world.phys.shapes.VoxelShape
  * @author Apion
  * @since August 24, 2023
  */
-interface MultiblockStructureBuilder {
+public interface MultiblockStructureBuilder {
     val boundingBox: VoxelShape
     val conditions: List<MultiblockCondition>
 
-    fun validate(world: ServerLevel): Boolean {
+    fun validate(ServerLevel world): Boolean {
         conditions.forEach {
             if (!it.test(world, boundingBox)) {
                 return false
@@ -34,5 +34,5 @@ interface MultiblockStructureBuilder {
         return true
     }
 
-    fun form(world: ServerLevel)
+    fun form(ServerLevel world)
 }

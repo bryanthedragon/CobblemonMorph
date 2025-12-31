@@ -26,16 +26,16 @@ import net.minecraft.world.entity.ai.behavior.OneShot
  * @author Hiroku
  * @since November 19th, 2025
  */
-class PokemonWanderControlTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+public class PokemonWanderControlTaskConfig : SingleTaskConfig {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity> {
         behaviourConfigurationContext.addMemories(CobblemonMemories.WANDER_CONTROL)
 
         return object : OneShot<LivingEntity>() {
-            override fun trigger(serverLevel: ServerLevel, livingEntity: LivingEntity, l: Long): Boolean {
+            override fun trigger(ServerLevel serverLevel, livingEntity: LivingEntity, l: Long): Boolean {
                 if (entity !is PokemonEntity) {
                     return false
                 }

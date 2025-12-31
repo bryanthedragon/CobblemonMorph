@@ -17,13 +17,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
 import java.util.UUID
 import net.minecraft.network.chat.MutableComponent
 
-class TrainerBattleActor(
+public class TrainerBattleActor(
     val trainerName: String,
-    uuid: UUID,
+    UUID uuid,
     pokemonList: List<BattlePokemon>,
     artificialDecider: BattleAI
 ) : AIBattleActor(uuid, pokemonList, artificialDecider) {
     override fun getName() = trainerName.asTranslated()
-    override fun nameOwned(name: String): MutableComponent = battleLang("owned_pokemon", this.getName(), name)
+    override fun nameOwned(String name): MutableComponent = battleLang("owned_pokemon", this.getName(), name)
     override val type = ActorType.NPC
 }

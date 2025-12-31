@@ -23,7 +23,7 @@ import net.minecraft.network.chat.Component
  * @author Xylopia
  * @since January 31st, 2023
  */
-class FieldStartInstruction(val message: BattleMessage): InterpreterInstruction {
+public class FieldStartInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val effect = message.effectAt(0) ?: return

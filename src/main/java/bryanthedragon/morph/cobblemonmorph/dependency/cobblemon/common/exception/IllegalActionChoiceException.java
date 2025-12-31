@@ -9,4 +9,4 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.exception
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
-class IllegalActionChoiceException(val actor: BattleActor, message: String) : IllegalArgumentException(message)
+public class IllegalActionChoiceException(val actor: BattleActor, message: String) : IllegalArgumentException(message)

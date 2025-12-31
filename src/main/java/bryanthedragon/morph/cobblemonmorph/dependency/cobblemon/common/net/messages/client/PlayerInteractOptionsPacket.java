@@ -22,27 +22,27 @@ import java.util.EnumMap
  * @author Apion
  * @since November 5th, 2023
  */
-class PlayerInteractOptionsPacket(
+public class PlayerInteractOptionsPacket(
     val options: EnumMap<Options, OptionStatus>,
     val targetId: UUID,
     val numericTargetId: Int,
-    val selectedPokemonId: UUID,
+    val selectedUUID pokemonId,
 ) : NetworkPacket<PlayerInteractOptionsPacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("player_interactions")
-        fun decode(buffer: RegistryFriendlyByteBuf) = PlayerInteractOptionsPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = PlayerInteractOptionsPacket(
             readOptionsMap(buffer),
             buffer.readUUID(),
             buffer.readInt(),
             buffer.readUUID()
         )
 
-        private fun readOptionsMap(buffer: RegistryFriendlyByteBuf) : EnumMap<Options, OptionStatus> {
+        private fun readOptionsMap(RegistryFriendlyByteBuf buffer) : EnumMap<Options, OptionStatus> {
             val size = buffer.readInt()
-            val options : EnumMap<Options, OptionStatus> = EnumMap<Options, OptionStatus>(Options::class.java)
+            val options : EnumMap<Options, OptionStatus> = EnumMap<Options, OptionStatus>(Options.class)
             repeat(size) {
-                val key = buffer.readEnum(Options::class.java)
-                val value = buffer.readEnum(OptionStatus::class.java)
+                val key = buffer.readEnum(Options.class)
+                val value = buffer.readEnum(OptionStatus.class)
                 options[key] = value
             }
             return options
@@ -50,7 +50,7 @@ class PlayerInteractOptionsPacket(
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(options.size)
         for ((key, value) in options) {
             buffer.writeEnum(key)

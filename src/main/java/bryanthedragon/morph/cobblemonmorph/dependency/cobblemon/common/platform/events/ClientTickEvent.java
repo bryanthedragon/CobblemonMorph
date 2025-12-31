@@ -16,21 +16,21 @@ import net.minecraft.client.Minecraft
  * @author Licious
  * @since February 15th, 2023
  */
-interface ClientTickEvent {
+public interface ClientTickEvent {
 
     /**
      * The [Minecraft] instance.
      */
-    val client: Minecraft
+    val Minecraft client
 
     /**
      * Fired during the Pre tick phase.
      */
-    record Pre(override val client: Minecraft) : ClientTickEvent
+    record Pre(override val Minecraft client) : ClientTickEvent
 
     /**
      * Fired during the Post tick phase.
      */
-    record Post(override val client: Minecraft) : ClientTickEvent
+    record Post(override val Minecraft client) : ClientTickEvent
 
 }

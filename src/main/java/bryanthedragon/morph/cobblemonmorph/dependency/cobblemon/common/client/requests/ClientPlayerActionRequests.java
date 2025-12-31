@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ba
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.trade.ClientTradeRequest
 import java.util.*
 
-class ClientPlayerActionRequests {
+public class ClientPlayerActionRequests {
     val battleChallenges = mutableMapOf<UUID, ClientBattleChallenge>()      // Player to challenge
     val multiBattleTeamRequests = mutableMapOf<UUID, ClientTeamRequest>()   // Player to team up invite
     val tradeOffers = mutableMapOf<UUID, ClientTradeRequest>()              // Player to trade offer

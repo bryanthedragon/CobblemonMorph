@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ba
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.ClientPlayerIcon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.TeamRequestNotificationPacket
 import net.minecraft.client.Minecraft
-final class TeamRequestNotificationHandler : ClientNetworkPacketHandler<TeamRequestNotificationPacket> {
-    override fun handle(packet: TeamRequestNotificationPacket, client: Minecraft) {
+public final class TeamRequestNotificationHandler : ClientNetworkPacketHandler<TeamRequestNotificationPacket> {
+    override fun handle(packet: TeamRequestNotificationPacket, Minecraft client) {
         CobblemonClient.requests.multiBattleTeamRequests[packet.senderID] = ClientTeamRequest(packet.requestID, packet.senderID, packet.expiryTime)
         ClientPlayerIcon.update(packet.senderID)
     }

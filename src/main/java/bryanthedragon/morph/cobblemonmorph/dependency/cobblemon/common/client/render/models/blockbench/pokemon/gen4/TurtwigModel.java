@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class TurtwigModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+public class TurtwigModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("turtwig")
     override val head = getPart("head")
     override val hindLeftLeg = getPart("leg_back_left")

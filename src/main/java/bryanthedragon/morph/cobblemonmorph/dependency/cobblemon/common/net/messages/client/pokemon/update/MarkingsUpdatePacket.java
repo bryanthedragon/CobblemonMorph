@@ -13,19 +13,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class MarkingsUpdatePacket(pokemon: () -> Pokemon?, value: List<Int>): SingleUpdatePacket<List<Int>, MarkingsUpdatePacket>(pokemon, value) {
+public class MarkingsUpdatePacket(pokemon: () -> Pokemon?, value: List<Int>): SingleUpdatePacket<List<Int>, MarkingsUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(this.value) { pb, value -> pb.writeInt(value) }
     }
 
-    override fun set(pokemon: Pokemon, value: List<Int>) {
+    override fun set(Pokemon pokemon, value: List<Int>) {
         pokemon.markings = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("markings_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): MarkingsUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): MarkingsUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val markings = buffer.readList(ByteBuf::readInt).toList()
             return MarkingsUpdatePacket(pokemon, markings)

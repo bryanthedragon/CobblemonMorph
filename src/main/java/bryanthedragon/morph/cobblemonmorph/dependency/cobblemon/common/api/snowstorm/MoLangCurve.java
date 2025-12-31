@@ -36,36 +36,36 @@ import kotlin.math.floor
  * @author Hiroku
  * @since January 21st, 2023
  */
-interface MoLangCurve : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<MoLangCurve, CurveType>(
+public interface MoLangCurve : CodecMapped {
+    final class Companion : ArbitrarilyMappedSerializableCompanion<MoLangCurve, CurveType>(
         keyFromString = CurveType::valueOf,
         keyFromValue = { it.type },
         stringFromKey = { it.name }
     ) {
         init {
-            registerSubtype(CurveType.LINEAR, LinearMoLangCurve::class.java, LinearMoLangCurve.CODEC)
-            registerSubtype(CurveType.CATMULL_ROM, CatmullRomMoLangCurve::class.java, CatmullRomMoLangCurve.CODEC)
-            registerSubtype(CurveType.BEZIER, BezierMoLangCurve::class.java, BezierMoLangCurve.CODEC)
-            registerSubtype(CurveType.BEZIER_CHAIN, BezierChainMoLangCurve::class.java, BezierChainMoLangCurve.CODEC)
+            registerSubtype(CurveType.LINEAR, LinearMoLangCurve.class, LinearMoLangCurve.CODEC)
+            registerSubtype(CurveType.CATMULL_ROM, CatmullRomMoLangCurve.class, CatmullRomMoLangCurve.CODEC)
+            registerSubtype(CurveType.BEZIER, BezierMoLangCurve.class, BezierMoLangCurve.CODEC)
+            registerSubtype(CurveType.BEZIER_CHAIN, BezierChainMoLangCurve.class, BezierChainMoLangCurve.CODEC)
         }
     }
 
-    var name: String
+    var String name
     val type: CurveType
     var input: Expression
-    fun resolve(runtime: MoLangRuntime, inputValue: Double): Double
-    fun apply(runtime: MoLangRuntime) {
+    fun resolve(MoLangRuntime runtime, inputValue: Double): Double
+    fun apply(MoLangRuntime runtime) {
         runtime.environment.setSimpleVariable(name, DoubleValue(resolve(runtime, runtime.resolveDouble(input))))
     }
 }
 
-class LinearMoLangCurve(
-    override var name: String = "variable",
+public class LinearMoLangCurve(
+    override var String name = "variable",
     override var input: Expression = NumberExpression(0.0),
     var horizontalRange: Expression = NumberExpression(1.0),
     var nodes: List<Double> = emptyList()
 ) : MoLangCurve {
-    companion object {
+    final class Companion {
         val CODEC: Codec<LinearMoLangCurve> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -80,7 +80,7 @@ class LinearMoLangCurve(
     }
 
     override val type: CurveType = CurveType.LINEAR
-    override fun resolve(runtime: MoLangRuntime, inputValue: Double): Double {
+    override fun resolve(MoLangRuntime runtime, inputValue: Double): Double {
         val range = runtime.resolveDouble(horizontalRange)
         val spaceBetweenNodes = range / (nodes.size - 1)
         val rangeIndex = floor(inputValue / spaceBetweenNodes).toInt()
@@ -97,15 +97,15 @@ class LinearMoLangCurve(
         }
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         name = buffer.readString()
         input = MoLang.createParser(buffer.readString()).parseExpression()
         horizontalRange = MoLang.createParser(buffer.readString()).parseExpression()
         nodes = buffer.readList { buffer.readDouble() }
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(name)
         buffer.writeString(input.getString())
         buffer.writeString(horizontalRange.getString())
@@ -113,8 +113,8 @@ class LinearMoLangCurve(
     }
 }
 
-class CatmullRomMoLangCurve(
-    override var name: String = "variable",
+public class CatmullRomMoLangCurve(
+    override var String name = "variable",
     override var input: Expression = NumberExpression(0.5),
     var horizontalRange: Expression = NumberExpression(1.0),
     var nodes: List<Double> = emptyList()
@@ -126,7 +126,7 @@ class CatmullRomMoLangCurve(
         curve = CatmullRomCurve(nodes)
     }
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<CatmullRomMoLangCurve> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -139,7 +139,7 @@ class CatmullRomMoLangCurve(
     }
 
     override val type = CurveType.CATMULL_ROM
-    override fun resolve(runtime: MoLangRuntime, inputValue: Double): Double {
+    override fun resolve(MoLangRuntime runtime, inputValue: Double): Double {
 
         val horizontalRange = runtime.resolveDouble(horizontalRange)
         val segments = nodes.size - 3
@@ -149,8 +149,8 @@ class CatmullRomMoLangCurve(
         return curve.getY(pso)
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         name = buffer.readString()
         input = MoLang.createParser(buffer.readString()).parseExpression()
         horizontalRange = MoLang.createParser(buffer.readString()).parseExpression()
@@ -159,7 +159,7 @@ class CatmullRomMoLangCurve(
         curve = CatmullRomCurve(nodes)
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(name)
         buffer.writeString(input.getString())
         buffer.writeString(horizontalRange.getString())
@@ -167,8 +167,8 @@ class CatmullRomMoLangCurve(
     }
 }
 
-class BezierChainMoLangCurve(
-    override var name: String = "variable",
+public class BezierChainMoLangCurve(
+    override var String name = "variable",
     override var input: Expression = NumberExpression(0.5),
     var nodes: Map<Double, BezierChainNode> = emptyMap()
 ) : MoLangCurve {
@@ -191,17 +191,17 @@ class BezierChainMoLangCurve(
     }
 
     class BezierChainNode(var value: Double, var slope: Double) {
-        fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+        fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
             buffer.writeDouble(value)
             buffer.writeDouble(slope)
         }
 
-        fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+        fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
             value = buffer.readDouble()
             slope = buffer.readDouble()
         }
 
-        companion object {
+        final class Companion {
             val CODEC = RecordCodecBuilder.create<BezierChainNode> { instance ->
                 instance.group(
                     PrimitiveCodec.DOUBLE.fieldOf("value").forGetter { it.value },
@@ -229,7 +229,7 @@ class BezierChainMoLangCurve(
 
     class BezierChainPointData(val time: Double, val value: Double, val slope: Double)
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<BezierChainMoLangCurve> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -241,7 +241,7 @@ class BezierChainMoLangCurve(
     }
 
     override val type: CurveType = CurveType.BEZIER_CHAIN
-    override fun resolve(runtime: MoLangRuntime, inputValue: Double): Double {
+    override fun resolve(MoLangRuntime runtime, inputValue: Double): Double {
         val position = inputValue.coerceIn(0.0, 1.0)
         val nodePair = nodePairs.last { position >= it.startTime }
         val curve = nodePair.curve
@@ -249,23 +249,23 @@ class BezierChainMoLangCurve(
         return curve.getY(t)
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         name = buffer.readString()
         input = MoLang.createParser(buffer.readString()).parseExpression()
         nodes = buffer.readMap({ buffer.readDouble() }, { BezierChainNode(0.0, 0.0).also { it.readFromBuffer(buffer) } })
         deriveNodePairs()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(name)
         buffer.writeString(input.getString())
         buffer.writeMap(nodes, { pb, key -> pb.writeDouble(key) }, { pb, value -> value.writeToBuffer(buffer) })
     }
 }
 
-class BezierMoLangCurve(
-    override var name: String = "variable",
+public class BezierMoLangCurve(
+    override var String name = "variable",
     override var input: Expression = NumberExpression(0.5),
     var horizontalRange: Expression = NumberExpression(1.0),
     var v0: Double = 0.0,
@@ -279,7 +279,7 @@ class BezierMoLangCurve(
         curve = CubedBezierCurve(v0, v1, v2, v3)
     }
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<BezierMoLangCurve> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -295,14 +295,14 @@ class BezierMoLangCurve(
     }
 
     override val type = CurveType.BEZIER
-    override fun resolve(runtime: MoLangRuntime, inputValue: Double): Double {
+    override fun resolve(MoLangRuntime runtime, inputValue: Double): Double {
         val horizontalRange = runtime.resolveDouble(horizontalRange)
         val position = inputValue / horizontalRange
         return curve.getY(position)
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         name = buffer.readString()
         input = MoLang.createParser(buffer.readString()).parseExpression()
         horizontalRange = MoLang.createParser(buffer.readString()).parseExpression()
@@ -313,7 +313,7 @@ class BezierMoLangCurve(
         curve = CubedBezierCurve(v0, v1, v2, v3)
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(name)
         buffer.writeString(input.getString())
         buffer.writeString(horizontalRange.getString())

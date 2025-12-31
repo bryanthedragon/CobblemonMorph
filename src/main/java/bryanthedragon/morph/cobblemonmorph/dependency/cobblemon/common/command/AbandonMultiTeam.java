@@ -18,7 +18,7 @@ import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-final class AbandonMultiTeam {
+public final class AbandonMultiTeam {
 
     private const val ALIAS = "abandonmultibattleteam"
 

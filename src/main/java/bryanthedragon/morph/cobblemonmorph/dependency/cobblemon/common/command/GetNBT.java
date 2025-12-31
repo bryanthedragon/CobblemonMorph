@@ -16,21 +16,21 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerPlayer
-final class GetNBT {
+public final class GetNBT {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(Commands.literal("getnbt")
             .requiresWithPermission(CobblemonPermissions.GET_NBT) { it.player != null }
             .executes { execute(it, it.source.playerOrException) })
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player) : Int {
         /*
         val stack = player.getItemInHand(Hand.MAIN_HAND)
         try {
             val formatter = NbtOrderedStringFormatter("", 0, mutableListOf())
             val str = formatter.apply(stack.nbt)
             player.sendMessage(str.text().suggest(str))
-        } catch (e: Exception) {
+        } catch (Exception e) {
             e.printStackTrace()
         }
 

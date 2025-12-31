@@ -19,14 +19,14 @@ import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvents
 
-class CookButton(
+public class CookButton(
     pX: Int, pY: Int,
     var selected: Boolean = false,
     var color: CampfirePotColor,
     onPress: OnPress
 ): Button(pX, pY, SIZE.toInt(), SIZE.toInt(), Component.literal("Cook"), onPress, DEFAULT_NARRATION) {
 
-    companion object {
+    final class Companion {
         private const val SIZE = 20F
 
         private val buttonResource = cobblemonResource("textures/gui/campfirepot/button.png")

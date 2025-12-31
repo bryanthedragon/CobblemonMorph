@@ -24,20 +24,20 @@ import net.minecraft.resources.ResourceLocation
  * @param resourceLocation: The location of the resource used in the TypeWidget
  * @param showdownId: The showdown ID of that element without spaces and all lowercase
  */
-class ElementalType(
-    val name: String,
-    val displayName: MutableComponent,
+public class ElementalType(
+    val String name,
+    val MutableComponent displayName,
     val hue: Int,
     val textureXMultiplier: Int,
     val resourceLocation: ResourceLocation = ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "ui/types.png"),
-    val showdownId: String = ShowdownIdentifiable.REGEX.replace(name.lowercase(), "")
+    val String showdownId = ShowdownIdentifiable.REGEX.replace(name.lowercase(), "")
 ) : ShowdownIdentifiable {
 
     override fun showdownId(): String {
         return showdownId
     }
 
-    companion object {
+    final class Companion {
         @JvmStatic
         val BY_STRING_CODEC: Codec<ElementalType> = CodecUtils.createByStringCodec(
             ElementalTypes::get,

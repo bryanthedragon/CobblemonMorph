@@ -15,7 +15,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration
 import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 
-class BerryMutationProvider : CobblemonJeiProvider {
+public class BerryMutationProvider : CobblemonJeiProvider {
     override fun registerCategory(registration: IRecipeCategoryRegistration) {
         registration.addRecipeCategories(BerryRecipeCategory(registration))
     }

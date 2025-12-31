@@ -28,7 +28,7 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
 
-class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<BerryBlockEntity> {
+public class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Context) : BlockEntityRenderer<BerryBlockEntity> {
 
     val mulchModels = mutableMapOf(
         MulchVariant.COARSE to CobblemonBakingOverrides.COARSE_MULCH,
@@ -43,7 +43,7 @@ class BerryBlockRenderer(private val context: BlockEntityRendererProvider.Contex
     )
 
 
-    override fun shouldRender(blockEntity: BerryBlockEntity, pos: Vec3): Boolean {
+    override fun shouldRender(blockEntity: BerryBlockEntity, Vec3 pos): Boolean {
         return super.shouldRender(blockEntity, pos)
                 && Minecraft.getInstance().levelRenderer.cullingFrustum.isVisible(AABB.ofSize(pos, 2.0, 4.0, 2.0))
     }

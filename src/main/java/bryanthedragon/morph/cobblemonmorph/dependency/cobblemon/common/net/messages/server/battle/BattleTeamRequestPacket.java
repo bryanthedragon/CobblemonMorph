@@ -23,13 +23,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author JazzMcNade
  * @since April 15th, 2024
  */
-class BattleTeamRequestPacket(val targetedEntityId: Int) : NetworkPacket<BattleTeamRequestPacket> {
+public class BattleTeamRequestPacket(val targetedEntityId: Int) : NetworkPacket<BattleTeamRequestPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(this.targetedEntityId)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_team_request")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleTeamRequestPacket(buffer.readInt())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleTeamRequestPacket(buffer.readInt())
     }
 }

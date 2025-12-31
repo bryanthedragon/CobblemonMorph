@@ -22,7 +22,8 @@ import net.minecraft.world.entity.schedule.Activity
  *
  * @author Hiroku
  * @since April 8th, 2024
- */final class HandleBattleActivityGoal {
+ */
+public final class HandleBattleActivityGoal {
     fun create(): OneShot<PokemonEntity> {
         return BehaviorBuilder.create {
             it.group(

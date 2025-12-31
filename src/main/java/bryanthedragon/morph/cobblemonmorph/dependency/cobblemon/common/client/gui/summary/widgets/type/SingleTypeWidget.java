@@ -13,9 +13,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.drawScaledText
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
-class SingleTypeWidget(
+public class SingleTypeWidget(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     private val type: ElementalType,
     private val renderText: Boolean = true
 ) : TypeWidget(pX, pY, pWidth, pHeight, Component.literal("SingleTypeWidget - ${type.name}")) {

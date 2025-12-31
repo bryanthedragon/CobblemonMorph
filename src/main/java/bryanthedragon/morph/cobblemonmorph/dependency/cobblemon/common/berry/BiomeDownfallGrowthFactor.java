@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState
  * @author Licious
  * @since December 2nd, 2022
  */
-class BiomeDownfallGrowthFactor(
+public class BiomeDownfallGrowthFactor(
     val range: MinMaxBounds.Doubles,
     val bonusYield: IntRange
 ) : GrowthFactor {
@@ -36,7 +36,7 @@ class BiomeDownfallGrowthFactor(
         }
     }
 
-    override fun isValid(world: LevelReader, state: BlockState, pos: BlockPos): Boolean {
+    override fun isValid(Level worldReader, BlockState state, (BlockPos pos): Boolean {
         val biome = world.getBiome(pos).value() as BiomeAccessor
         return this.range.matches(biome.climateSettings.downfall.toDouble())
     }
@@ -47,7 +47,7 @@ class BiomeDownfallGrowthFactor(
 
     override fun maxYield() = this.bonusYield.last
 
-    companion object {
+    final class Companion {
 
         val ID = cobblemonResource("biome_downfall")
 

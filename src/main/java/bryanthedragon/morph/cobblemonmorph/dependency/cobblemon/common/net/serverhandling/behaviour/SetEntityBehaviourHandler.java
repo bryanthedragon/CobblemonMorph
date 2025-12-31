@@ -18,8 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
-final class SetEntityBehaviourHandler : ServerNetworkPacketHandler<SetEntityBehaviourPacket> {
-    override fun handle(packet: SetEntityBehaviourPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class SetEntityBehaviourHandler : ServerNetworkPacketHandler<SetEntityBehaviourPacket> {
+    override fun handle(packet: SetEntityBehaviourPacket, server: MinecraftServer, ServerPlayer player) {
         val entity = player.serverLevel().getEntity(packet.entityId)
         if (entity == null || entity !is MoLangScriptingEntity || entity !is LivingEntity) {
             return player.closeContainer()

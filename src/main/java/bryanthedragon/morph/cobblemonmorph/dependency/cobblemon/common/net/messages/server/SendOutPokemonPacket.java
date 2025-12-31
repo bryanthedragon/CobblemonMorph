@@ -25,14 +25,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since December 2nd, 2021
  */
-class SendOutPokemonPacket(val slot: Int) : NetworkPacket<SendOutPokemonPacket> {
+public class SendOutPokemonPacket(val slot: Int) : NetworkPacket<SendOutPokemonPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeSizedInt(IntSize.U_BYTE, slot)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("send_out_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SendOutPokemonPacket(buffer.readSizedInt(IntSize.U_BYTE))
+        fun decode(RegistryFriendlyByteBuf buffer) = SendOutPokemonPacket(buffer.readSizedInt(IntSize.U_BYTE))
     }
 }

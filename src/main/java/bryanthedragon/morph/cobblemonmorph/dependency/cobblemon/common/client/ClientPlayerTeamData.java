@@ -14,10 +14,10 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import java.util.UUID
 
-class ClientPlayerTeamData {
+public class ClientPlayerTeamData {
     var multiBattleTeamMembers = mutableListOf<ClientMultiBattleTeamMember>()
 }
 
-class ClientMultiBattleTeamMember(val uuid: UUID, val name: MutableComponent) : ClientPlayerIcon(null) {
+public class ClientMultiBattleTeamMember(val UUID uuid, val name: MutableComponent) : ClientPlayerIcon(null) {
     override val texture: ResourceLocation = cobblemonResource("textures/particle/request/icon_partner.png")
 }

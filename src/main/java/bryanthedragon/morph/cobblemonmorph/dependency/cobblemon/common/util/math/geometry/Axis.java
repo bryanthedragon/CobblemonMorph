@@ -17,7 +17,7 @@ import kotlin.math.sin
  *
  * @author landonjw
  */
-enum class Axis(val x: Float, val y: Float, val z: Float) {
+public enum Axis(val x: Float, val y: Float, val z: Float) {
     X_AXIS(1f, 0f, 0f),
     Y_AXIS(0f, 1f, 0f),
     Z_AXIS(0f, 0f, 1f);

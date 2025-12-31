@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.behaviour.DamageOnCollisionPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class DamageOnCollisionPacketHandler : ServerNetworkPacketHandler<DamageOnCollisionPacket> {
-    override fun handle(packet: DamageOnCollisionPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class DamageOnCollisionPacketHandler : ServerNetworkPacketHandler<DamageOnCollisionPacket> {
+    override fun handle(packet: DamageOnCollisionPacket, server: MinecraftServer, ServerPlayer player) {
         val pokemon = player.vehicle
         if (pokemon != null && pokemon is PokemonEntity) {
             pokemon.ifRidingAvailable { behaviour, settings, state ->

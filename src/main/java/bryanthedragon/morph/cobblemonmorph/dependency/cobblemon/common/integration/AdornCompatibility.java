@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import juuxel.adorn.block.variant.BlockVariant
 import juuxel.adorn.block.variant.CompatBlockVariantSet
 
-class AdornCompatibility : CompatBlockVariantSet() {
+public class AdornCompatibility : CompatBlockVariantSet() {
     override fun getWoodVariants(): List<BlockVariant?>? {
         return this.createVariants({ BlockVariant.Wood(it) }, "apricorn")
     }

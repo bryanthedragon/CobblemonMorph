@@ -30,7 +30,8 @@ import net.minecraft.world.entity.LivingEntity
  *
  * @author Licious
  * @since January 29th, 2022
- */final class Gen3And4CaptureCalculator : CaptureCalculator {
+ */
+public final class Gen3And4CaptureCalculator : CaptureCalculator {
 
     override fun id(): String = "generation_3_and_4"
 
@@ -44,7 +45,7 @@ import net.minecraft.world.entity.LivingEntity
         PokeBalls.MOON_BALL
     )
 
-    override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
+    override fun processCapture(LivingEntity thrower, EmptyPokeBallEntity pokeBallEntity, PokemonEntity target): CaptureContext {
         val pokeBall = pokeBallEntity.pokeBall
         val pokemon = target.pokemon
         if (pokeBall.catchRateModifier.isGuaranteed()) {

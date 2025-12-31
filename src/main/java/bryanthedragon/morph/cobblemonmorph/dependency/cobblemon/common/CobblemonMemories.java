@@ -21,7 +21,7 @@ import net.minecraft.core.UUIDUtil
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import java.util.*
-final class CobblemonMemories {
+public final class CobblemonMemories {
     val memories = mutableMapOf<String, MemoryModuleType<*>>()
 
     /*

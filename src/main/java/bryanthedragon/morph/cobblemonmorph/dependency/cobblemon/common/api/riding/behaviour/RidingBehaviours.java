@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ridin
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.behaviour.types.liquid.DolphinBehaviour
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.behaviour.types.liquid.SubmarineBehaviour
 import net.minecraft.resources.ResourceLocation
-final class RidingBehaviours {
+public final class RidingBehaviours {
     val behaviours = mutableMapOf<ResourceLocation, RidingBehaviour<RidingBehaviourSettings, RidingBehaviourState>>()
 
     init {

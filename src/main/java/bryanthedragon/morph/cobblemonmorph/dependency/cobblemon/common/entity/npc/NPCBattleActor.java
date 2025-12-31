@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.effe
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.update
 import java.util.concurrent.CompletableFuture
 
-class NPCBattleActor(
+public class NPCBattleActor(
     val npc: NPCEntity,
     pokemonList: List<BattlePokemon>,
     val skill: Int
@@ -35,7 +35,7 @@ class NPCBattleActor(
     override val entity = npc
     override val type = ActorType.NPC
     override fun getName() = npc.effectiveName().copy()
-    override fun nameOwned(name: String) = battleLang("owned_pokemon", this.getName(), name)
+    override fun nameOwned(String name) = battleLang("owned_pokemon", this.getName(), name)
     override val initialPos = entity.position()
 
     constructor(
@@ -48,7 +48,7 @@ class NPCBattleActor(
         skill
     )
 
-    override fun sendUpdate(packet: NetworkPacket<*>) {
+    override fun sendUpdate( NetworkPacket<*> packet) {
         super.sendUpdate(packet)
         if (packet is BattleEndPacket) {
             if (npc.isAlive) {

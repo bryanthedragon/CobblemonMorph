@@ -36,7 +36,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.Mth
-final class CheckSpawnsCommand {
+public final class CheckSpawnsCommand {
     const val PURPLE_THRESHOLD = 0.01F
     const val RED_THRESHOLD = 0.1F
     const val YELLOW_THRESHOLD = 5F
@@ -52,7 +52,7 @@ final class CheckSpawnsCommand {
             ))
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player) : Int {
         if (!config.enableSpawning) {
             return 0
         }

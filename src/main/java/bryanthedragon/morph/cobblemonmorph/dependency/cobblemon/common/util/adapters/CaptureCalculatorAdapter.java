@@ -26,8 +26,9 @@ import java.lang.reflect.Type
  *
  * @author Licious
  * @since January 30th, 2023
- */final class CaptureCalculatorAdapter : JsonDeserializer<CaptureCalculator>, JsonSerializer<CaptureCalculator> {
-    override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): CaptureCalculator {
+ */
+public final class CaptureCalculatorAdapter : JsonDeserializer<CaptureCalculator>, JsonSerializer<CaptureCalculator> {
+    override fun deserialize(JsonElement jElement, Type type, JsonDeserializationContext context): CaptureCalculator {
         val id = element.asString.lowercase()
         val captureCalculator = CaptureCalculators.fromId(id)
         if (captureCalculator == null) {
@@ -37,6 +38,6 @@ import java.lang.reflect.Type
         return captureCalculator
     }
 
-    override fun serialize(calculator: CaptureCalculator, type: Type, context: JsonSerializationContext): JsonElement = JsonPrimitive(calculator.id().lowercase())
+    override fun serialize(calculator: CaptureCalculator, Type type, context: JsonSerializationContext): JsonElement = JsonPrimitive(calculator.id().lowercase())
 
 }

@@ -22,17 +22,18 @@ import net.minecraft.server.packs.resources.ResourceManager
  *
  * @author landonjw
  * @since January 5, 2022
- */final class BedrockAnimationRepository {
+ */
+public final class BedrockAnimationRepository {
 
     private val gson = GsonBuilder()
         .disableHtmlEscaping()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        .registerTypeAdapter(BedrockAnimation::class.java, BedrockAnimationAdapter)
+        .registerTypeAdapter(BedrockAnimation.class, BedrockAnimationAdapter)
         .create()
 
     private val animationGroups = mutableMapOf<String, BedrockAnimationGroup>()
 
-    fun loadAnimations(resourceManager: ResourceManager, directories: List<String>) {
+    fun loadAnimations(resourceResourceManager manager, directories: List<String>) {
         JsonPose.registerAnimationFactory("bedrock", BedrockAnimationReferenceFactory)
 
         LOGGER.info("Loading animations...")
@@ -56,7 +57,7 @@ import net.minecraft.server.packs.resources.ResourceManager
                         val animationGroupName = identifier.path.substringAfterLast("/").replace(".animation.json", "")
                         animationGroups[animationGroupName] = animationGroup
                         animationCount += animationGroup.animations.size
-                    } catch (e: Exception) {
+                    } catch (Exception e) {
                         LOGGER.error("Failed to load animation group $identifier", e)
                     }
                 }

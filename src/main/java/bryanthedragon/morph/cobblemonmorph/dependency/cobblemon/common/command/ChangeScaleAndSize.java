@@ -19,7 +19,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.world.entity.EntityDimensions
-final class ChangeScaleAndSize {
+public final class ChangeScaleAndSize {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("changescaleandsize")
             .permission(CobblemonPermissions.CHANGE_SCALE_AND_SIZE)

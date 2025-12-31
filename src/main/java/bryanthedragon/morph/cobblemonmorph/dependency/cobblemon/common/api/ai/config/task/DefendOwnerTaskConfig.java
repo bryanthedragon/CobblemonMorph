@@ -18,17 +18,17 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class DefendOwnerTaskConfig : SingleTaskConfig {
+public class DefendOwnerTaskConfig : SingleTaskConfig {
 
     override fun getVariables(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): List<MoLangConfigVariable> {
         return emptyList()
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         behaviourConfigurationContext.addMemories(
@@ -38,7 +38,7 @@ class DefendOwnerTaskConfig : SingleTaskConfig {
 
         return WrapperLivingEntityTask(
             DefendOwnerTask.create(),
-            PokemonEntity::class.java
+            PokemonEntity.class
         )
     }
 }

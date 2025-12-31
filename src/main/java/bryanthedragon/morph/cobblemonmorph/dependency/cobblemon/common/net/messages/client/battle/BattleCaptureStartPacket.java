@@ -22,15 +22,15 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since July 2nd, 2022
  */
-class BattleCaptureStartPacket(val pokeBallType: ResourceLocation, val aspects: Set<String>, val targetPNX: String) : NetworkPacket<BattleCaptureStartPacket> {
+public class BattleCaptureStartPacket(val pokeBallType: ResourceLocation, val aspects: Set<String>, val targetPNX: String) : NetworkPacket<BattleCaptureStartPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(pokeBallType)
         buffer.writeCollection(aspects) { _, aspect -> buffer.writeString(aspect) }
         buffer.writeString(targetPNX)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_capture_start")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleCaptureStartPacket(buffer.readIdentifier(), buffer.readList { it.readString() }.toSet(), buffer.readString())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleCaptureStartPacket(buffer.readIdentifier(), buffer.readList { it.readString() }.toSet(), buffer.readString())
     }
 }

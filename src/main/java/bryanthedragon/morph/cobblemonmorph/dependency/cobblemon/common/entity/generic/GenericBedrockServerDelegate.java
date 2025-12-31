@@ -10,5 +10,5 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.g
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity.EntitySideDelegate
 
-class GenericBedrockServerDelegate : EntitySideDelegate<GenericBedrockEntity> {
+public class GenericBedrockServerDelegate : EntitySideDelegate<GenericBedrockEntity> {
 }

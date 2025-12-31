@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.ga
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mixin.invoker.BooleanRuleInvoker
 import net.minecraft.world.level.GameRules
-final class CobblemonGameRules {
+public final class CobblemonGameRules {
 
     @JvmField
     val BATTLE_INVULNERABILITY: GameRules.Key<GameRules.BooleanValue> = Cobblemon.implementation.registerGameRule("battleInvulnerability", GameRules.Category.PLAYER, BooleanRuleInvoker.`cobblemon$create`(false))

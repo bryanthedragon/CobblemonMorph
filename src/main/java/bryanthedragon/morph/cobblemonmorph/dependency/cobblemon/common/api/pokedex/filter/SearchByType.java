@@ -8,7 +8,7 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.filter
 
-enum class SearchByType {
+public enum SearchByType {
     SPECIES,
     ABILITIES,
     DROPS;

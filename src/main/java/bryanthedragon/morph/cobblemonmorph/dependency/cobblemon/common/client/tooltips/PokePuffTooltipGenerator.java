@@ -17,14 +17,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-final class PokePuffTooltipGenerator : TooltipGenerator() {
-    override fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+public final class PokePuffTooltipGenerator : TooltipGenerator() {
+    override fun generateCategoryTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         if (stack.item !is PokePuffItem) return null
         if (stack.get(CobblemonItemComponents.FLAVOUR) == null) return null
         return mutableListOf(lang("tooltip.poke_puff.friendship_effects").blue())
     }
 
-    override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+    override fun generateAdditionalTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         if (stack.item !is PokePuffItem) return null
 
         val resultLines = mutableListOf<Component>()

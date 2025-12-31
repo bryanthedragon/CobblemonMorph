@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class CofagrigusModel (root: ModelPart) : PokemonPosableModel(root) {
+public class CofagrigusModel (root: ModelPart) : PokemonPosableModel(root) {
     override val rootPart = root.registerChildWithAllChildren("cofagrigus")
 
     override var portraitScale = 2.0F

@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity.CaptureState.NOT
 import net.minecraft.network.syncher.EntityDataAccessor
 
-class EmptyPokeBallClientDelegate : PokeBallPosableState(), EntitySideDelegate<EmptyPokeBallEntity> {
+public class EmptyPokeBallClientDelegate : PokeBallPosableState(), EntitySideDelegate<EmptyPokeBallEntity> {
     override val stateEmitter: SettableObservable<CaptureState> = SettableObservable(NOT)
     override val shakeEmitter = SimpleObservable<Unit>()
 

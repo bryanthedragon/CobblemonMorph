@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature
-final class CobblemonConfiguredFeatures {
+public final class CobblemonConfiguredFeatures {
 
     @JvmField
     val BLACK_APRICORN_TREE_KEY = of("black_apricorn_tree")

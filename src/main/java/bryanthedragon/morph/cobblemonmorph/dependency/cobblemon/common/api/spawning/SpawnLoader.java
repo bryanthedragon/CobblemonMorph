@@ -38,41 +38,42 @@ import net.minecraft.world.level.material.Fluid
  *
  * @author Hiroku
  * @since January 31st, 2022
- */final class SpawnLoader {
+ */
+public final class SpawnLoader {
     val gson = GsonBuilder()
         .setPrettyPrinting()
         .disableHtmlEscaping()
         .setLenient()
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Fluid::class.java).type, FluidLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Biome.class).type, BiomeLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Block.class).type, BlockLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Fluid.class).type, FluidLikeConditionAdapter)
         .registerTypeAdapter(
             TypeToken.getParameterized(
-                Either::class.java,
-                ResourceLocation::class.java,
+                Either.class,
+                ResourceLocation.class,
                 TypeToken.getParameterized(
-                    TagKey::class.java,
-                    Structure::class.java
+                    TagKey.class,
+                    Structure.class
                 ).type
             ).type,
             EitherIdentifierOrTagAdapter(Registries.STRUCTURE)
         )
-        .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(SpawnDetail::class.java, SpawnDetailAdapter)
-        .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
-        .registerTypeAdapter(SpawningCondition::class.java, SpawningConditionAdapter)
-        .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
-        .registerTypeAdapter(MoonPhaseRange::class.java, IntRangesAdapter(MoonPhaseRange.moonPhaseRanges) { MoonPhaseRange(*it) })
-        .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
-        .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-        .registerTypeAdapter(SpawnBucket::class.java, SpawnBucketAdapter)
-        .registerTypeAdapter(CompoundTag::class.java, NbtCompoundAdapter)
-        .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
-        .registerTypeAdapter(PossibleHeldItem::class.java, PossibleHeldItemAdapter)
-        .registerTypeAdapter(NPCClass::class.java, NPCClassReferenceAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+        .registerTypeAdapter(SpawnablePositionType.class, RegisteredSpawnablePositionAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(SpawnDetail.class, SpawnDetailAdapter)
+        .registerTypeAdapter(DropEntry.class, DropEntryAdapter)
+        .registerTypeAdapter(SpawningCondition.class, SpawningConditionAdapter)
+        .registerTypeAdapter(TimeRange.class, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
+        .registerTypeAdapter(MoonPhaseRange.class, IntRangesAdapter(MoonPhaseRange.moonPhaseRanges) { MoonPhaseRange(*it) })
+        .registerTypeAdapter(ItemDropMethod.class, ItemDropMethod.adapter)
+        .registerTypeAdapter(PokemonProperties.class, pokemonPropertiesShortAdapter)
+        .registerTypeAdapter(SpawnBucket.class, SpawnBucketAdapter)
+        .registerTypeAdapter(CompoundTag.class, NbtCompoundAdapter)
+        .registerTypeAdapter(IntRange.class, IntRangeAdapter)
+        .registerTypeAdapter(PossibleHeldItem.class, PossibleHeldItemAdapter)
+        .registerTypeAdapter(NPCClass.class, NPCClassReferenceAdapter)
+        .registerTypeAdapter(Expression.class, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
         .create()
 
     var deserializingConditionClass: Class<out SpawningCondition<*>>? = null

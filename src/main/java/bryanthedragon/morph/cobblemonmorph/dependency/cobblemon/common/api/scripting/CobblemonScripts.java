@@ -26,7 +26,7 @@ import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
 import java.io.File
 import java.util.concurrent.ExecutionException
-final class CobblemonScripts : DataRegistry {
+public final class CobblemonScripts : DataRegistry {
     const val MOLANG_EXTENSION = ".molang"
     override val id = cobblemonResource("molang")
     override val type = PackType.SERVER_DATA
@@ -35,7 +35,7 @@ final class CobblemonScripts : DataRegistry {
     val clientScripts = mutableMapOf<ResourceLocation, ExpressionLike>()
     val scripts = mutableMapOf<ResourceLocation, ExpressionLike>()
 
-    override fun reload(manager: ResourceManager) {
+    override fun reload(ResourceManager manager) {
         manager.listResources("molang") { path -> path.endsWith(MOLANG_EXTENSION) }.forEach { (identifier, resource) ->
             resource.open().use { stream ->
                 stream.bufferedReader().use { reader ->
@@ -47,7 +47,7 @@ final class CobblemonScripts : DataRegistry {
                         } else {
                             scripts[resolvedIdentifier] = expression
                         }
-                    } catch (exception: Exception) {
+                    } catch (Exception exception) {
                         throw ExecutionException("Error loading MoLang script: $identifier", exception)
                     }
                 }
@@ -59,12 +59,12 @@ final class CobblemonScripts : DataRegistry {
     }
 
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         player.sendPacket(ScriptRegistrySyncPacket(clientScripts.entries))
     }
 
     @JvmStatic
-    fun run(identifier: ResourceLocation, runtime: MoLangRuntime): MoValue? {
+    fun run(ResourceLocation identifier, MoLangRuntime runtime): MoValue? {
         return scripts[identifier]?.resolve(runtime, runtime.contextOrEmpty)
     }
 }

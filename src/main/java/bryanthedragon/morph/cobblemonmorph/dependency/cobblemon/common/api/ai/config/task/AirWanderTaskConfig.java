@@ -30,7 +30,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.HoverRandomPos
 
-class AirWanderTaskConfig : SingleTaskConfig {
+public class AirWanderTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(WANDER, "air_wanders", true).asExpressible()
     val wanderChance = numberVariable(WANDER, "air_wander_chance", 1/(20 * 1F)).asExpressible()
     val horizontalRange = numberVariable(WANDER, "horizontal_wander_range", 20).asExpressible()
@@ -39,12 +39,12 @@ class AirWanderTaskConfig : SingleTaskConfig {
     val minUpwardsMovement: ExpressionOrEntityVariable = Either.left("3.0".asExpression())
     val minDownwardsMovement: ExpressionOrEntityVariable = Either.left("3.0".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(condition, wanderChance, horizontalRange, verticalRange, speedMultiplier, minUpwardsMovement, minDownwardsMovement).asVariables()
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null

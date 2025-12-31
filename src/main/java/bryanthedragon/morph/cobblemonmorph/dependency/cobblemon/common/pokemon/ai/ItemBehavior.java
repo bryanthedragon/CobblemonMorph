@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asArrayValue
 
-class ItemBehavior {
+public class ItemBehavior {
     private val desiredItems = listOf<ObtainableItem>()
 
     @Transient

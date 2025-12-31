@@ -27,15 +27,15 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since January 2nd, 2023
  */
-class BedrockParticleOptions(
-    var id: ResourceLocation = ResourceLocation.parse("effect"),
+public class BedrockParticleOptions(
+    var ResourceLocation id = ResourceLocation.parse("effect"),
     var emitter: BedrockParticleEmitter = BedrockParticleEmitter(),
     var particle: BedrockParticle = BedrockParticle(),
     var curves: MutableList<MoLangCurve> = mutableListOf(),
     var space: ParticleSpace = ParticleSpace(),
     var events: MutableMap<String, ParticleEvent> = mutableMapOf()
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<BedrockParticleOptions> = RecordCodecBuilder.create { instance ->
             instance.group(
                 ResourceLocation.CODEC.fieldOf("id").forGetter { it.id },
@@ -57,7 +57,7 @@ class BedrockParticleOptions(
         }
     }
 
-    fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(id)
         emitter.writeToBuffer(buffer)
         particle.writeToBuffer(buffer)
@@ -66,7 +66,7 @@ class BedrockParticleOptions(
         buffer.writeMap(events, { _, v -> buffer.writeString(v) }) { _, event -> event.encode(buffer) }
     }
 
-    fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         id = buffer.readIdentifier()
         emitter.readFromBuffer(buffer)
         particle.readFromBuffer(buffer)

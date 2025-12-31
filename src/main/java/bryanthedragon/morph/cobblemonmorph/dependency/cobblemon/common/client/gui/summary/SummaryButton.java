@@ -23,7 +23,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class SummaryButton(
+public class SummaryButton(
     var buttonX: Float,
     var buttonY: Float,
     val buttonWidth: Number,
@@ -42,7 +42,7 @@ class SummaryButton(
     private val scale: Float = 1F
 ): Button(buttonX.toInt(), buttonY.toInt(), buttonWidth.toInt(), buttonHeight.toInt(), text, clickAction, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val TEXT_HEIGHT = 9
     }
 
@@ -98,7 +98,7 @@ class SummaryButton(
         }
     }
 
-    fun setPosFloat(x: Float, y: Float) {
+    fun setPosFloat(Float x, Float y) {
         this.x = x.toInt()
         this.y = y.toInt()
         this.buttonX = x

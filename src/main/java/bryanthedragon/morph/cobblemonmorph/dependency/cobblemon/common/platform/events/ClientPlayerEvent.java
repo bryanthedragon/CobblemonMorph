@@ -18,7 +18,7 @@ import net.minecraft.client.player.LocalPlayer
  * @author Licious
  * @since February 15th, 2023
  */
-interface ClientPlayerEvent {
+public interface ClientPlayerEvent {
 
     /**
      * The [ClientPlayer] triggering the events.

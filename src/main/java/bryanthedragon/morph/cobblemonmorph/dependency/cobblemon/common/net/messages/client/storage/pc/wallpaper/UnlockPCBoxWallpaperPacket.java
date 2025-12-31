@@ -22,14 +22,14 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since February 10th, 2025
  */
-class UnlockPCBoxWallpaperPacket(val texture: ResourceLocation) : NetworkPacket<UnlockPCBoxWallpaperPacket> {
-    companion object {
+public class UnlockPCBoxWallpaperPacket(val texture: ResourceLocation) : NetworkPacket<UnlockPCBoxWallpaperPacket> {
+    final class Companion {
         val ID = cobblemonResource("unlock_pc_box_wallpaper")
-        fun decode(buffer: RegistryFriendlyByteBuf) = UnlockPCBoxWallpaperPacket(ResourceLocation.parse(buffer.readString()))
+        fun decode(RegistryFriendlyByteBuf buffer) = UnlockPCBoxWallpaperPacket(ResourceLocation.parse(buffer.readString()))
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(texture.toString())
     }
 }

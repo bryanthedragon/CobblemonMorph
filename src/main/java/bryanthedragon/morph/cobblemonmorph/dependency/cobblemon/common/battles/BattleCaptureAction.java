@@ -25,10 +25,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
  * @author Hiroku
  * @since July 2nd, 2022
  */
-class BattleCaptureAction(
+public class BattleCaptureAction(
     val battle: PokemonBattle,
     val targetPokemon: ActiveBattlePokemon,
-    val pokeBallEntity: EmptyPokeBallEntity
+    val EmptyPokeBallEntity pokeBallEntity
 ) {
     val pokemonName = targetPokemon.battlePokemon?.getName() ?: "error".red()
     fun attach() {

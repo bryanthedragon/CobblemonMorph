@@ -30,7 +30,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since January 31st, 2022
  */
-interface SpawningPrecalculation<T : Any> {
+public interface SpawningPrecalculation<T : Any> {
     /** Retrieves the precalculation keys for the given spawn detail. */
     fun select(detail: SpawnDetail): Collection<T>
     /** Retrieves the precalculation key for the given spawnable position, if that key exists for this position. */
@@ -70,7 +70,8 @@ interface SpawningPrecalculation<T : Any> {
  *
  * @author Hiroku
  * @since January 31st, 2022
- */final class RootPrecalculation : SpawningPrecalculation<Any> {
+ */
+public final class RootPrecalculation : SpawningPrecalculation<Any> {
     val list = listOf(Unit)
     override fun select(detail: SpawnDetail): List<Any> = list
     override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition): Any = Unit
@@ -81,11 +82,12 @@ interface SpawningPrecalculation<T : Any> {
  *
  * @author Hiroku
  * @since February 14th, 2022
- */final class SpawnablePositionTypePrecalculation : SpawningPrecalculation<Class<out SpawnablePosition>> {
+ */
+public final class SpawnablePositionTypePrecalculation : SpawningPrecalculation<Class<out SpawnablePosition>> {
     override fun select(detail: SpawnDetail) = listOf(detail.spawnablePositionType.clazz)
-    override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = spawnablePosition::class.java
+    override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = spawnablePosition.class
 }
-final class BucketPrecalculation : SpawningPrecalculation<SpawnBucket> {
+public final class BucketPrecalculation : SpawningPrecalculation<SpawnBucket> {
     override fun select(detail: SpawnDetail) = listOf(detail.bucket)
     override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = bucket
 }
@@ -93,7 +95,8 @@ final class BucketPrecalculation : SpawningPrecalculation<SpawnBucket> {
 /**
  * This isn't so much of a precalculation as it is a yoinking of another precalculation.
  * Uses pre-established [SpawnDetail.validBiomes] to shortcut knowing which spawns are valid for a biome.
- */final class BiomePrecalculation : SpawningPrecalculation<ResourceLocation> {
+ */
+public final class BiomePrecalculation : SpawningPrecalculation<ResourceLocation> {
     override fun select(detail: SpawnDetail) = detail.validBiomes
     override fun select(bucket: SpawnBucket, spawnablePosition: SpawnablePosition) = spawnablePosition.biomeHolder.unwrapKey().map { it.location() }.orElse(null)
 }
@@ -119,7 +122,7 @@ sealed class PrecalculationResult<T : Any>(
  * @author Hiroku
  * @since January 31st, 2022
  */
-class NestedPrecalculationResult<T : Any>(
+public class NestedPrecalculationResult<T : Any>(
     calculation: SpawningPrecalculation<T>,
     val mapping: Map<T, PrecalculationResult<*>> = mutableMapOf()
 ) : PrecalculationResult<T>(calculation) {
@@ -133,7 +136,7 @@ class NestedPrecalculationResult<T : Any>(
  * @author Hiroku
  * @since January 31st, 2022
  */
-class FinalPrecalculationResult<T : Any>(
+public class FinalPrecalculationResult<T : Any>(
     calculation: SpawningPrecalculation<*>,
     val mapping: Map<T, List<SpawnDetail>>
 ) : PrecalculationResult<T>(calculation) {

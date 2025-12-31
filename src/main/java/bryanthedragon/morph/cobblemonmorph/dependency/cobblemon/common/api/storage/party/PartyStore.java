@@ -40,7 +40,7 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since November 29th, 2021
  */
-open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
+open class PartyStore(override val UUID uuid) : PokemonStore<PartyPosition>() {
     protected val slots = MutableList<Pokemon?>(6) { null }
     protected val anyChangeObservable = SimpleObservable<Unit>()
 
@@ -55,8 +55,8 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     override operator fun get(position: PartyPosition) = get(position.slot)
 
     /** Sets the Pokémon at the specified slot. */
-    fun set(slot: Int, pokemon: Pokemon) = set(PartyPosition(slot), pokemon)
-    override fun setAtPosition(position: PartyPosition, pokemon: Pokemon?) {
+    fun set(slot: Int, Pokemon pokemon) = set(PartyPosition(slot), pokemon)
+    override fun setAtPosition(position: PartyPosition, Pokemon pokemon?) {
         if (position.slot >= slots.size) {
             throw IllegalArgumentException("Slot position is out of bounds")
         } else {
@@ -89,7 +89,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
 
     fun isEmpty() = occupied() == 0
 
-    override fun sendTo(player: ServerPlayer) {
+    override fun sendTo(ServerPlayer player) {
         player.sendPacket(InitializePartyPacket(false, uuid, slots.size))
         slots.forEachIndexed { index, pokemon ->
             if (pokemon != null) {
@@ -98,12 +98,12 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         }
     }
 
-    override operator fun set(position: PartyPosition, pokemon: Pokemon) {
+    override operator fun set(position: PartyPosition, Pokemon pokemon) {
         super.set(position, pokemon)
         sendPacketToObservers(SetPartyPokemonPacket(uuid, position) { pokemon })
     }
 
-    override fun remove(pokemon: Pokemon): Boolean {
+    override fun remove(Pokemon pokemon): Boolean {
         return if (super.remove(pokemon)) {
             sendPacketToObservers(RemoveClientPokemonPacket(this, pokemon.uuid))
             true
@@ -140,7 +140,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         }
     }
 
-    override fun onPokemonChanged(pokemon: Pokemon) {
+    override fun onPokemonChanged(Pokemon pokemon) {
         anyChangeObservable.emit(Unit)
     }
 
@@ -149,7 +149,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
     /** Maps the slots of the party using the giving mapper function, but preserving the nulls in the party at the right spots. */
     fun <T : Any> mapNullPreserving(mapper: (Pokemon) -> T): List<T?> = toGappyList().map { it?.let(mapper) }
 
-    override fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag {
+    override fun saveToNBT(CompoundTag nbt, RegistryAccess registryAccess): CompoundTag {
         nbt.putInt(DataKeys.STORE_SLOT_COUNT, slots.size)
         for (slot in slots.indices) {
             val pokemon = get(slot)
@@ -160,7 +160,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         return nbt
     }
 
-    override fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PartyStore {
+    override fun loadFromNBT(CompoundTag nbt, RegistryAccess registryAccess): PartyStore {
         val slotCount = nbt.getInt(DataKeys.STORE_SLOT_COUNT).takeIf { it in 1..6 } ?: 6
         while (slotCount < slots.size) { slots.removeLast() }
         while (slotCount > slots.size) { slots.add(null) }
@@ -172,7 +172,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
                 }
             } catch (_: InvalidSpeciesException) {
                 handleInvalidSpeciesNBT(pokemonNBT)
-            } catch (e: Exception) {
+            } catch (Exception e) {
                 LOGGER.error("Failed to read a pokémon: $pokemonNBT", e)
             }
         }
@@ -182,7 +182,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         return this
     }
 
-    override fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject {
+    override fun saveToJSON(JsonObject json, RegistryAccess registryAccess): JsonObject {
         json.addProperty(DataKeys.STORE_SLOT_COUNT, slots.size)
         for (slot in slots.indices) {
             val pokemon = get(slot)
@@ -193,7 +193,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         return json
     }
 
-    override fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PartyStore {
+    override fun loadFromJSON(JsonObject json, RegistryAccess registryAccess): PartyStore {
         val slotCount = json.get(DataKeys.STORE_SLOT_COUNT).asInt
         while (slotCount > slots.size) { slots.removeLast() }
         while (slotCount < slots.size) { slots.add(null) }
@@ -205,7 +205,7 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
                     slots[slot] = Pokemon.loadFromJSON(registryAccess, pokemonJSON)
                 } catch (_: InvalidSpeciesException) {
                     handleInvalidSpeciesJSON(pokemonJSON)
-                } catch (e: Exception) {
+                } catch (Exception e) {
                     LOGGER.error("Failed to read a pokémon: $pokemonJSON", e)
                 }
             }
@@ -229,12 +229,12 @@ open class PartyStore(override val uuid: UUID) : PokemonStore<PartyPosition>() {
         }
     }
 
-    override fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<PartyPosition> {
+    override fun loadPositionFromNBT(CompoundTag nbt): StoreCoordinates<PartyPosition> {
         val slot = nbt.getByte(DataKeys.STORE_SLOT).toInt()
         return StoreCoordinates(this, PartyPosition(slot))
     }
 
-    override fun savePositionToNBT(position: PartyPosition, nbt: CompoundTag) {
+    override fun savePositionToNBT(position: PartyPosition, CompoundTag nbt) {
         nbt.putByte(DataKeys.STORE_SLOT, position.slot.toByte())
     }
 

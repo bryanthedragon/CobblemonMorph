@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.activeDialogue
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class InputToDialogueHandler : ServerNetworkPacketHandler<InputToDialoguePacket> {
-    override fun handle(packet: InputToDialoguePacket, server: MinecraftServer, player: ServerPlayer) {
+public final class InputToDialogueHandler : ServerNetworkPacketHandler<InputToDialoguePacket> {
+    override fun handle(packet: InputToDialoguePacket, server: MinecraftServer, ServerPlayer player) {
         val dialogue = player.activeDialogue ?: return
         val input = packet.input
         val activeInput = dialogue.activeInput

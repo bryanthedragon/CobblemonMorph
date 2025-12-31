@@ -18,7 +18,7 @@ import com.google.common.collect.HashBiMap
 import com.google.gson.*
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
-final class InteractionEffectAdapter : JsonDeserializer<InteractionEffect>, JsonSerializer<InteractionEffect> {
+public final class InteractionEffectAdapter : JsonDeserializer<InteractionEffect>, JsonSerializer<InteractionEffect> {
     private val types = HashBiMap.create<String, KClass<out InteractionEffect>>()
 
     init {
@@ -33,14 +33,14 @@ final class InteractionEffectAdapter : JsonDeserializer<InteractionEffect>, Json
         this.types[id.lowercase()] = type
     }
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): InteractionEffect {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): InteractionEffect {
         val variant = json.asJsonObject.get("variant").asString.lowercase()
         val type = this.types[variant] ?: throw IllegalArgumentException("Cannot resolve evolution requirement type for variant $variant")
         return context.deserialize(json, type.java)
     }
 
-    override fun serialize(src: InteractionEffect, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        val json = context.serialize(src, src::class.java).asJsonObject
+    override fun serialize(src: InteractionEffect, typeOfT srcype, context: JsonSerializationContext): JsonElement {
+        val json = context.serialize(src, src.class).asJsonObject
         val variant = this.types.inverse()[src::class] ?: throw IllegalArgumentException("Cannot resolve evolution requirement for type ${src::class.qualifiedName}")
         json.addProperty("variant", variant)
         return json

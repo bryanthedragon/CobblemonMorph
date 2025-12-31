@@ -17,7 +17,7 @@ import java.util.UUID
  * Loads and saves some kind of InstancedPlayerData
  */
 abstract class PlayerDataStoreBackend<T : InstancedPlayerData>(val dataType: PlayerInstancedDataStoreType) {
-    abstract fun load(uuid: UUID): T
+    abstract fun load(UUID uuid): T
     abstract fun save(playerData: T)
     open fun initialize(store: T) {}
 

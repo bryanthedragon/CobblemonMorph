@@ -20,20 +20,21 @@ import java.lang.reflect.Type
  *
  * @author Jackowes
  * @since April 26th, 2025
- */final class RideSoundSettingsListAdapter: JsonDeserializer<RideSoundSettingsList?> {
+ */
+public final class RideSoundSettingsListAdapter: JsonDeserializer<RideSoundSettingsList?> {
     override fun deserialize(
-        element: JsonElement,
-        type: Type,
-        context: JsonDeserializationContext
+        JsonElement jElement,
+        Type type,
+        JsonDeserializationContext context
     ): RideSoundSettingsList {
         val sounds = when {
             element.isJsonArray -> {
                 element.asJsonArray.map {
-                    context.deserialize(it, RideSoundSettings::class.java)
+                    context.deserialize(it, RideSoundSettings.class)
                 }
             }
             element.isJsonObject -> {
-                listOf(context.deserialize<RideSoundSettings>(element, RideSoundSettings::class.java))
+                listOf(context.deserialize<RideSoundSettings>(element, RideSoundSettings.class))
             }
             else -> {
                 emptyList()

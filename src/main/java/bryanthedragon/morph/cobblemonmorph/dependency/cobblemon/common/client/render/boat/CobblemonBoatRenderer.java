@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import org.joml.Quaternionf
 
-class CobblemonBoatRenderer(ctx: EntityRendererProvider.Context, private val hasChest: Boolean) : EntityRenderer<CobblemonBoatEntity>(ctx) {
+public class CobblemonBoatRenderer(ctx: EntityRendererProvider.Context, private val hasChest: Boolean) : EntityRenderer<CobblemonBoatEntity>(ctx) {
 
     private val boatModels = hashMapOf<CobblemonBoatType, Pair<ResourceLocation, BoatModel>>()
 
@@ -65,7 +65,7 @@ class CobblemonBoatRenderer(ctx: EntityRendererProvider.Context, private val has
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light)
     }
 
-    companion object {
+    final class Companion {
 
         private fun generateTextureIdentifier(type: CobblemonBoatType, hasChest: Boolean): ResourceLocation {
             val boatSubPath = if (hasChest) "chest_boat" else "boat"

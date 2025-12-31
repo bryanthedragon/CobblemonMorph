@@ -43,14 +43,14 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.Vec3
 
-class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : FishingRodItem(settings) {
+public class PokerodItem(val pokeRodResourceLocation id, settings: Properties) : FishingRodItem(settings) {
 
-    companion object {
-        fun getBaitStackOnRod(stack: ItemStack): ItemStack {
+    final class Companion {
+        fun getBaitStackOnRod(ItemStack stack): ItemStack {
             return stack.components.get(CobblemonItemComponents.BAIT)?.stack ?: ItemStack.EMPTY
         }
 
-        fun setBait(stack: ItemStack, bait: ItemStack) {
+        fun setBait(ItemStack stack, bait: ItemStack) {
             CobblemonEvents.BAIT_SET.postThen(BaitSetEvent(stack, bait), { event -> }, {
                 if (bait.isEmpty) {
                     stack.set<RodBaitComponent>(CobblemonItemComponents.BAIT, null)
@@ -63,7 +63,7 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
         }
 
 
-        fun consumeBait(stack: ItemStack) {
+        fun consumeBait(ItemStack stack) {
             CobblemonEvents.BAIT_CONSUMED.postThen(BaitConsumedEvent(stack)) {
                 val baitStack = getBaitStackOnRod(stack)
                 val baitCount = baitStack.count
@@ -148,7 +148,7 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
         return false
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
 
         val itemStack = user.getItemInHand(hand)
         val offHandItem = user.getItemInHand(InteractionHand.OFF_HAND)
@@ -244,11 +244,11 @@ class PokerodItem(val pokeRodId: ResourceLocation, settings: Properties) : Fishi
         return "item.cobblemon.poke_rod"
     }
 
-    private fun playAttachSound(entity: Entity) {
+    private fun playAttachSound(Entity entity) {
         entity.playSound(CobblemonSounds.FISHING_BAIT_ATTACH, 1F, 1F)
     }
 
-    private fun playDetachSound(entity: Entity) {
+    private fun playDetachSound(Entity entity) {
         entity.playSound(CobblemonSounds.FISHING_BAIT_DETACH, 1F, 1F)
     }
 

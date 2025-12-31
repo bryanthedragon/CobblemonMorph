@@ -21,14 +21,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Licious
  * @since March 21st, 2022
  */
-class PartyMemberRequirement : Requirement {
-    companion object {
+public class PartyMemberRequirement : Requirement {
+    final class Companion {
         const val ADAPTER_VARIANT = "party_member"
     }
 
     val target = PokemonProperties()
     val contains = true
-    override fun check(pokemon: Pokemon): Boolean {
+    override fun check(Pokemon pokemon): Boolean {
         val party = pokemon.storeCoordinates.get()?.store as? PartyStore ?: return false
         val has = party.any { member -> member.uuid != pokemon.uuid && this.target.matches(member) }
         return this.contains == has

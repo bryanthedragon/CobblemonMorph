@@ -25,13 +25,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 29th, 2021
  */
-class SetPartyReferencePacket(val storeID: UUID) : NetworkPacket<SetPartyReferencePacket> {
+public class SetPartyReferencePacket(val UUID storeID) : NetworkPacket<SetPartyReferencePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(this.storeID)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("set_party_reference")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SetPartyReferencePacket(buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = SetPartyReferencePacket(buffer.readUUID())
     }
 }

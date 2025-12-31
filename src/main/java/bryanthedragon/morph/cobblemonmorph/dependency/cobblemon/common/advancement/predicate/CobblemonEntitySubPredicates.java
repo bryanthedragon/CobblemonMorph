@@ -15,7 +15,7 @@ import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
-final class CobblemonEntitySubPredicates : PlatformRegistry<Registry<MapCodec<out EntitySubPredicate>>, ResourceKey<Registry<MapCodec<out EntitySubPredicate>>>, MapCodec<out EntitySubPredicate>>() {
+public final class CobblemonEntitySubPredicates : PlatformRegistry<Registry<MapCodec<out EntitySubPredicate>>, ResourceKey<Registry<MapCodec<out EntitySubPredicate>>>, MapCodec<out EntitySubPredicate>>() {
 
     @JvmStatic
     val POKE_POBBER = this.create("poke_bobber", FishingBobberPredicate.CODEC)

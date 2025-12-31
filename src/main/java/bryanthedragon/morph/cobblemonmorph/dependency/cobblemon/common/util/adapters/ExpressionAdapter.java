@@ -14,8 +14,8 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
-final class ExpressionAdapter : JsonDeserializer<Expression> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): Expression {
+public final class ExpressionAdapter : JsonDeserializer<Expression> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): Expression {
         return MoLang.createParser(json.asString).parseExpression()
     }
 }

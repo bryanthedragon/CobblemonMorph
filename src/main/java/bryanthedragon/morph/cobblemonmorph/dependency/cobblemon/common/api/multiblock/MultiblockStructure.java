@@ -19,29 +19,29 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
 
-interface MultiblockStructure {
-    val controllerBlockPos: BlockPos
+public interface MultiblockStructure {
+    val controllerBlock(BlockPos pos
 
     fun useWithoutItem(
-        blockState: BlockState,
-        world: Level,
-        blockPos: BlockPos,
+        blockBlockState state,
+        Level world,
+        blockBlockPos pos,
         player: Player,
         blockHitResult: BlockHitResult
     ): InteractionResult
 
-    fun playerWillDestroy(world: Level, pos: BlockPos, state: BlockState, player: Player?)
+    fun playerWillDestroy(Level world, (BlockPos pos, BlockState state, player: Player?)
 
-    fun tick(world: Level)
+    fun tick(Level world)
 
-    fun syncToClient(world: Level)
+    fun syncToClient(Level world)
 
-    fun markDirty(world: Level)
+    fun markDirty(Level world)
     fun writeToNbt(registryLookup: HolderLookup.Provider): CompoundTag
-    fun getAnalogOutputSignal(state: BlockState, world: Level?, pos: BlockPos?): Int {
+    fun getAnalogOutputSignal(BlockState state, Level world?, (BlockPos pos?): Int {
         return 0
     }
 
-    fun setRemoved(world: Level)
-    fun onTriggerEvent(state: BlockState?, world: ServerLevel?, pos: BlockPos?, random: RandomSource?)
+    fun setRemoved(Level world)
+    fun onTriggerEvent(BlockState state?, ServerLevel world?, (BlockPos pos?, random: RandomSource?)
 }

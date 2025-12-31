@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.RideSettingsSyncPacket
 import net.minecraft.client.Minecraft
-final class RideSettingsSyncHandler : ClientNetworkPacketHandler<RideSettingsSyncPacket> {
-    override fun handle(packet: RideSettingsSyncPacket, client: Minecraft) {
+public final class RideSettingsSyncHandler : ClientNetworkPacketHandler<RideSettingsSyncPacket> {
+    override fun handle(packet: RideSettingsSyncPacket, Minecraft client) {
         CobblemonRideSettings.bird = packet.bird
         CobblemonRideSettings.glider = packet.glider
         CobblemonRideSettings.helicopter = packet.helicopter

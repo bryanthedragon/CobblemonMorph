@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.ClientPlayerIcon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleChallengeExpiredPacket
 import net.minecraft.client.Minecraft
-final class BattleChallengeExpiredHandler : ClientNetworkPacketHandler<BattleChallengeExpiredPacket> {
-    override fun handle(packet: BattleChallengeExpiredPacket, client: Minecraft) {
+public final class BattleChallengeExpiredHandler : ClientNetworkPacketHandler<BattleChallengeExpiredPacket> {
+    override fun handle(packet: BattleChallengeExpiredPacket, Minecraft client) {
         val iter = CobblemonClient.requests.battleChallenges.iterator()
         while(iter.hasNext()) {
             val entry = iter.next()

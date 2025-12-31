@@ -18,9 +18,9 @@ import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class ModelWidget(
+public class ModelWidget(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     var pokemon: RenderablePokemon,
     var baseScale: Float = 2.7F,
     var rotationY: Float = 35F,

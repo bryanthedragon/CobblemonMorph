@@ -50,7 +50,7 @@ import net.minecraft.sounds.SoundEvent
 import kotlin.isInitialized
 import net.minecraft.resources.ResourceLocation
 
-class PCGUI(
+public class PCGUI(
     val pc: ClientPC,
     val party: ClientParty,
     val configuration: PCGUIConfiguration,
@@ -58,7 +58,7 @@ class PCGUI(
     val unseenWallpapers: MutableSet<ResourceLocation> = mutableSetOf()
 ) : Screen(Component.translatable("cobblemon.ui.pc.title")), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val BASE_WIDTH = 349
         const val BASE_HEIGHT = 205
         const val INFO_BOX_WIDTH = 63
@@ -113,7 +113,7 @@ class PCGUI(
     private lateinit var wallpaperWidget: WallpapersScrollingWidget
     private lateinit var markingsWidget: MarkingsWidget
     private var modelWidget: ModelWidget? = null
-    internal var previewPokemon: Pokemon? = null
+    internal var previewPokemon pokemon? = null
     var isPreviewInParty: Boolean? = null
 
     private var showCosmeticItem = false
@@ -741,7 +741,7 @@ class PCGUI(
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         val boxNameFocused = this::boxNameWidget.isInitialized && boxNameWidget.isFocused
         val filterFocused = this::filterWidget.isInitialized && filterWidget.isFocused
 
@@ -798,7 +798,7 @@ class PCGUI(
         if (ticksElapsed % delayFactor == 0) selectPointerOffsetY += if (selectPointerOffsetIncrement) 1 else -1
     }
 
-    fun playSound(soundEvent: SoundEvent) {
+    fun playSound(SoundEvent soundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 
@@ -806,7 +806,7 @@ class PCGUI(
         if (::markingsWidget.isInitialized) markingsWidget.saveMarkingsToPokemon(isParty)
     }
 
-    fun setPreviewPokemon(pokemon: Pokemon?, isParty: Boolean = false) {
+    fun setPreviewPokemon(Pokemon pokemon?, isParty: Boolean = false) {
         if (pokemon != null) {
             saveMarkings(isParty)
             previewPokemon = pokemon

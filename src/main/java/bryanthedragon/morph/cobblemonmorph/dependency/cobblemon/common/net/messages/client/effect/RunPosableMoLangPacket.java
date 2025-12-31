@@ -29,20 +29,20 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since October 27th, 2023
  */
-class RunPosableMoLangPacket(
+public class RunPosableMoLangPacket(
     val entityId: Int,
     val expressions: Set<String>
 ) : NetworkPacket<RunPosableMoLangPacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("run_posable_molang")
-        fun decode(buffer: RegistryFriendlyByteBuf) = RunPosableMoLangPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = RunPosableMoLangPacket(
             buffer.readInt(),
             buffer.readList { pb -> pb.readString() }.toSet()
         )
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(entityId)
         buffer.writeCollection(expressions) { pb, value -> pb.writeString(value) }
     }

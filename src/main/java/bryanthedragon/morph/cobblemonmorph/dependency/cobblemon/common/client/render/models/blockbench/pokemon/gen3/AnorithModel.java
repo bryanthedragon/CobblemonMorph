@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class AnorithModel (root: ModelPart) : PokemonPosableModel(root) {
+public class AnorithModel (root: ModelPart) : PokemonPosableModel(root) {
     override val rootPart = root.registerChildWithAllChildren("anorith")
 
     override var portraitTranslation = Vec3(-0.14, -1.56, 0.0)

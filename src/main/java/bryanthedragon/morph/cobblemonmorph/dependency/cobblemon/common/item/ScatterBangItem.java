@@ -24,7 +24,7 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
 
-class ScatterBangItem(settings: Settings?) : Item(settings) {
+public class ScatterBangItem(settings: Settings?) : Item(settings) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getStackInHand(hand)
         world.playSound(

@@ -20,8 +20,8 @@ import net.minecraft.world.level.pathfinder.PathType
  * @author Hiroku
  * @since March 24th, 2025
  */
-class CobblemonWalkTarget(
-    pos: BlockPos,
+public class CobblemonWalkTarget(
+    (BlockPos pos,
     speedModifier: Float,
     completionRange: Int,
     val nodeTypeFilter: (PathType) -> Boolean = { true },

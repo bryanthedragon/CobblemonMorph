@@ -14,11 +14,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokedex.s
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokedex.scanner.PokemonScanner
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class StartScanningHandler : ServerNetworkPacketHandler<StartScanningPacket> {
+public final class StartScanningHandler : ServerNetworkPacketHandler<StartScanningPacket> {
     override fun handle(
         packet: StartScanningPacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         val targetEntity = player.level().getEntity(packet.targetedId) ?: return
         if (PokemonScanner.isEntityInRange(player, targetEntity, packet.zoomLevel)) {

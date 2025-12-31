@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Mo
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.OpenBehaviourEditorPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.entity.LivingEntity
-final class OpenBehaviourEditorHandler : ClientNetworkPacketHandler<OpenBehaviourEditorPacket> {
-    override fun handle(packet: OpenBehaviourEditorPacket, client: Minecraft) {
+public final class OpenBehaviourEditorHandler : ClientNetworkPacketHandler<OpenBehaviourEditorPacket> {
+    override fun handle(packet: OpenBehaviourEditorPacket, Minecraft client) {
         val entity = client.level?.getEntity(packet.entityId) as? MoLangScriptingEntity
         if (entity != null && entity is LivingEntity) {
             client.setScreen(BehaviourEditorScreen(entity, packet.appliedPresets.toMutableSet()))

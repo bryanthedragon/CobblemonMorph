@@ -18,7 +18,8 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Hiroku
  * @since June 19th, 2022
- */final class PCLinkManager {
+ */
+public final class PCLinkManager {
     private val links = mutableMapOf<UUID, PCLink>()
 
     fun getLink(playerID: UUID) = links[playerID]
@@ -29,7 +30,7 @@ import net.minecraft.server.level.ServerPlayer
 
     fun addLink(playerID: UUID, pcStore: PCStore, condition: (ServerPlayer) -> Boolean = { true }) {
         links[playerID] = object : PCLink(playerID = playerID, pc = pcStore) {
-            override fun isPermitted(player: ServerPlayer) = condition(player)
+            override fun isPermitted(ServerPlayer player) = condition(player)
         }
     }
 
@@ -37,5 +38,5 @@ import net.minecraft.server.level.ServerPlayer
         links.remove(playerID)
     }
 
-    fun getPC(player: ServerPlayer) = getLink(player.uuid)?.takeIf { it.isPermitted(player) }?.pc
+    fun getPC(ServerPlayer player) = getLink(player.uuid)?.takeIf { it.isPermitted(player) }?.pc
 }

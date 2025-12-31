@@ -19,15 +19,15 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since April 16th, 2023
  */
-class PokemonPasturedPacket(val pasturePokemonDTO: OpenPasturePacket.PasturePokemonDataDTO) : NetworkPacket<PokemonPasturedPacket> {
-    companion object {
+public class PokemonPasturedPacket(val pasturePokemonDTO: OpenPasturePacket.PasturePokemonDataDTO) : NetworkPacket<PokemonPasturedPacket> {
+    final class Companion {
         val ID = cobblemonResource("pasture_pokemon_added")
-        fun decode(buffer: RegistryFriendlyByteBuf) = PokemonPasturedPacket(OpenPasturePacket.PasturePokemonDataDTO.decode(buffer))
+        fun decode(RegistryFriendlyByteBuf buffer) = PokemonPasturedPacket(OpenPasturePacket.PasturePokemonDataDTO.decode(buffer))
     }
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         pasturePokemonDTO.encode(buffer)
     }
 }

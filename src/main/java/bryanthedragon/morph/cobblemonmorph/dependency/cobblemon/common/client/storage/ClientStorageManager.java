@@ -22,7 +22,7 @@ import java.util.UUID
  * @author Hiroku
  * @since November 28th, 2021
  */
-class ClientStorageManager {
+public class ClientStorageManager {
     var party = ClientParty(UUID.randomUUID(), 1)
     val partyStores = mutableMapOf<UUID, ClientParty>()
     val pcStores = mutableMapOf<UUID, ClientPC>()
@@ -84,11 +84,11 @@ class ClientStorageManager {
         }
     }
 
-    fun locatePokemon(storeID: UUID, pokemonID: UUID): Pokemon? {
+    fun locatePokemon(UUID storeID, UUID pokemonId): Pokemon? {
         return partyStores[storeID]?.findByUUID(pokemonID) ?: pcStores[storeID]?.findByUUID(pokemonID)
     }
 
-    fun createParty(mine: Boolean, uuid: UUID, slots: Int) {
+    fun createParty(mine: Boolean, UUID uuid, slots: Int) {
         val party = ClientParty(uuid, slots)
         partyStores[uuid] = party
         if (mine) {
@@ -97,57 +97,57 @@ class ClientStorageManager {
         }
     }
 
-    fun setPartyPokemon(storeID: UUID, position: PartyPosition, pokemon: Pokemon) {
+    fun setPartyPokemon(UUID storeID, position: PartyPosition, Pokemon pokemon) {
         val party = partyStores[storeID]
             ?: return LOGGER.error("Tried setting a Pokémon in position $position for party store $storeID but no such store found.")
         party.set(position, pokemon)
         checkSelectedPokemon()
     }
 
-    fun setPCPokemon(storeID: UUID, position: PCPosition, pokemon: Pokemon) {
+    fun setPCPokemon(UUID storeID, position: PCPosition, Pokemon pokemon) {
         val pc = pcStores[storeID]
             ?: return LOGGER.error("Tried setting a Pokémon in position $position for PC store $storeID but no such store found.")
         pc.set(position, pokemon)
     }
 
-    fun setPartyStore(storeID: UUID) {
+    fun setPartyStore(UUID storeID) {
         party = partyStores[storeID] ?: throw IllegalArgumentException("Was told to set party store to $storeID but no such store is known!")
         checkSelectedPokemon()
     }
 
-    fun removeFromParty(storeID: UUID, pokemonID: UUID) {
+    fun removeFromParty(UUID storeID, UUID pokemonId) {
         partyStores[storeID]?.remove(pokemonID)
         checkSelectedPokemon()
     }
 
-    fun moveInParty(storeID: UUID, pokemonID: UUID, newPosition: PartyPosition) {
+    fun moveInParty(UUID storeID, UUID pokemonId, newPosition: PartyPosition) {
         partyStores[storeID]?.move(pokemonID, newPosition)
         checkSelectedPokemon()
     }
 
-    fun swapInParty(storeID: UUID, pokemonID1: UUID, pokemonID2: UUID) {
+    fun swapInParty(UUID storeID, pokemonID1: UUID, pokemonID2: UUID) {
         partyStores[storeID]?.swap(pokemonID1, pokemonID2)
         checkSelectedPokemon()
     }
 
-    fun swapInPC(storeID: UUID, pokemonID1: UUID, pokemonID2: UUID) {
+    fun swapInPC(UUID storeID, pokemonID1: UUID, pokemonID2: UUID) {
         pcStores[storeID]?.swap(pokemonID1, pokemonID2)
     }
 
-    fun moveInPC(storeID: UUID, pokemonID: UUID, newPosition: PCPosition) {
+    fun moveInPC(UUID storeID, UUID pokemonId, newPosition: PCPosition) {
         pcStores[storeID]?.move(pokemonID, newPosition)
         checkSelectedPokemon()
     }
 
-    fun removeFromPC(storeID: UUID, pokemonID: UUID) {
+    fun removeFromPC(UUID storeID, UUID pokemonId) {
         pcStores[storeID]?.remove(pokemonID)
     }
 
-    fun renameBox(storeID: UUID, boxNumber: Int, name: String?) {
+    fun renameBox(UUID storeID, Int boxNumber, String name?) {
         pcStores[storeID]?.renameBox(boxNumber, name)
     }
 
-    fun changeBoxWallpaper(storeID: UUID, boxNumber: Int, wallpaper: ResourceLocation) {
+    fun changeBoxWallpaper(UUID storeID, Int boxNumber, wallpaper: ResourceLocation) {
         pcStores[storeID]?.changeBoxWallpaper(boxNumber, wallpaper)
     }
 

@@ -17,8 +17,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.TeamMemberRemoveNotificationPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import net.minecraft.client.Minecraft
-final class TeamMemberRemoveNotificationHandler : ClientNetworkPacketHandler<TeamMemberRemoveNotificationPacket> {
-    override fun handle(packet: TeamMemberRemoveNotificationPacket, client: Minecraft) {
+public final class TeamMemberRemoveNotificationHandler : ClientNetworkPacketHandler<TeamMemberRemoveNotificationPacket> {
+    override fun handle(packet: TeamMemberRemoveNotificationPacket, Minecraft client) {
 
         if(packet.teamMemberUUID == client.player?.uuid) {
             // Client removes itself from its team

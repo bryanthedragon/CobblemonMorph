@@ -30,44 +30,44 @@ import kotlin.random.Random
  * @author Hiroku
  * @since May 13th, 2022
  */
-open class FlagSpeciesFeature(override val name: String) : SynchronizedSpeciesFeature, CustomPokemonProperty {
-    constructor(name: String, enabled: Boolean): this(name) {
+open class FlagSpeciesFeature(override val String name) : SynchronizedSpeciesFeature, CustomPokemonProperty {
+    constructor(String name, Boolean enabled): this(name) {
         this.enabled = enabled
     }
 
     var enabled = false
-    override fun saveToNBT(pokemonNBT: CompoundTag): CompoundTag {
+    override fun saveToNBT(pokemonCompoundTag nbt): CompoundTag {
         pokemonNBT.putBoolean(name, enabled)
         return pokemonNBT
     }
 
-    override fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature {
+    override fun loadFromNBT(pokemonCompoundTag nbt): SpeciesFeature {
         enabled = if (pokemonNBT.contains(name)) pokemonNBT.getBoolean(name) else enabled
         return this
     }
 
-    override fun saveToJSON(pokemonJSON: JsonObject): JsonObject {
+    override fun saveToJSON(JsonObject pokemonJSON): JsonObject {
         pokemonJSON.addProperty(name, enabled)
         return pokemonJSON
     }
 
-    override fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature {
+    override fun loadFromJSON(JsonObject pokemonJSON): SpeciesFeature {
         val isEnabled = pokemonJSON.get(name)?.asBoolean
         enabled = isEnabled ?: this.enabled
         return this
     }
 
-    override fun saveToBuffer(buffer: RegistryFriendlyByteBuf, toClient: Boolean) {
+    override fun saveToBuffer(RegistryFriendlyByteBuf buffer, Boolean toClient) {
         buffer.writeBoolean(enabled)
     }
 
-    override fun loadFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun loadFromBuffer(RegistryFriendlyByteBuf buffer) {
         enabled = buffer.readBoolean()
     }
 
     override fun asString() = "$name=$enabled"
 
-    override fun apply(pokemon: Pokemon) {
+    override fun apply(Pokemon pokemon) {
         val featureProvider = SpeciesFeatures.getFeature(name) ?: return
         if (featureProvider in SpeciesFeatures.getFeaturesFor(pokemon.species)) {
             val existingFeature = pokemon.getFeature<FlagSpeciesFeature>(name)
@@ -80,10 +80,10 @@ open class FlagSpeciesFeature(override val name: String) : SynchronizedSpeciesFe
         }
     }
 
-    override fun matches(pokemon: Pokemon) = pokemon.getFeature<FlagSpeciesFeature>(name)?.enabled == enabled
+    override fun matches(Pokemon pokemon) = pokemon.getFeature<FlagSpeciesFeature>(name)?.enabled == enabled
 }
 
-class FlagSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<FlagSpeciesFeature>, CustomPokemonPropertyType<FlagSpeciesFeature>, AspectProvider {
+public class FlagSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<FlagSpeciesFeature>, CustomPokemonPropertyType<FlagSpeciesFeature>, AspectProvider {
     override var keys: List<String> = emptyList()
     // Uses get() = true because that way there's no backing field. It MUST be true, this way no JSON trickery will overwrite it
     override val needsKey get() = true
@@ -91,7 +91,7 @@ class FlagSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<FlagSpecie
     var isAspect = true
     override var visible: Boolean = false
 
-    override fun invoke(buffer: RegistryFriendlyByteBuf, name: String): FlagSpeciesFeature? {
+    override fun invoke(RegistryFriendlyByteBuf buffer, String name): FlagSpeciesFeature? {
         return if (name in keys) {
             FlagSpeciesFeature(name).also { it.loadFromBuffer(buffer) }
         } else {
@@ -99,19 +99,19 @@ class FlagSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<FlagSpecie
         }
     }
 
-    override fun saveToBuffer(buffer: RegistryFriendlyByteBuf, toClient: Boolean) {
+    override fun saveToBuffer(RegistryFriendlyByteBuf buffer, Boolean toClient) {
         buffer.writeCollection(keys) { _, value -> buffer.writeString(value) }
         buffer.writeNullable(default) { _, value -> buffer.writeString(value) }
         buffer.writeBoolean(isAspect)
     }
 
-    override fun loadFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun loadFromBuffer(RegistryFriendlyByteBuf buffer) {
         keys = buffer.readList { it.readString() }
         default = buffer.readNullable { it.readString() }
         isAspect = buffer.readBoolean()
     }
 
-    override fun getRenderer(pokemon: Pokemon): SummarySpeciesFeatureRenderer<FlagSpeciesFeature>? {
+    override fun getRenderer(Pokemon pokemon): SummarySpeciesFeatureRenderer<FlagSpeciesFeature>? {
         return null
     }
 
@@ -132,9 +132,9 @@ class FlagSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<FlagSpecie
 
     constructor(vararg keys: String) : this(keys.toList())
 
-    override fun get(pokemon: Pokemon) = pokemon.getFeature<FlagSpeciesFeature>(keys.first())
+    override fun get(Pokemon pokemon) = pokemon.getFeature<FlagSpeciesFeature>(keys.first())
 
-    override fun invoke(pokemon: Pokemon): FlagSpeciesFeature? {
+    override fun invoke(Pokemon pokemon): FlagSpeciesFeature? {
         return get(pokemon)
             ?: when (default) {
                 "random" -> FlagSpeciesFeature(keys.first(), Random.Default.nextBoolean())
@@ -143,13 +143,13 @@ class FlagSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<FlagSpecie
             }
     }
 
-    override fun invoke(nbt: CompoundTag): FlagSpeciesFeature? {
+    override fun invoke(CompoundTag nbt): FlagSpeciesFeature? {
         return if (nbt.contains(keys.first())) {
             FlagSpeciesFeature(keys.first(), false).also { it.loadFromNBT(nbt) }
         } else null
     }
 
-    override fun invoke(json: JsonObject): FlagSpeciesFeature? {
+    override fun invoke(JsonObject json): FlagSpeciesFeature? {
         return if (json.has(keys.first())) {
             FlagSpeciesFeature(keys.first(), false).also { it.loadFromJSON(json) }
         } else null
@@ -169,7 +169,7 @@ class FlagSpeciesFeatureProvider : SynchronizedSpeciesFeatureProvider<FlagSpecie
         }
     }
 
-    override fun provide(pokemon: Pokemon): Set<String> {
+    override fun provide(Pokemon pokemon): Set<String> {
         return if (isAspect && pokemon.getFeature<FlagSpeciesFeature>(keys.first())?.enabled == true) {
             setOf(keys.first())
         } else {

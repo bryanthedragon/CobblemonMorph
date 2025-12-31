@@ -19,7 +19,7 @@ import net.minecraft.commands.Commands
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class HealPokemonCommand {
+public final class HealPokemonCommand {
 
     private val IN_BATTLE_EXCEPTION = SimpleCommandExceptionType(commandLang("pokeheal.in_battle").red())
 

@@ -18,23 +18,23 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class FossilRegistrySyncPacket(fossils: List<Fossil>) : DataRegistrySyncPacket<Fossil, FossilRegistrySyncPacket>(fossils) {
-    companion object {
+public class FossilRegistrySyncPacket(fossils: List<Fossil>) : DataRegistrySyncPacket<Fossil, FossilRegistrySyncPacket>(fossils) {
+    final class Companion {
         val ID = cobblemonResource("fossils")
-        fun decode(buffer: RegistryFriendlyByteBuf) = FossilRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = FossilRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 
 
     override val id = ID
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Fossil) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Fossil) {
         buffer.writeIdentifier(entry.identifier)
-        buffer.writeString(Fossils.gson.toJson(entry.result, PokemonProperties::class.java))
+        buffer.writeString(Fossils.gson.toJson(entry.result, PokemonProperties.class))
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Fossil {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Fossil {
         return Fossil (
                 identifier = buffer.readIdentifier(),
-                result = Fossils.gson.fromJson(buffer.readString(), PokemonProperties::class.java),
+                result = Fossils.gson.fromJson(buffer.readString(), PokemonProperties.class),
                 fossils = emptyList()
         )
     }

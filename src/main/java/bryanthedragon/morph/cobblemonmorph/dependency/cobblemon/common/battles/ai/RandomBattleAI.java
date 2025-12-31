@@ -25,7 +25,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.S
  * @since January 16th, 2022
  * @author Deltric, Hiroku
  */
-class RandomBattleAI : BattleAI {
+public class RandomBattleAI : BattleAI {
     override fun choose(
         activeBattlePokemon: ActiveBattlePokemon,
         battle: PokemonBattle,

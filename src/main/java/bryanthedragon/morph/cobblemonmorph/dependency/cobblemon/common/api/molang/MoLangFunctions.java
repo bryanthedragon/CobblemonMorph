@@ -6,233 +6,234 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang;
 
-import com.bedrockk.molang.runtime.MoLangEnvironment
-import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.MoParams
-import com.bedrockk.molang.runtime.struct.ArrayStruct
-import com.bedrockk.molang.runtime.struct.ContextStruct
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.struct.VariableStruct
-import com.bedrockk.molang.runtime.value.DoubleValue
-import com.bedrockk.molang.runtime.value.MoValue
-import com.bedrockk.molang.runtime.value.StringValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonActivities
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBlockEntities
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonMemories
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonUnlockableWallpapers
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Environment
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ai.CobblemonBlockPosTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ai.CobblemonWanderControl
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.ActorType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.PlayerDialogueFaceProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.ReferenceDialogueFaceProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.DropEntry
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.mark.Marks
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.BenchedMove
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffects
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.NPCProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.TargetsProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.NPCClasses
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.configuration.interaction.DialogueNPCInteractionConfiguration
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.configuration.interaction.ScriptNPCInteractionConfiguration
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.partyproviders.SimplePartyProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.AbstractPokedexManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.CaughtCount
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.CaughtPercent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.PokedexEntryProgress
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.PokedexManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.SeenCount
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.SeenPercent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.experience.SidemodExperienceSource
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.LearnsetQuery
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.stats.RidingStat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ClientTaskTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.Schedulable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ServerTaskTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scripting.CobblemonScripts
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.TimeRange
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.NPCPartyStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PlayerPartyStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCPosition
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonItemTags
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.text
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleBuilder
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleFormat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PlayerBattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PokemonBattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.WaveFunctions
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.MoLangScriptingEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PosableEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCBattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonBehaviourFlag
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.ai.PokemonMoveControl
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.animation.PlayPosableAnimationPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMusicPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.RunPosableMoLangPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormParticlePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.IVs
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.ai.ObtainableItem
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.ai.ObtainableItemCondition
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.ItemInteractionEvolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.LevelUpEvolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.TradeEvolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
-import com.mojang.datafixers.util.Either
-import java.util.UUID
-import kotlin.math.sqrt
-import kotlin.random.Random
-import net.minecraft.commands.arguments.EntityAnchorArgument
-import net.minecraft.core.BlockPos
-import net.minecraft.core.Holder
-import net.minecraft.core.Registry
-import net.minecraft.core.RegistryAccess
-import net.minecraft.core.Vec3i
-import net.minecraft.core.component.DataComponents
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.DoubleTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.StringTag
-import net.minecraft.nbt.Tag
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.MinecraftServer
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundSource
-import net.minecraft.tags.TagKey
-import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.damagesource.DamageTypes
-import net.minecraft.world.effect.MobEffectInstance
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityDimensions
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.LightningBolt
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.Mob
-import net.minecraft.world.entity.PathfinderMob
-import net.minecraft.world.entity.TamableAnimal
-import net.minecraft.world.entity.ai.behavior.BlockPosTracker
-import net.minecraft.world.entity.ai.memory.MemoryModuleType
-import net.minecraft.world.entity.ai.memory.MemoryStatus
-import net.minecraft.world.entity.ai.memory.WalkTarget
-import net.minecraft.world.entity.animal.Animal
-import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.monster.Monster
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.ClipContext
-import net.minecraft.world.level.GameType
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.Level.ExplosionInteraction
-import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.dimension.DimensionType
-import net.minecraft.world.level.levelgen.Heightmap
-import net.minecraft.world.level.pathfinder.PathType
-import net.minecraft.world.phys.AABB
-import net.minecraft.world.phys.Vec3
+import com.bedrockk.molang.runtime.MoLangEnvironment;
+import com.bedrockk.molang.runtime.MoLangRuntime;
+import com.bedrockk.molang.runtime.MoParams;
+import com.bedrockk.molang.runtime.struct.ArrayStruct;
+import com.bedrockk.molang.runtime.struct.ContextStruct;
+import com.bedrockk.molang.runtime.struct.QueryStruct;
+import com.bedrockk.molang.runtime.struct.VariableStruct;
+import com.bedrockk.molang.runtime.value.DoubleValue;
+import com.bedrockk.molang.runtime.value.MoValue;
+import com.bedrockk.molang.runtime.value.StringValue;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonActivities;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBlockEntities;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonMemories;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonUnlockableWallpapers;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Environment;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ai.CobblemonBlockPosTracker;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ai.CobblemonWanderControl;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.ActorType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.PlayerDialogueFaceProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.ReferenceDialogueFaceProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.DropEntry;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.mark.Marks;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.BenchedMove;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffects;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.NPCProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.TargetsProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.NPCClasses;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.configuration.interaction.DialogueNPCInteractionConfiguration;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.configuration.interaction.ScriptNPCInteractionConfiguration;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.partyproviders.SimplePartyProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.AbstractPokedexManager;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.CaughtCount;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.CaughtPercent;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.PokedexEntryProgress;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.PokedexManager;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.SeenCount;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex.SeenPercent;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.experience.SidemodExperienceSource;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.moves.LearnsetQuery;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.stats.RidingStat;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ClientTaskTracker;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.Schedulable;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ServerTaskTracker;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scripting.CobblemonScripts;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.TimeRange;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStore;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.NPCPartyStore;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyStore;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PlayerPartyStore;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCPosition;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonItemTags;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.text;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleBuilder;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleFormat;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PlayerBattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PokemonBattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.WaveFunctions;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.MoLangScriptingEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PosableEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCBattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonBehaviourFlag;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.ai.PokemonMoveControl;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.animation.PlayPosableAnimationPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMusicPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.RunPosableMoLangPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormParticlePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.IVs;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Species;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.ai.ObtainableItem;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.ai.ObtainableItemCondition;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.ItemInteractionEvolution;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.LevelUpEvolution;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.TradeEvolution;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*;
+import com.mojang.datafixers.util.Either;
+import java.util.UUID;
+import kotlin.math.sqrt;
+import kotlin.random.Random;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Level.ExplosionInteraction;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Holds a bunch of useful MoLang trickery that can be used or extended in API
  *
  * @author Hiroku
  * @since October 2nd, 2023
- */final class MoLangFunctions {
+ */
+public final class MoLangFunctions {
     val generalFunctions = hashMapOf<String, java.util.function.Function<MoParams, Any>>(
         "print" to java.util.function.Function { params ->
-            val message = params.get<MoValue>(0).asString()
-            Cobblemon.LOGGER.info(message)
+            val message = params.get<MoValue>(0).asString();
+            Cobblemon.LOGGER.info(message);
         },
         "delete_variable" to java.util.function.Function { params ->
-            val struct = params.get<VariableStruct>(0)
-            val variable = params.getString(1)
-            struct.map.remove(variable)
-            DoubleValue.ONE
+            val struct = params.get<VariableStruct>(0);
+            val variable = params.getString(1);
+            struct.map.remove(variable);
+            DoubleValue.ONE;
         },
         "delete_variables" to java.util.function.Function { params ->
-            val struct = params.get<VariableStruct>(0)
-            struct.map.clear()
-            DoubleValue.ONE
+            val struct = params.get<VariableStruct>(0);
+            struct.map.clear();
+            DoubleValue.ONE;
         },
         "get_variable" to java.util.function.Function { params ->
-            val struct = params.get<VariableStruct>(0)
-            val variable = params.getString(1)
-            return@Function struct.map[variable] ?: DoubleValue.ZERO
+            val struct = params.get<VariableStruct>(0);
+            val variable = params.getString(1);
+            return@Function struct.map[variable] ?: DoubleValue.ZERO;
         },
         "set_variable" to java.util.function.Function { params ->
-            val struct = params.get<VariableStruct>(0)
-            val variable = params.getString(1)
-            val value = params.get<MoValue>(2)
-            struct.map[variable] = value
-            return@Function value
+            val struct = params.get<VariableStruct>(0);
+            val variable = params.getString(1);
+            val value = params.get<MoValue>(2);
+            struct.map[variable] = value;
+            return@Function value;
         },
         "set_query" to java.util.function.Function { params ->
-            val variable = params.getString(0)
-            val value = params.get<MoValue>(1)
-            params.environment.query.addFunction(variable) { value }
-            return@Function value
+            val variable = params.getString(0);
+            val value = params.get<MoValue>(1);
+            params.environment.query.addFunction(variable) { value };
+            return@Function value;
         },
         "replace" to java.util.function.Function { params ->
-            val text = params.getString(0)
-            val search = params.getString(1)
-            val replace = params.getString(2)
-            return@Function StringValue(text.replace(search, replace))
+            val text = params.getString(0);
+            val search = params.getString(1);
+            val replace = params.getString(2);
+            return@Function StringValue(text.replace(search, replace));
         },
         "is_included" to java.util.function.Function { params ->
-            val text = params.getString(0)
-            val search = params.getString(1)
-            return@Function DoubleValue(text.contains(search))
+            val text = params.getString(0);
+            val search = params.getString(1);
+            return@Function DoubleValue(text.contains(search));
         },
         "to_lower" to java.util.function.Function { params ->
-            return@Function StringValue(params.getString(0).lowercase())
+            return@Function StringValue(params.getString(0).lowercase());
         },
         "to_upper" to java.util.function.Function { params ->
-            return@Function StringValue(params.getString(0).uppercase())
+            return@Function StringValue(params.getString(0).uppercase());
         },
         "string_length" to java.util.function.Function { params ->
-            return@Function DoubleValue(params.getString(0).length)
+            return@Function DoubleValue(params.getString(0).length);;
         },
         "split_string" to java.util.function.Function { params ->
-            val text = params.getString(0)
-            val delimiter = params.getString(1)
-            val parts = text.split(delimiter).map { StringValue(it) }
-            val struct = ArrayStruct(hashMapOf())
-            parts.forEachIndexed { index, moValue -> struct.setDirectly("$index", moValue) }
-            return@Function struct
+            val text = params.getString(0);
+            val delimiter = params.getString(1);
+            val parts = text.split(delimiter).map { StringValue(it) };
+            val struct = ArrayStruct(hashMapOf());
+            parts.forEachIndexed { index, moValue -> struct.setDirectly("$index", moValue) };
+            return@Function struct;
         },
         "is_blank" to java.util.function.Function { params ->
-            val arg = params.get<MoValue>(0)
-            return@Function DoubleValue((arg is StringValue && (arg.value.isBlank() || arg.value.toDoubleOrNull() == 0.0)) || (arg is DoubleValue && arg.value == 0.0))
+            val arg = params.get<MoValue>(0);
+            return@Function DoubleValue((arg is StringValue && (arg.value.isBlank() || arg.value.toDoubleOrNull() == 0.0)) || (arg is DoubleValue && arg.value == 0.0));
         },
         "run_command" to java.util.function.Function { params ->
-            val command = params.getString(0)
-            val server = server() ?: return@Function DoubleValue.ZERO
-            server.commands.performPrefixedCommand(server.createCommandSourceStack(), command)
+            val command = params.getString(0);
+            val server = server() ?: return@Function DoubleValue.ZERO;
+            server.commands.performPrefixedCommand(server.createCommandSourceStack(), command);
         },
         "is_int" to java.util.function.Function { params -> DoubleValue(params.get<MoValue>(0).asString().isInt()) },
         "is_number" to java.util.function.Function { params -> DoubleValue(params.get<MoValue>(0).asString().toDoubleOrNull() != null) },
@@ -240,418 +241,424 @@ import net.minecraft.world.phys.Vec3
         "to_int" to java.util.function.Function { params -> DoubleValue(params.get<MoValue>(0).asString().toIntOrNull() ?: 0) },
         "to_string" to java.util.function.Function { params -> StringValue(params.get<MoValue>(0).asString()) },
         "do_effect_walks" to java.util.function.Function { _ ->
-            DoubleValue(Cobblemon.config.walkingInBattleAnimations)
+            DoubleValue(Cobblemon.config.walkingInBattleAnimations);
         },
         "random" to java.util.function.Function { params ->
-            val options = mutableListOf<MoValue>()
-            var index = 0
+            val options = mutableListOf<MoValue>();
+            var index = 0;
             while (params.contains(index)) {
-                options.add(params.get(index))
-                index++
+                options.add(params.get(index));
+                index++;
             }
-            return@Function options.random() // Can throw an exception if they specified no args. They'd be idiots though.
+            return@Function options.random(); // Can throw an exception if they specified no args. They'd be idiots though.
         },
         "curve" to java.util.function.Function { params ->
-            val curveName = params.getString(0)
-            val curve = WaveFunctions.functions[curveName] ?: throw IllegalArgumentException("Unknown curve: $curveName")
-            return@Function ObjectValue(curve)
+            val curveName = params.getString(0);
+            val curve = WaveFunctions.functions[curveName] ?: throw IllegalArgumentException("Unknown curve: $curveName");
+            return@Function ObjectValue(curve);
         },
         "array" to java.util.function.Function { params ->
-            val values = params.params
-            val array = ArrayStruct(hashMapOf())
-            values.forEachIndexed { index, moValue -> array.setDirectly("$index", moValue) }
-            return@Function array
+            val values = params.params;
+            val array = ArrayStruct(hashMapOf());
+            values.forEachIndexed { index, moValue -> array.setDirectly("$index", moValue) };
+            return@Function array;
         },
         "length" to java.util.function.Function { params ->
-            val array = (params.getOrNull<MoValue>(0) as? VariableStruct) ?: return@Function DoubleValue.ZERO
-            return@Function DoubleValue(array.map.size.toDouble())
+            val array = (params.getOrNull<MoValue>(0) as? VariableStruct) ?: return@Function DoubleValue.ZERO;
+            return@Function DoubleValue(array.map.size.toDouble());
         },
         "append" to java.util.function.Function { params ->
-            val array = params.get<ArrayStruct>(0)
-            val value = params.get<MoValue>(1)
-            val nextIndex = array.map.size
-            array.setDirectly("$nextIndex", value)
-            return@Function array
+            val array = params.get<ArrayStruct>(0);
+            val value = params.get<MoValue>(1);
+            val nextIndex = array.map.size;
+            array.setDirectly("$nextIndex", value);
+            return@Function array;
         },
         "insert" to java.util.function.Function { params ->
-            val array = params.get<ArrayStruct>(0)
-            val index = params.getInt(1)
-            val value = params.get<MoValue>(2)
-            val size = array.map.size
+            val array = params.get<ArrayStruct>(0);
+            val index = params.getInt(1);
+            val value = params.get<MoValue>(2);
+            val size = array.map.size;
 
             // Shift elements at and after index up by 1
             for (i in (size - 1) downTo index) {
-                val current = array.map[i.toString()]
+                val current = array.map[i.toString()];
                 if (current != null) {
-                    array.map[(i + 1).toString()] = current
+                    array.map[(i + 1).toString()] = current;
                 }
             }
-            array.map[index.toString()] = value
-            return@Function array
+            array.map[index.toString()] = value;
+            return@Function array;
         },
         "delete" to java.util.function.Function { params ->
-            val array = params.get<ArrayStruct>(0)
-            val index = params.getInt(1)
+            val array = params.get<ArrayStruct>(0);
+            val index = params.getInt(1);
             if (index in 0 until array.map.size) {
-                array.map.remove(index.toString())
+                array.map.remove(index.toString());
                 // Re-index the array to keep keys sequential in numerical order
-                val newMap = hashMapOf<String, MoValue>()
-                array.map.keys.mapNotNull { it.toIntOrNull() }
-                    .sorted()
-                    .forEachIndexed { i, k -> newMap[i.toString()] = array.map[k.toString()]!! }
-                array.map.clear()
-                array.map.putAll(newMap)
+                val newMap = hashMapOf<String, MoValue>();
+                array.map.keys.mapNotNull { it.toIntOrNull() }.sorted().forEachIndexed { i, k -> newMap[i.toString()] = array.map[k.toString()]!! };
+                array.map.clear();
+                array.map.putAll(newMap);
             }
-            return@Function array
+            return@Function array;
         },
         "run_script" to java.util.function.Function { params ->
-            val runtime = MoLangRuntime()
-            runtime.environment.query = params.environment.query
-            runtime.environment.variable = params.environment.variable
-            val args = params.params.subList(1, params.params.size)
+            val runtime = MoLangRuntime();
+            runtime.environment.query = params.environment.query;
+            runtime.environment.variable = params.environment.variable;
+            val args = params.params.subList(1, params.params.size);
             runtime.environment.context = ContextStruct(
-                params.environment.context.map + args.mapIndexed { index, value -> "arg_${index + 1}" to value }.toMap()
+                params.environment.context.map + args.mapIndexed { index, value -> "arg_${index + 1}" to value }.toMap();
             )
-            val script = params.getString(0).asIdentifierDefaultingNamespace()
+            val script = params.getString(0).asIdentifierDefaultingNamespace();
             // store the args in the
-            CobblemonScripts.run(script, runtime) ?: DoubleValue.ZERO
+            CobblemonScripts.run(script, runtime) ?: DoubleValue.ZERO;
         },
         "run_molang" to java.util.function.Function { params ->
-            val runtime = MoLangRuntime()
-            runtime.environment.query = params.environment.query
-            runtime.environment.variable = params.environment.variable
-            runtime.environment.context = params.environment.context
-            val expression = params.getString(0).asExpressionLike()
-            val delayInSeconds = params.getDoubleOrNull(1)?.toFloat() ?: 0.0f
+            val runtime = MoLangRuntime();
+            runtime.environment.query = params.environment.query;
+            runtime.environment.variable = params.environment.variable;
+            runtime.environment.context = params.environment.context;
+            val expression = params.getString(0).asExpressionLike();
+            val delayInSeconds = params.getDoubleOrNull(1)?.toFloat() ?: 0.0f;
             if (delayInSeconds > 0.0f) {
                 val tracker = if (Cobblemon.implementation.environment() == Environment.SERVER) ServerTaskTracker else ClientTaskTracker
                 tracker.after(delayInSeconds) {
-                    runtime.resolve(expression)
+                    runtime.resolve(expression);
                 }
-            } else {
-                runtime.resolve(expression)
+            } 
+            else {
+                runtime.resolve(expression);
             }
         },
         "system_time_millis" to java.util.function.Function { _ ->
-            DoubleValue(System.currentTimeMillis())
+            DoubleValue(System.currentTimeMillis());
         },
         // the rest of the world use dd/MM/yyyy grow up america (this comment was generated by copilot)
         "date_local_time" to java.util.function.Function { _ ->
-            val time = System.currentTimeMillis()
-            val date = java.util.Date(time)
-            val formatted = java.text.SimpleDateFormat("DD/MM/YYYY").format(date)
-            StringValue(formatted)
+            val time = System.currentTimeMillis();
+            val date = java.util.Date(time);
+            val formatted = java.text.SimpleDateFormat("DD/MM/YYYY").format(date);
+            StringValue(formatted);
         },
         "date_of" to java.util.function.Function { params ->
-            val time = params.getDouble(0).toLong()
-            val date = java.util.Date(time)
-            val formatted = java.text.SimpleDateFormat("DD/MM/YYYY").format(date)
-            StringValue(formatted)
+            val time = params.getDouble(0).toLong();
+            val date = java.util.Date(time);
+            val formatted = java.text.SimpleDateFormat("DD/MM/YYYY").format(date);
+            StringValue(formatted);
         },
         "date_is_after" to java.util.function.Function { params ->
-            val dateA = params.getString(0)
-            val dateB = params.getString(1)
-            val format = java.text.SimpleDateFormat("DD/MM/YYYY")
-            val a = format.parse(dateA)
-            val b = format.parse(dateB)
-            DoubleValue(a.after(b))
+            val dateA = params.getString(0);
+            val dateB = params.getString(1);
+            val format = java.text.SimpleDateFormat("DD/MM/YYYY");
+            val a = format.parse(dateA);
+            val b = format.parse(dateB);
+            DoubleValue(a.after(b));
         },
         "create_simple_party_provider" to java.util.function.Function { params ->
-            val partyProvider = SimplePartyProvider()
-            return@Function partyProvider.struct
+            val partyProvider = SimplePartyProvider();
+            return@Function partyProvider.struct;
         },
         "create_pickup_item" to java.util.function.Function { params ->
-            val item = params.getOrNull<MoValue>(0)?.asString()?.let(ObtainableItemCondition::parseFromString)
-            val pickupPriority = params.getIntOrNull(1) ?: 0
-            val pickupItem = ObtainableItem(item = item, pickupPriority = pickupPriority)
-            return@Function pickupItem.struct
+            val item = params.getOrNull<MoValue>(0)?.asString()?.let(ObtainableItemCondition::parseFromString);
+            val pickupPriority = params.getIntOrNull(1) ?: 0;
+            val pickupItem = ObtainableItem(item = item, pickupPriority = pickupPriority);
+            return@Function pickupItem.struct;
         },
         "file" to java.util.function.Function { MoLangLoadedFilesCache.struct }
     )
-    val biomeFunctions = mutableListOf<(Holder<Biome>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>()
+    val biomeFunctions = mutableListOf<(Holder<Biome>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>();
     val worldFunctions = mutableListOf<(Holder<Level>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { worldHolder ->
             val world = worldHolder.value()
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
             map.put("is_time_of_day") { params ->
-                val timeOfDay = TimeRange.timeRanges[params.getString(0).lowercase()]
-                    ?: return@put DoubleValue.ZERO
-                val time = world.dayTime % 24000
-                return@put DoubleValue(timeOfDay.contains(time.toInt()))
+                val timeOfDay = TimeRange.timeRanges[params.getString(0).lowercase()] ?: return@put DoubleValue.ZERO;
+                val time = world.dayTime % 24000;
+                return@put DoubleValue(timeOfDay.contains(time.toInt()));
             }
-            map.put("game_time") { _ -> DoubleValue(world.gameTime.toDouble()) }
+            map.put("game_time") { _ -> DoubleValue(world.gameTime.toDouble()) };
             map.put("time_of_day") {
-                val time = world.dayTime % 24000
-                return@put DoubleValue(time.toDouble())
+                val time = world.dayTime % 24000;
+                return@put DoubleValue(time.toDouble());
             }
-            map.put("server") { _ -> server()?.asMoLangValue() ?: DoubleValue.ZERO }
+            map.put("server") { _ -> server()?.asMoLangValue() ?: DoubleValue.ZERO };
             map.put("is_raining_at") { params ->
-                val x = params.getInt(0)
-                val y = params.getInt(1)
-                val z = params.getInt(2)
-                return@put DoubleValue(world.isRainingAt(BlockPos(x, y, z)))
+                val x = params.getInt(0);
+                val y = params.getInt(1);
+                val z = params.getInt(2);
+                return@put DoubleValue(world.isRainingAt(BlockPos(x, y, z)));
             }
             map.put("is_snowing_at") { params ->
-                val x = params.getInt(0)
-                val y = params.getInt(1)
-                val z = params.getInt(2)
-                val blockPos = BlockPos(x, y, z)
+                val x = params.getInt(0);
+                val y = params.getInt(1);
+                val z = params.getInt(2);
+                val blockPos = BlockPos(x, y, z);
                 if (!world.isRaining()) {
-                    return@put DoubleValue.ZERO
-                } else if (!world.canSeeSky(blockPos)) {
-                    return@put DoubleValue.ZERO
-                } else if (world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, blockPos).getY() > blockPos.getY()) {
-                    return@put DoubleValue.ZERO
-                } else {
+                    return@put DoubleValue.ZERO;
+                } 
+                else if (!world.canSeeSky(blockPos)) {
+                    return@put DoubleValue.ZERO;
+                } 
+                else if (world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, blockPos).getY() > blockPos.getY()) {
+                    return@put DoubleValue.ZERO;
+                } 
+                else {
                     val biome = world.getBiome(blockPos).value() as Biome
-                    return@put DoubleValue(biome.getPrecipitationAt(blockPos) == Biome.Precipitation.SNOW)
+                    return@put DoubleValue(biome.getPrecipitationAt(blockPos) == Biome.Precipitation.SNOW);
                 }
             }
             map.put("is_chunk_loaded_at") { params ->
-                val x = params.getInt(0)
-                val y = params.getInt(1)
-                val z = params.getInt(2)
-                return@put DoubleValue(world.isLoaded(BlockPos(x, y, z)))
+                val x = params.getInt(0);
+                val y = params.getInt(1);
+                val z = params.getInt(2);
+                return@put DoubleValue(world.isLoaded(BlockPos(x, y, z)));
             }
-            map.put("is_thundering") { _ -> DoubleValue(world.isThundering) }
-            map.put("is_raining") { _ -> DoubleValue(world.isRaining) }
+            map.put("is_thundering") { _ -> DoubleValue(world.isThundering) };
+            map.put("is_raining") { _ -> DoubleValue(world.isRaining) };
             map.put("set_block") { params ->
-                val x = params.getInt(0)
-                val y = params.getInt(1)
-                val z = params.getInt(2)
+                val x = params.getInt(0);
+                val y = params.getInt(1);
+                val z = params.getInt(2);
                 val block = world.blockRegistry.get(params.getString(3).asIdentifierDefaultingNamespace())
                     ?: run {
-                        Cobblemon.LOGGER.error("Unknown block: ${params.getString(3)}")
-                        return@put DoubleValue.ZERO
+                        Cobblemon.LOGGER.error("Unknown block: ${params.getString(3)}");
+                        return@put DoubleValue.ZERO;
                     }
-                world.setBlock(BlockPos(x, y, z), block.defaultBlockState(), Block.UPDATE_ALL)
+                world.setBlock(BlockPos(x, y, z), block.defaultBlockState(), Block.UPDATE_ALL);
             }
             map.put("is_air") { params ->
-                val x = params.getDouble(0).toInt()
-                val y = params.getDouble(1).toInt()
-                val z = params.getDouble(2).toInt()
-                val blockState = world.getBlockState(BlockPos(x, y, z))
-                return@put DoubleValue(blockState.isAir)
+                val x = params.getDouble(0).toInt();
+                val y = params.getDouble(1).toInt();
+                val z = params.getDouble(2).toInt();
+                val blockState = world.getBlockState(BlockPos(x, y, z));
+                return@put DoubleValue(blockState.isAir);
             }
             map.put("get_block") { params ->
-                val x = params.getInt(0)
-                val y = params.getInt(1)
-                val z = params.getInt(2)
-                val block = world.getBlockState(BlockPos(x, y, z)).block
-                return@put world.blockRegistry.wrapAsHolder(block).asMoLangValue(Registries.BLOCK)
+                val x = params.getInt(0);
+                val y = params.getInt(1);
+                val z = params.getInt(2);
+                val block = world.getBlockState(BlockPos(x, y, z)).block;
+                return@put world.blockRegistry.wrapAsHolder(block).asMoLangValue(Registries.BLOCK);
             }
             map.put("spawn_explosion") { params ->
-                val x = params.getDouble(0)
-                val y = params.getDouble(1)
-                val z = params.getDouble(2)
-                val range = params.getDouble(3).toFloat()
-                world.explode(null, x, y, z, range, ExplosionInteraction.valueOf(params.getStringOrNull(4)?.uppercase() ?: ExplosionInteraction.TNT.name))
+                val x = params.getDouble(0);
+                val y = params.getDouble(1);
+                val z = params.getDouble(2);
+                val range = params.getDouble(3).toFloat();
+                world.explode(null, x, y, z, range, ExplosionInteraction.valueOf(params.getStringOrNull(4)?.uppercase() ?: ExplosionInteraction.TNT.name));
             }
             map.put("spawn_lightning") { params ->
-                val x = params.getDouble(0)
-                val y = params.getDouble(1)
-                val z = params.getDouble(2)
-                val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, world)
-                lightning.setPos(x, y, z)
-                world.addFreshEntity(lightning)
-                return@put DoubleValue.ONE
+                val x = params.getDouble(0);
+                val y = params.getDouble(1);
+                val z = params.getDouble(2);
+                val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, world);
+                lightning.setPos(x, y, z);
+                world.addFreshEntity(lightning);
+                return@put DoubleValue.ONE;
             }
             // q.entity.world.spawn_bedrock_particles(effect, x, y, z, [player]) - sends to everyone nearby or just to the player if they're set.
             map.put("spawn_bedrock_particles") { params ->
-                val particle = params.getString(0).asResource()
-                val x = params.getDouble(1)
-                val y = params.getDouble(2)
-                val z = params.getDouble(3)
+                val particle = params.getString(0).asResource();
+                val x = params.getDouble(1);
+                val y = params.getDouble(2);
+                val z = params.getDouble(3);
                 val player = params.getOrNull<MoValue>(4)?.let {
-                    if (it is StringValue) world.getPlayerByUUID(UUID.fromString(it.value))
-                    else if (it is ObjectValue<*>) it.obj
-                    else null
+                    if (it is StringValue) world.getPlayerByUUID(UUID.fromString(it.value));
+                    else if (it is ObjectValue<*>) it.obj;
+                    else null;
                 } as? ServerPlayer
-                val pos = Vec3(x, y, z)
+                val pos = Vec3(x, y, z);
 
-                val packet = SpawnSnowstormParticlePacket(particle, pos)
+                val packet = SpawnSnowstormParticlePacket(particle, pos);
                 if (player != null) {
-                    packet.sendToPlayer(player)
-                } else {
-                    packet.sendToPlayersAround(x, y, z, 64.0, world.dimension())
+                    packet.sendToPlayer(player);
+                } 
+                else {
+                    packet.sendToPlayersAround(x, y, z, 64.0, world.dimension());
                 }
             }
             map.put("spawn_pokemon") { params ->
-                val x = params.getInt(0)
-                val y = params.getInt(1)
-                val z = params.getInt(2)
-                val props = params.getString(3).toProperties()
+                val x = params.getInt(0);
+                val y = params.getInt(1);
+                val z = params.getInt(2);
+                val props = params.getString(3).toProperties();
 
-                val pos = BlockPos(x, y, z)
+                val pos = BlockPos(x, y, z);
 
                 if (!Level.isInSpawnableBounds(pos)) {
-                    return@put DoubleValue.ZERO
+                    return@put DoubleValue.ZERO;
                 }
 
-                val pokemon = props.createEntity(world)
-                pokemon.moveTo(pos, pokemon.yRot, pokemon.xRot)
+                val pokemon = props.createEntity(world);
+                pokemon.moveTo(pos, pokemon.yRot, pokemon.xRot);
 
                 if (world.addFreshEntity(pokemon)) {
-                    return@put pokemon.struct
-                } else {
-                    return@put DoubleValue.ZERO
+                    return@put pokemon.struct;
+                } 
+                else {
+                    return@put DoubleValue.ZERO;
                 }
             }
             map.put("spawn_npc") { params ->
-                val x = params.getDouble(0)
-                val y = params.getDouble(1)
-                val z = params.getDouble(2)
-                val npcClass = params.getStringOrNull(3)?.let { NPCClasses.getByIdentifier(it.asIdentifierDefaultingNamespace()) }
-                val level = params.getInt(4)
-                if(npcClass == null) return@put DoubleValue.ZERO
-                val npc = NPCEntity(world)
-                npc.moveTo(x, y, z, npc.yRot, npc.xRot)
-                npc.npc = npcClass
-                npc.initialize(level)
+                val x = params.getDouble(0);
+                val y = params.getDouble(1);
+                val z = params.getDouble(2);
+                val npcClass = params.getStringOrNull(3)?.let { NPCClasses.getByIdentifier(it.asIdentifierDefaultingNamespace()) };
+                val level = params.getInt(4);
+                if(npcClass == null) return@put DoubleValue.ZERO;
+                val npc = NPCEntity(world);
+                npc.moveTo(x, y, z, npc.yRot, npc.xRot);
+                npc.npc = npcClass;
+                npc.initialize(level);
                 if (world.addFreshEntity(npc)) {
-                    return@put npc.asMoLangValue()
+                    return@put npc.asMoLangValue();
                 }
-                return@put DoubleValue.ZERO
+                return@put DoubleValue.ZERO;
             }
             map.put("play_sound_on_server") { params ->
-                val sound = params.getString(0).asResource()
-                val soundSource = params.getString(1).uppercase()
-                val x = params.getDouble(2)
-                val y = params.getDouble(3)
-                val z = params.getDouble(4)
+                val sound = params.getString(0).asResource();
+                val soundSource = params.getString(1).uppercase();
+                val x = params.getDouble(2);
+                val y = params.getDouble(3);
+                val z = params.getDouble(4);
                 val player = params.getOrNull<MoValue>(5)?.let {
-                    if (it is StringValue) world.getPlayerByUUID(UUID.fromString(it.value))
-                    else if (it is ObjectValue<*>) it.obj
-                    else null
+                    if (it is StringValue) world.getPlayerByUUID(UUID.fromString(it.value));
+                    else if (it is ObjectValue<*>) it.obj;
+                    else null;
                 } as? ServerPlayer
-                val volume = params.getDoubleOrNull(6)?.toFloat() ?: 1.0f
-                val pitch = params.getDoubleOrNull(7)?.toFloat() ?: 1.0f
+                val volume = params.getDoubleOrNull(6)?.toFloat() ?: 1.0f;
+                val pitch = params.getDoubleOrNull(7)?.toFloat() ?: 1.0f;
 
-                val packet = UnvalidatedPlaySoundS2CPacket(sound, SoundSource.valueOf(soundSource), x, y, z, volume, pitch)
+                val packet = UnvalidatedPlaySoundS2CPacket(sound, SoundSource.valueOf(soundSource), x, y, z, volume, pitch);
                 if (player != null) {
-                    packet.sendToPlayer(player)
-                } else {
-                    packet.sendToPlayersAround(x, y, z, 16.0, world.dimension())
+                    packet.sendToPlayer(player);
+                } 
+                else {
+                    packet.sendToPlayersAround(x, y, z, 16.0, world.dimension());
                 }
             }
             map.put("get_entities_around") { params ->
-                val x = params.getDouble(0)
-                val y = params.getDouble(1)
-                val z = params.getDouble(2)
-                val range = params.getDouble(3) * 2
-                val entities = world.getEntities(null, AABB.ofSize(Vec3(x, y, z), range, range, range))
+                val x = params.getDouble(0);
+                val y = params.getDouble(1);
+                val z = params.getDouble(2);
+                val range = params.getDouble(3) * 2;
+                val entities = world.getEntities(null, AABB.ofSize(Vec3(x, y, z), range, range, range));
                 return@put entities
-                    .filterIsInstance<LivingEntity>()
-                    .map { it.asMostSpecificMoLangValue() }
-                    .asArrayValue()
+                    .filterIsInstance<LivingEntity>();
+                    .map { it.asMostSpecificMoLangValue() };
+                    .asArrayValue();
             }
             map.put("is_healer_in_use") { params ->
-                val pos = params.get<ArrayStruct>(0).asBlockPos()
-                val healer = world.getBlockEntity(pos, CobblemonBlockEntities.HEALING_MACHINE).orElse(null) ?: return@put DoubleValue.ONE
-                return@put DoubleValue(healer.isInUse)
+                val pos = params.get<ArrayStruct>(0).asBlockPos();
+                val healer = world.getBlockEntity(pos, CobblemonBlockEntities.HEALING_MACHINE).orElse(null) ?: return@put DoubleValue.ONE;
+                return@put DoubleValue(healer.isInUse);
             }
-
-            return@mutableListOf map
+            return@mutableListOf map;
         }
     )
-    val dimensionTypeFunctions = mutableListOf<(Holder<DimensionType>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>()
-    val blockFunctions = mutableListOf<(Holder<Block>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>()
+    val dimensionTypeFunctions = mutableListOf<(Holder<DimensionType>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>();
+    val blockFunctions = mutableListOf<(Holder<Block>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>();
     val playerFunctions = mutableListOf<(Player) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { player ->
-            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("username") { _ -> StringValue(player.gameProfile.name) }
-            map.put("uuid") { _ -> StringValue(player.gameProfile.id.toString()) }
-            map.put("main_held_item") { _ -> player.mainHandItem.asMoLangValue(player.registryAccess()) }
-            map.put("off_held_item") { _ -> player.offhandItem.asMoLangValue(player.registryAccess()) }
+            val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>();
+            map.put("username") { _ -> StringValue(player.gameProfile.name) };
+            map.put("uuid") { _ -> StringValue(player.gameProfile.id.toString()) };
+            map.put("main_held_item") { _ -> player.mainHandItem.asMoLangValue(player.registryAccess()) };
+            map.put("off_held_item") { _ -> player.offhandItem.asMoLangValue(player.registryAccess()) };
             map.put("inventory") { _ ->
-                val inventory = player.inventory
-                val items = ArrayStruct(hashMapOf())
+                val inventory = player.inventory;
+                val items = ArrayStruct(hashMapOf());
                 for (i in 0 until inventory.containerSize) {
-                    items.setDirectly("$i", inventory.getItem(i).asMoLangValue(player.registryAccess()))
+                    items.setDirectly("$i", inventory.getItem(i).asMoLangValue(player.registryAccess()));
                 }
-                return@put items
+                return@put items;
             }
-            map.put("face") { params -> ObjectValue(PlayerDialogueFaceProvider(player.uuid, params.getBooleanOrNull(0) != false)) }
-            map.put("swing_hand") { _ -> player.swing(player.usedItemHand) }
-            map.put("food_level") { _ -> DoubleValue(player.foodData.foodLevel) }
-            map.put("saturation_level") { _ -> DoubleValue(player.foodData.saturationLevel) }
+            map.put("face") { params -> ObjectValue(PlayerDialogueFaceProvider(player.uuid, params.getBooleanOrNull(0) != false)) };
+            map.put("swing_hand") { _ -> player.swing(player.usedItemHand) };
+            map.put("food_level") { _ -> DoubleValue(player.foodData.foodLevel) };
+            map.put("saturation_level") { _ -> DoubleValue(player.foodData.saturationLevel) };
             map.put("tell") { params ->
-                val message = params.getString(0).text()
-                val overlay = params.getBooleanOrNull(1) == true
-                player.displayClientMessage(message, overlay)
+                val message = params.getString(0).text();
+                val overlay = params.getBooleanOrNull(1) == true;
+                player.displayClientMessage(message, overlay);
             }
             map.put("teleport") { params ->
-                val x = params.getDouble(0)
-                val y = params.getDouble(1)
-                val z = params.getDouble(2)
-                val playParticleOptionss = params.getBooleanOrNull(3) ?: false
+                val x = params.getDouble(0);
+                val y = params.getDouble(1);
+                val z = params.getDouble(2);
+                val playParticleOptionss = params.getBooleanOrNull(3) ?: false;
                 player.randomTeleport(x, y, z, playParticleOptionss)
             }
             map.put("heal") { params ->
-                val amount = params.getDoubleOrNull(0) ?: player.maxHealth
-                player.heal(amount.toFloat())
+                val amount = params.getDoubleOrNull(0) ?: player.maxHealth;
+                player.heal(amount.toFloat());
             }
             map.put("environment") {
-                val environment = MoLangEnvironment()
-                environment.query = player.asMoLangValue()
-                environment
+                val environment = MoLangEnvironment();
+                environment.query = player.asMoLangValue();
+                environment;
             }
-            map.put("is_player") { DoubleValue.ONE }
+            map.put("is_player") { DoubleValue.ONE };
             map.put("riding_pokemon") {
-                val vehicle = player.vehicle
+                val vehicle = player.vehicle;
                 if (vehicle is PokemonEntity) {
-                    return@put vehicle.struct
-                } else {
-                    return@put DoubleValue.ZERO
+                    return@put vehicle.struct;
+                }
+                else {
+                    return@put DoubleValue.ZERO;
                 }
             }
             if (player is ServerPlayer) {
                 map.put("seen_credits") { _ ->
-                    DoubleValue(player.seenCredits)
+                    DoubleValue(player.seenCredits);
                 }
                 map.put("is_in_dialogue") { _ ->
-                    DoubleValue(player.isInDialogue)
+                    DoubleValue(player.isInDialogue);
                 }
                 map.put("active_dialogue") { _ ->
                     if (player.isInDialogue) {
-                        player.activeDialogue?.dialogueId.toString()
-                        return@put DoubleValue.ONE
-                    } else {
-                        DoubleValue.ZERO
+                        player.activeDialogue?.dialogueId.toString();
+                        return@put DoubleValue.ONE;
+                    } 
+                    else {
+                        DoubleValue.ZERO;
                     }
                 }
-                map.put("is_spectator") { DoubleValue(player.isSpectator) }
-                map.put("is_creative") { DoubleValue(player.isCreative) }
-                map.put("is_survival") { DoubleValue(player.gameMode.isSurvival) }
-                map.put("is_adventure") { DoubleValue(player.gameMode.getGameModeForPlayer() == GameType.ADVENTURE) }
+                map.put("is_spectator") { DoubleValue(player.isSpectator) };
+                map.put("is_creative") { DoubleValue(player.isCreative) };
+                map.put("is_survival") { DoubleValue(player.gameMode.isSurvival) };
+                map.put("is_adventure") { DoubleValue(player.gameMode.getGameModeForPlayer() == GameType.ADVENTURE) };
                 map.put("run_command") { params ->
-                    val command = params.getString(0)
-                    player.server.commands.performPrefixedCommand(player.createCommandSourceStack(), command)
+                    val command = params.getString(0);
+                    player.server.commands.performPrefixedCommand(player.createCommandSourceStack(), command);
                 }
                 map.put("set_battle_theme") { params ->
-                    val soundId = params.getString(0).asResource()
-                    Cobblemon.playerDataManager.getGenericData(player).battleTheme = soundId
-                    return@put DoubleValue.ONE
+                    val soundId = params.getString(0).asResource();
+                    Cobblemon.playerDataManager.getGenericData(player).battleTheme = soundId;
+                    return@put DoubleValue.ONE;
                 }
                 map.put("battle_music") { params ->
-                    val soundId = params.getString(0).asResource()
-                    val volume = params.getDoubleOrNull(1)?.toFloat() ?: 1.0f
-                    val pitch = params.getDoubleOrNull(2)?.toFloat() ?: 1.0f
-                    val restart = params.getBooleanOrNull(3) ?: true
+                    val soundId = params.getString(0).asResource();
+                    val volume = params.getDoubleOrNull(1)?.toFloat() ?: 1.0f;
+                    val pitch = params.getDoubleOrNull(2)?.toFloat() ?: 1.0f;
+                    val restart = params.getBooleanOrNull(3) ?: true;
 
-                    val music = soundId
+                    val music = soundId;
                     if (music != null) {
-                        val packet = BattleMusicPacket(music, volume, pitch, restart)
-                        packet.sendToPlayer(player)
-                        return@put DoubleValue.ONE
-                    } else {
-                        return@put DoubleValue.ZERO
+                        val packet = BattleMusicPacket(music, volume, pitch, restart);
+                        packet.sendToPlayer(player);
+                        return@put DoubleValue.ONE;
+                    }
+                    else {
+                        return@put DoubleValue.ZERO;
                     }
                 }
                 map.put("stop_battle_music") { _ ->
-                    val packet = BattleMusicPacket(null)
-                    packet.sendToPlayer(player)
-                    return@put DoubleValue.ONE
+                    val packet = BattleMusicPacket(null);
+                    packet.sendToPlayer(player);
+                    return@put DoubleValue.ONE;
                 }
                 map.put("play_sound_on_server") { params ->
                     val sound = params.getString(0).asResource()
@@ -663,7 +670,7 @@ import net.minecraft.world.phys.Vec3
                     packet.sendToPlayer(player)
                 }
                 map.put("is_party_at_full_health") { _ ->
-                    DoubleValue(player.party().none(Pokemon::canBeHealed)) }
+                    DoubleValue(player.party().none(Pokemon::canBeHealed)) };
                 map.put("can_heal_at_healer") { params ->
                     val pos = params.get<ArrayStruct>(0).asBlockPos()
                     val healer = player.level().getBlockEntity(pos, CobblemonBlockEntities.HEALING_MACHINE).orElse(null) ?: return@put DoubleValue.ZERO
@@ -678,23 +685,25 @@ import net.minecraft.world.phys.Vec3
                     if (healer.canHeal(party)) {
                         healer.activate(player.uuid, party)
                         return@put DoubleValue.ONE
-                    } else {
+                    } 
+                    else {
                         return@put DoubleValue.ZERO
                     }
                 }
-                map.put("party") { player.party().struct }
-                map.put("pc") { player.pc().struct }
-                map.put("has_permission") { params -> DoubleValue(Cobblemon.permissionValidator.hasPermission(player, params.getString(0), params.getIntOrNull(1) ?: 4)) }
-                map.put("data") { params -> Cobblemon.molangData.load(player.uuid, params.getStringOrNull(0)) }
-                map.put("save_data") { params -> Cobblemon.molangData.save(player.uuid, params.getStringOrNull(0)) }
-                map.put("in_battle") { DoubleValue(player.isInBattle()) }
-                map.put("battle") { player.getBattleState()?.first?.struct ?: DoubleValue.ZERO }
+                map.put("party") { player.party().struct };
+                map.put("pc") { player.pc().struct };
+                map.put("has_permission") { params -> DoubleValue(Cobblemon.permissionValidator.hasPermission(player, params.getString(0), params.getIntOrNull(1) ?: 4)) };
+                map.put("data") { params -> Cobblemon.molangData.load(player.uuid, params.getStringOrNull(0)) };
+                map.put("save_data") { params -> Cobblemon.molangData.save(player.uuid, params.getStringOrNull(0)) };
+                map.put("in_battle") { DoubleValue(player.isInBattle()) };
+                map.put("battle") { player.getBattleState()?.first?.struct ?: DoubleValue.ZERO };
                 map.put("get_npc_data") { params ->
                     val npcId = ((params.get<MoValue>(0) as? ObjectValue<*>)?.obj as? NPCEntity)?.stringUUID ?: params.getString(0)
                     val data = Cobblemon.molangData.load(player.uuid, params.getStringOrNull(1))
                     if (data.map.containsKey(npcId)) {
                         return@put data.map[npcId]!!
-                    } else {
+                    } 
+                    else {
                         val vars = VariableStruct()
                         data.map[npcId] = vars
                         return@put vars
@@ -706,7 +715,8 @@ import net.minecraft.world.phys.Vec3
                     val data = Cobblemon.molangData.load(player.uuid, params.getStringOrNull(2))
                     if (data.map.containsKey(npcId)) {
                         return@put (data.map[npcId] as VariableStruct).map[variable] ?: DoubleValue.ZERO
-                    } else {
+                    } 
+                    else {
                         return@put DoubleValue.ZERO
                     }
                 }
@@ -717,7 +727,7 @@ import net.minecraft.world.phys.Vec3
                     val saveAfterwards = params.getBooleanOrNull(3) != false
                     val path = params.getStringOrNull(4)
                     val data = Cobblemon.molangData.load(player.uuid, path)
-                    val npcData = data.map.getOrPut(npcId) { VariableStruct() } as VariableStruct
+                    val npcData = data.map.getOrPut(npcId) { VariableStruct() }; as VariableStruct
                     npcData.map[variable] = value
                     if (saveAfterwards) {
                         Cobblemon.molangData.save(player.uuid, path)
@@ -738,12 +748,14 @@ import net.minecraft.world.phys.Vec3
                     val opponentValue = params.get<MoValue>(0)
                     val opponent = if (opponentValue is ObjectValue<*>) {
                         opponentValue.obj as ServerPlayer
-                    } else {
+                    } 
+                    else {
                         val paramString = opponentValue.asString()
                         val playerUUID = paramString.asUUID
                         if (playerUUID != null) {
                             server()?.playerList?.getPlayer(playerUUID) ?: return@put DoubleValue.ZERO
-                        } else {
+                        } 
+                        else {
                             server()?.playerList?.getPlayerByName(paramString) ?: return@put DoubleValue.ZERO
                         }
                     }
@@ -788,16 +800,16 @@ import net.minecraft.world.phys.Vec3
             val holder = itemRegistry.wrapAsHolder(stack.item)
 
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("item") { _ -> holder.asMoLangValue(Registries.ITEM) }
-            map.put("count") { _ -> DoubleValue(stack.count.toDouble()) }
-            map.put("damage_value") { _ -> DoubleValue(stack.damageValue) }
-            map.put("max_damage") { _ -> DoubleValue(stack.maxDamage) }
-            map.put("is_empty") { _ -> DoubleValue(stack.isEmpty) }
-            map.put("shrink") { params -> stack.shrink(params.getInt(0)) }
-            map.put("grow") { params -> stack.grow(params.getInt(0)) }
-            map.put("is_of") { params -> DoubleValue(holder.`is`(params.getString(0).asIdentifierDefaultingNamespace())) }
-            map.put("is_in") { params -> DoubleValue(holder.`is`(TagKey.create(Registries.ITEM, params.getString(0).replace("#", "").asIdentifierDefaultingNamespace()))) }
-            map.put("is_food") { params -> DoubleValue(stack.has(DataComponents.FOOD)) }
+            map.put("item") { _ -> holder.asMoLangValue(Registries.ITEM) };
+            map.put("count") { _ -> DoubleValue(stack.count.toDouble()) };
+            map.put("damage_value") { _ -> DoubleValue(stack.damageValue) };
+            map.put("max_damage") { _ -> DoubleValue(stack.maxDamage) };
+            map.put("is_empty") { _ -> DoubleValue(stack.isEmpty) };
+            map.put("shrink") { params -> stack.shrink(params.getInt(0)) };
+            map.put("grow") { params -> stack.grow(params.getInt(0)) };
+            map.put("is_of") { params -> DoubleValue(holder.`is`(params.getString(0).asIdentifierDefaultingNamespace())) };
+            map.put("is_in") { params -> DoubleValue(holder.`is`(TagKey.create(Registries.ITEM, params.getString(0).replace("#", "").asIdentifierDefaultingNamespace()))) };
+            map.put("is_food") { params -> DoubleValue(stack.has(DataComponents.FOOD)) };
             return@mutableListOf map
         }
     )
@@ -805,7 +817,7 @@ import net.minecraft.world.phys.Vec3
     val entityFunctions: MutableList<(Entity) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf(
         { entity ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("uuid") { _ -> StringValue(entity.uuid.toString()) }
+            map.put("uuid") { _ -> StringValue(entity.uuid.toString()) };
             map.put("set_name") { params ->
                 val name = params.getString(0)
                 entity.customName = name.text()
@@ -836,7 +848,7 @@ import net.minecraft.world.phys.Vec3
             map.put("tags") {
                 val tags = entity.tags
                 val array = ArrayStruct(hashMapOf())
-                tags.forEachIndexed { index, tag -> array.setDirectly("$index", StringValue(tag)) }
+                tags.forEachIndexed { index, tag -> array.setDirectly("$index", StringValue(tag)) };
                 return@put array
             }
             map.put("add_tag") { params ->
@@ -874,7 +886,8 @@ import net.minecraft.world.phys.Vec3
                     val type = params.getStringOrNull(0)?.asIdentifierDefaultingNamespace()
                     if (type != null) {
                         entity.callbacks[type]?.clear()
-                    } else {
+                    } 
+                    else {
                         entity.callbacks.clear()
                     }
                     return@put DoubleValue.ONE
@@ -890,7 +903,8 @@ import net.minecraft.world.phys.Vec3
                     if (entity.brain.checkMemory(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED)) {
                         entity.brain.setMemory(MemoryModuleType.WALK_TARGET, WalkTarget(Vec3(x, y, z), speedMultiplier.toFloat(), 1))
                         entity.brain.setMemory(MemoryModuleType.LOOK_TARGET, BlockPosTracker(Vec3(x, y + entity.eyeHeight, z)))
-                    } else {
+                    } 
+                    else {
                         entity.navigation.moveTo(x, y, z, speedMultiplier)
                         entity.lookControl.setLookAt(Vec3(x, y + entity.eyeHeight, z))
                     }
@@ -907,82 +921,85 @@ import net.minecraft.world.phys.Vec3
                 }
 
                 map.put("get_pathfinding_malus") { params ->
-                    val type = PathType.entries.find { it.name == params.getString(0).uppercase() }
+                    val type = PathType.entries.find { it.name == params.getString(0).uppercase() };
                     if (type != null) {
                         return@put DoubleValue(entity.getPathfindingMalus(type))
-                    } else {
+                    } 
+                    else {
                         Cobblemon.LOGGER.error("Unknown pathfinding type: ${params.getString(0)}")
                         return@put DoubleValue.ZERO
                     }
                 }
                 map.put("set_pathfinding_malus") { params ->
-                    val type = PathType.entries.find { it.name == params.getString(0).uppercase() }
+                    val type = PathType.entries.find { it.name == params.getString(0).uppercase() };
                     val malus = params.getDouble(1).toFloat()
                     if (type != null) {
                         entity.setPathfindingMalus(type, malus)
                         return@put DoubleValue.ONE
-                    } else {
+                    } 
+                    else {
                         Cobblemon.LOGGER.error("Unknown pathfinding type: ${params.getString(0)}")
                         return@put DoubleValue.ZERO
                     }
                 }
             }
 
-            map.put("is_sneaking") { _ -> DoubleValue(entity.isShiftKeyDown) }
-            map.put("is_sprinting") { _ -> DoubleValue(entity.isSprinting) }
-            map.put("is_in_water") { _ -> DoubleValue(entity.isUnderWater) }
-            map.put("is_in_rain") { _ -> DoubleValue(entity.isInWaterOrRain && !entity.isInWater) }
-            map.put("is_touching_water_or_rain") { _ -> DoubleValue(entity.isInWaterRainOrBubble) }
-            map.put("is_touching_water") { _ -> DoubleValue(entity.isInWater) }
-            map.put("is_underwater") { DoubleValue(entity.getIsSubmerged()) }
-            map.put("is_in_lava") { _ -> DoubleValue(entity.isInLava) }
-            map.put("is_on_fire") { _ -> DoubleValue(entity.isOnFire) }
-            map.put("is_invisible") { _ -> DoubleValue(entity.isInvisible) }
-            map.put("is_riding") { _ -> DoubleValue(entity.isPassenger) }
+            map.put("is_sneaking") { _ -> DoubleValue(entity.isShiftKeyDown) };
+            map.put("is_sprinting") { _ -> DoubleValue(entity.isSprinting) };
+            map.put("is_in_water") { _ -> DoubleValue(entity.isUnderWater) };
+            map.put("is_in_rain") { _ -> DoubleValue(entity.isInWaterOrRain && !entity.isInWater) };
+            map.put("is_touching_water_or_rain") { _ -> DoubleValue(entity.isInWaterRainOrBubble) };
+            map.put("is_touching_water") { _ -> DoubleValue(entity.isInWater) };
+            map.put("is_underwater") { DoubleValue(entity.getIsSubmerged()) };
+            map.put("is_in_lava") { _ -> DoubleValue(entity.isInLava) };
+            map.put("is_on_fire") { _ -> DoubleValue(entity.isOnFire) };
+            map.put("is_invisible") { _ -> DoubleValue(entity.isInvisible) };
+            map.put("is_riding") { _ -> DoubleValue(entity.isPassenger) };
             map.put("distance_to_pos") { params ->
                 val x = params.getDouble(0)
                 val y = params.getDouble(1)
                 val z = params.getDouble(2)
                 return@put DoubleValue(sqrt(entity.distanceToSqr(Vec3(x, y, z))))
             }
-            map.put("name") { _ -> StringValue(entity.effectiveName().string) }
+            map.put("name") { _ -> StringValue(entity.effectiveName().string) };
             map.put("type") { _ ->
                 entity.registryAccess().registry(Registries.ENTITY_TYPE).get().getKey(entity.type)?.toString()?.let {
                     StringValue(it)
                 } ?: DoubleValue.ZERO
             }
-            map.put("yaw") { _ -> DoubleValue(entity.yRot.toDouble()) }
-            map.put("pitch") { _ -> DoubleValue(entity.xRot.toDouble()) }
-            map.put("x") { _ -> DoubleValue(entity.x) }
-            map.put("y") { _ -> DoubleValue(entity.y) }
-            map.put("z") { _ -> DoubleValue(entity.z) }
-            map.put("velocity_x") { _ -> DoubleValue(entity.deltaMovement.x) }
-            map.put("velocity_y") { _ -> DoubleValue(entity.deltaMovement.y) }
-            map.put("velocity_z") { _ -> DoubleValue(entity.deltaMovement.z) }
-            map.put("width") { DoubleValue(entity.boundingBox.xsize) }
-            map.put("height") { DoubleValue(entity.boundingBox.ysize) }
-            map.put("entity_size") { DoubleValue(entity.boundingBox.run { if (xsize > ysize) xsize else ysize }) }
-            map.put("entity_width") { DoubleValue(entity.boundingBox.xsize) }
-            map.put("entity_height") { DoubleValue(entity.boundingBox.ysize) }
-            map.put("id_modulo") { params -> DoubleValue(entity.uuid.hashCode() % params.getDouble(0)) }
-            map.put("horizontal_velocity") { _ -> DoubleValue(entity.deltaMovement.horizontalDistance()) }
-            map.put("vertical_velocity") { DoubleValue(entity.deltaMovement.y) }
-            map.put("is_on_ground") { _ -> DoubleValue(entity.onGround()) }
-            map.put("world") { _ -> entity.level().worldRegistry.wrapAsHolder(entity.level()).asWorldMoLangValue() }
-            map.put("biome") { _ -> entity.level().getBiome(entity.blockPosition()).asBiomeMoLangValue() }
-            map.put("is_passenger") { DoubleValue(entity.isPassenger) }
+            map.put("yaw") { _ -> DoubleValue(entity.yRot.toDouble()) };
+            map.put("pitch") { _ -> DoubleValue(entity.xRot.toDouble()) };
+            map.put("x") { _ -> DoubleValue(entity.x) };
+            map.put("y") { _ -> DoubleValue(entity.y) };
+            map.put("z") { _ -> DoubleValue(entity.z) };
+            map.put("velocity_x") { _ -> DoubleValue(entity.deltaMovement.x) };
+            map.put("velocity_y") { _ -> DoubleValue(entity.deltaMovement.y) };
+            map.put("velocity_z") { _ -> DoubleValue(entity.deltaMovement.z) };
+            map.put("width") { DoubleValue(entity.boundingBox.xsize) };
+            map.put("height") { DoubleValue(entity.boundingBox.ysize) };
+            map.put("entity_size") { DoubleValue(entity.boundingBox.run { if (xsize > ysize) xsize else ysize }) };
+            map.put("entity_width") { DoubleValue(entity.boundingBox.xsize) };
+            map.put("entity_height") { DoubleValue(entity.boundingBox.ysize) };
+            map.put("id_modulo") { params -> DoubleValue(entity.uuid.hashCode() % params.getDouble(0)) };
+            map.put("horizontal_velocity") { _ -> DoubleValue(entity.deltaMovement.horizontalDistance()) };
+            map.put("vertical_velocity") { DoubleValue(entity.deltaMovement.y) };
+            map.put("is_on_ground") { _ -> DoubleValue(entity.onGround()) };
+            map.put("world") { _ -> entity.level().worldRegistry.wrapAsHolder(entity.level()).asWorldMoLangValue() };
+            map.put("biome") { _ -> entity.level().getBiome(entity.blockPosition()).asBiomeMoLangValue() };
+            map.put("is_passenger") { DoubleValue(entity.isPassenger) };
             map.put("find_nearby_block") { params ->
                 val input = params.getString(0)
                 val isTag = input.contains("#")
                 val type = input.replace("#", "").asIdentifierDefaultingNamespace(namespace = "minecraft")
                 val range = params.getDoubleOrNull(1) ?: 10
                 val blockPos = entity.level().getBlockStatesWithPos(AABB.ofSize(entity.position(), range.toDouble(), range.toDouble(), range.toDouble()))
-                    .filter { it.first.blockHolder.let { if (isTag) it.`is`(TagKey.create(Registries.BLOCK, type)) else it.`is`(type) } }
-                    .minByOrNull { it.second.distSqr(entity.blockPosition()) }
+                    .filter { it.first.blockHolder.let { if (isTag) it.`is`(TagKey.create(Registries.BLOCK, type)) else it.`is`(type) }; }
+                    .minByOrNull { it.second.distSqr(entity.blockPosition()) };
                     ?.second
                 if (blockPos != null) {
                     return@put ArrayStruct(mapOf("0" to DoubleValue(blockPos.x), "1" to DoubleValue(blockPos.y), "2" to DoubleValue(blockPos.z)))
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
             }
@@ -991,7 +1008,7 @@ import net.minecraft.world.phys.Vec3
                 val entities = entity.level().getEntities(entity, AABB.ofSize(entity.position(), distance, distance, distance))
                 return@put entities
                     .filterIsInstance<Entity>()
-                    .map { it.asMostSpecificMoLangValue() }
+                    .map { it.asMostSpecificMoLangValue() };
                     .asArrayValue()
             }
             map.put("is_standing_on_blocks") { params ->
@@ -1014,18 +1031,22 @@ import net.minecraft.world.phys.Vec3
                     if (target != null) {
                         val targetPlayer = if (target.asUUID != null) {
                             entity.level().getPlayerByUUID(target.asUUID!!) as ServerPlayer
-                        } else if (entity.level() is ServerLevel) {
+                        } 
+                        else if (entity.level() is ServerLevel) {
                             entity.level().server!!.playerList.getPlayerByName(target)
-                        } else {
+                        } 
+                        else {
                             null
                         }
                         if (targetPlayer != null) {
                             packet.sendToPlayer(targetPlayer)
                             return@put DoubleValue.ONE
-                        } else {
+                        } 
+                        else {
                             return@put DoubleValue.ZERO
                         }
-                    } else {
+                    } 
+                    else {
                         packet.sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, entity.level().dimension())
                         return@put DoubleValue.ONE
                     }
@@ -1059,7 +1080,8 @@ import net.minecraft.world.phys.Vec3
                 val packet = SpawnSnowstormEntityParticlePacket(particle, entity.id, listOf(locator))
                 if (player == null) {
                     packet.sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, entity.level().dimension())
-                } else {
+                } 
+                else {
                     packet.sendToPlayer(player)
                 }
             }
@@ -1075,16 +1097,16 @@ import net.minecraft.world.phys.Vec3
     val livingEntityFunctions: MutableList<(LivingEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>> = mutableListOf<(LivingEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { entity ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("is_player") { _ -> DoubleValue(entity is Player) }
-            map.put("is_npc") { _ -> DoubleValue(entity is NPCEntity) }
-            map.put("is_mob") { _ -> DoubleValue(entity is Mob) }
-            map.put("is_pokemon") { _ -> DoubleValue(entity is PokemonEntity) }
-            map.put("is_animal") { _ -> DoubleValue(entity is Animal) }
-            map.put("is_tamable") { _ -> DoubleValue(entity is TamableAnimal) }
-            map.put("is_tamed") { _ -> DoubleValue(entity is TamableAnimal && entity.isTame) }
-            map.put("is_hostile") { _ -> DoubleValue(entity is Monster) }
-            map.put("is_baby") { _ -> DoubleValue(entity.isBaby) }
-            map.put("is_adult") { _ -> DoubleValue(!entity.isBaby) }
+            map.put("is_player") { _ -> DoubleValue(entity is Player) };
+            map.put("is_npc") { _ -> DoubleValue(entity is NPCEntity) };
+            map.put("is_mob") { _ -> DoubleValue(entity is Mob) };
+            map.put("is_pokemon") { _ -> DoubleValue(entity is PokemonEntity) };
+            map.put("is_animal") { _ -> DoubleValue(entity is Animal) };
+            map.put("is_tamable") { _ -> DoubleValue(entity is TamableAnimal) };
+            map.put("is_tamed") { _ -> DoubleValue(entity is TamableAnimal && entity.isTame) };
+            map.put("is_hostile") { _ -> DoubleValue(entity is Monster) };
+            map.put("is_baby") { _ -> DoubleValue(entity.isBaby) };
+            map.put("is_adult") { _ -> DoubleValue(!entity.isBaby) };
             map.put("remove_effect") { params ->
                 val effectId = params.getString(0).asIdentifierDefaultingNamespace()
                 val effectHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null)
@@ -1120,23 +1142,24 @@ import net.minecraft.world.phys.Vec3
 
                 val entity = if (targetEntity is ObjectValue<*> && targetEntity.obj is Entity) {
                     targetEntity.obj as Entity
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
 
                 return@put DoubleValue(entity.isLookingAt(entity, maxDistance))
             }
             map.put("is_living_entity") { DoubleValue.ONE }
-            map.put("is_flying") { _ -> DoubleValue(entity.isFallFlying) }
-            map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) }
-            map.put("health") { _ -> DoubleValue(entity.health) }
-            map.put("max_health") { _ -> DoubleValue(entity.maxHealth) }
+            map.put("is_flying") { _ -> DoubleValue(entity.isFallFlying) };
+            map.put("is_sleeping") { _ -> DoubleValue(entity.isSleeping) };
+            map.put("health") { _ -> DoubleValue(entity.health) };
+            map.put("max_health") { _ -> DoubleValue(entity.maxHealth) };
             map.put("look_at_position") { params ->
                 val x = params.getDouble(0)
                 val y = params.getDouble(1)
                 val z = params.getDouble(2)
                 val duration = params.getIntOrNull(3) ?: 20
-                val flags = params.params.subList(4, params.params.size).map { it.asString() }
+                val flags = params.params.subList(4, params.params.size).map { it.asString() };
                 val brain = entity.brain
                 brain.setMemoryWithExpiry(MemoryModuleType.LOOK_TARGET, CobblemonBlockPosTracker(Vec3(x, y, z), flags.toSet()), duration.toLong())
             }
@@ -1173,7 +1196,8 @@ import net.minecraft.world.phys.Vec3
                         )
                         else -> DoubleValue.ZERO
                     }
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
             }
@@ -1183,14 +1207,15 @@ import net.minecraft.world.phys.Vec3
                 val expiry = params.getIntOrNull(2) ?: -1
                 if (expiry != -1) {
                     entity.brain.setMemoryWithExpiry(memory, uuid, expiry.toLong())
-                } else {
+                } 
+                else {
                     entity.brain.setMemory(memory, uuid)
                 }
                 return@put DoubleValue.ONE
             }
             map.put("erase_memory") { params ->
-                val memories = params.params.map { it.asString().asIdentifierDefaultingNamespace() }.map(BuiltInRegistries.MEMORY_MODULE_TYPE::get)
-                memories.forEach { entity.brain.eraseMemory(it) }
+                val memories = params.params.map { it.asString().asIdentifierDefaultingNamespace() };.map(BuiltInRegistries.MEMORY_MODULE_TYPE::get)
+                memories.forEach { entity.brain.eraseMemory(it) };
                 return@put DoubleValue.ONE
             }
             map.put("has_memory_value") { params ->
@@ -1231,7 +1256,8 @@ import net.minecraft.world.phys.Vec3
                         collideBlock = ClipContext.Fluid.NONE
                     )
                     return@put DoubleValue(targetEntity in (trace?.entities ?: emptyList()))
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
             }
@@ -1251,7 +1277,8 @@ import net.minecraft.world.phys.Vec3
                             MemoryModuleType.LOOK_TARGET,
                             BlockPosTracker(Vec3(x, y + entity.eyeHeight, z))
                         )
-                    } else {
+                    } 
+                    else {
                         entity.navigation.moveTo(x, y, z, speedMultiplier)
                         entity.lookControl.setLookAt(Vec3(x, y + entity.eyeHeight, z))
                     }
@@ -1266,13 +1293,13 @@ import net.minecraft.world.phys.Vec3
     val npcFunctions = mutableListOf<(NPCEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { npc ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("class") { StringValue(npc.npc.id.toString()) }
-            map.put("name") { StringValue(npc.name.string) }
-            map.put("level") { DoubleValue(npc.level) }
-            map.put("has_aspect") { params -> DoubleValue(npc.aspects.contains(params.getString(0))) }
-            map.put("in_battle") { DoubleValue(npc.isInBattle()) }
-            map.put("battles") { ArrayStruct(npc.battleIds.mapNotNull { BattleRegistry.getBattle(it)?.struct }.mapIndexed { index, value -> "$index" to value }.toMap()) }
-            map.put("stop_battles") { _ -> npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() } }
+            map.put("class") { StringValue(npc.npc.id.toString()) };
+            map.put("name") { StringValue(npc.name.string) };
+            map.put("level") { DoubleValue(npc.level) };
+            map.put("has_aspect") { params -> DoubleValue(npc.aspects.contains(params.getString(0))) };
+            map.put("in_battle") { DoubleValue(npc.isInBattle()) };
+            map.put("battles") { ArrayStruct(npc.battleIds.mapNotNull { BattleRegistry.getBattle(it)?.struct }.mapIndexed { index, value -> "$index" to value }.toMap()) };
+            map.put("stop_battles") { _ -> npc.battleIds.forEach { BattleRegistry.getBattle(it)?.stop() }; }
             map.put("run_script_on_client") { params ->
                 val world = npc.level()
                 if (world is ServerLevel) {
@@ -1359,7 +1386,8 @@ import net.minecraft.world.phys.Vec3
                 if (npcClass != null) {
                     npc.npc = npcClass
                     return@put DoubleValue.ONE
-                } else {
+                } 
+                else {
                     Cobblemon.LOGGER.error("Unknown NPC class: $identifier")
                     return@put DoubleValue.ZERO
                 }
@@ -1369,14 +1397,14 @@ import net.minecraft.world.phys.Vec3
                 npc.renderScale = scale.toFloat()
                 return@put DoubleValue.ONE
             }
-            map.put("render_scale") { _ -> DoubleValue(npc.renderScale) }
+            map.put("render_scale") { _ -> DoubleValue(npc.renderScale) };
             map.put("set_hitbox_scale") { params ->
                 val scale = params.getDouble(0).toFloat()
                 npc.hitboxScale = scale
                 npc.refreshDimensions()
                 return@put DoubleValue.ONE
             }
-            map.put("hitbox_scale") { _ -> DoubleValue(npc.hitboxScale) }
+            map.put("hitbox_scale") { _ -> DoubleValue(npc.hitboxScale) };
             map.put("set_hitbox") { params ->
                 if (params.params.size == 0) {
                     npc.hitbox = null
@@ -1394,16 +1422,16 @@ import net.minecraft.world.phys.Vec3
             }
             map.put("aspects") {
                 val aspects = npc.aspects
-                return@put aspects.asArrayValue { StringValue(it) }
+                return@put aspects.asArrayValue { StringValue(it) };
             }
             map.put("add_aspect") { params ->
-                val aspects = params.params.map { it.asString() }
+                val aspects = params.params.map { it.asString() };
                 npc.appliedAspects.addAll(aspects)
                 npc.updateAspects()
                 return@put DoubleValue.ONE
             }
             map.put("remove_aspect") { params ->
-                val aspects = params.params.map { it.asString() }
+                val aspects = params.params.map { it.asString() };
                 npc.appliedAspects.removeAll(aspects)
                 npc.updateAspects()
                 return@put DoubleValue.ONE
@@ -1420,7 +1448,8 @@ import net.minecraft.world.phys.Vec3
                 val party = params.get<MoValue>(0)
                 if (party is ObjectValue<*>) {
                     npc.party = party.obj as NPCPartyStore
-                } else {
+                } 
+                else {
                     npc.party = null
                 }
                 DoubleValue.ONE
@@ -1458,7 +1487,8 @@ import net.minecraft.world.phys.Vec3
                 if (healer.canHeal(party)) {
                     healer.activate(npc.uuid, party)
                     return@put DoubleValue.ONE
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
             }
@@ -1468,9 +1498,9 @@ import net.minecraft.world.phys.Vec3
             }
             map.put("environment") { _ -> npc.runtime.environment }
             map.put("party") { npc.party?.struct ?: DoubleValue.ZERO }
-            map.put("has_party") { DoubleValue(npc.party != null) }
+            map.put("has_party") { DoubleValue(npc.party != null) };
             map.put("is_npc") { DoubleValue.ONE }
-            map.put("can_battle") { DoubleValue(npc.party?.any { it.currentHealth > 0 } == true || npc.npc.party?.isStatic == false) }
+            map.put("can_battle") { DoubleValue(npc.party?.any { it.currentHealth > 0 } == true || npc.npc.party?.isStatic == false) };
             map.put("set_battle_theme") { params ->
                 val soundId = params.getString(0).asResource()
                 npc.npc.battleTheme = soundId
@@ -1483,18 +1513,18 @@ import net.minecraft.world.phys.Vec3
     val battleFunctions = mutableListOf<(PokemonBattle) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { battle ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("battle_id") { StringValue(battle.battleId.toString()) }
-            map.put("is_pvn") { DoubleValue(battle.isPvN) }
-            map.put("is_pvp") { DoubleValue(battle.isPvP) }
-            map.put("is_pvw") { DoubleValue(battle.isPvW) }
-            map.put("battle_type") { StringValue(battle.format.toString()) }
+            map.put("battle_id") { StringValue(battle.battleId.toString()) };
+            map.put("is_pvn") { DoubleValue(battle.isPvN) };
+            map.put("is_pvp") { DoubleValue(battle.isPvP) };
+            map.put("is_pvw") { DoubleValue(battle.isPvW) };
+            map.put("battle_type") { StringValue(battle.format.toString()) };
             map.put("environment") { battle.runtime.environment }
             map.put("get_actor") { params ->
                 val uuid = UUID.fromString(params.getString(0))
                 val actor = battle.actors.find { it.uuid == uuid } ?: return@put DoubleValue.ZERO
                 return@put actor.struct
             }
-            map.put("stop") { _ -> battle.stop() }
+            map.put("stop") { _ -> battle.stop() };
             map.put("actors") { battle.actors.toList().asArrayValue { it.struct } }
             map
         }
@@ -1503,14 +1533,16 @@ import net.minecraft.world.phys.Vec3
     val battleActorFunctions = mutableListOf<(BattleActor) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { battleActor ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("is_npc") { DoubleValue(battleActor.type == ActorType.NPC) }
-            map.put("is_player") { DoubleValue(battleActor.type == ActorType.PLAYER) }
-            map.put("is_wild") { DoubleValue(battleActor.type == ActorType.WILD) }
+            map.put("is_npc") { DoubleValue(battleActor.type == ActorType.NPC) };
+            map.put("is_player") { DoubleValue(battleActor.type == ActorType.PLAYER) };
+            map.put("is_wild") { DoubleValue(battleActor.type == ActorType.WILD) };
             if (battleActor is NPCBattleActor) {
                 map.put("npc") { battleActor.entity.struct }
-            } else if (battleActor is PlayerBattleActor) {
+            } 
+            else if (battleActor is PlayerBattleActor) {
                 map.put("player") { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
-            } else if (battleActor is PokemonBattleActor) {
+            } 
+            else if (battleActor is PokemonBattleActor) {
                 map.put("pokemon") { battleActor.entity?.asMoLangValue() ?: DoubleValue.ZERO }
             }
             return@mutableListOf map
@@ -1537,14 +1569,14 @@ import net.minecraft.world.phys.Vec3
     val pokemonFunctions = mutableListOf<(Pokemon) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { pokemon ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("id") { StringValue(pokemon.uuid.toString()) }
-            map.put("nickname") { StringValue(pokemon.nickname.toString()) }
-            map.put("level") { DoubleValue(pokemon.level.toDouble()) }
-            map.put("max_hp") { DoubleValue(pokemon.maxHealth.toDouble()) }
-            map.put("current_hp") { DoubleValue(pokemon.currentHealth.toDouble()) }
-            map.put("friendship") { DoubleValue(pokemon.friendship.toDouble()) }
-            map.put("max_fullness") { DoubleValue(pokemon.getMaxFullness().toDouble()) }
-            map.put("fullness") { DoubleValue(pokemon.currentFullness.toDouble()) }
+            map.put("id") { StringValue(pokemon.uuid.toString()) };
+            map.put("nickname") { StringValue(pokemon.nickname.toString()) };
+            map.put("level") { DoubleValue(pokemon.level.toDouble()) };
+            map.put("max_hp") { DoubleValue(pokemon.maxHealth.toDouble()) };
+            map.put("current_hp") { DoubleValue(pokemon.currentHealth.toDouble()) };
+            map.put("friendship") { DoubleValue(pokemon.friendship.toDouble()) };
+            map.put("max_fullness") { DoubleValue(pokemon.getMaxFullness().toDouble()) };
+            map.put("fullness") { DoubleValue(pokemon.currentFullness.toDouble()) };
             map.put("lose_fullness") { params ->
                 val amount = params.getDouble(0)
                 pokemon.loseFullness(amount.toInt())
@@ -1556,14 +1588,15 @@ import net.minecraft.world.phys.Vec3
             }
             map.put("behaviour") { pokemon.form.behaviour.struct }
             map.put("behavior") { pokemon.form.behaviour.struct } // Inferior
-            map.put("pokeball") { StringValue(pokemon.caughtBall.toString()) }
-            map.put("ability") { StringValue(pokemon.ability.name) }
+            map.put("pokeball") { StringValue(pokemon.caughtBall.toString()) };
+            map.put("ability") { StringValue(pokemon.ability.name) };
             map.put("has_learned") { params ->
                 val moveName = params.getString(0)
                 val move = pokemon.allAccessibleMoves.find { it.name == moveName }
                 if(move != null) {
                     return@put DoubleValue.ONE
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
             }
@@ -1577,28 +1610,28 @@ import net.minecraft.world.phys.Vec3
             map.put("evs") {
                 val struct = QueryStruct(hashMapOf())
                 for (stat in Stats.PERMANENT) {
-                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.evs.getOrDefault(stat).toDouble()) }
+                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.evs.getOrDefault(stat).toDouble()) };
                 }
                 struct
             }
             map.put("ivs") {
                 val struct = QueryStruct(hashMapOf())
                 for (stat in Stats.PERMANENT) {
-                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.ivs.getOrDefault(stat).toDouble()) }
+                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.ivs.getOrDefault(stat).toDouble()) };
                 }
                 struct
             }
             map.put("hyper_trained_ivs") {
                 val struct = QueryStruct(hashMapOf())
                 for (stat in Stats.PERMANENT) {
-                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.ivs.hyperTrainedIVs[stat] ?: -1.0) }
+                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.ivs.hyperTrainedIVs[stat] ?: -1.0) };
                 }
                 struct
             }
             map.put("ride_boosts") {
                 val struct = QueryStruct(hashMapOf())
                 for (stat in RidingStat.entries) {
-                    struct.addFunction(stat.name.lowercase()) { DoubleValue(pokemon.getRideBoost(stat) ?: 0.0) }
+                    struct.addFunction(stat.name.lowercase()) { DoubleValue(pokemon.getRideBoost(stat) ?: 0.0) };
                 }
                 struct
             }
@@ -1606,7 +1639,7 @@ import net.minecraft.world.phys.Vec3
                 DoubleValue(pokemon.species.nationalPokedexNumber.toDouble())
             }
             map.put("types") {
-                pokemon.form.types.map { it.toString() }.asArrayValue(::StringValue)
+                pokemon.form.types.map { it.toString() };.asArrayValue(::StringValue)
             }
             map.put("gender_ratio") {
                 DoubleValue(pokemon.form.maleRatio.toDouble())
@@ -1614,14 +1647,14 @@ import net.minecraft.world.phys.Vec3
             map.put("ev_yield") {
                 val struct = QueryStruct(hashMapOf())
                 for (stat in Stats.PERMANENT) {
-                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.form.evYield[stat]?.toDouble()) }
+                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.form.evYield[stat]?.toDouble()) };
                 }
                 struct
             }
             map.put("base_stats") {
                 val struct = QueryStruct(hashMapOf())
                 for (stat in Stats.PERMANENT) {
-                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.form.baseStats[stat]?.toDouble()) }
+                    struct.addFunction(stat.showdownId) { DoubleValue(pokemon.form.baseStats[stat]?.toDouble()) };
                 }
                 struct
             }
@@ -1669,14 +1702,14 @@ import net.minecraft.world.phys.Vec3
             map.put("ability_pool") {
                 val struct = QueryStruct(hashMapOf())
                 for ((index, ability) in pokemon.form.abilities.withIndex()) {
-                    struct.addFunction(index.toString()) { StringValue(ability.toString()) }
+                    struct.addFunction(index.toString()) { StringValue(ability.toString()) };
                 }
                 struct
             }
             map.put("egg_groups") {
                 val struct = QueryStruct(hashMapOf())
                 for ((index, group) in pokemon.form.eggGroups.withIndex()) {
-                    struct.addFunction(index.toString()) { StringValue(group.toString()) }
+                    struct.addFunction(index.toString()) { StringValue(group.toString()) };
                 }
                 struct
             }
@@ -1686,17 +1719,17 @@ import net.minecraft.world.phys.Vec3
             map.put("labels") {
                 val struct = QueryStruct(hashMapOf())
                 for ((index, label) in pokemon.form.labels.withIndex()) {
-                    struct.addFunction(index.toString()) { StringValue(label) }
+                    struct.addFunction(index.toString()) { StringValue(label) };
                 }
                 struct
             }
             map.put("aspects") {
                 val aspects = pokemon.aspects
-                return@put aspects.asArrayValue { StringValue(it) }
+                return@put aspects.asArrayValue { StringValue(it) };
             }
             map.put("form_aspects") {
                 val aspects = pokemon.form.aspects
-                return@put aspects.asArrayValue { StringValue(it) }
+                return@put aspects.asArrayValue { StringValue(it) };
             }
             map.put("form_name") {
                 StringValue(pokemon.form.name.toString())
@@ -1708,14 +1741,14 @@ import net.minecraft.world.phys.Vec3
                 val prevolution = pokemon.species.preEvolution ?: return@put DoubleValue.ZERO
                 return@put prevolution
             }
-            map.put("nature") { StringValue(pokemon.nature.toString()) }
-            map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) }
-            map.put("is_shiny") { DoubleValue(pokemon.shiny) }
-            map.put("is_in_party") { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) }
+            map.put("nature") { StringValue(pokemon.nature.toString()) };
+            map.put("is_wild") { DoubleValue(pokemon.entity?.let { it.ownerUUID == null } == true) };
+            map.put("is_shiny") { DoubleValue(pokemon.shiny) };
+            map.put("is_in_party") { DoubleValue(pokemon.storeCoordinates.get()?.store is PartyStore) };
             map.put("species") { pokemon.species.struct }
-            map.put("form") { StringValue(pokemon.form.name) }
-            map.put("weight") { DoubleValue(pokemon.species.weight.toDouble()) }
-            map.put("matches") { params -> DoubleValue(params.getString(0).toProperties().matches(pokemon)) }
+            map.put("form") { StringValue(pokemon.form.name) };
+            map.put("weight") { DoubleValue(pokemon.species.weight.toDouble()) };
+            map.put("matches") { params -> DoubleValue(params.getString(0).toProperties().matches(pokemon)) };
             map.put("apply") { params ->
                 params.getString(0).toProperties().apply(pokemon)
                 DoubleValue.ONE
@@ -1773,7 +1806,8 @@ import net.minecraft.world.phys.Vec3
                 if (Stats.PERMANENT.contains(stat)) {
                     pokemon.hyperTrainIV(stat, value)
                     return@put DoubleValue.ONE
-                } else {
+                } 
+                else {
                     Cobblemon.LOGGER.error("Unknown or non-permanent stat: ${stat.toString()}")
                     return@put DoubleValue.ZERO
                 }
@@ -1791,7 +1825,8 @@ import net.minecraft.world.phys.Vec3
                 if (Stats.PERMANENT.contains(stat)) {
                     pokemon.setIV(stat, value)
                     return@put DoubleValue.ONE
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
             }
@@ -1803,13 +1838,14 @@ import net.minecraft.world.phys.Vec3
                 if (Stats.PERMANENT.contains(stat)) {
                     pokemon.setEV(stat, value)
                     return@put DoubleValue.ONE
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
             }
             map.put("set_ride_boost") { params ->
                 val statName = params.getString(0).uppercase()
-                val stat = RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) } ?: return@put DoubleValue.ZERO
+                val stat = RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) }; ?: return@put DoubleValue.ZERO
                 val value = params.getDoubleOrNull(1)?.toFloat() ?: return@put DoubleValue.ZERO
 
                 pokemon.setRideBoost(stat, value)
@@ -1817,7 +1853,7 @@ import net.minecraft.world.phys.Vec3
             }
             map.put("add_ride_boost") { params ->
                 val statName = params.getString(0).uppercase()
-                val stat = RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) } ?: return@put DoubleValue.ZERO
+                val stat = RidingStat.entries.find { it.name.equals(statName, ignoreCase = true) }; ?: return@put DoubleValue.ZERO
                 val value = params.getDoubleOrNull(1)?.toFloat() ?: return@put DoubleValue.ZERO
 
                 return@put DoubleValue(if (pokemon.addRideBoost(stat, value)) 1.0 else 0.0)
@@ -1855,7 +1891,8 @@ import net.minecraft.world.phys.Vec3
 
                 if (pokemon.moveSet.hasSpace()) {
                     pokemon.moveSet.add(moveTemplate.create())
-                } else {
+                } 
+                else {
                     pokemon.benchedMoves.add(BenchedMove(moveTemplate, 0))
                 }
 
@@ -1868,7 +1905,8 @@ import net.minecraft.world.phys.Vec3
 
                 val canLearn = if (includeLegacy) {
                     LearnsetQuery.ANY.canLearn(moveTemplate, pokemon.form.moves)
-                } else {
+                } 
+                else {
                     LearnsetQuery.LEGAL.canLearn(moveTemplate, pokemon.form.moves)
                 }
                 return@put DoubleValue(if (canLearn) 1.0 else 0.0)
@@ -1879,7 +1917,8 @@ import net.minecraft.world.phys.Vec3
                 if (moveTemplate != null) {
                     pokemon.unlearnMove(moveTemplate)
                     return@put DoubleValue.ONE
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
             }
@@ -1899,10 +1938,10 @@ import net.minecraft.world.phys.Vec3
     val pokemonEntityFunctions = mutableListOf<(PokemonEntity) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { pokemonEntity ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("is_busy") { DoubleValue(pokemonEntity.isBusy) }
-            map.put("in_battle") { DoubleValue(pokemonEntity.isBattling) }
-            map.put("is_moving") { DoubleValue((pokemonEntity.moveControl as? PokemonMoveControl)?.hasWanted() == true) }
-            map.put("is_flying") { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) }
+            map.put("is_busy") { DoubleValue(pokemonEntity.isBusy) };
+            map.put("in_battle") { DoubleValue(pokemonEntity.isBattling) };
+            map.put("is_moving") { DoubleValue((pokemonEntity.moveControl as? PokemonMoveControl)?.hasWanted() == true) };
+            map.put("is_flying") { DoubleValue(pokemonEntity.getBehaviourFlag(PokemonBehaviourFlag.FLYING)) };
             map.put("get_riding_state") { params ->
                 val name = params.getStringOrNull(0)
                 pokemonEntity.ifRidingAvailableSupply(DoubleValue.ZERO) { behaviour, settings, state ->
@@ -1940,19 +1979,19 @@ import net.minecraft.world.phys.Vec3
                     return@ifRidingAvailableSupply moValue.functions.get("in_air")?.apply(MoParams.EMPTY) as? MoValue ?: DoubleValue.ZERO
                 }
             }
-            map.put("is_wild") { DoubleValue(pokemonEntity.ownerUUID == null) }
-            map.put("is_in_party") { DoubleValue(pokemonEntity.pokemon.storeCoordinates.get()?.store is PartyStore) }
-            map.put("is_ridden") { DoubleValue(pokemonEntity.hasControllingPassenger()) }
-            map.put("has_aspect") { DoubleValue(it.getString(0) in pokemonEntity.aspects) }
+            map.put("is_wild") { DoubleValue(pokemonEntity.ownerUUID == null) };
+            map.put("is_in_party") { DoubleValue(pokemonEntity.pokemon.storeCoordinates.get()?.store is PartyStore) };
+            map.put("is_ridden") { DoubleValue(pokemonEntity.hasControllingPassenger()) };
+            map.put("has_aspect") { DoubleValue(it.getString(0) in pokemonEntity.aspects) };
             map.put("is_pokemon") { DoubleValue.ONE }
             map.put("is_holding_item") { DoubleValue(!pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).let {
                 it.isEmpty || it.`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS) || it.`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)
-            }) }
+            }) };
             map.put("riding_style") {
                 StringValue(pokemonEntity.ifRidingAvailableSupply("") { behaviour, settings, state -> behaviour.getRidingStyle(settings, state).name })
             }
-            map.put("is_wearing_hat") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS)) }
-            map.put("is_wearing_face") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)) }
+            map.put("is_wearing_hat") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_HAT_ITEMS)) };
+            map.put("is_wearing_face") { DoubleValue(pokemonEntity.entityData.get(PokemonEntity.SHOWN_HELD_ITEM).`is`(CobblemonItemTags.WEARABLE_FACE_ITEMS)) };
             map.put("is_pastured") {
                 DoubleValue((pokemonEntity.tethering != null))
             }
@@ -1994,7 +2033,7 @@ import net.minecraft.world.phys.Vec3
     val pokemonStoreFunctions = mutableListOf<(PokemonStore<*>) -> HashMap<String, java.util.function.Function<MoParams, Any>>>(
         { store ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
-            map.put("uuid") { StringValue(store.uuid.toString()) }
+            map.put("uuid") { StringValue(store.uuid.toString()) };
             map.put("add") { params ->
                 val pokemon = params.get<ObjectValue<Pokemon>>(0)
                 return@put DoubleValue(store.add(pokemon.obj))
@@ -2007,13 +2046,13 @@ import net.minecraft.world.phys.Vec3
             }
             map.put("find_by_properties") { params ->
                 val props = params.getString(0).toProperties()
-                val pokemon = store.find { props.matches(it) }
+                val pokemon = store.find { props.matches(it) };
                 return@put pokemon?.asStruct() ?: DoubleValue.ZERO
             }
             map.put("find_all_by_properties") { params ->
                 val props = params.getString(0).toProperties()
-                val pokemon = store.filter { props.matches(it) }
-                return@put ArrayStruct(pokemon.mapIndexed { index, value -> "$index" to value.asStruct() }.toMap())
+                val pokemon = store.filter { props.matches(it) };
+                return@put ArrayStruct(pokemon.mapIndexed { index, value -> "$index" to value.asStruct() };.toMap())
             }
             map.put("find_by_id") { params ->
                 val id = params.getString(0).asUUID
@@ -2037,10 +2076,10 @@ import net.minecraft.world.phys.Vec3
                 }
                 return@put DoubleValue(totalLevel.toDouble() / numberOfPokemon)
             }
-            map.put("count") { _ -> DoubleValue(store.count()) }
+            map.put("count") { _ -> DoubleValue(store.count()) };
             map.put("count_by_properties") { params ->
                 val props = params.getString(0).toProperties()
-                return@put DoubleValue(store.count { props.matches(it) })
+                return@put DoubleValue(store.count { props.matches(it) };)
             }
             map.put("highest_level") {
                 val highest = store.maxOfOrNull { it.level } ?: 0
@@ -2063,9 +2102,9 @@ import net.minecraft.world.phys.Vec3
                 }
                 DoubleValue(totalPercent)
             }
-            map.put("has_usable_pokemon") { _ -> DoubleValue(store.any { !it.isFainted() }) }
+            map.put("has_usable_pokemon") { _ -> DoubleValue(store.any { !it.isFainted() };) };
             map.put("pokemon") {
-                return@put store.map { it.asStruct() }.asArrayValue()
+                return@put store.map { it.asStruct() };.asArrayValue()
             }
             map
         }
@@ -2110,12 +2149,12 @@ import net.minecraft.world.phys.Vec3
                 pc.resize(newSize, lockNewSize)
                 return@put DoubleValue.ONE
             }
-            map.put("get_box_count") { _ -> DoubleValue(pc.boxes.size.toDouble()) }
+            map.put("get_box_count") { _ -> DoubleValue(pc.boxes.size.toDouble()) };
             map.put("has_unlocked_wallpaper") { params ->
                 val wallpaper = params.getString(0).asIdentifierDefaultingNamespace()
                 return@put DoubleValue(pc.unlockedWallpapers.contains(wallpaper))
             }
-            map.put("get_unlocked_wallpapers") { pc.unlockedWallpapers.asArrayValue { StringValue(it.toString()) } }
+            map.put("get_unlocked_wallpapers") { pc.unlockedWallpapers.asArrayValue { StringValue(it.toString()) }; }
             map.put("unlock_wallpaper") {
                 val wallpaper = it.getString(0).asIdentifierDefaultingNamespace()
                 val playSound = it.getBooleanOrNull(1) != false
@@ -2133,18 +2172,19 @@ import net.minecraft.world.phys.Vec3
             val biomeValue = spawningContext.biomeHolder.asBiomeMoLangValue()
             map.put("biome") { _ -> biomeValue }
             map.put("world") { _ -> worldValue }
-            map.put("light") { _ -> DoubleValue(spawningContext.light.toDouble()) }
-            map.put("x") { _ -> DoubleValue(spawningContext.position.x.toDouble()) }
-            map.put("y") { _ -> DoubleValue(spawningContext.position.y.toDouble()) }
-            map.put("z") { _ -> DoubleValue(spawningContext.position.z.toDouble()) }
-            map.put("moon_phase") { _ -> DoubleValue(spawningContext.moonPhase.toDouble()) }
-            map.put("can_see_sky") { _ -> DoubleValue(spawningContext.canSeeSky) }
-            map.put("sky_light") { _ -> DoubleValue(spawningContext.skyLight.toDouble()) }
+            map.put("light") { _ -> DoubleValue(spawningContext.light.toDouble()) };
+            map.put("x") { _ -> DoubleValue(spawningContext.position.x.toDouble()) };
+            map.put("y") { _ -> DoubleValue(spawningContext.position.y.toDouble()) };
+            map.put("z") { _ -> DoubleValue(spawningContext.position.z.toDouble()) };
+            map.put("moon_phase") { _ -> DoubleValue(spawningContext.moonPhase.toDouble()) };
+            map.put("can_see_sky") { _ -> DoubleValue(spawningContext.canSeeSky) };
+            map.put("sky_light") { _ -> DoubleValue(spawningContext.skyLight.toDouble()) };
             map.put("player") { _ ->
                 val causeEntity = spawningContext.cause.entity ?: return@put DoubleValue.ZERO
                 if (causeEntity is ServerPlayer) {
                     return@put causeEntity.asMoLangValue()
-                } else {
+                } 
+                else {
                     return@put DoubleValue.ZERO
                 }
             }
@@ -2228,7 +2268,8 @@ import net.minecraft.world.phys.Vec3
 
                 if (formName == null) {
                     return@put DoubleValue(pokedex.getHighestKnowledgeForSpecies(speciesId).ordinal >= PokedexEntryProgress.ENCOUNTERED.ordinal)
-                } else {
+                } 
+                else {
                     return@put DoubleValue((pokedex.getSpeciesRecord(speciesId)?.getFormRecord(formName)?.knowledge?.ordinal ?: 0) >= PokedexEntryProgress.ENCOUNTERED.ordinal)
                 }
             }
@@ -2238,17 +2279,18 @@ import net.minecraft.world.phys.Vec3
                 val formName = params.getStringOrNull(1)
                 if (formName == null) {
                     return@put DoubleValue(pokedex.getHighestKnowledgeForSpecies(speciesId) == PokedexEntryProgress.CAUGHT)
-                } else {
+                } 
+                else {
                     return@put DoubleValue(pokedex.getSpeciesRecord(speciesId)?.getFormRecord(formName)?.knowledge == PokedexEntryProgress.CAUGHT)
                 }
             }
-            map.put("caught_count") { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtCount)) }
-            map.put("seen_count") { DoubleValue(pokedex.getGlobalCalculatedValue(SeenCount)) }
-            map.put("caught_percent") { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtPercent)) }
-            map.put("seen_percent") { DoubleValue(pokedex.getGlobalCalculatedValue(SeenPercent)) }
+            map.put("caught_count") { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtCount)) };
+            map.put("seen_count") { DoubleValue(pokedex.getGlobalCalculatedValue(SeenCount)) };
+            map.put("caught_percent") { DoubleValue(pokedex.getGlobalCalculatedValue(CaughtPercent)) };
+            map.put("seen_percent") { DoubleValue(pokedex.getGlobalCalculatedValue(SeenPercent)) };
 
             if (pokedex is PokedexManager) {
-                map.put("player_id") { StringValue(pokedex.uuid.toString()) }
+                map.put("player_id") { StringValue(pokedex.uuid.toString()) };
                 map.put("see") { params ->
                     val pokemon = params.get<ObjectValue<Pokemon>>(0).obj
                     pokedex.encounter(pokemon)
@@ -2269,20 +2311,20 @@ import net.minecraft.world.phys.Vec3
         { species ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
 
-            map.put("identifier") { StringValue(species.resourceIdentifier.toString()) }
-            map.put("name") { StringValue(species.name) }
-            map.put("primary_type") { StringValue(species.primaryType.showdownId) }
-            map.put("secondary_type") { StringValue(species.secondaryType?.showdownId ?: "null") }
-            map.put("experience_group") { StringValue(species.experienceGroup.name) }
-            map.put("height") { DoubleValue(species.height) }
-            map.put("weight") { DoubleValue(species.weight) }
-            map.put("base_scale") { DoubleValue(species.baseScale) }
-            map.put("hitbox_width") { DoubleValue(species.hitbox.width) }
-            map.put("hitbox_height") { DoubleValue(species.hitbox.height) }
-            map.put("hitbox_fixed") { DoubleValue(species.hitbox.fixed) }
-            map.put("catch_rate") { DoubleValue(species.catchRate) }
-            map.put("labels") { return@put species.labels.asArrayValue { StringValue(it) } }
-            map.put("has_label") { params -> DoubleValue(species.labels.contains(params.getString(0))) }
+            map.put("identifier") { StringValue(species.resourceIdentifier.toString()) };
+            map.put("name") { StringValue(species.name) };
+            map.put("primary_type") { StringValue(species.primaryType.showdownId) };
+            map.put("secondary_type") { StringValue(species.secondaryType?.showdownId ?: "null") };
+            map.put("experience_group") { StringValue(species.experienceGroup.name) };
+            map.put("height") { DoubleValue(species.height) };
+            map.put("weight") { DoubleValue(species.weight) };
+            map.put("base_scale") { DoubleValue(species.baseScale) };
+            map.put("hitbox_width") { DoubleValue(species.hitbox.width) };
+            map.put("hitbox_height") { DoubleValue(species.hitbox.height) };
+            map.put("hitbox_fixed") { DoubleValue(species.hitbox.fixed) };
+            map.put("catch_rate") { DoubleValue(species.catchRate) };
+            map.put("labels") { return@put species.labels.asArrayValue { StringValue(it) }; }
+            map.put("has_label") { params -> DoubleValue(species.labels.contains(params.getString(0))) };
             map
         }
     )
@@ -2291,9 +2333,9 @@ import net.minecraft.world.phys.Vec3
         { dropEntry ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
 
-            map.put("percentage") { DoubleValue(dropEntry.percentage.toDouble()) }
-            map.put("quantity") { DoubleValue(dropEntry.quantity.toDouble()) }
-            map.put("max_selectable_times") { DoubleValue(dropEntry.maxSelectableTimes.toDouble()) }
+            map.put("percentage") { DoubleValue(dropEntry.percentage.toDouble()) };
+            map.put("quantity") { DoubleValue(dropEntry.quantity.toDouble()) };
+            map.put("max_selectable_times") { DoubleValue(dropEntry.maxSelectableTimes.toDouble()) };
             map.put("can_drop") { params ->
                 val pokemon = params.getOrNull<ObjectValue<Pokemon>>(0)?.obj
                 DoubleValue(if (dropEntry.canDrop(pokemon)) 1.0 else 0.0)
@@ -2306,32 +2348,33 @@ import net.minecraft.world.phys.Vec3
         { props ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
 
-            map.put("level") { DoubleValue(props.level?.toDouble() ?: 0) }
+            map.put("level") { DoubleValue(props.level?.toDouble() ?: 0) };
             map.put("set_level") { params ->
                 props.level = params.getIntOrNull(0)
                 return@put DoubleValue.ONE
             }
-            map.put("shiny") { DoubleValue(props.shiny) }
+            map.put("shiny") { DoubleValue(props.shiny) };
             map.put("set_shiny") { params ->
                 props.shiny = params.getBooleanOrNull(0)
                 return@put DoubleValue.ONE
             }
-            map.put("species") { props.species?.let { StringValue(it) } ?: DoubleValue.ZERO }
+            map.put("species") { props.species?.let { StringValue(it) }; ?: DoubleValue.ZERO }
             map.put("set_species") { params ->
                 props.species = params.getStringOrNull(0)
                 return@put DoubleValue.ONE
             }
-            map.put("gender") { props.gender?.let { StringValue(it.name) } ?: DoubleValue.ZERO }
+            map.put("gender") { props.gender?.let { StringValue(it.name) }; ?: DoubleValue.ZERO }
             map.put("set_gender") { params ->
-                props.gender = params.getStringOrNull(0)?.let { Gender.valueOf(it) }
+                props.gender = params.getStringOrNull(0)?.let { Gender.valueOf(it) };
                 return@put DoubleValue.ONE
             }
-            map.put("form") { props.form?.let { StringValue(it) } ?: DoubleValue.ZERO }
+            map.put("form") { props.form?.let { StringValue(it) }; ?: DoubleValue.ZERO }
             map.put("ivs") {
                 val ivs = props.ivs
                 if (ivs == null) {
                     return@put DoubleValue.ZERO
-                } else {
+                } 
+                else {
                     return@put ivs.struct
                 }
             }
@@ -2339,11 +2382,12 @@ import net.minecraft.world.phys.Vec3
                 val evs = props.evs
                 if (evs == null) {
                     return@put DoubleValue.ZERO
-                } else {
+                } 
+                else {
                     return@put evs.struct
                 }
             }
-            map.put("friendship") { DoubleValue(props.friendship?.toDouble() ?: DoubleValue.ZERO) }
+            map.put("friendship") { DoubleValue(props.friendship?.toDouble() ?: DoubleValue.ZERO) };
             map.put("set_friendship") { params ->
                 props.friendship = params.getIntOrNull(0)
                 return@put DoubleValue.ONE
@@ -2364,24 +2408,26 @@ import net.minecraft.world.phys.Vec3
         { evolution ->
             val map = hashMapOf<String, java.util.function.Function<MoParams, Any>>()
 
-            map.put("result") { evolution.result.asMoLangValue() }
+            map.put("result") { evolution.result.asMoLangValue() };
 
             if (evolution is LevelUpEvolution) {
                 map.put("is_level_up") { DoubleValue.ONE }
-            } else if (evolution is TradeEvolution) {
+            } 
+            else if (evolution is TradeEvolution) {
                 map.put("is_trade") { DoubleValue.ONE }
-            } else if (evolution is ItemInteractionEvolution) {
+            } 
+            else if (evolution is ItemInteractionEvolution) {
                 map.put("is_item") { DoubleValue.ONE }
             }
 
-            map.put("is_optional") { DoubleValue(evolution.optional) }
-            map.put("consumes_held_item") { DoubleValue(evolution.consumeHeldItem) }
+            map.put("is_optional") { DoubleValue(evolution.optional) };
+            map.put("consumes_held_item") { DoubleValue(evolution.consumeHeldItem) };
 
             map
         }
     )
 
-    fun ItemStack.asMoLangValue(registryAccess: RegistryAccess) = ObjectValue(this).addStandardFunctions().addFunctions(itemStackFunctions.flatMap { it(this, registryAccess).entries.map { it.key to it.value } }.toMap())
+    fun ItemStack.asMoLangValue(RegistryAccess registryAccess) = ObjectValue(this).addStandardFunctions().addFunctions(itemStackFunctions.flatMap { it(this, registryAccess).entries.map { it.key to it.value } }.toMap())
     fun Holder<Biome>.asBiomeMoLangValue() = asMoLangValue(Registries.BIOME).addFunctions(biomeFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
     fun Holder<Level>.asWorldMoLangValue() = asMoLangValue(Registries.DIMENSION).addFunctions(worldFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
     fun Holder<Block>.asBlockMoLangValue() = asMoLangValue(Registries.BLOCK).addFunctions(blockFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
@@ -2392,7 +2438,8 @@ import net.minecraft.world.phys.Vec3
             val existing = Cobblemon.serverPlayerStructs[uuid]!!
             if (existing.obj == this) {
                 return existing
-            } else {
+            } 
+            else {
                 Cobblemon.serverPlayerStructs.remove(uuid)
             }
         }
@@ -2423,7 +2470,7 @@ import net.minecraft.world.phys.Vec3
     fun PartyStore.asMoLangValue(): ObjectValue<PartyStore> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.toString() }
+            stringify = { it.toString() };
         )
         value.addFunctions(pokemonStoreFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         value.addFunctions(partyFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
@@ -2433,7 +2480,7 @@ import net.minecraft.world.phys.Vec3
     fun DropEntry.asMoLangValue(): ObjectValue<DropEntry> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.toString() }
+            stringify = { it.toString() };
         )
         value.addFunctions(dropEntryFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
@@ -2442,7 +2489,7 @@ import net.minecraft.world.phys.Vec3
     fun PokemonProperties.asMoLangValue(): ObjectValue<PokemonProperties> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.asString() }
+            stringify = { it.asString() };
         )
         value.addFunctions(pokemonPropertiesFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
@@ -2451,7 +2498,7 @@ import net.minecraft.world.phys.Vec3
     fun Evolution.asMoLangValue(): ObjectValue<Evolution> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.toString() }
+            stringify = { it.toString() };
         )
         value.addFunctions(evolutionFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
@@ -2460,7 +2507,7 @@ import net.minecraft.world.phys.Vec3
     fun PCStore.asMoLangValue(): ObjectValue<PCStore> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.toString() }
+            stringify = { it.toString() };
         )
         value.addFunctions(pokemonStoreFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         value.addFunctions(pcFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
@@ -2481,7 +2528,7 @@ import net.minecraft.world.phys.Vec3
     fun PokemonEntity.asMoLangValue(): ObjectValue<PokemonEntity> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.pokemon.uuid.toString() }
+            stringify = { it.pokemon.uuid.toString() };
         )
         value.addFunctions(entityFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         value.addFunctions(livingEntityFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
@@ -2493,7 +2540,7 @@ import net.minecraft.world.phys.Vec3
     fun PokemonBattle.asMoLangValue(): ObjectValue<PokemonBattle> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.battleId.toString() }
+            stringify = { it.battleId.toString() };
         )
         value.addFunctions(battleFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
@@ -2502,7 +2549,7 @@ import net.minecraft.world.phys.Vec3
     fun BattleActor.asMoLangValue(): ObjectValue<BattleActor> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.toString() }
+            stringify = { it.toString() };
         )
         value.addFunctions(battleActorFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
@@ -2511,7 +2558,7 @@ import net.minecraft.world.phys.Vec3
     fun SpawnablePosition.asMoLangValue(): ObjectValue<SpawnablePosition> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.toString() }
+            stringify = { it.toString() };
         )
         value.addFunctions(spawningContextFunctions.flatMap { it(this).entries.map { it.key to it.value } }.toMap())
         return value
@@ -2554,7 +2601,7 @@ import net.minecraft.world.phys.Vec3
     fun <T> Holder<T>.asMoLangValue(key: ResourceKey<Registry<T>>): ObjectValue<Holder<T>> {
         val value = ObjectValue(
             obj = this,
-            stringify = { it.unwrapKey().get().location().toString() }
+            stringify = { it.unwrapKey().get().location().toString() };
         )
         value.functions.put("is_in") {
             val tag = TagKey.create(key, ResourceLocation.parse(it.getString(0).replace("#", "")))
@@ -2572,7 +2619,7 @@ import net.minecraft.world.phys.Vec3
         return this
     }
 
-    fun QueryStruct.addEntityFunctions(entity: Entity): QueryStruct {
+    fun QueryStruct.addEntityFunctions(Entity entity): QueryStruct {
         val addedFunctions = entityFunctions
             .flatMap { it.invoke(entity).entries }
             .associate { it.key to it.value }
@@ -2580,7 +2627,7 @@ import net.minecraft.world.phys.Vec3
         return this
     }
 
-    fun QueryStruct.addLivingEntityFunctions(entity: LivingEntity): QueryStruct {
+    fun QueryStruct.addLivingEntityFunctions(LivingEntity entity): QueryStruct {
         val addedFunctions = livingEntityFunctions
             .flatMap { it.invoke(entity).entries }
             .associate { it.key to it.value }
@@ -2604,7 +2651,7 @@ import net.minecraft.world.phys.Vec3
         return this
     }
 
-    fun QueryStruct.addPokemonFunctions(pokemon: Pokemon): QueryStruct {
+    fun QueryStruct.addPokemonFunctions(Pokemon pokemon): QueryStruct {
         val addedFunctions = pokemonFunctions
             .flatMap { it.invoke(pokemon).entries }
             .associate { it.key to it.value }
@@ -2654,7 +2701,7 @@ import net.minecraft.world.phys.Vec3
         return QueryStruct(
             hashMapOf<String, java.util.function.Function<MoParams, Any>>(
                 *functions.map { (name, func) ->
-                    name to java.util.function.Function<MoParams, Any> { params -> func(params) }
+                    name to java.util.function.Function<MoParams, Any> { params -> func(params) };
                 }.toTypedArray()
             )
         )
@@ -2714,4 +2761,4 @@ import net.minecraft.world.phys.Vec3
     }
 }
 
-fun Either<ResourceLocation, ExpressionLike>.runScript(runtime: MoLangRuntime) = map({ CobblemonScripts.run(it, runtime) }, { it.resolve(runtime) })
+fun Either<ResourceLocation, ExpressionLike>.runScript(MoLangRuntime runtime) = map({ CobblemonScripts.run(it, runtime) }, { it.resolve(runtime) };)

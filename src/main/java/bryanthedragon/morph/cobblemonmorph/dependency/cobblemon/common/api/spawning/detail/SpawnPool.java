@@ -39,14 +39,14 @@ import net.minecraft.server.packs.PackType
  * @author Hiroku
  * @since February 9th, 2022
  */
-class SpawnPool(val name: String) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDetail> {
+public class SpawnPool(val String name) : JsonDataRegistry<SpawnSet>, Iterable<SpawnDetail> {
     override val id = cobblemonResource("spawn_pool_$name")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<SpawnPool>()
-    override val gson: Gson = SpawnLoader.gson
-    override val typeToken = TypeToken.get(SpawnSet::class.java)
+    override val Gson gson = SpawnLoader.gson
+    override val typeToken = TypeToken.get(SpawnSet.class)
     override val resourcePath = id.path
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
     override fun reload(data: Map<ResourceLocation, SpawnSet>) {
         details.clear()
         for (set in data.values.filter { it.isEnabled() }) {

@@ -27,15 +27,15 @@ import java.util.function.ToDoubleFunction
 *  moves the target pos out of liquids
 *
 * */
-class CobblemonRandomSurfacePos {
-    companion object {
+public class CobblemonRandomSurfacePos {
+    final class Companion {
         fun getPos(mob: PathfinderMob, radius: Int, verticalRange: Int): Vec3? {
             Objects.requireNonNull(mob)
             return getPos(
                 mob,
                 radius,
                 verticalRange,
-                 { pos: BlockPos? ->
+                 { (BlockPos pos? ->
                      if (pos != null) {
                          mob.getWalkTargetValue(pos).toDouble()
                      }
@@ -65,7 +65,7 @@ class CobblemonRandomSurfacePos {
             shortCircuit: Boolean
         ): Vec3? {
             return RandomPos.generateRandomPos(mob, Supplier {
-                val blockPos: BlockPos? =
+                val blockBlockPos pos? =
                     RandomPos.generateRandomDirectionWithinRadians(
                         mob.getRandom(),
                         radius,
@@ -98,7 +98,7 @@ class CobblemonRandomSurfacePos {
             mob: PathfinderMob,
             radius: Int,
             shortCircuit: Boolean,
-            pos: BlockPos
+            (BlockPos pos
         ): BlockPos? {
             val blockPos = RandomPos.generateRandomPosTowardDirection(mob, radius, mob.getRandom(), pos)
             return if (!GoalUtils.isOutsideLimits(blockPos, mob) && !GoalUtils.isRestricted(
@@ -109,12 +109,12 @@ class CobblemonRandomSurfacePos {
             ) blockPos else null
         }
 
-        fun movePosUpOutOfSolid(mob: PathfinderMob, pos: BlockPos): BlockPos? {
+        fun movePosUpOutOfSolid(mob: PathfinderMob, (BlockPos pos): BlockPos? {
             var pos = pos
             pos = RandomPos.moveUpOutOfSolid(
                 pos,
                 mob.level().maxBuildHeight
-            ) { blockPos: BlockPos ->
+            ) { blockBlockPos pos ->
                 if (GoalUtils.isSolid(mob, blockPos)) true
                 val fluidState = mob.level().getFluidState(blockPos)
                 !fluidState.isEmpty && (mob !is OmniPathingEntity || ((mob.canWalkOnWater() && fluidState.type == FluidTags.WATER) || (mob.canWalkOnLava() && fluidState.type == FluidTags.LAVA)))

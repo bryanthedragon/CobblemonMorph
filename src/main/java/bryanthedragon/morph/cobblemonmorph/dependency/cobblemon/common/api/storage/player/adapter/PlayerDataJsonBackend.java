@@ -25,7 +25,7 @@ import java.util.UUID
  * @author Apion
  * @since February 21, 2024
  */
-class PlayerDataJsonBackend: JsonBackedPlayerDataStoreBackend<GeneralPlayerData>(
+public class PlayerDataJsonBackend: JsonBackedPlayerDataStoreBackend<GeneralPlayerData>(
     "cobblemonplayerdata", PlayerInstancedDataStoreTypes.GENERAL
 ){
     override val defaultData = { forPlayer: UUID -> GeneralPlayerData(
@@ -42,9 +42,9 @@ class PlayerDataJsonBackend: JsonBackedPlayerDataStoreBackend<GeneralPlayerData>
     override val gson = GsonBuilder()
         .setPrettyPrinting()
         .disableHtmlEscaping()
-        .registerTypeAdapter(PlayerDataExtension::class.java, PlayerDataExtensionAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(PlayerDataExtension.class, PlayerDataExtensionAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .create()
 
-    override val classToken = TypeToken.get(GeneralPlayerData::class.java)
+    override val classToken = TypeToken.get(GeneralPlayerData.class)
 }

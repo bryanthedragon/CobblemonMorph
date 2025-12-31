@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.party.PartySelectCancelledPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class PartySelectCancelledHandler : ServerNetworkPacketHandler<PartySelectCancelledPacket> {
-    override fun handle(packet: PartySelectCancelledPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class PartySelectCancelledHandler : ServerNetworkPacketHandler<PartySelectCancelledPacket> {
+    override fun handle(packet: PartySelectCancelledPacket, server: MinecraftServer, ServerPlayer player) {
         PartySelectCallbacks.handleCancelled(player, packet.uuid)
     }
 }

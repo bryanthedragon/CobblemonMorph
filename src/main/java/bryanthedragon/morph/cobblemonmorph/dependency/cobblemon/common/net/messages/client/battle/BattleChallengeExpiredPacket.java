@@ -24,14 +24,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since March 11th, 2023
  */
-class BattleChallengeExpiredPacket(val requestID: UUID) : NetworkPacket<BattleChallengeExpiredPacket> {
-    companion object {
+public class BattleChallengeExpiredPacket(val requestID: UUID) : NetworkPacket<BattleChallengeExpiredPacket> {
+    final class Companion {
         val ID = cobblemonResource("battle_challenge_canceled")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleChallengeExpiredPacket(buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleChallengeExpiredPacket(buffer.readUUID())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(requestID)
     }
 

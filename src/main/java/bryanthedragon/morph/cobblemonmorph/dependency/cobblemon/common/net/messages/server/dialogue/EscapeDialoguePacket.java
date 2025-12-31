@@ -18,12 +18,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since December 29th, 2023
  */
-class EscapeDialoguePacket : NetworkPacket<EscapeDialoguePacket> {
-    companion object {
+public class EscapeDialoguePacket : NetworkPacket<EscapeDialoguePacket> {
+    final class Companion {
         val ID = cobblemonResource("escape_dialogue")
-        fun decode(buffer: RegistryFriendlyByteBuf) = EscapeDialoguePacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = EscapeDialoguePacket()
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
 }

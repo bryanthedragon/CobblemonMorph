@@ -11,8 +11,8 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement.Requirement
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-class AttackDefenceRatioRequirement : Requirement {
-    companion object {
+public class AttackDefenceRatioRequirement : Requirement {
+    final class Companion {
         const val ADAPTER_VARIANT = "attack_defence_ratio"
     }
     enum class AttackDefenceRatio {
@@ -23,7 +23,7 @@ class AttackDefenceRatioRequirement : Requirement {
 
     val ratio = AttackDefenceRatio.ATTACK_HIGHER
 
-    override fun check(pokemon: Pokemon): Boolean {
+    override fun check(Pokemon pokemon): Boolean {
         return when (ratio) {
             AttackDefenceRatio.ATTACK_HIGHER -> pokemon.attack > pokemon.defence
             AttackDefenceRatio.DEFENCE_HIGHER -> pokemon.defence > pokemon.attack

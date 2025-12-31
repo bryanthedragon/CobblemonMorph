@@ -20,11 +20,11 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since May 6th, 2022
  */
-class BattleEndPacket : NetworkPacket<BattleEndPacket> {
+public class BattleEndPacket : NetworkPacket<BattleEndPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
-    companion object {
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
+    final class Companion {
         val ID = cobblemonResource("battle_end")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleEndPacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleEndPacket()
     }
 }

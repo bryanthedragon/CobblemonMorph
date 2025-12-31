@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.SetPCPokemonPacket
 import net.minecraft.client.Minecraft
-final class SetPCPokemonHandler : ClientNetworkPacketHandler<SetPCPokemonPacket> {
-    override fun handle(packet: SetPCPokemonPacket, client: Minecraft) {
+public final class SetPCPokemonHandler : ClientNetworkPacketHandler<SetPCPokemonPacket> {
+    override fun handle(packet: SetPCPokemonPacket, Minecraft client) {
         CobblemonClient.storage.setPCPokemon(packet.storeID, packet.storePosition, packet.pokemon(client.level!!.registryAccess()))
     }
 }

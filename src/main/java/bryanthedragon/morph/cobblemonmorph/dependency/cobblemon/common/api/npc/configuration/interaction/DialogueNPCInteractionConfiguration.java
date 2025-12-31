@@ -26,11 +26,11 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since July 5th, 2024
  */
-class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
+public class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
     override val type: String = "dialogue"
     var dialogue = ResourceLocation.fromNamespaceAndPath("cobblemon", "dialogues/test.json")
 
-    override fun interact(npc: NPCEntity, player: ServerPlayer): Boolean {
+    override fun interact(npc: NPCEntity, ServerPlayer player): Boolean {
         val dialogue = Dialogues.dialogues[this.dialogue] ?: return false
         val currentDialogues = npc.brain.getMemory(CobblemonMemories.DIALOGUES).orElse(mutableListOf())
         val activeDialogue = DialogueManager.startDialogue(player, npc, dialogue)
@@ -40,7 +40,7 @@ class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
         return true
     }
 
-    fun onDialogueStopped(npc: NPCEntity, activeDialogue: ActiveDialogue) {
+    fun onDialogueStopped(npc: NPCEntity, ActiveDialogue activeDialogue) {
         val currentDialogues = npc.brain.getMemory(CobblemonMemories.DIALOGUES).orElse(mutableListOf())
         val newDialogues = currentDialogues - activeDialogue
         if (newDialogues.isEmpty()) {
@@ -50,19 +50,19 @@ class DialogueNPCInteractionConfiguration : NPCInteractConfiguration {
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeResourceLocation(dialogue)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         dialogue = buffer.readResourceLocation()
     }
 
-    override fun writeToNBT(compoundTag: CompoundTag) {
+    override fun writeToNBT(compoundCompoundTag tag) {
         compoundTag.putString(DataKeys.NPC_INTERACT_DIALOGUE, dialogue.toString())
     }
 
-    override fun readFromNBT(compoundTag: CompoundTag) {
+    override fun readFromNBT(compoundCompoundTag tag) {
         dialogue = ResourceLocation.parse(compoundTag.getString(DataKeys.NPC_INTERACT_DIALOGUE))
     }
 

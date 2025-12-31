@@ -17,4 +17,4 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since January 13th, 2024
  */
-class EntitySpawnResult(val entities: List<Entity>)
+public class EntitySpawnResult(val entities: List<Entity>)

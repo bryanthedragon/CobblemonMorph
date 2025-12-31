@@ -18,7 +18,7 @@ import java.util.UUID
 
 record PokemonSeenEvent(
     val playerId: UUID,
-    val pokemon: Pokemon
+    val Pokemon pokemon
 ) : Cancelable() {
     val context = mapOf<String, MoValue>(
         "player" to playerId.getPlayer()!!.asMoLangValue(),

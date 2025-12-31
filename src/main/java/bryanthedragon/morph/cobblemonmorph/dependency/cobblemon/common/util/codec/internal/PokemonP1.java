@@ -31,7 +31,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentSerialization
 
 internal class PokemonP1(
-    val uuid: UUID,
+    val UUID uuid,
     val species: Species,
     val form: FormData,
     val nickname: Optional<Component>,
@@ -49,7 +49,7 @@ internal class PokemonP1(
     val ability: Ability
 ) : Partial<Pokemon> {
 
-    override fun into(other: Pokemon): Pokemon {
+    override fun into(Pokemon other): Pokemon {
         other.uuid = this.uuid
         // This is done beforehand so the ability is legalized by species/form change
         other.ability = this.ability
@@ -85,7 +85,7 @@ internal class PokemonP1(
         return other
     }
 
-    companion object {
+    final class Companion {
         internal val CODEC: MapCodec<PokemonP1> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 UUIDUtil.LENIENT_CODEC.fieldOf(DataKeys.POKEMON_UUID).forGetter(PokemonP1::uuid),
@@ -110,7 +110,7 @@ internal class PokemonP1(
             }
         }
 
-        internal fun from(pokemon: Pokemon): PokemonP1 = PokemonP1(
+        internal fun from(Pokemon pokemon): PokemonP1 = PokemonP1(
             pokemon.uuid,
             pokemon.species,
             pokemon.form,

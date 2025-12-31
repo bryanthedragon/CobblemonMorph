@@ -26,16 +26,16 @@ import net.minecraft.resources.ResourceLocation
  * @author Segfault Guy
  * @since April 20th, 2023
  */
-class BattleMusicPacket(
+public class BattleMusicPacket(
     var music: ResourceLocation? = null,
-    var volume: Float = 1.0f,
-    var pitch: Float = 1.0f,
+    var Float volume = 1.0f,
+    var Float pitch = 1.0f,
     var restartExisting: Boolean = true
 ) : NetworkPacket<BattleMusicPacket> {
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_music")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleMusicPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleMusicPacket(
             music = buffer.readNullable { it.readIdentifier() },
             volume = buffer.readFloat(),
             pitch = buffer.readFloat(),
@@ -45,7 +45,7 @@ class BattleMusicPacket(
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(music) { buf, value -> buf.writeIdentifier(value) }
         buffer.writeFloat(volume)
         buffer.writeFloat(pitch)

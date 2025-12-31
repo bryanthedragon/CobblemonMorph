@@ -19,7 +19,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
-final class ClearPartyCommand {
+public final class ClearPartyCommand {
 
     private const val NAME = "clearparty"
     private const val PLAYER = "player"

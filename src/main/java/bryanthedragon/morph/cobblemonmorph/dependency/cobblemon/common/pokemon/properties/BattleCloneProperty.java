@@ -15,7 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.prope
  * present, indicates that the Pokémon is a battle clone and should not
  * persist outside the context of a battle.
  *
- */final class BattleCloneProperty : CustomPokemonPropertyType<FlagProperty> {
+ */
+public final class BattleCloneProperty : CustomPokemonPropertyType<FlagProperty> {
     override val keys = setOf("battleClone")
     override val needsKey = true
 

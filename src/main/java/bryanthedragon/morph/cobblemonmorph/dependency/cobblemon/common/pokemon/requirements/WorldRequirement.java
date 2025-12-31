@@ -6,13 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.requirements
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.requirements;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement.EntityQueryRequirement
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import net.minecraft.world.entity.LivingEntity
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.level.Level
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement.EntityQueryRequirement;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 /**
  * A [EntityQueryRequirement] for when a [Pokemon] is expected to be in a [Level].
@@ -21,10 +22,10 @@ import net.minecraft.world.level.Level
  * @author Licious
  * @since March 21st, 2022
  */
-class WorldRequirement : EntityQueryRequirement {
-    companion object {
-        const val ADAPTER_VARIANT = "world"
+public class WorldRequirement ex EntityQueryRequirement {
+    final class Companion {
+        const val ADAPTER_VARIANT = "world";
     }
-    val identifier: ResourceLocation = ResourceLocation.parse("minecraft:the_overworld")
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity) = queriedEntity.level().dimension().location() == this.identifier
+    public final ResourceLocation identifier = ResourceLocation.parse("minecraft:the_overworld");
+    override fun check(Pokemon pokemon, LivingEntity queriedEntity) = queriedEntity.level().dimension().location() == this.identifier;
 }

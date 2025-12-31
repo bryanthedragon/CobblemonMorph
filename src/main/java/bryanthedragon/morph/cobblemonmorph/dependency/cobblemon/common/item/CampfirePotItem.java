@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.CampfireBlock
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.entity.CampfireBlockEntity
 
-class CampfirePotItem(block: Block, val color: CampfirePotColor): BlockItem(block, Properties()) {
+public class CampfirePotItem(Block block, val color: CampfirePotColor): BlockItem(block, Properties()) {
 
     override fun useOn(context: UseOnContext): InteractionResult {
         val world = context.level

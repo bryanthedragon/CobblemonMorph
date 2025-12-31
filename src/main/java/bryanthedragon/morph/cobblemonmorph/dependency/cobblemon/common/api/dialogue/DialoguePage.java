@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since December 27th, 2023
  */
-class DialoguePage(
+public class DialoguePage(
     var id: String = "",
     var speaker: String? = null,
     var lines: MutableList<DialogueText> = mutableListOf(),
@@ -36,7 +36,7 @@ class DialoguePage(
     var clientActions: MutableList<Expression> = mutableListOf(),
     var escapeAction: DialogueAction? = null,
 ) {
-    companion object {
+    final class Companion {
         @JvmOverloads
         fun of(
             /** The ID is optional, but if you want to be able to jump to this page from other pages then you probably want to set this. */
@@ -65,7 +65,7 @@ class DialoguePage(
         }
     }
 
-    fun toMoLangStruct(activeDialogue: ActiveDialogue): MoStruct {
+    fun toMoLangStruct(ActiveDialogue activeDialogue): MoStruct {
         return QueryStruct(
             hashMapOf(
                 "id" to java.util.function.Function { _ -> StringValue(id) },

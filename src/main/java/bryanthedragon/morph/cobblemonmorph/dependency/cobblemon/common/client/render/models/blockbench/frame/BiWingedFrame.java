@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.WaveFunction
 import net.minecraft.client.model.geom.ModelPart
 
-interface BiWingedFrame : ModelFrame {
+public interface BiWingedFrame : ModelFrame {
     val leftWing: ModelPart
     val rightWing: ModelPart
 

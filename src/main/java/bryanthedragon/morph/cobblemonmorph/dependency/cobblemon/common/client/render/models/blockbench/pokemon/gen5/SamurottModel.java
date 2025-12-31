@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class SamurottModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+public class SamurottModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("samurott")
     override val head = getPart("head")
     override val foreLeftLeg= getPart("leg_front_left")

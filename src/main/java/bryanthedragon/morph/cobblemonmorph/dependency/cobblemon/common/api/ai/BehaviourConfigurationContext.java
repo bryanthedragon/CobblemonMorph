@@ -34,7 +34,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
 import net.minecraft.world.entity.schedule.Schedule
 
-class BehaviourConfigurationContext {
+public class BehaviourConfigurationContext {
     val runtime = MoLangRuntime().setup()
 
     var appliedBehaviours: Set<ResourceLocation> = setOf()
@@ -72,7 +72,7 @@ class BehaviourConfigurationContext {
         onAdd.add(script)
     }
 
-    fun apply(entity: LivingEntity, behaviourConfigs: List<BehaviourConfig>, dynamic: Dynamic<*>) {
+    fun apply(LivingEntity entity, behaviourConfigs: List<BehaviourConfig>, dynamic: Dynamic<*>) {
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         runtime.withQueryValue("brain", createBrainStruct(entity, this))
 
@@ -98,7 +98,7 @@ class BehaviourConfigurationContext {
         brain.setActiveActivityIfPossible(defaultActivity)
     }
 
-    fun createBrainStruct(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): QueryStruct {
+    fun createBrainStruct(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): QueryStruct {
         return QueryStruct(hashMapOf()).addStandardFunctions()
             .addFunction("entity") { entity.asMostSpecificMoLangValue() }
             .addFunction("create_activity") { params ->

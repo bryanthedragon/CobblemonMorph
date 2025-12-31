@@ -9,4 +9,4 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench
 
 /** A wrapping object so MoLang can return an ObjectValue of this type and have instance checks work. */
-class ExcludedLabels(val labels: List<String>)
+public class ExcludedLabels(val labels: List<String>)

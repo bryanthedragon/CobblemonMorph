@@ -21,7 +21,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 
-class BoxNameWidget(
+public class BoxNameWidget(
     pX: Int,
     pY: Int,
     text: Component = "BoxNameWidget".text(),
@@ -55,7 +55,7 @@ class BoxNameWidget(
         }
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         // Reset box name
         if (isFocused && keyCode == InputConstants.KEY_ESCAPE) value = getBox().name?.string ?: ""
         return super.keyPressed(keyCode, scanCode, modifiers)

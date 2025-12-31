@@ -34,7 +34,7 @@ import net.minecraft.world.item.ItemDisplayContext
 import org.joml.Quaternionf
 
 @Environment(value = EnvType.CLIENT)
-class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : EntityRenderer<PokeRodFishingBobberEntity>(context) {
+public class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : EntityRenderer<PokeRodFishingBobberEntity>(context) {
 
     override fun render(fishingBobberEntity: PokeRodFishingBobberEntity, elapsedPartialTicks: Float, tickDelta: Float, matrixStack: PoseStack, vertexConsumerProvider: MultiBufferSource, light: Int) {
         var playerPosXWorld: Double
@@ -237,11 +237,11 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
         }
     }
 
-    companion object {
+    final class Companion {
         private val TEXTURE = cobblemonResource("textures/item/fishing/bobber_hook.png")
         private val LAYER = RenderType.entityCutout(TEXTURE)
 
-        private fun vertex(buffer: VertexConsumer, entry: PoseStack.Pose, light: Int, x: Float, y: Float, u: Int, v: Int) {
+        private fun vertex(buffer: VertexConsumer, entry: PoseStack.Pose, light: Int, Float x, Float y, u: Int, v: Int) {
             buffer
                 .addVertex(entry.pose(), x - 0.5f, y - 0.5f, 0.0f)
                 .setColor(255, 255, 255, 255)
@@ -252,7 +252,7 @@ class PokeBobberEntityRenderer(context: EntityRendererProvider.Context?) : Entit
         }
 
         @JvmStatic
-        private fun percentage(value: Int, max: Int): Float {
+        private fun percentage(Int value, max: Int): Float {
             return value.toFloat() / max.toFloat()
         }
 

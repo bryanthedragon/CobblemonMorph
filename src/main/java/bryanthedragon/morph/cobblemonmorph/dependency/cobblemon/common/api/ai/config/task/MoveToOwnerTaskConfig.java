@@ -20,14 +20,14 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class MoveToOwnerTaskConfig : SingleTaskConfig {
+public class MoveToOwnerTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     var completionRange: ExpressionOrEntityVariable = Either.left("4.0".asExpression())
     var speedMultiplier: ExpressionOrEntityVariable = Either.left("0.4".asExpression())
     var teleportDistance: ExpressionOrEntityVariable = Either.left("24.0".asExpression())
     var maxDistance: ExpressionOrEntityVariable = Either.left("14.0".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         completionRange,
         speedMultiplier,
@@ -36,7 +36,7 @@ class MoveToOwnerTaskConfig : SingleTaskConfig {
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity> {
         behaviourConfigurationContext.addMemories(
@@ -51,7 +51,7 @@ class MoveToOwnerTaskConfig : SingleTaskConfig {
                 teleportDistance = teleportDistance.asExpression(),
                 maxDistance = maxDistance.asExpression()
             ),
-            PokemonEntity::class.java
+            PokemonEntity.class
         )
     }
 }

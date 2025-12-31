@@ -48,7 +48,7 @@ import net.minecraft.world.item.ItemStack
  * @author Licious
  * @since March 19th, 2022
  */
-interface Evolution : EvolutionLike {
+public interface Evolution : EvolutionLike {
 
     /**
      * The result of this evolution.
@@ -91,7 +91,7 @@ interface Evolution : EvolutionLike {
      * @param pokemon The [Pokemon] being queried.
      * @return If the [Evolution] can start.
      */
-    fun test(pokemon: Pokemon): Boolean {
+    fun test(Pokemon pokemon): Boolean {
         val result = this.requirements.all { requirement -> requirement.check(pokemon) }
         val event = EvolutionTestedEvent(pokemon, this, result, result)
         CobblemonEvents.EVOLUTION_TESTED.post(event)
@@ -104,7 +104,7 @@ interface Evolution : EvolutionLike {
      *
      * @param pokemon The [Pokemon] being evolved.
      */
-    fun evolve(pokemon: Pokemon): Boolean {
+    fun evolve(Pokemon pokemon): Boolean {
         if (this.consumeHeldItem) {
             pokemon.swapHeldItem(ItemStack.EMPTY)
         }
@@ -116,7 +116,7 @@ interface Evolution : EvolutionLike {
         return true
     }
 
-    fun shed(pokemon: Pokemon): Boolean {
+    fun shed(Pokemon pokemon): Boolean {
         val innerShedder = shedder ?: return false
 
         val owner = pokemon.getOwnerPlayer() ?: return false
@@ -153,7 +153,7 @@ interface Evolution : EvolutionLike {
      *
      * @param pokemon The [Pokemon] being evolved.
      */
-    fun forceEvolve(pokemon: Pokemon) {
+    fun forceEvolve(Pokemon pokemon) {
         // This is a switch to enable/disable the evolution effect while we get particles improved
         val useEvolutionEffect = true
 
@@ -194,7 +194,7 @@ interface Evolution : EvolutionLike {
         playPoseableAnimationPacket.sendToPlayersAround(pokemon.x, pokemon.y, pokemon.z, 128.0, pokemon.level().dimension())
     }
 
-    fun evolutionMethod(pokemon: Pokemon) {
+    fun evolutionMethod(Pokemon pokemon) {
         // This ensures the Pokémon doesn't lose moves during evolution
         // (e.g., Oshawott evolving at level 17 knowing Razor Shell, while Dewott only learns it at level 18).
         val previousSpeciesLearnableMoves = pokemon.relearnableMoves
@@ -244,7 +244,7 @@ interface Evolution : EvolutionLike {
         CobblemonEvents.POKEMON_GAINED.post(PokemonGainedEvent(pokemon.getOwnerUUID()!!, pokemon))
     }
 
-    fun applyTo(pokemon: Pokemon) {
+    fun applyTo(Pokemon pokemon) {
         result.apply(pokemon)
     }
 }

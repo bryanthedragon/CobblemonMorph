@@ -16,7 +16,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 import net.minecraft.client.Minecraft
 
-class CampfirePotJeiProvider : CobblemonJeiProvider {
+public class CampfirePotJeiProvider : CobblemonJeiProvider {
     override fun registerCategory(registration: IRecipeCategoryRegistration) {
         registration.addRecipeCategories(CampfirePotRecipeCategory(registration))
     }

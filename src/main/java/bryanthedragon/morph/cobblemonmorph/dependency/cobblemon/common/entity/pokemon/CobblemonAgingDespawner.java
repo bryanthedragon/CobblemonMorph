@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.Co
  * @author Hiroku
  * @since March 19th, 2022
  */
-class CobblemonAgingDespawner<T : Entity>(
+public class CobblemonAgingDespawner<T : Entity>(
     val getAgeTicks: (T) -> Int
 ) : Despawner<T> {
 

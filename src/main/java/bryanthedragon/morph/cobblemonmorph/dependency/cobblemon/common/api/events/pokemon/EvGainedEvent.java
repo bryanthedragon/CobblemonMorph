@@ -25,12 +25,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ifIs
  * @see [Pre]
  * @see [Post]
  */
-interface EvGainedEvent {
+public interface EvGainedEvent {
 
     /**
      * The [Stat] having EVs added to itself.
      */
-    val stat: Stat
+    val Stat stat 
 
     /**
      * @see EvSource.pokemon
@@ -49,7 +49,7 @@ interface EvGainedEvent {
      * @property amount The amount of EVs that will be gained.
      * @property source See [EvGainedEvent.source].
      */
-    class Pre(override val stat: Stat, var amount: Int, override val source: EvSource
+    class Pre(override val Stat stat , var amount: Int, override val source: EvSource
     ) : EvGainedEvent, Cancelable() {
         val context = mutableMapOf(
             "pokemon" to source.pokemon.struct,
@@ -80,7 +80,7 @@ interface EvGainedEvent {
      * @property amount The final amount of EVs gained.
      * @property source See [EvGainedEvent.source].
      */
-    class Post(override val stat: Stat, val amount: Int, override val source: EvSource) : EvGainedEvent {
+    class Post(override val Stat stat , val amount: Int, override val source: EvSource) : EvGainedEvent {
         val context = mutableMapOf(
             "pokemon" to source.pokemon.struct,
             "stat" to StringValue(stat.identifier.toString()),

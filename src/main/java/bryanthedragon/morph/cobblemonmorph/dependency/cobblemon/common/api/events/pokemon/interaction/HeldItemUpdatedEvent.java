@@ -28,9 +28,9 @@ import net.minecraft.world.item.ItemStack
  */
 record HeldItemUpdatedEvent(
     val cause: LivingEntity?,
-    val pokemon: Pokemon,
+    val Pokemon pokemon,
     val originalStack: ItemStack,
-    val decrement: Boolean,
+    val Boolean decrement,
     val oldItem: ItemStack,
     val newItem: ItemStack
 ) : Cancelable()

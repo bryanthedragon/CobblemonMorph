@@ -24,7 +24,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
-final class TestPcSlotCommand {
+public final class TestPcSlotCommand {
 
     private const val NAME = "testpcslot"
     private const val PLAYER = "player"

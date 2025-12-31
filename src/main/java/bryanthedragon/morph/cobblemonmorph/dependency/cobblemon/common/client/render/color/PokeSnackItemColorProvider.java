@@ -12,10 +12,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.cooking.getColourMixFromColors
 import net.minecraft.client.color.item.ItemColor
 import net.minecraft.world.item.ItemStack
-final class PokeSnackItemColorProvider : ItemColor {
+public final class PokeSnackItemColorProvider : ItemColor {
     private const val BASE_LAYER_INDEX = 0
 
-    override fun getColor(stack: ItemStack, layer: Int): Int {
+    override fun getColor(ItemStack stack, layer: Int): Int {
         val colorComponent = stack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
 
         if (layer == BASE_LAYER_INDEX) {

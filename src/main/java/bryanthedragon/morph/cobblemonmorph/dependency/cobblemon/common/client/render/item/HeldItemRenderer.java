@@ -28,11 +28,11 @@ import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector3f
 
-class HeldItemRenderer {
+public class HeldItemRenderer {
     private val itemRenderer: ItemRenderer = Minecraft.getInstance().itemRenderer
     private var displayContext: ItemDisplayContext = ItemDisplayContext.FIXED
 
-    companion object {
+    final class Companion {
         const val ITEM_FACE = "item_face"
         const val ITEM_HAT = "item_hat"
         const val ITEM = "item"
@@ -50,7 +50,7 @@ class HeldItemRenderer {
         buffer: MultiBufferSource,
         light: Int = LightTexture.pack(11, 7),
         frontLight: Boolean = false,
-        entity: LivingEntity? = null
+        LivingEntity entity? = null
     ) {
         if (!item.`is`(CobblemonItemTags.HIDDEN_ITEMS)) renderAtLocator(item, state, entity, poseStack, buffer, light, 0, frontLight)
         for ( (targetLocator, item) in state.animationItems) renderAtLocator(item, state, entity, poseStack, buffer, light, 0, frontLight, targetLocator)
@@ -59,7 +59,7 @@ class HeldItemRenderer {
     private fun renderAtLocator(
         item: ItemStack,
         state: PosableState,
-        entity: LivingEntity?,
+        LivingEntity entity?,
         poseStack: PoseStack,
         buffer: MultiBufferSource,
         light: Int,

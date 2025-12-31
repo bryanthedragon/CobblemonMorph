@@ -13,15 +13,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.U
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RequestPCBoxWallpapersPacket internal constructor() : NetworkPacket<RequestPCBoxWallpapersPacket>, UnsplittablePacket {
+public class RequestPCBoxWallpapersPacket internal constructor() : NetworkPacket<RequestPCBoxWallpapersPacket>, UnsplittablePacket {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("request_pc_box_wallpapers")
-        fun decode(buffer: RegistryFriendlyByteBuf): RequestPCBoxWallpapersPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): RequestPCBoxWallpapersPacket {
             return RequestPCBoxWallpapersPacket()
         }
     }

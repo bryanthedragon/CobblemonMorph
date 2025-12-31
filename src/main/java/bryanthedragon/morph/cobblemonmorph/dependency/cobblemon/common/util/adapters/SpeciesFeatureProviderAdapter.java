@@ -8,8 +8,9 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatureProvider
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatures
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.species.provider.SpeciesFeatureProvider;
+
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -21,8 +22,9 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since November 30th, 2022
- */final class SpeciesFeatureProviderAdapter : JsonDeserializer<SpeciesFeatureProvider<*>> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): SpeciesFeatureProvider<*> {
+ */
+public final class SpeciesFeatureProviderAdapter : JsonDeserializer<SpeciesFeatureProvider<*>> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): SpeciesFeatureProvider<*> {
         val typeName = json.asJsonObject.get("type").asString
         val clazz = SpeciesFeatures.types[typeName] ?: throw IllegalArgumentException("No type registered in SpeciesFeatures for name: $typeName")
         return ctx.deserialize(json, clazz)

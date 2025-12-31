@@ -18,7 +18,7 @@ import net.minecraft.util.FormattedCharSequence
  * @author Hiroku
  * @since June 24th, 2022
  */
-class ClientBattleMessageQueue {
+public class ClientBattleMessageQueue {
     var listeners = mutableListOf<(FormattedCharSequence) -> Unit>()
     private val messages = mutableListOf<FormattedCharSequence>()
 

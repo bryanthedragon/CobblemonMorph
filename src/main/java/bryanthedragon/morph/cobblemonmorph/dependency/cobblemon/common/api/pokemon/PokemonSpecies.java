@@ -78,63 +78,63 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.levelgen.structure.Structure
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.AABB
-final class PokemonSpecies : JsonDataRegistry<Species> {
+public final class PokemonSpecies : JsonDataRegistry<Species> {
 
     override val id = cobblemonResource("species")
     override val type = PackType.SERVER_DATA
 
-    override val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(Stat::class.java, Cobblemon.statProvider.typeAdapter)
-        .registerTypeAdapter(MemoryModuleType::class.java, MemoryModuleTypeAdapter)
-        .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
-        .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
-        .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
+    override val Gson gson = GsonBuilder()
+        .registerTypeAdapter(Stat.class, Cobblemon.statProvider.typeAdapter)
+        .registerTypeAdapter(MemoryModuleType.class, MemoryModuleTypeAdapter)
+        .registerTypeAdapter(SensorType.class, SensorTypeAdapter)
+        .registerTypeAdapter(BehaviourConfig.class, BehaviourConfigAdapter)
+        .registerTypeAdapter(TaskConfig.class, TaskConfigAdapter)
         .registerTypeAdapter(
-            TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,
+            TypeToken.getParameterized(Either.class, Expression.class, MoLangConfigVariable.class).type,
             ExpressionOrEntityVariableAdapter
         )
-        .registerTypeAdapter(Activity::class.java, ActivityAdapter)
-        .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
-        .registerTypeAdapter(ElementalType::class.java, ElementalTypeAdapter)
-        .registerTypeAdapter(AbilityTemplate::class.java, AbilityTemplateAdapter)
-        .registerTypeAdapter(ShoulderEffect::class.java, ShoulderEffectAdapter)
-        .registerTypeAdapter(MoveTemplate::class.java, MoveTemplateAdapter)
-        .registerTypeAdapter(ExperienceGroup::class.java, ExperienceGroupAdapter)
-        .registerTypeAdapter(EntityDimensions::class.java, EntityDimensionsAdapter)
-        .registerTypeAdapter(Learnset::class.java, LearnsetAdapter)
-        .registerTypeAdapter(Evolution::class.java, CobblemonEvolutionAdapter)
-        .registerTypeAdapter(AABB::class.java, BoxAdapter)
-        .registerTypeAdapter(AbilityPool::class.java, AbilityPoolAdapter)
-        .registerTypeAdapter(Requirement::class.java, CobblemonRequirementAdapter)
-        .registerTypeAdapter(PreEvolution::class.java, CobblemonPreEvolutionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(Set::class.java, Evolution::class.java).type, LazySetAdapter(Evolution::class))
-        .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
-        .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
-        .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
-        .registerTypeAdapter(SleepDepth::class.java, SleepDepth.adapter)
-        .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
-        .registerTypeAdapter(CompoundTag::class.java, NbtCompoundAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(Component::class.java, TextAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Structure::class.java).type, StructureLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Fluid::class.java).type, FluidLikeConditionAdapter)
-        .registerTypeAdapter(EggGroup::class.java, EggGroupAdapter)
-        .registerTypeAdapter(MobEffect::class.java, RegistryElementAdapter<MobEffect>(BuiltInRegistries::MOB_EFFECT))
-        .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
-        .registerTypeAdapter(RidingBehaviourSettings::class.java, RidingBehaviourSettingsAdapter)
-        .registerTypeAdapter(RideSoundSettingsList::class.java, RideSoundSettingsListAdapter)
-        .registerTypeAdapter(ObtainableItemCondition::class.java, ObtainableItemConditionAdapter)
+        .registerTypeAdapter(Activity.class, ActivityAdapter)
+        .registerTypeAdapter(Component.class, TranslatedTextAdapter)
+        .registerTypeAdapter(ElementalType.class, ElementalTypeAdapter)
+        .registerTypeAdapter(AbilityTemplate.class, AbilityTemplateAdapter)
+        .registerTypeAdapter(ShoulderEffect.class, ShoulderEffectAdapter)
+        .registerTypeAdapter(MoveTemplate.class, MoveTemplateAdapter)
+        .registerTypeAdapter(ExperienceGroup.class, ExperienceGroupAdapter)
+        .registerTypeAdapter(EntityDimensions.class, EntityDimensionsAdapter)
+        .registerTypeAdapter(Learnset.class, LearnsetAdapter)
+        .registerTypeAdapter(Evolution.class, CobblemonEvolutionAdapter)
+        .registerTypeAdapter(AABB.class, BoxAdapter)
+        .registerTypeAdapter(AbilityPool.class, AbilityPoolAdapter)
+        .registerTypeAdapter(Requirement.class, CobblemonRequirementAdapter)
+        .registerTypeAdapter(PreEvolution.class, CobblemonPreEvolutionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(Set.class, Evolution.class).type, LazySetAdapter(Evolution::class))
+        .registerTypeAdapter(IntRange.class, IntRangeAdapter)
+        .registerTypeAdapter(PokemonProperties.class, pokemonPropertiesShortAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(TimeRange.class, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
+        .registerTypeAdapter(ItemDropMethod.class, ItemDropMethod.adapter)
+        .registerTypeAdapter(SleepDepth.class, SleepDepth.adapter)
+        .registerTypeAdapter(DropEntry.class, DropEntryAdapter)
+        .registerTypeAdapter(CompoundTag.class, NbtCompoundAdapter)
+        .registerTypeAdapter(Expression.class, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+        .registerTypeAdapter(Component.class, TextAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Biome.class).type, BiomeLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Block.class).type, BlockLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Item.class).type, ItemLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Structure.class).type, StructureLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Fluid.class).type, FluidLikeConditionAdapter)
+        .registerTypeAdapter(EggGroup.class, EggGroupAdapter)
+        .registerTypeAdapter(MobEffect.class, RegistryElementAdapter<MobEffect>(BuiltInRegistries::MOB_EFFECT))
+        .registerTypeAdapter(ItemPredicate.class, LegacyItemConditionWrapperAdapter)
+        .registerTypeAdapter(RidingBehaviourSettings.class, RidingBehaviourSettingsAdapter)
+        .registerTypeAdapter(RideSoundSettingsList.class, RideSoundSettingsListAdapter)
+        .registerTypeAdapter(ObtainableItemCondition.class, ObtainableItemConditionAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()
 
-    override val typeToken: TypeToken<Species> = TypeToken.get(Species::class.java)
+    override val typeToken: TypeToken<Species> = TypeToken.get(Species.class)
     override val resourcePath = "species"
 
     override val observable = SimpleObservable<PokemonSpecies>()
@@ -172,7 +172,7 @@ final class PokemonSpecies : JsonDataRegistry<Species> {
      * @return The [Species] if existing.
      */
     @JvmStatic
-    fun getByName(name: String) = this.getByIdentifier(cobblemonResource(name))
+    fun getByName(String name) = this.getByIdentifier(cobblemonResource(name))
 
     /**
      * Finds a [Species] by its national Pokédex entry number.
@@ -190,7 +190,7 @@ final class PokemonSpecies : JsonDataRegistry<Species> {
      * @return The [Species] if existing.
      */
     @JvmStatic
-    fun getByIdentifier(identifier: ResourceLocation) = this.speciesByIdentifier[identifier]
+    fun getByIdentifier(ResourceLocation identifier) = this.speciesByIdentifier[identifier]
 
     /**
      * Counts the currently loaded species.
@@ -238,7 +238,7 @@ final class PokemonSpecies : JsonDataRegistry<Species> {
         }
     }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         SpeciesRegistrySyncPacket(species.toList()).sendToPlayer(player)
     }
 

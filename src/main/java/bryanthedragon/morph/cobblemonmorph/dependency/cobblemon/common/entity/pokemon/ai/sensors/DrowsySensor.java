@@ -23,13 +23,13 @@ import net.minecraft.world.entity.ai.sensing.Sensor
  * @author Hiroku
  * @since March 23rd, 2024
  */
-class DrowsySensor : Sensor<PokemonEntity>(20) {
+public class DrowsySensor : Sensor<PokemonEntity>(20) {
     override fun requires() = setOf(CobblemonMemories.POKEMON_DROWSY)
-    override fun doTick(world: ServerLevel, entity: PokemonEntity) {
+    override fun doTick(ServerLevel world, entity: PokemonEntity) {
         drowsyLogic(entity)
     }
 
-    companion object {
+    final class Companion {
         fun drowsyLogic(entity: PokemonEntity) {
             val world = entity.level()
             val rest = entity.behaviour.resting

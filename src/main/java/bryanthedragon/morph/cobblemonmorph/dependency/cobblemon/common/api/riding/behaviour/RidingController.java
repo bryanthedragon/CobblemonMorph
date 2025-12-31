@@ -28,7 +28,7 @@ import kotlin.math.max
  *
  * @author landonjw
  */
-class RidingController(
+public class RidingController(
     val entity: PokemonEntity,
     val behaviours: Map<RidingStyle, RidingBehaviourSettings>) {
 
@@ -149,9 +149,9 @@ class RidingController(
     }
 }
 
-class ActiveRidingContext(
+public class ActiveRidingContext(
     val behaviour: ResourceLocation,
     val settings: RidingBehaviourSettings,
     val state: RidingBehaviourState,
-    val style: RidingStyle
+    val RidingStyle style
 )

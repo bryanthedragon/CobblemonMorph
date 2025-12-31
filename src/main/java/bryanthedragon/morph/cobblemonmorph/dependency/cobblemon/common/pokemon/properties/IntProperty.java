@@ -13,17 +13,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
 open class IntProperty(
-    val key: String,
-    val value: Int,
-    private val pokemonApplicator: (pokemon: Pokemon, value: Int) -> Unit,
-    private val entityApplicator: (pokemonEntity: PokemonEntity, value: Int) -> Unit,
-    private val pokemonMatcher: (pokemon: Pokemon, value: Int) -> Boolean,
-    private val entityMatcher: (pokemonEntity: PokemonEntity, value: Int) -> Boolean
+    val String Key,
+    val Int value,
+    private val pokemonApplicator: (Pokemon pokemon, Int value) -> Unit,
+    private val entityApplicator: (pokemonEntity: PokemonEntity, Int value) -> Unit,
+    private val pokemonMatcher: (Pokemon pokemon, Int value) -> Boolean,
+    private val entityMatcher: (pokemonEntity: PokemonEntity, Int value) -> Boolean
 ) : CustomPokemonProperty {
 
     override fun asString() = "${this.key}=${this.value}"
 
-    override fun apply(pokemon: Pokemon) {
+    override fun apply(Pokemon pokemon) {
         this.pokemonApplicator.invoke(pokemon, this.value)
     }
 
@@ -31,7 +31,7 @@ open class IntProperty(
         this.entityApplicator.invoke(pokemonEntity, this.value)
     }
 
-    override fun matches(pokemon: Pokemon) = this.pokemonMatcher.invoke(pokemon, this.value)
+    override fun matches(Pokemon pokemon) = this.pokemonMatcher.invoke(pokemon, this.value)
 
     override fun matches(pokemonEntity: PokemonEntity) = this.entityMatcher.invoke(pokemonEntity, this.value)
 

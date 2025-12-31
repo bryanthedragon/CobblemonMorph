@@ -22,12 +22,12 @@ import org.jetbrains.annotations.ApiStatus
  * @author Qu
  * @since 2022-01-26
  */
-@Suppress("unused")final class ShoulderEffectRegistry {
+@Suppress("unused")public final class ShoulderEffectRegistry {
 
     private val effects = mutableMapOf<String, Class<out ShoulderEffect>>()
 
     // Effects - START
-    val POTION_EFFECT = register("potion_effect", PotionBaseEffect::class.java)
+    val POTION_EFFECT = register("potion_effect", PotionBaseEffect.class)
     // Effects - END
 
     // Internal so 3rd party can't accidentally subscriber over n over.
@@ -36,26 +36,26 @@ import org.jetbrains.annotations.ApiStatus
     }
 
     @JvmStatic
-    fun register(name: String, effect: Class<out ShoulderEffect>) = effect.also { effects[name] = it }
+    fun register(String name, effect: Class<out ShoulderEffect>) = effect.also { effects[name] = it }
 
     @JvmStatic
-    fun unregister(name: String) = effects.remove(name)
+    fun unregister(String name) = effects.remove(name)
 
     @JvmStatic
     fun getName(clazz: Class<out ShoulderEffect>) = effects.firstNotNullOf { if (it.value == clazz) it.key else null }
 
     @JvmStatic
-    fun get(name: String): Class<out ShoulderEffect>? = effects[name]
+    fun get(String name): Class<out ShoulderEffect>? = effects[name]
 
     // It was removed by a source such as milk, reapply
     @ApiStatus.Internal
-    fun onEffectEnd(player: ServerPlayer) {
+    fun onEffectEnd(ServerPlayer player) {
         // Do this next tick so the client syncs correctly.
         // While it is a ticks worth of downtime it's still 1/20th of a second, doubt they'll notice.
         ServerTaskTracker.momentarily { this.refreshEffects(player) }
     }
 
-    private fun refreshEffects(player: ServerPlayer) {
+    private fun refreshEffects(ServerPlayer player) {
         player.party().filter { it.state is ShoulderedState }.forEach { pkm ->
             pkm.form.shoulderEffects.forEach {
                 it.applyEffect(

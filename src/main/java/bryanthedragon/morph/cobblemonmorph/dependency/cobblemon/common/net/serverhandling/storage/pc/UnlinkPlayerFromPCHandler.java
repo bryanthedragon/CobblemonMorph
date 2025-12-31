@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stora
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class UnlinkPlayerFromPCHandler : ServerNetworkPacketHandler<UnlinkPlayerFromPCPacket> {
-    override fun handle(packet: UnlinkPlayerFromPCPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class UnlinkPlayerFromPCHandler : ServerNetworkPacketHandler<UnlinkPlayerFromPCPacket> {
+    override fun handle(packet: UnlinkPlayerFromPCPacket, server: MinecraftServer, ServerPlayer player) {
         PCLinkManager.removeLink(player.uuid)
         PastureLinkManager.links.remove(player.uuid) // Can remove this if same logic is done in closing a pasture GUI
     }

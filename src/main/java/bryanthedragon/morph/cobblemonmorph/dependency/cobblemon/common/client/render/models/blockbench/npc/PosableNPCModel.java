@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCEntity
 import net.minecraft.world.entity.Entity
 
-class PosableNPCModel : PosableEntityModel<NPCEntity>() {
-    override fun setupEntityTypeContext(entity: Entity?) {
+public class PosableNPCModel : PosableEntityModel<NPCEntity>() {
+    override fun setupEntityTypeContext(Entity entity?) {
         super.setupEntityTypeContext(entity)
         if (entity is NPCEntity) {
             context.put(RenderContext.ASPECTS, entity.aspects)

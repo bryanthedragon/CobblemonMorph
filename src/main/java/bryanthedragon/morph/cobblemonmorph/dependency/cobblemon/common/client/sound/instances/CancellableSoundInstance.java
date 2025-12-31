@@ -18,7 +18,7 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.phys.Vec3
 
-class CancellableSoundInstance(sound: SoundEvent, pos: BlockPos = BlockPos.ZERO, repeat: Boolean = false, volume: Float = 1.0F, pitch: Float = 1.0F) :
+public class CancellableSoundInstance(SoundEvent sound, (BlockPos pos = BlockPos.ZERO, repeat: Boolean = false, Float volume = 1.0F, Float pitch = 1.0F) :
     SimpleSoundInstance(sound, SoundSource.BLOCKS, volume, pitch, SoundInstance.createUnseededRandom(), pos),
     TickableSoundInstance {
 
@@ -74,7 +74,7 @@ class CancellableSoundInstance(sound: SoundEvent, pos: BlockPos = BlockPos.ZERO,
         }
     }
 
-    companion object {
+    final class Companion {
         const val UNHEARD_TICKS_MAX = 200
         const val ATTENUATION_DISTANCE_MAX_SQUARED = 18 * 18
     }

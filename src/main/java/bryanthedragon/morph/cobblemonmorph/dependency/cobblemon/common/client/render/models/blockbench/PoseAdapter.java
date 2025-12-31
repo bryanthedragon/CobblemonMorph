@@ -29,21 +29,21 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since October 18th, 2022
  */
-class PoseAdapter(
+public class PoseAdapter(
     val modelFinder: () -> PosableModel
 ) : JsonDeserializer<Pose> {
-    companion object {
+    final class Companion {
         val runtime = MoLangRuntime()
     }
 
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): Pose {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): Pose {
         val model = modelFinder()
         val obj = json as JsonObject
         val pose = JsonPose(model, obj)
 
         val conditionsList = mutableListOf<(PosableState) -> Boolean>()
 
-        fun addCondition(jsonKey: String, condition: (Entity, Boolean) -> Boolean) {
+        fun addCondition(jsonString Key, condition: (Entity, Boolean) -> Boolean) {
             json.get(jsonKey)?.asBoolean?.let { expectedValue ->
                 conditionsList.add { it.getEntity()?.let { entity -> condition(entity, expectedValue) } ?: true }
             }

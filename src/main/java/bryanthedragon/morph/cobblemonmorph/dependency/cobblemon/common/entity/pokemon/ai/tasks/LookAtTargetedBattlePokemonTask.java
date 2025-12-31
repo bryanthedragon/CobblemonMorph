@@ -22,7 +22,8 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
  *
  * @author Hiroku
  * @since April 8th, 2024
- */final class LookAtTargetedBattlePokemonTask {
+ */
+public final class LookAtTargetedBattlePokemonTask {
     fun create(): OneShot<PokemonEntity> {
         return BehaviorBuilder.create {
             it.group(

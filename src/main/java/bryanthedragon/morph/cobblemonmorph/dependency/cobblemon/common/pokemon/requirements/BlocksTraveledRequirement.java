@@ -20,17 +20,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Licious
  * @since January 28th, 2023
  */
-class BlocksTraveledRequirement(amount: Int) : Requirement {
+public class BlocksTraveledRequirement(amount: Int) : Requirement {
 
     constructor() : this(0)
 
     val amount: Int = amount
 
-    override fun check(pokemon: Pokemon): Boolean {
+    override fun check(Pokemon pokemon): Boolean {
         return pokemon.getBlocksTraveled() >= this.amount
     }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "blocks_traveled"
     }
 

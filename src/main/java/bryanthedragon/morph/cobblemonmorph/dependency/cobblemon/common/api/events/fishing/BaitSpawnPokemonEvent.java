@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack
 /**
  * Event that is fired when a Pokemon is spawned by a bobber.
  */
-interface BaitSpawnPokemonEvent {
+public interface BaitSpawnPokemonEvent {
 
     /**
      * Event that is fired before a Pokemon is spawned by a bobber.

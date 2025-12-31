@@ -52,8 +52,8 @@ import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Vector3f
 
-class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
-    companion object {
+public class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
+    final class Companion {
         val KEY = cobblemonResource("liquid/dolphin")
     }
 
@@ -545,7 +545,7 @@ class DolphinBehaviour : RidingBehaviour<DolphinSettings, DolphinState> {
     }
 }
 
-class DolphinSettings : RidingBehaviourSettings {
+public class DolphinSettings : RidingBehaviourSettings {
     override val key = DolphinBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -579,7 +579,7 @@ class DolphinSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
@@ -596,7 +596,7 @@ class DolphinSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(staminaExpr)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
@@ -614,7 +614,7 @@ class DolphinSettings : RidingBehaviourSettings {
     }
 }
 
-class DolphinState : RidingBehaviourState() {
+public class DolphinState : RidingBehaviourState() {
     var lastVelocity = ridingState(Vec3.ZERO, Side.BOTH)
     var currRollCorrectionForce = ridingState(0.0, Side.CLIENT)
     var currPitchCorrectionForce = ridingState(0.0, Side.CLIENT)

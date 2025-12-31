@@ -17,8 +17,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ba
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.BattleGUI
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleInitializePacket
 import net.minecraft.client.Minecraft
-final class BattleInitializeHandler : ClientNetworkPacketHandler<BattleInitializePacket> {
-    override fun handle(packet: BattleInitializePacket, client: Minecraft) {
+public final class BattleInitializeHandler : ClientNetworkPacketHandler<BattleInitializePacket> {
+    override fun handle(packet: BattleInitializePacket, Minecraft client) {
         val playerUUID = Minecraft.getInstance().player?.uuid
         CobblemonClient.battle = ClientBattle(
             packet.battleId,

@@ -26,8 +26,8 @@ import com.google.gson.JsonElement
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 
-class ScriptPartyProvider : NPCPartyProvider {
-    companion object {
+public class ScriptPartyProvider : NPCPartyProvider {
+    final class Companion {
         const val TYPE = "script"
     }
 
@@ -35,7 +35,7 @@ class ScriptPartyProvider : NPCPartyProvider {
     override var isStatic: Boolean = true
     var script: ResourceLocation = cobblemonResource("dummy")
 
-    override fun loadFromJSON(json: JsonElement) {
+    override fun loadFromJSON(JsonElement json) {
         isStatic = json.asJsonObject.get("isStatic")?.asBoolean != false
         script = json.asJsonObject.get("script").asString.asIdentifierDefaultingNamespace()
     }

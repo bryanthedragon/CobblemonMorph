@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeProcessStartedPacket
 import net.minecraft.client.Minecraft
-final class TradeProcessStartedHandler : ClientNetworkPacketHandler<TradeProcessStartedPacket> {
-    override fun handle(packet: TradeProcessStartedPacket, client: Minecraft) {
+public final class TradeProcessStartedHandler : ClientNetworkPacketHandler<TradeProcessStartedPacket> {
+    override fun handle(packet: TradeProcessStartedPacket, Minecraft client) {
         val trade = CobblemonClient.trade ?: return
         trade.tradeProcessing.emit(Pair(true, packet.isTradeInitiator))
     }

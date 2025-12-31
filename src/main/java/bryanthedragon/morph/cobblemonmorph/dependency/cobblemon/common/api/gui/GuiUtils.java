@@ -201,7 +201,7 @@ fun drawString(
 
 @JvmOverloads
 fun drawPosablePortrait(
-    identifier: ResourceLocation,
+    ResourceLocation identifier,
     matrixStack: PoseStack,
     scale: Float = 13F,
     contextScale: Float = 1F,
@@ -287,7 +287,7 @@ fun drawPosablePortrait(
 }
 
 fun drawProfile(
-    resourceIdentifier: ResourceLocation,
+    resourceResourceLocation identifier,
     matrixStack: PoseStack,
     state: PosableState,
     partialTicks: Float,

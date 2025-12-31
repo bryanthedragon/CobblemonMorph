@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class FeraligatrModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
+public class FeraligatrModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("feraligatr")
     override val head = getPart("head_ai")
 

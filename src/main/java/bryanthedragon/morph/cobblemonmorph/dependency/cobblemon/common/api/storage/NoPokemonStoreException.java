@@ -7,4 +7,4 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage
-class NoPokemonStoreException(message: String) : Exception(message)
+public class NoPokemonStoreException(message: String) : Exception(message)

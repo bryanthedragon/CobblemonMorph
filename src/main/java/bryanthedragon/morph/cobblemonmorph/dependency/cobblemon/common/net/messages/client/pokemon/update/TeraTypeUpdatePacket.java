@@ -22,19 +22,19 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Segfault Guy
  * @since July 19, 2023
  */
-class TeraTypeUpdatePacket(pokemon: () -> Pokemon?, value: TeraType) : SingleUpdatePacket<TeraType, TeraTypeUpdatePacket>(pokemon, value) {
+public class TeraTypeUpdatePacket(pokemon: () -> Pokemon?, value: TeraType) : SingleUpdatePacket<TeraType, TeraTypeUpdatePacket>(pokemon, value) {
     override val id = ID
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(value.id)
     }
 
-    override fun set(pokemon: Pokemon, value: TeraType) {
+    override fun set(Pokemon pokemon, value: TeraType) {
         pokemon.teraType = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("tera_type_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TeraTypeUpdatePacket(decodePokemon(buffer), TeraTypes.get(buffer.readIdentifier())!!)
+        fun decode(RegistryFriendlyByteBuf buffer) = TeraTypeUpdatePacket(decodePokemon(buffer), TeraTypes.get(buffer.readIdentifier())!!)
     }
 }

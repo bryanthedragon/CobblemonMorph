@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
 import java.util.concurrent.CompletableFuture
 
-class ForkActionEffectKeyframe(
+public class ForkActionEffectKeyframe(
     val condition: ExpressionLike = "true".asExpressionLike(),
     val ifTrue: List<ActionEffectKeyframe> = listOf(),
     val ifFalse: List<ActionEffectKeyframe> = listOf()

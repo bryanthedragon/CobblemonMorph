@@ -28,14 +28,14 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
 
-class MoveSlotWidget(
+public class MoveSlotWidget(
     pX: Int, pY: Int,
     val move: Move?,
     private val movesWidget: MovesWidget,
-        private val pokemon: Pokemon,
+        private val Pokemon pokemon,
 ): SoundlessWidget(pX, pY, MOVE_WIDTH, MOVE_HEIGHT, Component.literal(move?.name ?: "")) {
 
-    companion object {
+    final class Companion {
         private val moveResource = cobblemonResource("textures/gui/summary/summary_move.png")
         private val moveOverlayResource = cobblemonResource("textures/gui/summary/summary_move_overlay.png")
         private val moveSelectedOverlayResource = cobblemonResource("textures/gui/summary/summary_move_selected_overlay.png")

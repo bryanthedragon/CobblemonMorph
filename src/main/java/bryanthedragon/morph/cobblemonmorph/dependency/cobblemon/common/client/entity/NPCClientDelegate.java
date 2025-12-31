@@ -26,7 +26,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.DynamicTexture
 import net.minecraft.network.syncher.EntityDataAccessor
 
-class NPCClientDelegate : PosableState(), NPCSideDelegate {
+public class NPCClientDelegate : PosableState(), NPCSideDelegate {
     lateinit var npcEntity: NPCEntity
     override val schedulingTracker
         get() = npcEntity.schedulingTracker

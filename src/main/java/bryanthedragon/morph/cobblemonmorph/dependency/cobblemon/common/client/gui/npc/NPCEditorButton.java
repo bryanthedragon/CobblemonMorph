@@ -22,12 +22,12 @@ import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class NPCEditorButton(
+public class NPCEditorButton(
     var buttonX: Float,
     var buttonY: Float,
     var label: MutableComponent? = null,
     var cycleButtonState: Boolean? = null,
-    var buttonWidth: Int = label?.let { Minecraft.getInstance().font.width(it) + (BUTTON_PADDING * 2) } ?: 0,
+    var buttonInt width = label?.let { Minecraft.getInstance().font.width(it) + (BUTTON_PADDING * 2) } ?: 0,
     var buttonResource: ResourceLocation = cobblemonResource("textures/gui/npc/button_base.png"),
     var buttonBorderResource: ResourceLocation = cobblemonResource("textures/gui/npc/button_border.png"),
     val silent: Boolean = false,
@@ -35,7 +35,7 @@ class NPCEditorButton(
     val clickAction: OnPress
 ): Button(if (alignRight) (buttonX - buttonWidth).toInt() else buttonX.toInt(), buttonY.toInt(), buttonWidth, HEIGHT, "".text(), clickAction, DEFAULT_NARRATION) {
 
-    companion object {
+    final class Companion {
         val HEIGHT = 16
         val BORDER_WIDTH = 2
         val BUTTON_PADDING = 6

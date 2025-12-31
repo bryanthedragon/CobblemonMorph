@@ -14,8 +14,8 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
-final class LearnsetAdapter : JsonDeserializer<Learnset> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): Learnset {
+public final class LearnsetAdapter : JsonDeserializer<Learnset> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): Learnset {
         val array = json.asJsonArray
         val learnset = Learnset()
         for (element in array) {

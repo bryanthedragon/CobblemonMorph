@@ -27,7 +27,7 @@ import java.util.UUID
  * @author Licious
  * @since December 31st, 2022
  */
-class BattleMessage(rawMessage: String) {
+public class BattleMessage(rawMessage: String) {
     /**
      * The ID of the action received in the message.
      */
@@ -65,7 +65,7 @@ class BattleMessage(rawMessage: String) {
      * @param index The index of the expected argument.
      * @return The argument if existing or null.
      */
-    fun argumentAt(index: Int): String? = this.args.getOrNull(index)
+    fun argumentAt(Int index): String? = this.args.getOrNull(index)
 
     /**
      * Get an optional argument with the given [name].
@@ -74,7 +74,7 @@ class BattleMessage(rawMessage: String) {
      * @param name The name of the optional argument.
      * @return The argument data if existing or null.
      */
-    fun optionalArgument(name: String): String? = this.optionalArguments[name.lowercase()]
+    fun optionalArgument(String name): String? = this.optionalArguments[name.lowercase()]
 
     /**
      * Checks if an optional argument is present.
@@ -83,7 +83,7 @@ class BattleMessage(rawMessage: String) {
      * @param name The name of the optional argument.
      * @return True if the argument is present.
      */
-    fun hasOptionalArgument(name: String): Boolean = this.optionalArgument(name) != null
+    fun hasOptionalArgument(String name): Boolean = this.optionalArgument(name) != null
 
     /**
      * Clears the parsed arguments and parses the message again with the new given [rawMessage].
@@ -119,7 +119,7 @@ class BattleMessage(rawMessage: String) {
         return this
     }
 
-    fun pokemonByUuid(index: Int, battle: PokemonBattle): BattlePokemon? {
+    fun pokemonByUuid(Int index, battle: PokemonBattle): BattlePokemon? {
         return this.argumentAt(index)?.let { UUID.fromString(it) }?.let { uuid -> battle.actors.flatMap { it.pokemonList }.find { it.uuid == uuid } }
     }
 
@@ -130,7 +130,7 @@ class BattleMessage(rawMessage: String) {
      * @param battle The [PokemonBattle] being queried.
      * @return A pair of [BattleActor] and [ActiveBattlePokemon] if the argument exists and successfully parses them otherwise null.
      */
-    fun actorAndActivePokemon(index: Int, battle: PokemonBattle): Pair<BattleActor, ActiveBattlePokemon>? {
+    fun actorAndActivePokemon(Int index, battle: PokemonBattle): Pair<BattleActor, ActiveBattlePokemon>? {
         val (pnx, _) = this.pnxAndUuid(index) ?: return null
         return this.actorAndActivePokemon(pnx, battle)
     }
@@ -142,7 +142,7 @@ class BattleMessage(rawMessage: String) {
      * @param battle The [PokemonBattle] being queried.
      * @return The [BattlePokemon] if the argument exists and is successfully parsed; otherwise null.
      */
-    fun battlePokemon(index: Int, battle: PokemonBattle): BattlePokemon? {
+    fun battlePokemon(Int index, battle: PokemonBattle): BattlePokemon? {
         val (actorID, pokemonID) = this.pnxAndUuid(index) ?: return null
         return this.battlePokemon(actorID, pokemonID, battle)
     }
@@ -168,7 +168,7 @@ class BattleMessage(rawMessage: String) {
      * @param index The index of the argument containing the Showdown ID of a Pokemon.
      * @return A 'pnx' String representing position and a 'uuid' String representing the unique Pokemon if parsed correctly, otherwise null.
      */
-    fun pnxAndUuid(index: Int): Pair<String, String>? {
+    fun pnxAndUuid(Int index): Pair<String, String>? {
         val argument = this.argumentAt(index)?.takeIf { it.length >= 2 }?.split(":")?.takeIf { it.size == 2 } ?: return null
         val pnx = argument[0].takeIf { it.matches(PNX_MATCHER) || it.matches(PN_MATCHER) } ?: return null
         val uuid = argument[1].trim()
@@ -183,7 +183,7 @@ class BattleMessage(rawMessage: String) {
      * @param index The index of the expected argument.
      * @return The parsed [Effect] or null.
      */
-    fun effectAt(index: Int): Effect? {
+    fun effectAt(Int index): Effect? {
         val data = this.argumentAt(index) ?: return null
         return Effect.parse(data)
     }
@@ -194,12 +194,12 @@ class BattleMessage(rawMessage: String) {
      * @param argumentName The name of the optional argument.
      * @return The parsed [Effect] or null.
      */
-    fun effect(argumentName: String = "from"): Effect? {
+    fun effect(String argumentName = "from"): Effect? {
         val data = this.optionalArgument(argumentName) ?: return null
         return Effect.parse(data)
     }
 
-    fun moveAt(index: Int): MoveTemplate? {
+    fun moveAt(Int index): MoveTemplate? {
         val argument = argumentAt(index)?.lowercase()?.replace("[^a-z0-9]".toRegex(), "") ?: return null
         return Moves.getByName(argument)
     }
@@ -211,7 +211,7 @@ class BattleMessage(rawMessage: String) {
      * @param argumentName The name of the optional argument.
      * @return A pair of [BattleActor] and [ActiveBattlePokemon] if the argument exists and successfully parses them otherwise null.
      */
-    fun actorAndActivePokemonFromOptional(battle: PokemonBattle, argumentName: String = "of"): Pair<BattleActor, ActiveBattlePokemon>? {
+    fun actorAndActivePokemonFromOptional(battle: PokemonBattle, String argumentName = "of"): Pair<BattleActor, ActiveBattlePokemon>? {
         val pnx = this.optionalArgument(argumentName)?.takeIf { it.length >= 3 }?.substring(0, 3) ?: return null
         return this.actorAndActivePokemon(pnx, battle)
     }
@@ -243,7 +243,7 @@ class BattleMessage(rawMessage: String) {
         null
     }
 
-    companion object {
+    final class Companion {
 
         private const val SEPARATOR = "|"
         private const val OPTIONAL_ARG_START = "["

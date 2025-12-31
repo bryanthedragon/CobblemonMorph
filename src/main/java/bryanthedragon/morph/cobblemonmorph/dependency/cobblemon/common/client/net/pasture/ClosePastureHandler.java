@@ -18,9 +18,10 @@ import net.minecraft.client.Minecraft
  *
  * @author Deltric
  * @since May 17th, 2023
- */final class ClosePastureHandler: ClientNetworkPacketHandler<ClosePasturePacket> {
+ */
+public final class ClosePastureHandler: ClientNetworkPacketHandler<ClosePasturePacket> {
 
-    override fun handle(packet: ClosePasturePacket, client: Minecraft) {
+    override fun handle(packet: ClosePasturePacket, Minecraft client) {
         if (client.screen !is PCGUI) {
             return
         }

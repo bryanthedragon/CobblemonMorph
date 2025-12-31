@@ -73,6 +73,6 @@ abstract class SpawnDetailPreset {
 
     fun resolveCondition(spawnDetail: SpawnDetail, conditionJson: JsonObject): SpawningCondition<*> {
         SpawnLoader.deserializingConditionClass = SpawningCondition.getByName(spawnDetail.spawnablePositionType.defaultCondition)
-        return SpawnLoader.gson.fromJson(conditionJson, SpawningCondition::class.java)
+        return SpawnLoader.gson.fromJson(conditionJson, SpawningCondition.class)
     }
 }

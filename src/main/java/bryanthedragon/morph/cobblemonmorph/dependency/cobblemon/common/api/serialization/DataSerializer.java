@@ -17,7 +17,7 @@ import net.minecraft.nbt.Tag
  * @author Licious
  * @since June 27th, 2022
  */
-interface DataSerializer<N : Tag, J : JsonElement> {
+public interface DataSerializer<N : Tag, J : JsonElement> {
 
     /**
      * Loads the given [N] into the object representation.

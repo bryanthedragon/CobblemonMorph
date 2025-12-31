@@ -23,10 +23,10 @@ import net.minecraft.world.phys.AABB
  * @author Hiroku
  * @since February 3rd, 2024
  */
-class FishingSpawnablePosition(
+public class FishingSpawnablePosition(
     cause: FishingSpawnCause,
-    world: ServerLevel,
-    pos: BlockPos,
+    ServerLevel world,
+    (BlockPos pos,
     influences: MutableList<SpawningInfluence>
 ) : BasicSpawnablePosition(
     cause = cause,

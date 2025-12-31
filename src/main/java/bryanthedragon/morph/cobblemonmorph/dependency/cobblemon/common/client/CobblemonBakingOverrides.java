@@ -17,7 +17,8 @@ import net.minecraft.resources.ResourceLocation
 /**
  * The purpose of this class is to hold models that we want baked, but aren't associated with
  * any block state. Actual registration happens in ModelLoaderMixin/ModelLoader
- */final class CobblemonBakingOverrides {
+ */
+public final class CobblemonBakingOverrides {
     val models = mutableListOf<BakingOverride>()
 
     // Blocks

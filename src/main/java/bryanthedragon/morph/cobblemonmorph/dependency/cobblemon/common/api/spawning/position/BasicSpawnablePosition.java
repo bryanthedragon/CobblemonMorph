@@ -24,13 +24,13 @@ import net.minecraft.core.BlockPos
  */
 open class BasicSpawnablePosition(
     override val cause: SpawnCause,
-    override val world: ServerLevel,
-    override val position: BlockPos,
+    override val ServerLevel world,
+    override val BlockPos position,
     override val light: Int,
     override val skyLight: Int,
     override val canSeeSky: Boolean,
     override val influences: MutableList<SpawningInfluence>
 ) : SpawnablePosition() {
     val singlePointStructureCache = StructureChunkCache()
-    override fun getStructureCache(pos: BlockPos) = singlePointStructureCache
+    override fun getStructureCache(BlockPos pos) = singlePointStructureCache
 }

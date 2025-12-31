@@ -8,48 +8,48 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench
 
-import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.struct.ArrayStruct
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.struct.VariableStruct
-import com.bedrockk.molang.runtime.value.DoubleValue
-import com.bedrockk.molang.runtime.value.MoValue
-import com.bedrockk.molang.runtime.value.StringValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.addFunctions
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.setup
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.util.RidingAnimationData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.Schedulable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ClientMoLangFunctions.setupClient
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.BedrockParticleOptionsRepository
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.ParticleStorm
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.MatrixWrapper
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.ActiveAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.PoseAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.PrimaryAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockParticleKeyframe
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.QuirkData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PosableEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getIntOrNull
-import com.mojang.brigadier.StringReader
-import com.mojang.brigadier.exceptions.CommandSyntaxException
-import java.util.concurrent.ConcurrentLinkedQueue
-import net.minecraft.client.Minecraft
-import net.minecraft.client.multiplayer.ClientLevel
-import net.minecraft.client.resources.sounds.SimpleSoundInstance
-import net.minecraft.commands.arguments.item.ItemParser
-import net.minecraft.sounds.SoundEvent
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.phys.Vec3
+import com.bedrockk.molang.runtime.MoLangRuntime;
+import com.bedrockk.molang.runtime.struct.ArrayStruct;
+import com.bedrockk.molang.runtime.struct.QueryStruct;
+import com.bedrockk.molang.runtime.struct.VariableStruct;
+import com.bedrockk.molang.runtime.value.DoubleValue;
+import com.bedrockk.molang.runtime.value.MoValue;
+import com.bedrockk.molang.runtime.value.StringValue;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.addFunctions;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.setup;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.util.RidingAnimationData;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.Schedulable;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ClientMoLangFunctions.setupClient;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.BedrockParticleOptionsRepository;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.ParticleStorm;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.MatrixWrapper;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.ActiveAnimation;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.PoseAnimation;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.PrimaryAnimation;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockActiveAnimation;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockParticleKeyframe;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockPoseAnimation;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Pose;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.ModelQuirk;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk.QuirkData;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PosableEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getIntOrNull;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.commands.arguments.item.ItemParser;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * Represents some kind of animation state for an entity or GUI element or other renderable component in the game.
@@ -66,7 +66,7 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since December 5th, 2021
  */
-abstract class PosableState : Schedulable {
+public abstract class PosableState : Schedulable {
     var currentModel: PosableModel? = null
         set(value) {
             val changed = field != value
@@ -375,7 +375,7 @@ abstract class PosableState : Schedulable {
             }
         }
 
-    val runtime: MoLangRuntime = MoLangRuntime().setup().setupClient().also {
+    val MoLangRuntime runtime = MoLangRuntime().setup().setupClient().also {
         it.environment.query.addFunctions(functions.functions)
     }
 
@@ -391,7 +391,7 @@ abstract class PosableState : Schedulable {
      * and that needs an entity. This includes updating locators, checking for any primary animation expiry, applying
      * particle effects for any active animation, and updating [age].
      */
-    open fun incrementAge(entity: Entity) {
+    open fun incrementAge(Entity entity) {
         val previousAge = age
         updateAge(age + 1)
         currentModel?.let {
@@ -500,7 +500,7 @@ abstract class PosableState : Schedulable {
     /**
      * Updates the base position of all the locators. Doesn't require the model.
      */
-    fun updateLocatorPosition(position: Vec3) {
+    fun updateLocatorPosition(Vec3 position) {
         locatorStates.values.toList().forEach { it.updatePosition(position) }
     }
 
@@ -529,7 +529,7 @@ abstract class PosableState : Schedulable {
     /**
      * Runs [runEffects] with the ages converted to seconds.
      */
-    fun tickEffects(entity: Entity?, previousAge: Int, newAge: Int) {
+    fun tickEffects(Entity entity?, previousAge: Int, newAge: Int) {
         val previousSeconds = previousAge / 20F
         val newSeconds = newAge / 20F
         runEffects(entity, previousSeconds, newSeconds)
@@ -539,7 +539,7 @@ abstract class PosableState : Schedulable {
      * Runs any effects that are associated with the current state of the entity. This includes running effects for
      * all active animations, the primary animation, and any pose animations that are relevant.
      */
-    fun runEffects(entity: Entity?, previousSeconds: Float, newSeconds: Float) {
+    fun runEffects(Entity entity?, previousSeconds: Float, newSeconds: Float) {
         allActiveAnimations.forEach { it.applyEffects(entity, this, previousSeconds, newSeconds) }
         primaryAnimation?.animation?.applyEffects(entity, this, previousSeconds, newSeconds)
         currentModel?.let { model ->

@@ -28,7 +28,7 @@ import com.google.gson.annotations.SerializedName
  * @author Hiroku
  * @since October 1st, 2023
  */
-class FilterRuleComponent : SpawnRuleComponent {
+public class FilterRuleComponent : SpawnRuleComponent {
     @Transient
     val runtime = MoLangRuntime().setup()
 

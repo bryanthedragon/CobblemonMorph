@@ -19,7 +19,7 @@ import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.Slime
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin
-final class AttackHostileMobsTask {
+public final class AttackHostileMobsTask {
     fun create(): OneShot<LivingEntity> = BehaviorBuilder.create {
         it.group(
             it.registered(MemoryModuleType.ATTACK_TARGET),

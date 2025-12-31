@@ -20,8 +20,8 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-final class FishingRodTooltipGenerator : TooltipGenerator() {
-    override fun generateTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+public final class FishingRodTooltipGenerator : TooltipGenerator() {
+    override fun generateTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         val resultLines = mutableListOf<Component>()
 
         val rod = (stack.item as? PokerodItem)?.pokeRodId?.let { PokeRods.getPokeRod(it) } ?: return null
@@ -61,7 +61,7 @@ final class FishingRodTooltipGenerator : TooltipGenerator() {
     }
 
     override fun generateAdditionalTooltip(
-        stack: ItemStack,
+        ItemStack stack,
         lines: MutableList<Component>
     ): MutableList<Component>? {
         val resultLines = mutableListOf<Component>()

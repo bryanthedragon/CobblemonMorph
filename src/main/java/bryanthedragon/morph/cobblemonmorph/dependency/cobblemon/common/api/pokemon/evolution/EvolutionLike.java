@@ -16,7 +16,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.poke
  * @author Licious
  * @since April 28th, 2022
  */
-interface EvolutionLike {
+public interface EvolutionLike {
 
     /**
      * The unique id of the evolution.

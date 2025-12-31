@@ -12,11 +12,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battl
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import java.util.UUID
 import net.minecraft.network.chat.MutableComponent
-class ClientBattleActor(
+public class ClientBattleActor(
     /** The showdown pIndexing, p0, p2, etc*/
-    val showdownId: String,
-    val displayName: MutableComponent,
-    val uuid: UUID,
+    val String showdownId,
+    val MutableComponent displayName,
+    val UUID uuid,
     val type: ActorType
 ) {
     lateinit var side: ClientBattleSide

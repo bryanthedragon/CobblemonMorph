@@ -14,20 +14,20 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class OriginalTrainerUpdatePacket(pokemon: () -> Pokemon?, username: String?) : SingleUpdatePacket<String?, OriginalTrainerUpdatePacket>(pokemon, username) {
+public class OriginalTrainerUpdatePacket(pokemon: () -> Pokemon?, userString name?) : SingleUpdatePacket<String?, OriginalTrainerUpdatePacket>(pokemon, username) {
     override val id = ID
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(this.value) { _, v -> buffer.writeString(v) }
     }
 
-    override fun set(pokemon: Pokemon, value: String?) {
+    override fun set(Pokemon pokemon, value: String?) {
         pokemon.originalTrainerName = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("original_trainer_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): OriginalTrainerUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): OriginalTrainerUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val originalTrainer = buffer.readNullable { buffer.readString() }
             return OriginalTrainerUpdatePacket(pokemon, originalTrainer)

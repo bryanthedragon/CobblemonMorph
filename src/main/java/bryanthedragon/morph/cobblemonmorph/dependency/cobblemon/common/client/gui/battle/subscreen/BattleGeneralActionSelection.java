@@ -24,7 +24,7 @@ import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class BattleGeneralActionSelection(
+public class BattleGeneralActionSelection(
     battleGUI: BattleGUI,
     request: SingleActionRequest
 ) : BattleActionSelection(

@@ -15,19 +15,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class AspectsUpdatePacket(pokemon: () -> Pokemon?, value: Set<String>): SingleUpdatePacket<Set<String>, AspectsUpdatePacket>(pokemon, value) {
+public class AspectsUpdatePacket(pokemon: () -> Pokemon?, value: Set<String>): SingleUpdatePacket<Set<String>, AspectsUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(this.value) { pb, value -> pb.writeString(value) }
     }
 
-    override fun set(pokemon: Pokemon, value: Set<String>) {
+    override fun set(Pokemon pokemon, value: Set<String>) {
         pokemon.forcedAspects = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("aspects_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): AspectsUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): AspectsUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val aspects = buffer.readList(ByteBuf::readString).toSet()
             return AspectsUpdatePacket(pokemon, aspects)

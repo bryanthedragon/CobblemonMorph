@@ -13,16 +13,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class SetPastureConflictPacket(val pokemonId: UUID, val enabled: Boolean) : NetworkPacket<SetPastureConflictPacket> {
-    companion object {
+public class SetPastureConflictPacket(val UUID pokemonId, val Boolean enabled) : NetworkPacket<SetPastureConflictPacket> {
+    final class Companion {
         val ID = cobblemonResource("set_pasture_conflict")
-        fun decode(buf: RegistryFriendlyByteBuf) =
+        fun decode(RegistryFriendlyByteBuf buf) =
             SetPastureConflictPacket(buf.readUUID(), buf.readBoolean())
     }
 
     override val id = ID
 
-    override fun encode(buf: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buf) {
         buf.writeUUID(pokemonId)
         buf.writeBoolean(enabled)
     }

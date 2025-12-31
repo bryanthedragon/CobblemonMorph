@@ -34,13 +34,13 @@ abstract class ActivityAwareBehavior<E : LivingEntity> : Behavior<E> {
         return activities.any(entity.brain::isActive)
     }
 
-    override fun canStillUse(level: ServerLevel, entity: E, gameTime: Long) = isStillDoingActivity(entity)
+    override fun canStillUse(ServerLevel level, entity: E, gameTime: Long) = isStillDoingActivity(entity)
 
-    open fun onInterrupted(level: ServerLevel, entity: E, gameTime: Long) {
+    open fun onInterrupted(ServerLevel level, entity: E, gameTime: Long) {
         // No-op
     }
 
-    override fun stop(level: ServerLevel, entity: E, gameTime: Long) {
+    override fun stop(ServerLevel level, entity: E, gameTime: Long) {
         super.stop(level, entity, gameTime)
         if (!isStillDoingActivity(entity)) {
             onInterrupted(level, entity, gameTime)

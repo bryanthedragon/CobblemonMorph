@@ -41,9 +41,9 @@ abstract class OneToOneFileStoreAdapter<S>(
     private val fileExtension: String
 ) : FileStoreAdapter<S>, CobblemonAdapterParent<S>() {
     abstract fun save(file: File, serialized: S)
-    abstract fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, uuid: UUID, registryAccess: RegistryAccess): T?
+    abstract fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, UUID uuid, RegistryAccess registryAccess): T?
 
-    fun getFile(storeClass: Class<out PokemonStore<*>>, uuid: UUID): File {
+    fun getFile(storeClass: Class<out PokemonStore<*>>, UUID uuid): File {
         val className = storeClass.simpleName.lowercase()
         val subfolder1 = if (folderPerClass) "$className/" else ""
         val subfolder2 = if (useNestedFolders) "${uuid.toString().substring(0, 2)}/" else ""
@@ -54,7 +54,7 @@ abstract class OneToOneFileStoreAdapter<S>(
         return file
     }
 
-    override fun save(storeClass: Class<out PokemonStore<*>>, uuid: UUID, serialized: S) {
+    override fun save(storeClass: Class<out PokemonStore<*>>, UUID uuid, serialized: S) {
         val file = getFile(storeClass, uuid)
         val tempFile = File(file.absolutePath + ".temp")
         val oldFile = File(file.absolutePath + ".old")
@@ -67,7 +67,7 @@ abstract class OneToOneFileStoreAdapter<S>(
         tempFile.delete()
     }
 
-    override fun <E : StorePosition, T : PokemonStore<E>> provide(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+    override fun <E : StorePosition, T : PokemonStore<E>> provide(storeClass: Class<T>, UUID uuid, RegistryAccess registryAccess): T? {
         val file = getFile(storeClass, uuid)
         val oldFile = File(file.absolutePath + ".old")
 
@@ -78,7 +78,7 @@ abstract class OneToOneFileStoreAdapter<S>(
                     if (oldFile.exists() && oldFile.length() > 0L) {
                         var result = load(oldFile, storeClass, uuid, registryAccess) ?: let {
                             LOGGER.error("Pokémon save file for ${storeClass.simpleName} ($uuid) was corrupted. A fresh file will be created.")
-                            var result = storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                            var result = storeClass.getConstructor(UUID.class).newInstance(uuid)
                             save(storeClass, uuid, serialize(result, registryAccess))
                             oldFile.delete()
                             return result
@@ -88,8 +88,8 @@ abstract class OneToOneFileStoreAdapter<S>(
                         result
                     }
                     else {
-                        storeClass.getConstructor(UUID::class.java).newInstance(uuid)
-                        var result = storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                        storeClass.getConstructor(UUID.class).newInstance(uuid)
+                        var result = storeClass.getConstructor(UUID.class).newInstance(uuid)
                         save(storeClass, uuid, serialize(result, registryAccess))
                         oldFile.delete()
                         result

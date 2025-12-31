@@ -13,11 +13,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.syncher.EntityDataSerializer
-final class PoseTypeDataSerializer : EntityDataSerializer<PoseType> {
+public final class PoseTypeDataSerializer : EntityDataSerializer<PoseType> {
     val ID = cobblemonResource("pose_type")
-    fun read(buf: RegistryFriendlyByteBuf) = PoseType.values()[buf.readInt()]
+    fun read(RegistryFriendlyByteBuf buf) = PoseType.values()[buf.readInt()]
     override fun copy(value: PoseType) = value
-    fun write(buf: RegistryFriendlyByteBuf, value: PoseType) {
+    fun write(RegistryFriendlyByteBuf buf, value: PoseType) {
         buf.writeInt(value.ordinal)
     }
 

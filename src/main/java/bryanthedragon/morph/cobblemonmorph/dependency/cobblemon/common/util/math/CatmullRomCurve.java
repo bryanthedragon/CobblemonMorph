@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.mat
 
 import kotlin.math.floor
 
-class CatmullRomCurve(val nodes: List<Double>) {
+public class CatmullRomCurve(val nodes: List<Double>) {
     fun getY(t: Double): Double {
         val points = nodes
 
@@ -72,7 +72,7 @@ fun cubicBezierP3(t: Double, p: Double): Double {
     return t * t * t * p
 }
 
-class CubedBezierCurve(
+public class CubedBezierCurve(
     val v0: Double,
     val v1: Double,
     val v2: Double,

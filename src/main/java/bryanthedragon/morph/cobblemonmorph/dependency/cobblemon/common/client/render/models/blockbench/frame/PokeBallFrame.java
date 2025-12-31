@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
 
 import net.minecraft.client.model.geom.ModelPart
 
-interface PokeBallFrame : ModelFrame {
+public interface PokeBallFrame : ModelFrame {
     val base: ModelPart
     val lid: ModelPart
 }

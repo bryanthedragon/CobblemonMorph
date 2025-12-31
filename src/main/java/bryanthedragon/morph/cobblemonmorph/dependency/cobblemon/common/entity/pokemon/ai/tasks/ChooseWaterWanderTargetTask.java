@@ -16,7 +16,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.WalkTarget
-final class ChooseWaterWanderTargetTask {
+public final class ChooseWaterWanderTargetTask {
     fun create(chance: Int, horizontalRange: Int, verticalRange: Int, swimSpeed: Float, completionRange: Int): OneShot<PathfinderMob> {
         return BehaviorBuilder.create {
             it.group(

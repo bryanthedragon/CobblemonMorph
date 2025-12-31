@@ -6,22 +6,25 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.progress
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.progress;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgress
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgressType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgressTypes
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.requirements.BattleCriticalHitsRequirement
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-import com.google.gson.JsonObject
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.resources.ResourceLocation
-import com.mojang.serialization.Codec
-import com.mojang.serialization.MapCodec
-import com.mojang.serialization.codecs.RecordCodecBuilder
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgress;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgressType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgressTypes;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.requirements.BattleCriticalHitsRequirement;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource;
 
-class LastBattleCriticalHitsEvolutionProgress : EvolutionProgress<LastBattleCriticalHitsEvolutionProgress.Progress> {
+import com.google.gson.JsonObject;
+
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+public class LastBattleCriticalHitsEvolutionProgress extends EvolutionProgress<LastBattleCriticalHitsEvolutionProgress.Progress> {
 
     private var progress = Progress(0)
 
@@ -37,13 +40,13 @@ class LastBattleCriticalHitsEvolutionProgress : EvolutionProgress<LastBattleCrit
         this.updateProgress(Progress(0))
     }
 
-    override fun shouldKeep(pokemon: Pokemon): Boolean = supports(pokemon)
+    override fun shouldKeep(Pokemon pokemon): Boolean = supports(pokemon)
 
     override fun type(): EvolutionProgressType<*> = EvolutionProgressTypes.LAST_BATTLE_CRITICAL_HITS
 
     record Progress(val amount: Int)
 
-    companion object {
+    final class Companion {
 
         val ID = cobblemonResource(BattleCriticalHitsRequirement.ADAPTER_VARIANT)
         private const val AMOUNT = "amount"
@@ -55,7 +58,7 @@ class LastBattleCriticalHitsEvolutionProgress : EvolutionProgress<LastBattleCrit
             ).apply(instance) { amount -> LastBattleCriticalHitsEvolutionProgress().apply { updateProgress(Progress(amount)) } }
         }
 
-        fun supports(pokemon: Pokemon): Boolean {
+        fun supports(Pokemon pokemon): Boolean {
             return pokemon.form.evolutions.any { evolution ->
                 evolution.requirements.any { requirement ->
                     requirement is BattleCriticalHitsRequirement

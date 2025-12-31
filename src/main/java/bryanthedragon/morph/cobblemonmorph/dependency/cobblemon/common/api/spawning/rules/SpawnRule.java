@@ -19,11 +19,11 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since September 30th, 2023
  */
-class SpawnRule {
+public class SpawnRule {
 
-    lateinit var id: ResourceLocation
-    val displayName: Component = "Spawn Rule".text()
-    var enabled: Boolean = true
+    lateinit var ResourceLocation id
+    val Component displayName = "Spawn Rule".text()
+    var Boolean enabled = true
 //    val pool: String? = null Kinda difficult to see how this would get used in practice.
     val components: MutableList<SpawnRuleComponent> = mutableListOf()
 }

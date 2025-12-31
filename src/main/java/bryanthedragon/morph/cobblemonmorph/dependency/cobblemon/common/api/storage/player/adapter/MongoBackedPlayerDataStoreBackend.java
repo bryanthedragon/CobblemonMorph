@@ -23,7 +23,7 @@ import org.bson.Document
 abstract class MongoBackedPlayerDataStoreBackend<T : InstancedPlayerData>(
     mongoClient: MongoClient, databaseName: String, collectionName: String, type: PlayerInstancedDataStoreType
 ) : MongoBasedPlayerDataStoreBackend<T>(mongoClient, type, databaseName, collectionName) {
-    abstract val gson: Gson
+    abstract val Gson gson
 
     //The class GSON needs to deserialize to
     abstract val classToken: TypeToken<T>
@@ -39,7 +39,7 @@ abstract class MongoBackedPlayerDataStoreBackend<T : InstancedPlayerData>(
         }
     }
 
-    override fun load(uuid: UUID): T {
+    override fun load(UUID uuid): T {
         val filter = Document("uuid", uuid.toString())
         val document = collection.find(filter).first()
 

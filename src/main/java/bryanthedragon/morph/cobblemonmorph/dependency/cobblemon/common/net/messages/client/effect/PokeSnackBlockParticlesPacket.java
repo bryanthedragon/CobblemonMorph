@@ -17,22 +17,22 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 /**
  * Handled by [PokeSnackBlockParticlesHandler].
  */
-class PokeSnackBlockParticlesPacket(
-    val blockPos: BlockPos,
-    val entityPos: BlockPos?
+public class PokeSnackBlockParticlesPacket(
+    val blockBlockPos pos,
+    val entity(BlockPos pos?
 ) : NetworkPacket<PokeSnackBlockParticlesPacket> {
     override val id = ID
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("poke_snack_block_particles")
-        fun decode(buffer: RegistryFriendlyByteBuf): PokeSnackBlockParticlesPacket =
+        fun decode(RegistryFriendlyByteBuf buffer): PokeSnackBlockParticlesPacket =
             PokeSnackBlockParticlesPacket(
                 buffer.readBlockPos(),
                 buffer.readNullable { buffer.readBlockPos() }
             )
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBlockPos(blockPos)
         buffer.writeNullable(entityPos) { _, v -> buffer.writeBlockPos(v) }
     }

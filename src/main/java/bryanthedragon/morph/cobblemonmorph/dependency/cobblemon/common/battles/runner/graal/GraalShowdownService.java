@@ -42,7 +42,7 @@ import kotlin.text.replace
  * @since February 27, 2023
  * @author Hiroku, landonjw
  */
-class GraalShowdownService : ShowdownService {
+public class GraalShowdownService : ShowdownService {
 
     @Transient
     lateinit var context: Context
@@ -73,7 +73,7 @@ class GraalShowdownService : ShowdownService {
                 {
                     val default = FileSystem.newDefaultFileSystem()
                     override fun parsePath(uri: URI) = default.parsePath(uri)
-                    override fun parsePath(path: String) = default.parsePath(path)
+                    override fun parsePath(String path) = default.parsePath(path)
                     override fun createDirectory(dir: Path, vararg attrs: FileAttribute<*>) = default.createDirectory(dir, *attrs)
                     override fun delete(path: Path) = default.delete(path)
                     override fun newByteChannel(path: Path, options: MutableSet<out OpenOption>, vararg attrs: FileAttribute<*>) = default.newByteChannel(path, options, *attrs)
@@ -129,14 +129,14 @@ class GraalShowdownService : ShowdownService {
         startBattleFunction.execute(this, battle.battleId.toString(), messages)
     }
 
-    override fun send(battleId: UUID, messages: Array<String>) {
+    override fun send(UUID battleId, messages: Array<String>) {
         sendToShowdown(battleId, messages)
     }
 
     override fun getRegistryData(type: String): JsonArray {
         val func = context.getBindings("js").getMember("getData")
         val result = func.execute(type).asString()
-        return gson.fromJson(result, JsonArray::class.java)
+        return gson.fromJson(result, JsonArray.class)
     }
 
     override fun sendRegistryData(data: Map<String, String>, type: String) {
@@ -167,7 +167,7 @@ class GraalShowdownService : ShowdownService {
         func.execute()
     }
 
-    private fun sendToShowdown(battleId: UUID, messages: Array<String>) {
+    private fun sendToShowdown(UUID battleId, messages: Array<String>) {
         sendBattleMessageFunction.execute(battleId.toString(), messages)
     }
 

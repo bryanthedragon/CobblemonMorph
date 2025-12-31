@@ -19,7 +19,7 @@ import net.minecraft.world.effect.MobEffectInstance
 record MobEffectsComponent(
         val mobEffects: List<MobEffectInstance>
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<MobEffectsComponent> = RecordCodecBuilder.create { builder ->
             builder.group(
                     MobEffectInstance.CODEC.listOf().fieldOf("mob_effects").forGetter { it.mobEffects }

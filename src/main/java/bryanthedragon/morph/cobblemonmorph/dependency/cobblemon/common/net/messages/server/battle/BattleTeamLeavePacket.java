@@ -22,12 +22,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author JazzMcNade
  * @since April 15th, 2024
  */
-class BattleTeamLeavePacket() : NetworkPacket<BattleTeamLeavePacket> {
+public class BattleTeamLeavePacket() : NetworkPacket<BattleTeamLeavePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_team_leave")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleTeamLeavePacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleTeamLeavePacket()
     }
 }

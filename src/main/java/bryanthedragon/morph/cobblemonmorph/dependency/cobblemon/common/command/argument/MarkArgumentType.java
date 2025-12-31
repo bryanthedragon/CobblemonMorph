@@ -22,12 +22,12 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import java.util.concurrent.CompletableFuture
 
-class MarkArgumentType: ArgumentType<Mark> {
+public class MarkArgumentType: ArgumentType<Mark> {
 
     override fun parse(reader: StringReader): Mark {
         try {
             return reader.asIdentifierDefaultingNamespace().let { Marks.getByIdentifier(it) } ?: throw Exception()
-        } catch (e: Exception) {
+        } catch (Exception e) {
             throw SimpleCommandExceptionType(INVALID_MARK).createWithContext(reader)
         }
     }
@@ -41,15 +41,15 @@ class MarkArgumentType: ArgumentType<Mark> {
 
     override fun getExamples() = EXAMPLES
 
-    companion object {
+    final class Companion {
 
         val EXAMPLES: List<String> = listOf("cobblemon:ribbon_event")
         val INVALID_MARK: MutableComponent = Component.translatable("cobblemon.command.mark.invalid")
 
         fun mark() = MarkArgumentType()
 
-        fun <S> getMark(context: CommandContext<S>, name: String): Mark {
-            return context.getArgument(name, Mark::class.java)
+        fun <S> getMark(context: CommandContext<S>, String name): Mark {
+            return context.getArgument(name, Mark.class)
         }
     }
 }

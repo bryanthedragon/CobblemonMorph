@@ -25,7 +25,7 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since January 31st, 2022
  */
-interface SpawningInfluence {
+public interface SpawningInfluence {
     /** Whether this influence has passed and should be removed. */
     fun isExpired(): Boolean = false
     /** Runs for each influence when added to the spawnable position. */
@@ -37,7 +37,7 @@ interface SpawningInfluence {
     /** Affects the spawn action prior to it generating the entity. */
     fun affectAction(action: SpawnAction<*>) {}
     /** Applies some influence over the entity that's been spawned. */
-    fun affectSpawn(action: SpawnAction<*>, entity: Entity) {}
+    fun affectSpawn(action: SpawnAction<*>, Entity entity) {}
     /** Applies some influence over the weight of spawn buckets. */
     fun affectBucketWeights(bucketWeights: MutableMap<SpawnBucket, Float>) {}
     /** Normalizes all bucket weights to add up to 100 */
@@ -50,7 +50,7 @@ interface SpawningInfluence {
         }
     }
     /** Filters positions that could be usable for a spawnable position calculator */
-    fun isAllowedPosition(world: ServerLevel, pos: BlockPos, spawnablePositionCalculator: SpawnablePositionCalculator<*, *>): Boolean = true
+    fun isAllowedPosition(ServerLevel world, (BlockPos pos, spawnablePositionCalculator: SpawnablePositionCalculator<*, *>): Boolean = true
     /**
      * Injects additional spawn possibilities for the given bucket and spawnable position.
      *

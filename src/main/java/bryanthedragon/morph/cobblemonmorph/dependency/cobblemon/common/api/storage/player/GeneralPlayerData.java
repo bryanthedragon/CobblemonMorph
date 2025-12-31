@@ -21,18 +21,18 @@ import net.minecraft.resources.ResourceLocation
  * An [InstancedPlayerData] for misc stuff, mostly starters
  */
 record GeneralPlayerData(
-    override val uuid: UUID,
+    override val UUID uuid,
     var starterPrompted: Boolean,
     var starterLocked: Boolean,
     var starterSelected: Boolean,
-    var starterUUID: UUID?,
+    var starterUUID uuid?,
     var keyItems: MutableSet<ResourceLocation>,
     var battleTheme: ResourceLocation?,
     val extraData: MutableMap<String, PlayerDataExtension>,
 ) : InstancedPlayerData {
     var advancementData: PlayerAdvancementData = PlayerAdvancementData()
 
-    fun sendToPlayer(player: ServerPlayer) {
+    fun sendToPlayer(ServerPlayer player) {
         player.sendPacket(SetClientPlayerDataPacket(PlayerInstancedDataStoreTypes.GENERAL, this.toClientData()))
     }
 

@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-final class LookAtBattlingPokemonTask {
+public final class LookAtBattlingPokemonTask {
     fun create(minDurationTicks: Int = 60, maxDurationTicks: Int = 100): OneShot<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(

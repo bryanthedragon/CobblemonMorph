@@ -12,13 +12,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.N
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class DismountPokemonPacket : NetworkPacket<DismountPokemonPacket> {
+public class DismountPokemonPacket : NetworkPacket<DismountPokemonPacket> {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("dismount_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = DismountPokemonPacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = DismountPokemonPacket()
     }
 }

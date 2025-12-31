@@ -18,4 +18,4 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
  * @author Hiroku
  * @since January 7th, 2022
  */
-class PokemonEntitySaveToWorldEvent(val pokemonEntity: PokemonEntity) : Cancelable()
+public class PokemonEntitySaveToWorldEvent(val pokemonEntity: PokemonEntity) : Cancelable()

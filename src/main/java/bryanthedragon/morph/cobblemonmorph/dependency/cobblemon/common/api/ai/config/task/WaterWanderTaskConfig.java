@@ -36,19 +36,19 @@ import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.Vec3
 import kotlin.math.ceil
 
-class WaterWanderTaskConfig : SingleTaskConfig {
+public class WaterWanderTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(WANDER, "water_wanders", true).asExpressible()
     val wanderChance = numberVariable(WANDER, "water_wander_chance", 1/(20 * 3F)).asExpressible()
     val speedMultiplier = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
     val horizontalRange: ExpressionOrEntityVariable = Either.left("10.0".asExpression())
     val verticalRange: ExpressionOrEntityVariable = Either.left("7.0".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(condition, wanderChance, speedMultiplier).asVariables()
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
@@ -87,7 +87,7 @@ class WaterWanderTaskConfig : SingleTaskConfig {
 
                     pathCooldown.setWithExpiry(true, wanderControl.pathCooldownTicks.toLong())
 
-                    var pos: BlockPos? = null
+                    var (BlockPos pos? = null
                     var target: Vec3? = null
                     var attempts = 0
 

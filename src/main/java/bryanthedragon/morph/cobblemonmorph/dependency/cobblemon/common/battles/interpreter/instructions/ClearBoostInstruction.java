@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Yaseen
  * @since October 26th, 2024
  */
-class ClearBoostInstruction(val message: BattleMessage): InterpreterInstruction {
+public class ClearBoostInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val battlePokemon = message.battlePokemon(0, battle) ?: return

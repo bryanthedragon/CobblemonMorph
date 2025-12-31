@@ -25,14 +25,14 @@ import java.lang.reflect.Type
  * @author Licious
  * @since July 2nd, 2022
  */
-class TagKeyAdapter<T>(private val key: ResourceKey<Registry<T>>) : JsonDeserializer<TagKey<T>>, JsonSerializer<TagKey<T>> {
+public class TagKeyAdapter<T>(private val key: ResourceKey<Registry<T>>) : JsonDeserializer<TagKey<T>>, JsonSerializer<TagKey<T>> {
 
-    override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): TagKey<T> {
+    override fun deserialize(JsonElement jElement, Type type, JsonDeserializationContext ctx): TagKey<T> {
         val identifier = ResourceLocation.parse(element.asString.replace("#", ""))
         return TagKey.create(this.key, identifier)
     }
 
-    override fun serialize(tagKey: TagKey<T>, type: Type, ctx: JsonSerializationContext): JsonElement {
+    override fun serialize(tagKey: TagKey<T>, Type type, JsonSerializationContext ctx): JsonElement {
         return JsonPrimitive(tagKey.location.toString())
     }
 

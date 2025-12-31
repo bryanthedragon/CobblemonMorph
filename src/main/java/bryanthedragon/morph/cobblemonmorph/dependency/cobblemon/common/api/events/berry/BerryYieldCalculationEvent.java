@@ -28,11 +28,11 @@ import net.minecraft.world.level.block.state.BlockState
  * @author Licious
  * @since November 28th, 2022
  */
-class BerryYieldCalculationEvent(
+public class BerryYieldCalculationEvent(
     override val berry: Berry,
-    val world: Level,
-    val state: BlockState,
-    val pos: BlockPos,
+    val Level world,
+    val BlockState state,
+    val (BlockPos pos,
     val placer: LivingEntity?,
     yield: Int,
     val passedGrowthFactors: Collection<GrowthFactor>

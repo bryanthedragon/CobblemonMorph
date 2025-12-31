@@ -24,8 +24,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @author Hiroku
  * @since December 16th, 2022
  */
-class MoonPhaseRange : IntRanges {
-    companion object {
+public class MoonPhaseRange : IntRanges {
+    final class Companion {
         val moonPhaseRanges = mutableMapOf(
             "crescent" to MoonPhaseRange(3..3, 5..5),
             "gibbous" to MoonPhaseRange(1..1, 7..7),

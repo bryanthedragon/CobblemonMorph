@@ -8,5 +8,5 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.client
 
-class ClientSpeciesPokedexRecord {
+public class ClientSpeciesPokedexRecord {
 }

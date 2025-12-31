@@ -15,8 +15,8 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
-final class NPCClassReferenceAdapter : JsonDeserializer<NPCClass> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): NPCClass {
+public final class NPCClassReferenceAdapter : JsonDeserializer<NPCClass> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): NPCClass {
         val resourceLocation = json.asString.asIdentifierDefaultingNamespace()
         return NPCClasses.getByIdentifier(resourceLocation)
             ?: throw IllegalArgumentException("No such NPC class: $resourceLocation")

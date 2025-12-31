@@ -7,9 +7,9 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.collections
-class ImmutableArray<T>(private vararg val values: T) {
+public class ImmutableArray<T>(private vararg val values: T) {
 
-    operator fun get(index: Int) = values[index]
+    operator fun get(Int index) = values[index]
 
 }
 

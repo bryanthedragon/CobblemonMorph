@@ -24,7 +24,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
  * @author Deltric
  * @since January 22nd, 2022
  */
-class RequestInstruction(val battleActor: BattleActor, val message: BattleMessage): InterpreterInstruction {
+public class RequestInstruction(val battleActor: BattleActor, val message: BattleMessage): InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
         battle.log("Request Instruction")
 
@@ -32,7 +32,7 @@ class RequestInstruction(val battleActor: BattleActor, val message: BattleMessag
             return
 
         // Parse Json message and update state info for actor
-        val request = BattleRegistry.gson.fromJson(message.rawMessage.split("|request|")[1], ShowdownActionRequest::class.java)
+        val request = BattleRegistry.gson.fromJson(message.rawMessage.split("|request|")[1], ShowdownActionRequest.class)
         request.sanitize(battle, battleActor)
         battle.dispatchGo {
             // This request won't be acted on until the start of next turn

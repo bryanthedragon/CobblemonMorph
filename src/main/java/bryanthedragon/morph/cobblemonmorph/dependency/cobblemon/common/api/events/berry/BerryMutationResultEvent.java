@@ -29,9 +29,9 @@ import net.minecraft.world.level.block.state.BlockState
  */
 record BerryMutationResultEvent(
     override val berry: Berry,
-    val world: Level,
-    val state: BlockState,
-    val pos: BlockPos,
+    val Level world,
+    val BlockState state,
+    val (BlockPos pos,
     val mutations: Set<Berry>,
     var pickedMutation: Berry?
 ) : BerryEvent

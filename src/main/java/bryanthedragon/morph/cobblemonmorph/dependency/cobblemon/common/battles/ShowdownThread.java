@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.r
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
-class ShowdownThread : Thread("Cobblemon Showdown") {
+public class ShowdownThread : Thread("Cobblemon Showdown") {
 
     private val latch = CountDownLatch(1)
 

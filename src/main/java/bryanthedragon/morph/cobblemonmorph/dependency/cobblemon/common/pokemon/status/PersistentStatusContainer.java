@@ -21,8 +21,8 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author Deltric
  */
-class PersistentStatusContainer(
-    val status: PersistentStatus,
+public class PersistentStatusContainer(
+    val PersistentStatus status,
     var secondsLeft: Int = 0
 ) {
     fun isExpired(): Boolean {
@@ -34,20 +34,20 @@ class PersistentStatusContainer(
     }
 
     @Deprecated("Use the Codec instead", ReplaceWith("PersistentStatusContainer.CODEC"))
-    fun saveToNBT(nbt: CompoundTag): CompoundTag {
+    fun saveToNBT(CompoundTag nbt): CompoundTag {
         nbt.putString(DataKeys.POKEMON_STATUS_NAME, status.name.toString())
         nbt.putInt(DataKeys.POKEMON_STATUS_TIMER, secondsLeft)
         return nbt
     }
 
     @Deprecated("Use the Codec instead", ReplaceWith("PersistentStatusContainer.CODEC"))
-    fun saveToJSON(json: JsonObject): JsonObject {
+    fun saveToJSON(JsonObject json): JsonObject {
         json.addProperty(DataKeys.POKEMON_STATUS_NAME, status.name.toString())
         json.addProperty(DataKeys.POKEMON_STATUS_TIMER, secondsLeft)
         return json
     }
 
-    companion object {
+    final class Companion {
 
         /**
          * A [Codec] for [PersistentStatusContainer].
@@ -61,7 +61,7 @@ class PersistentStatusContainer(
         }
 
         @Deprecated("Use the Codec instead", ReplaceWith("PersistentStatusContainer.CODEC"))
-        fun loadFromNBT(nbt: CompoundTag): PersistentStatusContainer? {
+        fun loadFromNBT(CompoundTag nbt): PersistentStatusContainer? {
             val statusId = nbt.getString(DataKeys.POKEMON_STATUS_NAME)
             val activeSeconds = nbt.getInt(DataKeys.POKEMON_STATUS_TIMER)
 
@@ -78,7 +78,7 @@ class PersistentStatusContainer(
         }
 
         @Deprecated("Use the Codec instead", ReplaceWith("PersistentStatusContainer.CODEC"))
-        fun loadFromJSON(json: JsonObject): PersistentStatusContainer? {
+        fun loadFromJSON(JsonObject json): PersistentStatusContainer? {
             val statusId = json.get(DataKeys.POKEMON_STATUS_NAME).asString
             val activeSeconds = json.get(DataKeys.POKEMON_STATUS_TIMER).asInt
 

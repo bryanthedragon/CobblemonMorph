@@ -22,18 +22,18 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.ClipContext
 import java.util.*
 import kotlin.math.pow
-final class RequestInteractionsHandler : ServerNetworkPacketHandler<RequestPlayerInteractionsPacket> {
+public final class RequestInteractionsHandler : ServerNetworkPacketHandler<RequestPlayerInteractionsPacket> {
 
     override fun handle(
         packet: RequestPlayerInteractionsPacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         val world = player.level()
         val targetPlayerEntity = world.getPlayerByUUID(packet.targetId)
-        val options : EnumMap<PlayerInteractOptionsPacket.Options, PlayerInteractOptionsPacket.OptionStatus> = EnumMap<PlayerInteractOptionsPacket.Options, PlayerInteractOptionsPacket.OptionStatus>(PlayerInteractOptionsPacket.Options::class.java)
+        val options : EnumMap<PlayerInteractOptionsPacket.Options, PlayerInteractOptionsPacket.OptionStatus> = EnumMap<PlayerInteractOptionsPacket.Options, PlayerInteractOptionsPacket.OptionStatus>(PlayerInteractOptionsPacket.Options.class)
         if (targetPlayerEntity != null && player.traceFirstEntityCollision(
-            entityClass = LivingEntity::class.java,
+            entityClass = LivingEntity.class,
             ignoreEntity = player,
             maxDistance = Cobblemon.config.battleSpectateMaxDistance,
             collideBlock = ClipContext.Fluid.NONE

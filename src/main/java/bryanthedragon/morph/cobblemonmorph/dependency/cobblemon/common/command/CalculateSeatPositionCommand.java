@@ -20,7 +20,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-final class CalculateSeatPositionCommand {
+public final class CalculateSeatPositionCommand {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(
             Commands.literal("calculateseatpositions")

@@ -6,10 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress;
 
-import com.mojang.serialization.MapCodec
+import com.mojang.serialization.MapCodec;
 
-record EvolutionProgressType<T : EvolutionProgress<*>>(
-    val codec: MapCodec<T>
-)
+public record EvolutionProgressType<T extends EvolutionProgress<?>>(MapCodec<T> CODEC) {
+
+}

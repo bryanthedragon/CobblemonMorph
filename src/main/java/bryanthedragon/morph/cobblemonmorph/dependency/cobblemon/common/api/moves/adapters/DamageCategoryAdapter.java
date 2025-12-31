@@ -17,13 +17,13 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-final class DamageCategoryAdapter: JsonSerializer<DamageCategory>, JsonDeserializer<DamageCategory> {
+public final class DamageCategoryAdapter: JsonSerializer<DamageCategory>, JsonDeserializer<DamageCategory> {
 
-    override fun serialize(src: DamageCategory, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(src: DamageCategory, typeOfT srcype, context: JsonSerializationContext): JsonElement {
         return JsonPrimitive(src.name)
     }
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DamageCategory {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): DamageCategory {
         return DamageCategories.getOrException(json.asString)
     }
 }

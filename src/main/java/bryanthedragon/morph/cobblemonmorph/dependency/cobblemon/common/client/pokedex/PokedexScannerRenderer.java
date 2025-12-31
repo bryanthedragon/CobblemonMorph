@@ -39,8 +39,8 @@ import kotlin.math.*
  *
  * @author Village
  */
-class PokedexScannerRenderer {
-    companion object {
+public class PokedexScannerRenderer {
+    final class Companion {
         val SCAN_OVERLAY_NOTCH_WIDTH = 200
         val CENTER_INFO_FRAME_WIDTH = 128
         val CENTER_INFO_FRAME_HEIGHT = 16

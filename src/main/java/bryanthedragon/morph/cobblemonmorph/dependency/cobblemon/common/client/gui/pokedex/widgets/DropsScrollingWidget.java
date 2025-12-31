@@ -29,7 +29,7 @@ import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 
-class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrollingWidget.DropWidgetEntry>(
+public class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrollingWidget.DropWidgetEntry>(
     width = PokedexGUIConstants.HALF_OVERLAY_WIDTH - 2,
     height = 42,
     left = pX,
@@ -39,7 +39,7 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
 
     var dropTable: DropTable = DropTable()
 
-    companion object {
+    final class Companion {
         val df = DecimalFormat("#.##")
     }
 
@@ -111,11 +111,11 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
         mouseX: Int,
         mouseY: Int,
         delta: Float,
-        index: Int,
+        Int index,
         x: Int,
         y: Int,
-        entryWidth: Int,
-        entryHeight: Int
+        entryInt width,
+        entryInt height
     ) {
         val entry =  this.getEntry(index)
         entry.render(
@@ -124,18 +124,18 @@ class DropsScrollingWidget(val pX: Int, val pY: Int): ScrollingWidget<DropsScrol
         )
     }
 
-    override fun getEntry(index: Int): DropWidgetEntry {
+    override fun getEntry(Int index): DropWidgetEntry {
         return children()[index] as DropWidgetEntry
     }
 
     class DropWidgetEntry(val entry: ItemDropEntry): Slot<DropWidgetEntry>() {
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             y: Int,
             x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
+            entryInt width,
+            entryInt height,
             mouseX: Int,
             mouseY: Int,
             hovered: Boolean,

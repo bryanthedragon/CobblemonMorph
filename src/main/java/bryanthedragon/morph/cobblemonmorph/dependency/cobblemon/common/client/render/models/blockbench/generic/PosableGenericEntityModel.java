@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.generic.GenericBedrockEntity
 import net.minecraft.world.entity.Entity
 
-class PosableGenericEntityModel : PosableEntityModel<GenericBedrockEntity>() {
-    override fun setupEntityTypeContext(entity: Entity?) {
+public class PosableGenericEntityModel : PosableEntityModel<GenericBedrockEntity>() {
+    override fun setupEntityTypeContext(Entity entity?) {
         super.setupEntityTypeContext(entity)
         val entity = entity as? GenericBedrockEntity ?: return
         context.put(RenderContext.ASPECTS, entity.aspects)

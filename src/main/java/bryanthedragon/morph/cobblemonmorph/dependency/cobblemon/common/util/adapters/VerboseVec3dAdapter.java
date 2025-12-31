@@ -11,13 +11,13 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.ada
 import com.google.gson.*
 import net.minecraft.world.phys.Vec3
 import java.lang.reflect.Type
-final class VerboseVec3dAdapter : JsonDeserializer<Vec3>, JsonSerializer<Vec3> {
+public final class VerboseVec3dAdapter : JsonDeserializer<Vec3>, JsonSerializer<Vec3> {
 
     private const val X = "x"
     private const val Y = "y"
     private const val Z = "z"
 
-    override fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): Vec3 {
+    override fun deserialize(jElement: JsonElement, Type type, JsonDeserializationContext context): Vec3 {
         val json = jElement.asJsonObject
         val x = json.get(X).asDouble
         val y = json.get(Y).asDouble
@@ -25,7 +25,7 @@ final class VerboseVec3dAdapter : JsonDeserializer<Vec3>, JsonSerializer<Vec3> {
         return Vec3(x, y, z)
     }
 
-    override fun serialize(vec: Vec3, type: Type, context: JsonSerializationContext) = JsonObject().apply {
+    override fun serialize(Vec3 vec, Type type, context: JsonSerializationContext) = JsonObject().apply {
         addProperty(X, vec.x)
         addProperty(Y, vec.y)
         addProperty(Z, vec.z)

@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.block.state.BlockState
 
-class ApricornItem(block: ApricornBlock) : ItemNameBlockItem(block, Properties()) {
-    override fun canPlace(context: BlockPlaceContext, state: BlockState) = context.player?.isCreative != false && super.canPlace(context, state)
+public class ApricornItem(block: ApricornBlock) : ItemNameBlockItem(block, Properties()) {
+    override fun canPlace(BlockPlaceContext context, BlockState state) = context.player?.isCreative != false && super.canPlace(context, state)
 
 }

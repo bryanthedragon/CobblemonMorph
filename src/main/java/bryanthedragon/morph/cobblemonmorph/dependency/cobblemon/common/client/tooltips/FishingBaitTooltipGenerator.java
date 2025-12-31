@@ -26,17 +26,17 @@ import java.text.DecimalFormat
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-final class FishingBaitTooltipGenerator : TooltipGenerator() {
+public final class FishingBaitTooltipGenerator : TooltipGenerator() {
     private val fishingBaitItemClass by lazy { lang("item_class.fishing_bait").blue() }
 
-    override fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+    override fun generateCategoryTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         if (!SpawnBaitEffects.isFishingBait(stack)) {
             return null
         }
         return mutableListOf(fishingBaitItemClass)
     }
 
-    override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+    override fun generateAdditionalTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         val resultLines = mutableListOf<Component>()
 
         if (SpawnBaitEffects.isFishingBait(stack)) resultLines.add(this.fishingBaitItemClass)

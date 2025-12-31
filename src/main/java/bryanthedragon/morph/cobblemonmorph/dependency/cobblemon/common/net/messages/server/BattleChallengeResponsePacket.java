@@ -26,16 +26,16 @@ import java.util.UUID
  * @author JazzMcNade
  * @since March 12th, 2024
  */
-class BattleChallengeResponsePacket(val targetedEntityId: Int, val requestID: UUID, val selectedPokemonId: UUID, val accept: Boolean) : NetworkPacket<BattleChallengeResponsePacket> {
+public class BattleChallengeResponsePacket(val targetedEntityId: Int, val requestID: UUID, val selectedUUID pokemonId, val accept: Boolean) : NetworkPacket<BattleChallengeResponsePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(this.targetedEntityId)
         buffer.writeUUID(this.requestID)
         buffer.writeUUID(this.selectedPokemonId)
         buffer.writeBoolean(accept)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_challenge_response")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleChallengeResponsePacket(buffer.readInt(), buffer.readUUID(), buffer.readUUID(), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleChallengeResponsePacket(buffer.readInt(), buffer.readUUID(), buffer.readUUID(), buffer.readBoolean())
     }
 }

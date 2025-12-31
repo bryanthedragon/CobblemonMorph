@@ -42,9 +42,9 @@ import net.minecraft.util.Mth
 import kotlin.math.ceil
 import kotlin.math.floor
 
-class PartyOverlay : Gui(Minecraft.getInstance()) {
+public class PartyOverlay : Gui(Minecraft.getInstance()) {
 
-    companion object {
+    final class Companion {
         private const val SLOT_HEIGHT = 30
         private const val SLOT_WIDTH = 62
         private const val SLOT_SPACING = 4
@@ -64,8 +64,8 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         private val levelScroll = cobblemonResource("textures/gui/party/party_slot_portrait_level_up.png")
 
         private val screenExemptions: List<Class<out Screen>> = listOf(
-            ChatScreen::class.java,
-            BattleGUI::class.java
+            ChatScreen.class,
+            BattleGUI.class
         )
 
         fun canRender(): Boolean {
@@ -107,7 +107,7 @@ class PartyOverlay : Gui(Minecraft.getInstance()) {
         attachedToast = false
     }
 
-    fun getPokemonState(index: Int, pokemonUUID: UUID): FloatingState {
+    fun getPokemonState(Int index, pokemonUUID uuid): FloatingState {
         val state = this.stateAtIndex.getOrPut(index) { pokemonUUID to FloatingState() }
         if (state.first != pokemonUUID) {
             val newState = FloatingState()

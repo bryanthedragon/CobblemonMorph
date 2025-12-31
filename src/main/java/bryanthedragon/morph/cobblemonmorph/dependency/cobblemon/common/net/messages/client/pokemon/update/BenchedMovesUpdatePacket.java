@@ -13,19 +13,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class BenchedMovesUpdatePacket(pokemon: () -> Pokemon?, value: BenchedMoves): SingleUpdatePacket<BenchedMoves, BenchedMovesUpdatePacket>(pokemon, value) {
+public class BenchedMovesUpdatePacket(pokemon: () -> Pokemon?, value: BenchedMoves): SingleUpdatePacket<BenchedMoves, BenchedMovesUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         this.value.saveToBuffer(buffer)
     }
 
-    override fun set(pokemon: Pokemon, value: BenchedMoves) {
+    override fun set(Pokemon pokemon, value: BenchedMoves) {
         pokemon.benchedMoves.copyFrom(value)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("benched_moves_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): BenchedMovesUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): BenchedMovesUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val benchedMoves = BenchedMoves().apply { loadFromBuffer(buffer) }
             return BenchedMovesUpdatePacket(pokemon, benchedMoves)

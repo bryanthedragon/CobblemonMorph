@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.moveselect.MoveSelectGUI
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.callback.OpenMoveCallbackPacket
 import net.minecraft.client.Minecraft
-final class OpenMoveCallbackHandler : ClientNetworkPacketHandler<OpenMoveCallbackPacket> {
-    override fun handle(packet: OpenMoveCallbackPacket, client: Minecraft) {
+public final class OpenMoveCallbackHandler : ClientNetworkPacketHandler<OpenMoveCallbackPacket> {
+    override fun handle(packet: OpenMoveCallbackPacket, Minecraft client) {
         client.setScreen(MoveSelectGUI(packet.title, packet.moves, packet.uuid))
     }
 }

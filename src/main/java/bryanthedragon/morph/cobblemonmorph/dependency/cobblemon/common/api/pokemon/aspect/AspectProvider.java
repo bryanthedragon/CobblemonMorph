@@ -19,8 +19,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Hiroku
  * @since May 13th, 2022
  */
-interface AspectProvider {
-    companion object {
+public interface AspectProvider {
+    final class Companion {
         val providers = mutableListOf<AspectProvider>()
         fun register(provider: AspectProvider): AspectProvider {
             providers.add(provider)
@@ -32,7 +32,7 @@ interface AspectProvider {
     }
 
     /** Returns a set of aspects for this [Pokemon]. It's fine if this is empty. */
-    fun provide(pokemon: Pokemon): Set<String>
+    fun provide(Pokemon pokemon): Set<String>
     /** Returns a set of aspects for this [PokemonProperties]. It's fine if this is empty. */
     fun provide(properties: PokemonProperties): Set<String>
 

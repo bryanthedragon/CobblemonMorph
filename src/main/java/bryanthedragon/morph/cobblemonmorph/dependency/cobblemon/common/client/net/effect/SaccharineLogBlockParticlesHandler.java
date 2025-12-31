@@ -16,8 +16,8 @@ import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
-final class SaccharineLogBlockParticlesHandler : ClientNetworkPacketHandler<SaccharineLogBlockParticlesPacket> {
-    override fun handle(packet: SaccharineLogBlockParticlesPacket, client: Minecraft) {
+public final class SaccharineLogBlockParticlesHandler : ClientNetworkPacketHandler<SaccharineLogBlockParticlesPacket> {
+    override fun handle(packet: SaccharineLogBlockParticlesPacket, Minecraft client) {
         val level = Minecraft.getInstance().level ?: return
 
         val blockState = level.getBlockState(packet.blockPos)

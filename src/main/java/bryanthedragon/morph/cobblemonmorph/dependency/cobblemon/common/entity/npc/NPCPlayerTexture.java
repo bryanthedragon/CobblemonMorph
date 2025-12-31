@@ -8,13 +8,13 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc
 
-enum class NPCPlayerModelType {
+public enum NPCPlayerModelType {
     DEFAULT,
     SLIM,
     NONE
 }
 
-class NPCPlayerTexture(
+public class NPCPlayerTexture(
     val texture: ByteArray,
     val model: NPCPlayerModelType
 )

@@ -29,7 +29,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
 import java.awt.Color
 
-class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.riding_stats")), CobblemonRenderable {
+public class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.riding_stats")), CobblemonRenderable {
 
     var ridingStyle: RidingStyle = RidingStyle.LAND
 
@@ -214,7 +214,7 @@ class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.ri
 
     fun getScaledWidth() = Minecraft.getInstance().window.guiScaledWidth
 
-    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun render(GuiGraphics guiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         guiGraphics.fill(0, 0, width, height, Color(0, 0, 0, 100).rgb)
         super.render(guiGraphics, mouseX, mouseY, partialTick)
         drawScaledText(
@@ -269,7 +269,7 @@ class RidingStatsDebugGUI(val vehicle: PokemonEntity) : Screen(lang("ui.debug.ri
 
 }
 
-class SettingsSlider(x: Int, y: Int, width: Int, val label: Component, value: Int, private var minValue: Float, private var maxValue: Float) :
+public class SettingsSlider(x: Int, y: Int, Int width, val label: Component, Int value, private var minValue: Float, private var maxValue: Float) :
     AbstractSliderButton(x, y, width, 20, CommonComponents.EMPTY, 0.0) {
 
     var currentValue: Int
@@ -282,7 +282,7 @@ class SettingsSlider(x: Int, y: Int, width: Int, val label: Component, value: In
         currentValue = value
     }
 
-    fun update(value: Int, min: Float, max: Float) {
+    fun update(Int value, Float min, Float max) {
         minValue = min
         maxValue = max
         currentValue = value
@@ -300,7 +300,7 @@ class SettingsSlider(x: Int, y: Int, width: Int, val label: Component, value: In
     }
 }
 
-class RidingStatInputWidget(x: Int, y: Int, val hint: Component) : EditBox(
+public class RidingStatInputWidget(x: Int, y: Int, val hint: Component) : EditBox(
     Minecraft.getInstance().font,
     x,
     y,

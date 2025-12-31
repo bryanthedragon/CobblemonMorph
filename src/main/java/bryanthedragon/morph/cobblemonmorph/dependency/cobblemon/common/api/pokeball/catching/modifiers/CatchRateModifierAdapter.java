@@ -20,7 +20,7 @@ import kotlin.reflect.KClass
  * @author Licious
  * @since August 8th, 2022
  */
-interface CatchRateModifierAdapter : JsonDeserializer<CatchRateModifier>, JsonSerializer<CatchRateModifier> {
+public interface CatchRateModifierAdapter : JsonDeserializer<CatchRateModifier>, JsonSerializer<CatchRateModifier> {
 
     /**
      * Registers the given type of [CatchRateModifier] to it's associated ID for deserialization.

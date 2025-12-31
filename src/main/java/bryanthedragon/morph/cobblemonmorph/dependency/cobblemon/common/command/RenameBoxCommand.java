@@ -26,9 +26,9 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class RenameBoxCommand {
+public final class RenameBoxCommand {
     private val BOX_DOES_NOT_EXIST = { boxNo: Int -> commandLang("pokebox.box_does_not_exist", boxNo) }
-    private val CANNOT_RENAME_BOX = { name: String -> commandLang("renamebox.cannot_rename_box", name) }
+    private val CANNOT_RENAME_BOX = { String name -> commandLang("renamebox.cannot_rename_box", name) }
 
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(Commands.literal("renamebox")
@@ -48,9 +48,9 @@ final class RenameBoxCommand {
     }
 
     private fun execute(
-        player: ServerPlayer,
+        ServerPlayer player,
         box: Int,
-        name: String
+        String name
     ): Int {
         val playerPc = player.pc()
         if (playerPc.boxes.size < box) {

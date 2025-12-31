@@ -21,14 +21,14 @@ import java.util.UUID
  * @author Hiroku
  * @since April 16th, 2023
  */
-class UnpasturePokemonPacket(val pastureId: UUID, val pokemonId: UUID) : NetworkPacket<UnpasturePokemonPacket> {
-    companion object {
+public class UnpasturePokemonPacket(val pastureId: UUID, val UUID pokemonId) : NetworkPacket<UnpasturePokemonPacket> {
+    final class Companion {
         val ID = cobblemonResource("unpasture_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = UnpasturePokemonPacket(buffer.readUUID(), buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = UnpasturePokemonPacket(buffer.readUUID(), buffer.readUUID())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(pastureId)
         buffer.writeUUID(pokemonId)
     }

@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
 
-class ThunderstruckBehaviour {
+public class ThunderstruckBehaviour {
     val rotateFeatures = mutableListOf<RotateFeature>()
 
     // shorthand of ‘should run special code in thunderHit’
@@ -21,7 +21,7 @@ class ThunderstruckBehaviour {
         it.addFunction("has_rotating_features") { this.rotateFeatures.isNotEmpty() }
     }
 
-    record RotateFeature(val key: String, val chain: List<String>) {
+    record RotateFeature(val String Key, val chain: List<String>) {
         @Transient
         val struct = ObjectValue(this)
     }

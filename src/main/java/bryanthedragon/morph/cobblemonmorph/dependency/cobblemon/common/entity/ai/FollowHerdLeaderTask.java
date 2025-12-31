@@ -28,7 +28,7 @@ import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
-class FollowHerdLeaderTask : Behavior<PokemonEntity>(
+public class FollowHerdLeaderTask : Behavior<PokemonEntity>(
     ImmutableMap.of(
         CobblemonMemories.HERD_LEADER, MemoryStatus.VALUE_PRESENT,
         MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED,
@@ -42,7 +42,7 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
     /** Chance per tick of following the herd leader. */
     val chance = 1 / 60F
 
-    override fun checkExtraStartConditions(level: ServerLevel, owner: PokemonEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel level, owner: PokemonEntity): Boolean {
         leader = level.getEntity(owner.brain.getMemory(CobblemonMemories.HERD_LEADER).map(UUID::fromString).orElse(null) ?: return false) as? PokemonEntity
         val definition = leader?.let { leader -> owner.behaviour.herd.bestMatchLeader(owner, leader) }
         definition?.let {
@@ -52,9 +52,9 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
         return leader != null
     }
 
-    override fun canStillUse(level: ServerLevel, entity: PokemonEntity, gameTime: Long) = leader?.isAlive == true && leader?.uuid?.toString() == entity.brain.getMemory(CobblemonMemories.HERD_LEADER).orElse(null)
+    override fun canStillUse(ServerLevel level, entity: PokemonEntity, gameTime: Long) = leader?.isAlive == true && leader?.uuid?.toString() == entity.brain.getMemory(CobblemonMemories.HERD_LEADER).orElse(null)
 
-    override fun tick(level: ServerLevel, entity: PokemonEntity, gameTime: Long) {
+    override fun tick(ServerLevel level, entity: PokemonEntity, gameTime: Long) {
         val leader = leader ?: return
 
         if (entity.brain.hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
@@ -149,7 +149,7 @@ class FollowHerdLeaderTask : Behavior<PokemonEntity>(
         }
     }
 
-    fun getRandomOffset(entity: PokemonEntity, level: ServerLevel): Vec3 {
+    fun getRandomOffset(entity: PokemonEntity, ServerLevel level): Vec3 {
         val leader = leader ?: return Vec3.ZERO
 
         val minRange = closeEnough.toDouble()

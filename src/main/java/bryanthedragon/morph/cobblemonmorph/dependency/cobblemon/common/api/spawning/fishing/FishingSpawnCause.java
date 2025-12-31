@@ -38,13 +38,13 @@ import net.minecraft.world.item.ItemStack
  * @author Hiroku
  * @since February 3rd, 2024
  */
-class FishingSpawnCause(
+public class FishingSpawnCause(
     spawner: Spawner,
-    entity: Entity?,
+    Entity entity?,
     val rodStack: ItemStack,
     val lureLevel: Int
 ) : SpawnCause(spawner, entity) {
-    companion object {
+    final class Companion {
         const val FISHED_ASPECT = "fished"
         const val DROPS_REROLL_ASPECT = "drops_reroll"
 
@@ -140,7 +140,7 @@ class FishingSpawnCause(
     // Determine the combined bait effects if any
     val baitEffects = SpawnBaitInfluence(SpawnBaitEffects.getEffectsFromRodItemStack(rodStack))
 
-    override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
+    override fun affectSpawn(action: SpawnAction<*>, Entity entity) {
         super.affectSpawn(action, entity)
         if (entity is PokemonEntity) {
             entity.pokemon.forcedAspects += FISHED_ASPECT

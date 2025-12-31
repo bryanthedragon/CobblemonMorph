@@ -17,8 +17,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.TeamMemberAddNotificationPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import net.minecraft.client.Minecraft
-final class TeamMemberAddNotificationHandler : ClientNetworkPacketHandler<TeamMemberAddNotificationPacket> {
-    override fun handle(packet: TeamMemberAddNotificationPacket, client: Minecraft) {
+public final class TeamMemberAddNotificationHandler : ClientNetworkPacketHandler<TeamMemberAddNotificationPacket> {
+    override fun handle(packet: TeamMemberAddNotificationPacket, Minecraft client) {
 
         if (CobblemonClient.teamData.multiBattleTeamMembers.any { it.uuid == packet.teamMemberUUID }) {
             return //already knows about the new member

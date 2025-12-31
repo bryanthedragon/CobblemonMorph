@@ -31,13 +31,13 @@ import kotlin.random.Random
  * @since February 14th, 2022
  */
 open class PlayerSpawner(
-    player: ServerPlayer,
+    ServerPlayer player,
     spawnPool: SpawnPool
 ) : BasicSpawner(
     name = player.name.string,
     spawnPool = spawnPool
 ) {
-    val uuid: UUID = player.uuid
+    val UUID uuid = player.uuid
 
     fun getZoneInput(cause: SpawnCause): SpawningZoneInput? {
         val player = uuid.getPlayer() ?: return null

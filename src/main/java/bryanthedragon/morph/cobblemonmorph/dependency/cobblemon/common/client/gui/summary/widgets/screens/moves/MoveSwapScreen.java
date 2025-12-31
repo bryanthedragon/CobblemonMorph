@@ -28,7 +28,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.toRGB
 import net.minecraft.client.gui.GuiGraphics
 
-class MoveSwapScreen(
+public class MoveSwapScreen(
     x: Int,
     y: Int,
     val movesWidget: MovesWidget,
@@ -39,7 +39,7 @@ class MoveSwapScreen(
     lang("ui.moves.switch"),
     SLOT_HEIGHT + SLOT_SPACING
 ) {
-    companion object {
+    final class Companion {
         const val SLOT_HEIGHT = 18
         const val SLOT_SPACING = 3
 
@@ -53,16 +53,16 @@ class MoveSwapScreen(
         return super.addEntry(entry)
     }
 
-    class MoveSlot(val pane: MoveSwapScreen, val move: MoveTemplate?, val ppRaisedStages: Int, pokemon: Pokemon) : Entry<MoveSlot>() {
+    class MoveSlot(val pane: MoveSwapScreen, val MoveTemplate move?, val ppRaisedStages: Int, Pokemon pokemon) : Entry<MoveSlot>() {
         override fun getNarration() = move?.displayName ?: lang("ui.moves.forget")
         val elementalType = move?.getEffectiveElementalType(pokemon) ?: ElementalTypes.NORMAL
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             rowTop: Int,
             rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
+            rowInt width,
+            rowInt height,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,

@@ -20,14 +20,14 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 
-class PonigiriItem : Item(
+public class PonigiriItem : Item(
         Properties().stacksTo(64)
                 .food(FoodProperties.Builder()
                         .nutrition(2)
                         .saturationModifier(0.55f)
                         .build())
 ) {
-    override fun getName(stack: ItemStack): Component {
+    override fun getName(ItemStack stack): Component {
 
         val ingredients = stack.get(CobblemonItemComponents.INGREDIENT)
                 ?.ingredientIds?.map { it.toString() } ?: emptyList()
@@ -42,7 +42,7 @@ class PonigiriItem : Item(
         return Component.translatable(nameKey)
     }
 
-    override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
+    override fun finishUsingItem(ItemStack stack, Level world, user: LivingEntity): ItemStack {
         val effects = stack.get(CobblemonItemComponents.FOOD)
 
         if (effects != null && !world.isClientSide) {
@@ -54,7 +54,7 @@ class PonigiriItem : Item(
         return super.finishUsingItem(stack, world, user)
     }
 
-    override fun getUseAnimation(stack: ItemStack) = UseAnim.EAT
+    override fun getUseAnimation(ItemStack stack) = UseAnim.EAT
 
     override fun getEatingSound(): SoundEvent {
         return SoundEvents.GENERIC_EAT

@@ -19,21 +19,21 @@ import java.util.UUID
  * @author Hiroku
  * @since April 4th, 2023
  */
-class TetheringUpdatePacket(pokemon: () -> Pokemon?, tetheringId: UUID?) : SingleUpdatePacket<UUID?, TetheringUpdatePacket>(pokemon, tetheringId) {
+public class TetheringUpdatePacket(pokemon: () -> Pokemon?, tetheringId: UUID?) : SingleUpdatePacket<UUID?, TetheringUpdatePacket>(pokemon, tetheringId) {
 
     override val id = ID
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(this.value) { _, v -> buffer.writeUUID(v) }
     }
 
-    override fun set(pokemon: Pokemon, value: UUID?) {
+    override fun set(Pokemon pokemon, value: UUID?) {
         pokemon.tetheringId = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("tethering_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): TetheringUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): TetheringUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val tetheringId = buffer.readNullable { buffer.readUUID() }
             return TetheringUpdatePacket(pokemon, tetheringId)

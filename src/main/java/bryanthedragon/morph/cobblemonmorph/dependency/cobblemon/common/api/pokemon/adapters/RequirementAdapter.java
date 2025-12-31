@@ -20,7 +20,7 @@ import kotlin.reflect.KClass
  * @author Licious
  * @since March 21st, 2022
  */
-interface RequirementAdapter : JsonDeserializer<Requirement>, JsonSerializer<Requirement> {
+public interface RequirementAdapter : JsonDeserializer<Requirement>, JsonSerializer<Requirement> {
 
     /**
      * Registers the given type of [Requirement] to it's associated ID for deserialization.

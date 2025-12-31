@@ -22,22 +22,22 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import java.util.concurrent.CompletableFuture
 import net.minecraft.commands.SharedSuggestionProvider
 
-class NPCClassArgumentType : ArgumentType<NPCClass> {
-    companion object {
+public class NPCClassArgumentType : ArgumentType<NPCClass> {
+    final class Companion {
         val EXAMPLES: List<String> = listOf("cobblemon:example")
         val INVALID_NPC_CLASS = commandLang("error.nonpc")
 
         fun npcClass() = NPCClassArgumentType()
 
-        fun <S> getNPCClass(context: CommandContext<S>, name: String): NPCClass {
-            return context.getArgument(name, NPCClass::class.java)
+        fun <S> getNPCClass(context: CommandContext<S>, String name): NPCClass {
+            return context.getArgument(name, NPCClass.class)
         }
     }
 
     override fun parse(reader: StringReader): NPCClass {
         try {
             return reader.asIdentifierDefaultingNamespace().let { NPCClasses.getByIdentifier(it) } ?: throw Exception()
-        } catch (e: Exception) {
+        } catch (Exception e) {
             throw SimpleCommandExceptionType(INVALID_NPC_CLASS).createWithContext(reader)
         }
     }

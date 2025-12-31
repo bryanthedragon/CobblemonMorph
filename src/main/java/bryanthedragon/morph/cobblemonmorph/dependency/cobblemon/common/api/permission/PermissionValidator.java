@@ -20,7 +20,7 @@ import net.minecraft.server.level.ServerPlayer
  * @author Licious
  * @since September 23rd, 2022
  */
-interface PermissionValidator {
+public interface PermissionValidator {
 
     /**
      * Invoked when the validator replaces the existing one in [Cobblemon.permissionValidator].
@@ -34,7 +34,7 @@ interface PermissionValidator {
      * @param permission The [Permission] being queried.
      * @return If the [player] has the [permission].
      */
-    fun hasPermission(player: ServerPlayer, permission: Permission): Boolean
+    fun hasPermission(ServerPlayer player, permission: Permission): Boolean
     /**
      * Validates a permission for [ServerPlayer] based only on a permission string and a permission level.
      *
@@ -42,7 +42,7 @@ interface PermissionValidator {
      * @param permission The permission string being queried such as cobblemon.command.giveallpokemon.
      * @param level The permission level being queried. 4 is generally used for cheats.
      */
-    fun hasPermission(player: ServerPlayer, permission: String, level: Int): Boolean = hasPermission(player, CobblemonPermission(permission, PermissionLevel.byNumericValue(level)))
+    fun hasPermission(ServerPlayer player, permission: String, level: Int): Boolean = hasPermission(player, CobblemonPermission(permission, PermissionLevel.byNumericValue(level)))
 
     /**
      * Validates a permission for [CommandSource].

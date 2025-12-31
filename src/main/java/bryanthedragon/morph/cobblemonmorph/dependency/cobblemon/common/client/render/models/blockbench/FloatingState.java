@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.sched
  * @author Hiroku
  * @since May 1st, 2022
  */
-class FloatingState : PosableState() {
+public class FloatingState : PosableState() {
     override fun getEntity() = null
     override val schedulingTracker = ClientTaskTracker
     override fun updatePartialTicks(partialTicks: Float) {

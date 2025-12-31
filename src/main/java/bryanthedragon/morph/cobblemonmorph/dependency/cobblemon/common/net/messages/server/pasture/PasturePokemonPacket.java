@@ -21,15 +21,15 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since April 9th, 2023
  */
-class PasturePokemonPacket(val pokemonId: UUID, val pastureId: UUID) : NetworkPacket<PasturePokemonPacket> {
-    companion object {
+public class PasturePokemonPacket(val UUID pokemonId, val pastureId: UUID) : NetworkPacket<PasturePokemonPacket> {
+    final class Companion {
         val ID = cobblemonResource("pasture_pokemon")
 
-        fun decode(buffer: RegistryFriendlyByteBuf) = PasturePokemonPacket(buffer.readUUID(), buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = PasturePokemonPacket(buffer.readUUID(), buffer.readUUID())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(pokemonId)
         buffer.writeUUID(pastureId)
     }

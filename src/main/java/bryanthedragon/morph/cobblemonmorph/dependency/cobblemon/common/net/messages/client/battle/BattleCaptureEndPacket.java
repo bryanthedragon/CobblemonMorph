@@ -22,14 +22,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since July 2nd, 2022
  */
-class BattleCaptureEndPacket(val targetPNX: String, val succeeded: Boolean) : NetworkPacket<BattleCaptureEndPacket> {
+public class BattleCaptureEndPacket(val targetPNX: String, val succeeded: Boolean) : NetworkPacket<BattleCaptureEndPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(targetPNX)
         buffer.writeBoolean(succeeded)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_capture_end")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleCaptureEndPacket(buffer.readString(), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleCaptureEndPacket(buffer.readString(), buffer.readBoolean())
     }
 }

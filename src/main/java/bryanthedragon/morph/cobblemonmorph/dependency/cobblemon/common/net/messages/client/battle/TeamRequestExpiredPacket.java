@@ -25,14 +25,14 @@ import java.util.UUID
  * @author JazzMcNade
  * @since April 4th, 2024
  */
-class TeamRequestExpiredPacket(val senderID: UUID) : NetworkPacket<TeamRequestExpiredPacket> {
-    companion object {
+public class TeamRequestExpiredPacket(val senderID: UUID) : NetworkPacket<TeamRequestExpiredPacket> {
+    final class Companion {
         val ID = cobblemonResource("team_request_expired")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TeamRequestExpiredPacket(buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = TeamRequestExpiredPacket(buffer.readUUID())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(senderID)
     }
 

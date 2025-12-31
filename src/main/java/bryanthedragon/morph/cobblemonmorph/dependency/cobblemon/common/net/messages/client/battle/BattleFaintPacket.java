@@ -22,13 +22,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since May 22nd, 2022
  */
-class BattleFaintPacket(val pnx: String) : NetworkPacket<BattleFaintPacket> {
+public class BattleFaintPacket(val pnx: String) : NetworkPacket<BattleFaintPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(pnx)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_faint")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleFaintPacket(buffer.readString())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleFaintPacket(buffer.readString())
     }
 }

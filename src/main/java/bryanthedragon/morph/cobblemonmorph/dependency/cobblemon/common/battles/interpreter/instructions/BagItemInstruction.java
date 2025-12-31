@@ -24,7 +24,7 @@ import net.minecraft.world.item.ItemStack
  * @author landonjw
  * @since July 31st, 2023
  */
-class BagItemInstruction(val message: BattleMessage): InterpreterInstruction {
+public class BagItemInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchGo {

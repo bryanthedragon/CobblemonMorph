@@ -14,7 +14,7 @@ import com.google.common.collect.Multimap
 import java.util.UUID
 
 record PokemonInteractionGUICreationEvent(
-    val pokemonID: UUID,
+    val UUID pokemonId,
     val mountShoulder: Boolean,
     val giveHeld: Boolean,
     val giveCosmetic: Boolean,

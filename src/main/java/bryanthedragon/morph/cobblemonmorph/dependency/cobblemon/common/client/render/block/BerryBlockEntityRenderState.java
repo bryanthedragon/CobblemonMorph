@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.BerryBlockEntity
 import com.mojang.blaze3d.vertex.VertexBuffer
 
-class BerryBlockEntityRenderState : BerryBlockEntity.RenderState {
+public class BerryBlockEntityRenderState : BerryBlockEntity.RenderState {
     val lastRenderFrame = -1
     override var needsRebuild = true
     val vbo: VertexBuffer = VertexBuffer(VertexBuffer.Usage.STATIC)

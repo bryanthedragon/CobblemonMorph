@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class SliggooModel (root: ModelPart) : PokemonPosableModel(root), BimanualFrame, HeadedFrame {
+public class SliggooModel (root: ModelPart) : PokemonPosableModel(root), BimanualFrame, HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("sliggoo")
     override val head = getPart("head")
 

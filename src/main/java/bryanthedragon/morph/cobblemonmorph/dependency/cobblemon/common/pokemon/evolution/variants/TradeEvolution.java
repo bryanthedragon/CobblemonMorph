@@ -47,7 +47,7 @@ open class TradeEvolution(
         drops = DropTable(),
     )
 
-    override fun testContext(pokemon: Pokemon, context: Pokemon) = this.requiredContext.matches(context)
+    override fun testContext(Pokemon pokemon, context: Pokemon) = this.requiredContext.matches(context)
 
     override fun equals(other: Any?) = other is TradeEvolution && other.id.equals(this.id, true)
 
@@ -57,7 +57,7 @@ open class TradeEvolution(
         return result
     }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "trade"
     }
 }

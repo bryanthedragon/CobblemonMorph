@@ -30,14 +30,14 @@ import net.minecraft.world.level.pathfinder.PathComputationType
 /**
  * Moves to the nearest surface it can find so it can breathe.
  */
-class FindAirTaskConfig : SingleTaskConfig {
+public class FindAirTaskConfig : SingleTaskConfig {
     val walkSpeed = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(walkSpeed).asVariables()
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PathfinderMob) {
@@ -78,7 +78,7 @@ class FindAirTaskConfig : SingleTaskConfig {
         }
     }
 
-    private fun isAirPos(world: LevelReader, pos: BlockPos): Boolean {
+    private fun isAirPos(Level worldReader, (BlockPos pos): Boolean {
         val blockState = world.getBlockState(pos)
         val aboveState = world.getBlockState(pos.above())
         val notFluid = world.getFluidState(pos.above()).isEmpty || blockState.`is`(Blocks.BUBBLE_COLUMN)

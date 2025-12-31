@@ -26,7 +26,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.G
  *
  * @author Licious
  * @since May 7th, 2022
- */final class CatchRateModifiers {
+ */
+public final class CatchRateModifiers {
 
     /**
      * Used by [PokeBalls.LEVEL_BALL].

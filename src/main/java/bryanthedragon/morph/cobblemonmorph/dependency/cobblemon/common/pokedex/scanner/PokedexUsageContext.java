@@ -31,8 +31,8 @@ import net.minecraft.sounds.SoundEvent
 import kotlin.math.exp
 import kotlin.math.ln
 
-class PokedexUsageContext {
-    companion object {
+public class PokedexUsageContext {
+    final class Companion {
         const val ZOOM_MAX_STEP = 9F
         const val ZOOM_TARGET_FOV = 10F // the FOV we get at max zoom (probably somewhat inaccurate, but irrelevant)
         const val ZOOM_BASE_FOV = 80F // getting FOV from MC is easy, but pin it for consistent step count/zoom dist
@@ -68,7 +68,7 @@ class PokedexUsageContext {
     var availableInfoFrames: MutableList<Boolean?> = mutableListOf(null, null, null, null)
     val renderer: PokedexScannerRenderer = PokedexScannerRenderer()
 
-    fun stopUsing(ticksInUse: Int, speciesId: ResourceLocation? = null) {
+    fun stopUsing(ticksInUse: Int, speciesResourceLocation id? = null) {
         if (ticksInUse < OPEN_SCANNER_BUFFER_TICKS) {
             openPokedexGUI(type, speciesId)
             infoGuiOpen = true
@@ -132,7 +132,7 @@ class PokedexUsageContext {
         }
     }
 
-    fun openPokedexGUI(types: PokedexType = PokedexType.RED, speciesId: ResourceLocation? = null) {
+    fun openPokedexGUI(types: PokedexType = PokedexType.RED, speciesResourceLocation id? = null) {
         PokedexGUI.open(CobblemonClient.clientPokedexData, types, speciesId)
         playSound(CobblemonSounds.POKEDEX_OPEN)
     }
@@ -237,7 +237,7 @@ class PokedexUsageContext {
     // 1 = normal FOV; 0 = max zoom; this runs on render update, best to keep logic out of here
     fun getFovMultiplier() = zoomModifier
 
-    fun playSound(soundEvent: SoundEvent) {
+    fun playSound(SoundEvent soundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 }

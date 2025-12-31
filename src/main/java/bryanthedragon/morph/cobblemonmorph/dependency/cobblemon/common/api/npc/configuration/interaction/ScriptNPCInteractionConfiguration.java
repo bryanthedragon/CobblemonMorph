@@ -29,23 +29,23 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since July 5th, 2024
  */
-class ScriptNPCInteractionConfiguration : NPCInteractConfiguration {
-    companion object {
+public class ScriptNPCInteractionConfiguration : NPCInteractConfiguration {
+    final class Companion {
         val runtime = MoLangRuntime().setup()
     }
 
     override val type: String = "script"
     var script: ResourceLocation = ResourceLocation.fromNamespaceAndPath("cobblemon", "scripts/test.molang")
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(script)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         script = buffer.readIdentifier()
     }
 
-    override fun interact(npc: NPCEntity, player: ServerPlayer): Boolean {
+    override fun interact(npc: NPCEntity, ServerPlayer player): Boolean {
         val script = CobblemonScripts.scripts[script] ?: return false
         runtime.withQueryValue("npc", npc.struct)
         runtime.withQueryValue("player", player.asMoLangValue())
@@ -58,11 +58,11 @@ class ScriptNPCInteractionConfiguration : NPCInteractConfiguration {
         return true
     }
 
-    override fun writeToNBT(compoundTag: CompoundTag) {
+    override fun writeToNBT(compoundCompoundTag tag) {
         compoundTag.putString(DataKeys.NPC_INTERACT_SCRIPT, script.toString())
     }
 
-    override fun readFromNBT(compoundTag: CompoundTag) {
+    override fun readFromNBT(compoundCompoundTag tag) {
         script = ResourceLocation.parse(compoundTag.getString(DataKeys.NPC_INTERACT_SCRIPT))
     }
 

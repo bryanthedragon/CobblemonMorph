@@ -13,17 +13,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.network.RegistryFriendlyByteBuf
 import org.joml.Vector3f
 
-class ServerboundUpdateDriverInputPacket internal constructor(
+public class ServerboundUpdateDriverInputPacket internal constructor(
     val driverInput: Vector3f
 ) : NetworkPacket<ServerboundUpdateDriverInputPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeVector3f(driverInput)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("c2s_update_driver_input")
-        fun decode(buffer: RegistryFriendlyByteBuf): ServerboundUpdateDriverInputPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): ServerboundUpdateDriverInputPacket {
             val driverInput = buffer.readVector3f()
             return ServerboundUpdateDriverInputPacket(driverInput)
         }

@@ -18,7 +18,7 @@ import java.util.UUID
 
 record PokemonGainedEvent(
     val playerId: UUID,
-    val pokemon: Pokemon
+    val Pokemon pokemon
 ) {
     val context = mutableMapOf(
         "player_id" to StringValue(playerId.toString()),

@@ -13,11 +13,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.B
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.RemoveSpectatorPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class RemoveSpectatorHandler : ServerNetworkPacketHandler<RemoveSpectatorPacket> {
+public final class RemoveSpectatorHandler : ServerNetworkPacketHandler<RemoveSpectatorPacket> {
     override fun handle(
         packet: RemoveSpectatorPacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         BattleRegistry.getBattle(packet.battleId)?.spectators?.remove(player.uuid)
     }

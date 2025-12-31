@@ -14,15 +14,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class FullnessUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<FullnessUpdatePacket>(pokemon, value) {
+public class FullnessUpdatePacket(pokemon: () -> Pokemon?, Int value) : IntUpdatePacket<FullnessUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun getSize() = IntSize.U_BYTE
-    override fun set(pokemon: Pokemon, value: Int) {
+    override fun set(Pokemon pokemon, Int value) {
         pokemon.currentFullness = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("fullness_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = FullnessUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.U_BYTE))
+        fun decode(RegistryFriendlyByteBuf buffer) = FullnessUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.U_BYTE))
     }
 }

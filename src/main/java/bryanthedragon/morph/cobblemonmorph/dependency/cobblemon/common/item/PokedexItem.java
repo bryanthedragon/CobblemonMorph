@@ -26,14 +26,14 @@ import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
 
-class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacksTo(1)) {
+public class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacksTo(1)) {
 
     override fun getUseAnimation(itemStack: ItemStack): UseAnim? = UseAnim.TOOT_HORN
 
-    override fun getUseDuration(stack: ItemStack, user: LivingEntity): Int = 72000
+    override fun getUseDuration(ItemStack stack, user: LivingEntity): Int = 72000
 
     override fun use(
-        world: Level,
+        Level world,
         player: Player,
         usedHand: InteractionHand
     ): InteractionResultHolder<ItemStack> {
@@ -41,7 +41,7 @@ class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacks
 
         if (player.isCrouching) {
             val hitPokemon = player.traceFirstEntityCollision(
-                entityClass = PokemonEntity::class.java,
+                entityClass = PokemonEntity.class,
                 maxDistance = player.entityInteractionRange().toFloat()
             )
 
@@ -61,9 +61,9 @@ class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacks
     }
 
     override fun onUseTick(
-        world: Level,
+        Level world,
         user: LivingEntity,
-        stack: ItemStack,
+        ItemStack stack,
         remainingUseTicks: Int
     ) {
         if (world.isServerSide() && user is ServerPlayer && user.isChangingDimension) {
@@ -80,8 +80,8 @@ class PokedexItem(val type: PokedexType): CobblemonItem(Item.Properties().stacks
     }
 
     override fun releaseUsing(
-        stack: ItemStack,
-        world: Level,
+        ItemStack stack,
+        Level world,
         user: LivingEntity,
         remainingUseTicks: Int
     ) {

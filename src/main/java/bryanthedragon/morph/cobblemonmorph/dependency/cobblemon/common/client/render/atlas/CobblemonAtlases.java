@@ -11,11 +11,11 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.TextureAtlasHolder
-final class CobblemonAtlases {
+public final class CobblemonAtlases {
     val atlases = mutableSetOf<TextureAtlasHolder>()
 
     val BERRY_SPRITE_ATLAS = register("textures/atlas/berries.png", "berries")
-    fun register(atlasId: String, sourcePath: String): TextureAtlasHolder {
+    fun register(atlasId: String, sourceString path): TextureAtlasHolder {
         val atlas = CobblemonAtlas(
             Minecraft.getInstance().textureManager,
             cobblemonResource(atlasId),

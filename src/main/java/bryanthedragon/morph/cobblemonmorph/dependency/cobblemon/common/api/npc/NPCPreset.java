@@ -17,10 +17,10 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityDimensions
 
-class NPCPreset {
-    lateinit var id: ResourceLocation
-    var resourceIdentifier: ResourceLocation? = null
-    var aspects: Set<String>? = null
+public class NPCPreset {
+    lateinit var ResourceLocation id
+    var resourceResourceLocation identifier? = null
+    Set<String> aspects? = null
     var variations: Map<String, NPCVariationProvider>? = null
     var config: List<MoLangConfigVariable>? = null
     var party: NPCPartyProvider? = null

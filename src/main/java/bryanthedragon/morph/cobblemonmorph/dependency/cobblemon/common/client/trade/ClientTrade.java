@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import java.util.UUID
 
-class ClientTrade {
+public class ClientTrade {
     var myOffer = SettableObservable<Pokemon?>(null)
     var oppositeOffer = SettableObservable<Pokemon?>(null)
     var tradeProcessing = SettableObservable(Pair(false, false))

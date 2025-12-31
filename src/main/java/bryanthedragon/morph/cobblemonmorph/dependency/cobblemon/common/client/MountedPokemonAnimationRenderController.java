@@ -20,10 +20,11 @@ import net.minecraft.world.phys.Vec3
  * allows us to do that. It also caches which Pokemon have been pre-animated to avoid doing it multiple times.
  *
  * @author landonjw
- */final class MountedPokemonAnimationRenderController {
+ */
+public final class MountedPokemonAnimationRenderController {
     private val forcedDeltas = mutableMapOf<Int, Float>()
 
-    fun setup(pokemon: PokemonEntity, partialTickTime: Float) {
+    fun setup(Pokemon pokemonEntity, partialTickTime: Float) {
         if (forcedDeltas.contains(pokemon.id)) return
 
         val delegate = pokemon.delegate as? PokemonClientDelegate ?: return
@@ -63,7 +64,7 @@ import net.minecraft.world.phys.Vec3
         forcedDeltas[pokemon.id] = partialTickTime
     }
 
-    fun getPartialTick(pokemon: PokemonEntity) : Float? {
+    fun getPartialTick(Pokemon pokemonEntity) : Float? {
         return forcedDeltas[pokemon.id]
     }
 

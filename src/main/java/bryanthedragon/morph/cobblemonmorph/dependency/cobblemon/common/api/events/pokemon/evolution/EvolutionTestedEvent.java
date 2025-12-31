@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getB
  * @property result The final value returned by [Evolution.test].
  */
 record EvolutionTestedEvent(
-    override val pokemon: Pokemon,
+    override val Pokemon pokemon,
     override val evolution: Evolution,
     val originalResult: Boolean,
     var result: Boolean

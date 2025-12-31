@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since August 5th, 2022
  */
-interface DataProvider {
+public interface DataProvider {
     /**
      * Registers a [DataRegistry] to listen for updates.
      * The updates will automatically happen on the correct sides based on [DataRegistry.type].
@@ -33,7 +33,7 @@ interface DataProvider {
      * @param registryIdentifier The [ResourceLocation]
      * @return The [DataRegistry] if existing.
      */
-    fun fromIdentifier(registryIdentifier: ResourceLocation): DataRegistry?
+    fun fromIdentifier(registryResourceLocation identifier): DataRegistry?
 
     /**
      * Syncs all of [DataRegistry]s in this provider to a player when requested from the server.
@@ -41,7 +41,7 @@ interface DataProvider {
      *
      * @param player The [ServerPlayer] being synchronized to the server.
      */
-    fun sync(player: ServerPlayer)
+    fun sync(ServerPlayer player)
 
-    fun doAfterSync(player: ServerPlayer, action: () -> Unit)
+    fun doAfterSync(ServerPlayer player, action: () -> Unit)
 }

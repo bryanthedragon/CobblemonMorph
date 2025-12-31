@@ -16,10 +16,10 @@ import org.joml.AxisAngle4f
 import org.joml.Matrix4f
 import org.joml.Vector3f
 
-class EmitterSpace(
+public class EmitterSpace(
     var scaling: ScalingMode = ScalingMode.WORLD
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<EmitterSpace> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Codec.STRING.optionalFieldOfWithDefault("scaling", "world").forGetter { it.scaling.toString() }

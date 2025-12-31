@@ -27,8 +27,8 @@ internal class DummyEvolution : Evolution {
     override val learnableMoves: MutableSet<MoveTemplate> = mutableSetOf()
     override val drops: DropTable = DropTable()
 
-    override fun test(pokemon: Pokemon) = false
+    override fun test(Pokemon pokemon) = false
 
-    override fun evolve(pokemon: Pokemon) = false
+    override fun evolve(Pokemon pokemon) = false
 
 }

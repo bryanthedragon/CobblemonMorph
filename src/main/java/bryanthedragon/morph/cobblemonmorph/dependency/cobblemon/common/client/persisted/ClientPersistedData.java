@@ -18,7 +18,7 @@ import java.nio.file.Paths
 import kotlin.io.path.exists
 import net.minecraft.client.CameraType
 import net.minecraft.resources.ResourceLocation
-final class ClientPersistedData {
+public final class ClientPersistedData {
 
     val gson = CobblemonConfig.GSON
 
@@ -30,7 +30,7 @@ final class ClientPersistedData {
     fun readSnapshotsData() : SnapshotAcknowledgementData? {
         if (snapshotsPath.exists()) {
             BufferedReader(InputStreamReader(FileInputStream(snapshotsPath.toFile()))).use { reader ->
-                return gson.fromJson(reader, SnapshotAcknowledgementData::class.java)
+                return gson.fromJson(reader, SnapshotAcknowledgementData.class)
             }
         }
 
@@ -45,7 +45,7 @@ final class ClientPersistedData {
     fun readRidingPerspectivesData() : RidingPerspectiveData? {
         if (ridingPerspectivesPath.exists()) {
             BufferedReader(InputStreamReader(FileInputStream(ridingPerspectivesPath.toFile()))).use { reader ->
-                return gson.fromJson(reader, RidingPerspectiveData::class.java)
+                return gson.fromJson(reader, RidingPerspectiveData.class)
             }
         }
 

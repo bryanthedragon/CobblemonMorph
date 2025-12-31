@@ -47,12 +47,12 @@ internal object PropertiesCompletionProvider : DataRegistry {
     override val observable = SimpleObservable<PropertiesCompletionProvider>()
     private val providers = hashSetOf<SuggestionHolder>()
 
-    override fun reload(manager: ResourceManager) {
+    override fun reload(ResourceManager manager) {
         // We do not have sort of datapack support for this
         this.reload()
     }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         PropertiesCompletionRegistrySyncPacket(this.providers).sendToPlayer(player)
     }
 
@@ -88,7 +88,7 @@ internal object PropertiesCompletionProvider : DataRegistry {
      * @param builder The [SuggestionsBuilder] for the context of the query.
      * @return The suggestions
      */
-    fun suggestKeys(partialKey: String, excludedKeys: Collection<String>, builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
+    fun suggestKeys(partialString Key, excludedKeys: Collection<String>, builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
         var matches = 0
         var exactMatch = false
         this.providers.forEach { provider ->
@@ -120,7 +120,7 @@ internal object PropertiesCompletionProvider : DataRegistry {
      * @param builder The [SuggestionsBuilder] for the context of the query.
      * @return The suggestions.
      */
-    fun suggestValues(possibleKey: String, currentValue: String, builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
+    fun suggestValues(possibleString Key, currentValue: String, builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
         val suggestionHolder = this.providers.firstOrNull { provider -> provider.keys.contains(possibleKey) } ?: return Suggestions.empty()
         suggestionHolder.suggestions.forEach { suggestion ->
             if (!suggestion.startsWith(currentValue))

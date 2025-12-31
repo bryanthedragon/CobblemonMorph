@@ -6,79 +6,76 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion.*
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.PlatformRegistry
-import net.minecraft.advancements.CriterionTrigger
-import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
-import net.minecraft.resources.ResourceKey
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion.*;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.PlatformRegistry;
+
+import kotlin.jvm.JvmField;
+
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 
 /**
  * Contains all the advancement criteria in Cobblemon.
  *
  * @author Licious
  * @since October 26th, 2022
- */final class CobblemonCriteria : PlatformRegistry<Registry<CriterionTrigger<*>>, ResourceKey<Registry<CriterionTrigger<*>>>, CriterionTrigger<*>>(){
-    @JvmField
-    val PICK_STARTER = this.create("pick_starter", SimpleCriterionTrigger(PokemonCriterion.CODEC))
+ */
+public final class CobblemonCriteria extends PlatformRegistry<Registry<CriterionTrigger<?>>, ResourceKey<Registry<CriterionTrigger<?>>>, CriterionTrigger<?>>
+{
+    public final  CriterionTrigger<?> PICK_STARTER = create("pick_starter", SimpleCriterionTrigger(PokemonCriterion.CODEC));
 
-    @JvmField
-    val CATCH_POKEMON = this.create("catch_pokemon", SimpleCriterionTrigger(CaughtPokemonCriterion.CODEC))
+    public final  CriterionTrigger<?> CATCH_POKEMON = create("catch_pokemon", SimpleCriterionTrigger(CaughtPokemonCriterion.CODEC));
 
-    @JvmField
-    val CATCH_SHINY_POKEMON = this.create("catch_shiny_pokemon", SimpleCriterionTrigger(CountableCriterion.CODEC))
+    public final  CriterionTrigger<?> CATCH_SHINY_POKEMON = create("catch_shiny_pokemon", SimpleCriterionTrigger(CountableCriterion.CODEC));
 
-    @JvmField
-    val EGG_COLLECT = this.create("eggs_collected", SimpleCriterionTrigger(CountableCriterion.CODEC))
+    public final  CriterionTrigger<?> EGG_COLLECT = create("eggs_collected", SimpleCriterionTrigger(CountableCriterion.CODEC));
 
-    @JvmField
-    val EGG_HATCH = this.create("eggs_hatched", SimpleCriterionTrigger(CountableCriterion.CODEC))
+    public final  CriterionTrigger<?> EGG_HATCH = create("eggs_hatched", SimpleCriterionTrigger(CountableCriterion.CODEC));
 
-    @JvmField
-    val EVOLVE_POKEMON = this.create("pokemon_evolved", SimpleCriterionTrigger(EvolvePokemonCriterion.CODEC))
+    public final  CriterionTrigger<?> EVOLVE_POKEMON = create("pokemon_evolved", SimpleCriterionTrigger(EvolvePokemonCriterion.CODEC));
 
-    @JvmField
-    val WIN_BATTLE = this.create("battles_won", SimpleCriterionTrigger(BattleCountableCriterion.CODEC))
+    public final  CriterionTrigger<?> WIN_BATTLE = create("battles_won", SimpleCriterionTrigger(BattleCountableCriterion.CODEC));
 
-    @JvmField
-    val DEFEAT_POKEMON = this.create("pokemon_defeated", SimpleCriterionTrigger(CountableCriterion.CODEC))
+    public final  CriterionTrigger<?> DEFEAT_POKEMON = create("pokemon_defeated", SimpleCriterionTrigger(CountableCriterion.CODEC));
 
-    @JvmField
-    val COLLECT_ASPECT = this.create("aspects_collected", SimpleCriterionTrigger(AspectCriterion.CODEC))
+    public final  CriterionTrigger<?> COLLECT_ASPECT = create("aspects_collected", SimpleCriterionTrigger(AspectCriterion.CODEC));
 
-    @JvmField
-    val POKEMON_INTERACT = this.create("pokemon_interact", SimpleCriterionTrigger(PokemonInteractCriterion.CODEC))
+    public final  CriterionTrigger<?> POKEMON_INTERACT = create("pokemon_interact", SimpleCriterionTrigger(PokemonInteractCriterion.CODEC));
 
-    @JvmField
-    val PARTY_CHECK = this.create("party", SimpleCriterionTrigger(PartyCheckCriterion.CODEC))
+    public final  CriterionTrigger<?> PARTY_CHECK = create("party", SimpleCriterionTrigger(PartyCheckCriterion.CODEC));
 
-    @JvmField
-    val LEVEL_UP = this.create("level_up", SimpleCriterionTrigger(LevelUpCriterion.CODEC))
+    public final  CriterionTrigger<?> LEVEL_UP = create("level_up", SimpleCriterionTrigger(LevelUpCriterion.CODEC));
 
-    @JvmField
-    val PASTURE_USE = this.create("pasture_use", SimpleCriterionTrigger(PokemonCriterion.CODEC))
+    public final  CriterionTrigger<?> PASTURE_USE = create("pasture_use", SimpleCriterionTrigger(PokemonCriterion.CODEC));
 
-    @JvmField
-    val RESURRECT_POKEMON = this.create("resurrect_pokemon", SimpleCriterionTrigger(PokemonCriterion.CODEC))
+    public final  CriterionTrigger<?> RESURRECT_POKEMON = create("resurrect_pokemon", SimpleCriterionTrigger(PokemonCriterion.CODEC));
 
-    @JvmField
-    val TRADE_POKEMON = this.create("trade_pokemon", SimpleCriterionTrigger(TradePokemonCriterion.CODEC))
+    public final  CriterionTrigger<?> TRADE_POKEMON = create("trade_pokemon", SimpleCriterionTrigger(TradePokemonCriterion.CODEC));
 
-    @JvmField
-    val CAST_POKE_ROD = this.create("cast_poke_rod", SimpleCriterionTrigger(CastPokeRodCriterionCondition.CODEC))
+    public final  CriterionTrigger<?> CAST_POKE_ROD = create("cast_poke_rod", SimpleCriterionTrigger(CastPokeRodCriterionCondition.CODEC));
 
-    @JvmField
-    val REEL_IN_POKEMON = this.create("reel_in_pokemon", SimpleCriterionTrigger(ReelInPokemonCriterionCondition.CODEC))
+    public final  CriterionTrigger<?> REEL_IN_POKEMON = create("reel_in_pokemon", SimpleCriterionTrigger(ReelInPokemonCriterionCondition.CODEC));
 
     // Advancement criteria for [grow_tumblestone.json]
-    @JvmField
-    val PLANT_TUMBLESTONE = this.create("plant_tumblestone", SimpleCriterionTrigger(PlantTumblestoneCriterion.CODEC))
+    public final  CriterionTrigger<?> PLANT_TUMBLESTONE = create("plant_tumblestone", SimpleCriterionTrigger(PlantTumblestoneCriterion.CODEC));
 
-    val RIDING_STAT_BOOST = this.create("riding_stat_boost", SimpleCriterionTrigger(RidingStatBoostCriterion.CODEC))
+    public final  CriterionTrigger<?> RIDING_STAT_BOOST = create("riding_stat_boost", SimpleCriterionTrigger(RidingStatBoostCriterion.CODEC));
 
-    override val registry = BuiltInRegistries.TRIGGER_TYPES
-    override val resourceKey = Registries.TRIGGER_TYPE
+
+    @Override
+    public Registry<CriterionTrigger<?>> getRegistry() {
+        return BuiltInRegistries.TRIGGER_TYPES;
+    }
+
+    @Override
+    public ResourceKey<Registry<CriterionTrigger<?>>> getResourceKey() {
+        return Registries.TRIGGER_TYPE;
+    }
+
+    private CobblemonCriteria() {}
 }

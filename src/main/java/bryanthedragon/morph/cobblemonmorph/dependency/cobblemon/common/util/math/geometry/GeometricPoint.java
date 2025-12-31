@@ -28,9 +28,9 @@ record GeometricPoint(val x: Float, val y: Float, val z: Float) {
 
     constructor() : this(0f, 0f, 0f)
     constructor(x: Double, y: Double, z: Double): this(x.toFloat(), y.toFloat(), z.toFloat())
-    constructor(vec3d: Vec3) : this(vec3d.x, vec3d.y, vec3d.z)
+    constructor(Vec3 vec3d) : this(vec3d.x, vec3d.y, vec3d.z)
 
-    companion object {
+    final class Companion {
 
         /**
          * Creates a new geometric point representing two points added together.

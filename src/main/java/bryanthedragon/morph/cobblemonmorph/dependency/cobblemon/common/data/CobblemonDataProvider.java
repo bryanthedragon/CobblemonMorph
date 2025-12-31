@@ -61,7 +61,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener
-final class CobblemonDataProvider : DataProvider {
+public final class CobblemonDataProvider : DataProvider {
 
     // Both Forge n Fabric keep insertion order so if a registry depends on another simply register it after
     private val registries = linkedSetOf<DataRegistry>()
@@ -136,9 +136,9 @@ final class CobblemonDataProvider : DataProvider {
         return registry
     }
 
-    override fun fromIdentifier(registryIdentifier: ResourceLocation): DataRegistry? = this.registries.find { it.id == registryIdentifier }
+    override fun fromIdentifier(registryResourceLocation identifier): DataRegistry? = this.registries.find { it.id == registryIdentifier }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         if (!player.connection.connection.isMemoryConnection) {
             this.registries.forEach { registry ->
                 registry.sync(player)
@@ -150,7 +150,7 @@ final class CobblemonDataProvider : DataProvider {
         waitingActions.forEach { it() }
     }
 
-    override fun doAfterSync(player: ServerPlayer, action: () -> Unit) {
+    override fun doAfterSync(ServerPlayer player, action: () -> Unit) {
         if (player.uuid in synchronizedPlayerIds) {
             action()
         } else {
@@ -159,7 +159,7 @@ final class CobblemonDataProvider : DataProvider {
     }
 
     private class SimpleResourceReloader(private val type: PackType) : ResourceManagerReloadListener {
-        override fun onResourceManagerReload(manager: ResourceManager) {
+        override fun onResourceManagerReload(ResourceManager manager) {
             // Check for a server running, this is due to the create a world screen triggering datapack reloads, these are fine to happen as many times as needed as players may be in the process of adding their datapacks.
             val reloadAllowed = server()?.isReady != true
             registries.filter { it.type == this.type && (reloadAllowed || it in reloadableRegistries) }

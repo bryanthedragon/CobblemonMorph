@@ -16,19 +16,19 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import java.util.*
 
-open class ChangePCBoxWallpaperPacket internal constructor(val storeID: UUID, val boxNumber: Int, val wallpaper: ResourceLocation) : NetworkPacket<ChangePCBoxWallpaperPacket>, UnsplittablePacket {
+open public class ChangePCBoxWallpaperPacket internal constructor(val UUID storeID, val Int boxNumber, val wallpaper: ResourceLocation) : NetworkPacket<ChangePCBoxWallpaperPacket>, UnsplittablePacket {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(storeID)
         buffer.writeSizedInt(IntSize.U_SHORT, boxNumber)
         buffer.writeString(wallpaper.toString())
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("change_pc_box_wallpaper")
-        fun decode(buffer: RegistryFriendlyByteBuf): ChangePCBoxWallpaperPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): ChangePCBoxWallpaperPacket {
             val storeID = buffer.readUUID()
             val boxNumber = buffer.readSizedInt(IntSize.U_SHORT)
             val wallpaper = ResourceLocation.parse(buffer.readString())

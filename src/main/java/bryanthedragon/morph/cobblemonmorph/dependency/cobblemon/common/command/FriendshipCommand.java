@@ -18,7 +18,7 @@ import com.mojang.brigadier.CommandDispatcher
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerPlayer
-final class FriendshipCommand {
+public final class FriendshipCommand {
 
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(Commands.literal("friendship")
@@ -29,7 +29,7 @@ final class FriendshipCommand {
             ))
     }
 
-    private fun execute(source: CommandSourceStack, target: ServerPlayer, pokemon: Pokemon) : Int {
+    private fun execute(source: CommandSourceStack, target: ServerPlayer, Pokemon pokemon) : Int {
         source.sendSuccess({ commandLang("friendship", pokemon.getDisplayName(), pokemon.friendship) }, true)
         return Command.SINGLE_SUCCESS
     }

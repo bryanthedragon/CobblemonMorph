@@ -21,11 +21,12 @@ import net.minecraft.world.entity.ai.sensing.SensorType
  *
  * @author Hiroku
  * @since June 24th, 2025
- */final class SensorTypeAdapter : JsonDeserializer<SensorType<*>> {
+ */
+public final class SensorTypeAdapter : JsonDeserializer<SensorType<*>> {
     override fun deserialize(
-        json: JsonElement,
+        JsonElement json,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        JsonDeserializationContext context
     ): SensorType<*>? {
         val identifier = ResourceLocation.tryParse(json.asString)
             ?: throw IllegalArgumentException("Invalid identifier: ${json.asString}")

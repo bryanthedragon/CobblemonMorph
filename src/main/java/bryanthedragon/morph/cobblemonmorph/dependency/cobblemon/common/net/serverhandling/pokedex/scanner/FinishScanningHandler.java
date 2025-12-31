@@ -27,11 +27,12 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Apion
  * @since August 10, 2024
- */final class FinishScanningHandler : ServerNetworkPacketHandler<FinishScanningPacket> {
+ */
+public final class FinishScanningHandler : ServerNetworkPacketHandler<FinishScanningPacket> {
     override fun handle(
         packet: FinishScanningPacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         val targetEntity = player.level().getEntity(packet.targetedId) ?: return
         if (PokemonScanner.isEntityInRange(player, targetEntity, packet.zoomLevel)) {

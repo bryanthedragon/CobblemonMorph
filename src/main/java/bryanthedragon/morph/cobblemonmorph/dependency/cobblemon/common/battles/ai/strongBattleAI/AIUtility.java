@@ -19,7 +19,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 /**
  * Everything in this class will be eventually getting replaced by a dynamic datadriven approach
  * when moves/abilities/types become data-packable or at least queryable from showdown
- */final class AIUtility {
+ */
+public final class AIUtility {
     fun getDamageMultiplier(attackerType: ElementalType, defenderType: ElementalType): Double {
         return typeEffectiveness[attackerType]?.get(defenderType) ?: 1.0
 

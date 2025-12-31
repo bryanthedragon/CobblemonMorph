@@ -20,7 +20,7 @@ import kotlin.math.min
  */
 
 
-class Vec3Spring(
+public class Vec3Spring(
     var value: Vec3 = Vec3.ZERO,
     var velocity: Vec3 = Vec3.ZERO
 ) {

@@ -31,7 +31,7 @@ import kotlin.reflect.KClass
  * @author Segfault Guy
  * @since March 5th, 2024
  */
-interface EntityEffect {
+public interface EntityEffect {
 
     /**
      * Starts this effect for the provided [PokemonEntity].
@@ -51,9 +51,9 @@ interface EntityEffect {
     fun saveToNbt(registryLookup: HolderLookup.Provider): CompoundTag
 
     /** Loads this effect from NBT. */
-    fun loadFromNBT(nbt: CompoundTag, registryLookup: HolderLookup.Provider)
+    fun loadFromNBT(CompoundTag nbt, registryLookup: HolderLookup.Provider)
 
-    companion object {
+    final class Companion {
 
         private val effects = mutableMapOf<String, KClass<out EntityEffect>>()
         private val defaults = mutableMapOf<String, () -> EntityEffect>()
@@ -70,7 +70,7 @@ interface EntityEffect {
 
         fun createDefault(id: String): EntityEffect? = defaults[id]?.invoke()
 
-        fun loadFromNbt(nbt: CompoundTag, registryLookup: HolderLookup.Provider): EntityEffect? {
+        fun loadFromNbt(CompoundTag nbt, registryLookup: HolderLookup.Provider): EntityEffect? {
             if (nbt.contains(DataKeys.ENTITY_EFFECT_ID)) {
                 val id = nbt.getString(DataKeys.ENTITY_EFFECT_ID)
                 return createDefault(id)?.also { it.loadFromNBT(nbt, registryLookup) }
@@ -82,12 +82,12 @@ interface EntityEffect {
 
 
 /** An [EntityEffect] that modifies the dimensions of a [PokemonEntity]. */
-interface PhysicalEffect : EntityEffect {
+public interface PhysicalEffect : EntityEffect {
     val scale: Float
 }
 
 /** An [EntityEffect] that alters the physical appearance of a [PokemonEntity] to match a [mock]. */
-interface MocKEffect : PhysicalEffect {
+public interface MocKEffect : PhysicalEffect {
     val mock: PokemonProperties
 
     val exposedSpecies: Species?

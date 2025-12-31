@@ -6,258 +6,259 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.CalculateSeatPositionsHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.OpenBehaviourEditorHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.PlayerInteractOptionsHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.SetClientPlayerDataHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.animation.PlayPosableAnimationHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.battle.*
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.callback.move.OpenMoveCallbackHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.callback.party.OpenPartyCallbackHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.callback.partymove.OpenPartyMoveCallbackHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.cooking.ToggleCookingPotLidHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.data.CobblemonMechanicsSyncHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.data.DataRegistrySyncPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.data.RideSettingsSyncHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.debug.OpenRidingStatsDebugGUIHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.dialogue.DialogueClosedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.dialogue.DialogueOpenedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.PokeSnackBlockParticlesHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.RunPosableMoLangHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.SaccharineLogBlockParticlesHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.SpawnSnowstormEntityParticleHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.SpawnSnowstormParticleHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.gui.ExpGainedDataPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.gui.InteractPokemonUIPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.gui.PokedexUIPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.gui.SummaryUIPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.npc.CloseNPCEditorHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.npc.OpenNPCEditorHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.orientation.ClientboundUpdateOrientationHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.ClosePastureHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.OpenPastureHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.PokemonPasturedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.PokemonUnpasturedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.UpdatePastureConflictFlagHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pokedex.ServerConfirmedRegisterHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pokemon.update.ClientboundUpdateRidingStateHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pokemon.update.PokemonUpdatePacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.riding.ClientboundUpdateDriverInputHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.settings.OpenCobblemonConfigEditorHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.settings.ServerSettingsPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.sound.UnvalidatedPlaySoundS2CPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.spawn.SpawnExtraDataEntityHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.starter.StarterUIPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.RemoveClientPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.SwapClientPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.InitializePartyHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.MoveClientPartyPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.SetPartyPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.SetPartyReferenceHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.pc.*
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.toast.ToastPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeAcceptanceChangedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeCancelledHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeCompletedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeOfferExpiredHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeOfferNotificationHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeProcessStartedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeStartedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeUpdatedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.PacketRegisterInfo
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.CalculateSeatPositionsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.OpenBehaviourEditorPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PlayerInteractOptionsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.SetClientPlayerDataPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.animation.PlayPosableAnimationPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.*
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.callback.OpenMoveCallbackPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.callback.OpenPartyCallbackPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.callback.OpenPartyMoveCallbackPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.cooking.SeasoningRegistrySyncPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.cooking.ToggleCookingPotLidPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.*
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.DialogueClosedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.DialogueOpenedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.PokeSnackBlockParticlesPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.RunPosableMoLangPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SaccharineLogBlockParticlesPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormParticlePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.npc.CloseNPCEditorPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.npc.OpenNPCEditorPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.orientation.ClientboundUpdateDriverInputPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.ClosePasturePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.OpenPasturePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.PokemonPasturedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.PokemonUnpasturedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.UpdatePastureConflictFlagPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.*
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.settings.OpenCobblemonConfigScreenPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.settings.ServerSettingsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.sound.UnvalidatedPlaySoundS2CPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnGenericBedrockPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnNPCPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnPokeballPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.starter.OpenStarterUIPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.RemoveClientPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.SwapClientPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.InitializePartyPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.MoveClientPartyPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.SetPartyPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.SetPartyReferencePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.ClosePCPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.InitializePCPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.MoveClientPCPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.OpenPCPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.RenamePCBoxPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.SetPCBoxPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.SetPCPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.ChangePCBoxWallpaperPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast.ToastPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeAcceptanceChangedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeCancelledPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeCompletedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeOfferExpiredPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeOfferNotificationPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeProcessStartedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeStartedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeUpdatedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.ExpGainedDataPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.InteractPokemonUIPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.PokedexUIPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.SummaryUIPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.BattleChallengePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.BattleChallengeResponsePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.BenchMovePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.RequestMoveSwapPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.RequestPlayerInteractionsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.SelectStarterPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.SendOutPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleSelectActionsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleTeamLeavePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleTeamRequestPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleTeamResponsePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.RemoveSpectatorPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.SpectateBattlePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.behaviour.DamageOnCollisionPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.behaviour.SetEntityBehaviourPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectCancelledPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.party.PartyPokemonSelectedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.party.PartySelectCancelledPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.partymove.PartyMoveSelectCancelledPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.partymove.PartyPokemonMoveSelectedPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.OpenRidingStatsDebugGUIPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.ServerboundUpdateRidingSettingsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.ServerboundUpdateRidingStatRangePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.ServerboundUpdateRidingStatsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.dialogue.EscapeDialoguePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.dialogue.InputToDialoguePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.npc.SaveNPCPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.PasturePokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.SetPastureConflictPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.UnpastureAllPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.UnpasturePokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokedex.scanner.FinishScanningPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokedex.scanner.StartScanningPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.interact.InteractPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.SetActiveMarkPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.SetItemHiddenPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.SetMarkingsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.SetNicknamePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.DismountPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.ServerboundUpdateRiderRotationPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.starter.RequestStarterScreenPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.SwapPCPartyPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.party.MovePartyPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.party.ReleasePartyPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.party.SwapPartyPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.*
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.AcceptTradeRequestPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.CancelTradePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.ChangeTradeAcceptancePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.OfferTradePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.PerformTradePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.UpdateTradeOfferPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.ChallengeHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.ChallengeResponseHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.RequestInteractionsHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.BattleSelectActionsHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.RemoveSpectatorHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.SpectateBattleHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.TeamLeaveHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.TeamRequestHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.TeamRequestResponseHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.behaviour.DamageOnCollisionPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.behaviour.SetEntityBehaviourHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.block.AdjustBlockEntityViewerCountHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.move.MoveSelectCancelledHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.move.MoveSelectedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.party.PartyPokemonSelectedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.party.PartySelectCancelledHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.partymove.PartyMoveSelectCancelledHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.partymove.PartyPokemonMoveSelectedHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.debug.RequestOpenRidingStatsDebugGUIHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.debug.ServerboundUpdateRidingSettingsHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.debug.ServerboundUpdateRidingStatRangeHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.debug.ServerboundUpdateRidingStatsHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.dialogue.EscapeDialogueHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.dialogue.InputToDialogueHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.evolution.AcceptEvolutionHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.npc.SaveNPCHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.orientation.ServerboundUpdateOrientationHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pasture.PasturePokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pasture.SetPastureConflictHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pasture.UnpastureAllPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pasture.UnpasturePokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokedex.scanner.FinishScanningHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokedex.scanner.StartScanningHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.interact.InteractPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.ServerboundUpdateRidingStateHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.SetActiveMarkHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.SetItemHiddenHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.SetMarkingsHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.SetNicknameHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.riding.DismountPokemonPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.riding.DriverInputPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.riding.ServerboundUpdateRiderRotationHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.starter.RequestStarterScreenHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.starter.SelectStarterPacketHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.BenchMoveHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.RequestMoveSwapHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.SendOutPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.SwapPCPartyPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.party.MovePartyPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.party.ReleasePCPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.party.SwapPartyPokemonHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.pc.*
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.AcceptTradeRequestHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.CancelTradeHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.ChangeTradeAcceptanceHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.OfferTradeHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.PerformTradeHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.UpdateTradeOfferHandler
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
-import net.minecraft.server.level.ServerPlayer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.CalculateSeatPositionsHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.OpenBehaviourEditorHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.PlayerInteractOptionsHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.SetClientPlayerDataHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.animation.PlayPosableAnimationHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.battle.*;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.callback.move.OpenMoveCallbackHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.callback.party.OpenPartyCallbackHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.callback.partymove.OpenPartyMoveCallbackHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.cooking.ToggleCookingPotLidHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.data.CobblemonMechanicsSyncHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.data.DataRegistrySyncPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.data.RideSettingsSyncHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.debug.OpenRidingStatsDebugGUIHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.dialogue.DialogueClosedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.dialogue.DialogueOpenedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.PokeSnackBlockParticlesHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.RunPosableMoLangHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.SaccharineLogBlockParticlesHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.SpawnSnowstormEntityParticleHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.effect.SpawnSnowstormParticleHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.gui.ExpGainedDataPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.gui.InteractPokemonUIPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.gui.PokedexUIPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.gui.SummaryUIPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.npc.CloseNPCEditorHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.npc.OpenNPCEditorHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.orientation.ClientboundUpdateOrientationHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.ClosePastureHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.OpenPastureHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.PokemonPasturedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.PokemonUnpasturedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pasture.UpdatePastureConflictFlagHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pokedex.ServerConfirmedRegisterHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pokemon.update.ClientboundUpdateRidingStateHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.pokemon.update.PokemonUpdatePacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.riding.ClientboundUpdateDriverInputHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.settings.OpenCobblemonConfigEditorHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.settings.ServerSettingsPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.sound.UnValidatedPlaySoundS2CPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.spawn.SpawnExtraDataEntityHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.starter.StarterUIPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.RemoveClientPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.SwapClientPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.InitializePartyHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.MoveClientPartyPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.SetPartyPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.party.SetPartyReferenceHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.storage.pc.*;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.toast.ToastPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeAcceptanceChangedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeCancelledHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeCompletedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeOfferExpiredHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeOfferNotificationHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeProcessStartedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeStartedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeUpdatedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.PacketRegisterInfo;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.CalculateSeatPositionsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.OpenBehaviourEditorPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PlayerInteractOptionsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.SetClientPlayerDataPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.animation.PlayPosableAnimationPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.*;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.callback.OpenMoveCallbackPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.callback.OpenPartyCallbackPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.callback.OpenPartyMoveCallbackPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.cooking.SeasoningRegistrySyncPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.cooking.ToggleCookingPotLidPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.*;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.debug.RequestOpenRidingStatsDebugGUIPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.DialogueClosedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.DialogueOpenedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.PokeSnackBlockParticlesPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.RunPosableMoLangPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SaccharineLogBlockParticlesPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormParticlePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.npc.CloseNPCEditorPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.npc.OpenNPCEditorPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.orientation.ClientboundUpdateDriverInputPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.ClosePasturePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.OpenPasturePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.PokemonPasturedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.PokemonUnpasturedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.UpdatePastureConflictFlagPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.*;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.settings.OpenCobblemonConfigScreenPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.settings.ServerSettingsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.sound.UnValidatedPlaySoundS2CPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnGenericBedrockPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnNPCPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnPokeballPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.spawn.SpawnPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.starter.OpenStarterUIPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.RemoveClientPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.SwapClientPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.InitializePartyPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.MoveClientPartyPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.SetPartyPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.SetPartyReferencePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.ClosePCPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.InitializePCPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.MoveClientPCPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.OpenPCPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.RenamePCBoxPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.SetPCBoxPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.SetPCPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.ChangePCBoxWallpaperPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast.ToastPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeAcceptanceChangedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeCancelledPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeCompletedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeOfferExpiredPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeOfferNotificationPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeProcessStartedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeStartedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeUpdatedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.ExpGainedDataPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.InteractPokemonUIPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.PokedexUIPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.SummaryUIPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.BattleChallengePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.BattleChallengeResponsePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.BenchMovePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.RequestMoveSwapPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.RequestPlayerInteractionsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.SelectStarterPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.SendOutPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleSelectActionsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleTeamLeavePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleTeamRequestPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleTeamResponsePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.RemoveSpectatorPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.SpectateBattlePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.behaviour.DamageOnCollisionPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.behaviour.SetEntityBehaviourPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectCancelledPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.party.PartyPokemonSelectedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.party.PartySelectCancelledPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.partymove.PartyMoveSelectCancelledPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.partymove.PartyPokemonMoveSelectedPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.OpenRidingStatsDebugGUIPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.ServerboundUpdateRidingSettingsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.ServerboundUpdateRidingStatRangePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.ServerboundUpdateRidingStatsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.dialogue.EscapeDialoguePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.dialogue.InputToDialoguePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.npc.SaveNPCPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.PasturePokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.SetPastureConflictPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.UnpastureAllPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.UnpasturePokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokedex.scanner.FinishScanningPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokedex.scanner.StartScanningPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.interact.InteractPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.SetActiveMarkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.SetItemHiddenPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.SetMarkingsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.SetNicknamePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.evolution.AcceptEvolutionPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.DismountPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.ServerboundUpdateRiderRotationPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.starter.RequestStarterScreenPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.SwapPCPartyPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.party.MovePartyPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.party.ReleasePartyPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.party.SwapPartyPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.*;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.AcceptTradeRequestPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.CancelTradePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.ChangeTradeAcceptancePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.OfferTradePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.PerformTradePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.trade.UpdateTradeOfferPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.ChallengeHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.ChallengeResponseHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.RequestInteractionsHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.BattleSelectActionsHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.RemoveSpectatorHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.SpectateBattleHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.TeamLeaveHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.TeamRequestHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.battle.TeamRequestResponseHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.behaviour.DamageOnCollisionPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.behaviour.SetEntityBehaviourHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.block.AdjustBlockEntityViewerCountHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.move.MoveSelectCancelledHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.move.MoveSelectedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.party.PartyPokemonSelectedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.party.PartySelectCancelledHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.partymove.PartyMoveSelectCancelledHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.callback.partymove.PartyPokemonMoveSelectedHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.debug.RequestOpenRidingStatsDebugGUIHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.debug.ServerboundUpdateRidingSettingsHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.debug.ServerboundUpdateRidingStatRangeHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.debug.ServerboundUpdateRidingStatsHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.dialogue.EscapeDialogueHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.dialogue.InputToDialogueHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.evolution.AcceptEvolutionHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.npc.SaveNPCHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.orientation.ServerboundUpdateOrientationHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pasture.PasturePokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pasture.SetPastureConflictHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pasture.UnpastureAllPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pasture.UnpasturePokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokedex.scanner.FinishScanningHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokedex.scanner.StartScanningHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.interact.InteractPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.ServerboundUpdateRidingStateHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.SetActiveMarkHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.SetItemHiddenHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.SetMarkingsHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.pokemon.update.SetNicknameHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.riding.DismountPokemonPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.riding.DriverInputPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.riding.ServerboundUpdateRiderRotationHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.starter.RequestStarterScreenHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.starter.SelectStarterPacketHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.BenchMoveHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.RequestMoveSwapHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.SendOutPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.SwapPCPartyPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.party.MovePartyPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.party.ReleasePCPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.party.SwapPartyPokemonHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.storage.pc.*;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.AcceptTradeRequestHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.CancelTradeHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.ChangeTradeAcceptanceHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.OfferTradeHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.PerformTradeHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.serverhandling.trade.UpdateTradeOfferHandler;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server;
+
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Registers Cobblemon network packets.
@@ -266,25 +267,27 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Hiroku, Licious
  * @since November 27th, 2021
- */final class CobblemonNetwork {
+ */
+public final class CobblemonNetwork {
 
-    fun ServerPlayer.sendPacket(packet: NetworkPacket<*>) {
+    ServerPlayer sendPacket( NetworkPacket<*> packet) {
         sendPacketToPlayer(this, packet)
     }
-    @JvmStatic
-    fun sendToServer(packet: NetworkPacket<*>) {
+    fun sendToServer(NetworkPacket<*> packet) {
         Cobblemon.implementation.networkManager.sendToServer(packet)
     }
-    @JvmStatic
-    fun sendToAllPlayers(packet: NetworkPacket<*>) = sendPacketToPlayers(server()!!.playerList.players, packet)
-    @JvmStatic
-    fun sendPacketToPlayers(players: Iterable<ServerPlayer>, packet: NetworkPacket<*>) = players.forEach { sendPacketToPlayer(it, packet) }
+    fun sendToAllPlayers(NetworkPacket<*> packet) {
+        sendPacketToPlayers(server()!!.playerList.players, packet)
+    }
+    fun sendPacketToPlayers(Iterable<ServerPlayer> players,  NetworkPacket<*> packet) { 
+        players.forEach { sendPacketToPlayer(it, packet) }
+    }
 
-    val s2cPayloads = generateS2CPacketInfoList()
-    val c2sPayloads = generateC2SPacketInfoList()
+    public static final s2cPayloads = generateS2CPacketInfoList();
+    public static final c2sPayloads = generateC2SPacketInfoList();
 
     private fun generateS2CPacketInfoList(): List<PacketRegisterInfo<*>> {
-        val list = mutableListOf<PacketRegisterInfo<*>>()
+        public static final list = mutableListOf<PacketRegisterInfo<*>>()
 
         // Pokemon Update Packets
         list.add(PacketRegisterInfo(FriendshipUpdatePacket.ID, FriendshipUpdatePacket::decode, PokemonUpdatePacketHandler()))
@@ -380,7 +383,7 @@ import net.minecraft.server.level.ServerPlayer
         list.add(PacketRegisterInfo(BattleChallengeNotificationPacket.ID, BattleChallengeNotificationPacket::decode, BattleChallengeNotificationHandler))
         list.add(PacketRegisterInfo(BattleUpdateTeamPokemonPacket.ID, BattleUpdateTeamPokemonPacket::decode, BattleUpdateTeamPokemonHandler))
         list.add(PacketRegisterInfo(BattlePersistentStatusPacket.ID, BattlePersistentStatusPacket::decode, BattlePersistentStatusHandler))
-        list.add(PacketRegisterInfo(BattleMadeInvalidChoicePacket.ID, BattleMadeInvalidChoicePacket::decode, BattleMadeInvalidChoiceHandler))
+        list.add(PacketRegisterInfo(BattleMadeInValidChoicePacket.ID, BattleMadeInValidChoicePacket::decode, BattleMadeInValidChoiceHandler))
         list.add(PacketRegisterInfo(BattleMusicPacket.ID, BattleMusicPacket::decode, BattleMusicHandler))
         list.add(PacketRegisterInfo(BattleChallengeExpiredPacket.ID, BattleChallengeExpiredPacket::decode, BattleChallengeExpiredHandler))
         list.add(PacketRegisterInfo(BattleReplacePokemonPacket.ID, BattleReplacePokemonPacket::decode, BattleReplacePokemonHandler))
@@ -430,7 +433,7 @@ import net.minecraft.server.level.ServerPlayer
         list.add(PacketRegisterInfo(PokeSnackBlockParticlesPacket.ID, PokeSnackBlockParticlesPacket::decode, PokeSnackBlockParticlesHandler))
 
         // Hax
-        list.add(PacketRegisterInfo(UnvalidatedPlaySoundS2CPacket.ID, UnvalidatedPlaySoundS2CPacket::decode, UnvalidatedPlaySoundS2CPacketHandler))
+        list.add(PacketRegisterInfo(UnValidatedPlaySoundS2CPacket.ID, UnValidatedPlaySoundS2CPacket::decode, UnValidatedPlaySoundS2CPacketHandler))
         list.add(PacketRegisterInfo(SpawnPokemonPacket.ID, SpawnPokemonPacket::decode, SpawnExtraDataEntityHandler()))
         list.add(PacketRegisterInfo(SpawnPokeballPacket.ID, SpawnPokeballPacket::decode, SpawnExtraDataEntityHandler()))
         list.add(PacketRegisterInfo(SpawnGenericBedrockPacket.ID, SpawnGenericBedrockPacket::decode, SpawnExtraDataEntityHandler()))
@@ -497,7 +500,7 @@ import net.minecraft.server.level.ServerPlayer
     }
 
     private fun generateC2SPacketInfoList(): List<PacketRegisterInfo<*>> {
-        val list = mutableListOf<PacketRegisterInfo<*>>()
+        public static final list = mutableListOf<PacketRegisterInfo<*>>()
         // Pokemon Update Packets
         list.add(PacketRegisterInfo(SetNicknamePacket.ID, SetNicknamePacket::decode, SetNicknameHandler))
         list.add(PacketRegisterInfo(SetItemHiddenPacket.ID, SetItemHiddenPacket::decode, SetItemHiddenHandler))
@@ -615,7 +618,7 @@ import net.minecraft.server.level.ServerPlayer
         return list
     }
 
-    fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>) {
+    fun sendPacketToPlayer(ServerPlayer player,  NetworkPacket<*> packet) {
         Cobblemon.implementation.networkManager.sendPacketToPlayer(player, packet)
     }
 }

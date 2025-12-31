@@ -56,8 +56,8 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since January 24th, 2022
  */
-interface Spawner {
-    val name: String
+public interface Spawner {
+    val String name
     val influences: MutableList<SpawningInfluence>
     var spawnPool: SpawnPool
     var selector: SpawningSelector<*>
@@ -67,7 +67,7 @@ interface Spawner {
 
     fun <R> afterSpawn(action: SpawnAction<R>, result: R) {}
 
-    companion object {
+    final class Companion {
         /** The chunk range radius over which spawning will roughly keep the entity density under control. */
         const val ENTITY_LIMIT_CHUNK_RANGE = 3
     }
@@ -126,7 +126,7 @@ interface Spawner {
         }
 
         val numberNearby = constrainedArea.world.getEntitiesOfClass(
-            PokemonEntity::class.java,
+            PokemonEntity.class,
             areaBox,
             PokemonEntity::countsTowardsSpawnCap
         ).size
@@ -196,7 +196,7 @@ interface Spawner {
         return event.bucket
     }
 
-    fun isValidStartPoint(world: Level, chunk: ChunkAccess, startPos: BlockPos.MutableBlockPos): Boolean {
+    fun isValidStartPoint(Level world, chunk: ChunkAccess, start(BlockPos pos.MutableBlockPos): Boolean {
         val y = startPos.y
         if (!world.isLoaded(startPos) || !world.isLoaded(startPos.setY(y + 1))) {
             return false

@@ -32,7 +32,7 @@ import net.minecraft.world.level.Level
  * @author Licious
  * @since May 5th, 2022
  */
-class CandyItem(
+public class CandyItem(
     val item_rarity: Rarity,
     val calculator: Calculator
 ) : CobblemonItem(Properties().apply {
@@ -41,14 +41,14 @@ class CandyItem(
 
     override val bagItem = null
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }
         return InteractionResultHolder.success(user.getItemInHand(hand))
     }
 
-    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack>? {
+    override fun applyToPokemon(ServerPlayer player, ItemStack stack, Pokemon pokemon): InteractionResultHolder<ItemStack>? {
         val experience = this.calculator.calculate(player, pokemon)
         CobblemonEvents.EXPERIENCE_CANDY_USE_PRE.postThen(
                 event = ExperienceCandyUseEvent.Pre(player, pokemon, this, experience, experience),
@@ -74,7 +74,7 @@ class CandyItem(
         return InteractionResultHolder.fail(stack)
     }
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon): Boolean {
         return pokemon.isPlayerOwned()
     }
 
@@ -93,11 +93,11 @@ class CandyItem(
          * @param pokemon The [Pokemon] receiving experience.
          * @return The experience that will be received
          */
-        fun calculate(player: ServerPlayer, pokemon: Pokemon): Int
+        fun calculate(ServerPlayer player, Pokemon pokemon): Int
 
     }
 
-    companion object {
+    final class Companion {
         const val DEFAULT_XS_CANDY_YIELD = 100
         const val DEFAULT_S_CANDY_YIELD = 800
         const val DEFAULT_M_CANDY_YIELD = 3000

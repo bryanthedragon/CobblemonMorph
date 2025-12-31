@@ -6,37 +6,42 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves;
 
-import com.bedrockk.molang.runtime.MoParams
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.value.DoubleValue
-import com.bedrockk.molang.runtime.value.StringValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.addFunctions
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.categories.DamageCategory
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeSizedInt
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
-import com.google.gson.JsonObject
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.RegistryFriendlyByteBuf
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
-import kotlin.math.ceil
-import kotlin.properties.Delegates
-import net.minecraft.network.chat.MutableComponent
-import java.util.function.Function
+import com.bedrockk.molang.runtime.MoParams;
+import com.bedrockk.molang.runtime.struct.QueryStruct;
+import com.bedrockk.molang.runtime.value.DoubleValue;
+import com.bedrockk.molang.runtime.value.StringValue;
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.addFunctions;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.categories.DamageCategory;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeSizedInt;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString;
+
+import com.google.gson.JsonObject;
+
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.MutableComponent;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import kotlin.properties.Delegates;
+
+import java.util.function.Function;
 
 /**
  * Representing a Move based on some template and with current PP and the number of raised PP stages.
  */
-open class Move(
+public open class Move(
     val template: MoveTemplate,
     currentPp: Int,
     raisedPpStages: Int = 0
@@ -70,10 +75,10 @@ open class Move(
         }
     }
 
-    val name: String
+    val String name
         get() = template.name
 
-    val displayName: MutableComponent
+    val MutableComponent displayName
         get() = template.displayName
 
     val description: MutableComponent
@@ -126,14 +131,14 @@ open class Move(
         return oldPp != maxPp
     }
 
-    fun saveToNBT(nbt: CompoundTag): CompoundTag {
+    fun saveToNBT(CompoundTag nbt): CompoundTag {
         nbt.putString(DataKeys.POKEMON_MOVESET_MOVENAME, name)
         nbt.putInt(DataKeys.POKEMON_MOVESET_MOVEPP, currentPp)
         nbt.putInt(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES, raisedPpStages)
         return nbt
     }
 
-    fun saveToJSON(json: JsonObject): JsonObject {
+    fun saveToJSON(JsonObject json): JsonObject {
         json.addProperty(DataKeys.POKEMON_MOVESET_MOVENAME, name)
         json.addProperty(DataKeys.POKEMON_MOVESET_MOVEPP, currentPp)
         json.addProperty(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES, raisedPpStages)
@@ -142,20 +147,20 @@ open class Move(
 
     fun copy() = loadFromJSON(saveToJSON(JsonObject()))
 
-    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun saveToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(name)
         buffer.writeSizedInt(IntSize.U_BYTE, currentPp)
         buffer.writeSizedInt(IntSize.U_BYTE, raisedPpStages)
     }
 
-    companion object {
-        fun loadFromNBT(nbt: CompoundTag): Move {
+    final class Companion {
+        fun loadFromNBT(CompoundTag nbt): Move {
             val moveName = nbt.getString(DataKeys.POKEMON_MOVESET_MOVENAME)
             val template = Moves.getByNameOrDummy(moveName)
             return template.create(nbt.getInt(DataKeys.POKEMON_MOVESET_MOVEPP), nbt.getInt(DataKeys.POKEMON_MOVESET_RAISED_PP_STAGES))
         }
 
-        fun loadFromJSON(json: JsonObject): Move {
+        fun loadFromJSON(JsonObject json): Move {
             val moveName = json.get(DataKeys.POKEMON_MOVESET_MOVENAME).asString
             val template = Moves.getByNameOrDummy(moveName)
             val currentPp = json.get(DataKeys.POKEMON_MOVESET_MOVEPP).asInt
@@ -163,7 +168,7 @@ open class Move(
             return Move(template, currentPp, raisedPpStages)
         }
 
-        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): Move {
+        fun loadFromBuffer(RegistryFriendlyByteBuf buffer): Move {
             val moveName = buffer.readString()
             val currentPp = buffer.readSizedInt(IntSize.U_BYTE)
             val raisedPpStages = buffer.readSizedInt(IntSize.U_BYTE)

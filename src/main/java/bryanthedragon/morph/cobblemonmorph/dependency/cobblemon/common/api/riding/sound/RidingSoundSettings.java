@@ -28,7 +28,7 @@ record RideSoundSettings(
     @SerializedName("volumeExpr") private val _volumeExpr: Expression? = "1.0".asExpression(),
     @SerializedName("pitchExpr") private val _pitchExpr: Expression? = "1.0".asExpression(),
     val playForNonPassengers: Boolean = false,
-    val muffleEnabled: Boolean = false,
+    val muffleBoolean enabled = false,
     @SerializedName("attenuationModel") private val _attenuationModel: RideAttenuationModel? = RideAttenuationModel.NONE
 ): Encodable {
 
@@ -42,7 +42,7 @@ record RideSoundSettings(
     val attenuationModel: RideAttenuationModel
         get() = _attenuationModel ?: RideAttenuationModel.NONE
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeResourceLocation(soundLocation)
         buffer.writeExpression(volumeExpr)
         buffer.writeExpression(pitchExpr)
@@ -51,15 +51,15 @@ record RideSoundSettings(
         buffer.writeEnum(attenuationModel)
     }
 
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf): RideSoundSettings {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer): RideSoundSettings {
 
             val soundLocation = buffer.readResourceLocation()
             val volumeExpr = buffer.readExpression()
             val pitchExpr = buffer.readExpression()
             val playForNonPassengers = buffer.readBoolean()
             val muffleEnabled = buffer.readBoolean()
-            val attenuationModel = buffer.readEnum(RideAttenuationModel::class.java)
+            val attenuationModel = buffer.readEnum(RideAttenuationModel.class)
 
             return RideSoundSettings(
                 soundLocation,
@@ -73,14 +73,14 @@ record RideSoundSettings(
     }
 }
 
-class RideSoundSettingsList(var sounds: List<RideSoundSettings> = mutableListOf()) {
+public class RideSoundSettingsList(var sounds: List<RideSoundSettings> = mutableListOf()) {
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(sounds) { _, sound -> sound.encode(buffer) }
     }
 
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf): RideSoundSettingsList {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer): RideSoundSettingsList {
             val list = RideSoundSettingsList()
             list.sounds = buffer.readList { RideSoundSettings.decode(buffer) }.toMutableList()
             return list

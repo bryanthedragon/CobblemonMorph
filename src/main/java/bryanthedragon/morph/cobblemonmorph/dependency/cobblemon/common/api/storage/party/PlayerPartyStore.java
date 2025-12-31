@@ -6,114 +6,109 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.CobblemonCriteria
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonGainedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.PassiveEvolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.TickingSpeciesFeature
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.OriginalTrainerType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.ShoulderedState
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.LevelUpEvolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.network.chat.Component
-import java.util.*
-import kotlin.math.ceil
-import kotlin.math.round
-import kotlin.random.Random
-import net.minecraft.core.RegistryAccess
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.CobblemonCriteria;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.PokemonGainedEvent;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.PassiveEvolution;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.TickingSpeciesFeature;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc.PCStore;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.OriginalTrainerType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.activestate.ShoulderedState;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.LevelUpEvolution;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*;
+
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
+
+import java.util.*;
+
+import kotlin.math.ceil;
+import kotlin.math.round;
+import kotlin.random.Random;
+
+import net.minecraft.core.RegistryAccess;
 
 /**
  * A [PartyStore] used for a single player. This uses the player's UUID as the store's UUID, and is declared as its own
  * class so that the purpose of this store is clear in practice. It also automatically adds the player's UUID as an
  * observer UUID as per [PartyStore.observerUUIDs]
+ * The UUID of the player this store is for.
+ * The UUID of the store. This is the same as [playerUUID] by default, but can be changed to allow for multiple parties.
  *
  * @author Hiroku
  * @since November 29th, 2021
  */
-open class PlayerPartyStore(
-    /** The UUID of the player this store is for. */
-    val playerUUID: UUID,
-    /** The UUID of the store. This is the same as [playerUUID] by default, but can be changed to allow for multiple parties. */
-    storageUUID: UUID = playerUUID
-) : PartyStore(storageUUID) {
+public class PlayerPartyStore(UUID playerUUID, storageUUID uuid) : PartyStore(storageUUID) {
 
-    private var secondsSinceFriendshipUpdate = 0
+    private var secondsSinceFriendshipUpdate = 0;
 
-    constructor(playerUUID: UUID): this(playerUUID, playerUUID)
+    constructor(UUID playerUUID): this(playerUUID, playerUUID)
 
-    override fun initialize() {
-        super.initialize()
-        observerUUIDs.add(playerUUID)
+    fun initialize() {
+        super.initialize();
+        observerUUIDs.add(playerUUID);
     }
 
-    open fun getOverflowPC(registryAccess: RegistryAccess): PCStore? {
-        return Cobblemon.storage.getPC(playerUUID, registryAccess)
+    open fun getOverflowPC(RegistryAccess registryAccess): PCStore? {
+        return Cobblemon.storage.getPC(playerUUID, registryAccess);
     }
 
-    override fun add(pokemon: Pokemon): Boolean {
+    fun add(Pokemon pokemon): Boolean {
         if (pokemon.originalTrainerType == OriginalTrainerType.NONE) {
-            pokemon.setOriginalTrainer(playerUUID)
+            pokemon.setOriginalTrainer(playerUUID);
         }
-        pokemon.refreshOriginalTrainer()
+        pokemon.refreshOriginalTrainer();
 
-        val added = if (super.add(pokemon)) {
-            pokemon.getOwnerPlayer()?.let { CobblemonCriteria.PARTY_CHECK.trigger(it, this) }
-            true
-        } else {
-            val player = playerUUID.getPlayer()
-            val pc = getOverflowPC(player?.server?.registryAccess() ?: server()!!.registryAccess())
+    val added = if (super.add(pokemon)) {
+        pokemon.getOwnerPlayer()?.let { CobblemonCriteria.PARTY_CHECK.trigger(it, this) } true; } 
+        else {
+            val player = playerUUID.getPlayer();
+            val pc = getOverflowPC(player?.server?.registryAccess() ?: server()!!.registryAccess());
 
             if (pc == null || !pc.add(pokemon)) {
                 if (pc == null) {
-                    player?.sendSystemMessage(lang("overflow_no_pc"))
-                } else {
-                    player?.sendSystemMessage(lang("overflow_no_space", pc.name))
+                    player?.sendSystemMessage(lang("overflow_no_pc"));
+                } 
+                else {
+                    player?.sendSystemMessage(lang("overflow_no_space", pc.name));
                 }
-                false
-            } else {
-                player?.sendSystemMessage(lang("overflow_to_pc", pokemon.species.translatedName, pc.name))
-                true
+                false;
+            } 
+            else {
+                player?.sendSystemMessage(lang("overflow_to_pc", pokemon.species.translatedName, pc.name)) true;
             }
         }
 
         if (added) {
-            CobblemonEvents.POKEMON_GAINED.post(PokemonGainedEvent(playerUUID, pokemon))
+            CobblemonEvents.POKEMON_GAINED.post(PokemonGainedEvent(playerUUID, pokemon));
         }
-
-        return added
+        return added;
     }
 
     /**
      * Called on the party every second for routine party updates
      * ex: Passive healing, statuses, etc
      */
-    fun onSecondPassed(player: ServerPlayer) {
+    fun onSecondPassed(ServerPlayer player) {
         // Passive healing and passive statuses require the player be out of battle
         if (BattleRegistry.getBattleByParticipatingPlayer(player) == null) {
-            val random = Random.Default
+            val random = Random.Default;
             for (pokemon in this) {
                 // Awake from fainted
                 if (pokemon.isFainted()) {
                     //Skip awaken logic check if config value is 0
                     if (Cobblemon.config.faintAwakenHealthPercent > 0) {
-                        pokemon.faintedTimer -= 1
+                        pokemon.faintedTimer -= 1;
                         if (pokemon.faintedTimer <= -1) {
-                            val php = ceil(pokemon.maxHealth * Cobblemon.config.faintAwakenHealthPercent)
-                            pokemon.currentHealth = php.toInt()
-                            player.sendSystemMessage(
-                                Component.translatable(
-                                    "cobblemon.party.faintRecover",
-                                    pokemon.getDisplayName()
-                                )
-                            )
+                            val php = ceil(pokemon.maxHealth * Cobblemon.config.faintAwakenHealthPercent);
+                            pokemon.currentHealth = php.toInt();
+                            player.sendSystemMessage(Component.translatable("cobblemon.party.faintRecover", pokemon.getDisplayName()))
                         }
                     }
                 }
@@ -121,61 +116,60 @@ open class PlayerPartyStore(
                 else if (pokemon.currentHealth < pokemon.maxHealth) {
                     //Skip passive healing logic check if config value is 0
                     if (Cobblemon.config.healPercent > 0) {
-                        pokemon.healTimer--
+                        pokemon.healTimer--;
                         if (pokemon.healTimer <= -1) {
-                            pokemon.healTimer = Cobblemon.config.healTimer
-                            val healAmount =
-                                1.0.coerceAtLeast(pokemon.maxHealth.toDouble() * Cobblemon.config.healPercent)
-                            pokemon.currentHealth = pokemon.currentHealth + round(healAmount).toInt()
+                            pokemon.healTimer = Cobblemon.config.healTimer;
+                            val healAmount = 1.0.coerceAtLeast(pokemon.maxHealth.toDouble() * Cobblemon.config.healPercent)
+                            pokemon.currentHealth = pokemon.currentHealth + round(healAmount).toInt();
                         }
                     }
                 }
 
                 // Statuses
-                val status = pokemon.status
+                val status = pokemon.status;
                 if (status != null && !player.isSleeping) {
                     if (status.isExpired()) {
-                        status.status.onStatusExpire(player, pokemon, random)
-                        pokemon.status = null
-                    } else {
-                        status.status.onSecondPassed(player, pokemon, random)
-                        status.tickTimer()
+                        status.status.onStatusExpire(player, pokemon, random);
+                        pokemon.status = null;
+                    } 
+                    else {
+                        status.status.onSecondPassed(player, pokemon, random);
+                        status.tickTimer();
                     }
                 }
 
                 // Passive evolutions
-                pokemon.lockedEvolutions.filterIsInstance<PassiveEvolution>().forEach { it.attemptEvolution(pokemon) }
-                val removeList = mutableListOf<Evolution>()
+                pokemon.lockedEvolutions.filterIsInstance<PassiveEvolution>().forEach { it.attemptEvolution(pokemon) };
+                val removeList = mutableListOf<Evolution>();
                 pokemon.evolutionProxy.server().forEach {
                     if (!it.test(pokemon) && it is LevelUpEvolution && !it.permanent)
-                        removeList.add(it)
+                        removeList.add(it);
                 }
-                removeList.forEach { pokemon.evolutionProxy.server().remove(it) }
+                removeList.forEach { pokemon.evolutionProxy.server().remove(it) };
 
                 // Metabolism for Fullness
                 if (pokemon.currentFullness > 0) {
-                    pokemon.tickMetabolism()
+                    pokemon.tickMetabolism();
                 }
 
                 // Interaction Cooldown
                 if (pokemon.interactionCooldowns.any()) {
-                    pokemon.tickInteractionCooldown()
+                    pokemon.tickInteractionCooldown();
                 }
 
-                pokemon.features.filterIsInstance<TickingSpeciesFeature>().forEach { it.onSecondPassed(player.serverLevel(), pokemon, null) }
+                pokemon.features.filterIsInstance<TickingSpeciesFeature>().forEach { it.onSecondPassed(player.serverLevel(), pokemon, null) };
 
                 if (pokemon.entity?.passengers?.isNotEmpty() != true) {
-                    pokemon.rideStamina += 0.1F // Recover all stamina in 10 seconds, as long as no one's on it
+                    pokemon.rideStamina += 0.1F; // Recover all stamina in 10 seconds, as long as no one's on it
                 }
             }
             // Friendship
             // ToDo expand this down the line just a very basic implementation for the first releases
             if (++this.secondsSinceFriendshipUpdate == 120) {
-                this.secondsSinceFriendshipUpdate = 0
-                this.forEach { pokemon ->
-                    if (pokemon.friendship < 160) {
-                        if (pokemon.entity != null || pokemon.state is ShoulderedState) {
-                            pokemon.incrementFriendship(1)
+                this.secondsSinceFriendshipUpdate = 0;
+                this.forEach { pokemon -> if (pokemon.friendship < 160) { 
+                    if (pokemon.entity != null || pokemon.state is ShoulderedState) {
+                            pokemon.incrementFriendship(1);
                         }
                     }
                 }
@@ -184,23 +178,23 @@ open class PlayerPartyStore(
 
         // Shoulder validation code
         if (player.shoulderEntityLeft.isPokemonEntity() && !validateShoulder(player, true)) {
-            player.respawnEntityOnShoulder(player.shoulderEntityLeft)
+            player.respawnEntityOnShoulder(player.shoulderEntityLeft);
         }
         if (player.shoulderEntityRight.isPokemonEntity() && !validateShoulder(player, false)) {
-            player.respawnEntityOnShoulder(player.shoulderEntityRight)
+            player.respawnEntityOnShoulder(player.shoulderEntityRight);
         }
 
         forEach {
-            val state = it.state
+            val state = it.state;
             if (state is ShoulderedState && !state.isStillShouldered(player)) {
-                it.recall()
+                it.recall();
             }
         }
     }
 
-    private fun validateShoulder(player: ServerPlayer, isLeft: Boolean): Boolean {
-        val shoulderEntity = if(isLeft) player.shoulderEntityLeft else player.shoulderEntityRight
-        val pokemon = find { it.uuid == shoulderEntity.getCompound("Pokemon").getUUID(DataKeys.POKEMON_UUID) }
+    private Boolean validateShoulder(ServerPlayer player, Boolean isLeft) {
+        val shoulderEntity = if(isLeft) player.shoulderEntityLeft else player.shoulderEntityRight;
+        val pokemon = find { it.uuid == shoulderEntity.getCompound("Pokemon").getUUID(DataKeys.POKEMON_UUID) };
         // No longer valid if (in order): not in party, not the correct shoulder, no longer shoulder mountable
         if (pokemon == null || (pokemon.state as? ShoulderedState)?.isLeftShoulder != isLeft || !pokemon.form.shoulderMountable) {
             return false
@@ -209,29 +203,31 @@ open class PlayerPartyStore(
         return true
     }
 
-    override fun swap(position1: PartyPosition, position2: PartyPosition) {
-        super.swap(position1, position2)
+    fun swap(PartyPosition position1, PartyPosition position2) {
+        super.swap(position1, position2);
 
         //Make it so we can check what's in the Player's party
-        val pokemon1 = get(position1)
-        val pokemon2 = get(position2)
+        val pokemon1 = get(position1);
+        val pokemon2 = get(position2);
         if (pokemon1 != null && pokemon2 != null) {
-            val player = pokemon1.getOwnerPlayer()
+            val player = pokemon1.getOwnerPlayer();
             if (player != null) {
-                CobblemonCriteria.PARTY_CHECK.trigger(player, this)
+                CobblemonCriteria.PARTY_CHECK.trigger(player, this);
             }
-        } else if (pokemon1 != null || pokemon2 != null) {
-            var player = pokemon1?.getOwnerPlayer()
+        } 
+        else if (pokemon1 != null || pokemon2 != null) {
+            var player = pokemon1?.getOwnerPlayer();
             if (player != null) {
-                CobblemonCriteria.PARTY_CHECK.trigger(player, this)
-            } else {
-                player = pokemon2!!.getOwnerPlayer()
-                CobblemonCriteria.PARTY_CHECK.trigger(player!!, this)
+                CobblemonCriteria.PARTY_CHECK.trigger(player, this);
+            } 
+            else {
+                player = pokemon2!!.getOwnerPlayer();
+                CobblemonCriteria.PARTY_CHECK.trigger(player!!, this);
             }
         }
     }
 
-    override fun set(position: PartyPosition, pokemon: Pokemon) {
+    fun set(PartyPosition position, Pokemon pokemon) {
         super.set(position, pokemon)
         pokemon.getOwnerPlayer()?.let { CobblemonCriteria.PARTY_CHECK.trigger(it, this) }
     }

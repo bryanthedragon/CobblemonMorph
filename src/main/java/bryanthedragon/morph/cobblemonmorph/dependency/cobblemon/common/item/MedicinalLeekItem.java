@@ -22,7 +22,7 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 
-class MedicinalLeekItem(block: MedicinalLeekBlock, settings: Properties) : ItemNameBlockItem(block, settings) {
+public class MedicinalLeekItem(block: MedicinalLeekBlock, settings: Properties) : ItemNameBlockItem(block, settings) {
 
     init {
         Cobblemon.implementation.registerCompostable(this, .65F)
@@ -30,7 +30,7 @@ class MedicinalLeekItem(block: MedicinalLeekBlock, settings: Properties) : ItemN
 
     override fun useOn(context: UseOnContext): InteractionResult = InteractionResult.PASS
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val blockHitResult = PlaceOnWaterBlockItem.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY)
         val blockHitResult2 = blockHitResult.withPosition(blockHitResult.blockPos.above())
         val placeResult = this.place(BlockPlaceContext(UseOnContext(user, hand, blockHitResult2)))

@@ -67,8 +67,8 @@ import net.minecraft.world.phys.shapes.VoxelShape
  *
  * @throws IllegalArgumentException if the any yield range argument is not a positive range.
  */
-class Berry(
-    identifier: ResourceLocation,
+public class Berry(
+    ResourceLocation identifier,
     val baseYield: IntRange,
     val preferredBiomeTags: List<TagKey<Biome>>,
     val growthTime: IntRange,
@@ -89,10 +89,10 @@ class Berry(
     val colour: DyeColor,
     val tintIndexes: Map<Int, Color>,
     @SerializedName("flowerModel")
-    val flowerModelIdentifier: ResourceLocation,
+    val flowerModelResourceLocation identifier,
     val flowerTexture: ResourceLocation,
     @SerializedName("fruitModel")
-    val fruitModelIdentifier: ResourceLocation,
+    val fruitModelResourceLocation identifier,
     val fruitTexture: ResourceLocation,
     val stageOnePositioning: GrowthPoint,
     val pokeSnackPositionings: Array<GrowthPoint>,
@@ -100,7 +100,7 @@ class Berry(
     val boneMealChance: Float
 ) {
     @Transient
-    var identifier: ResourceLocation = identifier
+    var ResourceLocation identifier = identifier
         internal set
 
     @Transient
@@ -164,7 +164,7 @@ class Berry(
      * @param placer The [LivingEntity] tending to the tree, if any.
      * @return The total berry stack count.
      */
-    fun calculateYield(world: Level, state: BlockState, pos: BlockPos, placer: LivingEntity? = null): Int {
+    fun calculateYield(Level world, BlockState state, (BlockPos pos, placer: LivingEntity? = null): Int {
         val base = this.baseYield.random()
         val bonus = this.bonusYield(world, state, pos)
         var yield = base + bonus.first
@@ -254,11 +254,11 @@ class Berry(
         this.matureShape = this.createAndUniteShapes(this.matureShapeBoxes)
     }
 
-    internal fun encode(buffer: RegistryFriendlyByteBuf) {
+    internal fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(this.identifier)
         buffer.writeInt(this.baseYield.first)
         buffer.writeInt(this.baseYield.last)
-        buffer.writeEnumSet(favoriteMulches, MulchVariant::class.java)
+        buffer.writeEnumSet(favoriteMulches, MulchVariant.class)
         //buffer.writeInt(this.lifeCycles.first)
         //buffer.writeInt(this.lifeCycles.last)
         buffer.writeInt(this.growthTime.first)
@@ -313,7 +313,7 @@ class Berry(
      * @param pos The [BlockPos] of the tree.
      * @return The bonus yield, the growth factors that passed.
      */
-    private fun bonusYield(world: Level, state: BlockState, pos: BlockPos): Pair<Int, Collection<GrowthFactor>> {
+    private fun bonusYield(Level world, BlockState state, (BlockPos pos): Pair<Int, Collection<GrowthFactor>> {
         var bonus = 0
         val passed = arrayListOf<GrowthFactor>()
         val treeEntity = world.getBlockEntity(pos) as? BerryBlockEntity ?: return 0 to passed
@@ -344,14 +344,14 @@ class Berry(
         return shape ?: Shapes.block()
     }
 
-    companion object {
+    final class Companion {
         const val RICH_MULCH_MIN = 1
         const val RICH_MULCH_MAX = 2
 
-        internal fun decode(buffer: RegistryFriendlyByteBuf): Berry {
+        internal fun decode(RegistryFriendlyByteBuf buffer): Berry {
             val identifier = buffer.readIdentifier()
             val baseYield = IntRange(buffer.readInt(), buffer.readInt())
-            val favMulchs = buffer.readEnumSet(MulchVariant::class.java)
+            val favMulchs = buffer.readEnumSet(MulchVariant.class)
             //val lifeCycles = IntRange(buffer.readInt(), buffer.readInt())
             val growthTime = IntRange(buffer.readInt(), buffer.readInt())
             val refreshRate = IntRange(buffer.readInt(), buffer.readInt())
@@ -362,8 +362,8 @@ class Berry(
             val mutations = buffer.readMap({ reader -> reader.readIdentifier() }, { reader -> reader.readIdentifier() })
             val sproutShapeBoxes = buffer.readList { it.readBox() }
             val matureShapeBoxes = buffer.readList { it.readBox() }
-            val flavors = buffer.readMap({ reader -> reader.readEnumConstant(Flavour::class.java) }, { reader -> reader.readInt() })
-            val colour = buffer.readEnumConstant(DyeColor::class.java)
+            val flavors = buffer.readMap({ reader -> reader.readEnumConstant(Flavour.class) }, { reader -> reader.readInt() })
+            val colour = buffer.readEnumConstant(DyeColor.class)
             val tintIndexes = buffer.readMap({ reader -> reader.readInt() }, { reader -> Color(reader.readInt()) })
             val flowerModelIdentifier = buffer.readIdentifier()
             val flowerTexture = buffer.readIdentifier()

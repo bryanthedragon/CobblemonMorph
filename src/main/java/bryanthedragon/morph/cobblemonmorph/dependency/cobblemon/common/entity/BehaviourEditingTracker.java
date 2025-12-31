@@ -19,15 +19,16 @@ import net.minecraft.world.entity.LivingEntity
  *
  * @author Hiroku
  * @since April 13th, 2025
- */final class BehaviourEditingTracker {
+ */
+public final class BehaviourEditingTracker {
     @JvmStatic
     val playerToEditingEntity = HashBiMap.create<UUID, UUID>()
 
-    fun isPlayerEditing(player: ServerPlayer, entity: LivingEntity): Boolean {
+    fun isPlayerEditing(ServerPlayer player, LivingEntity entity): Boolean {
         return playerToEditingEntity[player.uuid] == entity.uuid
     }
 
-    fun startEditing(player: ServerPlayer, entity: LivingEntity) {
+    fun startEditing(ServerPlayer player, LivingEntity entity) {
         playerToEditingEntity[player.uuid] = entity.uuid
     }
 
@@ -35,7 +36,7 @@ import net.minecraft.world.entity.LivingEntity
         playerToEditingEntity.remove(playerId)
     }
 
-    fun getPlayerIdEditing(entity: LivingEntity): UUID? {
+    fun getPlayerIdEditing(LivingEntity entity): UUID? {
         return playerToEditingEntity.inverse()[entity.uuid]
     }
 }

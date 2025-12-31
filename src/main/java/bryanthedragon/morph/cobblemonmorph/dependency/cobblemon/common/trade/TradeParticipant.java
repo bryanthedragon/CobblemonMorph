@@ -24,8 +24,8 @@ import net.minecraft.network.chat.Component
  * @author Hiroku
  * @since May 12th, 2023
  */
-interface TradeParticipant {
-    val uuid: UUID
+public interface TradeParticipant {
+    val UUID uuid
     val name: Component
     val party: PartyStore
 
@@ -34,7 +34,7 @@ interface TradeParticipant {
      *
      * If it's null, it means they're no longer offering a Pokémon (so they're redeciding).
      */
-    fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, pokemon: Pokemon?)
+    fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, Pokemon pokemon?)
 
     /**
      * Notifies the participant that the acceptance state for trading with the opponent [Pokemon] with UUID [pokemonId]
@@ -44,7 +44,7 @@ interface TradeParticipant {
      * could otherwise state that acceptance has been changed for the previous offer when, in fact, the offer was updated
      * moments before.
      */
-    fun changeTradeAcceptance(trade: ActiveTrade, pokemonId: UUID, acceptance: Boolean)
+    fun changeTradeAcceptance(trade: ActiveTrade, UUID pokemonId, acceptance: Boolean)
 
     /**
      * Notifies the participant that the trade process has begun.
@@ -68,16 +68,16 @@ interface TradeParticipant {
  * @author Hiroku
  * @since May 12th, 2023
  */
-class PlayerTradeParticipant(val player: ServerPlayer): TradeParticipant {
+public class PlayerTradeParticipant(val ServerPlayer player): TradeParticipant {
     override val name = player.name
     override val uuid = player.uuid
     override val party = player.party()
 
-    override fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, pokemon: Pokemon?) {
+    override fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, Pokemon pokemon?) {
         player.sendPacket(TradeUpdatedPacket(tradeParticipant.uuid, pokemon))
     }
 
-    override fun changeTradeAcceptance(trade: ActiveTrade, pokemonId: UUID, acceptance: Boolean) {
+    override fun changeTradeAcceptance(trade: ActiveTrade, UUID pokemonId, acceptance: Boolean) {
         player.sendPacket(TradeAcceptanceChangedPacket(pokemonId, acceptance))
     }
 
@@ -100,8 +100,8 @@ class PlayerTradeParticipant(val player: ServerPlayer): TradeParticipant {
  * @author Hiroku
  * @since May 12th, 2023
  */
-class DummyTradeParticipant(val pokemonList: MutableList<Pokemon>) : TradeParticipant {
-    override val uuid: UUID = UUID.randomUUID()
+public class DummyTradeParticipant(val pokemonList: MutableList<Pokemon>) : TradeParticipant {
+    override val UUID uuid = UUID.randomUUID()
     override val name = "Debug Username".text()
     override val party = PartyStore(uuid).also { pokemonList.forEach(it::add) }
 
@@ -117,11 +117,11 @@ class DummyTradeParticipant(val pokemonList: MutableList<Pokemon>) : TradePartic
         // React, maybe. Change code and hotswap.
     }
 
-    override fun changeTradeAcceptance(trade: ActiveTrade, pokemonId: UUID, acceptance: Boolean) {
+    override fun changeTradeAcceptance(trade: ActiveTrade, UUID pokemonId, acceptance: Boolean) {
         // React, maybe. Change code and hotswap.
     }
 
-    override fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, pokemon: Pokemon?) {
+    override fun updateOffer(trade: ActiveTrade, tradeParticipant: TradeParticipant, Pokemon pokemon?) {
         // React, maybe. Change code and hotswap.
     }
 }

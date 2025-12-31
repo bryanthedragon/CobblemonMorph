@@ -21,11 +21,11 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Village
  * @since January 18th, 2023
  */
-class UnlinkPlayerFromPCPacket : NetworkPacket<UnlinkPlayerFromPCPacket> {
+public class UnlinkPlayerFromPCPacket : NetworkPacket<UnlinkPlayerFromPCPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
-    companion object {
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
+    final class Companion {
         val ID = cobblemonResource("unlink_player_from_pc")
-        fun decode(buffer: RegistryFriendlyByteBuf) = UnlinkPlayerFromPCPacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = UnlinkPlayerFromPCPacket()
     }
 }

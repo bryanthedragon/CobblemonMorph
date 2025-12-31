@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class NidoranmModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+public class NidoranmModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("nidoran_m")
     override val head = getPart("head")
     override val foreLeftLeg = getPart("leg_front_left")

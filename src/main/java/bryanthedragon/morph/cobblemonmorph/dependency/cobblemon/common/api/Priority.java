@@ -6,25 +6,27 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api;
 
-import com.mojang.serialization.Codec
-import net.minecraft.util.StringRepresentable
+import com.mojang.serialization.Codec;
 
-enum class Priority : StringRepresentable {
+import net.minecraft.util.StringRepresentable;
+
+public enum Priority implements StringRepresentable {
     HIGHEST,
     HIGH,
     NORMAL,
     LOW,
     LOWEST;
 
-    override fun getSerializedName() = this.name
+    @Override
+    public String getSerializedName() {
+        return this.name();
+    }
 
-    companion object {
 
-        @JvmStatic
-        val CODEC: Codec<Priority> = StringRepresentable.fromEnum(Priority::values)
-
+    final class Companion {
+        public static final Codec<Priority> CODEC = StringRepresentable.fromEnum(Priority::values);
     }
 
 }

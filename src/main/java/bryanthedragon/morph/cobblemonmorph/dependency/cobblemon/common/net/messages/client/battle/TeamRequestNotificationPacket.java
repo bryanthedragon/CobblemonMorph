@@ -26,21 +26,21 @@ import java.util.UUID
  * @author JazzMcNade
  * @since April 15th, 2024
  */
-class TeamRequestNotificationPacket(
+public class TeamRequestNotificationPacket(
     val requestID: UUID,
     val senderID: UUID,
     val expiryTime: Int
 ): NetworkPacket<TeamRequestNotificationPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(requestID)
         buffer.writeUUID(senderID)
         buffer.writeInt(expiryTime)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("team_request_notification")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TeamRequestNotificationPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = TeamRequestNotificationPacket(
             buffer.readUUID(),
             buffer.readUUID(),
             buffer.readInt()

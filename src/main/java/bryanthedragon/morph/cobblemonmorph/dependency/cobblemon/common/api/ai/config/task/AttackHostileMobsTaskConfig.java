@@ -15,19 +15,19 @@ import com.mojang.serialization.Codec
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
-class AttackHostileMobsTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+public class AttackHostileMobsTaskConfig : SingleTaskConfig {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return emptyList()
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         brainConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         return AttackHostileMobsTask.create()
     }
     
-    companion object {
+    final class Companion {
         val CODEC: Codec<AttackHostileMobsTaskConfig> = Codec.unit(AttackHostileMobsTaskConfig())
     }
 }

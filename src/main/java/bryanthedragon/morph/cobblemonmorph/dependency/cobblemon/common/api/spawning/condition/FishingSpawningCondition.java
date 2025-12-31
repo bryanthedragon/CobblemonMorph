@@ -23,8 +23,8 @@ import net.minecraft.world.level.block.Block
  * @author Hiroku
  * @since February 3rd, 2024
  */
-class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
-    override fun spawnablePositionClass() = FishingSpawnablePosition::class.java
+public class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
+    override fun spawnablePositionClass() = FishingSpawnablePosition.class
 
     var rod: RegistryLikeCondition<Item>? = null
     var neededNearbyBlocks: MutableList<RegistryLikeCondition<Block>>? = null
@@ -71,7 +71,7 @@ class FishingSpawningCondition: SpawningCondition<FishingSpawnablePosition>() {
         return true
     }
 
-    companion object {
+    final class Companion {
         const val NAME = "fishing"
     }
 }

@@ -37,8 +37,8 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since May 28th, 2023
  */
-class JsonPose(model: PosableModel, json: JsonObject) {
-    companion object {
+public class JsonPose(model: PosableModel, JsonObject json) {
+    final class Companion {
         fun registerAnimationFactory(id: String, factory: AnimationReferenceFactory) {
             ANIMATION_FACTORIES[id] = factory
         }
@@ -113,7 +113,7 @@ class JsonPose(model: PosableModel, json: JsonObject) {
             try {
                 val expression = animString.asExpressionLike()
                 runtime.resolveObject(expression).obj as PoseAnimation
-            } catch (exception: Exception) {
+            } catch (Exception exception) {
                 val animString = it.asString
                 val anim = animString.substringBefore("(")
                 if (ANIMATION_FACTORIES.contains(anim)) {
@@ -145,7 +145,7 @@ class JsonPose(model: PosableModel, json: JsonObject) {
                 try {
                     val expr = animJson.asString.asExpressionLike()
                     runtime.resolveObject(expr).obj as ActiveAnimation
-                } catch (e: Exception) {
+                } catch (Exception e) {
                     val animString = animJson.asString
                     val anim = animString.substringBefore("(")
                     return@mapNotNull ANIMATION_FACTORIES[anim]?.active(model, animString)

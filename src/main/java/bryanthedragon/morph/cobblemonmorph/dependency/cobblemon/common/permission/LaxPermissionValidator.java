@@ -18,14 +18,14 @@ import net.minecraft.server.level.ServerPlayer
  * A [PermissionValidator] that uses the permission level vanilla system.
  * This is only used when the platform has no concept of permissions.
  */
-class LaxPermissionValidator : PermissionValidator {
+public class LaxPermissionValidator : PermissionValidator {
 
     override fun initialize() {
         Cobblemon.LOGGER.info("Booting LaxPermissionValidator, permissions will be checked using Minecrafts permission level system, see https://minecraft.fandom.com/wiki/Permission_level")
     }
 
-    override fun hasPermission(player: ServerPlayer, permission: Permission) = player.hasPermissions(permission.level.numericalValue)
+    override fun hasPermission(ServerPlayer player, permission: Permission) = player.hasPermissions(permission.level.numericalValue)
     override fun hasPermission(source: CommandSourceStack, permission: Permission) = source.hasPermission(permission.level.numericalValue)
-    override fun hasPermission(player: ServerPlayer, permission: String, level: Int) = player.hasPermissions(level)
+    override fun hasPermission(ServerPlayer player, permission: String, level: Int) = player.hasPermissions(level)
     override fun hasPermission(source: CommandSourceStack, permission: String, level: Int) = source.hasPermission(level)
 }

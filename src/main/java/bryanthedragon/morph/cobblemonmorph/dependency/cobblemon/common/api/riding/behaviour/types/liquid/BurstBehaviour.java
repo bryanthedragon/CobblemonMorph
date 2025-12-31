@@ -36,8 +36,8 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 
-class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
-    companion object {
+public class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
+    final class Companion {
         val KEY = cobblemonResource("liquid/burst")
         const val DASH_TICKS: Int = 60
     }
@@ -243,7 +243,7 @@ class BurstBehaviour : RidingBehaviour<BurstSettings, BurstState> {
     }
 }
 
-class BurstSettings : RidingBehaviourSettings {
+public class BurstSettings : RidingBehaviourSettings {
     override val key = BurstBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -252,20 +252,20 @@ class BurstSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullable(dashSpeed) { buf, speed -> buf.writeFloat(speed) }
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         dashSpeed = buffer.readNullable { buf -> buf.readFloat() }
     }
 }
 
-class BurstState : RidingBehaviourState() {
+public class BurstState : RidingBehaviourState() {
     var dashing = ridingState(false, Side.BOTH)
     var ticks = ridingState(0, Side.BOTH)
 

@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class MamoswineModel(root: ModelPart) : PokemonPosableModel(root), QuadrupedFrame {
+public class MamoswineModel(root: ModelPart) : PokemonPosableModel(root), QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("mamoswine")
 
     override val hindLeftLeg = getPart("leg_back_left")

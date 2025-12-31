@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class BlisseyModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame {
+public class BlisseyModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame {
     override val rootPart = root.registerChildWithAllChildren("blissey")
 
     override val leftLeg = getPart("left_foot")

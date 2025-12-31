@@ -12,9 +12,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.CobblemonMechanicsSyncPacket
 import net.minecraft.client.Minecraft
-final class CobblemonMechanicsSyncHandler : ClientNetworkPacketHandler<CobblemonMechanicsSyncPacket> {
+public final class CobblemonMechanicsSyncHandler : ClientNetworkPacketHandler<CobblemonMechanicsSyncPacket> {
 
-    override fun handle(packet: CobblemonMechanicsSyncPacket, client: Minecraft) {
+    override fun handle(packet: CobblemonMechanicsSyncPacket, Minecraft client) {
         CobblemonMechanics.remedies = packet.remedies
         CobblemonMechanics.berries = packet.berries
         CobblemonMechanics.potions = packet.potions

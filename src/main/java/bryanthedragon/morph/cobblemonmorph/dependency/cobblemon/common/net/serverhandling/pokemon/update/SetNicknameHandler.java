@@ -21,11 +21,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.part
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.network.chat.Component
-final class SetNicknameHandler : ServerNetworkPacketHandler<SetNicknamePacket> {
+public final class SetNicknameHandler : ServerNetworkPacketHandler<SetNicknamePacket> {
 
     const val MAX_NAME_LENGTH = 12
 
-    override fun handle(packet: SetNicknamePacket, server: MinecraftServer, player: ServerPlayer) {
+    override fun handle(packet: SetNicknamePacket, server: MinecraftServer, ServerPlayer player) {
         val pokemonStore: PokemonStore<*> = if (packet.isParty) {
             player.party()
         } else {

@@ -21,7 +21,7 @@ import kotlin.random.Random
  * @author Licious
  * @since January 29th, 2023
  */
-interface CriticalCaptureProvider {
+public interface CriticalCaptureProvider {
 
     /**
      * Checks if the critical capture should occur based on the Pokedex progression of the given [player].
@@ -30,7 +30,7 @@ interface CriticalCaptureProvider {
      * @param modifiedCatchRate The resulting catch rate calculated inside the [CaptureCalculator].
      * @return If the critical capture should occur
      */
-    fun shouldHaveCriticalCapture(player: ServerPlayer, modifiedCatchRate: Float): Boolean {
+    fun shouldHaveCriticalCapture(ServerPlayer player, modifiedFloat catchRate): Boolean {
         val caughtCount = Cobblemon.playerDataManager.getPokedexData(player).getGlobalCalculatedValue(CaughtCount)
         val caughtMultiplier = when {
             caughtCount <= 30 -> 0F

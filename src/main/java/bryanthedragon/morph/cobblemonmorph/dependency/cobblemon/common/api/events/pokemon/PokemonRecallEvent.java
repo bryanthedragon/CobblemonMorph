@@ -20,16 +20,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Segfault Guy
  * @since March 25th, 2023
  */
-interface PokemonRecallEvent {
+public interface PokemonRecallEvent {
 
-    val pokemon: Pokemon
+    val Pokemon pokemon
     val oldEntity: PokemonEntity?
 
     /**
      * Event fired before a [PokemonEntity] is recalled.
      */
     record Pre(
-        override val pokemon: Pokemon,
+        override val Pokemon pokemon,
         override val oldEntity: PokemonEntity?
     ) : PokemonRecallEvent, Cancelable() {
 
@@ -44,7 +44,7 @@ interface PokemonRecallEvent {
     }
 
     record Post(
-        override val pokemon: Pokemon,
+        override val Pokemon pokemon,
         override val oldEntity: PokemonEntity?
     ) : PokemonRecallEvent {
         val context = mutableMapOf(

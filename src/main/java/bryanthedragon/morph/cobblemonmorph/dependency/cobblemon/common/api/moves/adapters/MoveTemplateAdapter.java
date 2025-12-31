@@ -23,7 +23,8 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since April 1st, 2022
- */final class MoveTemplateAdapter : JsonSerializer<MoveTemplate>, JsonDeserializer<MoveTemplate> {
-    override fun serialize(template: MoveTemplate, type: Type?, ctx: JsonSerializationContext) = JsonPrimitive(template.name)
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = Moves.getByName(json.asString) ?: Moves.getExceptional()
+ */
+public final class MoveTemplateAdapter : JsonSerializer<MoveTemplate>, JsonDeserializer<MoveTemplate> {
+    override fun serialize(template: MoveTemplate, Type type?, JsonSerializationContext ctx) = JsonPrimitive(template.name)
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) = Moves.getByName(json.asString) ?: Moves.getExceptional()
 }

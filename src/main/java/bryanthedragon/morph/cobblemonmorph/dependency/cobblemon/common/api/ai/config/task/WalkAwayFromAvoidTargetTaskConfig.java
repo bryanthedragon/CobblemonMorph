@@ -23,19 +23,19 @@ import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 
-class WalkAwayFromAvoidTargetTaskConfig : SingleTaskConfig {
+public class WalkAwayFromAvoidTargetTaskConfig : SingleTaskConfig {
     var condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     var speedMultiplier = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_SPEED_MULTIPLIER, 0.7).asExpressible()
     var desiredDistance = numberVariable(SharedEntityVariables.FEAR_CATEGORY, FLEE_DESIRED_DISTANCE, 9).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         speedMultiplier,
         desiredDistance
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime) || entity !is PathfinderMob) return null
@@ -47,7 +47,7 @@ class WalkAwayFromAvoidTargetTaskConfig : SingleTaskConfig {
         val desiredDistance = desiredDistance.resolveInt(behaviourConfigurationContext.runtime)
         return WrapperLivingEntityTask(
             SetWalkTargetAwayFrom.entity(MemoryModuleType.HURT_BY_ENTITY, speedMultiplier, desiredDistance, false),
-            PathfinderMob::class.java
+            PathfinderMob.class
         )
     }
 }

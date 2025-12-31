@@ -11,11 +11,11 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast.ToastPacket
 import net.minecraft.client.Minecraft
 import java.util.UUID
-final class ToastTracker {
+public final class ToastTracker {
 
     private val toasts = hashMapOf<UUID, CobblemonToast>()
 
-    fun handle(packet: ToastPacket, client: Minecraft) {
+    fun handle(packet: ToastPacket, Minecraft client) {
         var needsQueue = false
         var toast = this.toasts[packet.uuid]
         if (toast == null) {

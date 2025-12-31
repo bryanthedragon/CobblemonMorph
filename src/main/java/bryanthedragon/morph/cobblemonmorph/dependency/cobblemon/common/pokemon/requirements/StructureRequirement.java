@@ -22,16 +22,16 @@ import net.minecraft.world.level.levelgen.structure.Structure
  * @author whatsy
  * @since December 5th, 2023
  */
-class StructureRequirement : EntityQueryRequirement {
+public class StructureRequirement : EntityQueryRequirement {
     val structureCondition: RegistryLikeCondition<Structure>? = null
     val structureAnticondition: RegistryLikeCondition<Structure>? = null
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
+    override fun check(Pokemon pokemon, LivingEntity queriedEntity): Boolean {
         val structures = queriedEntity.level().getChunk(queriedEntity.blockPosition()).allReferences
         val registry = queriedEntity.level().registryAccess().registryOrThrow(Registries.STRUCTURE)
         return (structureCondition == null || structures.any { structureCondition.fits(it.key, registry) }) && (structureAnticondition == null || !structures.any { structureAnticondition.fits(it.key, registry) })
     }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "structure"
     }
 

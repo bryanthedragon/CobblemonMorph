@@ -8,4 +8,4 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch
 
-interface CauserInstruction
+public interface CauserInstruction

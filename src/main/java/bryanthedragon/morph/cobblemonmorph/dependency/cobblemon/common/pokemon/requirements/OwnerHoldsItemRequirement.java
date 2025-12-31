@@ -25,28 +25,28 @@ import kotlin.collections.iterator
  *
  * @author Polymeta
  */
-class OwnerHoldsItemRequirement(val itemCondition: ItemPredicate)
+public class OwnerHoldsItemRequirement(val itemCondition: ItemPredicate)
     : OwnerQueryRequirement {
 
     override fun checkPlayer(
-        pokemon: Pokemon,
+        Pokemon pokemon,
         owner: ServerPlayer
     ): Boolean {
         return checkItem(owner)
     }
 
     override fun checkNPC(
-        pokemon: Pokemon,
+        Pokemon pokemon,
         owner: NPCEntity
     ): Boolean {
         return checkItem(owner)
     }
 
-    fun checkItem(entity: LivingEntity): Boolean {
+    fun checkItem(LivingEntity entity): Boolean {
         return itemCondition.test(entity.getItemInHand(InteractionHand.MAIN_HAND))
     }
 
-    companion object {
+    final class Companion {
         val ADAPTER_VARIANT = "owner_held_item"
     }
 }

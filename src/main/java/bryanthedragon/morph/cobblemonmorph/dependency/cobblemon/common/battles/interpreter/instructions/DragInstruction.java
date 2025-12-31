@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Hiroku
  * @since April 24th, 2022
  */
-class DragInstruction(val instructionSet: InstructionSet, val battleActor: BattleActor, val publicMessage: BattleMessage, val privateMessage: BattleMessage): InterpreterInstruction {
+public class DragInstruction(val instructionSet: InstructionSet, val battleActor: BattleActor, val publicMessage: BattleMessage, val privateMessage: BattleMessage): InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchInsert {
             val (pnx, _) = publicMessage.pnxAndUuid(0)!!

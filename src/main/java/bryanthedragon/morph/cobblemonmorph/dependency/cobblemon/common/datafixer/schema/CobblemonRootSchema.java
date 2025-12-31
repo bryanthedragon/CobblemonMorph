@@ -19,7 +19,7 @@ import net.minecraft.util.datafix.schemas.NamespacedSchema
 import java.util.function.Supplier
 
 //I will document this class heavily hoping to spare others the pain caused to me figuring this out
-class CobblemonRootSchema(versionKey: Int, parent: Schema?) : Schema(versionKey, parent) {
+public class CobblemonRootSchema(versionKey: Int, parent: Schema?) : Schema(versionKey, parent) {
 
     //A schema is basically used to parse an arbitrary nbt tag and turn it into "types" to be manipulated by
     //The actual fixes. So here are all the types!

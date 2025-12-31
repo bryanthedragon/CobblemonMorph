@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Licious
  * @since March 20th, 2022
  */
-open class LevelUpEvolution(
+public open class LevelUpEvolution(
     override val id: String,
     override val result: PokemonProperties,
     override val shedder: PokemonProperties?,
@@ -56,7 +56,7 @@ open class LevelUpEvolution(
         return result
     }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "level_up"
         // Just for user convenience sake as we may have passive evolutions not backed by level ups
         const val ALTERNATIVE_ADAPTER_VARIANT = "passive"

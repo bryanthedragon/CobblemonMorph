@@ -44,7 +44,7 @@ val mobEffectSeasoningHeader by lazy { lang("item_class.mob_effect_seasoning").b
 val mobEffectHeader by lazy { lang("seasoning_mob_effect_header").gray() }
 val rideBoostSeasoningHeader by lazy { lang("seasoning_ride_boosts_info_header").blue() }
 
-private fun recipeUsesProcessor(stack: ItemStack, processorType: String): Boolean {
+private fun recipeUsesProcessor(ItemStack stack, processorType: String): Boolean {
     val level = Minecraft.getInstance().level ?: return false
     val recipeManager = level.recipeManager
 
@@ -58,23 +58,23 @@ private fun recipeUsesProcessor(stack: ItemStack, processorType: String): Boolea
         }
 }
 
-fun itemTakesSeasoningData(stack: ItemStack): Boolean {
+fun itemTakesSeasoningData(ItemStack stack): Boolean {
     return recipeUsesFlavor(stack) || recipeUsesFood(stack) || recipeUsesMobEffect(stack) || recipeUsesBaitEffect(stack)
 }
 
-fun recipeUsesFlavor(stack: ItemStack): Boolean {
+fun recipeUsesFlavor(ItemStack stack): Boolean {
     return recipeUsesProcessor(stack, "flavour")
 }
 
-fun recipeUsesFood(stack: ItemStack): Boolean {
+fun recipeUsesFood(ItemStack stack): Boolean {
     return recipeUsesProcessor(stack, "food")
 }
 
-fun recipeUsesMobEffect(stack: ItemStack): Boolean {
+fun recipeUsesMobEffect(ItemStack stack): Boolean {
     return recipeUsesProcessor(stack, "mob_effects")
 }
 
-fun recipeUsesBaitEffect(stack: ItemStack): Boolean {
+fun recipeUsesBaitEffect(ItemStack stack): Boolean {
     return recipeUsesProcessor(stack, "spawn_bait")
 }
 
@@ -126,7 +126,7 @@ fun generateAdditionalFlavorTooltip(flavours: Map<Flavour, Int>): MutableList<Co
     return resultLines
 }
 
-fun generateAdditionalBaitEffectTooltip(stack: ItemStack): MutableList<Component> {
+fun generateAdditionalBaitEffectTooltip(ItemStack stack): MutableList<Component> {
     val resultLines = mutableListOf<Component>()
 
     val rawEffects = mutableListOf<SpawnBait.Effect>().apply {
@@ -199,7 +199,7 @@ fun generateAdditionalBaitEffectTooltip(stack: ItemStack): MutableList<Component
     return resultLines
 }
 
-fun generateAdditionalRideBoostsTooltip(stack: ItemStack): MutableList<Component> {
+fun generateAdditionalRideBoostsTooltip(ItemStack stack): MutableList<Component> {
     val boosts = stack.get(CobblemonItemComponents.RIDE_BOOST)?.boosts
         ?: return mutableListOf()
 

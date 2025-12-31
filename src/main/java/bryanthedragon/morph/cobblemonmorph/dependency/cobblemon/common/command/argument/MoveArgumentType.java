@@ -21,7 +21,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import java.util.concurrent.CompletableFuture
 
-class MoveArgumentType: ArgumentType<MoveTemplate> {
+public class MoveArgumentType: ArgumentType<MoveTemplate> {
 
     override fun parse(reader: StringReader): MoveTemplate = Moves.getByName(reader.readString()) ?: throw SimpleCommandExceptionType(INVALID_MOVE).createWithContext(reader)
 
@@ -34,15 +34,15 @@ class MoveArgumentType: ArgumentType<MoveTemplate> {
 
     override fun getExamples() = EXAMPLES
 
-    companion object {
+    final class Companion {
 
         val EXAMPLES: List<String> = listOf("tackle")
         val INVALID_MOVE: MutableComponent = Component.translatable("cobblemon.command.pokespawn.invalid-move")
 
         fun move() = MoveArgumentType()
 
-        fun <S> getMove(context: CommandContext<S>, name: String): MoveTemplate {
-            return context.getArgument(name, MoveTemplate::class.java)
+        fun <S> getMove(context: CommandContext<S>, String name): MoveTemplate {
+            return context.getArgument(name, MoveTemplate.class)
         }
 
     }

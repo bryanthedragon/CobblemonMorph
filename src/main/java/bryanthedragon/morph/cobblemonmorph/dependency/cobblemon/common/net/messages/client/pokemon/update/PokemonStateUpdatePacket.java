@@ -13,19 +13,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.a
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class PokemonStateUpdatePacket(pokemon: () -> Pokemon?, value: PokemonState): SingleUpdatePacket<PokemonState, PokemonStateUpdatePacket>(pokemon, value) {
+public class PokemonStateUpdatePacket(pokemon: () -> Pokemon?, value: PokemonState): SingleUpdatePacket<PokemonState, PokemonStateUpdatePacket>(pokemon, value) {
 
     override val id = ID
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         value.writeToBuffer(buffer)
     }
 
-    override fun set(pokemon: Pokemon, value: PokemonState) { pokemon.state = value }
+    override fun set(Pokemon pokemon, value: PokemonState) { pokemon.state = value }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("state_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): PokemonStateUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): PokemonStateUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val state = PokemonState.fromBuffer(buffer)
             return PokemonStateUpdatePacket(pokemon, state)

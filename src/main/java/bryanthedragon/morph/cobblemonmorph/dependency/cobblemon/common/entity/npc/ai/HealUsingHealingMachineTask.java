@@ -26,7 +26,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.phys.AABB
 
-class HealUsingHealingMachineTask(
+public class HealUsingHealingMachineTask(
     val horizontalUseRange: Expression = "3".asExpression(),
     val verticalUseRange: Expression = "2".asExpression(),
 ) : Behavior<LivingEntity>(
@@ -38,12 +38,12 @@ class HealUsingHealingMachineTask(
     var blockPos = BlockPos(0, 0, 0)
     var nearestHealer: HealingMachineBlockEntity? = null
 
-    override fun canStillUse(world: ServerLevel, entity: LivingEntity, l: Long): Boolean {
+    override fun canStillUse(ServerLevel world, LivingEntity entity, l: Long): Boolean {
         val healer = nearestHealer
         return !(healer == null || healer.currentUser != entity.uuid || world.getBlockEntity(blockPos) != healer)
     }
 
-    override fun checkExtraStartConditions(world: ServerLevel, entity: LivingEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel world, LivingEntity entity): Boolean {
         if (entity !is NPCEntity) {
             return false
         }
@@ -70,7 +70,7 @@ class HealUsingHealingMachineTask(
         return this.nearestHealer != null
     }
 
-    override fun start(world: ServerLevel, entity: LivingEntity, l: Long) {
+    override fun start(ServerLevel world, LivingEntity entity, l: Long) {
         entity as NPCEntity
         nearestHealer?.activate(entity.uuid, entity.party ?: return)
         entity.playAnimation("punch_right")

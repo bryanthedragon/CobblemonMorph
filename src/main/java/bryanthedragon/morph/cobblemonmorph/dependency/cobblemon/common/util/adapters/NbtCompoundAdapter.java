@@ -19,9 +19,10 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since July 25th, 2022
- */final class NbtCompoundAdapter : JsonDeserializer<CompoundTag>, JsonSerializer<CompoundTag> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = NbtUtils.snbtToStructure(json.asString)
-    override fun serialize(nbt: CompoundTag, type: Type, ctx: JsonSerializationContext): JsonElement {
+ */
+public final class NbtCompoundAdapter : JsonDeserializer<CompoundTag>, JsonSerializer<CompoundTag> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) = NbtUtils.snbtToStructure(json.asString)
+    override fun serialize(CompoundTag nbt, Type type, JsonSerializationContext ctx): JsonElement {
         return JsonPrimitive(SnbtPrinterTagVisitor("", 0, mutableListOf()).visit(nbt))
     }
 }

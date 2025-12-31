@@ -32,12 +32,12 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import java.util.*
 
-class BattleConfigureGUI(
+public class BattleConfigureGUI(
         private val packet: PlayerInteractOptionsPacket,
         private val activeRequest: ClientBattleChallenge? = null,
         private val activeTeamRequest: ClientTeamRequest? = null
 ) : Screen(lang("ui.challenge.challenge_title")), CobblemonRenderable {
-    companion object {
+    final class Companion {
         const val SIZE = 113
         private val backgroundResource = cobblemonResource("textures/gui/interact/request/battle_request.png")
         private val battleArrowsResource = cobblemonResource("textures/gui/interact/request/battle_request_arrows.png")

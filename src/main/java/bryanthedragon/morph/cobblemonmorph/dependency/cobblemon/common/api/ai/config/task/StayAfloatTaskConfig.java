@@ -17,17 +17,17 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
-class StayAfloatTaskConfig : SingleTaskConfig {
+public class StayAfloatTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SharedEntityVariables.MOVEMENT_CATEGORY, "can_float", true).asExpressible()
     val chance = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, "float_chance", 0.8F).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition, chance).asVariables()
-    override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<LivingEntity>? {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition, chance).asVariables()
+    override fun createTask(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         behaviourConfigurationContext.addMemories(CobblemonMemories.POKEMON_BATTLE)
         return WrapperLivingEntityTask(
             StayAfloatTask(chance.resolveFloat(behaviourConfigurationContext.runtime)),
-            PathfinderMob::class.java
+            PathfinderMob.class
         )
     }
 }

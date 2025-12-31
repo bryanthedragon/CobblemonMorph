@@ -26,7 +26,7 @@ import java.util.UUID
  * @author Hiroku
  * @since March 6th, 2023
  */
-class TradeOfferNotificationPacket(val requestID: UUID, val senderID: UUID, val expiryTime: Int): NetworkPacket<TradeOfferNotificationPacket> {
+public class TradeOfferNotificationPacket(val requestID: UUID, val senderID: UUID, val expiryTime: Int): NetworkPacket<TradeOfferNotificationPacket> {
     override val id = ID
 
     constructor(request: TradeManager.TradeRequest) : this(
@@ -35,14 +35,14 @@ class TradeOfferNotificationPacket(val requestID: UUID, val senderID: UUID, val 
         expiryTime = request.expiryTime
     )
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(requestID)
         buffer.writeUUID(senderID)
         buffer.writeInt(expiryTime)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("trade_offer_notification")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TradeOfferNotificationPacket(buffer.readUUID(), buffer.readUUID(), buffer.readInt())
+        fun decode(RegistryFriendlyByteBuf buffer) = TradeOfferNotificationPacket(buffer.readUUID(), buffer.readUUID(), buffer.readInt())
     }
 }

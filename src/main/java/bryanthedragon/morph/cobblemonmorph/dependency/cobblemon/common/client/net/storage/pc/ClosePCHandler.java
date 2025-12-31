@@ -18,8 +18,9 @@ import net.minecraft.client.Minecraft
  *
  * @author Deltric
  * @since May 17th, 2023
- */final class ClosePCHandler : ClientNetworkPacketHandler<ClosePCPacket> {
-    override fun handle(packet: ClosePCPacket, client: Minecraft) {
+ */
+public final class ClosePCHandler : ClientNetworkPacketHandler<ClosePCPacket> {
+    override fun handle(packet: ClosePCPacket, Minecraft client) {
         if (client.screen !is PCGUI) {
             return
         }

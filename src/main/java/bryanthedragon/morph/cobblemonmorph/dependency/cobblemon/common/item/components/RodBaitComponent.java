@@ -21,8 +21,8 @@ import net.minecraft.world.item.ItemStack
  * @author Hiroku
  * @since June 9th, 2024
  */
-class RodBaitComponent(val stack: ItemStack = ItemStack.EMPTY) {
-    companion object {
+public class RodBaitComponent(val ItemStack stack = ItemStack.EMPTY) {
+    final class Companion {
         val CODEC: Codec<RodBaitComponent> = RecordCodecBuilder.create { builder -> builder.group(
             ItemStack.CODEC.optionalFieldOf("stack", ItemStack.EMPTY).forGetter { it.stack }
         ).apply(builder) { stack -> RodBaitComponent(stack) } }

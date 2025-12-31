@@ -23,11 +23,11 @@ record SelectDriverEvent(val options: Set<LivingEntity>) {
      * values are permitted by this function. All priority values with lesser priorities
      * will be outright ignored.
      */
-    fun suggest(target: LivingEntity, priority: Int) {
+    fun suggest(LivingEntity target, priority: Int) {
         if (priority >= 0 && priority > (this.result?.priority ?: -1)) {
             this.result = DriverSuggestion(target, priority)
         }
     }
 
-    record DriverSuggestion(val entity: LivingEntity, val priority: Int)
+    record DriverSuggestion(val LivingEntity entity, val priority: Int)
 }

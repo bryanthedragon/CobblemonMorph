@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.
  * @author Hiroku
  * @since July 2nd, 2022
  */
-class ClientBallDisplay(val pokeBall: PokeBall, val aspects: Set<String>) : PokeBallPosableState() {
+public class ClientBallDisplay(val pokeBall: PokeBall, val aspects: Set<String>) : PokeBallPosableState() {
     override val stateEmitter = SettableObservable(EmptyPokeBallEntity.CaptureState.FALL)
     override val shakeEmitter = SimpleObservable<Unit>()
     override val schedulingTracker = ClientTaskTracker

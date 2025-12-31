@@ -14,12 +14,12 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.DoNothing
 
-interface SingleTaskConfig : TaskConfig {
-    companion object {
+public interface SingleTaskConfig : TaskConfig {
+    final class Companion {
         fun nothing() = object : SingleTaskConfig {
-            override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+            override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
             override fun createTask(
-                entity: LivingEntity,
+                LivingEntity entity,
                 behaviourConfigurationContext: BehaviourConfigurationContext
             ): BehaviorControl<in LivingEntity>? {
                 return DoNothing(0, 1)
@@ -28,11 +28,11 @@ interface SingleTaskConfig : TaskConfig {
     }
 
     override fun createTasks(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): List<BehaviorControl<in LivingEntity>> {
         return createTask(entity, behaviourConfigurationContext)?.let { listOf(it) } ?: emptyList()
     }
 
-    fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<in LivingEntity>?
+    fun createTask(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<in LivingEntity>?
 }

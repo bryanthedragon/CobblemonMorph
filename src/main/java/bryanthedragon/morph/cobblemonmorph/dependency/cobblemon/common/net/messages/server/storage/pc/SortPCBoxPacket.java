@@ -18,20 +18,20 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
 
-class SortPCBoxPacket internal constructor(val storeID: UUID, val boxNumber: Int, val sortMode: PokemonSortMode, val descending: Boolean) : NetworkPacket<SortPCBoxPacket>, UnsplittablePacket {
+public class SortPCBoxPacket internal constructor(val UUID storeID, val Int boxNumber, val sortMode: PokemonSortMode, val descending: Boolean) : NetworkPacket<SortPCBoxPacket>, UnsplittablePacket {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(storeID)
         buffer.writeSizedInt(IntSize.U_SHORT, boxNumber)
         buffer.writeSizedInt(IntSize.U_BYTE, sortMode.ordinal)
         buffer.writeBoolean(descending)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("sort_pc_box")
-        fun decode(buffer: RegistryFriendlyByteBuf): SortPCBoxPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SortPCBoxPacket {
             val storeID = buffer.readUUID()
             val boxNumber = buffer.readSizedInt(IntSize.U_SHORT)
             val sortMode = PokemonSortMode.entries[buffer.readSizedInt(IntSize.U_BYTE)]

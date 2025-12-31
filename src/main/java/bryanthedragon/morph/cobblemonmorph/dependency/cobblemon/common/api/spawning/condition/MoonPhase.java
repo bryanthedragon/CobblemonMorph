@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level
  * @author Licious
  * @since January 25th, 2023
  */
-enum class MoonPhase {
+public enum MoonPhase {
 
     FULL_MOON,
     WANING_GIBBOUS,
@@ -28,7 +28,7 @@ enum class MoonPhase {
     FIRST_QUARTER,
     WAXING_GIBBOUS;
 
-    companion object {
+    final class Companion {
         private val VALUES = values()
 
         /**
@@ -39,7 +39,7 @@ enum class MoonPhase {
          *
          * @throws IndexOutOfBoundsException if the moon phase cannot be resolved, this should never happen.
          */
-        fun ofWorld(world: Level): MoonPhase = VALUES[world.moonPhase]
+        fun ofWorld(Level world): MoonPhase = VALUES[world.moonPhase]
     }
 
 }

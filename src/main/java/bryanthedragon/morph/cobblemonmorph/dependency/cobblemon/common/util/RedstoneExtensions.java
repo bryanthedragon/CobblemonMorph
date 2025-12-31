@@ -6,15 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.ObserverBlock
 
-fun Level.activateNearbyObservers(blockPos: BlockPos) {
+fun Level.activateNearbyObservers(blockBlockPos pos) {
     val currentState = getBlockState(blockPos)
     sendBlockUpdated(blockPos, currentState, currentState, 3)
 

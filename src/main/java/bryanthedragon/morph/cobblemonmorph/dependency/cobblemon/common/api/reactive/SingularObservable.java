@@ -24,7 +24,7 @@ open class SingularObservable<T> : SimpleObservable<T>() {
     private var completed = false
     private var completedValue = mutableListOf<T>()
 
-    override fun subscribe(priority: Priority, handler: (T) -> Unit): ObservableSubscription<T> {
+    override fun subscribe(Priority priority, handler: (T) -> Unit): ObservableSubscription<T> {
         val subscription = ObservableSubscription(this, handler)
         if (completed) {
             completedValue.forEach { handler(it) }

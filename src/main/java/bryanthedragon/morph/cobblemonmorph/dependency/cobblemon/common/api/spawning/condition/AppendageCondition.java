@@ -36,13 +36,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adap
  * @author Hiroku
  * @since July 9th, 2022
  */
-interface AppendageCondition {
+public interface AppendageCondition {
     private class RegisteredAppendageCondition(
         val clazz: Class<out AppendageCondition>,
         val spawningConditionFits: (SpawningCondition<*>) -> Boolean
     )
 
-    companion object {
+    final class Companion {
         private val appendages = mutableListOf<RegisteredAppendageCondition>()
         fun registerAppendage(conditionClass: Class<out SpawningCondition<*>>, appendageClass: Class<out AppendageCondition>) {
             registerAppendage(appendageClass, conditionClass::isInstance)

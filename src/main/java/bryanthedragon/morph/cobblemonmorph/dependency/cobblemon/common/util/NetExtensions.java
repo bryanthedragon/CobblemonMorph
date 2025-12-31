@@ -6,8 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
 import io.netty.buffer.ByteBuf
 import net.minecraft.world.phys.AABB
@@ -24,7 +23,7 @@ fun ByteBuf.writeConditional(shouldWrite: Boolean, writer: () -> Unit) {
     }
 }
 
-fun ByteBuf.writeSizedInt(size: IntSize, value: Int) {
+fun ByteBuf.writeSizedInt(size: IntSize, Int value) {
     when (size) {
         IntSize.INT -> writeInt(value)
         IntSize.SHORT, IntSize.U_SHORT -> writeShort(value)
@@ -54,7 +53,7 @@ fun ByteBuf.readTimes(size: IntSize = IntSize.U_BYTE, readEntry: () -> Unit) {
     repeat(times) { readEntry() }
 }
 
-fun ByteBuf.writeBox(box: AABB) {
+fun ByteBuf.writeBox(AABB box) {
     this.writeDouble(box.minX)
     this.writeDouble(box.minY)
     this.writeDouble(box.minZ)
@@ -78,7 +77,7 @@ fun <K, V> ByteBuf.readMapK(size: IntSize = IntSize.U_BYTE, map: MutableMap<K, V
     }
 }
 
-fun ByteBuf.writeVec3d(vec3d: Vec3) {
+fun ByteBuf.writeVec3d(Vec3 vec3d) {
     writeDouble(vec3d.x)
     writeDouble(vec3d.y)
     writeDouble(vec3d.z)

@@ -30,9 +30,9 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since January 31st, 2022
  */
-class SpawningZone(
+public class SpawningZone(
     val cause: SpawnCause,
-    val world: ServerLevel,
+    val ServerLevel world,
     val baseX: Int,
     val baseY: Int,
     val baseZ: Int,
@@ -42,7 +42,7 @@ class SpawningZone(
     influences: List<SpawningZoneInfluence>
 ) {
     class BlockData(
-        val state: BlockState,
+        val BlockState state,
         val light: Int,
         val skyLight: Int
     )
@@ -56,26 +56,26 @@ class SpawningZone(
 
     private val structureChunkCaches = mutableMapOf<ChunkPos, SpawnablePosition.StructureChunkCache>()
 
-    fun getStructureCache(pos: BlockPos): SpawnablePosition.StructureChunkCache {
+    fun getStructureCache(BlockPos pos): SpawnablePosition.StructureChunkCache {
         return structureChunkCaches.getOrPut(ChunkPos(pos), SpawnablePosition::StructureChunkCache)
     }
 
-    companion object {
+    final class Companion {
         val stoneState = Blocks.STONE.defaultBlockState()
     }
 
     fun isInBounds(x: Int, y: Int, z: Int) = x >= baseX && x < baseX + length && y >= baseY && y < baseY + height && z >= baseZ && z < baseZ + width
     fun getBlockData(x: Int, y: Int, z: Int): BlockData = blocks[x - baseX][y - baseY][z - baseZ]
-    fun getBlockData(position: BlockPos) = getBlockData(position.x, position.y, position.z)
+    fun getBlockData(BlockPos position) = getBlockData(position.x, position.y, position.z)
 
-    fun getBlockState(x: Int, y: Int, z: Int, elseBlock: BlockState = stoneState): BlockState {
+    fun getBlockState(x: Int, y: Int, z: Int, elseBlock blockState = stoneState): BlockState {
         return if (!isInBounds(x, y, z)) {
             elseBlock
         } else {
             blocks[x - baseX][y - baseY][z - baseZ].state
         }
     }
-    fun getBlockState(position: BlockPos, elseBlock: BlockState = stoneState) = getBlockState(position.x, position.y, position.z, elseBlock)
+    fun getBlockState(BlockPos position, elseBlock blockState = stoneState) = getBlockState(position.x, position.y, position.z, elseBlock)
 
     fun getLight(x: Int, y: Int, z: Int, elseLight: Int = 0): Int {
         return if (!isInBounds(x, y, z)) {
@@ -84,7 +84,7 @@ class SpawningZone(
             getBlockData(x, y, z).light
         }
     }
-    fun getLight(position: BlockPos, elseLight: Int = 0) = getLight(position.x, position.y, position.z, elseLight)
+    fun getLight(BlockPos position, elseLight: Int = 0) = getLight(position.x, position.y, position.z, elseLight)
 
     fun getSkyLight(x: Int, y: Int, z: Int, elseLight: Int = 0): Int {
         return if (!isInBounds(x, y, z)) {
@@ -93,7 +93,7 @@ class SpawningZone(
             getBlockData(x, y, z).skyLight
         }
     }
-    fun getSkyLight(position: BlockPos, elseLight: Int = 0) = getSkyLight(position.x, position.y, position.z, elseLight)
+    fun getSkyLight(BlockPos position, elseLight: Int = 0) = getSkyLight(position.x, position.y, position.z, elseLight)
 
     fun skySpaceAbove(x: Int, y: Int, z: Int): Int {
         return if (!isInBounds(x, y, z) || skyLevel[x - baseX][z - baseZ] > y) {
@@ -102,7 +102,7 @@ class SpawningZone(
             max(0, world.maxBuildHeight - y)
         }
     }
-    fun skySpaceAbove(position: BlockPos) = skySpaceAbove(position.x, position.y, position.z)
+    fun skySpaceAbove(BlockPos position) = skySpaceAbove(position.x, position.y, position.z)
 
     fun canSeeSky(x: Int, y: Int, z: Int, elseCanSeeSky: Boolean = false): Boolean {
         return if (!isInBounds(x, y, z)) {
@@ -111,9 +111,9 @@ class SpawningZone(
             y >= skyLevel[x - baseX][z - baseZ]
         }
     }
-    fun canSeeSky(position: BlockPos, elseCanSeeSky: Boolean = false) = canSeeSky(position.x, position.y, position.z, elseCanSeeSky)
+    fun canSeeSky(BlockPos position, elseCanSeeSky: Boolean = false) = canSeeSky(position.x, position.y, position.z, elseCanSeeSky)
 
-    fun nearbyBlocks(position: BlockPos, maxHorizontalRadius: Int, maxVerticalRadius: Int) = nearbyBlocks(position.x, position.y, position.z, maxHorizontalRadius, maxVerticalRadius)
+    fun nearbyBlocks(BlockPos position, maxHorizontalRadius: Int, maxVerticalRadius: Int) = nearbyBlocks(position.x, position.y, position.z, maxHorizontalRadius, maxVerticalRadius)
     fun nearbyBlocks(centerX: Int, centerY: Int, centerZ: Int, maxHorizontalRadius: Int, maxVerticalRadius: Int): List<BlockState> {
         val blocks = mutableListOf<BlockState>()
 
@@ -135,7 +135,7 @@ class SpawningZone(
         return blocks
     }
 
-    fun horizontalSpace(position: BlockPos, condition: (BlockState) -> Boolean, maximum: Int)
+    fun horizontalSpace(BlockPos position, condition: (BlockState) -> Boolean, maximum: Int)
         = horizontalSpace(position.x, position.y, position.z, condition, maximum)
     fun horizontalSpace(centerX: Int, centerY: Int, centerZ: Int, condition: (BlockState) -> Boolean, maximum: Int): Int {
         var space = 1

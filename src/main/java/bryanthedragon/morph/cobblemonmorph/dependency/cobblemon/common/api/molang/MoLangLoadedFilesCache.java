@@ -29,7 +29,8 @@ import net.minecraft.world.level.storage.LevelResource
  *
  * @author Hiroku
  * @since November 1st, 2025
- */final class MoLangLoadedFilesCache {
+ */
+public final class MoLangLoadedFilesCache {
     private val gson = GsonBuilder().setPrettyPrinting().create()
     val loadedFiles = ConcurrentHashMap<String, VariableStruct>()
 
@@ -97,7 +98,7 @@ import net.minecraft.world.level.storage.LevelResource
             if (!file.exists()) {
                 return VariableStruct()
             }
-            val jsonElement = gson.fromJson(file.readText(), JsonElement::class.java)
+            val jsonElement = gson.fromJson(file.readText(), JsonElement.class)
             MoValue.of(jsonElement) as VariableStruct
         }
     }

@@ -32,7 +32,7 @@ import java.util.concurrent.CompletableFuture
  * @author Segfault Guy
  * @since March 5th, 2024
  */
-class IllusionEffect(
+public class IllusionEffect(
     override var mock: PokemonProperties = PokemonProperties(),
     override var scale: Float = 1.0F
 ) : BattleEffect(), MocKEffect {
@@ -71,7 +71,7 @@ class IllusionEffect(
         return nbt
     }
 
-    override fun loadFromNBT(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+    override fun loadFromNBT(CompoundTag nbt, registryLookup: HolderLookup.Provider) {
         if (nbt.contains(DataKeys.POKEMON_ENTITY_MOCK)) this.mock = PokemonProperties().loadFromNBT(nbt.getCompound(DataKeys.POKEMON_ENTITY_MOCK), registryLookup)
         if (nbt.contains(DataKeys.POKEMON_ENTITY_SCALE)) this.scale = nbt.getFloat(DataKeys.POKEMON_ENTITY_SCALE)
     }
@@ -93,7 +93,7 @@ class IllusionEffect(
         }
     }
 
-    companion object {
+    final class Companion {
         val ID = "ILLUSION"
     }
 }

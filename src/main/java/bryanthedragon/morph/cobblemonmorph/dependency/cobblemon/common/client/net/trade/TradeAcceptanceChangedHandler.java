@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeAcceptanceChangedPacket
 import net.minecraft.client.Minecraft
-final class TradeAcceptanceChangedHandler : ClientNetworkPacketHandler<TradeAcceptanceChangedPacket> {
-    override fun handle(packet: TradeAcceptanceChangedPacket, client: Minecraft) {
+public final class TradeAcceptanceChangedHandler : ClientNetworkPacketHandler<TradeAcceptanceChangedPacket> {
+    override fun handle(packet: TradeAcceptanceChangedPacket, Minecraft client) {
         if (CobblemonClient.trade?.myOffer?.get()?.uuid == packet.pokemonId) {
             CobblemonClient.trade!!.oppositeAcceptedMyOffer.set(packet.accepted)
         } else if (CobblemonClient.trade?.oppositeOffer?.get()?.uuid == packet.pokemonId) {

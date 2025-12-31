@@ -6,24 +6,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asTranslated
+import java.util.List;
 
-record StarterCategory(
-    val name: String,
-    val displayName: String,
-    val pokemon: List<PokemonProperties>
-) {
-    fun asRenderableStarterCategory() = RenderableStarterCategory(name, displayName, pokemon.map { it.asRenderablePokemon() })
-}
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter.renderer.RenderableStarterCategory;
 
-record RenderableStarterCategory(
-    val name: String,
-    val displayName: String,
-    val pokemon: List<RenderablePokemon>
-) {
-    val displayNameText = displayName.asTranslated()
+public record StarterCategory(String name, String displayName, List<PokemonProperties> pokemon) {
+    fun asRenderableStarterCategory() {
+        RenderableStarterCategory(name, displayName, pokemon.map { it.asRenderablePokemon() })
+    }
 }

@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asTr
  * @author Hiroku
  * @since October 3rd, 2022
  */
-class StatusInstruction(val message: BattleMessage): InterpreterInstruction {
+public class StatusInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val (pnx, _) = message.pnxAndUuid(0) ?: return

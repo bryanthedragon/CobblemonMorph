@@ -18,14 +18,14 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.lang.reflect.Type
-final class SpawnablePositionSelectorAdapter : JsonDeserializer<SpawnablePositionSelector> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): SpawnablePositionSelector {
+public final class SpawnablePositionSelectorAdapter : JsonDeserializer<SpawnablePositionSelector> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): SpawnablePositionSelector {
         return if (json.isJsonPrimitive || json.isJsonArray) {
             val expression = if (json.isJsonPrimitive) json.asString.asExpressionLike() else (json as JsonArray).asExpressionLike()
             ExpressionSpawnablePositionSelector().also { it.expression = expression }
         } else {
             json as JsonObject
-            val type = json.get("type")?.asString ?: return ctx.deserialize(json, ConditionalSpawnablePositionSelector::class.java)
+            val type = json.get("type")?.asString ?: return ctx.deserialize(json, ConditionalSpawnablePositionSelector.class)
             val clazz = SpawnablePositionSelector.types[type] ?: throw IllegalArgumentException("Unknown spawn detail selector type: $type")
             ctx.deserialize(json, clazz)
         }

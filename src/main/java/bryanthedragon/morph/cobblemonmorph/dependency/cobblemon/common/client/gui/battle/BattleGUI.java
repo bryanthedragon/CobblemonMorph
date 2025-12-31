@@ -30,8 +30,8 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 
-class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
-    companion object {
+public class BattleGUI : Screen(battleLang("gui.title")), CobblemonRenderable {
+    final class Companion {
         const val OPTION_VERTICAL_SPACING = 3
         const val OPTION_HORIZONTAL_SPACING = 3
         const val OPTION_ROOT_X = 12

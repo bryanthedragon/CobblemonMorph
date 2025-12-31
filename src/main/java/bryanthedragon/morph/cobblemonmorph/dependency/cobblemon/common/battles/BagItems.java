@@ -29,21 +29,22 @@ import java.io.File
  *
  * @author Hiroku
  * @since June 26th, 2023
- */final class BagItems : DataRegistry {
+ */
+public final class BagItems : DataRegistry {
     override val id = cobblemonResource("bag_items")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<BagItems>()
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 
     val bagItems = PrioritizedList<BagItemLike>()
     internal val bagItemsScripts = mutableMapOf<String, String>() // itemId to JavaScript
 
     @JvmStatic
-    fun getConvertibleForStack(stack: ItemStack): BagItemLike? {
+    fun getConvertibleForStack(ItemStack stack): BagItemLike? {
         return bagItems.firstOrNull { it.getBagItem(stack) != null }
     }
 
-    override fun reload(manager: ResourceManager) {
+    override fun reload(ResourceManager manager) {
         this.bagItemsScripts.clear()
         ShowdownService.service.resetRegistryData("bagItem")
         manager.listResources("bag_items") { it.path.endsWith(".js") }.forEach { (identifier, resource) ->

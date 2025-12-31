@@ -22,8 +22,9 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since February 10th, 2023
- */final class LocatorBoneAdapter : JsonDeserializer<LocatorBone> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): LocatorBone {
+ */
+public final class LocatorBoneAdapter : JsonDeserializer<LocatorBone> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): LocatorBone {
         val offset: List<Float>
         val rotation: List<Float>
         if (json is JsonArray) {

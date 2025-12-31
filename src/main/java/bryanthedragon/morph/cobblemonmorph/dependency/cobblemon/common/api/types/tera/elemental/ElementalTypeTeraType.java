@@ -14,14 +14,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class ElementalTypeTeraType(val type: ElementalType) : TeraType {
+public class ElementalTypeTeraType(val type: ElementalType) : TeraType {
     override val legalAsStatic: Boolean = true
 
-    override val name: String = this.type.name
+    override val String name = this.type.name
 
-    override val id: ResourceLocation = cobblemonResource(this.type.showdownId)
+    override val ResourceLocation id = cobblemonResource(this.type.showdownId)
 
-    override val displayName: Component = this.type.displayName
+    override val Component displayName = this.type.displayName
 
     override fun showdownId(): String = this.type.showdownId()
 }

@@ -40,8 +40,8 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 
-class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourState> {
-    companion object {
+public class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourState> {
+    final class Companion {
         val KEY = cobblemonResource("air/helicopter")
         val ROTATION_LIMIT = 30.0f
     }
@@ -285,7 +285,7 @@ class HelicopterBehaviour : RidingBehaviour<HelicopterSettings, RidingBehaviourS
 }
 
 
-class HelicopterSettings : RidingBehaviourSettings {
+public class HelicopterSettings : RidingBehaviourSettings {
     override val key = HelicopterBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -303,7 +303,7 @@ class HelicopterSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(gravity)
@@ -312,7 +312,7 @@ class HelicopterSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(speed)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         gravity = buffer.readNullableExpression()

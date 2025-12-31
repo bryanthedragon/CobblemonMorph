@@ -30,7 +30,7 @@ sealed interface SpawningZoneInfluence {
 }
 
 open class UnconditionalSpawningZoneInfluence(override val influence: SpawningInfluence) : SpawningZoneInfluence
-interface ConditionalSpawningZoneInfluence: SpawningZoneInfluence {
+public interface ConditionalSpawningZoneInfluence: SpawningZoneInfluence {
     /** Whether this influence will apply to */
     fun appliesTo(spawnablePosition: SpawnablePosition): Boolean = true
 }

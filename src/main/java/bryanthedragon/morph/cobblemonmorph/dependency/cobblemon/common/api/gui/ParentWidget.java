@@ -21,8 +21,8 @@ import net.minecraft.network.chat.Component
  */
 abstract class ParentWidget(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
-    component: Component
+    pInt width, pInt height,
+    Component component
 ): CobblemonRenderable, AbstractWidget(pX, pY, pWidth, pHeight, component) {
 
     val children: MutableList<GuiEventListener> = mutableListOf()
@@ -72,13 +72,13 @@ abstract class ParentWidget(
         }
     }
 
-    override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+    override fun keyPressed(pInt keyCode, pInt scanCode, pModifiers: Int): Boolean {
         return children.any {
             it.keyPressed(pKeyCode, pScanCode, pModifiers)
         } || super.keyPressed(pKeyCode, pScanCode, pModifiers)
     }
 
-    override fun keyReleased(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+    override fun keyReleased(pInt keyCode, pInt scanCode, pModifiers: Int): Boolean {
         children.forEach {
             it.keyReleased(pKeyCode, pScanCode, pModifiers)
         }

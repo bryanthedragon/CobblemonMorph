@@ -32,12 +32,12 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.WoodType
 
 @Suppress("unused")
-open class CobblemonBoatEntity(entityType: EntityType<out Boat>, world: Level) : Boat(entityType, world) {
+open class CobblemonBoatEntity(entityType: EntityType<out Boat>, Level world) : Boat(entityType, world) {
 
-    constructor(world: Level) : this(CobblemonEntities.BOAT, world)
+    constructor(Level world) : this(CobblemonEntities.BOAT, world)
 
     // This exists cause super passes in vanilla boat entity type
-    constructor(world: Level, x: Double, y: Double, z: Double) : this(CobblemonEntities.BOAT, world) {
+    constructor(Level world, x: Double, y: Double, z: Double) : this(CobblemonEntities.BOAT, world) {
         this.setPos(x, y, z)
         this.xo = x
         this.yo = y
@@ -61,7 +61,7 @@ open class CobblemonBoatEntity(entityType: EntityType<out Boat>, world: Level) :
     /**
      * The [Block] that represents the base material for this boat.
      */
-    val baseBlock: Block get() = this.boatType.baseBlock
+    val baseBlock block get() = this.boatType.baseBlock
 
     override fun getDropItem(): Item = this.boatType.boatItem
 
@@ -72,17 +72,17 @@ open class CobblemonBoatEntity(entityType: EntityType<out Boat>, world: Level) :
         builder.define(TYPE_TRACKED_DATA, CobblemonBoatType.APRICORN.ordinal)
     }
 
-    override fun readAdditionalSaveData(nbt: CompoundTag) {
+    override fun readAdditionalSaveData(CompoundTag nbt) {
         if (nbt.contains(TYPE_KEY, Tag.TAG_STRING.toInt())) {
             this.boatType = CobblemonBoatType.valueOf(nbt.getString(TYPE_KEY))
         }
     }
 
-    override fun addAdditionalSaveData(nbt: CompoundTag) {
+    override fun addAdditionalSaveData(CompoundTag nbt) {
         nbt.put(TYPE_KEY, StringTag.valueOf(this.boatType.name))
     }
 
-    override fun setVariant(type: Type) {
+    override fun setVariant(Type type) {
         throw UnsupportedOperationException("The vanilla boat type is not present in the Cobblemon implementation use the boatType property")
     }
 
@@ -92,7 +92,7 @@ open class CobblemonBoatEntity(entityType: EntityType<out Boat>, world: Level) :
 
     override fun getSinglePassengerXOffset(): Float = this.boatType.mountedOffset
 
-    override fun checkFallDamage(heightDifference: Double, onGround: Boolean, state: BlockState, landedPosition: BlockPos) {
+    override fun checkFallDamage(heightDifference: Double, onGround: Boolean, BlockState state, landedBlockPos position) {
         val accessor = this.accessor()
         accessor.setFallVelocity(this.deltaMovement.y)
         if (!this.isPassenger()) {
@@ -125,10 +125,10 @@ open class CobblemonBoatEntity(entityType: EntityType<out Boat>, world: Level) :
 
     protected fun accessor(): BoatEntityAccessor = this as BoatEntityAccessor
 
-    companion object {
+    final class Companion {
 
         private const val TYPE_KEY = "type"
-        private val TYPE_TRACKED_DATA = SynchedEntityData.defineId(CobblemonBoatEntity::class.java, EntityDataSerializers.INT)
+        private val TYPE_TRACKED_DATA = SynchedEntityData.defineId(CobblemonBoatEntity.class, EntityDataSerializers.INT)
 
     }
 

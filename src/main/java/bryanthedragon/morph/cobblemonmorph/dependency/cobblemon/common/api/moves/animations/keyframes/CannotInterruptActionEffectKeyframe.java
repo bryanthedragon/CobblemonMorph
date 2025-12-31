@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.move
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
 import java.util.concurrent.CompletableFuture
 
-class CannotInterruptActionEffectKeyframe : ConditionalActionEffectKeyframe() {
+public class CannotInterruptActionEffectKeyframe : ConditionalActionEffectKeyframe() {
     override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
         context.canBeInterrupted = false
         return CompletableFuture.completedFuture(Unit)

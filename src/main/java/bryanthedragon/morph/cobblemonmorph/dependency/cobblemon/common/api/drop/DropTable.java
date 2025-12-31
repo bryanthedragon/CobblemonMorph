@@ -35,7 +35,7 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since July 24th, 2022
  */
-class DropTable {
+public class DropTable {
     /** All [DropEntry] values in the drop table. */
     val entries = mutableListOf<DropEntry>()
     /** The default range of values which might be selected to decide the 'quantity' of drops for a drop attempt. */
@@ -85,10 +85,10 @@ class DropTable {
      * will fall back to the [DropTable.amount] range.
      */
     fun drop(
-        entity: LivingEntity?,
-        world: ServerLevel,
-        pos: Vec3,
-        player: ServerPlayer?,
+        LivingEntity entity?,
+        ServerLevel world,
+        Vec3 pos,
+        ServerPlayer player?,
         amount: IntRange = this.amount,
         pokemon: Pokemon? = null,
     ) {
@@ -98,10 +98,10 @@ class DropTable {
 
     fun postLootDroppedEvent(
         drops: MutableList<DropEntry>,
-        entity: LivingEntity?,
-        world: ServerLevel,
-        pos: Vec3,
-        player: ServerPlayer?,
+        LivingEntity entity?,
+        ServerLevel world,
+        Vec3 pos,
+        ServerPlayer player?,
     ) {
         LOOT_DROPPED.postThen(
             event = LootDroppedEvent(this, player, entity, drops),
@@ -109,12 +109,12 @@ class DropTable {
         )
     }
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(this.entries.size)
         this.entries.filterIsInstance<ItemDropEntry>().forEach { it.encode(buffer) }
     }
 
-    fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(RegistryFriendlyByteBuf buffer) {
         val entries = buffer.readInt()
         repeat(entries) { this.entries.add(ItemDropEntry().decode(buffer)) }
     }

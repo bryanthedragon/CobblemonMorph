@@ -26,7 +26,7 @@ import net.minecraft.world.item.ItemStack
  * @since September 4th, 2024
  * @param searchString The string to use when checking.
  */
-class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString: String, val searchByType: SearchByType = SearchByType.SPECIES) : EntryFilter() {
+public class SearchFilter(val pokedexManager: AbstractPokedexManager, val searchString string, val searchByType: SearchByType = SearchByType.SPECIES) : EntryFilter() {
 
     override fun test(entry: PokedexEntry): Boolean {
         if (searchString == "") return true

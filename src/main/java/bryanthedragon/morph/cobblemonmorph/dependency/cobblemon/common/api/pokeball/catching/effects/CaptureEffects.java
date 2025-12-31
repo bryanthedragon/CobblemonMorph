@@ -15,7 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeb
  *
  * @author Licious
  * @since May 8th, 2022
- */final class CaptureEffects {
+ */
+public final class CaptureEffects {
 
     /**
      * Used by [PokeBalls.HEAL_BALL].
@@ -29,6 +30,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeb
      * @param value The value the friendship of the Pokémon will start at must be between 0 and 255.
      * @return The created capture effect.
      */
-    fun friendshipSetter(value: Int) = CaptureEffect { _, pokemon -> pokemon.setFriendship(value) }
+    fun friendshipSetter(Int value) = CaptureEffect { _, pokemon -> pokemon.setFriendship(value) }
 
 }

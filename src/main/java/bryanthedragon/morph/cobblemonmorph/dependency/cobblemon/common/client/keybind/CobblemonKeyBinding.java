@@ -19,7 +19,7 @@ import net.minecraft.client.KeyMapping
  * @since 2022-02-17
  */
 abstract class CobblemonKeyBinding(
-    name: String,
+    String name,
     type: InputConstants.Type = InputConstants.Type.KEYSYM,
     key: Int,
     category: String

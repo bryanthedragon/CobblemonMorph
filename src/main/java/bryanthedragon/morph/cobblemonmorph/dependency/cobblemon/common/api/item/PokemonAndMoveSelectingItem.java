@@ -38,8 +38,8 @@ import net.minecraft.world.phys.AABB
  * @author Hiroku
  * @since July 29th, 2023
  */
-interface PokemonAndMoveSelectingItem {
-    fun use(player: ServerPlayer, stack: ItemStack): InteractionResultHolder<ItemStack>? {
+public interface PokemonAndMoveSelectingItem {
+    fun use(ServerPlayer player, ItemStack stack): InteractionResultHolder<ItemStack>? {
         val entity = player.level()
             .getEntities(player, AABB.ofSize(player.position(), 16.0, 16.0, 16.0))
             .filter { player.isLookingAt(it, stepDistance = 0.1F) }
@@ -76,9 +76,9 @@ interface PokemonAndMoveSelectingItem {
     }
 
     val bagItem: BagItem?
-    fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon, move: Move)
+    fun applyToPokemon(ServerPlayer player, ItemStack stack, Pokemon pokemon, move: Move)
 
-    fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon, move: Move) {
+    fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon, move: Move) {
         val battle = battlePokemon.actor.battle
         val bagItem = bagItem
         if (!battlePokemon.actor.canFitForcedAction()) {
@@ -91,18 +91,18 @@ interface PokemonAndMoveSelectingItem {
         }
     }
 
-    fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
+    fun canUseOnPokemon(ItemStack stack, Pokemon pokemon): Boolean {
         if (stack.`is`(CobblemonItemTags.POKE_FOOD)) {
             return !pokemon.isFull()
         }
         return true
     }
 
-    fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
-    fun canUseOnMove(stack: ItemStack, pokemon: Pokemon, move: Move): Boolean = canUseOnMove(stack, move)
-    fun canUseOnMove(stack: ItemStack, move: Move): Boolean
+    fun canUseOnBattlePokemon(ItemStack stack, BattlePokemon battlePokemon): Boolean = bagItem!!.canUse(stack, battlePokemon.actor.battle, battlePokemon)
+    fun canUseOnMove(ItemStack stack, Pokemon pokemon, move: Move): Boolean = canUseOnMove(stack, move)
+    fun canUseOnMove(ItemStack stack, move: Move): Boolean
 
-    fun interactWithSpecific(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack>? {
+    fun interactWithSpecific(ServerPlayer player, ItemStack stack, Pokemon pokemon): InteractionResultHolder<ItemStack>? {
 
         if (player.isShiftKeyDown) {
             return InteractionResultHolder.pass(stack)
@@ -117,7 +117,7 @@ interface PokemonAndMoveSelectingItem {
         return InteractionResultHolder.success(stack)
     }
 
-    fun interactWithSpecificBattle(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon): InteractionResultHolder<ItemStack>? {
+    fun interactWithSpecificBattle(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon): InteractionResultHolder<ItemStack>? {
         return if (canUseOnBattlePokemon(stack, battlePokemon)) {
             MoveSelectCallbacks.create(
                 player = player,
@@ -132,7 +132,7 @@ interface PokemonAndMoveSelectingItem {
         }
     }
 
-    fun interactGeneral(player: ServerPlayer, stack: ItemStack): InteractionResultHolder<ItemStack>? {
+    fun interactGeneral(ServerPlayer player, ItemStack stack): InteractionResultHolder<ItemStack>? {
         PartyMoveSelectCallbacks.createFromPokemon(
             player = player,
             pokemon = player.party().toList(),
@@ -144,7 +144,7 @@ interface PokemonAndMoveSelectingItem {
         return InteractionResultHolder.success(stack)
     }
 
-    fun interactGeneralBattle(player: ServerPlayer, stack: ItemStack, actor: BattleActor): InteractionResultHolder<ItemStack>? {
+    fun interactGeneralBattle(ServerPlayer player, ItemStack stack, actor: BattleActor): InteractionResultHolder<ItemStack>? {
         PartyMoveSelectCallbacks.createFromPokemon(
             player = player,
             pokemon = actor.pokemonList.map { it.effectedPokemon },

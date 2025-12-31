@@ -25,7 +25,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Segfault Guy
  * @since March 26th, 2024
  */
-class BattleTransformPokemonPacket(val pnx: String, val updatedPokemon: BattleInitializePacket.ActiveBattlePokemonDTO, val isAlly: Boolean) : NetworkPacket<BattleTransformPokemonPacket> {
+public class BattleTransformPokemonPacket(val pnx: String, val updatedPokemon: BattleInitializePacket.ActiveBattlePokemonDTO, val isAlly: Boolean) : NetworkPacket<BattleTransformPokemonPacket> {
 
     override val id = ID
 
@@ -37,14 +37,14 @@ class BattleTransformPokemonPacket(val pnx: String, val updatedPokemon: BattleIn
     constructor(pnx: String, updatedPokemon: BattlePokemon, mock: PokemonProperties, isAlly: Boolean) :
             this(pnx, BattleInitializePacket.ActiveBattlePokemonDTO.fromMock(updatedPokemon, isAlly, mock), isAlly)
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(pnx)
         updatedPokemon.saveToBuffer(buffer)
         buffer.writeBoolean(isAlly)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_transform_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleTransformPokemonPacket(buffer.readString(), BattleInitializePacket.ActiveBattlePokemonDTO.loadFromBuffer(buffer), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleTransformPokemonPacket(buffer.readString(), BattleInitializePacket.ActiveBattlePokemonDTO.loadFromBuffer(buffer), buffer.readBoolean())
     }
 }

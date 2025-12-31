@@ -13,9 +13,9 @@ import mezz.jei.api.recipe.vanilla.IJeiBrewingRecipe
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 
-class JeiBrewingStandRecipe(
+public class JeiBrewingStandRecipe(
     private val recipe: BrewingStandRecipe,
-    private val id: ResourceLocation
+    private val ResourceLocation id
 ) : IJeiBrewingRecipe {
 
     override fun getPotionInputs(): List<ItemStack> {

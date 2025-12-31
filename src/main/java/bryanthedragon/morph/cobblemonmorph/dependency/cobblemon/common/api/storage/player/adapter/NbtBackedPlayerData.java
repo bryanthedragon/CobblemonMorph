@@ -36,7 +36,7 @@ abstract class NbtBackedPlayerData<T : InstancedPlayerData>(
         }
     }
 
-    override fun load(uuid: UUID): T {
+    override fun load(UUID uuid): T {
         return loadWithFallback(uuid) {
             val input = NbtIo.read(it.toPath())
             val decodeResult = codec.decode(NbtOps.INSTANCE, input)

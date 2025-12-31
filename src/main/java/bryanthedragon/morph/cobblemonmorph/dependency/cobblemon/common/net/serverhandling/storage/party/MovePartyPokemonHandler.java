@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class MovePartyPokemonHandler : ServerNetworkPacketHandler<MovePartyPokemonPacket> {
-    override fun handle(packet: MovePartyPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class MovePartyPokemonHandler : ServerNetworkPacketHandler<MovePartyPokemonPacket> {
+    override fun handle(packet: MovePartyPokemonPacket, server: MinecraftServer, ServerPlayer player) {
         val party = player.party()
         val pokemon = party[packet.oldPosition] ?: return
         if (pokemon.uuid != packet.pokemonID) {

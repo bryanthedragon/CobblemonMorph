@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Segfault Guy
  * @since December 9th, 2024
  */
-class FormeChangeInstruction(val message: BattleMessage): InterpreterInstruction {
+public class FormeChangeInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val battlePokemon = message.battlePokemon(0, battle) ?: return

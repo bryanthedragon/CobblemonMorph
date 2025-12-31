@@ -20,12 +20,12 @@ import net.minecraft.server.packs.resources.ResourceManager
  * @author Licious
  * @since August 1st, 2022
  */
-interface DataRegistry {
+public interface DataRegistry {
 
     /**
      * The unique [ResourceLocation] of this registry.
      */
-    val id: ResourceLocation
+    val ResourceLocation id
 
     /**
      * The expected [PackType].
@@ -42,13 +42,13 @@ interface DataRegistry {
      *
      * @param manager The newly updated [ResourceManager]
      */
-    fun reload(manager: ResourceManager)
+    fun reload(ResourceManager manager)
 
     /**
      * Syncs this registry to a player when requested by the server.
      *
      * @param player The [ServerPlayer] being synchronized to the server.
      */
-    fun sync(player: ServerPlayer)
+    fun sync(ServerPlayer player)
 
 }

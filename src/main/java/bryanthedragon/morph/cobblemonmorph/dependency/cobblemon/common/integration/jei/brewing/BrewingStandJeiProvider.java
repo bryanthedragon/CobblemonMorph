@@ -16,7 +16,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration
 import mezz.jei.api.registration.IRecipeRegistration
 import net.minecraft.client.Minecraft
 
-class BrewingStandJeiProvider : CobblemonJeiProvider {
+public class BrewingStandJeiProvider : CobblemonJeiProvider {
     override fun registerCategory(registration: IRecipeCategoryRegistration) {
     }
 

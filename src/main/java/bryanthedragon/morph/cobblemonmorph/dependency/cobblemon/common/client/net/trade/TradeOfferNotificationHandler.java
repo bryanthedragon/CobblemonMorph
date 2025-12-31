@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.trade.ClientTradeRequest
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeOfferNotificationPacket
 import net.minecraft.client.Minecraft
-final class TradeOfferNotificationHandler : ClientNetworkPacketHandler<TradeOfferNotificationPacket> {
-    override fun handle(packet: TradeOfferNotificationPacket, client: Minecraft) {
+public final class TradeOfferNotificationHandler : ClientNetworkPacketHandler<TradeOfferNotificationPacket> {
+    override fun handle(packet: TradeOfferNotificationPacket, Minecraft client) {
         CobblemonClient.requests.tradeOffers[packet.senderID] = ClientTradeRequest(packet.requestID, packet.senderID, packet.expiryTime)
         ClientPlayerIcon.update(packet.senderID)
     }

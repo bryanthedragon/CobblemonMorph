@@ -16,13 +16,13 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since February 10th, 2025
  */
-interface ServerPlayerTickEvent : ServerPlayerEvent {
+public interface ServerPlayerTickEvent : ServerPlayerEvent {
     /**
      * Fired when the [player] pre-ticks. For most use cases it doesn't matter if you take the pre or the post.
      */
-    record Pre(override val player: ServerPlayer) : ServerPlayerTickEvent
+    record Pre(override val ServerPlayer player) : ServerPlayerTickEvent
     /**
      * Fired when the [player] post-ticks. For most use cases it doesn't matter if you take the pre or the post.
      */
-    record Post(override val player: ServerPlayer) : ServerPlayerTickEvent
+    record Post(override val ServerPlayer player) : ServerPlayerTickEvent
 }

@@ -15,8 +15,8 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
-final class MulchVariantAdapter : JsonDeserializer<MulchVariant> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): MulchVariant {
+public final class MulchVariantAdapter : JsonDeserializer<MulchVariant> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): MulchVariant {
         val mulchName = json.asString.lowercase()
         return MulchVariant.values().filter { it.name.lowercase() == mulchName }.first()
     }

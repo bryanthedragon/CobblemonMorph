@@ -27,7 +27,7 @@ typealias CobblemonPose = Pose
  * @author Hiroku
  * @since December 5th, 2021
  */
-class Pose(
+public class Pose(
     var poseName: String,
     val poseTypes: Set<PoseType>,
     val condition: ((PosableState) -> Boolean)?,

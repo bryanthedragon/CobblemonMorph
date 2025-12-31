@@ -24,11 +24,11 @@ import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.CommonComponents
 
-class CobblemonConfigScreen(
+public class CobblemonConfigScreen(
     private val previousScreen: Screen?,
 ) : Screen("gui.cobblemon_config.title".asTranslated()), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val HEIGHT = 240
         const val HEADER_HEIGHT = 45
         const val FOOTER_HEIGHT = 33
@@ -52,7 +52,7 @@ class CobblemonConfigScreen(
     private lateinit var variableList: CobblemonConfigVariableList
     private lateinit var doneButton: Button
 
-    private var searchString: String = ""
+    private var searchString string = ""
 
     override fun init() {
         super.init()

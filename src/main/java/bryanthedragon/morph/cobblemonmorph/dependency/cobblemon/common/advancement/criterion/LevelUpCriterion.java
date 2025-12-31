@@ -6,40 +6,34 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.advancements.critereon.EntityPredicate
-import net.minecraft.server.level.ServerPlayer
-import java.util.Optional
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion.LevelUpContext;
 
-class LevelUpContext(val level: Int, val pokemon: Pokemon)
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-class LevelUpCriterion(
-    playerCtx: Optional<ContextAwarePredicate>,
-    val level: Int,
-    val evolved: Boolean
-): SimpleCriterionCondition<LevelUpContext>(playerCtx) {
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.server.level.ServerPlayer;
 
-    companion object {
-        val CODEC: Codec<LevelUpCriterion> = RecordCodecBuilder.create { it.group(
-            EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(LevelUpCriterion::playerCtx),
-            Codec.INT.optionalFieldOf("level", 0).forGetter(LevelUpCriterion::level),
-            Codec.BOOL.optionalFieldOf("has_evolved", true).forGetter(LevelUpCriterion::evolved)
-        ).apply(it, ::LevelUpCriterion) }
+import java.util.Optional;
+
+public class LevelUpCriterion(Optional<ContextAwarePredicate> playerCtx, Int level, boolean evolved): SimpleCriterionCondition<LevelUpContext>(playerCtx) {
+
+    final class Companion {
+        public final Codec<LevelUpCriterion> CODEC = RecordCodecBuilder.create { it.group(EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(LevelUpCriterion::playerCtx), Codec.INT.optionalFieldOf("level", 0).forGetter(LevelUpCriterion::level), Codec.BOOL.optionalFieldOf("has_evolved", true).forGetter(LevelUpCriterion::evolved)).apply(it, ::LevelUpCriterion) }
     }
 
-    override fun matches(player: ServerPlayer, context: LevelUpContext): Boolean {
-        val preEvo = context.pokemon.preEvolution != null
-        val hasEvolution = !context.pokemon.evolutions.none()
-        var evolutionCheck = true
+    public boolean matches(ServerPlayer player, LevelUpContext context) {
+        val preEvo = context.pokemon.preEvolution != null;
+        val hasEvolution = !context.pokemon.evolutions.none();
+        var evolutionCheck = true;
         if (preEvo || hasEvolution) {
-            evolutionCheck = preEvo != hasEvolution
+            evolutionCheck = preEvo != hasEvolution;
         }
-        return level == context.level && evolutionCheck == evolved
+        return level == context.level && evolutionCheck == evolved;
     }
 
 }

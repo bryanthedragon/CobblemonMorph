@@ -6,52 +6,49 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import net.minecraft.server.level.ServerPlayer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * An event to modify the shiny chance of a Pokémon.
  */
-class ShinyChanceCalculationEvent(
-    val baseChance: Float,
-    val pokemon: Pokemon
-) {
-    val chance: Float = baseChance
-    var isShiny: Boolean = false
-    private val modifiers = mutableListOf<Float>()
-    private val modificationFunctions = mutableListOf<(Float, ServerPlayer?, Pokemon) -> Float>()
+public class ShinyChanceCalculationEvent(Float baseChance, Pokemon pokemon) {
+    public final chance: Float = baseChance;
+    var isShiny: Boolean = false;
+    private final modifiers = mutableListOf<Float>();
+    private final modificationFunctions = mutableListOf<(Float, ServerPlayer?, Pokemon) -> Float>();
 
     /**
      * Adds a modifier to the shiny chance.
      */
-    fun addModifier(modifier: Float) {
-        modifiers.add(modifier)
+    fun addModifier(Float modifier) {
+        modifiers.add(modifier);
     }
 
     /**
      * Adds a function to modify the shiny chance.
      */
     fun addModificationFunction(function: (Float, ServerPlayer?, Pokemon) -> Float) {
-        modificationFunctions.add(function)
+        modificationFunctions.add(function);
     }
 
     /**
      * Calculates the shiny chance of a Pokémon.
      */
-    fun calculate(player: ServerPlayer?): Float {
-        var result = baseChance
+    Float calculate(ServerPlayer player?) {
+        var result = baseChance;
         for (modifier in modifiers) {
-            result += modifier
+            result += modifier;
         }
         for (function in modificationFunctions) {
-            result = function(result, player, pokemon)
+            result = function(result, player, pokemon);
         }
-        return result
+        return result;
     }
 
-    fun isShiny(player: ServerPlayer?): Boolean {
-        return calculate(player) >= chance || isShiny
+    boolean isShiny(ServerPlayer player?) {
+        return calculate(player) >= chance || isShiny;
     }
 }

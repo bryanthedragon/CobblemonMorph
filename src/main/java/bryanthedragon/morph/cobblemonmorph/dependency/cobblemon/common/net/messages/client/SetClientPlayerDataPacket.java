@@ -22,7 +22,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku, Apion
  * @since August 1st, 2022
  */
-class SetClientPlayerDataPacket(
+public class SetClientPlayerDataPacket(
     val type: PlayerInstancedDataStoreType,
     val playerData: ClientInstancedPlayerData,
     var isIncremental: Boolean = false
@@ -30,15 +30,15 @@ class SetClientPlayerDataPacket(
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeResourceLocation(type.id)
         buffer.writeBoolean(isIncremental)
         playerData.encode(buffer)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("set_client_playerdata")
-        fun decode(buffer: RegistryFriendlyByteBuf): SetClientPlayerDataPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SetClientPlayerDataPacket {
             val typeId = buffer.readResourceLocation()
             val type = PlayerInstancedDataStoreTypes.getTypeById(typeId) ?: throw IllegalArgumentException("Unknown player data type $typeId")
             val isIncremental = buffer.readBoolean()

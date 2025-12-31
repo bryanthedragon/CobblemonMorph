@@ -34,7 +34,7 @@ import org.joml.Vector4f
  * @author Hiroku
  * @since May 14th, 2022
  */
-class VaryingRenderableResolver(
+public class VaryingRenderableResolver(
     val name: ResourceLocation,
     val variations: MutableList<ModelAssetVariation>
 ) {
@@ -88,15 +88,15 @@ class VaryingRenderableResolver(
         return models
     }
 
-    companion object {
+    final class Companion {
         val GSON = GsonBuilder()
             .setPrettyPrinting()
-            .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-            .registerTypeAdapter(Vector3f::class.java, Vector3fAdapter)
-            .registerTypeAdapter(Vector4f::class.java, Vector4fAdapter)
-            .registerTypeAdapter(ModelTextureSupplier::class.java, ModelTextureSupplierAdapter)
-            .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-            .registerTypeAdapter(SpriteType::class.java, SpriteTypeAdapter)
+            .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+            .registerTypeAdapter(Vector3f.class, Vector3fAdapter)
+            .registerTypeAdapter(Vector4f.class, Vector4fAdapter)
+            .registerTypeAdapter(ModelTextureSupplier.class, ModelTextureSupplierAdapter)
+            .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+            .registerTypeAdapter(SpriteType.class, SpriteTypeAdapter)
             .disableHtmlEscaping()
             .setLenient()
             .create()
@@ -108,7 +108,7 @@ class VaryingRenderableResolver(
         getAllModels().forEach { identifier ->
             try {
                 models[identifier] = repository.texturedModels[identifier]!!
-            } catch (e: Exception) {
+            } catch (Exception e) {
                 throw IllegalStateException("Unable to load model $identifier for $name", e)
             }
         }
@@ -149,7 +149,7 @@ class VaryingRenderableResolver(
  * @author Hiroku
  * @since December 4th, 2022
  */
-class ModelVariationSet(
+public class ModelVariationSet(
     @SerializedName("name", alternate = ["species", "pokeball"])
     val name: ResourceLocation = cobblemonResource("thing"),
     val order: Int = 0,
@@ -166,7 +166,7 @@ class ModelVariationSet(
  * @author Hiroku
  * @since May 14th, 2022
  */
-class ModelAssetVariation(
+public class ModelAssetVariation(
     val aspects: MutableSet<String> = mutableSetOf(),
     val condition: ExpressionLike? = null,
     val poser: ResourceLocation? = null,
@@ -191,13 +191,13 @@ fun interface ModelTextureSupplier {
     operator fun invoke(state: PosableState): ResourceLocation
 }
 
-class StaticModelTextureSupplier(val texture: ResourceLocation): ModelTextureSupplier {
+public class StaticModelTextureSupplier(val texture: ResourceLocation): ModelTextureSupplier {
     override fun invoke(state: PosableState): ResourceLocation {
         return texture
     }
 }
 
-class AnimatedModelTextureSupplier(
+public class AnimatedModelTextureSupplier(
     val loop: Boolean,
     val fps: Float,
     val frames: List<ResourceLocation>,
@@ -275,16 +275,16 @@ class AnimatedModelTextureSupplier(
     }
 }
 
-class VariableModelTextureSupplier : ModelTextureSupplier {
+public class VariableModelTextureSupplier : ModelTextureSupplier {
     override fun invoke(state: PosableState): ResourceLocation {
         return state.runtime.environment.variable.map["texture"]?.asString()?.asIdentifierDefaultingNamespace()
             ?: cobblemonResource("textures/npcs/default.png")
     }
 }
 
-class ModelLayer {
-    val name: String = ""
-    val enabled: Boolean = true
+public class ModelLayer {
+    val String name = ""
+    val Boolean enabled = true
     val tint: Vector4f = Vector4f(1F, 1F, 1F, 1F)
     val texture: ModelTextureSupplier? = null
     val emissive: Boolean = false
@@ -292,7 +292,7 @@ class ModelLayer {
     val translucent_cull: Boolean = false
 }
 
-enum class SpriteType {
+public enum SpriteType {
     PORTRAIT,
     PROFILE
 }

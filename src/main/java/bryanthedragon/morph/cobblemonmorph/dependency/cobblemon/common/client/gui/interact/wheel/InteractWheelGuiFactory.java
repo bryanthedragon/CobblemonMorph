@@ -26,7 +26,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import org.joml.Vector3f
 
-fun createPokemonInteractGui(pokemonID: UUID, canMountShoulder: Boolean, canGiveHeld: Boolean, canGiveCosmetic: Boolean, canRide: Boolean): InteractWheelGUI {
+fun createPokemonInteractGui(UUID pokemonId, canMountShoulder: Boolean, canGiveHeld: Boolean, canGiveCosmetic: Boolean, canRide: Boolean): InteractWheelGUI {
     val mountShoulder = InteractWheelOption(
         iconResource = cobblemonResource("textures/gui/interact/interact_wheel_icon_shoulder.png"),
         tooltipText = "cobblemon.ui.interact.mount.shoulder",

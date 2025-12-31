@@ -6,8 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission.Permission
 import com.mojang.brigadier.builder.ArgumentBuilder
@@ -23,7 +22,7 @@ import net.minecraft.commands.CommandSourceStack
  * @return the [ArgumentBuilder].
  */
 fun <T : ArgumentBuilder<CommandSourceStack, T>> ArgumentBuilder<CommandSourceStack, T>.permission(permission: Permission, appendRequirement: Boolean = true): T {
-    val permissionPredicate = { src: CommandSourceStack -> Cobblemon.permissionValidator.hasPermission(src, permission)  }
+    val permissionPredicate = { CommandSourceStack src -> Cobblemon.permissionValidator.hasPermission(src, permission)  }
     return if (appendRequirement) this.requires(this.requirement.and(permissionPredicate)) else this.requires(permissionPredicate)
 }
 
@@ -35,7 +34,7 @@ fun <T : ArgumentBuilder<CommandSourceStack, T>> ArgumentBuilder<CommandSourceSt
  * @param predicate The requirement for the command.
  * @return the [ArgumentBuilder].
  */
-fun <T : ArgumentBuilder<CommandSourceStack, T>> ArgumentBuilder<CommandSourceStack, T>.requiresWithPermission(permission: Permission, predicate: (src: CommandSourceStack) -> Boolean): T {
+fun <T : ArgumentBuilder<CommandSourceStack, T>> ArgumentBuilder<CommandSourceStack, T>.requiresWithPermission(permission: Permission, predicate: (CommandSourceStack src) -> Boolean): T {
     this.requires(predicate)
     return this.permission(permission)
 }

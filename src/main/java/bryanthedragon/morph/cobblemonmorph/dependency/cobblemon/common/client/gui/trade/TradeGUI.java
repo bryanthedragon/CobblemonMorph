@@ -48,7 +48,7 @@ import java.util.*
  * When you change ready status, [ChangeTradeAcceptancePacket].
  * When you cancel the trade, just run this.close()
  */
-class TradeGUI(
+public class TradeGUI(
     val trade: ClientTrade,
     val traderId: UUID,
     val traderName: MutableComponent,
@@ -56,7 +56,7 @@ class TradeGUI(
     val party: MutableList<TradeablePokemon?>
 ): Screen(lang("trade.gui.title")), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val BASE_WIDTH = 293
         const val BASE_HEIGHT = 212
         const val BASE_BACKGROUND_WIDTH = 157
@@ -103,8 +103,8 @@ class TradeGUI(
     private lateinit var offeredPokemonMarkings: MarkingsWidget
     private lateinit var opposingOfferedPokemonMarkings: MarkingsWidget
 
-    var offeredPokemon: Pokemon? = null
-    var opposingOfferedPokemon: Pokemon? = null
+    var offeredPokemon pokemon? = null
+    var opposingOfferedPokemon pokemon? = null
 
     var ticksElapsed = 0
     var protectiveTicks = 0
@@ -446,7 +446,7 @@ class TradeGUI(
         }
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true) {
             CancelTradePacket().sendToServer()
             cancelTradeSound()
@@ -514,7 +514,7 @@ class TradeGUI(
 
     override fun renderMenuBackground(context: GuiGraphics) {}
 
-    private fun setOfferedPokemon(pokemon: Pokemon?, isOpposing: Boolean = false) {
+    private fun setOfferedPokemon(Pokemon pokemon?, isOpposing: Boolean = false) {
         protectiveTicks = 20
         val x = (width - BASE_WIDTH) / 2
         val y = (height - BASE_HEIGHT) / 2
@@ -549,7 +549,7 @@ class TradeGUI(
         }
     }
 
-    private fun playSound(soundEvent: SoundEvent): SoundInstance {
+    private fun playSound(SoundEvent soundEvent): SoundInstance {
         val soundInstance = SimpleSoundInstance.forUI(soundEvent, 1.0F)
         Minecraft.getInstance().soundManager.play(soundInstance)
         return soundInstance
@@ -559,7 +559,7 @@ class TradeGUI(
         if (tradeSoundInstance !== null) Minecraft.getInstance().soundManager.stop(tradeSoundInstance)
     }
 
-    private fun renderPokemonInfo(pokemon: Pokemon?, isOpposing: Boolean, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
+    private fun renderPokemonInfo(Pokemon pokemon?, isOpposing: Boolean, context: GuiGraphics, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         if (pokemon != null) {
             val matrices = context.pose()
             // Level

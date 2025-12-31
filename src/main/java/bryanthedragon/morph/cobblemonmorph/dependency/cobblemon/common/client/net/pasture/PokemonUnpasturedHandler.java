@@ -19,9 +19,10 @@ import net.minecraft.client.Minecraft
  *
  * @author Deltric
  * @since May 17th, 2023
- */final class PokemonUnpasturedHandler: ClientNetworkPacketHandler<PokemonUnpasturedPacket> {
+ */
+public final class PokemonUnpasturedHandler: ClientNetworkPacketHandler<PokemonUnpasturedPacket> {
 
-    override fun handle(packet: PokemonUnpasturedPacket, client: Minecraft) {
+    override fun handle(packet: PokemonUnpasturedPacket, Minecraft client) {
         val pastureGuiConfiguration = (Minecraft.getInstance().screen as? PCGUI)?.configuration as? PasturePCGUIConfiguration
         pastureGuiConfiguration?.pasturedPokemon?.set(pastureGuiConfiguration.pasturedPokemon.get().filterNot { it.pokemonId == packet.pokemonId })
     }

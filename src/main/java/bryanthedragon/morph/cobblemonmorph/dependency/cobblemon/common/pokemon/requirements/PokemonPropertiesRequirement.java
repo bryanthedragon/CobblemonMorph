@@ -19,11 +19,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Licious
  * @since March 26th, 2022
  */
-class PokemonPropertiesRequirement : Requirement {
+public class PokemonPropertiesRequirement : Requirement {
     val target = PokemonProperties()
-    override fun check(pokemon: Pokemon) = this.target.matches(pokemon)
+    override fun check(Pokemon pokemon) = this.target.matches(pokemon)
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "properties"
     }
 }

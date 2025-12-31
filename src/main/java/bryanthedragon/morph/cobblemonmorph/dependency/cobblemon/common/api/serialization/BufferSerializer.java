@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.serialization
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.serialization;
 
-import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 /**
  * A Netty serializer.
@@ -16,7 +16,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Licious
  * @since June 27th, 2022
  */
-interface BufferSerializer {
+public interface BufferSerializer {
 
     /**
      * Saves this object into a [RegistryFriendlyByteBuf].
@@ -24,13 +24,13 @@ interface BufferSerializer {
      * @param buffer The [RegistryFriendlyByteBuf] the data will be written to.
      * @param toClient If the resulting packet will be client-bound.
      */
-    fun saveToBuffer(buffer: RegistryFriendlyByteBuf, toClient: Boolean)
+    fun saveToBuffer(RegistryFriendlyByteBuf buffer, Boolean toClient)
 
     /**
      * Loads the data from the given [RegistryFriendlyByteBuf].
      *
      * @param buffer The [RegistryFriendlyByteBuf] with the received data.
      */
-    fun loadFromBuffer(buffer: RegistryFriendlyByteBuf)
+    fun loadFromBuffer(RegistryFriendlyByteBuf buffer)
 
 }

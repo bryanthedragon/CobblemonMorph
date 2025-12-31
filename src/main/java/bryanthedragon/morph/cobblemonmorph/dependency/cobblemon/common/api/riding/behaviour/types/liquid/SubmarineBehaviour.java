@@ -44,8 +44,8 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 import kotlin.math.*
 
-class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
-    companion object {
+public class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
+    final class Companion {
         val KEY = cobblemonResource("liquid/submarine")
     }
 
@@ -550,7 +550,7 @@ class SubmarineBehaviour : RidingBehaviour<SubmarineSettings, SubmarineState> {
     }
 }
 
-class SubmarineSettings : RidingBehaviourSettings {
+public class SubmarineSettings : RidingBehaviourSettings {
     override val key = SubmarineBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -577,7 +577,7 @@ class SubmarineSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
@@ -590,7 +590,7 @@ class SubmarineSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(staminaExpr)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
@@ -604,7 +604,7 @@ class SubmarineSettings : RidingBehaviourSettings {
     }
 }
 
-class SubmarineState : RidingBehaviourState() {
+public class SubmarineState : RidingBehaviourState() {
     var speed = ridingState(0.0, Side.CLIENT)
     var currRollCorrectionForce = ridingState(0.0, Side.CLIENT)
     var currPitchCorrectionForce = ridingState(0.0, Side.CLIENT)

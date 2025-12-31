@@ -16,7 +16,7 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since March 19th, 2022
  */
-interface Despawner<T : Entity> {
+public interface Despawner<T : Entity> {
     fun beginTracking(entity: T)
     fun shouldDespawn(entity: T): Boolean
 }

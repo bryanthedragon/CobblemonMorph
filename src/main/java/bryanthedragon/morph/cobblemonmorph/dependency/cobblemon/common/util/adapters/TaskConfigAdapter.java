@@ -25,8 +25,9 @@ import java.lang.reflect.Type
  * @see TaskConfig
  * @since October 14th, 2024
  * @author Hiroku
- */final class TaskConfigAdapter : JsonDeserializer<TaskConfig> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): TaskConfig? {
+ */
+public final class TaskConfigAdapter : JsonDeserializer<TaskConfig> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): TaskConfig? {
         if (json.isJsonPrimitive) {
             val type = json.asString.asIdentifierDefaultingNamespace()
             val clazz = TaskConfig.types[type]

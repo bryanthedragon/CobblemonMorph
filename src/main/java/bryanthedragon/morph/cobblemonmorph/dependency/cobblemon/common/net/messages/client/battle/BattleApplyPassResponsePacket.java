@@ -20,11 +20,11 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since July 3rd, 2022
  */
-class BattleApplyPassResponsePacket : NetworkPacket<BattleApplyPassResponsePacket> {
+public class BattleApplyPassResponsePacket : NetworkPacket<BattleApplyPassResponsePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
-    companion object {
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
+    final class Companion {
         val ID = cobblemonResource("battle_apply_pass_response")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleApplyPassResponsePacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleApplyPassResponsePacket()
     }
 }

@@ -22,15 +22,15 @@ import java.util.*
  *
  * @author joshxviii
  */
-class SetItemHiddenPacket(val pokemonUUID: UUID, val heldItemVisible: Boolean) :NetworkPacket<SetItemHiddenPacket> {
+public class SetItemHiddenPacket(val pokemonUUID uuid, val heldItemVisible: Boolean) :NetworkPacket<SetItemHiddenPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(pokemonUUID)
         buffer.writeBoolean(heldItemVisible)
     }
-    companion object {
-        val ID: ResourceLocation = cobblemonResource("set_item_hidden")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SetItemHiddenPacket(
+    final class Companion {
+        val ResourceLocation id = cobblemonResource("set_item_hidden")
+        fun decode(RegistryFriendlyByteBuf buffer) = SetItemHiddenPacket(
             buffer.readUUID(), buffer.readBoolean()
         )
     }

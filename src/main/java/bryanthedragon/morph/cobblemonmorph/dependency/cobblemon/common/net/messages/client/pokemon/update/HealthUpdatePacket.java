@@ -20,14 +20,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since February 12, 2022
  */
-class HealthUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<HealthUpdatePacket>(pokemon, value) {
+public class HealthUpdatePacket(pokemon: () -> Pokemon?, Int value) : IntUpdatePacket<HealthUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun getSize() = IntSize.U_SHORT
-    override fun set(pokemon: Pokemon, value: Int) {
+    override fun set(Pokemon pokemon, Int value) {
         pokemon.currentHealth = value
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("health_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = HealthUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.U_SHORT))
+        fun decode(RegistryFriendlyByteBuf buffer) = HealthUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.U_SHORT))
     }
 }

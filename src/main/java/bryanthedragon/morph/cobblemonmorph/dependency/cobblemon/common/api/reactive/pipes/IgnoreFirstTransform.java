@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
  * @author Hiroku
  * @since November 27th, 2021
  */
-class IgnoreFirstTransform<T>(var amount: Int = 1) : Transform<T, T> {
+public class IgnoreFirstTransform<T>(var amount: Int = 1) : Transform<T, T> {
     override fun invoke(input: T): T {
         if (amount > 0) {
             amount--

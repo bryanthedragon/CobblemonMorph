@@ -28,7 +28,7 @@ import kotlin.math.pow
  * @author Hiroku
  * @since April 20th, 2025
  */
-open class BucketNormalizingInfluence(
+public open class BucketNormalizingInfluence(
     val tier: Int = 0,
     val gradient: Float = 0.2F,
     val firstTier: Float = 1.29F

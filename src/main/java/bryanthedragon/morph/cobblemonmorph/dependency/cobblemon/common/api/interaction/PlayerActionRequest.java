@@ -24,7 +24,7 @@ import java.util.UUID
  * @author Segfault Guy
  * @since September 3rd, 2024
  */
-interface PlayerActionRequest {
+public interface PlayerActionRequest {
     /** The unique ID of this request. */
     val requestID: UUID
 
@@ -41,10 +41,10 @@ interface PlayerActionRequest {
  * @author Segfault Guy
  * @since September 29th, 2024
  */
-interface ServerPlayerActionRequest : PlayerActionRequest {
+public interface ServerPlayerActionRequest : PlayerActionRequest {
 
     /** The subkey identifying lang entries associated with this request. */
-    val key: String
+    val String Key
 
     /** The player initiating this interaction request. */
     val sender: ServerPlayer
@@ -58,19 +58,19 @@ interface ServerPlayerActionRequest : PlayerActionRequest {
     override val senderID: UUID get() = sender.uuid
 
     /** Sends [packet] to sending party of this request. */
-    fun sendToSender(packet: NetworkPacket<*>) = sender.sendPacket(packet)
+    fun sendToSender( NetworkPacket<*> packet) = sender.sendPacket(packet)
 
     /** Sends [packet] to receiving party of this request. */
-    fun sendToReceiver(packet: NetworkPacket<*>) = receiver.sendPacket(packet)
+    fun sendToReceiver( NetworkPacket<*> packet) = receiver.sendPacket(packet)
 
     /** Notifies the sending party of this request about [langKey]. */
-    fun notifySender(error: Boolean, langKey: String, vararg params: Any) = notify(sender, error, "$key.$langKey", *params)
+    fun notifySender(error: Boolean, langString Key, vararg params: Any) = notify(sender, error, "$key.$langKey", *params)
 
     /** Notifies the receiving party of this request about [langKey]. */
-    fun notifyReceiver(error: Boolean, langKey: String, vararg params: Any) = notify(receiver, error, "$key.$langKey", *params)
+    fun notifyReceiver(error: Boolean, langString Key, vararg params: Any) = notify(receiver, error, "$key.$langKey", *params)
 
     /** System message to inform individual [player] about [langKey]. */
-    fun notify(player: ServerPlayer, error: Boolean, langKey: String, vararg params: Any) {
+    fun notify(ServerPlayer player, error: Boolean, langString Key, vararg params: Any) {
         val lang = lang(langKey, *params).apply { if (error) red() else yellow() }
         player.sendSystemMessage(lang, false)
     }
@@ -82,7 +82,7 @@ interface ServerPlayerActionRequest : PlayerActionRequest {
  * @author Segfault Guy
  * @since October 29th, 2024
  */
-interface ServerTeamActionRequest : ServerPlayerActionRequest {
+public interface ServerTeamActionRequest : ServerPlayerActionRequest {
 
     /** The team initiating this request. */
     val senderTeam: TeamManager.MultiBattleTeam
@@ -94,13 +94,13 @@ interface ServerTeamActionRequest : ServerPlayerActionRequest {
 
     override val receiverID: UUID get() = receiverTeam.teamID
 
-    override fun sendToSender(packet: NetworkPacket<*>) = CobblemonNetwork.sendPacketToPlayers(senderTeam.teamPlayers, packet)
+    override fun sendToSender( NetworkPacket<*> packet) = CobblemonNetwork.sendPacketToPlayers(senderTeam.teamPlayers, packet)
 
-    override fun sendToReceiver(packet: NetworkPacket<*>) = CobblemonNetwork.sendPacketToPlayers(receiverTeam.teamPlayers, packet)
+    override fun sendToReceiver( NetworkPacket<*> packet) = CobblemonNetwork.sendPacketToPlayers(receiverTeam.teamPlayers, packet)
 
-    override fun notifySender(error: Boolean, langKey: String, vararg params: Any) =
+    override fun notifySender(error: Boolean, langString Key, vararg params: Any) =
         senderTeam.teamPlayers.forEach { this.notify(it, error, "$key.$langKey", *params) }
 
-    override fun notifyReceiver(error: Boolean, langKey: String, vararg params: Any) =
+    override fun notifyReceiver(error: Boolean, langString Key, vararg params: Any) =
         receiverTeam.teamPlayers.forEach { this.notify(it, error, "$key.$langKey", *params) }
 }

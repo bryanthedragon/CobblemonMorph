@@ -20,18 +20,18 @@ import net.minecraft.network.chat.ComponentSerialization
  * @author Hiroku
  * @since May 22nd, 2022
  */
-class BattleMessagePacket(val messages: List<Component>) : NetworkPacket<BattleMessagePacket> {
+public class BattleMessagePacket(val messages: List<Component>) : NetworkPacket<BattleMessagePacket> {
 
     override val id = ID
 
     constructor(vararg messages: Component): this(messages.toList())
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(this.messages) { pb, value -> ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC.encode(buffer, value) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_message")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleMessagePacket(buffer.readList { ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC.decode(buffer) })
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleMessagePacket(buffer.readList { ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC.decode(buffer) })
     }
 }

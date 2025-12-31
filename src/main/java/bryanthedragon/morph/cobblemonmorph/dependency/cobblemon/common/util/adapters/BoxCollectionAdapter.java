@@ -14,7 +14,7 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
 import net.minecraft.world.phys.AABB
-final class BoxCollectionAdapter : JsonDeserializer<Collection<AABB>> {
+public final class BoxCollectionAdapter : JsonDeserializer<Collection<AABB>> {
     val boxesByName = mutableMapOf<String, Collection<AABB>>()
 
     init {
@@ -58,11 +58,11 @@ final class BoxCollectionAdapter : JsonDeserializer<Collection<AABB>> {
 
     }
 
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): Collection<AABB> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): Collection<AABB> {
         if (json.isJsonPrimitive)  {
             return boxesByName[json.asString] ?: throw IllegalArgumentException("Unrecognized box collection name: ${json.asString}")
         } else {
-            return json.asJsonArray.map { ctx.deserialize<AABB>(it, AABB::class.java) }.toList()
+            return json.asJsonArray.map { ctx.deserialize<AABB>(it, AABB.class) }.toList()
         }
     }
 }

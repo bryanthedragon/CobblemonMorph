@@ -43,7 +43,7 @@ import kotlin.math.ceil
  * @author Hiroku
  * @since July 7th, 2023
  */
-class ReviveItem(
+public class ReviveItem(
     val max: Boolean
 ) : CobblemonItem(Properties().apply {
         if (max) rarity(Rarity.UNCOMMON)
@@ -52,11 +52,11 @@ class ReviveItem(
     val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_revive" else "revive" }"
         override val returnItem = Items.AIR
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "revive ${ if (max) "1" else "0.5" }"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "revive ${ if (max) "1" else "0.5" }"
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (world !is ServerLevel) {
             return InteractionResultHolder.success(user.getItemInHand(hand))
         } else {

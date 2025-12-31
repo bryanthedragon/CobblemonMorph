@@ -29,15 +29,15 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since June 20th, 2022
  */
-class MovePCPokemonToPartyPacket(val pokemonID: UUID, val pcPosition: PCPosition, val partyPosition: PartyPosition?) : NetworkPacket<MovePCPokemonToPartyPacket> {
+public class MovePCPokemonToPartyPacket(val UUID pokemonId, val pcPosition: PCPosition, val partyPosition: PartyPosition?) : NetworkPacket<MovePCPokemonToPartyPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(pokemonID)
         buffer.writePCPosition(pcPosition)
         buffer.writeNullable(partyPosition) { pb, value -> pb.writePartyPosition(value) }
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("move_pc_pokemon_to_party")
-        fun decode(buffer: RegistryFriendlyByteBuf) = MovePCPokemonToPartyPacket(buffer.readUUID(), buffer.readPCPosition(), buffer.readNullable { it.readPartyPosition() })
+        fun decode(RegistryFriendlyByteBuf buffer) = MovePCPokemonToPartyPacket(buffer.readUUID(), buffer.readPCPosition(), buffer.readNullable { it.readPartyPosition() })
     }
 }

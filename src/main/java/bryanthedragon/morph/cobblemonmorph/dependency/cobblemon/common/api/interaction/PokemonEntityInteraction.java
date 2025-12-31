@@ -18,16 +18,16 @@ import net.minecraft.world.item.ItemStack
  * An [EntityInteraction] targeting [PokemonEntity]s.
  * These need to be manually triggered if not implemented by an item.
  */
-interface PokemonEntityInteraction : EntityInteraction<PokemonEntity> {
+public interface PokemonEntityInteraction : EntityInteraction<PokemonEntity> {
 
     /**
      * The accepted [Ownership] for the Pokémon entity in order for the interaction to fire.
      */
     val accepted: Set<Ownership>
-    val sound: SoundEvent?
+    val SoundEvent sound?
         get() = CobblemonSounds.ITEM_USE
 
-    override fun onInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean {
+    override fun onInteraction(ServerPlayer player, entity: PokemonEntity, ItemStack stack): Boolean {
         val pokemon = entity.pokemon
         val storeCoordinates = pokemon.storeCoordinates.get()
         val ownership = when {
@@ -50,7 +50,7 @@ interface PokemonEntityInteraction : EntityInteraction<PokemonEntity> {
      * @param stack The [ItemStack] used in this interaction.
      * @return true if the interaction was successful and no further interactions should be processed.
      */
-    fun processInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean
+    fun processInteraction(ServerPlayer player, entity: PokemonEntity, ItemStack stack): Boolean
 
     /**
      * Represents the ownership status of a Pokemon relative to a Player.

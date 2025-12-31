@@ -21,18 +21,18 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.schedule.Activity
 
-class ActivityChangeTaskConfig : SingleTaskConfig {
+public class ActivityChangeTaskConfig : SingleTaskConfig {
     val activity: Activity = Activity.IDLE
     val condition: ExpressionLike = "true".asExpressionLike()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> = emptyList()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> = emptyList()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity> {
         return object : OneShot<LivingEntity>() {
-            override fun trigger(serverLevel: ServerLevel, livingEntity: LivingEntity, l: Long): Boolean {
+            override fun trigger(ServerLevel serverLevel, livingEntity: LivingEntity, l: Long): Boolean {
                 mainThreadRuntime.withQueryValue("entity", livingEntity.asMostSpecificMoLangValue())
                 if (condition.resolveBoolean(mainThreadRuntime)) {
                     livingEntity.brain.setActiveActivityIfPossible(activity)

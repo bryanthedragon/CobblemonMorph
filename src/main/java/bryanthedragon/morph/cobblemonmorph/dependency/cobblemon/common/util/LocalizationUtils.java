@@ -6,15 +6,25 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+public class LocalizationUtils
+{
+    private Cobblemon MODID;
+    public void lang(String subKey, Any objects) {
+        "cobblemon.$subKey".asTranslated(objects);
+    }
 
-fun lang(
-    subKey: String,
-    vararg objects: Any
-) = "cobblemon.$subKey".asTranslated(*objects)
+    public void commandLang(String subKey, Any objects ){ 
+        lang("command.$subKey", objects);
+    }
 
-fun commandLang(subKey: String, vararg objects: Any ) = lang("command.$subKey", *objects)
-fun battleLang(key: String, vararg objects: Any) = lang("battle.$key", *objects)
-fun tooltipLang(modId: String = Cobblemon.MODID, key: String, vararg objects: Any) = "item.$modId.$key.tooltip".asTranslated(*objects)
+    public void battleLang(String Key, Any objects) {
+        lang("battle.$key", objects);
+    }
+
+    public void tooltipLang(String modId, String Key, Any objects) {
+        "item.$modId.$key.tooltip".asTranslated(objects);
+    }
+}

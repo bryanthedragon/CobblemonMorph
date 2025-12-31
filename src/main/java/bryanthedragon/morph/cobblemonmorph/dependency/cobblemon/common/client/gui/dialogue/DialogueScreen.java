@@ -47,7 +47,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.sounds.SoundEvent
 
-class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTranslated()), CobblemonRenderable {
+public class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTranslated()), CobblemonRenderable {
     val speakers = dialogueDTO.speakers?.mapNotNull { (key, value) ->
         val name = value.name
         when (val face = value.face) {
@@ -103,7 +103,7 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
     var gibber: DialogueGibberDTO? = null
     var gibberSounds = listOf<SoundEvent>()
 
-    companion object {
+    final class Companion {
         const val BOX_WIDTH = 196
         const val BOX_HEIGHT = 74
 
@@ -249,7 +249,7 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
 
     fun renderInput() = gibber?.graduallyShowText != true || gibberDone
 
-    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun render(GuiGraphics guiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val gibber = gibber
         if (gibber != null) {
             playGibberSpeak(
@@ -278,7 +278,7 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         rebuildWidgets()
     }
 
-    fun sendToServer(packet: NetworkPacket<*>) {
+    fun sendToServer( NetworkPacket<*> packet) {
         packet.sendToServer()
         waitingForServerUpdate = true
     }
@@ -287,7 +287,7 @@ class DialogueScreen(var dialogueDTO: DialogueDTO) : Screen("gui.dialogue".asTra
         EscapeDialoguePacket().sendToServer()
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
             onClose()
             return true

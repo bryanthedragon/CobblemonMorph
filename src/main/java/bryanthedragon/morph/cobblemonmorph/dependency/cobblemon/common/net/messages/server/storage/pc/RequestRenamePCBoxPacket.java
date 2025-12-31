@@ -19,19 +19,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
 
-class RequestRenamePCBoxPacket internal constructor(val storeID: UUID, val boxNumber: Int, val name: String?) : NetworkPacket<RequestRenamePCBoxPacket>, UnsplittablePacket {
+public class RequestRenamePCBoxPacket internal constructor(val UUID storeID, val Int boxNumber, val String name?) : NetworkPacket<RequestRenamePCBoxPacket>, UnsplittablePacket {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(storeID)
         buffer.writeSizedInt(IntSize.U_SHORT, boxNumber)
         buffer.writeString(name ?: "")
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("request_rename_pc_box")
-        fun decode(buffer: RegistryFriendlyByteBuf): RequestRenamePCBoxPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): RequestRenamePCBoxPacket {
             val storeID = buffer.readUUID()
             val boxNumber = buffer.readSizedInt(IntSize.U_SHORT)
             val name = buffer.readString()

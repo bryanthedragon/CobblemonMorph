@@ -35,8 +35,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since August 23rd, 2024
  */
-class FormDexRecord {
-    companion object {
+public class FormDexRecord {
+    final class Companion {
         val CODEC: Codec<FormDexRecord> = RecordCodecBuilder.create { instance ->
             instance.group(
                 ListCodec(Codec.STRING, 0, 3).fieldOf("genders").forGetter { it.genders.map { it.name } },
@@ -162,17 +162,17 @@ class FormDexRecord {
                 || speciesDexRecord.wouldBeDifferent(pokedexEntityData)
     }
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(genders) { _, it -> buffer.writeEnumConstant(it) }
         buffer.writeCollection(seenShinyStates) { _, it -> buffer.writeString(it) }
         buffer.writeEnumConstant(knowledge)
     }
 
-    fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(RegistryFriendlyByteBuf buffer) {
         genders.clear()
         seenShinyStates.clear()
-        genders.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readEnumConstant(Gender::class.java) })
+        genders.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readEnumConstant(Gender.class) })
         seenShinyStates.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readString() })
-        knowledge = buffer.readEnumConstant(PokedexEntryProgress::class.java)
+        knowledge = buffer.readEnumConstant(PokedexEntryProgress.class)
     }
 }

@@ -44,27 +44,27 @@ import net.minecraft.server.packs.resources.ResourceManager
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
-final class CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
-    override val gson: Gson = GsonBuilder()
+public final class CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
+    override val Gson gson = GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(Activity::class.java, ActivityAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(MemoryModuleType::class.java, MemoryModuleTypeAdapter)
-        .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
-        .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
-        .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
+        .registerTypeAdapter(Activity.class, ActivityAdapter)
+        .registerTypeAdapter(Expression.class, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+        .registerTypeAdapter(MemoryModuleType.class, MemoryModuleTypeAdapter)
+        .registerTypeAdapter(SensorType.class, SensorTypeAdapter)
+        .registerTypeAdapter(BehaviourConfig.class, BehaviourConfigAdapter)
+        .registerTypeAdapter(TaskConfig.class, TaskConfigAdapter)
         .registerTypeAdapter(
-            TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,
+            TypeToken.getParameterized(Either.class, Expression.class, MoLangConfigVariable.class).type,
             ExpressionOrEntityVariableAdapter
         )
-        .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(Component.class, TranslatedTextAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .create()
 
-    override val typeToken = TypeToken.get(CobblemonBehaviour::class.java)
+    override val typeToken = TypeToken.get(CobblemonBehaviour.class)
     override val resourcePath = "behaviours"
-    override val id: ResourceLocation = cobblemonResource("behaviours")
+    override val ResourceLocation id = cobblemonResource("behaviours")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<CobblemonBehaviours>()
 
@@ -82,11 +82,11 @@ final class CobblemonBehaviours : JsonDataRegistry<CobblemonBehaviour> {
 
     val behaviours = mutableMapOf<ResourceLocation, CobblemonBehaviour>()
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         player.sendPacket(BehaviourSyncPacket(behaviours.filter { it.value.visible }))
     }
 
-    override fun reload(manager: ResourceManager) {
+    override fun reload(ResourceManager manager) {
         autoPokemonBehaviours.clear()
         autoNPCBehaviours.clear()
         val data = mutableMapOf<ResourceLocation, CobblemonBehaviour>()

@@ -26,7 +26,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
  * @author Licious
  * @since January 28th, 2022
  */
-class DamageTakenEvolutionProgress : EvolutionProgress<DamageTakenEvolutionProgress.Progress> {
+public class DamageTakenEvolutionProgress : EvolutionProgress<DamageTakenEvolutionProgress.Progress> {
 
     private var progress = Progress(0)
 
@@ -42,13 +42,13 @@ class DamageTakenEvolutionProgress : EvolutionProgress<DamageTakenEvolutionProgr
         this.updateProgress(Progress(0))
     }
 
-    override fun shouldKeep(pokemon: Pokemon): Boolean = supports(pokemon)
+    override fun shouldKeep(Pokemon pokemon): Boolean = supports(pokemon)
 
     override fun type(): EvolutionProgressType<*> = EvolutionProgressTypes.DAMAGE_TAKEN
 
     record Progress(val amount: Int)
 
-    companion object {
+    final class Companion {
 
         val ID = cobblemonResource(DamageTakenRequirement.ADAPTER_VARIANT)
         private const val AMOUNT = "amount"
@@ -60,7 +60,7 @@ class DamageTakenEvolutionProgress : EvolutionProgress<DamageTakenEvolutionProgr
             ).apply(instance) { amount -> DamageTakenEvolutionProgress().apply { updateProgress(Progress(amount)) } }
         }
 
-        fun supports(pokemon: Pokemon): Boolean {
+        fun supports(Pokemon pokemon): Boolean {
             return pokemon.form.evolutions.any { evolution ->
                 evolution.requirements.any { requirement ->
                     requirement is DamageTakenRequirement

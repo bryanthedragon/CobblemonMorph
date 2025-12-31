@@ -16,9 +16,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @author Hiroku
  * @since February 7th, 2022
  */
-class BasicSpawningCondition : SpawningCondition<SpawnablePosition>() {
-    override fun spawnablePositionClass(): Class<out SpawnablePosition> = SpawnablePosition::class.java
-    companion object {
+public class BasicSpawningCondition : SpawningCondition<SpawnablePosition>() {
+    override fun spawnablePositionClass(): Class<out SpawnablePosition> = SpawnablePosition.class
+    final class Companion {
         const val NAME = "basic"
     }
 }

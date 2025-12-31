@@ -13,10 +13,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 import net.minecraft.world.entity.LivingEntity
-final class DebugCaptureCalculator : CaptureCalculator {
+public final class DebugCaptureCalculator : CaptureCalculator {
 
     override fun id(): String = "debug"
 
-    override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext = CaptureContext(numberOfShakes = 1, isSuccessfulCapture = true, isCriticalCapture = true)
+    override fun processCapture(LivingEntity thrower, EmptyPokeBallEntity pokeBallEntity, PokemonEntity target): CaptureContext = CaptureContext(numberOfShakes = 1, isSuccessfulCapture = true, isCriticalCapture = true)
 
 }

@@ -16,7 +16,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.perm
  * @author Licious
  * @since September 25th, 2022
  */
-enum class PermissionLevel(val numericalValue: Int) {
+public enum PermissionLevel(val numericalValue: Int) {
 
     NONE(0),
     SPAWN_PROTECTION_BYPASS(1),
@@ -24,8 +24,8 @@ enum class PermissionLevel(val numericalValue: Int) {
     MULTIPLAYER_MANAGEMENT(3),
     ALL_COMMANDS(4);
 
-    companion object {
-        fun byNumericValue(value: Int): PermissionLevel {
+    final class Companion {
+        fun byNumericValue(Int value): PermissionLevel {
             return entries.first { it.numericalValue == value }
         }
     }

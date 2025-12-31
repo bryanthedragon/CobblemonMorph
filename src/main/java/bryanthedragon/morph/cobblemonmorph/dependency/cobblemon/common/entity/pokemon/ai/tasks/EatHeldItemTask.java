@@ -31,13 +31,13 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.item.ItemStack
 
 
-class EatHeldItemTask(entity: PokemonEntity) : Behavior<PokemonEntity>(
+public class EatHeldItemTask(entity: PokemonEntity) : Behavior<PokemonEntity>(
     ImmutableMap.of(
         MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT
     )
 ) {
 
-    companion object {
+    final class Companion {
         private const val MAX_DURATION = 60
         private const val COOLDOWN = 120
     }
@@ -45,7 +45,7 @@ class EatHeldItemTask(entity: PokemonEntity) : Behavior<PokemonEntity>(
     private var timelastEaten: Long = 0
     val pickupItems = entity.config.getObjectList<ObtainableItem>(PICKUP_ITEMS)
 
-    override fun checkExtraStartConditions(world: ServerLevel, entity: PokemonEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel world, entity: PokemonEntity): Boolean {
         if (timelastEaten + COOLDOWN > world.gameTime) {
             return false
         }
@@ -53,7 +53,7 @@ class EatHeldItemTask(entity: PokemonEntity) : Behavior<PokemonEntity>(
         return !itemStack.isEmpty && canEat(itemStack, entity) && !entity.isBusy
     }
 
-    override fun canStillUse(world: ServerLevel, entity: PokemonEntity, time: Long): Boolean {
+    override fun canStillUse(ServerLevel world, entity: PokemonEntity, time: Long): Boolean {
         return !entity.pokemon.heldItem.isEmpty && !entity.pokemon.isFull() && !entity.isBusy
     }
 
@@ -61,16 +61,16 @@ class EatHeldItemTask(entity: PokemonEntity) : Behavior<PokemonEntity>(
         return item.has(DataComponents.FOOD) || pickupItems.findMatchingEntry(entity.registryAccess(), item)?.onUseEffect != null
     }
 
-    override fun start(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun start(ServerLevel world, entity: PokemonEntity, time: Long) {
         timelastEaten = time
         entity.brain.setMemory(CobblemonMemories.IS_CONSUMING_ITEM, true)
     }
 
-    override fun stop(level: ServerLevel, entity: PokemonEntity, gameTime: Long) {
+    override fun stop(ServerLevel level, entity: PokemonEntity, gameTime: Long) {
         entity.brain.eraseMemory(CobblemonMemories.IS_CONSUMING_ITEM)
     }
 
-    override fun tick(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun tick(ServerLevel world, entity: PokemonEntity, time: Long) {
         if (!world.isClientSide && entity.isAlive) {
             val itemStack: ItemStack = entity.pokemon.heldItem()
             val itemConfig = pickupItems.findMatchingEntry(entity.registryAccess(), itemStack)
@@ -112,7 +112,7 @@ class EatHeldItemTask(entity: PokemonEntity) : Behavior<PokemonEntity>(
         }
     }
 
-    private fun spawnFoodParticles(entity: LivingEntity, itemStack: ItemStack) {
+    private fun spawnFoodParticles(LivingEntity entity, itemStack: ItemStack) {
         val serverLevel = entity.level() as ServerLevel
         //TODO: Figure out how to this with snowstorm so we can use mouth/face/head locators
         // The issue as of this writing is we don't have a clean way to utilize the item texture for the particle in snowstorm

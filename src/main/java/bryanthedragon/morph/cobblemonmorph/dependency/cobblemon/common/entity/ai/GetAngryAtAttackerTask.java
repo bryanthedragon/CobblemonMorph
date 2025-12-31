@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-final class GetAngryAtAttackerTask {
+public final class GetAngryAtAttackerTask {
     fun create(): OneShot<in LivingEntity> {
         return BehaviorBuilder.create {
             it.group(

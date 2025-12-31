@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.Apri
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-final class AprijuiceTooltipGenerator : TooltipGenerator() {
-    override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+public final class AprijuiceTooltipGenerator : TooltipGenerator() {
+    override fun generateAdditionalTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         if (stack.item !is AprijuiceItem) return null
 
         val rideBoostComponent = stack.get(CobblemonItemComponents.RIDE_BOOST) ?: return null

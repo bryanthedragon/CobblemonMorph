@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class SizzlipedeModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class SizzlipedeModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("sizzlipede")
     override val head = getPart("head")
 

@@ -23,16 +23,16 @@ import java.util.UUID
  * @author JazzMcNade
  * @since April 9th, 2024
  */
-class TeamMemberRemoveNotificationPacket(
-        val teamMemberUUID: UUID,
+public class TeamMemberRemoveNotificationPacket(
+        val teamMemberUUID uuid,
 ): NetworkPacket<TeamMemberRemoveNotificationPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(teamMemberUUID)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("team_member_remove_notification")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TeamMemberRemoveNotificationPacket(buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = TeamMemberRemoveNotificationPacket(buffer.readUUID())
     }
 }

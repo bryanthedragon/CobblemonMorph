@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.tags.BiomeTags
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
-final class CobblemonPlacedFeatures {
+public final class CobblemonPlacedFeatures {
 
     // TODO we don't need a placed feature for every colour, clean all this crap in the JSONs (ask Hiro)
     @JvmField

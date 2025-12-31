@@ -29,7 +29,7 @@ import net.minecraft.world.entity.ai.behavior.RunOne
  * @author Hiroku
  * @since October 19th, 2024
  */
-class OneOfTaskConfig : SingleTaskConfig {
+public class OneOfTaskConfig : SingleTaskConfig {
     class OneOfTaskOption {
         val weight: Int = 1
         val task: TaskConfig = SingleTaskConfig.nothing()
@@ -38,9 +38,9 @@ class OneOfTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val options = mutableListOf<OneOfTaskOption>()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = options.flatMap { it.task.getVariables(entity, behaviourConfigurationContext) }
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = options.flatMap { it.task.getVariables(entity, behaviourConfigurationContext) }
 
-    override fun createTask(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<in LivingEntity>? {
+    override fun createTask(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
         return RunOne(options.map { it.task.createTasks(entity, behaviourConfigurationContext).first() toDF it.weight })
     }

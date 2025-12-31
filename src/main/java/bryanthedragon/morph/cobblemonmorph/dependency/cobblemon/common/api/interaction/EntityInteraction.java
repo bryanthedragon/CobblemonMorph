@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack
  *
  * @param T The type of the [Entity] this interaction will affect.
  */
-interface EntityInteraction<T : Entity> {
+public interface EntityInteraction<T : Entity> {
 
     /**
      * Fired when a [ServerPlayer] interacts with the target entity.
@@ -28,5 +28,5 @@ interface EntityInteraction<T : Entity> {
      * @param stack The [ItemStack] used in this interaction.
      * @return true if the interaction was successful and no further interactions should be processed
      */
-    fun onInteraction(player: ServerPlayer, entity: T, stack: ItemStack): Boolean
+    fun onInteraction(ServerPlayer player, entity: T, ItemStack stack): Boolean
 }

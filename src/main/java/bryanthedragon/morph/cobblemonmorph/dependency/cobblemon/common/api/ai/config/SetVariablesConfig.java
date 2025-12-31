@@ -15,11 +15,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Mo
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolve
 import net.minecraft.world.entity.LivingEntity
 
-class SetVariablesConfig : BehaviourConfig {
+public class SetVariablesConfig : BehaviourConfig {
     var variableValues = mutableMapOf<String, ExpressionLike>()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
-    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+    override fun configure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (entity is MoLangScriptingEntity) {
             variableValues.forEach { (variableName, valueExpression) ->
                 entity.config.setDirectly(variableName, behaviourConfigurationContext.runtime.resolve(valueExpression))

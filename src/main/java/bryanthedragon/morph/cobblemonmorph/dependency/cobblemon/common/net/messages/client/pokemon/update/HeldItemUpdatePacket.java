@@ -15,19 +15,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.item.ItemStack
 
-class HeldItemUpdatePacket(pokemon: () -> Pokemon?, value: ItemStack): SingleUpdatePacket<ItemStack, HeldItemUpdatePacket>(pokemon, value) {
+public class HeldItemUpdatePacket(pokemon: () -> Pokemon?, value: ItemStack): SingleUpdatePacket<ItemStack, HeldItemUpdatePacket>(pokemon, value) {
 
     override val id = ID
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeItemStack(this.value)
     }
 
-    override fun set(pokemon: Pokemon, value: ItemStack) { pokemon.swapHeldItem(this.value, false) }
+    override fun set(Pokemon pokemon, value: ItemStack) { pokemon.swapHeldItem(this.value, false) }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("held_item_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): HeldItemUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): HeldItemUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val stack = buffer.readItemStack()
             return HeldItemUpdatePacket(pokemon, stack)

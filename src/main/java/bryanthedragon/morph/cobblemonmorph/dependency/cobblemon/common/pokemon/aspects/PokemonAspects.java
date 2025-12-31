@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.serv
 
 val SHINY_ASPECT = object : SingleConditionalAspectProvider {
     override val aspect = "shiny"
-    override fun meetsCondition(pokemon: Pokemon) = pokemon.shiny
+    override fun meetsCondition(Pokemon pokemon) = pokemon.shiny
     override fun meetsCondition(pokemonProperties: PokemonProperties) = pokemonProperties.shiny == true
 }
 
@@ -36,12 +36,12 @@ val GENDER_ASPECT = object : AspectProvider {
         }
     )
 
-    override fun provide(pokemon: Pokemon) = getAspectsForGender(pokemon.gender)
+    override fun provide(Pokemon pokemon) = getAspectsForGender(pokemon.gender)
     override fun provide(properties: PokemonProperties) = properties.gender?.let { getAspectsForGender(it) } ?: emptySet()
 }
 
 val COSMETIC_SLOT_ASPECT = object : AspectProvider {
-    override fun provide(pokemon: Pokemon): Set<String> {
+    override fun provide(Pokemon pokemon): Set<String> {
         val server = server() ?: return emptySet()
         if (pokemon.cosmeticItem.isEmpty) {
             return emptySet()
@@ -118,7 +118,7 @@ val CHARACTERISTIC_RAINBOW_ASPECT = object : AspectProvider {
         }
     }
 
-    override fun provide(pokemon: Pokemon): Set<String> {
+    override fun provide(Pokemon pokemon): Set<String> {
         if (!pokemon.form.behaviour.characteristicRainbow) {
             return emptySet()
         }

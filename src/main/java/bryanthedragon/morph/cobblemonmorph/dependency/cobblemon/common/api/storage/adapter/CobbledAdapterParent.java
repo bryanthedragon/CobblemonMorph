@@ -27,10 +27,10 @@ abstract class CobblemonAdapterParent<S> : CobblemonAdapter<S> {
         return this
     }
 
-    override fun <E : StorePosition, T : PokemonStore<E>> load(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+    override fun <E : StorePosition, T : PokemonStore<E>> load(storeClass: Class<T>, UUID uuid, RegistryAccess registryAccess): T? {
         return this.provide(storeClass, uuid, registryAccess)
             ?: children.firstNotNullOfOrNull { it.load(storeClass, uuid, registryAccess) }
     }
 
-    abstract fun <E : StorePosition, T : PokemonStore<E>> provide(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T?
+    abstract fun <E : StorePosition, T : PokemonStore<E>> provide(storeClass: Class<T>, UUID uuid, RegistryAccess registryAccess): T?
 }

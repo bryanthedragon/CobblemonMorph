@@ -15,11 +15,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.ent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.cooking.ToggleCookingPotLidPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class ToggleCookingPotLidHandler : ServerNetworkPacketHandler<ToggleCookingPotLidPacket> {
+public final class ToggleCookingPotLidHandler : ServerNetworkPacketHandler<ToggleCookingPotLidPacket> {
     override fun handle(
         packet: ToggleCookingPotLidPacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         if (player.containerMenu !is CookingPotMenu) {
             Cobblemon.LOGGER.debug("Player {} interacted with invalid menu {}", player, player.containerMenu);

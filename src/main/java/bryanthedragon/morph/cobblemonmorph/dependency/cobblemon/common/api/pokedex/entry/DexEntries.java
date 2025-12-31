@@ -21,18 +21,18 @@ import com.google.gson.reflect.TypeToken
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
-final class DexEntries : JsonDataRegistry<PokedexEntry> {
+public final class DexEntries : JsonDataRegistry<PokedexEntry> {
     override val id = cobblemonResource("dex_entries")
     override val type = PackType.SERVER_DATA
 
-    override val gson: Gson = GsonBuilder()
+    override val Gson gson = GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .create()
 
-    override val typeToken: TypeToken<PokedexEntry> = TypeToken.get(PokedexEntry::class.java)
+    override val typeToken: TypeToken<PokedexEntry> = TypeToken.get(PokedexEntry.class)
     override val resourcePath = "dex_entries"
 
     val entries = mutableMapOf<ResourceLocation, PokedexEntry>()
@@ -54,7 +54,7 @@ final class DexEntries : JsonDataRegistry<PokedexEntry> {
 
     override val observable = SimpleObservable<DexEntries>()
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         DexEntrySyncPacket(entries.values).sendToPlayer(player)
     }
 }

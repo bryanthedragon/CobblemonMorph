@@ -24,21 +24,21 @@ import java.util.UUID
  * @author Apion
  * @since February 22, 2024
  */
-class DexDataJsonBackend: JsonBackedPlayerDataStoreBackend<PokedexManager>("pokedex", PlayerInstancedDataStoreTypes.POKEDEX) {
+public class DexDataJsonBackend: JsonBackedPlayerDataStoreBackend<PokedexManager>("pokedex", PlayerInstancedDataStoreTypes.POKEDEX) {
     override val gson = GsonBuilder()
         .setPrettyPrinting()
         .disableHtmlEscaping()
-        .registerTypeAdapter(PokedexManager::class.java, CodecBackedAdapter(PokedexManager.CODEC))
+        .registerTypeAdapter(PokedexManager.class, CodecBackedAdapter(PokedexManager.CODEC))
         .create()
-    override val classToken = TypeToken.get(PokedexManager::class.java)
+    override val classToken = TypeToken.get(PokedexManager.class)
     override val defaultData = defaultDataFunc
 
     override fun initialize(store: PokedexManager) {
         store.initialize()
     }
 
-    companion object {
-        val defaultDataFunc = { uuid: UUID ->
+    final class Companion {
+        val defaultDataFunc = { UUID uuid ->
             PokedexManager(uuid, mutableMapOf())
         }
     }

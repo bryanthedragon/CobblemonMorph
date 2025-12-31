@@ -20,8 +20,8 @@ import net.minecraft.resources.ResourceLocation
  * Each type has its own deserialization logic, and an action to run on the client after the object is deserialized
  * Some types can also have incremental updates, where a separate run action runs when the incremental flag is present in the packet
  */
-class PlayerInstancedDataStoreType(
-    val id: ResourceLocation,
+public class PlayerInstancedDataStoreType(
+    val ResourceLocation id,
     val decoder: (RegistryFriendlyByteBuf) -> (SetClientPlayerDataPacket),
     val afterDecodeAction: (ClientInstancedPlayerData) -> (Unit),
     val incrementalAfterDecodeAction: (ClientInstancedPlayerData) -> Unit = {}

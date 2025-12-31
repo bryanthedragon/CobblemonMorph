@@ -29,13 +29,14 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since February 7th, 2022
- */final class SpawningConditionAdapter : JsonDeserializer<SpawningCondition<*>> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): SpawningCondition<*> {
+ */
+public final class SpawningConditionAdapter : JsonDeserializer<SpawningCondition<*>> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): SpawningCondition<*> {
         val name = json.asJsonObject.get("type")?.asString
 
         val condition: SpawningCondition<*> = if (name == null) {
             if (deserializingConditionClass == null) {
-                ctx.deserialize(json, BasicSpawningCondition::class.java)
+                ctx.deserialize(json, BasicSpawningCondition.class)
             } else {
                 ctx.deserialize(json, deserializingConditionClass)
             }
@@ -52,7 +53,7 @@ import java.lang.reflect.Type
         appendageClasses.forEach {
             try {
                 condition.appendages.add(ctx.deserialize(json, it))
-            } catch (e: Exception) {
+            } catch (Exception e) {
                 LOGGER.error("Unable to deserialize appendage condition of type: ${it.simpleName}")
                 throw e
             }

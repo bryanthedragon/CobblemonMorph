@@ -18,12 +18,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Yaseen
  * April 22nd, 2023
  */
-class BattleMadeInvalidChoicePacket : NetworkPacket<BattleMadeInvalidChoicePacket> {
-    companion object {
+public class BattleMadeInvalidChoicePacket : NetworkPacket<BattleMadeInvalidChoicePacket> {
+    final class Companion {
         val ID = cobblemonResource("battle_made_invalid_choice")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleMadeInvalidChoicePacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleMadeInvalidChoicePacket()
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
 }

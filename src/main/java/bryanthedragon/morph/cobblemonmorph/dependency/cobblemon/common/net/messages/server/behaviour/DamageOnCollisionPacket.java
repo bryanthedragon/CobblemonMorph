@@ -13,18 +13,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.phys.Vec3
 
-class DamageOnCollisionPacket(
-    val impactVec: Vec3
+public class DamageOnCollisionPacket(
+    val impactVec3 vec
 ) : NetworkPacket<DamageOnCollisionPacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("c2s_on_collision_damage")
-        fun decode(buffer: RegistryFriendlyByteBuf): DamageOnCollisionPacket = DamageOnCollisionPacket(
+        fun decode(RegistryFriendlyByteBuf buffer): DamageOnCollisionPacket = DamageOnCollisionPacket(
             impactVec = buffer.readVec3()
         )
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeVec3(impactVec)
     }
 }

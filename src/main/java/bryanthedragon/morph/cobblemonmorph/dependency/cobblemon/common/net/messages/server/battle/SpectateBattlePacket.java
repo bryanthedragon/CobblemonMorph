@@ -15,14 +15,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
 
-class SpectateBattlePacket(val targetedEntityId: UUID) : NetworkPacket<SpectateBattlePacket> {
+public class SpectateBattlePacket(val targetedEntityId: UUID) : NetworkPacket<SpectateBattlePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(targetedEntityId)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_spectate")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SpectateBattlePacket(buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = SpectateBattlePacket(buffer.readUUID())
     }
 }

@@ -17,8 +17,8 @@ import kotlin.math.abs
 const val CHARACTERISTIC_MODULUS: Int = 5
 
 record Characteristic(val relevantStat: Stat, val mod: Int) {
-    companion object {
-        fun calculate(ivs: IVs, uuid: UUID): Characteristic {
+    final class Companion {
+        fun calculate(ivs: IVs, UUID uuid): Characteristic {
             val ivList = ivs.toList()
             // If multiple IVs are the highest maxWithOrNull always returns the first one found, so we rotate the first one
             // found to depend on UUID (vis-à-vis Personality value)

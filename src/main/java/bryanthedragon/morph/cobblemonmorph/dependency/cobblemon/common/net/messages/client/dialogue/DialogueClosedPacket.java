@@ -22,14 +22,14 @@ import java.util.UUID
  * @author Hiroku
  * @since December 27th, 2023
  */
-class DialogueClosedPacket(val dialogueId: UUID? = null) : NetworkPacket<DialogueClosedPacket> {
-    companion object {
+public class DialogueClosedPacket(val dialogueId: UUID? = null) : NetworkPacket<DialogueClosedPacket> {
+    final class Companion {
         val ID = cobblemonResource("dialogue_closed")
-        fun decode(buffer: RegistryFriendlyByteBuf) = DialogueClosedPacket(buffer.readNullable { it.readUUID() })
+        fun decode(RegistryFriendlyByteBuf buffer) = DialogueClosedPacket(buffer.readNullable { it.readUUID() })
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(dialogueId) { buff, value -> buff.writeUUID(value) }
     }
 }

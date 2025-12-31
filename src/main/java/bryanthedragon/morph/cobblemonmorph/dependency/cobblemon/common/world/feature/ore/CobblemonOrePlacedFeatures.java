@@ -17,7 +17,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.GenerationStep
 import net.minecraft.world.level.levelgen.placement.PlacedFeature
-final class CobblemonOrePlacedFeatures {
+public final class CobblemonOrePlacedFeatures {
 
     private val features = arrayListOf<FeatureHolder>()
 

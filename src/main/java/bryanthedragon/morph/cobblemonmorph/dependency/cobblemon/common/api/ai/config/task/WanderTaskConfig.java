@@ -37,8 +37,8 @@ import net.minecraft.world.entity.ai.util.HoverRandomPos
 import net.minecraft.world.entity.ai.util.LandRandomPos
 import net.minecraft.world.level.pathfinder.PathType
 
-class WanderTaskConfig : SingleTaskConfig {
-    companion object {
+public class WanderTaskConfig : SingleTaskConfig {
+    final class Companion {
         const val WANDER = "wander" // Category
         const val MAX_LOOK_DOWN_DISTANCE = 64
     }
@@ -54,7 +54,7 @@ class WanderTaskConfig : SingleTaskConfig {
     val minimumHeight: ExpressionOrEntityVariable = Either.left("0".asExpression()) // Height off the ground
     val maximumHeight: ExpressionOrEntityVariable = Either.left("-1".asExpression()) // Height off the ground
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) =
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) =
         listOf(
             condition,
             wanderChance,
@@ -67,10 +67,10 @@ class WanderTaskConfig : SingleTaskConfig {
         ).asVariables()
 
     private fun applyHeightConstraints(
-        pos: BlockPos,
-        minimumHeight: Int,
-        maximumHeight: Int,
-        world: ServerLevel
+        (BlockPos pos,
+        minimumInt height,
+        maximumInt height,
+        ServerLevel world
     ): BlockPos {
         if (minimumHeight <= 0 && maximumHeight == -1) {
             return pos // It ain't a hoverer
@@ -110,7 +110,7 @@ class WanderTaskConfig : SingleTaskConfig {
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
@@ -148,7 +148,7 @@ class WanderTaskConfig : SingleTaskConfig {
                     val maximumHeight = maximumHeight.resolveInt(mainThreadRuntime)
 
                     var attempts = 0
-                    var pos: BlockPos? = null
+                    var (BlockPos pos? = null
                     while (attempts++ < wanderControl.maxAttempts && pos == null) {
 //                    val targetVec = getLandTarget(entity) ?: return@Trigger true
                         val targetVec = if (maximumHeight != -1) {

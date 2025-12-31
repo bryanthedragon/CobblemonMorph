@@ -20,12 +20,12 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 
-class RecallButton(
+public class RecallButton(
     x: Int, y: Int,
     onPress: OnPress
 ) : Button(x, y, WIDTH, HEIGHT, Component.literal("Retrieve"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val WIDTH = 70
         private const val HEIGHT = 17
 

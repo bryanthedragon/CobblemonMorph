@@ -14,8 +14,8 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.Sensor
 
-class PokemonDisturbancesSensor : Sensor<PokemonEntity>() {
-    override fun doTick(world: ServerLevel, entity: PokemonEntity) {
+public class PokemonDisturbancesSensor : Sensor<PokemonEntity>() {
+    override fun doTick(ServerLevel world, entity: PokemonEntity) {
         val nearestPlayers = world.players()
                 .filter { it.isAlive && entity.distanceToSqr(it) <= 16 * 16 }
                 .minByOrNull { entity.distanceToSqr(it) }

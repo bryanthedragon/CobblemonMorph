@@ -24,11 +24,11 @@ import java.util.stream.Stream
  * @author Hiroku
  * @since September 23rd, 2023
  */
-class ConditionalCountPlacementModifier(
+public class ConditionalCountPlacementModifier(
     val predicate: BlockPredicate,
     val count: Int
 ) : PlacementModifier() {
-    companion object {
+    final class Companion {
         val MODIFIER_CODEC: MapCodec<ConditionalCountPlacementModifier> = RecordCodecBuilder.mapCodec { instance ->
             instance
                 .group(
@@ -41,7 +41,7 @@ class ConditionalCountPlacementModifier(
 
     override fun type() = CobblemonPlacementModifierTypes.CONDITIONAL_COUNT
 
-    override fun getPositions(context: PlacementContext, random: RandomSource, pos: BlockPos): Stream<BlockPos> {
+    override fun getPositions(context: PlacementContext, random: RandomSource, (BlockPos pos): Stream<BlockPos> {
         return if (predicate.test(context.level, pos)) {
             val new = mutableListOf<BlockPos>()
             repeat(times = count) { new.add(pos) }

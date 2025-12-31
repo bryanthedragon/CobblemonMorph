@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.party.PartyPokemonSelectedPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class PartyPokemonSelectedHandler : ServerNetworkPacketHandler<PartyPokemonSelectedPacket> {
-    override fun handle(packet: PartyPokemonSelectedPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class PartyPokemonSelectedHandler : ServerNetworkPacketHandler<PartyPokemonSelectedPacket> {
+    override fun handle(packet: PartyPokemonSelectedPacket, server: MinecraftServer, ServerPlayer player) {
         PartySelectCallbacks.handleCallback(player, packet.uuid, packet.index)
     }
 }

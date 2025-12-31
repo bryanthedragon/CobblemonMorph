@@ -20,16 +20,16 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.minecraft.commands.SharedSuggestionProvider
 import java.util.concurrent.CompletableFuture
 
-class SpawnBucketArgumentType: ArgumentType<SpawnBucket> {
+public class SpawnBucketArgumentType: ArgumentType<SpawnBucket> {
 
-    companion object {
+    final class Companion {
         val EXAMPLES: List<String> = listOf(Cobblemon.bestSpawner.config.buckets.first().name)
         val INVALID_BUCKET = lang("command.checkspawns.invalid-bucket")
 
         fun spawnBucket() = SpawnBucketArgumentType()
 
-        fun <S> getSpawnBucket(context: CommandContext<S>, name: String): SpawnBucket {
-            return context.getArgument(name, SpawnBucket::class.java)
+        fun <S> getSpawnBucket(context: CommandContext<S>, String name): SpawnBucket {
+            return context.getArgument(name, SpawnBucket.class)
         }
     }
 

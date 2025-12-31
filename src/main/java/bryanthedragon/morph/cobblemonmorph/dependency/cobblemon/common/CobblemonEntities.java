@@ -28,76 +28,34 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 
-final class CobblemonEntities : PlatformRegistry<Registry<EntityType<*>>, ResourceKey<Registry<EntityType<*>>>, EntityType<*>>() {
+public final class CobblemonEntities : PlatformRegistry<Registry<EntityType<?>>, ResourceKey<Registry<EntityType<?>>>, EntityType<?>>() {
 
 
-    override val registry: Registry<EntityType<*>> = BuiltInRegistries.ENTITY_TYPE
-    override val resourceKey: ResourceKey<Registry<EntityType<*>>> = Registries.ENTITY_TYPE
+    @Override public static final registry: Registry<EntityType<?>> = BuiltInRegistries.ENTITY_TYPE;
+    @Override public static final resourceKey: ResourceKey<Registry<EntityType<?>>> = Registries.ENTITY_TYPE;
     
-    @JvmField
-    val POKEMON_KEY = cobblemonResource("pokemon")
-    @JvmField
-    val POKEMON: EntityType<PokemonEntity> = this.create(
-        POKEMON_KEY.path,
-        EntityType.Builder.of({ _, world -> PokemonEntity(world) }, MobCategory.CREATURE)
-            .build(POKEMON_KEY.toString())
-    )
+    public static final POKEMON_KEY = cobblemonResource("pokemon");
+    public static final POKEMON: EntityType<PokemonEntity> = this.create(POKEMON_KEY.path,EntityType.Builder.of({ _, world -> PokemonEntity(world) }, MobCategory.CREATURE).build(POKEMON_KEY.toString()));
 
-    @JvmField
-    val EMPTY_POKEBALL_KEY = cobblemonResource("empty_pokeball")
-    @JvmField
-    val EMPTY_POKEBALL: EntityType<EmptyPokeBallEntity> = this.create(
-        EMPTY_POKEBALL_KEY.path,
-        EntityType.Builder.of({ _, world -> EmptyPokeBallEntity(PokeBalls.POKE_BALL, world) }, MobCategory.MISC)
-            .build(EMPTY_POKEBALL_KEY.toString())
-    )
+    public static final EMPTY_POKEBALL_KEY = cobblemonResource("empty_pokeball");
+    public static final EMPTY_POKEBALL: EntityType<EmptyPokeBallEntity> = this.create(EMPTY_POKEBALL_KEY.path, EntityType.Builder.of({ _, world -> EmptyPokeBallEntity(PokeBalls.POKE_BALL, world) }, MobCategory.MISC).build(EMPTY_POKEBALL_KEY.toString()));
 
-    @JvmField
-    val BOAT_KEY = cobblemonResource("boat")
-    @JvmField
-    val BOAT: EntityType<CobblemonBoatEntity> = this.create(
-        BOAT_KEY.path,
-        EntityType.Builder.of(::CobblemonBoatEntity, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10)
-            .build(BOAT_KEY.toString())
-    )
+    public static final BOAT_KEY = cobblemonResource("boat");
+    public static final BOAT: EntityType<CobblemonBoatEntity> = this.create(BOAT_KEY.path, EntityType.Builder.of(::CobblemonBoatEntity, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10).build(BOAT_KEY.toString()));
 
-    @JvmField
-    val CHEST_BOAT_KEY = cobblemonResource("chest_boat")
-    @JvmField
-    val CHEST_BOAT: EntityType<CobblemonChestBoatEntity> = this.create(
-        CHEST_BOAT_KEY.path,
-        EntityType.Builder.of(::CobblemonChestBoatEntity, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10)
-            .build(CHEST_BOAT_KEY.toString())
-    )
+    public static final CHEST_BOAT_KEY = cobblemonResource("chest_boat");
+    public static final CHEST_BOAT: EntityType<CobblemonChestBoatEntity> = this.create(CHEST_BOAT_KEY.path, EntityType.Builder.of(::CobblemonChestBoatEntity, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10).build(CHEST_BOAT_KEY.toString()));
 
-    @JvmField
-    val POKE_BOBBER_KEY = cobblemonResource("poke_bobber")
-    @JvmField
-    val POKE_BOBBER: EntityType<PokeRodFishingBobberEntity> = this.create(
-            POKE_BOBBER_KEY.path,
-            EntityType.Builder.of(::PokeRodFishingBobberEntity, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10)
-                    .build(POKE_BOBBER_KEY.toString())
-    )
+    public static final POKE_BOBBER_KEY = cobblemonResource("poke_bobber");
+    public static final POKE_BOBBER: EntityType<PokeRodFishingBobberEntity> = this.create(POKE_BOBBER_KEY.path, EntityType.Builder.of(::PokeRodFishingBobberEntity, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(10).build(POKE_BOBBER_KEY.toString()));
 
-    @JvmField
-    val GENERIC_BEDROCK_ENTITY_KEY = cobblemonResource("generic_bedrock")
-    @JvmField
-    val GENERIC_BEDROCK_ENTITY: EntityType<GenericBedrockEntity> = this.create(
-        GENERIC_BEDROCK_ENTITY_KEY.path,
-        EntityType.Builder.of({ _, world -> GenericBedrockEntity(world) }, MobCategory.MISC)
-            .build(GENERIC_BEDROCK_ENTITY_KEY.toString())
-    )
+    public static final GENERIC_BEDROCK_ENTITY_KEY = cobblemonResource("generic_bedrock");
+    public static final GENERIC_BEDROCK_ENTITY: EntityType<GenericBedrockEntity> = this.create(GENERIC_BEDROCK_ENTITY_KEY.path, EntityType.Builder.of({ _, world -> GenericBedrockEntity(world) }, MobCategory.MISC).build(GENERIC_BEDROCK_ENTITY_KEY.toString()));
 
-    @JvmField
-    val NPC_KEY = cobblemonResource("npc")
-    @JvmField
-    val NPC: EntityType<NPCEntity> = create(
-        NPC_KEY.path,
-        EntityType.Builder.of({ _, world -> NPCEntity(world) }, MobCategory.CREATURE).build("$NPC_KEY")
-    )
+    public static final NPC_KEY = cobblemonResource("npc");
+    public static final NPC: EntityType<NPCEntity> = create(NPC_KEY.path, EntityType.Builder.of({ _, world -> NPCEntity(world) }, MobCategory.CREATURE).build("$NPC_KEY"));
 
     fun registerAttributes(consumer: (EntityType<out LivingEntity>, AttributeSupplier.Builder) -> Unit) {
-        consumer(POKEMON, PokemonEntity.createAttributes())
-        consumer(NPC, NPCEntity.createAttributes())
+        consumer(POKEMON, PokemonEntity.createAttributes())consumer(NPC, NPCEntity.createAttributes())
     }
 }

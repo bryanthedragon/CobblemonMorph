@@ -14,12 +14,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 
-interface EvSource {
+public interface EvSource {
 
     /**
      * The [Pokemon] being affected.
      */
-    val pokemon: Pokemon
+    val Pokemon pokemon
 
     /**
      * Utility function that checks if the source is an implementation of [BattleEvSource].
@@ -45,8 +45,8 @@ interface EvSource {
  * @property pokemon See [EvSource.pokemon].
  */
 open class SidemodEvSource(
-    val sidemodId: String,
-    override val pokemon: Pokemon
+    val sideString modId,
+    override val Pokemon pokemon
 ) : EvSource
 
 /**
@@ -57,9 +57,9 @@ open class SidemodEvSource(
  * @property pokemon See [EvSource.pokemon].
  */
 open class ItemEvSource(
-    val player: ServerPlayer,
-    val stack: ItemStack,
-    override val pokemon: Pokemon
+    val ServerPlayer player,
+    val ItemStack stack,
+    override val Pokemon pokemon
 ) : EvSource
 
 /**
@@ -72,5 +72,5 @@ open class ItemEvSource(
 open class BattleEvSource(
     val battle: PokemonBattle,
     val facedPokemon: List<BattlePokemon>,
-    override val pokemon: Pokemon
+    override val Pokemon pokemon
 ) : EvSource

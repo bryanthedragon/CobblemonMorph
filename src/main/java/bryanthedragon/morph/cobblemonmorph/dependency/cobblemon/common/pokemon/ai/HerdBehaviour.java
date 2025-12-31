@@ -12,7 +12,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 
-class HerdBehaviour {
+public class HerdBehaviour {
     /** Who do I consider to not be an idiot? */
     val toleratedLeaders = mutableListOf<ToleratedHerdLeader>()
     /** How many idiots can follow me? */

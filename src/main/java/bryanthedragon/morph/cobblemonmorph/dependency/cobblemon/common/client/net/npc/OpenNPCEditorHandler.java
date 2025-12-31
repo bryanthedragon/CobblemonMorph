@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.npc.NPCEditorScreen
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.npc.OpenNPCEditorPacket
 import net.minecraft.client.Minecraft
-final class OpenNPCEditorHandler : ClientNetworkPacketHandler<OpenNPCEditorPacket> {
-    override fun handle(packet: OpenNPCEditorPacket, client: Minecraft) {
+public final class OpenNPCEditorHandler : ClientNetworkPacketHandler<OpenNPCEditorPacket> {
+    override fun handle(packet: OpenNPCEditorPacket, Minecraft client) {
         client.setScreen(NPCEditorScreen(packet.npcId, packet.dto))
     }
 }

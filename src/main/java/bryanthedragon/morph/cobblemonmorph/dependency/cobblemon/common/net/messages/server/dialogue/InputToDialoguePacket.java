@@ -24,17 +24,17 @@ import java.util.UUID
  * @author Hiroku
  * @since December 29th, 2023
  */
-class InputToDialoguePacket(val inputId: UUID, val input: String = ""): NetworkPacket<InputToDialoguePacket> {
-    companion object {
+public class InputToDialoguePacket(val inputId: UUID, val input: String = ""): NetworkPacket<InputToDialoguePacket> {
+    final class Companion {
         val ID = cobblemonResource("input_to_dialogue")
-        fun decode(buffer: RegistryFriendlyByteBuf) = InputToDialoguePacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = InputToDialoguePacket(
             buffer.readUUID(),
             buffer.readString()
         )
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(inputId)
         buffer.writeString(input)
     }

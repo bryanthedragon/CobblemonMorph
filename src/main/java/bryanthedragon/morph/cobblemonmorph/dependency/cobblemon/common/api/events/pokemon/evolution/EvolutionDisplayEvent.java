@@ -25,7 +25,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @since May 3rd, 2022
  */
 record EvolutionDisplayEvent(
-    override val pokemon: Pokemon,
+    override val Pokemon pokemon,
     var display: EvolutionDisplay,
     override val evolution: Evolution
 ) : EvolutionEvent

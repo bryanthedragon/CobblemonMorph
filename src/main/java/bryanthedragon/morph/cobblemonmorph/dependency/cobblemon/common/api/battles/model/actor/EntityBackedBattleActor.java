@@ -16,7 +16,7 @@ import net.minecraft.world.phys.Vec3
  *
  * @param T The type of [LivingEntity].
  */
-interface EntityBackedBattleActor<T : LivingEntity> {
+public interface EntityBackedBattleActor<T : LivingEntity> {
 
     /**
      * The [LivingEntity] attached to the [BattleActor].

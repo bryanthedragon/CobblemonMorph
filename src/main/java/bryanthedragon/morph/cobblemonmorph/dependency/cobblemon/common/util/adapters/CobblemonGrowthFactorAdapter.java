@@ -26,7 +26,8 @@ import kotlin.reflect.KClass
  *
  * @author Licious
  * @since December 2nd, 2022
- */final class CobblemonGrowthFactorAdapter : GrowthFactorAdapter {
+ */
+public final class CobblemonGrowthFactorAdapter : GrowthFactorAdapter {
 
     private const val VARIANT = "variant"
     private val types = hashMapOf<String, KClass<out GrowthFactor>>()
@@ -37,21 +38,21 @@ import kotlin.reflect.KClass
         this.register(PreferredBiomeGrowthFactor::class, PreferredBiomeGrowthFactor.ID)
     }
 
-    override fun register(type: KClass<out GrowthFactor>, identifier: ResourceLocation) {
+    override fun register(type: KClass<out GrowthFactor>, ResourceLocation identifier) {
         val existing = this.types.put(identifier.toString(), type)
         if (existing != null) {
             Cobblemon.LOGGER.debug("Replaced {} under ID {} with {} in the {}", existing::class.qualifiedName, identifier.toString(), type.qualifiedName, this::class.qualifiedName)
         }
     }
 
-    override fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): GrowthFactor {
+    override fun deserialize(jElement: JsonElement, Type type, JsonDeserializationContext context): GrowthFactor {
         val json = jElement.asJsonObject
         val variant = json.get(VARIANT).asString.lowercase()
         val registeredType = this.types[variant] ?: throw IllegalArgumentException("Cannot resolve type for variant $variant")
         return context.deserialize(json, registeredType.java)
     }
 
-    override fun serialize(factor: GrowthFactor, type: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(factor: GrowthFactor, Type type, context: JsonSerializationContext): JsonElement {
         val json = context.serialize(factor).asJsonObject
         val variant = this.types.entries.find { it.value == factor::class }?.key ?: throw IllegalArgumentException("Cannot resolve variant for type ${factor::class.qualifiedName}")
         json.addProperty(VARIANT, variant)

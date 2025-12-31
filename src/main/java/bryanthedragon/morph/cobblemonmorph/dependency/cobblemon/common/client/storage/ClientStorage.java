@@ -12,11 +12,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stora
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import java.util.UUID
 
-abstract class ClientStorage<T : StorePosition>(val uuid: UUID) {
-    abstract fun findByUUID(uuid: UUID): Pokemon?
-    abstract fun set(position: T, pokemon: Pokemon?)
+abstract class ClientStorage<T : StorePosition>(val UUID uuid) {
+    abstract fun findByUUID(UUID uuid): Pokemon?
+    abstract fun set(position: T, Pokemon pokemon?)
     abstract fun get(position: T): Pokemon?
-    abstract fun getPosition(pokemon: Pokemon): T?
+    abstract fun getPosition(Pokemon pokemon): T?
 
     fun swap(pokemonID1: UUID, pokemonID2: UUID) {
         val pokemon1 = findByUUID(pokemonID1)
@@ -27,12 +27,12 @@ abstract class ClientStorage<T : StorePosition>(val uuid: UUID) {
         position2?.run { set(this, pokemon1) }
     }
 
-    fun remove(pokemonID: UUID) {
+    fun remove(UUID pokemonId) {
         val pokemon = findByUUID(pokemonID) ?: return
         getPosition(pokemon)?.let { set(it, null) }
     }
 
-    fun move(pokemonID: UUID, newPosition: T) {
+    fun move(UUID pokemonId, newPosition: T) {
         val pokemon = findByUUID(pokemonID) ?: return
         getPosition(pokemon)?.let {
             set(it, null)

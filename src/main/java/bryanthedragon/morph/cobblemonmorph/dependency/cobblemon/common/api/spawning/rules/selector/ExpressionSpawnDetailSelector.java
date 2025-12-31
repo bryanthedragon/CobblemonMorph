@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asEx
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveBoolean
 
-class ExpressionSpawnDetailSelector : SpawnDetailSelector {
+public class ExpressionSpawnDetailSelector : SpawnDetailSelector {
     @Transient
     val runtime = MoLangRuntime().setup()
     var expression = "true".asExpressionLike()

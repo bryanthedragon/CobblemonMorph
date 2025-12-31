@@ -21,8 +21,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.reso
  * @author Hiroku
  * @since December 29th, 2023
  */
-interface DialogueAction {
-    companion object {
+public interface DialogueAction {
+    final class Companion {
         @JvmStatic
         val types = mutableMapOf<String, Class<out DialogueAction>>()
     }
@@ -30,13 +30,13 @@ interface DialogueAction {
     operator fun invoke(dialogue: ActiveDialogue, input: String? = null)
 }
 
-class FunctionDialogueAction(val consumer: (ActiveDialogue, String?) -> Unit) : DialogueAction {
+public class FunctionDialogueAction(val consumer: (ActiveDialogue, String?) -> Unit) : DialogueAction {
     override fun invoke(dialogue: ActiveDialogue, input: String?) {
         consumer(dialogue, input)
     }
 }
 
-class ExpressionLikeDialogueAction(val expression: ExpressionLike) : DialogueAction {
+public class ExpressionLikeDialogueAction(val expression: ExpressionLike) : DialogueAction {
     override fun invoke(dialogue: ActiveDialogue, input: String?) {
         if (input != null) {
             dialogue.runtime.environment.setSimpleVariable("selected_option", StringValue(input))

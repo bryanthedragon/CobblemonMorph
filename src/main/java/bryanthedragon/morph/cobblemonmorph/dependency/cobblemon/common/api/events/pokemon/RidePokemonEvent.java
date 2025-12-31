@@ -21,13 +21,13 @@ import net.minecraft.server.level.ServerPlayer
  * @see [Pre]
  * @see [Post]
  */
-interface RidePokemonEvent {
-    val player: ServerPlayer
-    val pokemon: PokemonEntity
+public interface RidePokemonEvent {
+    val ServerPlayer player
+    val Pokemon pokemonEntity
 
     class Pre(
-        override val player: ServerPlayer,
-        override val pokemon: PokemonEntity
+        override val ServerPlayer player,
+        override val Pokemon pokemonEntity
     ) : RidePokemonEvent, Cancelable() {
         val context = mutableMapOf(
             "player" to player.asMoLangValue(),
@@ -39,8 +39,8 @@ interface RidePokemonEvent {
     }
 
     class Post(
-        override val player: ServerPlayer,
-        override val pokemon: PokemonEntity
+        override val ServerPlayer player,
+        override val Pokemon pokemonEntity
     ) : RidePokemonEvent {
         val context = mutableMapOf(
             "player" to player.asMoLangValue(),
@@ -53,8 +53,8 @@ interface RidePokemonEvent {
      * mount or you can make the stamina infinite. Handy hey.
      */
     class ApplyStamina(
-        override val player: ServerPlayer,
-        override val pokemon: PokemonEntity,
+        override val ServerPlayer player,
+        override val Pokemon pokemonEntity,
         var rideStamina: Float
     ) : RidePokemonEvent {
         val context = mutableMapOf(

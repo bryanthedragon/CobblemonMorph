@@ -50,7 +50,7 @@ internal record PokemonP2(
     val tradeable: Boolean
 ) : Partial<Pokemon> {
 
-    override fun into(other: Pokemon): Pokemon {
+    override fun into(Pokemon other): Pokemon {
         this.state.ifPresent { other.state = it }
         this.status.ifPresent { other.status = it }
         other.caughtBall = this.caughtBall
@@ -73,7 +73,7 @@ internal record PokemonP2(
         return other
     }
 
-    companion object {
+    final class Companion {
         internal val CODEC: MapCodec<PokemonP2> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 ShoulderedState.CODEC.optionalFieldOf(DataKeys.POKEMON_STATE).forGetter(PokemonP2::state),
@@ -87,7 +87,7 @@ internal record PokemonP2(
                 Nature.BY_IDENTIFIER_CODEC.optionalFieldOf(DataKeys.POKEMON_MINTED_NATURE).forGetter(PokemonP2::mintedNature),
                 ItemStack.CODEC.mapResult(object: Codec.ResultFunction<ItemStack> {
                     override fun <T : Any> apply(
-                        ops: DynamicOps<T>,
+                        DynamicOps<T> ops,
                         input: T,
                         a: DataResult<Pair<ItemStack, T>>
                     ): DataResult<Pair<ItemStack, T>> {
@@ -98,8 +98,8 @@ internal record PokemonP2(
                     }
 
                     override fun <T : Any> coApply(
-                        ops: DynamicOps<T>,
-                        input: ItemStack?,
+                        DynamicOps<T> ops,
+                        I inputtemStack?,
                         t: DataResult<T>
                     ): DataResult<T> {
                         return t
@@ -114,7 +114,7 @@ internal record PokemonP2(
             ).apply(instance, ::PokemonP2)
         }
 
-        internal fun from(pokemon: Pokemon): PokemonP2 = PokemonP2(
+        internal fun from(Pokemon pokemon): PokemonP2 = PokemonP2(
             Optional.ofNullable(pokemon.state as? ShoulderedState),
             Optional.ofNullable(pokemon.status),
             pokemon.caughtBall,

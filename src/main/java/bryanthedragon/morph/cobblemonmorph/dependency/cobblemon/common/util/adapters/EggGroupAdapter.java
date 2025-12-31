@@ -16,18 +16,18 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-final class EggGroupAdapter : JsonDeserializer<EggGroup>, JsonSerializer<EggGroup> {
+public final class EggGroupAdapter : JsonDeserializer<EggGroup>, JsonSerializer<EggGroup> {
 
     // Safe to just cache
     private val eggGroups = EggGroup.values()
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): EggGroup {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): EggGroup {
         val rawID = json.asString
         return this.eggGroups.firstOrNull { eggGroup -> eggGroup.name.equals(rawID, true) }
             ?: throw IllegalStateException("Failed to resolve egg group from: $rawID")
     }
 
-    override fun serialize(src: EggGroup, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(src: EggGroup, typeOfT srcype, context: JsonSerializationContext): JsonElement {
         // We prettify the enum value instead of PokeAPI format due to it being the "correct" english name
         return JsonPrimitive(
             src.name.lowercase()

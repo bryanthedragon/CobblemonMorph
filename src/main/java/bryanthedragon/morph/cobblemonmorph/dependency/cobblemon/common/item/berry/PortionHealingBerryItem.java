@@ -35,24 +35,24 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since August 4th, 2023
  */
-class PortionHealingBerryItem(block: BerryBlock, val canCauseConfusion: Boolean, val portion: () -> ExpressionLike): BerryItem(block), PokemonSelectingItem, HealingSource {
+public class PortionHealingBerryItem(block: BerryBlock, val canCauseConfusion: Boolean, val portion: () -> ExpressionLike): BerryItem(block), PokemonSelectingItem, HealingSource {
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${this@PortionHealingBerryItem.berry()!!.identifier.path}"
         override val returnItem = Items.AIR
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?): String {
             val confuse = if (canCauseConfusion) berry()!!.dislikedBy(battlePokemon.nature) else false
             return "potion_by_portion ${genericRuntime.resolveFloat(portion(), battlePokemon)} $confuse"
         }
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
     }
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFainted() && !pokemon.isFullHealth()
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = !pokemon.isFainted() && !pokemon.isFullHealth()
             && super.canUseOnPokemon(stack, pokemon)
 
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack>? {
         if (!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
@@ -71,12 +71,12 @@ class PortionHealingBerryItem(block: BerryBlock, val canCauseConfusion: Boolean,
         return InteractionResultHolder.success(stack)
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.originalPokemon.feedPokemon(5)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

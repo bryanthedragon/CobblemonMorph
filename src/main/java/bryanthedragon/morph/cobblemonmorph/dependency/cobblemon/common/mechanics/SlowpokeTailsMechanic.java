@@ -16,13 +16,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 14th, 2025
  */
-class SlowpokeTailsMechanic {
+public class SlowpokeTailsMechanic {
     var canShearSlowpoke = true
     var onlyRegrowWhenSentOut = false
     var regrowthSeconds = 1200
     var aspectThresholds = mapOf<Int, String>()
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(canShearSlowpoke)
         buffer.writeBoolean(onlyRegrowWhenSentOut)
         buffer.writeVarInt(regrowthSeconds)
@@ -40,9 +40,9 @@ class SlowpokeTailsMechanic {
             .toSet()
     }
 
-    companion object {
+    final class Companion {
 
-        fun decode(buffer: RegistryFriendlyByteBuf): SlowpokeTailsMechanic {
+        fun decode(RegistryFriendlyByteBuf buffer): SlowpokeTailsMechanic {
             val canShearSlowpoke = buffer.readBoolean()
             val onlyRegrow = buffer.readBoolean()
             val seconds = buffer.readVarInt()

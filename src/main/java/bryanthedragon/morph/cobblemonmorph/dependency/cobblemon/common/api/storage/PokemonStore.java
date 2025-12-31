@@ -37,7 +37,7 @@ import net.minecraft.server.level.ServerPlayer
  */
 abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
     /** The UUID of the store. The exact uniqueness requirements depend on the method used for saving. */
-    abstract val uuid: UUID
+    abstract val UUID uuid
     /** Gets the [Pokemon] at the given position. */
     abstract operator fun get(position: T): Pokemon?
     /** Gets the first empty position that a [Pokemon] might be put. */
@@ -45,9 +45,9 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
     /** Gets an iterable of all [ServerPlayer]s that should be notified of any changes to the Pokémon in this store. */
     abstract fun getObservingPlayers(): Iterable<ServerPlayer>
     /** Sends the contents of this store to a player as if they've never seen it before. This initializes the store then sends each contained Pokémon. */
-    abstract fun sendTo(player: ServerPlayer)
+    abstract fun sendTo(ServerPlayer player)
     /** Notifies the store that the provided Pokémon has changed in some way that would require persisting. */
-    abstract fun onPokemonChanged(pokemon: Pokemon)
+    abstract fun onPokemonChanged(Pokemon pokemon)
 
     /**
      * Runs initialization logic for this store, knowing that it has just been constructed in a [PokemonStoreFactory].
@@ -64,16 +64,16 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
      * other, more public methods will additionally send updates to the client, and for logical reasons this means
      * there must be an internal and external set method.
      */
-    protected abstract fun setAtPosition(position: T, pokemon: Pokemon?)
+    protected abstract fun setAtPosition(position: T, Pokemon pokemon?)
 
     /** Returns true if the given position is pointing to a legitimate location in this store. */
     abstract fun isValidPosition(position: T): Boolean
 
     /** Sends the given packet to all observing players. */
-    open fun sendPacketToObservers(packet: NetworkPacket<*>) = getObservingPlayers().forEach { it.sendPacket(packet) }
+    open fun sendPacketToObservers( NetworkPacket<*> packet) = getObservingPlayers().forEach { it.sendPacket(packet) }
 
     /** Adds the given [Pokemon] to the first available space. Returns false if there is no space. */
-    open fun add(pokemon: Pokemon): Boolean {
+    open fun add(Pokemon pokemon): Boolean {
         remove(pokemon)
         val position = getFirstAvailablePosition() ?: return false // Couldn't fit, shrug emoji
         set(position, pokemon)
@@ -86,7 +86,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
      *
      * This method will also notify any observing players about the changes.
      */
-    open operator fun set(position: T, pokemon: Pokemon) {
+    open operator fun set(position: T, Pokemon pokemon) {
         val existing = get(position)
         if (existing == pokemon) {
             return
@@ -115,7 +115,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
      *
      * This is a shortcut to running [PokemonStore.swap]
      */
-    fun move(pokemon: Pokemon, position: T) {
+    fun move(Pokemon pokemon, position: T) {
         val currentPosition = pokemon.storeCoordinates.get() ?: return
         if (currentPosition.store != this) {
             return
@@ -134,7 +134,7 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
     }
 
     /** Removes the specified Pokémon from this store. Returns true if the Pokémon was in this store and was successfully removed. */
-    open fun remove(pokemon: Pokemon): Boolean {
+    open fun remove(Pokemon pokemon): Boolean {
         val currentPosition = pokemon.storeCoordinates.get() ?: return false
         if (currentPosition.store != this) {
             return false
@@ -149,20 +149,20 @@ abstract class PokemonStore<T : StorePosition> : Iterable<Pokemon> {
         return true
     }
 
-    operator fun get(uuid: UUID) = find { it.uuid == uuid }
+    operator fun get(UUID uuid) = find { it.uuid == uuid }
 
-    open fun handleInvalidSpeciesNBT(nbt: CompoundTag) {
+    open fun handleInvalidSpeciesNBT(CompoundTag nbt) {
         Cobblemon.LOGGER.error("Failed to read unknown species: ${nbt.getString(DataKeys.POKEMON_SPECIES_IDENTIFIER)}")
     }
-    abstract fun saveToNBT(nbt: CompoundTag, registryAccess: RegistryAccess): CompoundTag
-    abstract fun loadFromNBT(nbt: CompoundTag, registryAccess: RegistryAccess): PokemonStore<T>
-    open fun handleInvalidSpeciesJSON(json: JsonObject) {
+    abstract fun saveToNBT(CompoundTag nbt, RegistryAccess registryAccess): CompoundTag
+    abstract fun loadFromNBT(CompoundTag nbt, RegistryAccess registryAccess): PokemonStore<T>
+    open fun handleInvalidSpeciesJSON(JsonObject json) {
         Cobblemon.LOGGER.error("Failed to read unknown species: ${json.get(DataKeys.POKEMON_SPECIES_IDENTIFIER).asString}")
     }
-    abstract fun saveToJSON(json: JsonObject, registryAccess: RegistryAccess): JsonObject
-    abstract fun loadFromJSON(json: JsonObject, registryAccess: RegistryAccess): PokemonStore<T>
-    abstract fun savePositionToNBT(position: T, nbt: CompoundTag)
-    abstract fun loadPositionFromNBT(nbt: CompoundTag): StoreCoordinates<T>
+    abstract fun saveToJSON(JsonObject json, RegistryAccess registryAccess): JsonObject
+    abstract fun loadFromJSON(JsonObject json, RegistryAccess registryAccess): PokemonStore<T>
+    abstract fun savePositionToNBT(position: T, CompoundTag nbt)
+    abstract fun loadPositionFromNBT(CompoundTag nbt): StoreCoordinates<T>
 
     /**
      * Returns an [Observable] that emits Unit whenever there is a change to this store. This includes any save-worthy

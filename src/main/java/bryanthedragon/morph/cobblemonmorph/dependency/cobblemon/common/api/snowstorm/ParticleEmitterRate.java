@@ -24,30 +24,30 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.lang.Integer.min
 
-interface ParticleEmitterRate : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<ParticleEmitterRate, ParticleEmitterRateType>(
+public interface ParticleEmitterRate : CodecMapped {
+    final class Companion : ArbitrarilyMappedSerializableCompanion<ParticleEmitterRate, ParticleEmitterRateType>(
         keyFromValue = { it.type },
         keyFromString = ParticleEmitterRateType::valueOf,
         stringFromKey = { it.name }
     ) {
         const val OVERFLOW_VARIABLE = "emitter_overflow"
         init {
-            registerSubtype(ParticleEmitterRateType.INSTANT, InstantParticleEmitterRate::class.java, InstantParticleEmitterRate.CODEC)
-            registerSubtype(ParticleEmitterRateType.STEADY, SteadyParticleEmitterRate::class.java, SteadyParticleEmitterRate.CODEC)
+            registerSubtype(ParticleEmitterRateType.INSTANT, InstantParticleEmitterRate.class, InstantParticleEmitterRate.CODEC)
+            registerSubtype(ParticleEmitterRateType.STEADY, SteadyParticleEmitterRate.class, SteadyParticleEmitterRate.CODEC)
         }
     }
 
     val type: ParticleEmitterRateType
-    fun getEmitCount(runtime: MoLangRuntime, started: Boolean, currentlyActive: Int): Int
+    fun getEmitCount(MoLangRuntime runtime, started: Boolean, currentlyActive: Int): Int
 }
 
-enum class ParticleEmitterRateType {
+public enum ParticleEmitterRateType {
     STEADY,
     INSTANT
 }
 
-class InstantParticleEmitterRate(var amount: Expression = "1".asExpression()) : ParticleEmitterRate {
-    companion object {
+public class InstantParticleEmitterRate(var amount: Expression = "1".asExpression()) : ParticleEmitterRate {
+    final class Companion {
         val CODEC: Codec<InstantParticleEmitterRate> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -58,7 +58,7 @@ class InstantParticleEmitterRate(var amount: Expression = "1".asExpression()) : 
 
     override val type = ParticleEmitterRateType.INSTANT
 
-    override fun getEmitCount(runtime: MoLangRuntime, started: Boolean, currentlyActive: Int): Int {
+    override fun getEmitCount(MoLangRuntime runtime, started: Boolean, currentlyActive: Int): Int {
         if (started) {
             return 0
         } else {
@@ -66,24 +66,24 @@ class InstantParticleEmitterRate(var amount: Expression = "1".asExpression()) : 
         }
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         amount = buffer.readString().asExpression()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(amount.getString())
     }
 }
 
-class SteadyParticleEmitterRate(
+public class SteadyParticleEmitterRate(
     var rate: Expression = NumberExpression(0.0),
     var maximum: Expression = NumberExpression(0.0)
 ) : ParticleEmitterRate {
 
     var time = System.currentTimeMillis()
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<SteadyParticleEmitterRate> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -95,7 +95,7 @@ class SteadyParticleEmitterRate(
 
     override val type = ParticleEmitterRateType.STEADY
 
-    override fun getEmitCount(runtime: MoLangRuntime, started: Boolean, currentlyActive: Int): Int {
+    override fun getEmitCount(MoLangRuntime runtime, started: Boolean, currentlyActive: Int): Int {
         // The emitting rates are all per second, but this runs every tick. Presents some difficulties.
 
         val max = runtime.resolveDouble(maximum).toInt()
@@ -124,13 +124,13 @@ class SteadyParticleEmitterRate(
         return min(intComponent, max - currentlyActive)
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         rate = buffer.readString().asExpression()
         maximum = buffer.readString().asExpression()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(rate.getString())
         buffer.writeString(maximum.getString())
     }

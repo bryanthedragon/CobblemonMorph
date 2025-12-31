@@ -17,8 +17,9 @@ import java.lang.reflect.Type
  *
  * @author Licious
  * @since December 5th, 2022
- */final class LiteralHexColorAdapter : JsonDeserializer<Color>, JsonSerializer<Color> {
-    override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext) = Color(element.asString.removePrefix("#").toInt(16))
+ */
+public final class LiteralHexColorAdapter : JsonDeserializer<Color>, JsonSerializer<Color> {
+    override fun deserialize(JsonElement jElement, Type type, JsonDeserializationContext context) = Color(element.asString.removePrefix("#").toInt(16))
 
-    override fun serialize(color: Color, type: Type, context: JsonSerializationContext) = JsonPrimitive("#${color.rgb.toString(16)}")
+    override fun serialize(color: Color, Type type, context: JsonSerializationContext) = JsonPrimitive("#${color.rgb.toString(16)}")
 }

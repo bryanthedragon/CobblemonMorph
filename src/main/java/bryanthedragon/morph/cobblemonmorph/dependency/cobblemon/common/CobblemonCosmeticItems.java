@@ -28,18 +28,18 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-final class CobblemonCosmeticItems : JsonDataRegistry<CosmeticItemAssignment> {
+public final class CobblemonCosmeticItems : JsonDataRegistry<CosmeticItemAssignment> {
     override val id = cobblemonResource("cosmetic_items")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<CobblemonCosmeticItems>()
-    override val typeToken = TypeToken.get(CosmeticItemAssignment::class.java)
+    override val typeToken = TypeToken.get(CosmeticItemAssignment.class)
     override val resourcePath = "cosmetic_items"
 
     override val gson = GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(PokemonProperties::class.java, PokemonPropertiesAdapter(saveLong = false))
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(PokemonProperties.class, PokemonPropertiesAdapter(saveLong = false))
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Item.class).type, ItemLikeConditionAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .create()
 
     @JvmField
@@ -51,14 +51,14 @@ final class CobblemonCosmeticItems : JsonDataRegistry<CosmeticItemAssignment> {
         cosmeticItems.addAll(data.values)
     }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         CosmeticItemAssignmentSyncPacket(cosmeticItems).sendToPlayer(player)
     }
 
     @JvmStatic
-    fun findValidForPokemon(pokemon: Pokemon) = cosmeticItems.filter { it.pokemon.any { it.matches(pokemon) } }
+    fun findValidForPokemon(Pokemon pokemon) = cosmeticItems.filter { it.pokemon.any { it.matches(pokemon) } }
     @JvmStatic
-    fun findValidCosmeticForPokemonAndItem(registryAccess: RegistryAccess, pokemon: Pokemon, itemStack: ItemStack) = cosmeticItems
+    fun findValidCosmeticForPokemonAndItem(RegistryAccess registryAccess, pokemon: Pokemon, itemStack: ItemStack) = cosmeticItems
         .filter { it.pokemon.any { it.matches(pokemon) } }
         .flatMap { it.cosmeticItems }
         .firstOrNull { it.consumedItem.fits(itemStack.item, registryAccess.registryOrThrow(Registries.ITEM)) }

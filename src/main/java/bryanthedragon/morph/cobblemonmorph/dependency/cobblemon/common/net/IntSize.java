@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net;
 
 /**
  * Convenient breakdown of different sizes of integer for use in (de)serializing from byte buffers.
@@ -14,7 +14,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net
  * @author Hiroku
  * @since November 28th, 2021
  */
-enum class IntSize {
+public enum IntSize {
     INT,
     SHORT,
     U_SHORT,

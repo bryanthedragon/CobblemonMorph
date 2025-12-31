@@ -8,7 +8,7 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokedex
 
-enum class PokedexLearnedInformation {
+public enum PokedexLearnedInformation {
     NONE,
     SPECIES,
     FORM,

@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class CroconawModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
+public class CroconawModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("croconaw")
     override val head = getPart("head")
 

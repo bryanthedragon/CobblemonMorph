@@ -25,11 +25,11 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 
-class MarksWidget(
+public class MarksWidget(
     pX: Int, pY: Int,
-    val pokemon: Pokemon
+    val Pokemon pokemon
 ): SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("MarksWidget")) {
-    companion object {
+    final class Companion {
         private const val WIDTH = 134
         private const val HEIGHT = 148
         const val SCALE = 0.5F

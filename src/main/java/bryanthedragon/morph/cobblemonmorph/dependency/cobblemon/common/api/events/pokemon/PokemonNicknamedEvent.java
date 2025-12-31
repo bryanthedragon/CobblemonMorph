@@ -28,9 +28,9 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since April 22nd, 2023
  */
-class PokemonNicknamedEvent(val player: ServerPlayer, val pokemon: Pokemon, var nickname: MutableComponent?): Cancelable() {
+public class PokemonNicknamedEvent(val ServerPlayer player, val Pokemon pokemon, var nickname: MutableComponent?): Cancelable() {
     /** A shortcut to using [nickname].getString(). Learn how Text works! */
-    val nicknameString: String?
+    val nicknameString string?
         get() = nickname?.string
 
     fun getContext(): MutableMap<String, MoValue> {

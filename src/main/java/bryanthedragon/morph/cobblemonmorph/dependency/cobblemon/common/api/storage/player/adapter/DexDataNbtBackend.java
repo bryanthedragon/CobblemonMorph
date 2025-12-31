@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.poked
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.PlayerInstancedDataStoreType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.PlayerInstancedDataStoreTypes
 
-class DexDataNbtBackend : NbtBackedPlayerData<PokedexManager>("pokedex", PlayerInstancedDataStoreTypes.POKEDEX) {
+public class DexDataNbtBackend : NbtBackedPlayerData<PokedexManager>("pokedex", PlayerInstancedDataStoreTypes.POKEDEX) {
     override val codec = PokedexManager.CODEC
     override val defaultData = DexDataJsonBackend.defaultDataFunc
 }

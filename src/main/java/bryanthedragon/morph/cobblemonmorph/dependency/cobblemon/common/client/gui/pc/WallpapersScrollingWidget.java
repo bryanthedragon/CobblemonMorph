@@ -26,7 +26,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class WallpapersScrollingWidget(
+public class WallpapersScrollingWidget(
     pX: Int, val pY: Int,
     val pcGui: PCGUI,
     val storageWidget: StorageWidget
@@ -37,7 +37,7 @@ class WallpapersScrollingWidget(
     top = 0,
     slotHeight = SLOT_HEIGHT + SLOT_PADDING
 ) {
-    companion object {
+    final class Companion {
         const val WIDTH = 68
         const val HEIGHT = 146
         const val SLOT_WIDTH = 56
@@ -104,12 +104,12 @@ class WallpapersScrollingWidget(
 
     inner class WallpaperEntry(val wallpaper: ResourceLocation, var altWallpaper: ResourceLocation?, var isNew: Boolean) : Slot<WallpaperEntry>() {
         override fun render(
-            guiGraphics: GuiGraphics,
-            index: Int,
+            GuiGraphics guiGraphics,
+            Int index,
             top: Int,
             left: Int,
-            width: Int,
-            height: Int,
+            Int width,
+            Int height,
             mouseX: Int,
             mouseY: Int,
             hovering: Boolean,

@@ -20,10 +20,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Licious
  * @since March 21st, 2022
  */
-class MoveSetRequirement : Requirement {
-    val move: MoveTemplate = Moves.getByNameOrDummy("tackle")
-    override fun check(pokemon: Pokemon) = pokemon.moveSet.getMoves().any { move -> move.name.equals(this.move.name, true) }
-    companion object {
+public class MoveSetRequirement : Requirement {
+    val MoveTemplate move = Moves.getByNameOrDummy("tackle")
+    override fun check(Pokemon pokemon) = pokemon.moveSet.getMoves().any { move -> move.name.equals(this.move.name, true) }
+    final class Companion {
         const val ADAPTER_VARIANT = "has_move"
     }
 }

@@ -21,8 +21,8 @@ import java.util.UUID
  * @author Hiroku
  * @since December 27th, 2023
  */
-class ActiveInput(
-    val activeDialogue: ActiveDialogue,
+public class ActiveInput(
+    val ActiveDialogue activeDialogue,
     val dialogueInput: DialogueInput
 ) {
     val inputId = UUID.randomUUID()

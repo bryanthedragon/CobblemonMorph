@@ -19,7 +19,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @since January 13th, 2022
  */
 abstract class BooleanUpdatePacket<T : NetworkPacket<T>>(pokemon: () -> Pokemon?, value: Boolean) : SingleUpdatePacket<Boolean, T>(pokemon, value) {
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(this.value)
     }
 }

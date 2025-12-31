@@ -14,16 +14,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class SetPCBoxWallpapersPacket internal constructor(val wallpapers: Set<ResourceLocation>) : NetworkPacket<SetPCBoxWallpapersPacket>, UnsplittablePacket {
+public class SetPCBoxWallpapersPacket internal constructor(val wallpapers: Set<ResourceLocation>) : NetworkPacket<SetPCBoxWallpapersPacket>, UnsplittablePacket {
     override val id = ID
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("set_pc_box_wallpapers")
-        fun decode(buffer: RegistryFriendlyByteBuf): SetPCBoxWallpapersPacket =
+        fun decode(RegistryFriendlyByteBuf buffer): SetPCBoxWallpapersPacket =
             SetPCBoxWallpapersPacket(buffer.readList { reader -> reader.readResourceLocation() }.toSet())
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(wallpapers) { writer, value -> writer.writeResourceLocation(value) }
     }
 }

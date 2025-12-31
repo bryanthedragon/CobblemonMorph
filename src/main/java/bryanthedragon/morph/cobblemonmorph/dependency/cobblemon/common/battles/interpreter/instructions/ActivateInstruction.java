@@ -37,12 +37,12 @@ import net.minecraft.network.chat.Component
  * @author Hunter
  * @since September 25th, 2022
  */
-class ActivateInstruction(val instructionSet: InstructionSet, val message: BattleMessage) : ActionEffectInstruction, CauserInstruction {
+public class ActivateInstruction(val instructionSet: InstructionSet, val message: BattleMessage) : ActionEffectInstruction, CauserInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
     override var holds = mutableSetOf<String>()
     override val id = cobblemonResource("activate")
 
-    override fun addMolangQueries(runtime: MoLangRuntime) {
+    override fun addMolangQueries(MoLangRuntime runtime) {
         super.addMolangQueries(runtime)
         runtime.environment.query.addBattleMessageFunctions(message)
     }
@@ -59,7 +59,7 @@ class ActivateInstruction(val instructionSet: InstructionSet, val message: Battl
         }
     }
 
-    override fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime) {
+    override fun runActionEffect(battle: PokemonBattle, MoLangRuntime runtime) {
         battle.dispatch {
             val effect = message.effectAt(1) ?: return@dispatch GO
             val status = Statuses.getStatus(effect.id)

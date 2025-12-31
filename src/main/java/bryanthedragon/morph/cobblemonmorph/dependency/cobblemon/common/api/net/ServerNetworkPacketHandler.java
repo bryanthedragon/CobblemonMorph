@@ -11,6 +11,6 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
-interface ServerNetworkPacketHandler<T: NetworkPacket<T>>: PacketHandler<T> {
-    fun handle(packet: T, server: MinecraftServer, player: ServerPlayer)
+public interface ServerNetworkPacketHandler<T: NetworkPacket<T>>: PacketHandler<T> {
+    fun handle(packet: T, server: MinecraftServer, ServerPlayer player)
 }

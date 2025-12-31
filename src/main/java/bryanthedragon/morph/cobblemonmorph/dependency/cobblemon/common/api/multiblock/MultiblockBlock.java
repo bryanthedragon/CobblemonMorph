@@ -29,9 +29,9 @@ import net.minecraft.world.phys.BlockHitResult
 abstract class MultiblockBlock(properties: Properties) : BaseEntityBlock(properties) {
 
     override fun setPlacedBy(
-        world: Level,
-        pos: BlockPos,
-        state: BlockState,
+        Level world,
+        (BlockPos pos,
+        BlockState state,
         placer: LivingEntity?,
         itemStack: ItemStack
     ) {
@@ -43,9 +43,9 @@ abstract class MultiblockBlock(properties: Properties) : BaseEntityBlock(propert
     }
 
     override fun useWithoutItem(
-        state: BlockState,
-        world: Level,
-        pos: BlockPos,
+        BlockState state,
+        Level world,
+        (BlockPos pos,
         player: Player,
         hit: BlockHitResult
     ): InteractionResult {
@@ -56,7 +56,7 @@ abstract class MultiblockBlock(properties: Properties) : BaseEntityBlock(propert
         return super.useWithoutItem(state, world, pos, player, hit)
     }
 
-    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, newState: BlockState, movedByPiston: Boolean) {
+    override fun onRemove(BlockState state, Level level, (BlockPos pos, newBlockState state, movedByPiston: Boolean) {
         val entity = level.getBlockEntity(pos)
         if (entity is MultiblockEntity && entity.multiblockStructure != null && state.block != newState.block) {
             entity.multiblockStructure!!.playerWillDestroy(level, pos, state, null)
@@ -64,21 +64,21 @@ abstract class MultiblockBlock(properties: Properties) : BaseEntityBlock(propert
         super.onRemove(state, level, pos, newState, movedByPiston)
     }
 
-    override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity? {
+    override fun newBlockEntity(BlockPos pos, BlockState state): BlockEntity? {
         return createMultiBlockEntity(pos, state)
     }
 
     @Deprecated("Deprecated in Java")
-    override fun getRenderShape(state: BlockState): RenderShape {
+    override fun getRenderShape(BlockState state): RenderShape {
         return RenderShape.MODEL
     }
 
     //This is done so a block picked with NBT doesnt absolutely DESTROY multiblocks
-    override fun getCloneItemStack(world: LevelReader, pos: BlockPos, state: BlockState): ItemStack {
+    override fun getCloneItemStack(Level worldReader, (BlockPos pos, BlockState state): ItemStack {
         val blockEntity = world.getBlockEntity(pos) as? MultiblockEntity ?: return ItemStack.EMPTY
         return if (blockEntity.multiblockStructure == null) super.getCloneItemStack(world, pos, state) else ItemStack.EMPTY
     }
 
-    abstract fun createMultiBlockEntity(pos: BlockPos, state: BlockState): FossilMultiblockEntity
+    abstract fun createMultiBlockEntity(BlockPos pos, BlockState state): FossilMultiblockEntity
 
 }

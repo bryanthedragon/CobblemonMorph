@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.PasturePokemonPacket
 import java.util.*
 
-class PasturePCGUIConfiguration(
+public class PasturePCGUIConfiguration(
     val pastureId: UUID,
     val limit: Int,
     val pasturedPokemon: SettableObservable<List<OpenPasturePacket.PasturePokemonDataDTO>>,

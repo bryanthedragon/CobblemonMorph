@@ -14,7 +14,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.levelgen.feature.Feature
-final class CobblemonFeatures : PlatformRegistry<Registry<Feature<*>>, ResourceKey<Registry<Feature<*>>>, Feature<*>>() {
+public final class CobblemonFeatures : PlatformRegistry<Registry<Feature<*>>, ResourceKey<Registry<Feature<*>>>, Feature<*>>() {
 
     override val registry: Registry<Feature<*>> = BuiltInRegistries.FEATURE
     override val resourceKey: ResourceKey<Registry<Feature<*>>> = Registries.FEATURE

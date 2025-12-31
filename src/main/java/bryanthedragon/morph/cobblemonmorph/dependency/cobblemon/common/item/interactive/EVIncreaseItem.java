@@ -23,19 +23,19 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
 abstract class EVIncreaseItem(
-    val stat: Stat,
+    val Stat stat ,
     val evIncreaseAmount: Int,
 ) : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = null
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.getOrDefault(stat) < EVs.MAX_STAT_VALUE &&
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = pokemon.evs.getOrDefault(stat) < EVs.MAX_STAT_VALUE &&
             super.canUseOnPokemon(stack, pokemon)
 
-    abstract val sound: SoundEvent
+    abstract val SoundEvent sound
 
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack> {
         val evsGained = pokemon.evs.add(stat, evIncreaseAmount, ItemEvSource(player, stack, pokemon))
         return if (evsGained > 0) {
@@ -47,7 +47,7 @@ abstract class EVIncreaseItem(
         }
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

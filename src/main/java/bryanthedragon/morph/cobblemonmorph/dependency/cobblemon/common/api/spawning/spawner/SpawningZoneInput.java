@@ -21,13 +21,13 @@ import net.minecraft.world.phys.Vec3
  */
 record SpawningZoneInput(
     val cause: SpawnCause,
-    val world: ServerLevel,
+    val ServerLevel world,
     val baseX: Int,
     val baseY: Int,
     val baseZ: Int,
     val length: Int,
-    val height: Int,
-    val width: Int
+    val Int height,
+    val Int width
 ) {
     fun getCenter(): Vec3 =
         Vec3(

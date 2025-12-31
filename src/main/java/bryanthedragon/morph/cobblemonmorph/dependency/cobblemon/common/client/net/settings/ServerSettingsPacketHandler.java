@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.settings.ServerSettings
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.settings.ServerSettingsPacket
 import net.minecraft.client.Minecraft
-final class ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPacket> {
-    override fun handle(packet: ServerSettingsPacket, client: Minecraft) {
+public final class ServerSettingsPacketHandler : ClientNetworkPacketHandler<ServerSettingsPacket> {
+    override fun handle(packet: ServerSettingsPacket, Minecraft client) {
         ServerSettings.preventCompletePartyDeposit = packet.preventCompletePartyDeposit
         ServerSettings.displayEntityLevelLabel = packet.displayEntityLevelLabel
         ServerSettings.displayEntityNameLabel = packet.displayEntityNameLabel

@@ -34,16 +34,16 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 
-class SpawnPokemonPacket(
+public class SpawnPokemonPacket(
     var ownerId: UUID?,
-    var pokemonUUID: UUID,
+    var pokemonUUID uuid,
     var scaleModifier: Float,
-    var speciesId: ResourceLocation,
+    var speciesResourceLocation id,
     var gender: Gender,
     var shiny: Boolean,
     var formName: String,
-    var aspects: Set<String>,
-    var battleId: UUID?,
+    Set<String> aspects,
+    var UUID battleId?,
     var phasingTargetId: Int,
     var beamMode: Byte,
     var platform: PlatformType,
@@ -64,7 +64,7 @@ class SpawnPokemonPacket(
     vanillaSpawnPacket: ClientboundAddEntityPacket,
 ) : SpawnExtraDataEntityPacket<SpawnPokemonPacket, PokemonEntity>(vanillaSpawnPacket) {
 
-    override val id: ResourceLocation = ID
+    override val ResourceLocation id = ID
 
     constructor(entity: PokemonEntity, vanillaSpawnPacket: ClientboundAddEntityPacket) : this(
         entity.ownerUUID,
@@ -96,7 +96,7 @@ class SpawnPokemonPacket(
         vanillaSpawnPacket
     )
 
-    override fun encodeEntityData(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeEntityData(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(ownerId) { _, v -> buffer.writeUUID(v) }
         buffer.writeUUID(this.pokemonUUID)
         buffer.writeFloat(this.scaleModifier)
@@ -172,27 +172,27 @@ class SpawnPokemonPacket(
         entity.delegate.updateAge(this.tickSpawned)
     }
 
-    override fun checkType(entity: Entity): Boolean = entity is PokemonEntity
+    override fun checkType(Entity entity): Boolean = entity is PokemonEntity
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("spawn_pokemon_entity")
-        fun decode(buffer: RegistryFriendlyByteBuf): SpawnPokemonPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SpawnPokemonPacket {
             val ownerId = buffer.readNullable { buffer.readUUID() }
             val pokemonUUID = buffer.readUUID()
             val scaleModifier = buffer.readFloat()
             val speciesId = buffer.readIdentifier()
-            val gender = buffer.readEnumConstant(Gender::class.java)
+            val gender = buffer.readEnumConstant(Gender.class)
             val shiny = buffer.readBoolean()
             val formName = buffer.readString()
             val aspects = buffer.readList { it.readString() }.toSet()
             val battleId = buffer.readNullable { buffer.readUUID() }
             val phasingTargetId = buffer.readInt()
             val beamModeEmitter = buffer.readByte()
-            val platform = buffer.readEnumConstant(PlatformType::class.java)
+            val platform = buffer.readEnumConstant(PlatformType.class)
             val nickname = buffer.readNullable { buffer.readText().copy() }
             val mark = buffer.readNullable { buffer.readResourceLocation() }
             val labelLevel = buffer.readInt()
-            val poseType = buffer.readEnumConstant(PoseType::class.java)
+            val poseType = buffer.readEnumConstant(PoseType.class)
             val unbattlable = buffer.readBoolean()
             val hideLabel = buffer.readBoolean()
             val caughtBall = buffer.readIdentifier()
@@ -202,7 +202,7 @@ class SpawnPokemonPacket(
             val passengers = buffer.readVarIntArray()
             val tickSpawned = buffer.readInt()
             val rideBoosts = buffer.readMap(
-                { buffer.readEnumConstant(RidingStat::class.java) },
+                { buffer.readEnumConstant(RidingStat.class) },
                 { buffer.readFloat() }
             )
             val rideStamina = buffer.readFloat()

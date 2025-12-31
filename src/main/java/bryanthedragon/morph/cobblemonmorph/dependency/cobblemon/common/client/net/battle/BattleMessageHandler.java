@@ -17,8 +17,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMessagePacket
 import net.minecraft.client.Minecraft
 import net.minecraft.locale.Language
-final class BattleMessageHandler : ClientNetworkPacketHandler<BattleMessagePacket> {
-    override fun handle(packet: BattleMessagePacket, client: Minecraft) {
+public final class BattleMessageHandler : ClientNetworkPacketHandler<BattleMessagePacket> {
+    override fun handle(packet: BattleMessagePacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val textRenderer = Minecraft.getInstance().font
         for (message in packet.messages) {

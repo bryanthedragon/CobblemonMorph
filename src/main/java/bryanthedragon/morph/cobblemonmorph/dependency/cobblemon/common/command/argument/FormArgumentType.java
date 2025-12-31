@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture
  * @author Apion
  * @since February 26, 2024
  */
-class FormArgumentType : ArgumentType<FormData> {
+public class FormArgumentType : ArgumentType<FormData> {
     override fun parse(reader: StringReader): FormData {
         var speciesBeginning = reader.cursor - 2
         val formTokenBeginning = reader.cursor - 1
@@ -66,7 +66,7 @@ class FormArgumentType : ArgumentType<FormData> {
         }
     }
 
-    companion object {
+    final class Companion {
         fun form() = FormArgumentType()
     }
 }

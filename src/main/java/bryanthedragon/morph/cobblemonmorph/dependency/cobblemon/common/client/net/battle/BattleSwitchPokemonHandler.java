@@ -15,8 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ba
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.animations.MoveTileOnscreenAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleSwitchPokemonPacket
 import net.minecraft.client.Minecraft
-final class BattleSwitchPokemonHandler : ClientNetworkPacketHandler<BattleSwitchPokemonPacket> {
-    override fun handle(packet: BattleSwitchPokemonPacket, client: Minecraft) {
+public final class BattleSwitchPokemonHandler : ClientNetworkPacketHandler<BattleSwitchPokemonPacket> {
+    override fun handle(packet: BattleSwitchPokemonPacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val (actor, activeBattlePokemon) = battle.getPokemonFromPNX(packet.pnx)
 

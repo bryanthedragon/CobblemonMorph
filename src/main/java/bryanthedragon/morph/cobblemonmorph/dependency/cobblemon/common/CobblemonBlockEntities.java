@@ -26,7 +26,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.resources.ResourceKey;
 
-class CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, ResourceKey<Registry<BlockEntityType<*>>>, BlockEntityType<*>>() {
+public class CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, ResourceKey<Registry<BlockEntityType<*>>>, BlockEntityType<*>>() {
 
     override val registry: Registry<BlockEntityType<*>> = BuiltInRegistries.BLOCK_ENTITY_TYPE
     override val resourceKey: ResourceKey<Registry<BlockEntityType<*>>> = Registries.BLOCK_ENTITY_TYPE
@@ -63,7 +63,7 @@ class CobblemonBlockEntities : PlatformRegistry<Registry<BlockEntityType<*>>, Re
     ).build(null))
 
     @JvmField
-    val FOSSIL_MULTIBLOCK: BlockEntityType<FossilMultiblockEntity> = this.create("fossil_multiblock",
+    val FOSSIL_MULTIBlock blockEntityType<FossilMultiblockEntity> = this.create("fossil_multiblock",
         BlockEntityType.Builder.of({ pos, state -> FossilMultiblockEntity(pos, state, FossilMultiblockBuilder(pos)) },
             CobblemonBlocks.MONITOR
         ).build(null)

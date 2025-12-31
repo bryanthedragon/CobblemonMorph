@@ -39,7 +39,7 @@ import org.joml.Vector3f
 import kotlin.math.min
 import kotlin.math.sign
 import kotlin.math.sqrt
-final class MountedCameraRenderer {
+public final class MountedCameraRenderer {
     private var returnTimer: Float = 0f
     private var lastHandledRotationTime: Double = Double.MIN_VALUE
     private var frameTime: Double = 0.0

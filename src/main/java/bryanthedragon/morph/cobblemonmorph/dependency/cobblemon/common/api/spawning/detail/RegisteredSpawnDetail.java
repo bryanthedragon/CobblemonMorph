@@ -17,8 +17,8 @@ import com.google.gson.JsonElement
  * @author Hiroku
  * @since January 31st, 2022
  */
-class RegisteredSpawnDetail<T : SpawnDetail>(
+public class RegisteredSpawnDetail<T : SpawnDetail>(
     val detailClass: Class<T>
 ) {
-    fun deserializeDetail(element: JsonElement, spawnablePosition: JsonDeserializationContext): T = spawnablePosition.deserialize(element, detailClass)
+    fun deserializeDetail(JsonElement jElement, spawnablePosition: JsonDeserializationContext): T = spawnablePosition.deserialize(element, detailClass)
 }

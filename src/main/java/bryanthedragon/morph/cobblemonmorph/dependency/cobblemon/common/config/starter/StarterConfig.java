@@ -6,22 +6,22 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.Category
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.CobblemonConfigField
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.CobblemonConfigField.CobblemonConfigSide.SERVER
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.LastChangedVersion
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.pokemonPropertiesShortAdapter
-import com.google.gson.GsonBuilder
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonProperties;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.Category;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.CobblemonConfigField;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.CobblemonConfigField.CobblemonConfigSide.SERVER;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.LastChangedVersion;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.pokemonPropertiesShortAdapter;
+import com.google.gson.GsonBuilder;
 
-class StarterConfig {
-    companion object {
+public class StarterConfig {
+    final class Companion {
         val GSON = GsonBuilder()
             .disableHtmlEscaping()
             .setPrettyPrinting()
-            .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
+            .registerTypeAdapter(PokemonProperties.class, pokemonPropertiesShortAdapter)
             .create()
     }
 

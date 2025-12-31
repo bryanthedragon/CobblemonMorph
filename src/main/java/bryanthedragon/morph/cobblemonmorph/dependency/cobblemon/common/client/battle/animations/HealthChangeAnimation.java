@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.b
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ActiveClientBattlePokemon
 
-class HealthChangeAnimation(private val newHealth: Float, private val duration: Float = 1F) : TileAnimation {
+public class HealthChangeAnimation(private val newHealth: Float, private val duration: Float = 1F) : TileAnimation {
 
     private var passedSeconds = 0F
     private var initialHealthRatio = -1F

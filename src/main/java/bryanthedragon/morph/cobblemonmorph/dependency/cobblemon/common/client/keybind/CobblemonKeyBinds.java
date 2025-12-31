@@ -18,7 +18,8 @@ import net.minecraft.client.KeyMapping
  *
  * @author Qu
  * @since 2022-02-17
- */final class CobblemonKeyBinds {
+ */
+public final class CobblemonKeyBinds {
     private val keyBinds = arrayListOf<CobblemonKeyBinding>()
 
     init {

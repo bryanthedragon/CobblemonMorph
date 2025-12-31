@@ -36,8 +36,8 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import kotlin.math.*
 
-class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
-    companion object {
+public class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
+    final class Companion {
         val KEY = cobblemonResource("air/hover")
     }
 
@@ -421,7 +421,7 @@ class HoverBehaviour : RidingBehaviour<HoverSettings, HoverState> {
     }
 }
 
-class HoverSettings : RidingBehaviourSettings {
+public class HoverSettings : RidingBehaviourSettings {
     override val key = HoverBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -456,7 +456,7 @@ class HoverSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
@@ -469,7 +469,7 @@ class HoverSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(handlingExpr)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
@@ -484,7 +484,7 @@ class HoverSettings : RidingBehaviourSettings {
 
 }
 
-class HoverState : RidingBehaviourState() {
+public class HoverState : RidingBehaviourState() {
     var speed = ridingState(0.0, Side.CLIENT)
     var isBoosting = ridingState(false, Side.BOTH)
     var boostVec = ridingState(Vec3.ZERO, Side.CLIENT)

@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-final class SeasoningTooltipGenerator : TooltipGenerator() {
-    override fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+public final class SeasoningTooltipGenerator : TooltipGenerator() {
+    override fun generateCategoryTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         val isSeasoningIngredient = Seasonings.isSeasoning(stack)
         val flavors = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours
         val baitEffects = stack.get(CobblemonItemComponents.BAIT_EFFECTS)?.effects
@@ -58,7 +58,7 @@ final class SeasoningTooltipGenerator : TooltipGenerator() {
         return if (result.isNotEmpty()) result else null
     }
 
-    override fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+    override fun generateAdditionalTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         val isSeasoningIngredient = Seasonings.isSeasoning(stack)
         val flavors = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours
         val food = stack.get(CobblemonItemComponents.FOOD)

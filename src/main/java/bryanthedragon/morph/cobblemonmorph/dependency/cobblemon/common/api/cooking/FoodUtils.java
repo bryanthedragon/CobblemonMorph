@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.cook
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.components.FoodComponent
 import kotlin.math.ceil
 import kotlin.math.round
-final class FoodUtils {
+public final class FoodUtils {
     fun merge(components: List<FoodComponent>, extraHunger: Int = 0, extraSaturation: Float = 0f): FoodComponent {
         if (components.isEmpty()) return FoodComponent(0, 0f)
 

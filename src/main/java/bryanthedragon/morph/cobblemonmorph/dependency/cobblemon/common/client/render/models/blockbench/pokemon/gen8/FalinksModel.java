@@ -16,7 +16,7 @@ import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
 
-class FalinksModel (root: ModelPart) : PokemonPosableModel(root){
+public class FalinksModel (root: ModelPart) : PokemonPosableModel(root){
     override val rootPart = root.registerChildWithAllChildren("falinks")
 
     override var portraitScale = 1.9F

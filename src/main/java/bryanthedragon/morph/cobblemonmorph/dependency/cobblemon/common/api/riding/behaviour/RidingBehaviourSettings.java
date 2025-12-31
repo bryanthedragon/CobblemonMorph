@@ -24,11 +24,11 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author landonjw
  */
-interface RidingBehaviourSettings: Encodable, Decodable {
+public interface RidingBehaviourSettings: Encodable, Decodable {
     val key: ResourceLocation
     val stats: MutableMap<RidingStat, IntRange>
 
-    fun calculate(stat: RidingStat, boostAmount: Float): Float {
+    fun calculate(RidingStat stat, Float boostAmount): Float {
         val range = stats[stat] ?: return 0F
         return (range.first + boostAmount).coerceAtMost(range.endInclusive.toFloat())
     }

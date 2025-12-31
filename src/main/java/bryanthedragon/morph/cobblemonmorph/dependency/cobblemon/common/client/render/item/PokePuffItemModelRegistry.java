@@ -7,7 +7,7 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.item
-final class PokePuffItemModelRegistry {
+public final class PokePuffItemModelRegistry {
     private val modelMap = mapOf(
         "overlay_spicy" to 0.001f,
         "overlay_spicy_only" to 0.002f,
@@ -138,7 +138,7 @@ final class PokePuffItemModelRegistry {
         "overlay_plain_star" to 0.119f
     )
 
-    fun getModelId(key: String): Float {
+    fun getModelId(String Key): Float {
         return modelMap[key] ?: 0.0f
     }
 }

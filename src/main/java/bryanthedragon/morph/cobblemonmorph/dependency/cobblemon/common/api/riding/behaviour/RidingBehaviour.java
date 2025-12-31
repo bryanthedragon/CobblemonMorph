@@ -30,7 +30,7 @@ import net.minecraft.world.phys.Vec3
  *
  * @author landonjw
  */
-interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBehaviourState> {
+public interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBehaviourState> {
     val key: ResourceLocation
 
     fun getRidingStyle(settings: Settings, state: State): RidingStyle
@@ -101,7 +101,7 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
     /**
      * Calculate the damage a horizontal collision will do to a ridden Pokémon. This is only relevant to fast flying behaviours, fall damage is separate!
      */
-    fun damageOnCollision(settings: Settings, state: State, vehicle: PokemonEntity, impactVec: Vec3): Boolean = false
+    fun damageOnCollision(settings: Settings, state: State, vehicle: PokemonEntity, impactVec3 vec): Boolean = false
 
     /**
      * Called in [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.pokemon.PokemonRenderer] to allow the controller to set rotations
@@ -131,13 +131,13 @@ interface RidingBehaviour<Settings : RidingBehaviourSettings, State : RidingBeha
     /**
      * Internal helpers to help behaviour specific calculations
      */
-    companion object {
+    final class Companion {
         /**
          *  Scales a given value between a min and a max.
          *  The result is clamped between 0.0 and 1.0, where 0.0 represents x is at or below min
          *  and 1.0 represents x is at or above it.
          */
-        internal fun scaleToRange(x: Double, min: Double, max: Double): Double {
+        internal fun scaleToRange(x: Double, Double min, Double max): Double {
             return if ((max - min) < 0.01) 0.0 else ((x - min) / (max - min)).coerceIn(0.0, 1.0)
         }
     }

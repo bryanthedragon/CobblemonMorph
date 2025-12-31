@@ -18,8 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
  * @author Hiroku
  * @since November 26th, 2021
  */
-class EmitWhileTransform<I>(private val predicate: (I) -> Boolean) : Transform<I, I> {
-    override fun invoke(input: I): I {
+public class EmitWhileTransform<I>(private val predicate: (I) -> Boolean) : Transform<I, I> {
+    override fun invoke(I input): I {
         if (predicate(input)) {
             return input
         } else {

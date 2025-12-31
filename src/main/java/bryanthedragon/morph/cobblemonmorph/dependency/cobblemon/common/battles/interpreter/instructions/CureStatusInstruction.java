@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Hiroku
  * @since November 5th, 2022
  */
-class CureStatusInstruction(val message: BattleMessage): InterpreterInstruction {
+public class CureStatusInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val maybeActivePokemon = message.actorAndActivePokemon(0, battle)?.second?.battlePokemon

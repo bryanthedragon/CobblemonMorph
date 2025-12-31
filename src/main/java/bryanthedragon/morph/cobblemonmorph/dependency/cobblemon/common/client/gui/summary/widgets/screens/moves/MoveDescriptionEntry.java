@@ -14,18 +14,18 @@ import net.minecraft.client.gui.components.ObjectSelectionList
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 
-class MoveDescriptionEntry(
+public class MoveDescriptionEntry(
     var line : MutableComponent
 ) :
     ObjectSelectionList.Entry<MoveDescriptionEntry>() {
 
     override fun render(
         context: GuiGraphics,
-        index: Int,
+        Int index,
         rowTop: Int,
         rowLeft: Int,
-        rowWidth: Int,
-        rowHeight: Int,
+        rowInt width,
+        rowInt height,
         mouseX: Int,
         mouseY: Int,
         isHovered: Boolean,

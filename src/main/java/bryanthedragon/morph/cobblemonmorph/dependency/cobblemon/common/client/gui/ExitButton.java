@@ -15,12 +15,12 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 
-class ExitButton(
+public class ExitButton(
     pX: Int, pY: Int,
     onPress: OnPress
 ): Button(pX, pY, WIDTH.toInt(), HEIGHT.toInt(), Component.literal("Exit"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val WIDTH = 26F
         private const val HEIGHT = 13F
         private const val SCALE = 0.5F

@@ -31,4 +31,4 @@ import net.minecraft.nbt.CompoundTag
  * @author Hiroku
  * @since January 6th, 2023
  */
-record PokemonEntitySaveEvent(val pokemonEntity: PokemonEntity, val nbt: CompoundTag)
+record PokemonEntitySaveEvent(val pokemonEntity: PokemonEntity, val CompoundTag nbt)

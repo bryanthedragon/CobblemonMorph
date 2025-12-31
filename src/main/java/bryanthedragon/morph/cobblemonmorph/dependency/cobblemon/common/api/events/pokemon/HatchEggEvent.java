@@ -17,10 +17,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
 import net.minecraft.server.level.ServerPlayer
 
-interface HatchEggEvent {
-    val player: ServerPlayer
+public interface HatchEggEvent {
+    val ServerPlayer player
 
-    record Pre(var egg : PokemonProperties, override val player: ServerPlayer) : HatchEggEvent, Cancelable() {
+    record Pre(var egg : PokemonProperties, override val ServerPlayer player) : HatchEggEvent, Cancelable() {
         val context = mutableMapOf(
             "player" to (player.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO)
         )
@@ -29,7 +29,7 @@ interface HatchEggEvent {
         )
     }
 
-    record Post(override var player: ServerPlayer, val pokemon : Pokemon) : HatchEggEvent {
+    record Post(override var ServerPlayer player, val pokemon : Pokemon) : HatchEggEvent {
         val context = mutableMapOf(
             "player" to (player.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO)
         )

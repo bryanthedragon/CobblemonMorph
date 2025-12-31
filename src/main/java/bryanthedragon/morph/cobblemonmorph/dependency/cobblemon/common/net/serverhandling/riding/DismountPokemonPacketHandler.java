@@ -13,12 +13,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.DismountPokemonPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class DismountPokemonPacketHandler : ServerNetworkPacketHandler<DismountPokemonPacket> {
+public final class DismountPokemonPacketHandler : ServerNetworkPacketHandler<DismountPokemonPacket> {
 
     override fun handle(
         packet: DismountPokemonPacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         if (!(player.isPassenger && player.vehicle is PokemonEntity)) return
 
@@ -32,7 +32,7 @@ final class DismountPokemonPacketHandler : ServerNetworkPacketHandler<DismountPo
         }
     }
 
-    private fun canPlayerStopRidingPokemon(pokemon: PokemonEntity, player: ServerPlayer): Boolean {
+    private fun canPlayerStopRidingPokemon(Pokemon pokemonEntity, ServerPlayer player): Boolean {
         return pokemon.ifRidingAvailableSupply(false) { behaviour, settings, state ->
             behaviour.canStopRiding(settings, state, pokemon, player)
         }

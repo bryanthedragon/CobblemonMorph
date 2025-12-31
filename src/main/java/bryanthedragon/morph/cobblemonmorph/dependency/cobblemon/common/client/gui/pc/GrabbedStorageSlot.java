@@ -11,10 +11,10 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.client.gui.GuiGraphics
 
-class GrabbedStorageSlot(
+public class GrabbedStorageSlot(
     x: Int, y: Int,
     parent: StorageWidget,
-    private val pokemon: Pokemon
+    private val Pokemon pokemon
 ) : StorageSlot(x, y, parent, {}) {
 
     init {

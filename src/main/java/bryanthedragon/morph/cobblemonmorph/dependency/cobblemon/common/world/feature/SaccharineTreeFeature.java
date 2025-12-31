@@ -33,7 +33,7 @@ import net.minecraft.world.level.levelgen.feature.TreeFeature
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration
 import java.util.function.Consumer
 
-class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfiguration.CODEC) {
+public class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfiguration.CODEC) {
 
     override fun place(context: FeaturePlaceContext<BlockStateConfiguration>): Boolean {
         val worldGenLevel: WorldGenLevel = context.level()
@@ -181,7 +181,7 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
         val viableBeeNestPositions: MutableList<BlockPos> = mutableListOf()
         for (pos in locationsToCheck) {
             // Block that is south of possible bee nest
-            val southBlock: BlockPos = pos.offset(0, 0, 1)
+            val southBlock blockPos = pos.offset(0, 0, 1)
 
             // Check for if the southern block is empty.
             if (worldGenLevel.isEmptyBlock(southBlock)) {
@@ -218,7 +218,7 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
         }
     }
 
-    private fun populateBeeNest(worldGenLevel: WorldGenLevel, pos: BlockPos) {
+    private fun populateBeeNest(worldGenLevel: WorldGenLevel, (BlockPos pos) {
         worldGenLevel.getBlockEntity(pos, BlockEntityType.BEEHIVE)
             .ifPresent(
                 Consumer { beehiveBlockEntity: BeehiveBlockEntity? ->
@@ -238,7 +238,7 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
                 })
     }
 
-    private fun placeBigLeafPattern(worldGenLevel: WorldGenLevel, origin: BlockPos, logBlock: BlockState, leafBlock: BlockState) {
+    private fun placeBigLeafPattern(worldGenLevel: WorldGenLevel, origin: BlockPos, logBlock blockState, leafBlock blockState) {
         val positions = listOf(
             origin.offset(-2, 0, 0),
             origin.offset(2, 0, 0),
@@ -272,7 +272,7 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
         worldGenLevel.setBlock(origin, logBlock, UPDATE_CLIENTS)
     }
 
-    private fun placeSmallLeafPattern(worldGenLevel: WorldGenLevel, origin: BlockPos, logBlock: BlockState, leafBlock: BlockState, specialBlock: BlockState, random: RandomSource) {
+    private fun placeSmallLeafPattern(worldGenLevel: WorldGenLevel, origin: BlockPos, logBlock blockState, leafBlock blockState, specialBlock blockState, random: RandomSource) {
         val positions = listOf(
             origin.offset(-1, 0, 0),
             origin.offset(1, 0, 0),
@@ -303,7 +303,7 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
         worldGenLevel.setBlock(origin, logBlock, UPDATE_CLIENTS)
     }
 
-    private fun placeLeafStartPattern(worldGenLevel: WorldGenLevel, origin: BlockPos, logBlock: BlockState, leafBlock: BlockState, potentialBeeNestPositions: MutableList<BlockPos>, random: RandomSource) {
+    private fun placeLeafStartPattern(worldGenLevel: WorldGenLevel, origin: BlockPos, logBlock blockState, leafBlock blockState, potentialBeeNestPositions: MutableList<BlockPos>, random: RandomSource) {
         val positions = listOf(
             origin.offset(-1, 0, 0),
             origin.offset(1, 0, 0),
@@ -327,7 +327,7 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
         worldGenLevel.setBlock(origin, logBlock, UPDATE_CLIENTS)
     }
 
-    private fun placeTopTrunkPattern(worldGenLevel: WorldGenLevel, origin: BlockPos, logBlock: BlockState, potentialBeeNestPositions: MutableList<BlockPos>) {
+    private fun placeTopTrunkPattern(worldGenLevel: WorldGenLevel, origin: BlockPos, logBlock blockState, potentialBeeNestPositions: MutableList<BlockPos>) {
         val positions = listOf(
             origin.offset(-1, 0, 0),
             origin.offset(1, 0, 0),
@@ -341,14 +341,14 @@ class SaccharineTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigu
         worldGenLevel.setBlock(origin, logBlock, UPDATE_CLIENTS)
     }
 
-    private fun setBlockIfClear(worldGenLevel: WorldGenLevel, blockPos: BlockPos, blockState: BlockState) {
+    private fun setBlockIfClear(worldGenLevel: WorldGenLevel, blockBlockPos pos, blockBlockState state) {
         if (!TreeFeature.isAirOrLeaves(worldGenLevel, blockPos)) {
             return
         }
         worldGenLevel.setBlock(blockPos, blockState, UPDATE_ALL)
     }
 
-    companion object {
+    final class Companion {
         val POKEMON_ARGS = "combee"
         val LEVEL_RANGE = 5..15
     }

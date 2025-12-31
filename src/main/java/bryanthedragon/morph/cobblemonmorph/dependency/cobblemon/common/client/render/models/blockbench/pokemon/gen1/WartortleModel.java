@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class WartortleModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("wartortle")
     override val head = getPart("head_ai")
 

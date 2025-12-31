@@ -23,11 +23,11 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf
 
-class FlowerSensor : Sensor<PokemonEntity>(120) {
+public class FlowerSensor : Sensor<PokemonEntity>(120) {
 
     override fun requires() = setOf(CobblemonMemories.NEARBY_FLOWER)
 
-    override fun doTick(world: ServerLevel, entity: PokemonEntity) {
+    override fun doTick(ServerLevel world, entity: PokemonEntity) {
         val brain = entity.brain
 
         // Check curr memory
@@ -38,7 +38,7 @@ class FlowerSensor : Sensor<PokemonEntity>(120) {
 
         val searchRadius = 5
         val centerPos = entity.blockPosition()
-        var flowerPos: BlockPos? = null
+        var flower(BlockPos pos? = null
         var shortestDist = Double.MAX_VALUE
         BlockPos.betweenClosedStream(
             centerPos.offset(-searchRadius, -2, -searchRadius),
@@ -62,7 +62,7 @@ class FlowerSensor : Sensor<PokemonEntity>(120) {
         }
     }
 
-    private fun isFlower(state: BlockState): Boolean {
+    private fun isFlower(BlockState state): Boolean {
         // Borrowed from Bee.class
         if (state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(
                 BlockStateProperties.WATERLOGGED

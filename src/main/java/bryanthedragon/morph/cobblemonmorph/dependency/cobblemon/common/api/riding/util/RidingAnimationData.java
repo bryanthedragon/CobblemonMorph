@@ -29,7 +29,7 @@ import kotlin.math.sin
  */
 
 
-class RidingAnimationData(val ride: PokemonEntity)
+public class RidingAnimationData(val ride: PokemonEntity)
 {
     var prevOrientation: Matrix3f = Matrix3f()
     var prevRot: Vec3 = Vec3.ZERO

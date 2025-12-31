@@ -31,8 +31,8 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since August 23rd, 2024
  */
-class SpeciesDexRecord {
-    companion object {
+public class SpeciesDexRecord {
+    final class Companion {
         val CODEC: Codec<SpeciesDexRecord> = RecordCodecBuilder.create { instance ->
             instance.group(
                 ListCodec(PrimitiveCodec.STRING, 0, 512).fieldOf("aspects").forGetter { it.aspects.toList() },
@@ -47,7 +47,7 @@ class SpeciesDexRecord {
     }
 
     @Transient
-    lateinit var id: ResourceLocation
+    lateinit var ResourceLocation id
     private val aspects: MutableSet<String> = mutableSetOf()
     private val formRecords: MutableMap<String, FormDexRecord> = mutableMapOf()
     val isFormRecordsEmpty: Boolean
@@ -82,7 +82,7 @@ class SpeciesDexRecord {
     @Transient
     lateinit var pokedexManager: AbstractPokedexManager
 
-    fun initialize(pokedexManager: AbstractPokedexManager, id: ResourceLocation) {
+    fun initialize(pokedexManager: AbstractPokedexManager, ResourceLocation id) {
         this.id = id
         this.pokedexManager = pokedexManager
         this.formRecords.forEach { it.value.initialize(this, it.key) }
@@ -92,7 +92,7 @@ class SpeciesDexRecord {
         pokedexManager.onSpeciesRecordUpdated(this)
     }
 
-    fun addInformation(pokemon: Pokemon, knowledge: PokedexEntryProgress) {
+    fun addInformation(Pokemon pokemon, knowledge: PokedexEntryProgress) {
         aspects.addAll(pokemon.aspects)
     }
 
@@ -105,7 +105,7 @@ class SpeciesDexRecord {
     }
 
     /** Returns true if the given Pokémon contains new information. Internal because it's only to be called from [FormDexRecord.wouldBeDifferent]. */
-    internal fun wouldBeDifferent(pokemon: Pokemon) = pokemon.aspects.any { it !in aspects }
+    internal fun wouldBeDifferent(Pokemon pokemon) = pokemon.aspects.any { it !in aspects }
 
     internal fun wouldBeDifferent(pokedexEntityData: PokedexEntityData) = pokedexEntityData.pokemon.aspects.any { it !in aspects }
 
@@ -137,7 +137,7 @@ class SpeciesDexRecord {
     fun hasAtLeast(knowledge: PokedexEntryProgress) = getKnowledge().ordinal >= knowledge.ordinal
     fun hasSeenForm(formName: String) = formRecords.entries.any { it.key.equals(formName, ignoreCase = true) && it.value.knowledge != PokedexEntryProgress.NONE }
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(aspects) { _, it -> buffer.writeString(it) }
         buffer.writeInt(formRecords.size)
         for ((formName, formRecord) in formRecords) {
@@ -146,7 +146,7 @@ class SpeciesDexRecord {
         }
     }
 
-    fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(RegistryFriendlyByteBuf buffer) {
         aspects.clear()
         aspects.addAll(buffer.readCollection(Sets::newHashSetWithExpectedSize) { buffer.readString() })
         formRecords.clear()

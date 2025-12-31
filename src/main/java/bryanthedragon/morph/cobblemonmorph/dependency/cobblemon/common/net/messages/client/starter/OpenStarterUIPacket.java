@@ -6,55 +6,52 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.starter
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.starter;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter.RenderableStarterCategory
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter.StarterCategory
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
-import net.minecraft.network.RegistryFriendlyByteBuf
+import java.util.List;
 
-class OpenStarterUIPacket internal constructor(val categories: List<RenderableStarterCategory>) : NetworkPacket<OpenStarterUIPacket> {
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter.RenderableStarterCategory;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter.StarterCategory;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
-    override val id = ID
+public class OpenStarterUIPacket internal constructor(List<RenderableStarterCategory> categories) : NetworkPacket<OpenStarterUIPacket> {
+
+    val id = ID;
 
     constructor(categories: Collection<StarterCategory>) : this(categories.map { it.asRenderableStarterCategory() })
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeInt(categories.size)
+    fun encode(RegistryFriendlyByteBuf buffer) {
+        buffer.writeInt(categories.size);
         categories.forEach {
-            buffer.writeString(it.name)
-            buffer.writeString(it.displayName)
-            buffer.writeInt(it.pokemon.size)
+            buffer.writeString(it.name);
+            buffer.writeString(it.displayName);
+            buffer.writeInt(it.pokemon.size);
             it.pokemon.forEach { it.saveToBuffer(buffer) }
         }
     }
 
-    companion object {
-        val ID = cobblemonResource("open_starter")
-        fun decode(buffer: RegistryFriendlyByteBuf): OpenStarterUIPacket {
-            val numCategories = buffer.readInt()
-            val categories = arrayListOf<RenderableStarterCategory>()
+    final class Companion {
+        val ID = cobblemonResource("open_starter");
+        fun decode(RegistryFriendlyByteBuf buffer): OpenStarterUIPacket {
+            val numCategories = buffer.readInt();
+            val categories = arrayListOf<RenderableStarterCategory>();
             for (i in 0 until numCategories) {
-                val name = buffer.readString()
-                val displayName = buffer.readString()
-                val numProperties = buffer.readInt()
-                val renderablePokemon = mutableListOf<RenderablePokemon>()
+                val name = buffer.readString();
+                val displayName = buffer.readString();
+                val numProperties = buffer.readInt();
+                val renderablePokemon = mutableListOf<RenderablePokemon>();
                 repeat(times = numProperties) {
-                    renderablePokemon.add(RenderablePokemon.loadFromBuffer(buffer))
+                    renderablePokemon.add(RenderablePokemon.loadFromBuffer(buffer));
                 }
-                categories.add(
-                    RenderableStarterCategory(
-                        name = name,
-                        displayName = displayName,
-                        pokemon = renderablePokemon
-                    )
+                categories.add(RenderableStarterCategory(name = name, displayName = displayName, pokemon = renderablePokemon);
                 )
             }
-            return OpenStarterUIPacket(categories)
+            return OpenStarterUIPacket(categories);
         }
     }
 }

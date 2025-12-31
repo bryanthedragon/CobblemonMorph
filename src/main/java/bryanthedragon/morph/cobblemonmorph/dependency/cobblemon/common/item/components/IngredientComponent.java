@@ -17,10 +17,10 @@ import net.minecraft.resources.ResourceLocation
 /**
  * Component for storing a list of main ingredient IDs.
  */
-class IngredientComponent(
+public class IngredientComponent(
     val ingredientIds: List<ResourceLocation>
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<IngredientComponent> = ResourceLocation.CODEC.listOf()
             .xmap(::IngredientComponent, IngredientComponent::ingredientIds)
 

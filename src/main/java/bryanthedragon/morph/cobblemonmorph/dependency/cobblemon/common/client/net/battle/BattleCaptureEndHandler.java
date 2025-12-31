@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.animations.MoveTileOffscreenAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleCaptureEndPacket
 import net.minecraft.client.Minecraft
-final class BattleCaptureEndHandler : ClientNetworkPacketHandler<BattleCaptureEndPacket> {
-    override fun handle(packet: BattleCaptureEndPacket, client: Minecraft) {
+public final class BattleCaptureEndHandler : ClientNetworkPacketHandler<BattleCaptureEndPacket> {
+    override fun handle(packet: BattleCaptureEndPacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val overlay = CobblemonClient.battleOverlay
         val (_, activeBattlePokemon) = battle.getPokemonFromPNX(packet.targetPNX)

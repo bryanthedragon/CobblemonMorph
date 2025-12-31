@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.ClientPlayerIcon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.TeamJoinNotificationPacket
 import net.minecraft.client.Minecraft
-final class TeamJoinNotificationHandler : ClientNetworkPacketHandler<TeamJoinNotificationPacket> {
-    override fun handle(packet: TeamJoinNotificationPacket, client: Minecraft) {
+public final class TeamJoinNotificationHandler : ClientNetworkPacketHandler<TeamJoinNotificationPacket> {
+    override fun handle(packet: TeamJoinNotificationPacket, Minecraft client) {
         CobblemonClient.teamData.multiBattleTeamMembers = packet.teamMemberUUIDs.mapIndexed { index, uuid -> ClientMultiBattleTeamMember(uuid, packet.teamMemberNames[index]) }.toMutableList()
         packet.teamMemberUUIDs.forEach { ClientPlayerIcon.update(it) }
     }

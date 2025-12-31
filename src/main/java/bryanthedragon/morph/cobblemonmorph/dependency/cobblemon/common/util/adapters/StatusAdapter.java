@@ -13,14 +13,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
 import com.google.gson.*
 import java.lang.reflect.Type
-final class StatusAdapter : JsonDeserializer<Status>, JsonSerializer<Status> {
-    override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): Status {
+public final class StatusAdapter : JsonDeserializer<Status>, JsonSerializer<Status> {
+    override fun deserialize(JsonElement jElement, Type type, JsonDeserializationContext context): Status {
         val id = element.asString.asIdentifierDefaultingNamespace()
         val status = Statuses.getStatus(id)
         return status ?: throw IllegalArgumentException("There is no status with the ID $id")
     }
 
-    override fun serialize(status: Status, type: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(status: Status, Type type, context: JsonSerializationContext): JsonElement {
         return JsonPrimitive(status.name.toString())
     }
 }

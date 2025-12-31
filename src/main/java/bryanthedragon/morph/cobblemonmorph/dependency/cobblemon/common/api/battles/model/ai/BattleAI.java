@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
  * @since January 16th, 2022
  * @author Deltric, Polymeta
  */
-interface BattleAI {
+public interface BattleAI {
     /**
      * Requests that the AI choose an action for the given Pokémon
      * @param activeBattlePokemon The Pokémon slot that is choosing an action

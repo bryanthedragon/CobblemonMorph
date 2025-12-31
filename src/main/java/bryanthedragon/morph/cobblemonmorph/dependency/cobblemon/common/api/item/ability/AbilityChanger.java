@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.a
  *
  * @param T The type of [PotentialAbility].
  */
-interface AbilityChanger<T : PotentialAbility> {
+public interface AbilityChanger<T : PotentialAbility> {
 
     /**
      * The [PotentialAbilityType] of type [T].
@@ -34,7 +34,7 @@ interface AbilityChanger<T : PotentialAbility> {
      * @param pokemon The [Pokemon] being queried.
      * @return A set containing all their legal abilities associated with [type], can be empty.
      */
-    fun queryPossible(pokemon: Pokemon): Set<Pair<AbilityTemplate, Priority>>
+    fun queryPossible(Pokemon pokemon): Set<Pair<AbilityTemplate, Priority>>
 
     /**
      * Attempts to update the ability of the given [pokemon].
@@ -42,7 +42,7 @@ interface AbilityChanger<T : PotentialAbility> {
      * @param pokemon The [Pokemon] attempting to change an ability.
      * @return If the operation was successful.
      */
-    fun performChange(pokemon: Pokemon): Boolean
+    fun performChange(Pokemon pokemon): Boolean
 
     /**
      * Checks if the current [PotentialAbilityType] of a [Pokemon.ability] is possible to swap from with this.
@@ -52,7 +52,7 @@ interface AbilityChanger<T : PotentialAbility> {
      */
     fun canChangeFrom(type: PotentialAbilityType<*>?): Boolean
 
-    companion object {
+    final class Companion {
 
         /**
          * An implementation of [AbilityChanger] for [CommonAbility].

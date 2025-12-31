@@ -18,10 +18,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RemediesMechanic {
+public class RemediesMechanic {
     val remedies = mutableMapOf<String, RemedyEntry>()
 
-    internal fun encode(buffer: RegistryFriendlyByteBuf) {
+    internal fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeMap(this.remedies,
             { _, key -> buffer.writeString(key) },
             { _, entry ->
@@ -31,8 +31,8 @@ class RemediesMechanic {
         )
     }
 
-    companion object {
-        internal fun decode(buffer: RegistryFriendlyByteBuf): RemediesMechanic {
+    final class Companion {
+        internal fun decode(RegistryFriendlyByteBuf buffer): RemediesMechanic {
             val mechanic = RemediesMechanic()
 
             val decodedRemedies = buffer.readMap(
@@ -51,8 +51,8 @@ class RemediesMechanic {
         }
     }
 
-    fun getHealingAmount(type: String, runtime: MoLangRuntime, default: Int = 20) = remedies[type]?.let { runtime.resolveInt(it.healingAmount) } ?: default
-    fun getFriendshipDrop(type: String, runtime: MoLangRuntime, default: Int = 0) = remedies[type]?.let { runtime.resolveInt(it.friendshipDrop) } ?: default
+    fun getHealingAmount(type: String, MoLangRuntime runtime, default: Int = 20) = remedies[type]?.let { runtime.resolveInt(it.healingAmount) } ?: default
+    fun getFriendshipDrop(type: String, MoLangRuntime runtime, default: Int = 0) = remedies[type]?.let { runtime.resolveInt(it.friendshipDrop) } ?: default
 }
 
 record RemedyEntry(val healingAmount: ExpressionLike, val friendshipDrop: ExpressionLike)

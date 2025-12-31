@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity
 import net.minecraft.world.entity.Entity
 
-class PosablePokeBallModel : PosableEntityModel<EmptyPokeBallEntity>() {
-    override fun setupEntityTypeContext(entity: Entity?) {
+public class PosablePokeBallModel : PosableEntityModel<EmptyPokeBallEntity>() {
+    override fun setupEntityTypeContext(Entity entity?) {
         super.setupEntityTypeContext(entity)
         if (entity is EmptyPokeBallEntity) {
             context.put(RenderContext.ASPECTS, entity.aspects)

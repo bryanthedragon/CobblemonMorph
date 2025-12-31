@@ -14,7 +14,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.sounds.SoundEvent
 import java.util.*
-final class PartyOverlayDataControl {
+public final class PartyOverlayDataControl {
     const val BAR_UPDATE_BEFORE_TIME = 15
     const val BAR_UPDATE_AFTER_TIME = 15
     const val BAR_FLASH_TIME = 2
@@ -109,7 +109,7 @@ final class PartyOverlayDataControl {
         }
     }
 
-    private fun getCurrentRenderTarget(uuid: UUID): RenderTarget {
+    private fun getCurrentRenderTarget(UUID uuid): RenderTarget {
         val data = overlayData[uuid] ?: return RenderTarget.NONE
         if (data.expGainedData != null) return RenderTarget.EXP_GAINED
         if (data.evoGainedData != null) return RenderTarget.EVOLUTION
@@ -118,17 +118,17 @@ final class PartyOverlayDataControl {
         return RenderTarget.NONE
     }
 
-    fun getExpGainedData(uuid: UUID): ExpGainedData? {
+    fun getExpGainedData(UUID uuid): ExpGainedData? {
         if (getCurrentRenderTarget(uuid) != RenderTarget.EXP_GAINED) return null
         return overlayData[uuid]?.expGainedData
     }
 
-    fun getEvolutionData(uuid: UUID): EvolutionGainedData? {
+    fun getEvolutionData(UUID uuid): EvolutionGainedData? {
         if (getCurrentRenderTarget(uuid) != RenderTarget.EVOLUTION) return null
         return overlayData[uuid]?.evoGainedData
     }
 
-    fun getMovesData(uuid: UUID): MovesGainedData? {
+    fun getMovesData(UUID uuid): MovesGainedData? {
         if (getCurrentRenderTarget(uuid) != RenderTarget.MOVES) return null
         return overlayData[uuid]?.movesGainedData
     }
@@ -213,7 +213,7 @@ final class PartyOverlayDataControl {
     }
 
     //SOUNDS
-    private fun playSound(soundEvent: SoundEvent): SoundInstance? {
+    private fun playSound(SoundEvent soundEvent): SoundInstance? {
         if (!PartyOverlay.canRender()) return null
         val soundInstance = SimpleSoundInstance.forUI(soundEvent, 1F)
         Minecraft.getInstance().soundManager.play(soundInstance)

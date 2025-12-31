@@ -20,9 +20,10 @@ import net.minecraft.sounds.SoundEvent
  *
  * @author Segfault Guy
  * @since April 22nd, 2023
- */final class BattleMusicHandler : ClientNetworkPacketHandler<BattleMusicPacket> {
+ */
+public final class BattleMusicHandler : ClientNetworkPacketHandler<BattleMusicPacket> {
 
-    override fun handle(packet: BattleMusicPacket, client: Minecraft) {
+    override fun handle(packet: BattleMusicPacket, Minecraft client) {
         val soundManager = client.soundManager
         val currMusic = BattleMusicController.music
         val newMusic = packet.music?.let {

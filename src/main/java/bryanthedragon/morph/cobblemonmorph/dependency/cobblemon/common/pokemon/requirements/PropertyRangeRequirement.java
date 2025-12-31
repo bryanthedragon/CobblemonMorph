@@ -12,16 +12,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement.Requirement
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-class PropertyRangeRequirement : Requirement {
+public class PropertyRangeRequirement : Requirement {
     val range = IntRange(0, 256)
     val feature: String = ""
 
-    override fun check(pokemon: Pokemon): Boolean {
-        val feature: IntSpeciesFeature = pokemon.getFeature(feature) ?: return false
+    override fun check(Pokemon pokemon): Boolean {
+        val IntSpeciesFeature feature = pokemon.getFeature(feature) ?: return false
         return this.range.contains(feature.value)
     }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "property_range"
     }
 }

@@ -38,7 +38,7 @@ open class ChoiceSpeciesFeatureProvider(
     override var visible = false
     fun getAspect(feature: StringSpeciesFeature) = aspectFormat.substitute("choice", feature.value)
 
-    override fun saveToBuffer(buffer: RegistryFriendlyByteBuf, toClient: Boolean) {
+    override fun saveToBuffer(RegistryFriendlyByteBuf buffer, Boolean toClient) {
         buffer.writeCollection(keys) { _, value -> buffer.writeString(value) }
         buffer.writeNullable(default) { _, value -> buffer.writeString(value) }
         buffer.writeCollection(choices) { _, value -> buffer.writeString(value) }
@@ -47,7 +47,7 @@ open class ChoiceSpeciesFeatureProvider(
         buffer.writeBoolean(needsKey)
     }
 
-    override fun loadFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun loadFromBuffer(RegistryFriendlyByteBuf buffer) {
         keys = buffer.readList { buffer.readString() }
         default = buffer.readNullable { buffer.readString() }
         choices = buffer.readList { buffer.readString() }
@@ -56,11 +56,11 @@ open class ChoiceSpeciesFeatureProvider(
         needsKey = buffer.readBoolean()
     }
 
-    override fun getRenderer(pokemon: Pokemon): SummarySpeciesFeatureRenderer<StringSpeciesFeature>? {
+    override fun getRenderer(Pokemon pokemon): SummarySpeciesFeatureRenderer<StringSpeciesFeature>? {
         return null
     }
 
-    override fun invoke(buffer: RegistryFriendlyByteBuf, name: String): StringSpeciesFeature? {
+    override fun invoke(RegistryFriendlyByteBuf buffer, String name): StringSpeciesFeature? {
         return if (name in keys) {
             StringSpeciesFeature(name, "").also { it.loadFromBuffer(buffer) }
         } else {
@@ -80,9 +80,9 @@ open class ChoiceSpeciesFeatureProvider(
 
     internal constructor(): this(emptyList())
 
-    override fun get(pokemon: Pokemon) = pokemon.getFeature<StringSpeciesFeature>(keys.first())
+    override fun get(Pokemon pokemon) = pokemon.getFeature<StringSpeciesFeature>(keys.first())
 
-    override fun invoke(pokemon: Pokemon): StringSpeciesFeature? {
+    override fun invoke(Pokemon pokemon): StringSpeciesFeature? {
         val existing = get(pokemon)
         return if (existing != null && existing.value in choices) {
             existing
@@ -100,13 +100,13 @@ open class ChoiceSpeciesFeatureProvider(
         }
     }
 
-    override fun invoke(nbt: CompoundTag): StringSpeciesFeature? {
+    override fun invoke(CompoundTag nbt): StringSpeciesFeature? {
         return if (nbt.contains(keys.first())) {
             StringSpeciesFeature(keys.first(), "").also { it.loadFromNBT(nbt) }
         } else null
     }
 
-    override fun invoke(json: JsonObject): StringSpeciesFeature? {
+    override fun invoke(JsonObject json): StringSpeciesFeature? {
         return if (json.has(keys.first())) {
             StringSpeciesFeature(keys.first(), "").also { it.loadFromJSON(json) }
         } else null
@@ -121,7 +121,7 @@ open class ChoiceSpeciesFeatureProvider(
         return StringSpeciesFeature(keys.first(), lower)
     }
 
-    override fun provide(pokemon: Pokemon): Set<String> {
+    override fun provide(Pokemon pokemon): Set<String> {
         return if (isAspect) {
             get(pokemon)?.let { setOf(getAspect(it)) } ?: emptySet()
         } else {

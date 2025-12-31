@@ -16,8 +16,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
 
-class FriendshipFeatureRenderer(
-    val selectedPokemon: Pokemon
+public class FriendshipFeatureRenderer(
+    val selectedPokemon pokemon
 ) : BarSummarySpeciesFeatureRenderer(
     "friendship",
     lang("ui.stats.friendship"),
@@ -28,12 +28,12 @@ class FriendshipFeatureRenderer(
     255,
     selectedPokemon.friendship
 ) {
-    override fun render(guiGraphics: GuiGraphics, x: Float, y: Float, pokemon: Pokemon): Boolean {
+    override fun render(GuiGraphics guiGraphics, Float x, Float y, Pokemon pokemon): Boolean {
         renderElement(guiGraphics, x, y, pokemon)
         return true
     }
 
-    override fun renderBar(guiGraphics: GuiGraphics, x: Float, y: Float, barValue: Int, barRatio: Float, barWidth: Int) {
+    override fun renderBar(GuiGraphics guiGraphics, Float x, Float y, barValue: Int, barRatio: Float, barInt width) {
         val red = 1
         val green: Number = if (barValue >= 160) 0.28 else 0.56
         val blue: Number = if (barValue >= 160) 0.4 else 0.64

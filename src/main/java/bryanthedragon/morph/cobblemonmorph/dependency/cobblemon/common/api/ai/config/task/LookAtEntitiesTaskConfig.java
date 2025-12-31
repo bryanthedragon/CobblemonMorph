@@ -18,8 +18,8 @@ import net.minecraft.world.entity.ai.behavior.SetEntityLookTarget
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 
-class LookAtEntitiesTaskConfig : SingleTaskConfig {
-    companion object {
+public class LookAtEntitiesTaskConfig : SingleTaskConfig {
+    final class Companion {
         const val LOOK_AT_ENTITIES = "look_at_entities"
         const val LOOK_AT_ENTITY_TYPES = "look_at_entity_types"
     }
@@ -28,14 +28,14 @@ class LookAtEntitiesTaskConfig : SingleTaskConfig {
     val maxDistance = numberVariable(SharedEntityVariables.LOOKING_CATEGORY, SEE_DISTANCE, 15).asExpressible()
     val entityTypes = stringVariable(SharedEntityVariables.LOOKING_CATEGORY, LOOK_AT_ENTITY_TYPES, "").asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         entityTypes,
         maxDistance
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null

@@ -22,9 +22,9 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since January 21st, 2024
  */
-interface EntityConditionalActionEffectKeyframe {
+public interface EntityConditionalActionEffectKeyframe {
     val entityCondition: ExpressionLike
-    fun test(context: ActionEffectContext, entity: Entity, isUser: Boolean): Boolean {
+    fun test(context: ActionEffectContext, Entity entity, isUser: Boolean): Boolean {
         context.runtime.environment.query
             .addFunction("entity") {
                 if (entity is PosableEntity) {

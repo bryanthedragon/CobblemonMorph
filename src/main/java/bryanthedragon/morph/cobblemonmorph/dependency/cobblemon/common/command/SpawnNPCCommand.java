@@ -28,7 +28,7 @@ import net.minecraft.commands.arguments.coordinates.Vec3Argument
 import net.minecraft.network.chat.Component
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
-final class SpawnNPCCommand {
+public final class SpawnNPCCommand {
     private const val NAME = "spawnnpc"
     private const val CLASS = "class"
     private const val POSITION = "pos"
@@ -67,7 +67,7 @@ final class SpawnNPCCommand {
         dispatcher.register(argumentPositionCommand.alias(AT_ALIAS))
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, pos: Vec3, level: Int): Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, Vec3 pos, level: Int): Int {
         val world = context.source.level
         val blockPos = pos.toBlockPos()
         if (!Level.isInSpawnableBounds(blockPos)) {

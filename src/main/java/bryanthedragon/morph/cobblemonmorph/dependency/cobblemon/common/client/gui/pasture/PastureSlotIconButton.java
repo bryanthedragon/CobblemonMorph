@@ -16,12 +16,12 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 
-class PastureSlotIconButton(
+public class PastureSlotIconButton(
     var xPos: Int, var yPos: Int,
     onPress: OnPress
 ) : Button(xPos, yPos, (SIZE * SCALE).toInt(), (SIZE * SCALE).toInt(), Component.literal("Pasture Move"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val SIZE = 14
         private const val SCALE = 0.5F
 

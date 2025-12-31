@@ -26,27 +26,27 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import kotlin.math.abs
 
-interface ParticleRotation : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<ParticleRotation, ParticleRotationType>(
+public interface ParticleRotation : CodecMapped {
+    final class Companion : ArbitrarilyMappedSerializableCompanion<ParticleRotation, ParticleRotationType>(
         keyFromValue = { it.type },
         keyFromString = ParticleRotationType::valueOf,
         stringFromKey = { it.name }
     ) {
         init {
-            registerSubtype(ParticleRotationType.DYNAMIC, DynamicParticleRotation::class.java, DynamicParticleRotation.CODEC)
-            registerSubtype(ParticleRotationType.PARAMETRIC, ParametricParticleRotation::class.java, ParametricParticleRotation.CODEC)
+            registerSubtype(ParticleRotationType.DYNAMIC, DynamicParticleRotation.class, DynamicParticleRotation.CODEC)
+            registerSubtype(ParticleRotationType.PARAMETRIC, ParametricParticleRotation.class, ParametricParticleRotation.CODEC)
         }
     }
 
     val type: ParticleRotationType
 
-    fun getInitialRotation(runtime: MoLangRuntime): Double
-    fun getInitialAngularVelocity(runtime: MoLangRuntime): Double
-    fun getAngularVelocity(runtime: MoLangRuntime, angle: Double, angularVelocity: Double): Double
+    fun getInitialRotation(MoLangRuntime runtime): Double
+    fun getInitialAngularVelocity(MoLangRuntime runtime): Double
+    fun getAngularVelocity(MoLangRuntime runtime, angle: Double, angularVelocity: Double): Double
 }
 
-class ParametricParticleRotation(var expression: Expression = NumberExpression(0.0)): ParticleRotation {
-    companion object {
+public class ParametricParticleRotation(var expression: Expression = NumberExpression(0.0)): ParticleRotation {
+    final class Companion {
         val CODEC: Codec<ParametricParticleRotation> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -58,27 +58,27 @@ class ParametricParticleRotation(var expression: Expression = NumberExpression(0
     }
 
     override val type = ParticleRotationType.PARAMETRIC
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun getInitialRotation(runtime: MoLangRuntime) = runtime.resolveDouble(expression)
-    override fun getInitialAngularVelocity(runtime: MoLangRuntime) = 0.0
-    override fun getAngularVelocity(runtime: MoLangRuntime, angle: Double, angularVelocity: Double) = runtime.resolveDouble(expression) - angle
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun getInitialRotation(MoLangRuntime runtime) = runtime.resolveDouble(expression)
+    override fun getInitialAngularVelocity(MoLangRuntime runtime) = 0.0
+    override fun getAngularVelocity(MoLangRuntime runtime, angle: Double, angularVelocity: Double) = runtime.resolveDouble(expression) - angle
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         expression = MoLang.createParser(buffer.readString()).parseExpression()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(expression.getString())
     }
 }
 
-class DynamicParticleRotation(
+public class DynamicParticleRotation(
     var startRotation: Expression = NumberExpression(0.0),
     var speed: Expression = NumberExpression(0.0),
     var acceleration: Expression = NumberExpression(0.0),
     var drag: Expression = NumberExpression(0.0)
 ): ParticleRotation {
-    companion object {
+    final class Companion {
         val CODEC: Codec<DynamicParticleRotation> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -93,10 +93,10 @@ class DynamicParticleRotation(
     }
 
     override val type = ParticleRotationType.DYNAMIC
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun getInitialRotation(runtime: MoLangRuntime) = runtime.resolveDouble(startRotation)
-    override fun getInitialAngularVelocity(runtime: MoLangRuntime) = runtime.resolveDouble(speed) / 20
-    override fun getAngularVelocity(runtime: MoLangRuntime, angle: Double, angularVelocity: Double): Double {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun getInitialRotation(MoLangRuntime runtime) = runtime.resolveDouble(startRotation)
+    override fun getInitialAngularVelocity(MoLangRuntime runtime) = runtime.resolveDouble(speed) / 20
+    override fun getAngularVelocity(MoLangRuntime runtime, angle: Double, angularVelocity: Double): Double {
         val acceleration = runtime.resolveDouble(acceleration)
         val nextVelocity = angularVelocity * 20 + acceleration
         val drag = nextVelocity * runtime.resolveDouble(drag)
@@ -107,14 +107,14 @@ class DynamicParticleRotation(
         })
     }
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         startRotation = MoLang.createParser(buffer.readString()).parseExpression()
         speed = MoLang.createParser(buffer.readString()).parseExpression()
         acceleration = MoLang.createParser(buffer.readString()).parseExpression()
         drag = MoLang.createParser(buffer.readString()).parseExpression()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(startRotation.getString())
         buffer.writeString(speed.getString())
         buffer.writeString(acceleration.getString())
@@ -122,7 +122,7 @@ class DynamicParticleRotation(
     }
 }
 
-enum class ParticleRotationType {
+public enum ParticleRotationType {
     DYNAMIC,
     PARAMETRIC
 }

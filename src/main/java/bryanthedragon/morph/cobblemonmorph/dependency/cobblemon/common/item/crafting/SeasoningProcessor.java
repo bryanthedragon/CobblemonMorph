@@ -18,8 +18,8 @@ import net.minecraft.world.item.ItemStack
  * @author Hiroku
  * @since March 18th, 2025
  */
-interface SeasoningProcessor {
-    companion object {
+public interface SeasoningProcessor {
+    final class Companion {
         val processors = mutableMapOf<String, SeasoningProcessor>(
             IngredientSeasoningProcessor.type to IngredientSeasoningProcessor,
             BaitSeasoningProcessor.type to BaitSeasoningProcessor,

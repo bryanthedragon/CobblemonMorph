@@ -17,7 +17,7 @@ import net.minecraft.tags.FluidTags
 import net.minecraft.tags.TagKey
 import net.minecraft.world.level.material.Fluid
 
-class SwimBehaviour {
+public class SwimBehaviour {
     val avoidsWater = false
 
     val canSwimInWater = true

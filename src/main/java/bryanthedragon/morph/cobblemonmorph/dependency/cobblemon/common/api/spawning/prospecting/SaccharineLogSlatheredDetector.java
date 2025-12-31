@@ -25,7 +25,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.village.poi.PoiManager
 import net.minecraft.world.entity.ai.village.poi.PoiType
 import net.minecraft.world.level.block.state.BlockState
-final class SaccharineLogSlatheredDetector : SpawningInfluenceDetector {
+public final class SaccharineLogSlatheredDetector : SpawningInfluenceDetector {
     @JvmField
     val RANGE: Int = 32
 
@@ -52,8 +52,8 @@ final class SaccharineLogSlatheredDetector : SpawningInfluenceDetector {
     }
 
     override fun detectFromBlock(
-        world: ServerLevel,
-        pos: BlockPos,
-        blockState: BlockState
+        ServerLevel world,
+        (BlockPos pos,
+        blockBlockState state
     ): List<SpawningZoneInfluence> = emptyList()
 }

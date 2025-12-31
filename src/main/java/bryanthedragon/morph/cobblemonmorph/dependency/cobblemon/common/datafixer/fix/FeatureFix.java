@@ -23,7 +23,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 
-class FeatureFix(output: Schema) : PokemonFix(output) {
+public class FeatureFix(output: Schema) : PokemonFix(output) {
     override fun fixPokemonData(dynamic: Dynamic<*>): Dynamic<*> {
         var features = dynamic.get(FEATURES).asListOpt<CompoundTag> { it.decode<CompoundTag>(CompoundTag.CODEC).result().get().first }
         if (features.result().isPresent) {

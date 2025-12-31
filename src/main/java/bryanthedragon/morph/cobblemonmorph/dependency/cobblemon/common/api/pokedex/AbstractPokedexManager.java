@@ -27,12 +27,12 @@ abstract class AbstractPokedexManager {
         .addStandardFunctions()
         .addPokedexFunctions(this)
 
-    fun deleteSpeciesRecord(speciesId: ResourceLocation) {
+    fun deleteSpeciesRecord(speciesResourceLocation id) {
         speciesRecords.remove(speciesId)
         markDirty()
     }
 
-    fun deleteFormRecord(speciesId: ResourceLocation, formName: String) {
+    fun deleteFormRecord(speciesResourceLocation id, formName: String) {
         val speciesRecord = speciesRecords[speciesId] ?: return
         speciesRecord.deleteFormRecord(formName)
 
@@ -44,11 +44,11 @@ abstract class AbstractPokedexManager {
         markDirty()
     }
 
-    fun getSpeciesRecord(speciesId: ResourceLocation): SpeciesDexRecord? {
+    fun getSpeciesRecord(speciesResourceLocation id): SpeciesDexRecord? {
         return speciesRecords[speciesId]
     }
 
-    fun getOrCreateSpeciesRecord(speciesId: ResourceLocation): SpeciesDexRecord {
+    fun getOrCreateSpeciesRecord(speciesResourceLocation id): SpeciesDexRecord {
         return speciesRecords.getOrPut(speciesId) {
             val record = SpeciesDexRecord()
             record.initialize(this, speciesId)
@@ -56,7 +56,7 @@ abstract class AbstractPokedexManager {
         }
     }
 
-    fun getHighestKnowledgeForSpecies(pokemonId: ResourceLocation): PokedexEntryProgress {
+    fun getHighestKnowledgeForSpecies(pokemonResourceLocation id): PokedexEntryProgress {
         val speciesRecord = getSpeciesRecord(pokemonId)
         return speciesRecord?.getKnowledge() ?: PokedexEntryProgress.NONE
     }
@@ -128,7 +128,7 @@ abstract class AbstractPokedexManager {
         return getSpeciesRecord(entry.speciesId)?.getAspects() ?: emptySet()
     }
 
-    fun getKnowledgeForSpecies(speciesId: ResourceLocation): PokedexEntryProgress {
+    fun getKnowledgeForSpecies(speciesResourceLocation id): PokedexEntryProgress {
         return speciesRecords[speciesId]?.getKnowledge() ?: PokedexEntryProgress.NONE
     }
 

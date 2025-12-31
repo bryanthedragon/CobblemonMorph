@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture
  * @author Hiroku
  * @since October 27th, 2023
  */
-class RemoveHoldsActionEffectKeyframe : ActionEffectKeyframe {
+public class RemoveHoldsActionEffectKeyframe : ActionEffectKeyframe {
     val delay = 0F
     val holds = mutableSetOf<String>()
     override fun play(context: ActionEffectContext): CompletableFuture<Unit> {

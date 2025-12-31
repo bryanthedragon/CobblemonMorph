@@ -29,7 +29,7 @@ import net.minecraft.server.level.ServerLevel
  * @author Hiroku
  * @since January 21st, 2024
  */
-class EntityParticlesActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityConditionalActionEffectKeyframe {
+public class EntityParticlesActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityConditionalActionEffectKeyframe {
     override val entityCondition = "q.entity.is_user".asExpressionLike()
     var effect: String? = null
     var locators: List<String> = listOf("target")
@@ -55,7 +55,7 @@ class EntityParticlesActionEffectKeyframe : ConditionalActionEffectKeyframe(), E
 
         val effectIdentifier = try {
             effect?.asExpressionLike()?.resolveString(context.runtime)?.takeIf { it != "0" } ?: effect
-        } catch (e: Exception) {
+        } catch (Exception e) {
             effect
         }?.asIdentifierDefaultingNamespace() ?: return skip()
 

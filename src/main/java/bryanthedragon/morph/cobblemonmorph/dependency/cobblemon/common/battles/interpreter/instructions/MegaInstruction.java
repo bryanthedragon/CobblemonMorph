@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Segfault Guy
  * @since September 10th, 2023
  */
-class MegaInstruction(val message: BattleMessage): InterpreterInstruction {
+public class MegaInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val battlePokemon = message.battlePokemon(0, battle) ?: return

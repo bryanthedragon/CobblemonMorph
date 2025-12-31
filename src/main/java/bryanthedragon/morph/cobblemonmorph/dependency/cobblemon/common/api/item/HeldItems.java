@@ -18,18 +18,18 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
 import java.io.File
-final class HeldItems : DataRegistry {
+public final class HeldItems : DataRegistry {
 
     override val id = cobblemonResource("held_items")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<HeldItems>()
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 
     // val heldItems = PrioritizedList<BagItemLike>()
     internal val heldItemsScripts = mutableMapOf<String, String>() // showdown item ID to JavaScript
     val showdownItems = hashSetOf<String>()
 
-    override fun reload(manager: ResourceManager) {
+    override fun reload(ResourceManager manager) {
         heldItemsScripts.clear()
         ShowdownService.service.resetRegistryData("heldItem")
         manager.listResources("held_items") { it.path.endsWith(".js") }.forEach { (identifier, resource) ->

@@ -18,7 +18,7 @@ import java.util.function.Function
 import net.minecraft.Util
 import net.minecraft.client.renderer.RenderStateShard
 import net.minecraft.client.renderer.RenderStateShard.*
-final class CobblemonRenderLayers {
+public final class CobblemonRenderLayers {
     val BERRY_LAYER = run {
         val multiPhaseParameters = RenderType.CompositeState.builder()
             .setLightmapState(LIGHTMAP)

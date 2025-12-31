@@ -30,7 +30,7 @@ val pokemonPropertiesShortAdapter = PokemonPropertiesAdapter(false)
  * @since February 13th, 2022
  */
 open class PokemonPropertiesAdapter(val saveLong: Boolean) : JsonSerializer<PokemonProperties>, JsonDeserializer<PokemonProperties> {
-    override fun serialize(props: PokemonProperties, type: Type, ctx: JsonSerializationContext): JsonElement {
+    override fun serialize(props: PokemonProperties, Type type, JsonSerializationContext ctx): JsonElement {
         return if (saveLong) {
             props.saveToJSON()
         } else {
@@ -38,7 +38,7 @@ open class PokemonPropertiesAdapter(val saveLong: Boolean) : JsonSerializer<Poke
         }
     }
 
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): PokemonProperties {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): PokemonProperties {
         return if (json.isJsonPrimitive) {
             PokemonProperties.parse(json.asString)
         } else {

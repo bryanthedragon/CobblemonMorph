@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class ButterfreeModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BiWingedFrame {
+public class ButterfreeModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BiWingedFrame {
     override val rootPart = root.registerChildWithAllChildren("butterfree")
     override val head = getPart("head")
     override val leftWing = getPart("wing_left")

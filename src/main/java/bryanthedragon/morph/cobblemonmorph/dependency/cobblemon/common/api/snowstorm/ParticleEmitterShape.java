@@ -37,18 +37,18 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
-interface ParticleEmitterShape : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<ParticleEmitterShape, ParticleEmitterShapeType>(
+public interface ParticleEmitterShape : CodecMapped {
+    final class Companion : ArbitrarilyMappedSerializableCompanion<ParticleEmitterShape, ParticleEmitterShapeType>(
         keyFromString = ParticleEmitterShapeType::valueOf,
         stringFromKey = { it.name },
         keyFromValue = { it.type }
     ) {
         init {
-            registerSubtype(ParticleEmitterShapeType.SPHERE, SphereParticleEmitterShape::class.java, SphereParticleEmitterShape.CODEC)
-            registerSubtype(ParticleEmitterShapeType.POINT, PointParticleEmitterShape::class.java, PointParticleEmitterShape.CODEC)
-            registerSubtype(ParticleEmitterShapeType.BOX, BoxParticleEmitterShape::class.java, BoxParticleEmitterShape.CODEC)
-            registerSubtype(ParticleEmitterShapeType.DISC, DiscParticleEmitterShape::class.java, DiscParticleEmitterShape.CODEC)
-            registerSubtype(ParticleEmitterShapeType.ENTITY_BOUNDING_BOX, EntityBoundingBoxParticleEmitterShape::class.java, EntityBoundingBoxParticleEmitterShape.CODEC)
+            registerSubtype(ParticleEmitterShapeType.SPHERE, SphereParticleEmitterShape.class, SphereParticleEmitterShape.CODEC)
+            registerSubtype(ParticleEmitterShapeType.POINT, PointParticleEmitterShape.class, PointParticleEmitterShape.CODEC)
+            registerSubtype(ParticleEmitterShapeType.BOX, BoxParticleEmitterShape.class, BoxParticleEmitterShape.CODEC)
+            registerSubtype(ParticleEmitterShapeType.DISC, DiscParticleEmitterShape.class, DiscParticleEmitterShape.CODEC)
+            registerSubtype(ParticleEmitterShapeType.ENTITY_BOUNDING_BOX, EntityBoundingBoxParticleEmitterShape.class, EntityBoundingBoxParticleEmitterShape.CODEC)
         }
     }
 
@@ -56,12 +56,12 @@ interface ParticleEmitterShape : CodecMapped {
     val defaultAttachedOptions: MutableMap<AttachedType, Boolean>
         get() = mutableMapOf(AttachedType.POSITION to true, AttachedType.ROTATION to false, AttachedType.SCALE to false)
 
-    fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3
-    fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3
+    fun getNewParticlePosition(MoLangRuntime runtime, Entity entity?): Vec3
+    fun getCenter(MoLangRuntime runtime, Entity entity?): Vec3
     fun getAttachmentOptions(): MutableMap<AttachedType, Boolean> = defaultAttachedOptions // Default Values
 }
 
-enum class ParticleEmitterShapeType {
+public enum ParticleEmitterShapeType {
     SPHERE,
     POINT,
     BOX,
@@ -69,13 +69,13 @@ enum class ParticleEmitterShapeType {
     ENTITY_BOUNDING_BOX
 }
 
-enum class AttachedType {
+public enum AttachedType {
     ROTATION,
     SCALE,
     POSITION
 }
 
-class SphereParticleEmitterShape(
+public class SphereParticleEmitterShape(
     var offset: Triple<Expression, Expression, Expression> = Triple(
         NumberExpression(0.0),
         NumberExpression(0.0),
@@ -85,7 +85,7 @@ class SphereParticleEmitterShape(
     var surfaceOnly: Boolean = false,
     val pAttachmentOptions: Map<AttachedType, Boolean>? = null
 ) : ParticleEmitterShape {
-    companion object {
+    final class Companion {
         val CODEC: Codec<SphereParticleEmitterShape> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -102,11 +102,11 @@ class SphereParticleEmitterShape(
 
     override val type = ParticleEmitterShapeType.SPHERE
 
-    override fun <T> encode(ops: DynamicOps<T>): DataResult<T> {
+    override fun <T> encode(DynamicOps<T> ops): DataResult<T> {
         return CODEC.encodeStart(ops, this)
     }
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         offset = Triple(
             MoLang.createParser(buffer.readString()).parseExpression(),
             MoLang.createParser(buffer.readString()).parseExpression(),
@@ -116,7 +116,7 @@ class SphereParticleEmitterShape(
         surfaceOnly = buffer.readBoolean()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(offset.first.getString())
         buffer.writeString(offset.second.getString())
         buffer.writeString(offset.third.getString())
@@ -124,9 +124,9 @@ class SphereParticleEmitterShape(
         buffer.writeBoolean(surfaceOnly)
     }
 
-    override fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
+    override fun getCenter(MoLangRuntime runtime, Entity entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
 
-    override fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3 {
+    override fun getNewParticlePosition(MoLangRuntime runtime, Entity entity?): Vec3 {
         val radius = runtime.resolveDouble(radius) * if (surfaceOnly) 1.0 else Random.Default.nextDouble()
         val theta = Math.PI * 2 * Random.Default.nextDouble()
         val psi = Math.PI * 2 * Random.Default.nextDouble()
@@ -144,7 +144,7 @@ class SphereParticleEmitterShape(
     }
 }
 
-class PointParticleEmitterShape(
+public class PointParticleEmitterShape(
     var offset: Triple<Expression, Expression, Expression> = Triple(
         NumberExpression(0.0),
         NumberExpression(0.0),
@@ -152,7 +152,7 @@ class PointParticleEmitterShape(
     ),
     val pAttachmentOptions: Map<AttachedType, Boolean>? = null
 ): ParticleEmitterShape {
-    companion object {
+    final class Companion {
         val CODEC: Codec<PointParticleEmitterShape> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -164,8 +164,8 @@ class PointParticleEmitterShape(
     }
 
     override val type = ParticleEmitterShapeType.POINT
-    override fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
-    override fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3 {
+    override fun getNewParticlePosition(MoLangRuntime runtime, Entity entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
+    override fun getCenter(MoLangRuntime runtime, Entity entity?): Vec3 {
         return Vec3.ZERO
     }
 
@@ -179,8 +179,8 @@ class PointParticleEmitterShape(
         return map
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         offset = Triple(
             MoLang.createParser(buffer.readString()).parseExpression(),
             MoLang.createParser(buffer.readString()).parseExpression(),
@@ -188,14 +188,14 @@ class PointParticleEmitterShape(
         )
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(offset.first.getString())
         buffer.writeString(offset.second.getString())
         buffer.writeString(offset.third.getString())
     }
 }
 
-class BoxParticleEmitterShape(
+public class BoxParticleEmitterShape(
     var offset: Triple<Expression, Expression, Expression> = Triple(
         NumberExpression(0.0),
         NumberExpression(0.0),
@@ -209,7 +209,7 @@ class BoxParticleEmitterShape(
     var surfaceOnly: Boolean = false,
     val pAttachmentOptions: Map<AttachedType, Boolean>? = null
 ) : ParticleEmitterShape {
-    companion object {
+    final class Companion {
         val CODEC: Codec<BoxParticleEmitterShape> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -228,11 +228,11 @@ class BoxParticleEmitterShape(
 
     override val type = ParticleEmitterShapeType.BOX
 
-    override fun <T> encode(ops: DynamicOps<T>): DataResult<T> {
+    override fun <T> encode(DynamicOps<T> ops): DataResult<T> {
         return CODEC.encodeStart(ops, this)
     }
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         offset = Triple(
             MoLang.createParser(buffer.readString()).parseExpression(),
             MoLang.createParser(buffer.readString()).parseExpression(),
@@ -246,7 +246,7 @@ class BoxParticleEmitterShape(
         surfaceOnly = buffer.readBoolean()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(offset.first.getString())
         buffer.writeString(offset.second.getString())
         buffer.writeString(offset.third.getString())
@@ -256,9 +256,9 @@ class BoxParticleEmitterShape(
         buffer.writeBoolean(surfaceOnly)
     }
 
-    override fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
+    override fun getCenter(MoLangRuntime runtime, Entity entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
 
-    override fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3 {
+    override fun getNewParticlePosition(MoLangRuntime runtime, Entity entity?): Vec3 {
         val center = getCenter(runtime, entity)
         val sizes = runtime.resolveVec3d(boxSize).scale(2.0).add(0.0001, 0.0001, 0.0001)
         val disposition = if (surfaceOnly) {
@@ -316,7 +316,7 @@ class BoxParticleEmitterShape(
     }
 }
 
-class DiscParticleEmitterShape(
+public class DiscParticleEmitterShape(
     var offset: Triple<Expression, Expression, Expression> = Triple(
         NumberExpression(0.0),
         NumberExpression(0.0),
@@ -331,7 +331,7 @@ class DiscParticleEmitterShape(
     var surfaceOnly: Boolean = false,
     val pAttachmentOptions: Map<AttachedType, Boolean>? = null
 ): ParticleEmitterShape {
-    companion object {
+    final class Companion {
         val CODEC: Codec<DiscParticleEmitterShape> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -355,7 +355,7 @@ class DiscParticleEmitterShape(
     }
 
     override val type = ParticleEmitterShapeType.DISC
-    override fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3 {
+    override fun getNewParticlePosition(MoLangRuntime runtime, Entity entity?): Vec3 {
         val center = getCenter(runtime, entity)
         val normal = runtime.resolveVec3d(normal).let { if (it == Vec3.ZERO) Vec3(
             0.0,
@@ -374,7 +374,7 @@ class DiscParticleEmitterShape(
         return center.add(displacement)
     }
 
-    override fun getCenter(runtime: MoLangRuntime, entity: Entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
+    override fun getCenter(MoLangRuntime runtime, Entity entity?): Vec3 = runtime.resolveVec3d(offset).multiply(Vec3(-1.0, 1.0, 1.0))
 
     override fun getAttachmentOptions(): MutableMap<AttachedType, Boolean> {
         val map = super.getAttachmentOptions()
@@ -386,8 +386,8 @@ class DiscParticleEmitterShape(
         return map
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         offset = Triple(
             MoLang.createParser(buffer.readString()).parseExpression(),
             MoLang.createParser(buffer.readString()).parseExpression(),
@@ -402,7 +402,7 @@ class DiscParticleEmitterShape(
         surfaceOnly = buffer.readBoolean()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(offset.first.getString())
         buffer.writeString(offset.second.getString())
         buffer.writeString(offset.third.getString())
@@ -414,10 +414,10 @@ class DiscParticleEmitterShape(
     }
 }
 
-class EntityBoundingBoxParticleEmitterShape(
+public class EntityBoundingBoxParticleEmitterShape(
     var surfaceOnly: Boolean = true
 ): ParticleEmitterShape {
-    companion object {
+    final class Companion {
         val CODEC: Codec<EntityBoundingBoxParticleEmitterShape> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -427,7 +427,7 @@ class EntityBoundingBoxParticleEmitterShape(
     }
 
     override val type = ParticleEmitterShapeType.ENTITY_BOUNDING_BOX
-    override fun getNewParticlePosition(runtime: MoLangRuntime, entity: Entity?): Vec3 {
+    override fun getNewParticlePosition(MoLangRuntime runtime, Entity entity?): Vec3 {
         val box = getBox(entity)
         val center = getCenter(runtime, entity)
         val sizes = Vec3(
@@ -479,21 +479,21 @@ class EntityBoundingBoxParticleEmitterShape(
         return center.add(disposition)
     }
 
-    override fun getCenter(runtime: MoLangRuntime, entity: Entity?) = getBox(entity).center
+    override fun getCenter(MoLangRuntime runtime, Entity entity?) = getBox(entity).center
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    fun getBox(entity: Entity?) = entity?.boundingBox ?: AABB.ofSize(
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    fun getBox(Entity entity?) = entity?.boundingBox ?: AABB.ofSize(
         Vec3(
             0.0,
             0.0,
             0.0
         ), 1.0, 2.0, 1.0)
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         surfaceOnly = buffer.readBoolean()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(surfaceOnly)
     }
 }

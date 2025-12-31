@@ -25,7 +25,7 @@ import net.minecraft.util.Mth
  * @author Deltric
  * @since December 21st, 2021
  */
-class BimanualSwingAnimation(
+public class BimanualSwingAnimation(
     /** The multiplier to apply to the cosine movement of the arms. The smaller this value, the quicker the arms move. */
     val swingPeriodMultiplier: Float = 0.6662F,
     /** The multiplier to apply to the swing of the entity. The larger this is, the further the arms move. */

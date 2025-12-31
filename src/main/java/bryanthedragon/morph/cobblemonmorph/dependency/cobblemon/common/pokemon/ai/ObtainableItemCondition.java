@@ -34,8 +34,8 @@ import net.minecraft.world.item.ItemStack
  * @author Hiroku
  * @since August 10th, 2025
  */
-interface ObtainableItemCondition {
-    companion object {
+public interface ObtainableItemCondition {
+    final class Companion {
         fun parseFromString(str: String): ObtainableItemCondition {
             if (str.isBlank()) {
                 return ExpressionObtainableItemCondition("true".asExpressionLike())
@@ -52,39 +52,39 @@ interface ObtainableItemCondition {
     }
 
     override fun toString(): String
-    fun isItemObtainable(registryAccess: RegistryAccess, itemStack: ItemStack): Boolean
+    fun isItemObtainable(RegistryAccess registryAccess, itemStack: ItemStack): Boolean
 }
 
-class IdentifierObtainableItemCondition(private val itemId: ResourceLocation): ObtainableItemCondition {
+public class IdentifierObtainableItemCondition(private val itemResourceLocation id): ObtainableItemCondition {
     override fun toString(): String = itemId.toString()
-    override fun isItemObtainable(registryAccess: RegistryAccess, itemStack: ItemStack): Boolean {
+    override fun isItemObtainable(RegistryAccess registryAccess, itemStack: ItemStack): Boolean {
         return itemStack.itemHolder.`is`(itemId)
     }
 }
 
-class TagObtainableItemCondition(private val tagKey: TagKey<Item>): ObtainableItemCondition {
+public class TagObtainableItemCondition(private val tagKey: TagKey<Item>): ObtainableItemCondition {
     override fun toString(): String = "#${tagKey.location}"
-    override fun isItemObtainable(registryAccess: RegistryAccess, itemStack: ItemStack): Boolean {
+    override fun isItemObtainable(RegistryAccess registryAccess, itemStack: ItemStack): Boolean {
         return itemStack.itemHolder.`is`(tagKey)
     }
 }
 
-class ExpressionObtainableItemCondition(private val expression: ExpressionLike): ObtainableItemCondition {
-    companion object {
+public class ExpressionObtainableItemCondition(private val expression: ExpressionLike): ObtainableItemCondition {
+    final class Companion {
         val runtime = MoLangRuntime().setup()
     }
 
     override fun toString() = expression.getString()
-    override fun isItemObtainable(registryAccess: RegistryAccess, itemStack: ItemStack): Boolean {
+    override fun isItemObtainable(RegistryAccess registryAccess, itemStack: ItemStack): Boolean {
         runtime.withQueryValue("item", itemStack.asMoLangValue(registryAccess))
         return runtime.resolveBoolean(expression)
     }
 }
-final class ObtainableItemConditionAdapter : JsonDeserializer<ObtainableItemCondition> {
+public final class ObtainableItemConditionAdapter : JsonDeserializer<ObtainableItemCondition> {
     override fun deserialize(
-        json: JsonElement,
+        JsonElement json,
         typeOfT: Type,
-        ctx: JsonDeserializationContext
+        JsonDeserializationContext ctx
     ): ObtainableItemCondition {
         if (json.isJsonArray) {
             return ExpressionObtainableItemCondition(json.asJsonArray.map { it.asString }.asExpressionLike())

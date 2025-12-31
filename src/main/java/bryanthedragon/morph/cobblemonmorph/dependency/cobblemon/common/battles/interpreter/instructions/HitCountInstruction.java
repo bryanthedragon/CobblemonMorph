@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Licious
  * @since December 30th, 2022
  */
-class HitCountInstruction(val message: BattleMessage): InterpreterInstruction {
+public class HitCountInstruction(val message: BattleMessage): InterpreterInstruction {
     val hitCount = message.argumentAt(1)?.toIntOrNull()
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchGo {

@@ -18,11 +18,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Licious
  * @since March 21st, 2022
  */
-class FriendshipRequirement : Requirement {
+public class FriendshipRequirement : Requirement {
     val amount = 0
-    override fun check(pokemon: Pokemon) = pokemon.friendship >= this.amount
+    override fun check(Pokemon pokemon) = pokemon.friendship >= this.amount
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "friendship"
     }
 }

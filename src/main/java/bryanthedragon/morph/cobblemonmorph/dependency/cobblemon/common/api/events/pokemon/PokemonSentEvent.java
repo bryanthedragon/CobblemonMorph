@@ -22,21 +22,21 @@ import net.minecraft.world.phys.Vec3
  * @author Segfault Guy
  * @since March 25th, 2023
  */
-interface PokemonSentEvent {
+public interface PokemonSentEvent {
     /**
      * The [Pokemon] being sent out.
      */
-    val pokemon: Pokemon
+    val Pokemon pokemon
 
     /**
      * The [ServerLevel] the [Pokemon] is being sent out into.
      */
-    val level: ServerLevel
+    val ServerLevel level
 
     /**
      * The [Vec3] position the [Pokemon] is being sent out at.
      */
-    val position: Vec3
+    val Vec3 position
 
     /**
      * Event fired when a party [Pokemon] is sent out. Cancelling this event prevents a corresponding
@@ -46,9 +46,9 @@ interface PokemonSentEvent {
      * @since March 25th, 2023
      */
     record Pre(
-        override val pokemon: Pokemon,
-        override val level: ServerLevel,
-        override val position: Vec3
+        override val Pokemon pokemon,
+        override val ServerLevel level,
+        override val Vec3 position
     ) : PokemonSentEvent, Cancelable() {
         val context = mutableMapOf(
             "pokemon" to pokemon.struct,
@@ -67,9 +67,9 @@ interface PokemonSentEvent {
      * @since March 25th, 2023
      */
     record Post(
-        override val pokemon: Pokemon,
-        override val level: ServerLevel,
-        override val position: Vec3,
+        override val Pokemon pokemon,
+        override val ServerLevel level,
+        override val Vec3 position,
         val pokemonEntity: PokemonEntity
     ) : PokemonSentEvent {
         val context = mutableMapOf(

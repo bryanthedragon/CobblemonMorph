@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 
-class ForfeitConfirmationSelection(
+public class ForfeitConfirmationSelection(
     battleGUI: BattleGUI,
     request: SingleActionRequest
 ) : BattleActionSelection(
@@ -35,7 +35,7 @@ class ForfeitConfirmationSelection(
     height = HEIGHT,
     battleLang("ui.forfeit_confirmation")
 ) {
-    companion object {
+    final class Companion {
         private const val WIDTH = 113
         private const val HEIGHT = 45
 

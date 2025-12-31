@@ -14,7 +14,7 @@ import net.minecraft.util.StringRepresentable
  * Represents the different types of Mulch implemented in the mod.
  *
  */
-enum class MulchVariant(val duration: Int = -1) : StringRepresentable {
+public enum MulchVariant(val duration: Int = -1) : StringRepresentable {
     COARSE,
     GROWTH(5),
     HUMID,
@@ -29,7 +29,7 @@ enum class MulchVariant(val duration: Int = -1) : StringRepresentable {
         return name.lowercase()
     }
 
-    companion object {
+    final class Companion {
         const val GROWTH_TIME_MULTIPLIER = 0.5
     }
 }

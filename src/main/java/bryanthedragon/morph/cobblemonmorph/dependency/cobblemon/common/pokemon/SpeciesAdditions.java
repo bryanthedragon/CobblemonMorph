@@ -30,9 +30,9 @@ internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionPar
     override val id = cobblemonResource("species_additions")
     override val type = PackType.SERVER_DATA
     override val observable  = SimpleObservable<SpeciesAdditions>()
-    override val gson: Gson = PokemonSpecies.gson.newBuilder().registerTypeAdapter(AdditionParameter::class.java, AdditionParameterAdapter).create()
-    override val typeToken: TypeToken<AdditionParameter> = TypeToken.get(AdditionParameter::class.java)
-    override val resourcePath: String = this.id.path
+    override val Gson gson = PokemonSpecies.gson.newBuilder().registerTypeAdapter(AdditionParameter.class, AdditionParameterAdapter).create()
+    override val typeToken: TypeToken<AdditionParameter> = TypeToken.get(AdditionParameter.class)
+    override val String resourcePath = this.id.path
 
     override fun reload(data: Map<ResourceLocation, AdditionParameter>) {
         for ((identifier,parameter) in data) {
@@ -55,7 +55,7 @@ internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionPar
                         value = existing
                     }
                     addition.property.setter.call(species, value)
-                } catch (e: Exception) {
+                } catch (Exception e) {
                     Cobblemon.LOGGER.error("Caught exception applying addition {} to {}", identifier.toString(), parameter.targetIdentifier.toString(), e)
                 }
             }
@@ -64,10 +64,10 @@ internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionPar
         this.observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 
     record AdditionParameter(
-        val targetIdentifier: ResourceLocation,
+        val targetResourceLocation identifier,
         val additions: Collection<Addition>
     )
 
@@ -94,7 +94,7 @@ internal object SpeciesAdditions : JsonDataRegistry<SpeciesAdditions.AdditionPar
         }
 
         @OptIn(ExperimentalStdlibApi::class)
-        override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): AdditionParameter {
+        override fun deserialize(JsonElement jElement, Type type, JsonDeserializationContext context): AdditionParameter {
             val jObject = element.asJsonObject
             val target = jObject.get(TARGET).asString.asIdentifierDefaultingNamespace()
             val additions = arrayListOf<Addition>()

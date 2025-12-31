@@ -14,7 +14,7 @@ import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType
-final class CobblemonProcessorTypes {
+public final class CobblemonProcessorTypes {
     val registry = BuiltInRegistries.STRUCTURE_PROCESSOR
     val lists = CobblemonStructureProcessorLists
 

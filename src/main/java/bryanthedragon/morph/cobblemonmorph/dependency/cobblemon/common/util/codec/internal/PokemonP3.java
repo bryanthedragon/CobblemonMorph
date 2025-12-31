@@ -45,7 +45,7 @@ internal record PokemonP3(
     val interactionCooldowns: Map<ResourceLocation, Int>,
 ) : Partial<Pokemon> {
 
-    override fun into(other: Pokemon): Pokemon {
+    override fun into(Pokemon other): Pokemon {
         other.originalTrainerType = this.originalTrainerType
         this.originalTrainer.ifPresent { other.originalTrainer = it }
         other.refreshOriginalTrainer()
@@ -84,7 +84,7 @@ internal record PokemonP3(
         return other
     }
 
-    companion object {
+    final class Companion {
         internal val CODEC: MapCodec<PokemonP3> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 OriginalTrainerType.CODEC.optionalFieldOfWithDefault(DataKeys.POKEMON_ORIGINAL_TRAINER_TYPE, OriginalTrainerType.NONE).forGetter(PokemonP3::originalTrainerType),
@@ -137,7 +137,7 @@ internal record PokemonP3(
             }
         }
 
-        internal fun from(pokemon: Pokemon): PokemonP3 = PokemonP3(
+        internal fun from(Pokemon pokemon): PokemonP3 = PokemonP3(
             pokemon.originalTrainerType,
             Optional.ofNullable(pokemon.originalTrainer),
             pokemon.forcedAspects,

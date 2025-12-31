@@ -20,6 +20,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @since February 21, 2024
  * @author Apion
  */
-interface ClientInstancedPlayerData {
-    fun encode(buf: RegistryFriendlyByteBuf)
+public interface ClientInstancedPlayerData {
+    fun encode(RegistryFriendlyByteBuf buf)
 }

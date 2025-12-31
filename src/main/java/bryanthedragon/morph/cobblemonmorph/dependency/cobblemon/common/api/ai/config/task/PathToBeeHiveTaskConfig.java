@@ -28,8 +28,8 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.phys.Vec3
 
-class PathToBeeHiveTaskConfig : SingleTaskConfig {
-    companion object {
+public class PathToBeeHiveTaskConfig : SingleTaskConfig {
+    final class Companion {
         const val HONEY = "honey"
         const val STAY_OUT_OF_HIVE_COOLDOWN = 400
 
@@ -37,12 +37,12 @@ class PathToBeeHiveTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(HONEY, "can_add_honey", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {
@@ -68,18 +68,18 @@ class PathToBeeHiveTaskConfig : SingleTaskConfig {
             val maxTicks = 400
             var traveledTicks = 0
 
-            override fun checkExtraStartConditions(level: ServerLevel, owner: LivingEntity): Boolean {
+            override fun checkExtraStartConditions(ServerLevel level, owner: LivingEntity): Boolean {
                 return (owner is PathfinderMob && owner.isAlive  && (owner is PokemonEntity && PlaceHoneyInHiveTask.wantsToEnterHive(owner))) && owner.brain.checkMemory(
                     MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT)
             }
 
-            override fun canStillUse(level: ServerLevel, entity: LivingEntity, gameTime: Long): Boolean {
+            override fun canStillUse(ServerLevel level, LivingEntity entity, gameTime: Long): Boolean {
                 if (maxTicks >= traveledTicks) return false
                 val pos = entity.brain.getMemory(CobblemonMemories.HIVE_LOCATION)
                 return !pos.isEmpty && entity.distanceTo(pos.get()) > 1.0
             }
 
-            override fun start(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
+            override fun start(ServerLevel level, LivingEntity entity, gameTime: Long) {
                 super.start(level, entity, gameTime)
                 val hiveLocation = entity.brain.getMemorySafely(CobblemonMemories.HIVE_LOCATION).orElse(null)
                 val world = entity.level()
@@ -121,18 +121,18 @@ class PathToBeeHiveTaskConfig : SingleTaskConfig {
                 }
             }
 
-            override fun tick(level: ServerLevel, owner: LivingEntity, gameTime: Long) {
+            override fun tick(ServerLevel level, owner: LivingEntity, gameTime: Long) {
                 traveledTicks++
             }
 
-            override fun stop(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
+            override fun stop(ServerLevel level, LivingEntity entity, gameTime: Long) {
                 if (maxTicks < traveledTicks) {
                     dropAndBlackListHive(entity)
                     entity.brain.setMemoryWithExpiry(CobblemonMemories.HIVE_COOLDOWN, true, 100)
                 }
             }
 
-            fun dropAndBlackListHive(entity: LivingEntity) {
+            fun dropAndBlackListHive(LivingEntity entity) {
                 val hivePos = entity.brain.getMemorySafely(CobblemonMemories.HIVE_LOCATION).orElse(null)
                 if (hivePos == null) return
                 val blackList = entity.brain.getMemorySafely(CobblemonMemories.HIVE_BLACKLIST).orElse(emptyList()).toMutableList()
@@ -146,7 +146,7 @@ class PathToBeeHiveTaskConfig : SingleTaskConfig {
 
             }
 
-            private fun pathfindDirectlyTowards(pos: BlockPos, entity: LivingEntity): Boolean {
+            private fun pathfindDirectlyTowards(BlockPos pos, LivingEntity entity): Boolean {
                 if (entity !is PathfinderMob) return false
                 val nav = entity.navigation
                 val path = nav. createPath(pos, 0)

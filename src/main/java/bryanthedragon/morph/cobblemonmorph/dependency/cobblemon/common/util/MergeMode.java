@@ -6,15 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 /**
  * A way of combining two collections of items together.
  *
  * @author Hiroku
  * @since July 8th, 2022
  */
-enum class MergeMode : Merger {
+public enum MergeMode : Merger {
     /** Replaces the base list with the other list if the other list is non-null. */
     REPLACE {
         override fun <T> merge(base: MutableCollection<T>?, other: MutableCollection<T>?): MutableCollection<T>? {
@@ -59,7 +58,7 @@ enum class MergeMode : Merger {
  * @author Hiroku
  * @since July 8th, 2022
  */
-interface Merger {
+public interface Merger {
     fun <T> merge(base: MutableCollection<T>?, other: MutableCollection<T>?): MutableCollection<T>?
     fun <T> mergeSingle(base: T?, other: T?): T?
 }

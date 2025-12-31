@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
  * @author Licious
  * @since December 2nd, 2022
  */
-interface GrowthFactorAdapter : JsonDeserializer<GrowthFactor>, JsonSerializer<GrowthFactor> {
+public interface GrowthFactorAdapter : JsonDeserializer<GrowthFactor>, JsonSerializer<GrowthFactor> {
 
     /**
      * Register a [GrowthFactor] to be used by this adapter.
@@ -30,6 +30,6 @@ interface GrowthFactorAdapter : JsonDeserializer<GrowthFactor>, JsonSerializer<G
      * @param type The [KClass] of the [GrowthFactor].
      * @param identifier The expected [ResourceLocation] in the parsed JSON.
      */
-    fun register(type: KClass<out GrowthFactor>, identifier: ResourceLocation)
+    fun register(type: KClass<out GrowthFactor>, ResourceLocation identifier)
 
 }

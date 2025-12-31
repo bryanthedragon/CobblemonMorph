@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.S
 // in shittier in events to have to cater to two distinct classes of data that can be scanned.
 
 record PokedexEntityData(
-    val pokemon: Pokemon,
+    val Pokemon pokemon,
     val disguise: DisguiseData?
 ) {
     class DisguiseData(

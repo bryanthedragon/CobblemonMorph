@@ -25,11 +25,11 @@ import net.minecraft.client.gui.navigation.ScreenRectangle
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 
-class BehaviourOptionsList(
+public class BehaviourOptionsList(
     val parent: BehaviourEditorScreen,
     val left: Int,
     val top: Int,
-    val entity: LivingEntity,
+    val LivingEntity entity,
     val appliedPresets: MutableSet<ResourceLocation>,
     val addingMenu: Boolean // Whether this is the list for the un-added presets
 ) : ContainerObjectSelectionList<BehaviourOptionSlot>(
@@ -53,7 +53,7 @@ class BehaviourOptionsList(
 
     override fun renderListBackground(context: GuiGraphics) {}
 
-    override fun renderListSeparators(guiGraphics: GuiGraphics) {}
+    override fun renderListSeparators(GuiGraphics guiGraphics) {}
 
     override fun getScrollbarPosition() = left + width - 6
 
@@ -69,7 +69,7 @@ class BehaviourOptionsList(
     }
 
     class BehaviourOptionSlot(val parent: BehaviourOptionsList, val resourceLocation: ResourceLocation, val behaviour: CobblemonBehaviour, val alignButtonRight: Boolean = true) : Entry<BehaviourOptionSlot>() {
-        companion object {
+        final class Companion {
             val SLOT_WIDTH = 140
             val BUTTON_WIDTH = 16
             val ICON_WIDTH = 15
@@ -109,12 +109,12 @@ class BehaviourOptionsList(
         override fun isFocused() = false
 
         override fun render(
-            guiGraphics: GuiGraphics,
-            index: Int,
+            GuiGraphics guiGraphics,
+            Int index,
             top: Int,
             left: Int,
-            width: Int,
-            height: Int,
+            Int width,
+            Int height,
             mouseX: Int,
             mouseY: Int,
             hovering: Boolean,

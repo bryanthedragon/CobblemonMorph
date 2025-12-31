@@ -25,8 +25,8 @@ import kotlin.math.ceil
  * @author Hiroku
  * @since October 8th, 2023
  */
-class NPCSpawnDetail : SpawnDetail() {
-    companion object {
+public class NPCSpawnDetail : SpawnDetail() {
+    final class Companion {
         val TYPE = "npc"
         val blankClass = NPCClass()
     }

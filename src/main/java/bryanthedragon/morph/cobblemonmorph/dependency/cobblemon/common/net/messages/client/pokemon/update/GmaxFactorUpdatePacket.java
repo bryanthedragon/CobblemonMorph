@@ -18,15 +18,15 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Segfault Guy
  * @since July 27, 2023
  */
-class GmaxFactorUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : BooleanUpdatePacket<GmaxFactorUpdatePacket>(pokemon, value) {
+public class GmaxFactorUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : BooleanUpdatePacket<GmaxFactorUpdatePacket>(pokemon, value) {
     override val id = ID
 
-    override fun set(pokemon: Pokemon, value: Boolean) {
+    override fun set(Pokemon pokemon, value: Boolean) {
         pokemon.gmaxFactor = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("gmax_factor_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = GmaxFactorUpdatePacket(decodePokemon(buffer), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = GmaxFactorUpdatePacket(decodePokemon(buffer), buffer.readBoolean())
     }
 }

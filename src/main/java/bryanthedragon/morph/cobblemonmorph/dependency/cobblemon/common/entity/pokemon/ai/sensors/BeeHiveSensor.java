@@ -23,9 +23,9 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity
 import net.minecraft.world.level.block.entity.BlockEntity
 
 
-class BeeHiveSensor : Sensor<PokemonEntity>(300) {
+public class BeeHiveSensor : Sensor<PokemonEntity>(300) {
     override fun requires() = setOf(CobblemonMemories.HIVE_LOCATION, CobblemonMemories.HIVE_BLACKLIST)
-    override fun doTick(world: ServerLevel, entity: PokemonEntity) {
+    override fun doTick(ServerLevel world, entity: PokemonEntity) {
         val brain = entity.brain
         val currentHive = brain.getMemory(CobblemonMemories.HIVE_LOCATION).orElse(null)
 
@@ -39,7 +39,7 @@ class BeeHiveSensor : Sensor<PokemonEntity>(300) {
             }
         }
 
-        var closestHivePos: BlockPos? = null
+        var closestHive(BlockPos pos? = null
 
         val list = findNearbyHivesWithSpace(entity)
 
@@ -72,7 +72,7 @@ class BeeHiveSensor : Sensor<PokemonEntity>(300) {
         return state.`is`(Blocks.BEEHIVE) || state.`is`(Blocks.BEE_NEST)
     }
 
-    private fun hasReachableAdjacentSide(world: ServerLevel, pos: BlockPos): Boolean {
+    private fun hasReachableAdjacentSide(ServerLevel world, (BlockPos pos): Boolean {
         for (dir in Direction.entries) {
             val adjacentPos = pos.relative(dir)
             if (world.isEmptyBlock(adjacentPos)) {
@@ -98,7 +98,7 @@ class BeeHiveSensor : Sensor<PokemonEntity>(300) {
             .toList()
     }
 
-    private fun doesHiveHaveSpace(hivePos: BlockPos, world: Level): Boolean {
+    private fun doesHiveHaveSpace(hive(BlockPos pos, Level world): Boolean {
         val blockEntity: BlockEntity? = world.getBlockEntity(hivePos)
         if (blockEntity is BeehiveBlockEntity) {
             return !blockEntity.isFull

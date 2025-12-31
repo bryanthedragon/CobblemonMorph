@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialo
  * @since December 27th, 2023
 
  */
-class DialogueNoInput(
+public class DialogueNoInput(
     var action: DialogueAction = FunctionDialogueAction { dialogue, _ -> dialogue.incrementPage() }
 ) : DialogueInput {
     override var timeout: DialogueTimeout?

@@ -20,10 +20,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class ClientPokedexManager(
+public class ClientPokedexManager(
     override val speciesRecords: MutableMap<ResourceLocation, SpeciesDexRecord>,
 ) : AbstractPokedexManager(), ClientInstancedPlayerData {
-    override fun encode(buf: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buf) {
         buf.writeMap(
             speciesRecords,
             { _, key -> buf.writeString(key.toString()) },
@@ -31,8 +31,8 @@ class ClientPokedexManager(
         )
     }
 
-    companion object {
-        fun decode(buf: RegistryFriendlyByteBuf): SetClientPlayerDataPacket {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buf): SetClientPlayerDataPacket {
             val map = buf.readMap(
                 { buf.readString().asIdentifierDefaultingNamespace() },
                 { SpeciesDexRecord().also { it.decode(buf) } }

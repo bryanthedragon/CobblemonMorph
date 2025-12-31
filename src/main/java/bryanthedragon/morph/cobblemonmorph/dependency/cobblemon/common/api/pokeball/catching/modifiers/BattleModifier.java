@@ -25,12 +25,12 @@ import net.minecraft.server.level.ServerPlayer
  * @since May 7th, 2022
  */
 open class BattleModifier(
-    private val calculator: (player: ServerPlayer, playerPokemon: Iterable<ActiveBattlePokemon>, pokemon: Pokemon) -> Float
+    private val calculator: (ServerPlayer player, playerPokemon: Iterable<ActiveBattlePokemon>, Pokemon pokemon) -> Float
 ) : CatchRateModifier {
 
     override fun isGuaranteed(): Boolean = false
 
-    override fun value(thrower: LivingEntity, pokemon: Pokemon): Float {
+    override fun value(LivingEntity thrower, Pokemon pokemon): Float {
         val player = thrower as? ServerPlayer ?: return 1F
         val team = BattleRegistry
             .getBattleByParticipatingPlayer(player)
@@ -39,12 +39,12 @@ open class BattleModifier(
         return this.calculator(player, team, pokemon)
     }
 
-    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
+    override fun behavior(LivingEntity thrower, Pokemon pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
 
-    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean = true
+    override fun isValid(LivingEntity thrower, Pokemon pokemon): Boolean = true
 
-    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
+    override fun modifyCatchRate(currentFloat catchRate, LivingEntity thrower, Pokemon pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
 
-    open fun modifyCatchRate(currentCatchRate: Float, player: ServerPlayer, playerPokemon: Iterable<ActiveBattlePokemon>, pokemon: Pokemon): Float = this.calculator.invoke(player, playerPokemon, pokemon)
+    open fun modifyCatchRate(currentFloat catchRate, ServerPlayer player, playerPokemon: Iterable<ActiveBattlePokemon>, Pokemon pokemon): Float = this.calculator.invoke(player, playerPokemon, pokemon)
 
 }

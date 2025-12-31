@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.cooki
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.cooking.Seasonings
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.components.FlavourComponent
 import net.minecraft.world.item.ItemStack
-final class FlavourSeasoningProcessor : SeasoningProcessor {
+public final class FlavourSeasoningProcessor : SeasoningProcessor {
     override val type = "flavour"
 
     override fun apply(result: ItemStack, seasoning: List<ItemStack>) {

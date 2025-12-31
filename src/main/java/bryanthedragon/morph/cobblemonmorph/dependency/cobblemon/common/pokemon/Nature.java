@@ -16,7 +16,7 @@ import com.mojang.serialization.Codec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth.floor
 
-class Nature(
+public class Nature(
     val name: ResourceLocation,
     val displayName: String,
     val increasedStat: Stat?,
@@ -24,7 +24,7 @@ class Nature(
     val favouriteFlavour: Flavour?,
     val dislikedFlavour: Flavour?
 ) {
-    fun modifyStat(stat: Stat, value: Int): Int {
+    fun modifyStat(Stat stat , Int value): Int {
         return when (stat) {
             increasedStat -> floor(value * 1.1)
             decreasedStat -> floor(value * 0.9)
@@ -32,7 +32,7 @@ class Nature(
         }
     }
 
-    companion object {
+    final class Companion {
         @JvmStatic
         val BY_IDENTIFIER_CODEC: Codec<Nature> = CodecUtils.createByIdentifierCodec(
             Natures::getNature,

@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.PokeSnackBlockEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 
-interface PokeSnackSpawnPokemonEvent {
+public interface PokeSnackSpawnPokemonEvent {
 
     record Pre(
         val pokeSnackBlockEntity: PokeSnackBlockEntity,

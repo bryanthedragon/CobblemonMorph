@@ -14,5 +14,5 @@ record ClientPlayerData(
     var promptStarter: Boolean = true,
     var starterLocked: Boolean = true,
     var starterSelected: Boolean = false,
-    var starterUUID: UUID? = null
+    var starterUUID uuid? = null
 )

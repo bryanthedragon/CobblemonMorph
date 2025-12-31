@@ -13,7 +13,8 @@ import net.minecraft.network.chat.MutableComponent
 
 /**
  * Registry for all known ElementalTypes
- */final class ElementalTypes {
+ */
+public final class ElementalTypes {
 
     private val allTypes = mutableListOf<ElementalType>()
 
@@ -162,7 +163,7 @@ import net.minecraft.network.chat.MutableComponent
     )
 
     @JvmStatic
-    fun register(name: String, displayName: MutableComponent, hue: Int, textureXMultiplier: Int): ElementalType {
+    fun register(String name, MutableComponent displayName, hue: Int, textureXMultiplier: Int): ElementalType {
         return ElementalType(
             name = name,
             displayName = displayName,
@@ -180,12 +181,12 @@ import net.minecraft.network.chat.MutableComponent
     }
 
     @JvmStatic
-    fun get(name: String): ElementalType? {
+    fun get(String name): ElementalType? {
         return allTypes.firstOrNull { type -> type.name.equals(name, ignoreCase = true) }
     }
 
     @JvmStatic
-    fun getOrException(name: String): ElementalType {
+    fun getOrException(String name): ElementalType {
         return allTypes.first { type -> type.name.equals(name, ignoreCase = true) }
     }
 

@@ -29,13 +29,13 @@ import net.minecraft.world.level.block.state.BlockState
  */
 abstract class MultiblockEntity(
     type: BlockEntityType<*>,
-    pos: BlockPos,
-    state: BlockState,
+    (BlockPos pos,
+    BlockState state,
     var multiblockBuilder: MultiblockStructureBuilder?
 ) : BlockEntity(type, pos, state) {
 
     abstract var multiblockStructure: MultiblockStructure?
-    abstract var masterBlockPos: BlockPos?
+    abstract var masterBlock(BlockPos pos?
 
     override fun getUpdatePacket(): Packet<ClientGamePacketListener>? {
         return ClientboundBlockEntityDataPacket.create(this)
@@ -47,7 +47,7 @@ abstract class MultiblockEntity(
         return result
     }
 
-    override fun saveAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+    override fun saveAdditional(CompoundTag nbt, registryLookup: HolderLookup.Provider) {
         super.saveAdditional(nbt, registryLookup)
         //Used for checking build conditions in multiblocks (Dont count a block if it has the FORMED flag)
         nbt.putBoolean(DataKeys.FORMED, masterBlockPos != null)
@@ -59,8 +59,8 @@ abstract class MultiblockEntity(
         }
     }
 
-    override fun isValidBlockState(blockState: BlockState) = blockState.block is MultiblockBlock
+    override fun isValidBlockState(blockBlockState state) = blockState.block is MultiblockBlock
 
-    abstract override fun loadAdditional(nbt: CompoundTag, registryLookup: HolderLookup.Provider)
+    abstract override fun loadAdditional(CompoundTag nbt, registryLookup: HolderLookup.Provider)
 
 }

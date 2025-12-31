@@ -15,7 +15,7 @@ import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class ClientboundUpdateRidingStatePacket(
+public class ClientboundUpdateRidingStatePacket(
     val entity: Int,
     val behaviour: ResourceLocation,
     val state: RidingBehaviourState? = null,
@@ -23,16 +23,16 @@ class ClientboundUpdateRidingStatePacket(
 ) : NetworkPacket<ClientboundUpdateRidingStatePacket> {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         if (state == null) error("Expected state to be populated for encoding")
         buffer.writeInt(entity)
         buffer.writeResourceLocation(behaviour)
         state.encode(buffer)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("s2c_update_ride_controller")
-        fun decode(buffer: RegistryFriendlyByteBuf): ClientboundUpdateRidingStatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): ClientboundUpdateRidingStatePacket {
             val entity = buffer.readInt()
             val behaviour = buffer.readResourceLocation()
             val state = FriendlyByteBuf(buffer.readBytes(buffer.readableBytes()))

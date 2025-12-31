@@ -11,11 +11,11 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.mult
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.phys.shapes.VoxelShape
 
-class OrCondition(
+public class OrCondition(
     val conditionOne: MultiblockCondition,
     val conditionTwo: MultiblockCondition
 ) : MultiblockCondition {
-    override fun test(world: ServerLevel, box: VoxelShape): Boolean {
+    override fun test(ServerLevel world, box: VoxelShape): Boolean {
         return conditionOne.test(world, box) or conditionTwo.test(world, box)
     }
 

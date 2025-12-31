@@ -16,19 +16,19 @@ import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.behavior.Behavior
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 
-class StayAfloatTask(private val chance: Float = 0F) : Behavior<PathfinderMob>(
+public class StayAfloatTask(private val chance: Float = 0F) : Behavior<PathfinderMob>(
         ImmutableMap.of(CobblemonMemories.POKEMON_BATTLE, MemoryStatus.VALUE_ABSENT) // Prevents Illusion Pokemon from bouncing in the water when disguised as swimmers.
 ) {
-    override fun checkExtraStartConditions(world: ServerLevel, entity: PathfinderMob): Boolean {
+    override fun checkExtraStartConditions(ServerLevel world, entity: PathfinderMob): Boolean {
         return entity.isInWater && (entity.getFluidHeight(FluidTags.WATER) > entity.fluidJumpThreshold) ||
                 (entity.isInLava && !entity.fireImmune())
     }
 
-    override fun canStillUse(world: ServerLevel, entity: PathfinderMob, l: Long): Boolean {
+    override fun canStillUse(ServerLevel world, entity: PathfinderMob, l: Long): Boolean {
         return this.checkExtraStartConditions(world, entity)
     }
 
-    override fun tick(world: ServerLevel, entity: PathfinderMob, l: Long) {
+    override fun tick(ServerLevel world, entity: PathfinderMob, l: Long) {
         if (entity.random.nextFloat() < this.chance) {
             entity.jumpControl.jump()
         }

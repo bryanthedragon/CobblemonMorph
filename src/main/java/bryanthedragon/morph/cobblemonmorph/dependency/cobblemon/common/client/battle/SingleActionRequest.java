@@ -10,14 +10,14 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.b
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.*
 
-class SingleActionRequest(
+public class SingleActionRequest(
     val activePokemon: ActiveClientBattlePokemon,
     val side: ShowdownSide?,
     val moveSet: ShowdownMoveset?,
     val forceSwitch: Boolean,
     val canCancel: Boolean
 ) {
-    companion object {
+    final class Companion {
         fun composeFrom(actor: ClientBattleActor, request: ShowdownActionRequest): MutableList<SingleActionRequest> {
             val singleActionRequests = mutableListOf<SingleActionRequest>()
             singleActionRequests.addAll(

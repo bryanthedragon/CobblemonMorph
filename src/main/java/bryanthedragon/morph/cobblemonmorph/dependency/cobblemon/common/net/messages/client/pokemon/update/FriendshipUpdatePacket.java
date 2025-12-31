@@ -14,14 +14,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class FriendshipUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<FriendshipUpdatePacket>(pokemon, value) {
+public class FriendshipUpdatePacket(pokemon: () -> Pokemon?, Int value) : IntUpdatePacket<FriendshipUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun getSize() = IntSize.U_BYTE
-    override fun set(pokemon: Pokemon, value: Int) {
+    override fun set(Pokemon pokemon, Int value) {
         pokemon.setFriendship(value)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("friendship_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = FriendshipUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.U_BYTE))
+        fun decode(RegistryFriendlyByteBuf buffer) = FriendshipUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.U_BYTE))
     }
 }

@@ -19,7 +19,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-final class ChangeEyeHeight {
+public final class ChangeEyeHeight {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("changeeyeheight")
             .permission(CobblemonPermissions.CHANGE_EYE_HEIGHT)

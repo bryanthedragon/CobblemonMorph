@@ -24,15 +24,15 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since June 6th, 2022
  */
-class BattleSetTeamPokemonPacket(val team: List<Pokemon>) : NetworkPacket<BattleSetTeamPokemonPacket>, UnsplittablePacket {
+public class BattleSetTeamPokemonPacket(val team: List<Pokemon>) : NetworkPacket<BattleSetTeamPokemonPacket>, UnsplittablePacket {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(this.team) { _, pokemon -> Pokemon.S2C_CODEC.encode(buffer, pokemon) }
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_set_team")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleSetTeamPokemonPacket(buffer.readList { _ -> Pokemon.S2C_CODEC.decode(buffer) })
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleSetTeamPokemonPacket(buffer.readList { _ -> Pokemon.S2C_CODEC.decode(buffer) })
     }
 }

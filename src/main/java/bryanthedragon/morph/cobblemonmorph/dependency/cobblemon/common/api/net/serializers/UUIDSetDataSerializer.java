@@ -14,14 +14,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.syncher.EntityDataSerializer
 import java.util.*
-final class UUIDSetDataSerializer : EntityDataSerializer<Set<UUID>> {
+public final class UUIDSetDataSerializer : EntityDataSerializer<Set<UUID>> {
     val ID = cobblemonResource("uuidset")
-    fun write(buffer: RegistryFriendlyByteBuf, set: Set<UUID>) {
+    fun write(RegistryFriendlyByteBuf buffer, set: Set<UUID>) {
         buffer.writeSizedInt(IntSize.U_BYTE, set.size)
         set.forEach(buffer::writeUUID)
     }
 
-    fun read(buffer: RegistryFriendlyByteBuf): Set<UUID> {
+    fun read(RegistryFriendlyByteBuf buffer): Set<UUID> {
         val set = mutableSetOf<UUID>()
         repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
             set.add(buffer.readUUID())

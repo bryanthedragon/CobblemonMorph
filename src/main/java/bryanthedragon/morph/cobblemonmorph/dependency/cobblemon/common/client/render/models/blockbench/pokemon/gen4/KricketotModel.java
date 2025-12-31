@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class KricketotModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame, HeadedFrame {
+public class KricketotModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame, HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("kricketot")
     override val head = getPart("head")
 

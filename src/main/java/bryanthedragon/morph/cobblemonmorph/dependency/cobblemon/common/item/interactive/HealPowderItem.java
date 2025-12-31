@@ -28,12 +28,12 @@ import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
-class HealPowderItem : CobblemonItem(Properties()), PokemonSelectingItem {
+public class HealPowderItem : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.heal_powder"
         override val returnItem = Items.AIR
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(stack, target.effectedPokemon)
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(stack, target.effectedPokemon)
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?): String {
             battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("heal_powder", runtime))
             return "cure_status"
         }
@@ -45,11 +45,11 @@ class HealPowderItem : CobblemonItem(Properties()), PokemonSelectingItem {
         Cobblemon.implementation.registerCompostable(this, .75F)
     }
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.status != null && pokemon.currentHealth > 0
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = pokemon.status != null && pokemon.currentHealth > 0
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack>? {
         val currentStatus = pokemon.status?.status
         return if (currentStatus != null) {
@@ -63,12 +63,12 @@ class HealPowderItem : CobblemonItem(Properties()), PokemonSelectingItem {
         }
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.RequestMoveSwapPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class RequestMoveSwapHandler : ServerNetworkPacketHandler<RequestMoveSwapPacket> {
-    override fun handle(packet: RequestMoveSwapPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class RequestMoveSwapHandler : ServerNetworkPacketHandler<RequestMoveSwapPacket> {
+    override fun handle(packet: RequestMoveSwapPacket, server: MinecraftServer, ServerPlayer player) {
         val pokemon = Cobblemon.storage.getParty(player).get(packet.slot) ?: return
         val move1 = pokemon.moveSet[packet.move1] ?: return
         val move2 = pokemon.moveSet[packet.move2] ?: return

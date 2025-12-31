@@ -17,7 +17,7 @@ import com.mojang.serialization.Dynamic
 import net.minecraft.util.datafix.ExtraDataFixUtils
 import net.minecraft.util.datafix.fixes.References
 
-class BlockPosUpdateFix(outputSchema: Schema) : DataFix(outputSchema, false) {
+public class BlockPosUpdateFix(outputSchema: Schema) : DataFix(outputSchema, false) {
     override fun makeRule(): TypeRewriteRule {
         val pokemonType = inputSchema.getChoiceType(References.ENTITY, "cobblemon:pokemon")
         val controllerFinder = DSL.namedChoice("cobblemon:fossil_analyzer", inputSchema.getChoiceType(References.BLOCK_ENTITY, "cobblemon:fossil_multiblock"))
@@ -51,7 +51,7 @@ class BlockPosUpdateFix(outputSchema: Schema) : DataFix(outputSchema, false) {
 
     private fun createBlockEntityFixer(
         typeReference: DSL.TypeReference,
-        string: String,
+        String string,
         map: Map<String, String>
     ): TypeRewriteRule {
         val fixerName = "Block pos fixer for $string}"

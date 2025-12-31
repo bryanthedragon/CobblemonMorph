@@ -27,8 +27,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  *
  * @see HealingSource
  */
-class PokemonHealedEvent(
-    val pokemon: Pokemon,
+public class PokemonHealedEvent(
+    val Pokemon pokemon,
     var amount: Int = -1,
     val source: HealingSource = HealingSource.Force
 ) : Cancelable() {

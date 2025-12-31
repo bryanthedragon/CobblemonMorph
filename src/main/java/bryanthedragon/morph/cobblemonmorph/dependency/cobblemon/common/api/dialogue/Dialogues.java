@@ -36,7 +36,8 @@ import net.minecraft.server.packs.PackType
  * @see Dialogue
  * @since December 29th, 2023
  * @author Hiroku
- */final class Dialogues : JsonDataRegistry<Dialogue> {
+ */
+public final class Dialogues : JsonDataRegistry<Dialogue> {
     override val id = cobblemonResource("dialogues")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<Dialogues>()
@@ -45,22 +46,22 @@ import net.minecraft.server.packs.PackType
     /** If you need custom adapters registered, subscribe to this and register them. */
     val gsonObservable: SimpleObservable<GsonBuilder> = SimpleObservable()
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 
     override val gson = GsonBuilder()
-        .registerTypeAdapter(DialogueAction::class.java, DialogueActionAdapter)
-        .registerTypeAdapter(DialoguePredicate::class.java, DialoguePredicateAdapter)
-        .registerTypeAdapter(DialogueInput::class.java, DialogueInputAdapter)
-        .registerTypeAdapter(DialogueFaceProvider::class.java, DialogueFaceProviderAdapter)
-        .registerTypeAdapter(DialogueText::class.java, DialogueTextAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(MutableComponent::class.java, TranslatedTextAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(DialogueAction.class, DialogueActionAdapter)
+        .registerTypeAdapter(DialoguePredicate.class, DialoguePredicateAdapter)
+        .registerTypeAdapter(DialogueInput.class, DialogueInputAdapter)
+        .registerTypeAdapter(DialogueFaceProvider.class, DialogueFaceProviderAdapter)
+        .registerTypeAdapter(DialogueText.class, DialogueTextAdapter)
+        .registerTypeAdapter(Expression.class, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+        .registerTypeAdapter(MutableComponent.class, TranslatedTextAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .also { gsonObservable.emit(it) }
         .create()
 
-    override val typeToken = TypeToken.get(Dialogue::class.java)
+    override val typeToken = TypeToken.get(Dialogue.class)
     override val resourcePath = "dialogues"
 
     override fun reload(data: Map<ResourceLocation, Dialogue>) {

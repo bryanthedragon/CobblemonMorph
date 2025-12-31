@@ -16,8 +16,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
  * @author Hiroku
  * @since November 26th, 2021
  */
-class TakeFirstTransform<I>(private var amount: Int = 1) : Transform<I, I> {
-    override fun invoke(input: I): I {
+public class TakeFirstTransform<I>(private var amount: Int = 1) : Transform<I, I> {
+    override fun invoke(I input): I {
         if (amount > 0) {
             amount--
             return input

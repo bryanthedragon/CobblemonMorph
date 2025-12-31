@@ -19,7 +19,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.resources.ResourceLocation
 
-class ScaledButton(
+public class ScaledButton(
     var buttonX: Float,
     var buttonY: Float,
     val buttonWidth: Number,

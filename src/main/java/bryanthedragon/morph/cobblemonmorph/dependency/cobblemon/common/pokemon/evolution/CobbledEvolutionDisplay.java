@@ -18,6 +18,6 @@ internal record CobblemonEvolutionDisplay(
     override val aspects: Set<String>
 ) : EvolutionDisplay {
 
-    constructor(id: String, pokemon: Pokemon) : this(id, pokemon.species, pokemon.aspects)
+    constructor(id: String, Pokemon pokemon) : this(id, pokemon.species, pokemon.aspects)
 
 }

@@ -17,7 +17,7 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-final class AbilityTemplateAdapter: JsonSerializer<AbilityTemplate>, JsonDeserializer<AbilityTemplate> {
-    override fun serialize(src: AbilityTemplate, type: Type, ctx: JsonSerializationContext) = JsonPrimitive(src.name)
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = Abilities.getOrException(json.asString)
+public final class AbilityTemplateAdapter: JsonSerializer<AbilityTemplate>, JsonDeserializer<AbilityTemplate> {
+    override fun serialize(src: AbilityTemplate, Type type, JsonSerializationContext ctx) = JsonPrimitive(src.name)
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) = Abilities.getOrException(json.asString)
 }

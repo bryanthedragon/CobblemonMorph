@@ -22,14 +22,14 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since February 10th, 2025
  */
-class MarkPCBoxWallpapersSeenPacket(val seenTextures: Set<ResourceLocation>) : NetworkPacket<MarkPCBoxWallpapersSeenPacket> {
-    companion object {
+public class MarkPCBoxWallpapersSeenPacket(val seenTextures: Set<ResourceLocation>) : NetworkPacket<MarkPCBoxWallpapersSeenPacket> {
+    final class Companion {
         val ID = cobblemonResource("mark_pc_box_wallpapers_seen")
-        fun decode(buffer: RegistryFriendlyByteBuf) = MarkPCBoxWallpapersSeenPacket(buffer.readList { ResourceLocation.parse(it.readString()) }.toSet())
+        fun decode(RegistryFriendlyByteBuf buffer) = MarkPCBoxWallpapersSeenPacket(buffer.readList { ResourceLocation.parse(it.readString()) }.toSet())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(seenTextures.map { it.toString() }) { _, it -> buffer.writeString(it) }
     }
 }

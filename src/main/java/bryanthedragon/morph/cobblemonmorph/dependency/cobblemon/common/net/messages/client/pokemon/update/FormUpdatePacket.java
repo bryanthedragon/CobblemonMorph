@@ -14,20 +14,20 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class FormUpdatePacket(pokemon: () -> Pokemon?, form: FormData) : SingleUpdatePacket<FormData, FormUpdatePacket>(pokemon, form) {
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+public class FormUpdatePacket(pokemon: () -> Pokemon?, form: FormData) : SingleUpdatePacket<FormData, FormUpdatePacket>(pokemon, form) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         this.value.encode(buffer)
     }
 
-    override fun set(pokemon: Pokemon, value: FormData) {
+    override fun set(Pokemon pokemon, value: FormData) {
         pokemon.form = value
     }
 
-    override val id: ResourceLocation = ID
+    override val ResourceLocation id = ID
 
-    companion object {
-        val ID: ResourceLocation = cobblemonResource("packets/form-update")
-        fun decode(buffer: RegistryFriendlyByteBuf): FormUpdatePacket {
+    final class Companion {
+        val ResourceLocation id = cobblemonResource("packets/form-update")
+        fun decode(RegistryFriendlyByteBuf buffer): FormUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val form = FormData()
             form.species = pokemon()!!.species

@@ -10,6 +10,6 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net
 
 import net.minecraft.client.Minecraft
 
-interface ClientNetworkPacketHandler<T: NetworkPacket<T>> : PacketHandler<T>{
-    fun handle(packet: T, client: Minecraft)
+public interface ClientNetworkPacketHandler<T: NetworkPacket<T>> : PacketHandler<T>{
+    fun handle(packet: T, Minecraft client)
 }

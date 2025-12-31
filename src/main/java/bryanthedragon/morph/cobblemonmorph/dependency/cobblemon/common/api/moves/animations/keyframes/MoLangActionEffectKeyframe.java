@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture
  * @author Hiroku
  * @since January 21st, 2024
  */
-class MoLangActionEffectKeyframe : ActionEffectKeyframe {
+public class MoLangActionEffectKeyframe : ActionEffectKeyframe {
     val expressions: ExpressionLike = "0".asExpressionLike()
     val delay: ExpressionLike = "0".asExpressionLike()
     override fun play(context: ActionEffectContext): CompletableFuture<Unit> {

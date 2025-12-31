@@ -28,21 +28,21 @@ import net.minecraft.world.level.block.state.BlockState
  */
 open class AreaSpawnablePosition(
     override val cause: SpawnCause,
-    override val world: ServerLevel,
-    override val position: BlockPos,
+    override val ServerLevel world,
+    override val BlockPos position,
     override val light: Int,
     override val skyLight: Int,
     override val canSeeSky: Boolean,
     override val influences: MutableList<SpawningInfluence>,
     /** Space above. */
-    val height: Int,
+    val Int height,
     val nearbyBlocks: List<BlockState>,
     val zone: SpawningZone
 ) : SpawnablePosition() {
     val nearbyBlockTypes: List<Block> by lazy { nearbyBlocks.mapNotNull { it.block }.distinct() }
     val nearbyBlockHolders: List<Holder<Block>> by lazy { nearbyBlockTypes.mapNotNull(blockRegistry::wrapAsHolder) }
 
-    override fun getStructureCache(pos: BlockPos): StructureChunkCache {
+    override fun getStructureCache(BlockPos pos): StructureChunkCache {
         return zone.getStructureCache(pos)
     }
 
@@ -51,7 +51,7 @@ open class AreaSpawnablePosition(
      * This is not considering the provided state as what the entity would be on top of,
      * but rather the space its hitbox would fill.
      */
-    open fun isSafeSpace(world: ServerLevel, pos: BlockPos, state: BlockState): Boolean = !state.isSolid
+    open fun isSafeSpace(ServerLevel world, (BlockPos pos, BlockState state): Boolean = !state.isSolid
 
     override fun postFilter(detail: SpawnDetail): Boolean {
         if (!super.postFilter(detail)) {

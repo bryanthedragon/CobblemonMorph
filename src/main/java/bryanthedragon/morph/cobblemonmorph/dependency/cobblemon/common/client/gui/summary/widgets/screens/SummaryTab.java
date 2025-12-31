@@ -21,13 +21,13 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class SummaryTab(
+public class SummaryTab(
     pX: Int, pY: Int,
     val label: MutableComponent? = null,
     val icon: ResourceLocation? = null,
     onPress: OnPress
 ): Button(pX, pY, WIDTH, HEIGHT, label ?: Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
-    companion object {
+    final class Companion {
         private const val WIDTH = 39
         private const val HEIGHT = 13
         private const val SCALE = 0.5F

@@ -16,19 +16,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class SpeciesUpdatePacket(pokemon: () -> Pokemon?, value: Species) : SingleUpdatePacket<Species, SpeciesUpdatePacket>(pokemon, value) {
+public class SpeciesUpdatePacket(pokemon: () -> Pokemon?, value: Species) : SingleUpdatePacket<Species, SpeciesUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(this.value.resourceIdentifier)
     }
 
-    override fun set(pokemon: Pokemon, value: Species) {
+    override fun set(Pokemon pokemon, value: Species) {
         pokemon.species = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("species_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): SpeciesUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SpeciesUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val species = PokemonSpecies.getByIdentifier(buffer.readIdentifier())!!
             return SpeciesUpdatePacket(pokemon, species)

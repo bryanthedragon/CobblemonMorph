@@ -19,7 +19,7 @@ import net.minecraft.network.codec.StreamCodec
 record FlavourComponent(
     val flavours: Map<Flavour, Int>
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<FlavourComponent> = RecordCodecBuilder.create { builder ->
             builder.group(
                 Codec.unboundedMap(Codec.STRING, Codec.INT).fieldOf("flavours").forGetter { it.flavours.mapKeys { it.key.name } }

@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.poke
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-enum class PokemonSortMode(val comparator: Comparator<Pokemon?>, val reverseComparator: Comparator<Pokemon?>) {
+public enum PokemonSortMode(val comparator: Comparator<Pokemon?>, val reverseComparator: Comparator<Pokemon?>) {
     NAME({ it?.getDisplayName()?.string }),
     LEVEL({ it?.level }),
     TYPE({ it?.primaryType?.showdownId }),

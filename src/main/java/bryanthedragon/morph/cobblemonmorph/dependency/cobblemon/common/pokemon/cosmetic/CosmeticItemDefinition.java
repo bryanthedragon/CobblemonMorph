@@ -25,14 +25,14 @@ import net.minecraft.world.item.Item
 
 // TODO: Item components on the filter and display items? Would be cool but would need to study it
 
-class CosmeticItemAssignment(
+public class CosmeticItemAssignment(
     val pokemon: MutableList<PokemonProperties> = mutableListOf(),
     val cosmeticItems: MutableList<CosmeticItemDefinition> = mutableListOf()
 ) {
     @Transient
-    lateinit var id: ResourceLocation
+    lateinit var ResourceLocation id
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<CosmeticItemAssignment> = RecordCodecBuilder.create {
             it.group(
                 ResourceLocation.CODEC.fieldOf("id").forGetter { it.id },
@@ -50,11 +50,11 @@ class CosmeticItemAssignment(
     }
 }
 
-class CosmeticItemDefinition(
+public class CosmeticItemDefinition(
     val consumedItem: RegistryLikeCondition<Item> = RegistryLikeIdentifierCondition(cobblemonResource("poke_ball")),
     val aspects: List<String> = listOf()
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<CosmeticItemDefinition> = RecordCodecBuilder.create {
             it.group(
                 ITEM_REGISTRY_LIKE_CODEC.fieldOf("item").forGetter { it.consumedItem },

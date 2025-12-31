@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PokemonUpdatePacket
 import net.minecraft.client.Minecraft
 
-class PokemonUpdatePacketHandler<T : PokemonUpdatePacket<T>> : ClientNetworkPacketHandler<T> {
-    override fun handle(packet: T, client: Minecraft) {
+public class PokemonUpdatePacketHandler<T : PokemonUpdatePacket<T>> : ClientNetworkPacketHandler<T> {
+    override fun handle(packet: T, Minecraft client) {
         packet.applyToPokemon()
     }
 }

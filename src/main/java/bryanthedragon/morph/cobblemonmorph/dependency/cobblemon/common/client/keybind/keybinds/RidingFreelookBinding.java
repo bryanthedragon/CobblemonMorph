@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ke
 
 import com.mojang.blaze3d.platform.InputConstants
 
-final class RidingFreelookBinding : CobblemonBlockingKeyBinding(
+public final class RidingFreelookBinding : CobblemonBlockingKeyBinding(
     "key.cobblemon.ridingfreelook",
     InputConstants.Type.KEYSYM,
     InputConstants.KEY_LALT,

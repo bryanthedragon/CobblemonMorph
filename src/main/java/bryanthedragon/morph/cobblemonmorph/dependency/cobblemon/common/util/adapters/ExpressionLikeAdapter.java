@@ -21,8 +21,9 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since October 22nd, 2023
- */final class ExpressionLikeAdapter : JsonDeserializer<ExpressionLike> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): ExpressionLike {
+ */
+public final class ExpressionLikeAdapter : JsonDeserializer<ExpressionLike> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): ExpressionLike {
         return if (json.isJsonPrimitive) {
             json.asString.asExpressionLike()
         } else if (json.isJsonArray) {

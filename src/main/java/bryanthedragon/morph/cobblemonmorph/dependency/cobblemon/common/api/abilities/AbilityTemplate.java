@@ -20,32 +20,32 @@ import net.minecraft.nbt.CompoundTag
  *
  * @param name: The English name used to load / find it (spaces -> _)
  */
-class AbilityTemplate(
-    val name: String = "",
-    var builder: (AbilityTemplate, forced: Boolean, priority: Priority) -> Ability = { template, forced, priority -> Ability(template, forced, priority) },
+public class AbilityTemplate(
+    val String name = "",
+    var builder: (AbilityTemplate, forced: Boolean, Priority priority) -> Ability = { template, forced, priority -> Ability(template, forced, priority) },
     val displayName: String = "cobblemon.ability.$name",
     val description: String = "cobblemon.ability.$name.desc"
 ) {
     /**
      * Returns the Ability or if applicable the extension connected to this template
      */
-    fun create(forced: Boolean = false, priority: Priority = Priority.LOWEST) = builder(this, forced, priority)
+    fun create(forced: Boolean = false, Priority priority = Priority.LOWEST) = builder(this, forced, priority)
 
     /**
      * Returns the Ability and loads the given NBT Tag into it.
      *
      * Ability extensions need to write and read their needed data from here.
      */
-    fun create(nbt: CompoundTag) = create().loadFromNBT(nbt)
+    fun create(CompoundTag nbt) = create().loadFromNBT(nbt)
 
     /**
      * Returns the Ability and loads the given JSON object into it.
      *
      * Ability extensions need to write and read their needed data from here.
      */
-    fun create(json: JsonObject) = create().loadFromJSON(json)
+    fun create(JsonObject json) = create().loadFromJSON(json)
 
-    companion object {
+    final class Companion {
 
         @JvmStatic
         val CODEC: Codec<AbilityTemplate> = CodecUtils.createByStringCodec(

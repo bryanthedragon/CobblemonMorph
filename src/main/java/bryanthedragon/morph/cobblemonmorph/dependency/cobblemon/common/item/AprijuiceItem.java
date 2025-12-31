@@ -27,15 +27,15 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 
-class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)), PokemonSelectingItem {
+public class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)), PokemonSelectingItem {
     override val bagItem = null
 
-    fun hasRideBoosts(stack: ItemStack): Boolean {
+    fun hasRideBoosts(ItemStack stack): Boolean {
         val rideBoostComponent = stack.get(CobblemonItemComponents.RIDE_BOOST)
         return rideBoostComponent?.boosts?.isNotEmpty() == true
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val stack = user.getItemInHand(hand)
 
         return if (!hasRideBoosts(stack)) {
@@ -50,7 +50,7 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
         }
     }
 
-    override fun getName(stack: ItemStack): Component {
+    override fun getName(ItemStack stack): Component {
         val rideBoostsComponent = stack.get(CobblemonItemComponents.RIDE_BOOST)
         val hasBoosts = rideBoostsComponent?.boosts?.isNotEmpty() == true
         val quality = rideBoostsComponent?.getQuality()
@@ -73,19 +73,19 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
         } // todo if no boosts call it "Plain Red Aprijuice" or "Raw Red Aprijuice" maybe and have players able to drink it
     }
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon): Boolean {
         val boosts = getBoosts(stack)
         return boosts.isNotEmpty() && boosts.any { pokemon.canAddRideBoost(it.key) } && super.canUseOnPokemon(stack, pokemon)
     }
 
-    fun getBoosts(stack: ItemStack): Map<RidingStat, Int> {
+    fun getBoosts(ItemStack stack): Map<RidingStat, Int> {
         return stack.get(CobblemonItemComponents.RIDE_BOOST)?.boosts ?: emptyMap()
     }
 
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack>? {
         if (!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
@@ -101,7 +101,7 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
         return InteractionResultHolder.success(stack)
     }
 
-    override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
+    override fun finishUsingItem(ItemStack stack, Level world, user: LivingEntity): ItemStack {
         if (!hasRideBoosts(stack) && user is Player && !world.isClientSide) {
             user.foodData.eat(4, 1.2f)
             stack.consume(1, user)
@@ -110,11 +110,11 @@ class AprijuiceItem(val type: Apricorn): CobblemonItem(Properties().stacksTo(16)
         return super.finishUsingItem(stack, world, user)
     }
 
-    override fun getUseAnimation(stack: ItemStack): UseAnim {
+    override fun getUseAnimation(ItemStack stack): UseAnim {
         return if (hasRideBoosts(stack)) UseAnim.NONE else UseAnim.DRINK
     }
 
-    override fun getUseDuration(stack: ItemStack, entity: LivingEntity): Int {
+    override fun getUseDuration(ItemStack stack, LivingEntity entity): Int {
         return if (hasRideBoosts(stack)) 0 else 32 // 32 ticks like drinking a potion
     }
 

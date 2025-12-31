@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.CobblemonPartyLockedKeyBinding
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.KeybindCategories
 import com.mojang.blaze3d.platform.InputConstants
-final class SummaryBinding : CobblemonPartyLockedKeyBinding(
+public final class SummaryBinding : CobblemonPartyLockedKeyBinding(
     "key.cobblemon.summary",
     InputConstants.Type.KEYSYM,
     InputConstants.KEY_M,
@@ -24,7 +24,7 @@ final class SummaryBinding : CobblemonPartyLockedKeyBinding(
         if (CobblemonClient.storage.selectedSlot >= 0) {
             try {
                 Summary.open(CobblemonClient.storage.party.slots, true, CobblemonClient.storage.selectedSlot)
-            } catch (e: Exception) {
+            } catch (Exception e) {
                 Cobblemon.LOGGER.debug("Failed to open the summary from the Summary keybind", e)
             }
         }

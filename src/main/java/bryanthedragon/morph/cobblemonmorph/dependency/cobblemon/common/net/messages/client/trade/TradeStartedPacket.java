@@ -29,13 +29,13 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since March 13th, 2023
  */
-class TradeStartedPacket(
+public class TradeStartedPacket(
     val traderId: UUID,
     val traderName: MutableComponent,
     val traderParty: List<TradeablePokemon?>
 ) : NetworkPacket<TradeStartedPacket> {
     class TradeablePokemon(
-        val pokemonId: UUID,
+        val UUID pokemonId,
         val species: ResourceLocation,
         val aspects: Set<String>,
         val level: Int,
@@ -43,8 +43,8 @@ class TradeStartedPacket(
         val heldItem: ItemStack,
         val tradeable: Boolean
     ) {
-        companion object {
-            fun decode(buffer: RegistryFriendlyByteBuf) = TradeablePokemon(
+        final class Companion {
+            fun decode(RegistryFriendlyByteBuf buffer) = TradeablePokemon(
                 buffer.readUUID(),
                 buffer.readIdentifier(),
                 buffer.readList { it.readString() }.toSet(),
@@ -55,7 +55,7 @@ class TradeStartedPacket(
             )
         }
 
-        constructor(pokemon: Pokemon): this(
+        constructor(Pokemon pokemon): this(
             pokemon.uuid,
             pokemon.species.resourceIdentifier,
             pokemon.aspects,
@@ -65,7 +65,7 @@ class TradeStartedPacket(
             pokemon.tradeable
         )
 
-        fun encode(buffer: RegistryFriendlyByteBuf) {
+        fun encode(RegistryFriendlyByteBuf buffer) {
             buffer.writeUUID(pokemonId)
             buffer.writeIdentifier(species)
             buffer.writeCollection(aspects) { _, v -> buffer.writeString(v) }
@@ -81,9 +81,9 @@ class TradeStartedPacket(
         )
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("trade_started")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TradeStartedPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = TradeStartedPacket(
             buffer.readUUID(),
             buffer.readText().copy(),
             buffer.readList { buffer.readNullable { TradeablePokemon.decode(buffer) } }
@@ -91,7 +91,7 @@ class TradeStartedPacket(
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(traderId)
         buffer.writeText(traderName)
         buffer.writeCollection(traderParty) { _, v -> buffer.writeNullable(v) { _, v2 -> v2.encode(buffer) } }

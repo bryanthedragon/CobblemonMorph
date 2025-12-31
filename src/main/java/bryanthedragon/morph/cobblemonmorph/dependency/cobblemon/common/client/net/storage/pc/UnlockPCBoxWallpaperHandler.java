@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.gui.PCBoxWallpaperRepository
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket
 import net.minecraft.client.Minecraft
-final class UnlockPCBoxWallpaperHandler : ClientNetworkPacketHandler<UnlockPCBoxWallpaperPacket> {
-    override fun handle(packet: UnlockPCBoxWallpaperPacket, client: Minecraft) {
+public final class UnlockPCBoxWallpaperHandler : ClientNetworkPacketHandler<UnlockPCBoxWallpaperPacket> {
+    override fun handle(packet: UnlockPCBoxWallpaperPacket, Minecraft client) {
         PCBoxWallpaperRepository.availableWallpapers.add(packet.texture)
     }
 }

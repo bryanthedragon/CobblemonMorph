@@ -9,5 +9,5 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.entity.EntitySideDelegate
-class EmptyPokeBallServerDelegate : EntitySideDelegate<EmptyPokeBallEntity> {
+public class EmptyPokeBallServerDelegate : EntitySideDelegate<EmptyPokeBallEntity> {
 }

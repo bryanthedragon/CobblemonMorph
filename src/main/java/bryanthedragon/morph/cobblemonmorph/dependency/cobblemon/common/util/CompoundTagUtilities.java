@@ -6,19 +6,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import net.minecraft.nbt.CompoundTag
 import java.util.*
-final class CompoundTagUtilities {
+public final class CompoundTagUtilities {
     @JvmStatic
-    fun getPokemonID(nbt: CompoundTag): UUID {
+    fun getPokemonID(CompoundTag nbt): UUID {
         return nbt.getCompound(DataKeys.POKEMON)
             .getUUID(DataKeys.POKEMON_UUID)
     }
 
     @JvmStatic
-    fun isShoulderPokemon(nbt: CompoundTag): Boolean {
+    fun isShoulderPokemon(CompoundTag nbt): Boolean {
         return nbt.isPokemonEntity()
     }
 }

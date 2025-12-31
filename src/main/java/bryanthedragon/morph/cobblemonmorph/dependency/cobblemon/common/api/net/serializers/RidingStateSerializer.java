@@ -7,7 +7,7 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.serializers
-final class RidingStateSerializer {
+public final class RidingStateSerializer {
 
 
 

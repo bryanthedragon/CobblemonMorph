@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class AcceptEvolutionHandler : ServerNetworkPacketHandler<AcceptEvolutionPacket> {
-    override fun handle(packet: AcceptEvolutionPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class AcceptEvolutionHandler : ServerNetworkPacketHandler<AcceptEvolutionPacket> {
+    override fun handle(packet: AcceptEvolutionPacket, server: MinecraftServer, ServerPlayer player) {
         val pokemon = player.party()[packet.pokemonUUID] ?: return
         if (player.isInBattle() || pokemon.entity?.isBusy == true) return
         val evolution = pokemon.evolutionProxy.server().firstOrNull { evolution -> evolution.id.equals(packet.evolutionId, true) } ?: return

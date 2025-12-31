@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerPlayer
 /**
  * Behavioural properties relating to how it treats other entities and how base Minecraft entities treat it.
  */
-class EntityBehaviour {
+public class EntityBehaviour {
     val avoidedByCreeper = false
     val avoidedByPhantom = false
     val avoidedByFox = false
@@ -32,20 +32,20 @@ class EntityBehaviour {
         it.addFunction("avoided_by_skeleton") { DoubleValue(avoidedBySkeleton) }
     }
 
-    companion object {
-        fun hasCreeperFearedShoulderMount(player: ServerPlayer) : Boolean {
+    final class Companion {
+        fun hasCreeperFearedShoulderMount(ServerPlayer player) : Boolean {
             return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.form.behaviour.entityInteract.avoidedByCreeper }
         }
 
-        fun hasFoxFearedShoulderMount(player: ServerPlayer) : Boolean {
+        fun hasFoxFearedShoulderMount(ServerPlayer player) : Boolean {
             return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.form.behaviour.entityInteract.avoidedByFox }
         }
 
-        fun hasSkeletonFearedShoulderMount(player: ServerPlayer) : Boolean {
+        fun hasSkeletonFearedShoulderMount(ServerPlayer player) : Boolean {
             return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.form.behaviour.entityInteract.avoidedBySkeleton }
         }
 
-        fun hasPhantomFearedShoulderMount(player: ServerPlayer) : Boolean {
+        fun hasPhantomFearedShoulderMount(ServerPlayer player) : Boolean {
             return player.party().any { pokemon -> pokemon.state is ShoulderedState && pokemon.form.behaviour.entityInteract.avoidedByPhantom }
         }
     }

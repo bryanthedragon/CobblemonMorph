@@ -31,21 +31,21 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since August 4th, 2023
  */
-class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): BerryItem(block), PokemonSelectingItem {
+public class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): BerryItem(block), PokemonSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${this@StatusCuringBerryItem.berry()!!.identifier.path}"
         override val returnItem = Items.AIR
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = canUseOnBattlePokemon(stack, target)
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "cure_status${status.takeIf { it.isNotEmpty() }?.let { " ${it.joinToString(separator = " ") { it.showdownName } }" } ?: "" }"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) = canUseOnBattlePokemon(stack, target)
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "cure_status${status.takeIf { it.isNotEmpty() }?.let { " ${it.joinToString(separator = " ") { it.showdownName } }" } ?: "" }"
     }
 
     // check for whether a berry can cure a persistent status
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.status?.let { it.status in status || status.isEmpty() } == true &&
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = pokemon.status?.let { it.status in status || status.isEmpty() } == true &&
             pokemon.currentHealth > 0 &&
             super.canUseOnPokemon(stack, pokemon)
 
     // check for whether a berry can cure a volatile or persistent status in battle
-    override fun canUseOnBattlePokemon(stack: ItemStack, battlePokemon: BattlePokemon): Boolean {
+    override fun canUseOnBattlePokemon(ItemStack stack, BattlePokemon battlePokemon): Boolean {
         battlePokemon.contextManager.get(BattleContext.Type.VOLATILE)?.map { it.id }?.let { volatiles ->  // TODO ContextManager is deprecated
             if (status.find { it.showdownName in volatiles } != null)
                 return true
@@ -54,9 +54,9 @@ class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): Berry
     }
 
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack>? {
         return if (canUseOnPokemon(stack, pokemon)) {
             pokemon.feedPokemon(1)
@@ -68,12 +68,12 @@ class StatusCuringBerryItem(block: BerryBlock, vararg val status: Status): Berry
         }
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.originalPokemon.feedPokemon(1)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

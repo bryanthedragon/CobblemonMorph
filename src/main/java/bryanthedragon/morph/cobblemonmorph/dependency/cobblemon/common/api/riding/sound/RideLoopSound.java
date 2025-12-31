@@ -35,7 +35,7 @@ import kotlin.math.sin
  * @author Jackowes
  * @since April 21st, 2025
  */
-class RideLoopSound(val ride: PokemonEntity, val soundSettings: RideSoundSettings) :
+public class RideLoopSound(val ride: PokemonEntity, val soundSettings: RideSoundSettings) :
         AbstractTickableSoundInstance(SoundEvent.createVariableRangeEvent(soundSettings.soundLocation), SoundSource.NEUTRAL, SoundInstance.createUnseededRandom()) {
 
     var shouldStop: Boolean = false

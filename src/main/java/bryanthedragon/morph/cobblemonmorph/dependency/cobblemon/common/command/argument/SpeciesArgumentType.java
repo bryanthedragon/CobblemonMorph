@@ -23,16 +23,16 @@ import net.minecraft.network.chat.Component
 import java.util.concurrent.CompletableFuture
 
 //Very helpful for all command related stuff: https://fabricmc.net/wiki/tutorial:commands#brigadier_explained
-class SpeciesArgumentType : ArgumentType<Species> {
+public class SpeciesArgumentType : ArgumentType<Species> {
 
-    companion object {
+    final class Companion {
         val EXAMPLES: List<String> = listOf("eevee")
         val INVALID_POKEMON = Component.translatable("cobblemon.command.pokespawn.invalid-pokemon")
 
         fun species() = SpeciesArgumentType()
 
-        fun <S> getPokemon(context: CommandContext<S>, name: String): Species {
-            return context.getArgument(name, Species::class.java)
+        fun <S> getPokemon(context: CommandContext<S>, String name): Species {
+            return context.getArgument(name, Species.class)
         }
     }
 

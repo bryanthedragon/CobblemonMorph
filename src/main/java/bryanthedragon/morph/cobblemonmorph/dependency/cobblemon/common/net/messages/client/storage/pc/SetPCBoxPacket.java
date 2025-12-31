@@ -30,13 +30,13 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since June 18th, 2022
  */
-class SetPCBoxPacket internal constructor(val storeID: UUID, val boxNumber: Int, val name: String, val wallpaper: ResourceLocation, val pokemon: Map<Int, (RegistryAccess) -> Pokemon>) : NetworkPacket<SetPCBoxPacket>, UnsplittablePacket {
+public class SetPCBoxPacket internal constructor(val UUID storeID, val Int boxNumber, val String name, val wallpaper: ResourceLocation, val pokemon: Map<Int, (RegistryAccess) -> Pokemon>) : NetworkPacket<SetPCBoxPacket>, UnsplittablePacket {
 
     override val id = ID
 
     constructor(box: PCBox): this(box.pc.uuid, box.boxNumber, box.name?: "", box.wallpaper, box.getNonEmptySlotsForPackets())
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(storeID)
         buffer.writeSizedInt(IntSize.U_SHORT, boxNumber)
         buffer.writeString(name)
@@ -51,9 +51,9 @@ class SetPCBoxPacket internal constructor(val storeID: UUID, val boxNumber: Int,
         }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("set_pc_box")
-        fun decode(buffer: RegistryFriendlyByteBuf): SetPCBoxPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SetPCBoxPacket {
             val storeID = buffer.readUUID()
             val boxNumber = buffer.readSizedInt(IntSize.U_SHORT)
             val name = buffer.readString()

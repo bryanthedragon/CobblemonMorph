@@ -13,7 +13,7 @@ import com.mojang.datafixers.schemas.Schema
 import com.mojang.serialization.Dynamic
 import kotlin.jvm.optionals.getOrNull
 
-class HypertrainIVFix(outputSchema: Schema) : PokemonFix(outputSchema) {
+public class HypertrainIVFix(outputSchema: Schema) : PokemonFix(outputSchema) {
 
     override fun fixPokemonData(dynamic: Dynamic<*>): Dynamic<*> {
         var baseDynamic = dynamic

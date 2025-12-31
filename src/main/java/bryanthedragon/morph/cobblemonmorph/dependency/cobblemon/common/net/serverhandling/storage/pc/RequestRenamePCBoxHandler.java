@@ -17,8 +17,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.RequestRenamePCBoxPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class RequestRenamePCBoxHandler : ServerNetworkPacketHandler<RequestRenamePCBoxPacket> {
-    override fun handle(packet: RequestRenamePCBoxPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class RequestRenamePCBoxHandler : ServerNetworkPacketHandler<RequestRenamePCBoxPacket> {
+    override fun handle(packet: RequestRenamePCBoxPacket, server: MinecraftServer, ServerPlayer player) {
         val pc = PCLinkManager.getPC(player) ?: return run { ClosePCPacket(null).sendToPlayer(player) }
         if (pc.boxes.size <= packet.boxNumber) {
             return

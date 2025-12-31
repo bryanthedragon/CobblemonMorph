@@ -12,17 +12,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RidingAnimation(
+public class RidingAnimation(
     val fileName: String,
     val animationName: String
 ) {
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(fileName)
         buffer.writeString(animationName)
     }
 
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf) : RidingAnimation {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer) : RidingAnimation {
             return RidingAnimation(
                 buffer.readString(),
                 buffer.readString()

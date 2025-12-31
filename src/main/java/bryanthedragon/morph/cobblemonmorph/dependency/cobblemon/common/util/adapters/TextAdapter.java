@@ -14,6 +14,6 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import net.minecraft.network.chat.Component
 import java.lang.reflect.Type
-final class TextAdapter : JsonDeserializer<Component> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = json.asString.text()
+public final class TextAdapter : JsonDeserializer<Component> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) = json.asString.text()
 }

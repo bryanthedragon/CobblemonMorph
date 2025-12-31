@@ -30,7 +30,7 @@ import java.util.UUID
 import net.minecraft.server.level.ServerPlayer
 
 abstract class BattleActor(
-    val uuid: UUID,
+    val UUID uuid,
     val pokemonList: MutableList<BattlePokemon>
 ) {
     init {
@@ -39,7 +39,7 @@ abstract class BattleActor(
 
     val struct = asMoLangValue()
 
-    lateinit var showdownId: String
+    lateinit var String showdownId
     lateinit var battle: PokemonBattle
     fun isInitialized() = this::battle.isInitialized && this::showdownId.isInitialized
 
@@ -149,13 +149,13 @@ abstract class BattleActor(
      * @param name The name of an object being appended, typically a Pokémon nickname received from showdown.
      * @return A [MutableComponent] of the [name] append with owner prefix.
      */
-    abstract fun nameOwned(name: String): MutableComponent
+    abstract fun nameOwned(String name): MutableComponent
 
-    open fun sendMessage(component: Component) {
+    open fun sendMessage(Component component) {
         sendUpdate(BattleMessagePacket(component))
     }
-    open fun awardExperience(battlePokemon: BattlePokemon, experience: Int) {}
-    open fun sendUpdate(packet: NetworkPacket<*>) {}
+    open fun awardExperience(BattlePokemon battlePokemon, experience: Int) {}
+    open fun sendUpdate( NetworkPacket<*> packet) {}
 
     open fun win(otherWinners: List<BattleActor>, losers: List<BattleActor>) {}
     open fun lose(winners: List<BattleActor>, otherLosers: List<BattleActor>) {}

@@ -41,7 +41,7 @@ import org.joml.Vector3d
 import org.joml.Vector3f
 import kotlin.random.Random
 
-class SnowstormParticle(
+public class SnowstormParticle(
     val storm: ParticleStorm,
     world: ClientLevel,
     x: Double,
@@ -49,11 +49,11 @@ class SnowstormParticle(
     z: Double,
     initialVelocity: Vec3,
     //Usually, this will be the storms runtime. But sometimes particles need to have variables different from their emitter, so the VariableStruct will differ
-    val runtime: MoLangRuntime,
+    val MoLangRuntime runtime,
     val matrixWrapper: MatrixWrapper,
     var invisible: Boolean = false,
 ) : Particle(world, x, y, z) {
-    companion object {
+    final class Companion {
         const val MAXIMUM_DISTANCE_CHANGE_PER_TICK_FOR_FRICTION = 0.005
     }
 

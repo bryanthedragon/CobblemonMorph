@@ -21,7 +21,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
-final class QueryLearnsetCommand {
+public final class QueryLearnsetCommand {
 
     private const val NAME = "querylearnset"
     private const val PLAYER = "player"

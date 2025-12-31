@@ -13,17 +13,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.c
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class CosmeticItemAssignmentSyncPacket(
+public class CosmeticItemAssignmentSyncPacket(
     assignments: Collection<CosmeticItemAssignment>
 ) : DataRegistrySyncPacket<CosmeticItemAssignment, CosmeticItemAssignmentSyncPacket>(assignments) {
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: CosmeticItemAssignment) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: CosmeticItemAssignment) {
         CosmeticItemAssignment.PACKET_CODEC.encode(buffer, entry)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): CosmeticItemAssignment? {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): CosmeticItemAssignment? {
         return CosmeticItemAssignment.PACKET_CODEC.decode(buffer)
     }
 
@@ -31,8 +31,8 @@ class CosmeticItemAssignmentSyncPacket(
         CobblemonCosmeticItems.reload(entries.associateBy { it.id })
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("cosmetic_item_assignment_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf) = CosmeticItemAssignmentSyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = CosmeticItemAssignmentSyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 }

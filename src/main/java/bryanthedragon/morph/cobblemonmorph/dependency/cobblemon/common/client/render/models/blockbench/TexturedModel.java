@@ -22,7 +22,7 @@ import net.minecraft.client.model.geom.builders.*
  * @author Chris Fusco
  * @since May 10th, 2022
  */
-class TexturedModel {
+public class TexturedModel {
     @SerializedName("format_version")
     val formatVersion: String = "0"
     @SerializedName("minecraft:geometry")
@@ -65,7 +65,7 @@ class TexturedModel {
      *
      * - Hiro & Apion
      */
-//    fun createFlywheelModel(atlas: TextureAtlasHolder, textureName: Identifier, name: String): Model {
+//    fun createFlywheelModel(atlas: TextureAtlasHolder, textureName: Identifier, String name): Model {
 //        val texture = atlas.getSprite(textureName)
 //        val width = ((texture.maxU * atlas.atlas.width.toFloat()) - (texture.minU * atlas.atlas.width)).toInt()
 //        val height =( (texture.maxV * atlas.atlas.height.toFloat()) - (texture.minV * atlas.atlas.height)).toInt()
@@ -148,7 +148,7 @@ class TexturedModel {
 //        return modelBuilder.build()
 //    }
 
-    fun createWithUvOverride(u: Int, v: Int, textureWidth: Int?, textureHeight: Int?) : LayerDefinition {
+    fun createWithUvOverride(u: Int, v: Int, textureInt width?, textureInt height?) : LayerDefinition {
         val modelData = MeshDefinition()
         val parts = HashMap<String, PartDefinition>()
         val bones = HashMap<String, ModelBone>()
@@ -279,7 +279,7 @@ class TexturedModel {
                 textureWidth ?: geometry.description.textureWidth,
                 textureHeight ?: geometry.description.textureHeight
             )
-        } catch (e: Exception) {
+        } catch (Exception e) {
             if (geometry != null) {
                 throw IllegalArgumentException("Error creating LayerDefinition with identifier ${geometry[0].description.identifier}", e)
             } else {
@@ -288,32 +288,32 @@ class TexturedModel {
         }
     }
 
-    companion object {
+    final class Companion {
         val GSON = GsonBuilder()
             .setLenient()
-            .registerTypeAdapter(LocatorBone::class.java, LocatorBoneAdapter)
+            .registerTypeAdapter(LocatorBone.class, LocatorBoneAdapter)
             .create()
 
         fun from(json: String) : TexturedModel? {
             return try {
-                GSON.fromJson(json, TexturedModel::class.java)
-            } catch (exception: Exception) {
+                GSON.fromJson(json, TexturedModel.class)
+            } catch (Exception exception) {
                 LOGGER.warn(exception)
                 null
             }
         }
     }
 }
-class ModelGeometry {
+public class ModelGeometry {
     lateinit var description: ModelDataDescription
     val bones: List<ModelBone>? = null
 }
-class ModelDataDescription(
+public class ModelDataDescription(
     val identifier: String,
     @SerializedName("texture_width")
-    val textureWidth: Int,
+    val textureInt width,
     @SerializedName("texture_height")
-    val textureHeight: Int,
+    val textureInt height,
     @SerializedName("visible_bounds_width")
     val visibleBoundsWidth: Float,
     @SerializedName("visible_bounds_height")
@@ -322,8 +322,8 @@ class ModelDataDescription(
     val visibleBoundsOffset: List<Float>
 )
 
-class ModelBone {
-    var name: String = ""
+public class ModelBone {
+    var String name = ""
     var parent: String? = null
     var pivot: List<Float> = emptyList()
     var rotation: List<Float>? = null
@@ -331,7 +331,7 @@ class ModelBone {
     var locators: Map<String, LocatorBone>? = null
 }
 
-class Cube {
+public class Cube {
     val origin: List<Float>? = null
     val size: List<Float>? = null
     val pivot: List<Float>? = null
@@ -341,7 +341,7 @@ class Cube {
     val mirror: Boolean = false
 }
 
-class LocatorBone(
+public class LocatorBone(
     var offset: List<Float> = listOf(0F, 0F, 0F),
     var rotation: List<Float> = listOf(0F, 0F, 0F)
 )

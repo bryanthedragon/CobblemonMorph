@@ -16,14 +16,14 @@ import net.minecraft.world.level.WorldGenLevel
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate
 import java.util.*
 
-class AltitudePredicate(val min: Optional<Int>, val max: Optional<Int>) : BlockPredicate {
+public class AltitudePredicate(val min: Optional<Int>, val max: Optional<Int>) : BlockPredicate {
     val range = min.orElse(Int.MIN_VALUE)..max.orElse(Int.MAX_VALUE)
 
-    override fun test(world: WorldGenLevel, block: BlockPos) = block.y in range
+    override fun test(world: WorldGenLevel, Block blockPos) = block.y in range
 
     override fun type() = CobblemonBlockPredicates.ALTITUDE
 
-    companion object {
+    final class Companion {
         val CODEC : MapCodec<AltitudePredicate> = RecordCodecBuilder.mapCodec {
             it.group(
                 PrimitiveCodec.INT.optionalFieldOf("min").forGetter(AltitudePredicate::min),

@@ -17,14 +17,14 @@ import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.network.chat.MutableComponent
 
-class DialogueNameWidget(
+public class DialogueNameWidget(
     val x: Int,
     val y: Int,
-    val width: Int,
-    val height: Int,
+    val Int width,
+    val Int height,
     val text: MutableComponent?
 ) : CobblemonRenderable, GuiEventListener {
-    companion object {
+    final class Companion {
         val nameResource = cobblemonResource("textures/gui/dialogue/dialogue_name.png")
     }
 

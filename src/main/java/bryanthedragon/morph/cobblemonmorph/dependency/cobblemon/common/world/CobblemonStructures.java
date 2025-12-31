@@ -21,7 +21,7 @@ import net.minecraft.world.level.levelgen.structure.pools.LegacySinglePoolElemen
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList
-final class CobblemonStructures {
+public final class CobblemonStructures {
     private val EMPTY_PROCESSOR_LIST_KEY = ResourceKey.create(Registries.PROCESSOR_LIST, ResourceLocation.fromNamespaceAndPath("minecraft", "empty"))
     private const val pokecenterWeight = 35
     private const val berryFarmWeight = 1

@@ -173,7 +173,7 @@ public final class CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceK
 
     public static final SACCHARINE_PLANKS = this.create("saccharine_planks", Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
 
-    public static final SACCHARINE_LEAVES = this.create("saccharine_leaves", SaccharineLeafBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.2f).randomTicks().sound(SoundType.GRASS).noOcclusion().ispublic static finalidSpawn { _: BlockState?, _: BlockGetter?, _: BlockPos?, entity: EntityType<*>? -> entity === EntityType.OCELOT || entity === EntityType.PARROT}.isSuffocating { _: BlockState?, _: BlockGetter?, _: BlockPos? -> false}.isViewBlocking { _: BlockState?, _: BlockGetter?, _: BlockPos? -> false}.ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor { _: BlockState?, _: BlockGetter?, _: BlockPos? -> false}));
+    public static final SACCHARINE_LEAVES = this.create("saccharine_leaves", SaccharineLeafBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.2f).randomTicks().sound(SoundType.GRASS).noOcclusion().ispublic static finalidSpawn { _: BlockState?, _: BlockGetter?, _: BlockPos?, Entity entityType<*>? -> entity === EntityType.OCELOT || entity === EntityType.PARROT}.isSuffocating { _: BlockState?, _: BlockGetter?, _: BlockPos? -> false}.isViewBlocking { _: BlockState?, _: BlockGetter?, _: BlockPos? -> false}.ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor { _: BlockState?, _: BlockGetter?, _: BlockPos? -> false}));
 
     public static final SACCHARINE_FENCE = this.create("saccharine_fence", FenceBlock(BlockBehaviour.Properties.of().mapColor(SACCHARINE_PLANKS.defaultMapColor()).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
 
@@ -464,9 +464,9 @@ public final class CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceK
      */
     fun strippedBlocks(): Map<Block, Block> = mapOf(APRICORN_WOOD STRIPPED_APRICORN_WOOD, APRICORN_LOG STRIPPED_APRICORN_LOG, SACCHARINE_WOOD STRIPPED_SACCHARINE_WOOD, SACCHARINE_LOG STRIPPED_SACCHARINE_LOG, SACCHARINE_LOG_SLATHERED STRIPPED_SACCHARINE_LOG)
 
-    private fun apricornBlock(name: String, apricorn: Apricorn): ApricornBlock = this.create(name, ApricornBlock(BlockBehaviour.Properties.of().mapColor(apricorn.mapColor()).randomTicks().strength(Blocks.OAK_LOG.defaultDestroyTime(), Blocks.OAK_LOG.explosionResistance).sound(SoundType.WOOD).noOcclusion(), apricorn))
+    private fun apricornBlock(String name, apricorn: Apricorn): ApricornBlock = this.create(name, ApricornBlock(BlockBehaviour.Properties.of().mapColor(apricorn.mapColor()).randomTicks().strength(Blocks.OAK_LOG.defaultDestroyTime(), Blocks.OAK_LOG.explosionResistance).sound(SoundType.WOOD).noOcclusion(), apricorn))
 
-    private fun tumblestoneBlock(name: String, stage: Int, height: Int, xzOffset: Int, nextStage: Block?) : Block {
+    private fun tumblestoneBlock(String name, stage: Int, Int height, xzOffset: Int, nextStage: Block?) : Block {
         return this.create(name, TumblestoneBlock(BlockBehaviour.Properties.of().pushReaction(PushReaction.DESTROY).noOcclusion().strength(1.5F).sound(CobblemonSounds.TUMBLESTONE_SOUNDS), stage, height, xzOffset, nextStage));
     }
 
@@ -647,7 +647,7 @@ public final class CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceK
 
     fun berries() = this.berries.toMap();
 
-    private fun berryBlock(name: String): BerryBlock {
+    private fun berryBlock(String name): BerryBlock {
         public static final identifier = cobblemonResource("${name}_berry");
         public static final block = this.create(identifier.path, BerryBlock(identifier, BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).dynamicShape().sound(CobblemonSounds.BERRY_BUSH_SOUNDS).strength(0.2F)));
         this.berries[identifier] = block
@@ -657,7 +657,7 @@ public final class CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceK
     /**
      * Calls helper method from Vanilla
      */
-    private fun log(name: String, arg: MapColor = MapColor.DIRT, arg2: MapColor = MapColor.DIRT): Block {
+    private fun log(String name, arg: MapColor = MapColor.DIRT, arg2: MapColor = MapColor.DIRT): Block {
         public static final block = BlocksInvoker.createLogBlock(arg, arg2);
         return this.create(name, block);
     }
@@ -677,17 +677,17 @@ public final class CobblemonBlocks : PlatformRegistry<Registry<Block>, ResourceK
         return block
     }
 
-    private fun evolutionStoneOre(name: String) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
-    private fun evolutionStoneOre(name: String, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE).lightLevel { lightLevel }));
+    private fun evolutionStoneOre(String name) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
+    private fun evolutionStoneOre(String name, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE).lightLevel { lightLevel }));
 
-    private fun deepslateEvolutionStoneOre(name: String) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
-    private fun deepslateEvolutionStoneOre(name: String, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE).lightLevel { lightLevel }));
+    private fun deepslateEvolutionStoneOre(String name) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
+    private fun deepslateEvolutionStoneOre(String name, lightLevel: Int) = this.create(name, DropExperienceBlock(UniformInt.of(1, 2), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE).lightLevel { lightLevel }));
 
     /**
      * Helper method for creating leaves
      * copied over from Vanilla
      */
-    private fun leaves(name: String): Block {
+    private fun leaves(String name): Block {
         public static final block = BlocksInvoker.createLeavesBlock(SoundType.GRASS);
         return this.create(name, block);
     }

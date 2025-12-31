@@ -17,23 +17,23 @@ import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.Level
 
-interface CookingPotRecipeBase : Recipe<CraftingInput> {
+public interface CookingPotRecipeBase : Recipe<CraftingInput> {
     val result: ItemStack
     val groupName: String
     val category: CookingPotBookCategory
-    val seasoningTag: TagKey<Item>
+    val seasoningTagKey<Item> tag
     val seasoningProcessors: List<SeasoningProcessor>
 
     override fun getGroup() = groupName
-    override fun matches(input: CraftingInput, level: Level): Boolean
+    override fun matches(input: CraftingInput, Level level): Boolean
     fun category() = category
-    override fun getResultItem(registries: HolderLookup.Provider) = this.result
+    override fun getResultItem(HolderLookup.Provider registries) = this.result
 
-    override fun assemble(input: CraftingInput, registries: HolderLookup.Provider): ItemStack {
+    override fun assemble(input: CraftingInput, HolderLookup.Provider registries): ItemStack {
         return result.copy()
     }
 
-    fun applySeasoning(stack: ItemStack, seasoning: List<ItemStack>) {
+    fun applySeasoning(ItemStack stack, seasoning: List<ItemStack>) {
         for (processor in seasoningProcessors) {
             processor.apply(stack, seasoning)
         }

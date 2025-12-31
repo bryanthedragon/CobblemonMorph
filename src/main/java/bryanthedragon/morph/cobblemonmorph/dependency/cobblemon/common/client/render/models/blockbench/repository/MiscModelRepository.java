@@ -23,19 +23,20 @@ import net.minecraft.server.packs.PackType
 /**
  * The data registry responsible for "one off" models that are usually used in BERs and don't really need their own repo
  * This is only present on the client.
- */final class MiscModelRepository : JsonDataRegistry<TexturedModel> {
+ */
+public final class MiscModelRepository : JsonDataRegistry<TexturedModel> {
 
     override val id = cobblemonResource("misc_models")
     override val type = PackType.CLIENT_RESOURCES
     override val observable = SimpleObservable<MiscModelRepository>()
-    override val gson: Gson = TexturedModel.GSON
-    override val typeToken: TypeToken<TexturedModel> = TypeToken.get(TexturedModel::class.java)
+    override val Gson gson = TexturedModel.GSON
+    override val typeToken: TypeToken<TexturedModel> = TypeToken.get(TexturedModel.class)
     override val resourcePath = "bedrock/misc"
     private val models = hashMapOf<ResourceLocation, ModelPart>()
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 
-    override fun reload(data: Map<ResourceLocation, TexturedModel>) {
+    override fun reload(Map<ResourceLocation, T> dataexturedModel>) {
         data.forEach { (identifier, model) ->
             this.models[identifier] = model.create().bakeRoot()
         }
@@ -43,5 +44,5 @@ import net.minecraft.server.packs.PackType
         Cobblemon.LOGGER.info("Loaded {} misc models",this.models.size)
     }
 
-    fun modelOf(identifier: ResourceLocation) = this.models[identifier]
+    fun modelOf(ResourceLocation identifier) = this.models[identifier]
 }

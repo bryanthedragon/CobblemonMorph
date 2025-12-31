@@ -22,16 +22,16 @@ import java.util.*
  * @author Hiroku
  * @since July 7th, 2023
  */
-class OpenPartyCallbackPacket(
-    val uuid: UUID,
+public class OpenPartyCallbackPacket(
+    val UUID uuid,
     val title: MutableComponent,
 //    val usePortraits: Boolean,
 //    val animate: Boolean,
     val pokemon: List<PartySelectPokemonDTO>
 ) : NetworkPacket<OpenPartyCallbackPacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("open_party_callback")
-        fun decode(buffer: RegistryFriendlyByteBuf) = OpenPartyCallbackPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = OpenPartyCallbackPacket(
             uuid = buffer.readUUID(),
             title = ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC.decode(buffer).copy(),
 //            usePortraits = buffer.readBoolean(),
@@ -41,7 +41,7 @@ class OpenPartyCallbackPacket(
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(uuid)
         ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC.encode(buffer, title)
 //        buffer.writeBoolean(usePortraits)

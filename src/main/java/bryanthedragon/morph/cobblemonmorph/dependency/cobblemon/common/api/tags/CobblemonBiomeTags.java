@@ -17,7 +17,8 @@ import net.minecraft.tags.TagKey
  *
  * @author Veraxiel, Licious
  * @since July 8th, 2022
- */final class CobblemonBiomeTags {
+ */
+public final class CobblemonBiomeTags {
 
     @JvmField
     val IS_AUTUMN = create("has_season/autumn")
@@ -94,5 +95,5 @@ import net.minecraft.tags.TagKey
     @JvmField
     val HAS_WATER_STONE_ORE_RARE = create("has_ore/ore_water_stone_rare")
 
-    private fun create(path: String) = TagKey.create(Registries.BIOME, cobblemonResource(path))
+    private fun create(String path) = TagKey.create(Registries.BIOME, cobblemonResource(path))
 }

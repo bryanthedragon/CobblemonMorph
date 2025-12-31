@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math
  * @author Hiroku
  * @since September 30th, 2022
  */
-class SimpleQuirk(
+public class SimpleQuirk(
     private val secondsBetweenOccurrences: Pair<Float, Float>,
     val condition: (context: PosableState) -> Boolean = { true },
     val loopTimes: IntRange = 1..1,

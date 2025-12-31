@@ -20,6 +20,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @author Hiroku
  * @since January 29th, 2022
  */
-interface SpawningZoneGenerator {
+public interface SpawningZoneGenerator {
     fun generate(spawner: Spawner, input: SpawningZoneInput): SpawningZone
 }

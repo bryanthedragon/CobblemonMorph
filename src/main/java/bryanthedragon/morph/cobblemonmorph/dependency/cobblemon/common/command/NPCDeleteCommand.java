@@ -21,7 +21,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.world.entity.Entity
-final class NPCDeleteCommand {
+public final class NPCDeleteCommand {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(
             Commands.literal("npcdelete")
@@ -42,7 +42,7 @@ final class NPCDeleteCommand {
                         return@executes 0
                     }
 
-                    val targetEntity = player.traceFirstEntityCollision(entityClass = NPCEntity::class.java)
+                    val targetEntity = player.traceFirstEntityCollision(entityClass = NPCEntity.class)
 
                     if (targetEntity == null) {
                         player.sendSystemMessage(commandLang("npcedit.non_npc").red())
@@ -54,7 +54,7 @@ final class NPCDeleteCommand {
         )
     }
 
-    private fun execute(entity: Entity, source: CommandSourceStack) : Int {
+    private fun execute(Entity entity, source: CommandSourceStack) : Int {
         if(entity !is NPCEntity){
             source.sendSystemMessage(commandLang("npcedit.non_npc").red())
             return 0

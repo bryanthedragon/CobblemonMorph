@@ -106,7 +106,7 @@ fun drawScaledText(
     y: Number,
     scale: Float = 1F,
     opacity: Number = 1F,
-    maxCharacterWidth: Int = Int.MAX_VALUE,
+    maxCharacterInt width = Int.MAX_VALUE,
     colour: Int = 0x00FFFFFF + ((opacity.toFloat() * 255).toInt() shl 24),
     centered: Boolean = false,
     shadow: Boolean = false,
@@ -180,7 +180,7 @@ fun drawScaledTextJustifiedRight(
     y: Number,
     scale: Float = 1F,
     opacity: Number = 1F,
-    maxCharacterWidth: Int = Int.MAX_VALUE,
+    maxCharacterInt width = Int.MAX_VALUE,
     colour: Int = 0x00FFFFFF + ((opacity.toFloat() * 255).toInt() shl 24),
     shadow: Boolean = false
 ) {
@@ -241,13 +241,13 @@ fun renderBeaconBeam(
     totalLevelTime: Long,
     yOffset: Float = 0F,
     height: Float,
-    red: Float,
-    green: Float,
-    blue: Float,
-    alpha: Float,
+    Float red,
+    Float green,
+    Float blue,
+    Float alpha,
     beamRadius: Float,
     glowRadius: Float,
-    glowAlpha: Float
+    glowFloat alpha
 ) {
     val i = yOffset + height
     val beamRotation = Math.floorMod(totalLevelTime, 40).toFloat() + partialTicks
@@ -302,10 +302,10 @@ fun renderBeaconBeam(
 fun renderPart(
     matrixStack: PoseStack,
     vertexBuffer: VertexConsumer,
-    red: Float,
-    green: Float,
-    blue: Float,
-    alpha: Float,
+    Float red,
+    Float green,
+    Float blue,
+    Float alpha,
     yMin: Float,
     yMax: Float,
     p_112164_: Float,
@@ -381,10 +381,10 @@ fun renderPart(
 fun renderQuad(
     matrixEntry: PoseStack.Pose,
     buffer: VertexConsumer,
-    red: Float,
-    green: Float,
-    blue: Float,
-    alpha: Float,
+    Float red,
+    Float green,
+    Float blue,
+    Float alpha,
     yMin: Float,
     yMax: Float,
     x1: Float,
@@ -401,10 +401,10 @@ fun renderQuad(
 fun addVertex(
     matrixEntry: PoseStack.Pose,
     buffer: VertexConsumer,
-    red: Float,
-    green: Float,
-    blue: Float,
-    alpha: Float,
+    Float red,
+    Float green,
+    Float blue,
+    Float alpha,
     y: Float,
     x: Float,
     z: Float,

@@ -30,20 +30,20 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.*
 import net.minecraft.world.level.Level
 
-class CookingPotShapelessRecipe(
+public class CookingPotShapelessRecipe(
     override val groupName: String,
     override val category: CookingPotBookCategory,
     override val result: ItemStack,
     private val ingredients: NonNullList<Ingredient>,
-    override val seasoningTag: TagKey<Item>,
+    override val seasoningTagKey<Item> tag,
     override val seasoningProcessors: List<SeasoningProcessor>
 ) : Recipe<CraftingInput>, CookingPotRecipeBase {
     override fun getType(): RecipeType<CookingPotShapelessRecipe> = CobblemonRecipeTypes.COOKING_POT_SHAPELESS
     override fun getSerializer() = CobblemonRecipeSerializers.COOKING_POT_SHAPELESS
     override fun getIngredients() = ingredients
-    override fun canCraftInDimensions(width: Int, height: Int) = width * height >= ingredients.size
+    override fun canCraftInDimensions(Int width, Int height) = width * height >= ingredients.size
 
-    override fun matches(input: CraftingInput, level: Level): Boolean {
+    override fun matches(input: CraftingInput, Level level): Boolean {
         val remaining = ingredients.toMutableList()
 
         for (item in input.items()) {
@@ -61,7 +61,7 @@ class CookingPotShapelessRecipe(
     }
 
     class Serializer : RecipeSerializer<CookingPotShapelessRecipe> {
-        companion object {
+        final class Companion {
             private val CODEC: MapCodec<CookingPotShapelessRecipe> = RecordCodecBuilder.mapCodec { instance ->
                 instance.group(
                     Codec.STRING.optionalFieldOf("group", "").forGetter { it.group },
@@ -87,9 +87,9 @@ class CookingPotShapelessRecipe(
             val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, CookingPotShapelessRecipe> =
                 StreamCodec.of(::toNetwork, ::fromNetwork)
 
-            private fun fromNetwork(buffer: RegistryFriendlyByteBuf): CookingPotShapelessRecipe {
+            private fun fromNetwork(RegistryFriendlyByteBuf buffer): CookingPotShapelessRecipe {
                 val group = buffer.readUtf()
-                val category = buffer.readEnum(CookingPotBookCategory::class.java)
+                val category = buffer.readEnum(CookingPotBookCategory.class)
                 val seasoningTag = TagKey.create(Registries.ITEM, buffer.readIdentifier())
                 val size = buffer.readVarInt()
                 val ingredients = NonNullList.withSize(size, Ingredient.EMPTY)
@@ -102,7 +102,7 @@ class CookingPotShapelessRecipe(
                 return CookingPotShapelessRecipe(group, category, result, ingredients, seasoningTag, seasoningProcessors)
             }
 
-            private fun toNetwork(buffer: RegistryFriendlyByteBuf, recipe: CookingPotShapelessRecipe) {
+            private fun toNetwork(RegistryFriendlyByteBuf buffer, recipe: CookingPotShapelessRecipe) {
                 buffer.writeUtf(recipe.group)
                 buffer.writeEnum(recipe.category)
                 buffer.writeIdentifier(recipe.seasoningTag.location)

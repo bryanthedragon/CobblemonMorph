@@ -25,13 +25,13 @@ import net.minecraft.util.Mth
  * @author Hiroku
  * @since August 9th, 2025
  */
-class PitchTiltAnimation(
+public class PitchTiltAnimation(
     val bone: Bone,
     val maxChangePerTick: Float = 1F,
     val minPitch: Float = -45F,
     val maxPitch: Float = 45F,
 ) : PoseAnimation() {
-    companion object {
+    final class Companion {
         const val PREVIOUS_ANGLE = "previous_pitch_tilt_angle"
         const val CORRECTED_ANGLE = "corrected_pitch_tilt_angle"
         const val PITCHED_TILT = "has_pitched_tilt"

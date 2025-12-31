@@ -17,7 +17,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.LandRandomPos
-final class ChooseLandWanderTargetTask {
+public final class ChooseLandWanderTargetTask {
     fun create(chance: Int, horizontalRange: Int, verticalRange: Int, walkSpeed: Float, completionRange: Int): OneShot<PathfinderMob> {
         return BehaviorBuilder.create {
             it.group(

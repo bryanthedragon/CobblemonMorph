@@ -29,16 +29,16 @@ import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth
 
-class MoveSlotButton(
+public class MoveSlotButton(
     x: Int, y: Int,
-    val move: MoveTemplate,
+    val MoveTemplate move,
     val pp: Int,
     val ppMax: Int,
-    val enabled: Boolean = true,
+    val Boolean enabled = true,
     onPress: OnPress
 ) : Button(x, y, WIDTH, HEIGHT, Component.literal("Move"), onPress, CreateNarration { "".text() }), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private val moveResource = cobblemonResource("textures/gui/summary/summary_move.png")
         private val moveOverlayResource = cobblemonResource("textures/gui/summary/summary_move_overlay.png")
 

@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stora
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.storage.ClientParty
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-class PartyStorageSlot(
+public class PartyStorageSlot(
     x: Int, y: Int,
     private val parent: StorageWidget,
     private val party: ClientParty,

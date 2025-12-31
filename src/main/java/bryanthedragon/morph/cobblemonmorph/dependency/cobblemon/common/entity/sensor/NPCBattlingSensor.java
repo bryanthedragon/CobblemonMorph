@@ -13,14 +13,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.np
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.sensing.Sensor
 
-class NPCBattlingSensor : Sensor<NPCEntity>() {
-    companion object {
+public class NPCBattlingSensor : Sensor<NPCEntity>() {
+    final class Companion {
         val OUTPUT_MEMORY_MODULES = setOf(CobblemonMemories.NPC_BATTLING)
     }
 
     override fun requires() = OUTPUT_MEMORY_MODULES
 
-    override fun doTick(world: ServerLevel, entity: NPCEntity) {
+    override fun doTick(ServerLevel world, entity: NPCEntity) {
         val isBattling = entity.isInBattle()
         if (isBattling) {
             entity.getBrain().setMemory(CobblemonMemories.NPC_BATTLING, true)

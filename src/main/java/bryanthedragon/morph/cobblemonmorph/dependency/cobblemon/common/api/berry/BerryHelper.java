@@ -15,7 +15,7 @@ import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import net.minecraft.core.Holder
 import net.minecraft.world.level.biome.Biome
-final class BerryHelper {
+public final class BerryHelper {
     private val CACHE_LOADER = object : CacheLoader<Holder<Biome>, List<BerryBlock>>() {
         override fun load(key: Holder<Biome>): List<BerryBlock> {
             return naturalBerries.filter { berryBlock ->

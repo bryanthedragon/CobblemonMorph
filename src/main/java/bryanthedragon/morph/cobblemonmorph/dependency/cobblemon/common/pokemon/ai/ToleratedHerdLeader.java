@@ -18,8 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.toPr
  * @author Hiroku
  * @since June 26th, 2025
  */
-class ToleratedHerdLeader(
-    var pokemon: PokemonProperties,
+public class ToleratedHerdLeader(
+    var Pokemon pokemonProperties,
     /** A higher tier indicates a more favourable herd leader. */
     val tier: Int,
     /** If true, a lower level Pokémon can still lead it.*/

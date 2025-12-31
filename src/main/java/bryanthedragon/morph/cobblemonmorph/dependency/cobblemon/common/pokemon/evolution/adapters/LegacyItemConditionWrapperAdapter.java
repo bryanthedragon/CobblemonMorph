@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import java.lang.reflect.Type
 
-// This is an ugly adapter because breaking changes are scary and people would ;(final class LegacyItemConditionWrapperAdapter : JsonDeserializer<ItemPredicate>, JsonSerializer<ItemPredicate> {
+// This is an ugly adapter because breaking changes are scary and people would ;(public final class LegacyItemConditionWrapperAdapter : JsonDeserializer<ItemPredicate>, JsonSerializer<ItemPredicate> {
 
     private const val TAG_PREFIX = "#"
     private const val LEGACY_ITEM = "item"
@@ -33,7 +33,7 @@ import java.lang.reflect.Type
 
     private val codecAdapter = CodecBackedAdapter(ItemPredicate.CODEC)
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ItemPredicate {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): ItemPredicate {
         if (json.isJsonPrimitive) {
             return this.createBuilderForItem(json.asString).build()
         }
@@ -51,7 +51,7 @@ import java.lang.reflect.Type
         return this.codecAdapter.deserialize(json, typeOfT, context)
     }
 
-    override fun serialize(src: ItemPredicate, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(src: ItemPredicate, typeOfT srcype, context: JsonSerializationContext): JsonElement {
         return this.codecAdapter.serialize(src, typeOfSrc, context)
     }
 

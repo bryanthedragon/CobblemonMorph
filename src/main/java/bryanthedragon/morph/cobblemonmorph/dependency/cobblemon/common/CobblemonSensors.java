@@ -16,7 +16,7 @@ import java.util.function.Supplier
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.entity.ai.sensing.SensorType
-final class CobblemonSensors {
+public final class CobblemonSensors {
     val sensors = mutableMapOf<String, SensorType<*>>()
 
     @JvmField

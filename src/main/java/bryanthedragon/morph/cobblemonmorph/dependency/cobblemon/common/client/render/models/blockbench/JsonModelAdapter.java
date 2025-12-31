@@ -19,12 +19,12 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since October 18th, 2022
  */
-class JsonModelAdapter<T : PosableModel>(private val constructor: (Bone) -> T) : InstanceCreator<T> {
-    companion object {
+public class JsonModelAdapter<T : PosableModel>(private val constructor: (Bone) -> T) : InstanceCreator<T> {
+    final class Companion {
         var modelPart: Bone? = null
         var model: PosableModel? = null
     }
-    override fun createInstance(type: Type): T {
+    override fun createInstance(Type type): T {
         val rootBone = modelPart!!
         return constructor(rootBone).also {
             model = it

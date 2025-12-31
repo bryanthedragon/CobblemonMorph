@@ -16,11 +16,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.M
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacket<MoveTemplate, MovesRegistrySyncPacket>(moves) {
+public class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacket<MoveTemplate, MovesRegistrySyncPacket>(moves) {
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: MoveTemplate) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: MoveTemplate) {
         buffer.writeString(entry.name)
         buffer.writeInt(entry.num)
         buffer.writeString(entry.elementalType.showdownId)
@@ -35,13 +35,13 @@ class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacke
         entry.effectChances.forEach { chance -> buffer.writeDouble(chance) }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): MoveTemplate {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): MoveTemplate {
         val name = buffer.readString()
         val num = buffer.readInt()
         val type = ElementalTypes.getOrException(buffer.readString())
         val damageCategory = DamageCategories.getOrException(buffer.readString())
         val power = buffer.readDouble()
-        val target = buffer.readEnumConstant(MoveTarget::class.java)
+        val target = buffer.readEnumConstant(MoveTarget.class)
         val accuracy = buffer.readDouble()
         val pp = buffer.readInt()
         val priority = buffer.readInt()
@@ -57,8 +57,8 @@ class MovesRegistrySyncPacket(moves: List<MoveTemplate>) : DataRegistrySyncPacke
         Moves.receiveSyncPacket(entries)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("moves_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf): MovesRegistrySyncPacket = MovesRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer): MovesRegistrySyncPacket = MovesRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 }

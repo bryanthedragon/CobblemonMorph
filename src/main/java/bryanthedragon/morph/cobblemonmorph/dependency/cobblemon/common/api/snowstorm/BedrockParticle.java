@@ -26,7 +26,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since January 4th, 2023
  */
-class BedrockParticle(
+public class BedrockParticle(
     var texture: ResourceLocation = ResourceLocation.parse("minecraft:textures/particles/bubble.png"),
     var material: ParticleMaterial = ParticleMaterial.ALPHA,
     var uvMode: ParticleUVMode = StaticParticleUVMode(),
@@ -71,7 +71,7 @@ class BedrockParticle(
     )
 
     // kill plane maybe
-    companion object {
+    final class Companion {
         val EXPRESSION_SET_CODEC = RecordCodecBuilder.create<ExpressionSet> { instance ->
             instance.group(
                 EXPRESSION_CODEC.fieldOf("sizeX").forGetter { it.sizeX },
@@ -147,7 +147,7 @@ class BedrockParticle(
         }
     }
 
-    fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(texture)
         buffer.writeString(material.name)
         ParticleUVMode.writeToBuffer(buffer, uvMode)
@@ -169,7 +169,7 @@ class BedrockParticle(
         timeline.encode(buffer)
     }
 
-    fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         texture = buffer.readIdentifier()
         material = ParticleMaterial.valueOf(buffer.readString())
         uvMode = ParticleUVMode.readFromBuffer(buffer)

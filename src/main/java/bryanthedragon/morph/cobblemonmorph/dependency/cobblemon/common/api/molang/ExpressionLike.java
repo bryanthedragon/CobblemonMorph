@@ -6,12 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang;
 
-import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.value.MoValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
-import com.mojang.serialization.Codec
+import com.bedrockk.molang.runtime.MoLangRuntime;
+import com.bedrockk.molang.runtime.value.MoValue;
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike;
+
+import com.mojang.serialization.Codec;
 
 /**
  * An object that can be given a [MoLangRuntime] to produce a single [MoValue]. This abstracts
@@ -21,24 +23,21 @@ import com.mojang.serialization.Codec
  * @author Hiroku
  * @since October 22nd, 2023
  */
-interface ExpressionLike {
-    override fun toString(): String
+public interface ExpressionLike {
+    public String toString();
+
     /** Produces a [MoValue] for a [MoLangRuntime] to supply an environment. */
-    fun resolve(runtime: MoLangRuntime, context: Map<String, MoValue> = runtime.environment.context?.map ?: hashMapOf()): MoValue
-    fun getString(): String = toString()
+    public MoValue resolve(MoLangRuntime runtime, Map<String, MoValue> context = runtime.environment.context?.map ?: hashMapOf());
+    String getString() = toString();
 
-    fun resolveDouble(runtime: MoLangRuntime) = resolve(runtime).asDouble()
-    fun resolveFloat(runtime: MoLangRuntime) = resolveDouble(runtime).toFloat()
-    fun resolveString(runtime: MoLangRuntime) = resolve(runtime).asString()
-    fun resolveInt(runtime: MoLangRuntime) = resolveDouble(runtime).toInt()
-    fun resolveBoolean(runtime: MoLangRuntime) = resolveDouble(runtime) == 1.0
-    fun resolveObject(runtime: MoLangRuntime) = resolve(runtime) as ObjectValue<*>
+    fun resolveDouble(MoLangRuntime runtime) = resolve(runtime).asDouble();
+    fun resolveFloat(MoLangRuntime runtime) = resolveDouble(runtime).toFloat();
+    fun resolveString(MoLangRuntime runtime) = resolve(runtime).asString();
+    fun resolveInt(MoLangRuntime runtime) = resolveDouble(runtime).toInt();
+    fun resolveBoolean(MoLangRuntime runtime) = resolveDouble(runtime) == 1.0;
+    fun resolveObject(MoLangRuntime runtime) = resolve(runtime) as ObjectValue<*>;
 
-    companion object {
-        val CODEC: Codec<ExpressionLike> = Codec.STRING.xmap({
-            it.asExpressionLike()
-        }) {
-            it.getString()
-        }
+    final class Companion {
+        public final Codec<ExpressionLike> CODEC = Codec.STRING.xmap({it.asExpressionLike();}) { it.getString(); }
     }
 }

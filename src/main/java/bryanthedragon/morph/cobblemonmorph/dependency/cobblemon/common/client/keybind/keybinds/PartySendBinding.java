@@ -32,7 +32,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ClipContext
 import kotlin.math.pow
-final class PartySendBinding : CobblemonBlockingKeyBinding(
+public final class PartySendBinding : CobblemonBlockingKeyBinding(
     "key.cobblemon.throwpartypokemon",
     InputConstants.Type.KEYSYM,
     InputConstants.KEY_R,
@@ -99,9 +99,9 @@ final class PartySendBinding : CobblemonBlockingKeyBinding(
         }
     }
 
-    private fun checkForTargetInteractions(player: LocalPlayer, selectedPartyPokemon: Pokemon) {
+    private fun checkForTargetInteractions(player: LocalPlayer, selectedPartyPokemon pokemon) {
         val targetEntity = player.traceFirstEntityCollision(
-            entityClass = LivingEntity::class.java,
+            entityClass = LivingEntity.class,
             ignoreEntity = player,
             maxDistance = Cobblemon.config.battleSpectateMaxDistance,
             collideBlock = ClipContext.Fluid.NONE)
@@ -112,12 +112,12 @@ final class PartySendBinding : CobblemonBlockingKeyBinding(
         }
     }
 
-    private fun canSendOutPokemon(player: LocalPlayer, target: LivingEntity?): Boolean {
+    private fun canSendOutPokemon(player: LocalPlayer, LivingEntity target?): Boolean {
         if (isRidingPokemon(player, ignoreControlling = true)) return false
         return target == null || (target is PokemonEntity && target.ownerUUID == player.uuid)
     }
 
-    private fun processEntityTarget(player: LocalPlayer, pokemon: Pokemon, entity: LivingEntity?) {
+    private fun processEntityTarget(player: LocalPlayer, Pokemon pokemon, LivingEntity entity?) {
         if (entity == null) return
         if (!canProcessEntityTarget(player, entity)) return
         when (entity) {
@@ -133,7 +133,7 @@ final class PartySendBinding : CobblemonBlockingKeyBinding(
         }
     }
 
-    private fun canProcessEntityTarget(player: LocalPlayer, target: LivingEntity): Boolean {
+    private fun canProcessEntityTarget(player: LocalPlayer, LivingEntity target): Boolean {
         return when (target) {
             is Player -> !isRidingPokemon(player)
             is PokemonEntity -> !isRidingPokemon(player, ignoreControlling = true)
@@ -141,7 +141,7 @@ final class PartySendBinding : CobblemonBlockingKeyBinding(
         }
     }
 
-    private fun canAttemptDismount(player: LocalPlayer, selectedPartyPokemon: Pokemon?): Boolean {
+    private fun canAttemptDismount(player: LocalPlayer, selectedPartyPokemon pokemon?): Boolean {
         if (player.vehicle !is PokemonEntity) return false
         val vehicle = player.vehicle as PokemonEntity
         if (player != vehicle.controllingPassenger) {
@@ -163,7 +163,7 @@ final class PartySendBinding : CobblemonBlockingKeyBinding(
         return true
     }
 
-    private fun isRidingSelectedPokemon(player: LocalPlayer, selectedPartyPokemon: Pokemon, ignoreControlling: Boolean = false): Boolean {
+    private fun isRidingSelectedPokemon(player: LocalPlayer, selectedPartyPokemon pokemon, ignoreControlling: Boolean = false): Boolean {
         if (!player.isPassenger) return false
         if (player.vehicle !is PokemonEntity) return false
         val vehicle = player.vehicle as PokemonEntity

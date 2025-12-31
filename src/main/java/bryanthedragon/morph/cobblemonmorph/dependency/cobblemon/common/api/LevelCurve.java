@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api
  * @author Hiroku
  * @since March 21st, 2022
  */
-interface LevelCurve {
+public interface LevelCurve {
     fun getExperience(level: Int): Int
     fun getLevel(experience: Int): Int
 }
@@ -31,7 +31,7 @@ interface LevelCurve {
  * @author Hiroku
  * @since March 21st, 2022
  */
-class CachedLevelThresholds(
+public class CachedLevelThresholds(
     val levelLimit: Int = 1000,
     val experienceToLevel: (Int) -> Int
 ) {

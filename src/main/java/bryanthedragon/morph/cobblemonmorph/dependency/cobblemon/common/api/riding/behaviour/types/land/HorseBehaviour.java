@@ -52,8 +52,8 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 
-class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
-    companion object {
+public class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
+    final class Companion {
         val KEY = cobblemonResource("land/horse")
     }
 
@@ -564,7 +564,7 @@ class HorseBehaviour : RidingBehaviour<HorseSettings, HorseState> {
     }
 }
 
-class HorseSettings : RidingBehaviourSettings {
+public class HorseSettings : RidingBehaviourSettings {
     override val key = HorseBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -599,7 +599,7 @@ class HorseSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
@@ -615,7 +615,7 @@ class HorseSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(canSprint)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
@@ -632,7 +632,7 @@ class HorseSettings : RidingBehaviourSettings {
     }
 }
 
-class HorseState : RidingBehaviourState() {
+public class HorseState : RidingBehaviourState() {
     var sprinting = ridingState(false, Side.CLIENT)
     var walking = ridingState(false, Side.BOTH)
     var sprintToggleable = ridingState(false, Side.CLIENT)

@@ -25,7 +25,7 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since May 22nd, 2023
  */
-class SpawnGenericBedrockPacket(
+public class SpawnGenericBedrockPacket(
     val category: ResourceLocation,
     val aspects: Set<String>,
     val poseType: PoseType,
@@ -35,7 +35,7 @@ class SpawnGenericBedrockPacket(
     val startAge: Int,
     vanillaSpawnPacket: ClientboundAddEntityPacket
 ) : SpawnExtraDataEntityPacket<SpawnGenericBedrockPacket, GenericBedrockEntity>(vanillaSpawnPacket) {
-    override val id: ResourceLocation = ID
+    override val ResourceLocation id = ID
 
     override fun applyData(entity: GenericBedrockEntity, level: ClientLevel) {
         entity.category = this.category
@@ -49,9 +49,9 @@ class SpawnGenericBedrockPacket(
         (entity.delegate as GenericBedrockClientDelegate).updateAge(startAge)
     }
 
-    override fun checkType(entity: Entity): Boolean = entity is GenericBedrockEntity
+    override fun checkType(Entity entity): Boolean = entity is GenericBedrockEntity
 
-    override fun encodeEntityData(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeEntityData(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(this.category)
         buffer.writeSizedInt(size = IntSize.U_BYTE, poseType.ordinal)
         buffer.writeFloat(scale)
@@ -61,9 +61,9 @@ class SpawnGenericBedrockPacket(
         buffer.writeCollection(aspects) { _, aspect -> buffer.writeString(aspect) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("spawn_generic_bedrock_entity")
-        fun decode(buffer: RegistryFriendlyByteBuf): SpawnGenericBedrockPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SpawnGenericBedrockPacket {
             val category = buffer.readIdentifier()
             val poseType = PoseType.entries[buffer.readSizedInt(IntSize.U_BYTE)]
             val scale = buffer.readFloat()

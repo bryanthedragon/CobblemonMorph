@@ -47,8 +47,8 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 
-class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
-    companion object {
+public class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
+    final class Companion {
         val KEY = cobblemonResource("liquid/boat")
     }
 
@@ -403,7 +403,7 @@ class BoatBehaviour : RidingBehaviour<BoatSettings, BoatState> {
     }
 }
 
-class BoatSettings : RidingBehaviourSettings {
+public class BoatSettings : RidingBehaviourSettings {
     override val key = BoatBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
@@ -442,7 +442,7 @@ class BoatSettings : RidingBehaviourSettings {
 
     var surfaceLevelOffset: Expression? = null
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
@@ -459,7 +459,7 @@ class BoatSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(surfaceLevelOffset)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
@@ -477,7 +477,7 @@ class BoatSettings : RidingBehaviourSettings {
     }
 }
 
-class BoatState : RidingBehaviourState() {
+public class BoatState : RidingBehaviourState() {
     val deltaRotation = ridingState(0.0, Side.CLIENT)
     val jumpBuffer = ridingState(-1, Side.CLIENT)
     val staminaBuffer = ridingState(0, Side.CLIENT)

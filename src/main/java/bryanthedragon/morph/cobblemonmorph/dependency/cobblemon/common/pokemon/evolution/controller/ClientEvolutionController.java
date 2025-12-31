@@ -23,8 +23,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asTr
 import com.mojang.serialization.Codec
 import net.minecraft.client.Minecraft
 
-class ClientEvolutionController(
-    private val pokemon: Pokemon,
+public class ClientEvolutionController(
+    private val Pokemon pokemon,
     evolutions: Set<EvolutionDisplay>,
 ) : EvolutionController<EvolutionDisplay, ClientEvolutionController.Intermediate> {
     private val evolutions = evolutions.toMutableSet()
@@ -88,10 +88,10 @@ class ClientEvolutionController(
     }
 
     record Intermediate(val evolutions: Set<EvolutionDisplay>): PreProcessor {
-        override fun create(pokemon: Pokemon): ClientEvolutionController = ClientEvolutionController(pokemon, this.evolutions)
+        override fun create(Pokemon pokemon): ClientEvolutionController = ClientEvolutionController(pokemon, this.evolutions)
     }
 
-    companion object {
+    final class Companion {
         @JvmStatic
         val CODEC: Codec<Intermediate> = EvolutionDisplay.CODEC.listOf()
             .xmap(

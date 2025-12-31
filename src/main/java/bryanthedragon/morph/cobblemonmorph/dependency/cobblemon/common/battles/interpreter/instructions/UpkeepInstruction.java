@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.d
  * @author Hiroku
  * @since March 12th, 2022
  */
-class UpkeepInstruction : InterpreterInstruction {
+public class UpkeepInstruction : InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
         battle.dispatch {
             battle.actors.forEach { it.upkeep() }

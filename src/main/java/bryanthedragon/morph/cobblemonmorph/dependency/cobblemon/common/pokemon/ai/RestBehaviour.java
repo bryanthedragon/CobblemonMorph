@@ -23,7 +23,7 @@ import net.minecraft.world.level.material.Fluid
  * @author Hiroku
  * @since July 16th, 2022
  */
-class RestBehaviour {
+public class RestBehaviour {
     val canSleep = false
     val times = TimeRange.timeRanges["night"]!!
     val blocks = mutableListOf<RegistryLikeCondition<Block>>()

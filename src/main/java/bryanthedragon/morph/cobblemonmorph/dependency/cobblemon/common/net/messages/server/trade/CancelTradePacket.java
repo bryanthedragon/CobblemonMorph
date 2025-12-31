@@ -12,12 +12,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.N
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class CancelTradePacket : NetworkPacket<CancelTradePacket> {
-    companion object {
+public class CancelTradePacket : NetworkPacket<CancelTradePacket> {
+    final class Companion {
         val ID = cobblemonResource("cancel_trade")
-        fun decode(buffer: RegistryFriendlyByteBuf) = CancelTradePacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = CancelTradePacket()
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
 }

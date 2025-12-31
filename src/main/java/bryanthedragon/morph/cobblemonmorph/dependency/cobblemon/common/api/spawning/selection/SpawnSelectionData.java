@@ -20,13 +20,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @author Hiroku
  * @since April 21st, 2025
  */
-interface SpawnSelectionData {
+public interface SpawnSelectionData {
     val context: MutableMap<String, Any>
     val spawnActions: MutableList<SpawnAction<*>>
     fun removeSpawnDetails(shouldRemove: (SpawnDetail) -> Boolean)
     fun removeSpawnablePositions(shouldRemove: (SpawnDetail, SpawnablePosition) -> Boolean)
 
-    companion object {
+    final class Companion {
         val EMPTY = object : SpawnSelectionData {
             override val context: MutableMap<String, Any> = mutableMapOf()
             override val spawnActions: MutableList<SpawnAction<*>> = mutableListOf()

@@ -24,13 +24,13 @@ import net.minecraft.world.entity.ai.sensing.SensorType
  * @author Hiroku
  * @since June 27th, 2025
  */
-class AddMemoriesAndSensorsConfig : BehaviourConfig {
+public class AddMemoriesAndSensorsConfig : BehaviourConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val memories: Set<MemoryModuleType<*>> = emptySet()
     val sensors: Set<SensorType<*>> = mutableSetOf()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
-    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
+    override fun configure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (!checkCondition(behaviourConfigurationContext, condition)) return
         behaviourConfigurationContext.addMemories(memories)
         behaviourConfigurationContext.addSensors(sensors)

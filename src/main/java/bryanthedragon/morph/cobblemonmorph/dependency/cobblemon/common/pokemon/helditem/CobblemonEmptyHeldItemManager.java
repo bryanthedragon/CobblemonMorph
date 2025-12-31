@@ -20,7 +20,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.p
  *
  * @author Licious
  * @since January 6th, 2022
- */final class CobblemonEmptyHeldItemManager : BaseCobblemonHeldItemManager() {
+ */
+public final class CobblemonEmptyHeldItemManager : BaseCobblemonHeldItemManager() {
     override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {}
     override fun handleEndInstruction(pokemon: BattlePokemon, battle: PokemonBattle, battleMessage: BattleMessage) {}
 }

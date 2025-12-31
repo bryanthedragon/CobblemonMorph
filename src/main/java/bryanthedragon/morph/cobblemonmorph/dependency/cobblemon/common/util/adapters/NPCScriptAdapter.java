@@ -17,17 +17,17 @@ import com.google.gson.JsonElement
 import com.mojang.datafixers.util.Either
 import java.lang.reflect.Type
 import net.minecraft.resources.ResourceLocation
-final class NPCScriptAdapter : JsonDeserializer<Either<ResourceLocation, ExpressionLike>> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Either<ResourceLocation, ExpressionLike> {
+public final class NPCScriptAdapter : JsonDeserializer<Either<ResourceLocation, ExpressionLike>> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): Either<ResourceLocation, ExpressionLike> {
         return if (json.isJsonPrimitive) {
             try {
                 val identifier = json.asString.asIdentifierDefaultingNamespace()
                 Either.left(identifier)
-            } catch (exception: Exception) {
+            } catch (Exception exception) {
                 Either.right(json.asString.asExpressionLike())
             }
         } else {
-            Either.right(context.deserialize(json, ExpressionLike::class.java))
+            Either.right(context.deserialize(json, ExpressionLike.class))
         }
     }
 }

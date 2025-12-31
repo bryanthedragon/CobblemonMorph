@@ -6,14 +6,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon;
 
-import com.bedrockk.molang.runtime.value.DoubleValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.moLangFunctionMap
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import net.minecraft.server.level.ServerPlayer
+import com.bedrockk.molang.runtime.value.DoubleValue;
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.moLangFunctionMap;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Event that is fired when a Player mounts a Pokemon to a shoulder
@@ -21,17 +23,7 @@ import net.minecraft.server.level.ServerPlayer
  * @author Qu
  * @since 2022-01-26
  */
-record ShoulderMountEvent(
-    val player: ServerPlayer,
-    val pokemon: Pokemon,
-    val isLeft: Boolean
-) : Cancelable() {
-    val context = mutableMapOf(
-        "player" to (player.asMoLangValue() ?: DoubleValue.ZERO),
-        "pokemon" to pokemon.struct,
-        "is_left" to DoubleValue(if (isLeft) 1.0 else 0.0),
-    )
-    val functions = moLangFunctionMap(
-        cancelFunc
-    )
+public record ShoulderMountEvent(ServerPlayer player, Pokemon pokemon, Boolean isLeft) : Cancelable() {
+    public final context = mutableMapOf("player" to (player.asMoLangValue() ?: DoubleValue.ZERO), "pokemon" to pokemon.struct, "is_left" to DoubleValue(if (isLeft) 1.0 else 0.0))
+    public final functions = moLangFunctionMap(cancelFunc)
 }

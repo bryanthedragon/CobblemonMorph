@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-final class PokemonMeleeTask {
+public final class PokemonMeleeTask {
     fun create(cooldownBetweenAttacks: Int): OneShot<PokemonEntity> {
         return BehaviorBuilder.create { context ->
             context.group(

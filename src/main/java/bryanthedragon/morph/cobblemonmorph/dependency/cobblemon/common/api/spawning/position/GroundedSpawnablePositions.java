@@ -27,13 +27,13 @@ import net.minecraft.world.level.block.state.BlockState
  */
 abstract class FlooredSpawnablePosition(
     cause: SpawnCause,
-    world: ServerLevel,
-    position: BlockPos,
+    ServerLevel world,
+    BlockPos position,
     light: Int,
     skyLight: Int,
     canSeeSky: Boolean,
     influences: MutableList<SpawningInfluence>,
-    height: Int,
+    Int height,
     nearbyBlocks: List<BlockState>,
     zone: SpawningZone
 ) : AreaSpawnablePosition(cause, world, position, light, skyLight, canSeeSky, influences, height, nearbyBlocks, zone) {
@@ -50,13 +50,13 @@ abstract class FlooredSpawnablePosition(
  */
 open class GroundedSpawnablePosition(
     cause: SpawnCause,
-    world: ServerLevel,
-    position: BlockPos,
+    ServerLevel world,
+    BlockPos position,
     light: Int,
     skyLight: Int,
     canSeeSky: Boolean,
     influences: MutableList<SpawningInfluence>,
-    height: Int,
+    Int height,
     nearbyBlocks: List<BlockState>,
     zone: SpawningZone
 ) : FlooredSpawnablePosition(cause, world, position, light, skyLight, canSeeSky, influences, height, nearbyBlocks, zone)
@@ -69,17 +69,17 @@ open class GroundedSpawnablePosition(
  */
 open class SeafloorSpawnablePosition(
     cause: SpawnCause,
-    world: ServerLevel,
-    position: BlockPos,
+    ServerLevel world,
+    BlockPos position,
     light: Int,
     skyLight: Int,
     canSeeSky: Boolean,
     influences: MutableList<SpawningInfluence>,
-    height: Int,
+    Int height,
     nearbyBlocks: List<BlockState>,
     zone: SpawningZone
 ) : FlooredSpawnablePosition(cause, world, position, light, skyLight, canSeeSky, influences, height, nearbyBlocks, zone) {
-    override fun isSafeSpace(world: ServerLevel, pos: BlockPos, state: BlockState) = state.fluidState.`is`(FluidTags.WATER)
+    override fun isSafeSpace(ServerLevel world, (BlockPos pos, BlockState state) = state.fluidState.`is`(FluidTags.WATER)
 }
 
 /**
@@ -90,29 +90,29 @@ open class SeafloorSpawnablePosition(
  */
 open class LavafloorSpawnablePosition(
     cause: SpawnCause,
-    world: ServerLevel,
-    position: BlockPos,
+    ServerLevel world,
+    BlockPos position,
     light: Int,
     skyLight: Int,
     canSeeSky: Boolean,
     influences: MutableList<SpawningInfluence>,
-    height: Int,
+    Int height,
     nearbyBlocks: List<BlockState>,
     zone: SpawningZone
 ) : FlooredSpawnablePosition(cause, world, position, light, skyLight, canSeeSky, influences, height, nearbyBlocks, zone) {
-    override fun isSafeSpace(world: ServerLevel, pos: BlockPos, state: BlockState) = state.fluidState.`is`(FluidTags.LAVA)
+    override fun isSafeSpace(ServerLevel world, (BlockPos pos, BlockState state) = state.fluidState.`is`(FluidTags.LAVA)
 }
 
 open class SurfaceSpawnablePosition(
     cause: SpawnCause,
-    world: ServerLevel,
-    position: BlockPos,
+    ServerLevel world,
+    BlockPos position,
     light: Int,
     skyLight: Int,
     canSeeSky: Boolean,
     influences: MutableList<SpawningInfluence>,
-    height: Int,
-    val depth: Int,
+    Int height,
+    val Int depth,
     nearbyBlocks: List<BlockState>,
     zone: SpawningZone
 ) : FlooredSpawnablePosition(cause, world, position, light, skyLight, canSeeSky, influences, height, nearbyBlocks, zone)

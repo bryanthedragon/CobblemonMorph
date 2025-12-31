@@ -12,6 +12,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.server.level.ServerLevel
 
-interface TickingSpeciesFeature {
-    fun onSecondPassed(world: ServerLevel, pokemon: Pokemon, entity: PokemonEntity?)
+public interface TickingSpeciesFeature {
+    fun onSecondPassed(ServerLevel world, Pokemon pokemon, entity: PokemonEntity?)
 }

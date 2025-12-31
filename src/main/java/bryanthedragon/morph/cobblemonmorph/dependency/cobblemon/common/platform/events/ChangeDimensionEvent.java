@@ -11,4 +11,4 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
-class ChangeDimensionEvent(val player: ServerPlayer, val origin: ServerLevel?, val destination: ServerLevel?)
+public class ChangeDimensionEvent(val ServerPlayer player, val origin: ServerLevel?, val destination: ServerLevel?)

@@ -6,186 +6,176 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
-import com.mojang.brigadier.arguments.ArgumentType
-import kotlin.reflect.KClass
-import net.minecraft.commands.synchronization.ArgumentTypeInfo
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.MinecraftServer
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.packs.PackType
-import net.minecraft.server.packs.resources.PreparableReloadListener
-import net.minecraft.tags.TagKey
-import net.minecraft.world.level.GameRules
-import net.minecraft.world.level.ItemLike
-import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.levelgen.GenerationStep
-import net.minecraft.world.level.levelgen.placement.PlacedFeature
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.mod.CobblemonModAPI;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.network.CobblemonNetworkManager;
 
-interface CobblemonImplementation {
-    val modAPI: ModAPI
+import com.mojang.brigadier.arguments.ArgumentType;
+
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+
+import java.util.Collection;
+
+public interface CobblemonImplementation {
+
+    CobblemonModAPI getModAPI();
 
     /**
-     *
+     * 
      */
-    val networkManager: NetworkManager
-
-    /**
-     * TODO
-     *
-     * @return
-     */
-    fun environment(): Environment
+    CobblemonNetworkManager getNetworkManager();
 
     /**
      * TODO
      *
-     * @param id
-     * @return
+     * @return The current environment.
      */
-    fun isModInstalled(id: String): Boolean
+    CobblemonEnvironment environment();
 
     /**
      * TODO
      *
+     * @param id The mod ID to check.
+     * @return True if the mod is installed, false otherwise.
      */
-    fun registerPermissionValidator()
+    boolean isModInstalled(String id);
 
     /**
      * TODO
-     *
      */
-    fun registerSoundEvents()
-
-    fun registerDataComponents()
-
-    fun registerEntityDataSerializers()
+    void registerPermissionValidator();
 
     /**
      * TODO
-     *
      */
-    fun registerItems()
+    void registerSoundEvents();
+
+    void registerDataComponents();
+
+    void registerEntityDataSerializers();
 
     /**
      * TODO
-     *
      */
-    fun registerBlocks()
+    void registerItems();
 
     /**
      * TODO
-     *
      */
-    fun registerEntityTypes()
+    void registerBlocks();
 
     /**
      * TODO
-     *
      */
-    fun registerEntityAttributes()
+    void registerEntityTypes();
 
     /**
      * TODO
-     *
      */
-    fun registerBlockEntityTypes()
-
-    fun registerPoiTypes()
-    /**
-     * TODO
-     *
-     */
-    fun registerVillagers()
-
-    fun registerRecipeSerializers()
-    fun registerRecipeTypes()
-
+    void registerEntityAttributes();
 
     /**
      * TODO
-     *
      */
-    fun registerWorldGenFeatures()
+    void registerBlockEntityTypes();
 
-    fun registerParticles()
+    void registerPoiTypes();
 
-    fun registerMenu()
+    /**
+     * TODO
+     */
+    void registerVillagers();
 
-    fun registerEntitySubPredicates()
+    void registerRecipeSerializers();
 
+    void registerRecipeTypes();
+
+    /**
+     * TODO
+     */
+    void registerWorldGenFeatures();
+
+    void registerParticles();
+
+    void registerMenu();
+
+    void registerEntitySubPredicates();
 
     /**
      * Add a feature to the current platform implementation.
      *
-     * @param feature The [PlacedFeature] being added.
-     * @param step The [GenerationStep.Feature] of this feature.
+     * @param feature  The [PlacedFeature] being added.
+     * @param step     The [GenerationStep.Decoration] of this feature.
      * @param validTag The [TagKey] required by the [Biome] for this feature to generate in, if null all biomes are valid.
      */
-    fun addFeatureToWorldGen(feature: ResourceKey<PlacedFeature>, step: GenerationStep.Decoration, validTag: TagKey<Biome>?)
+    void addFeatureToWorldGen(ResourceKey<PlacedFeature> feature, GenerationStep.Decoration step, TagKey<Biome> validTag);
 
     /**
      * TODO
      *
-     * @param A
-     * @param T
-     * @param identifier
-     * @param argumentClass
-     * @param serializer
+     * @param identifier    The resource location identifier.
+     * @param argumentClass The class of the argument type.
+     * @param serializer    The argument type info serializer.
+     * @param <A>           The argument type.
+     * @param <T>           The template type.
      */
-    fun <A : ArgumentType<*>, T : ArgumentTypeInfo.Template<A>> registerCommandArgument(identifier: ResourceLocation, argumentClass: KClass<A>, serializer: ArgumentTypeInfo<A, T>)
+    <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>> void registerCommandArgument(ResourceLocation identifier, Class<A> argumentClass, ArgumentTypeInfo<A, T> serializer);
 
     /**
      * TODO
      *
-     * @param T
-     * @param name
-     * @param category
-     * @param type
-     * @return
+     * @param name     The name of the game rule.
+     * @param category The category of the game rule.
+     * @param type     The type of the game rule.
+     * @param <T>      The game rule value type.
+     * @return The registered game rule key.
      */
-    fun <T : GameRules.Value<T>> registerGameRule(name: String, category: GameRules.Category, type: GameRules.Type<T>): GameRules.Key<T>
+    <T extends GameRules.Value<T>> GameRules.Key<T> registerGameRule(String name, GameRules.Category category, GameRules.Type<T> type);
+
+    /**
+     * TODO
+     */
+    void registerCriteria();
 
     /**
      * TODO
      *
-     * @param T
-     * @param criteria
-     * @return
+     * @param identifier   The resource location identifier.
+     * @param reloader     The reload listener.
+     * @param type         The pack type.
+     * @param dependencies The collection of dependencies.
      */
-    fun registerCriteria()
+    void registerResourceReloader(ResourceLocation identifier, PreparableReloadListener reloader, PackType type, Collection<ResourceLocation> dependencies);
 
     /**
      * TODO
      *
-     * @param identifier
-     * @param reloader
-     * @param type
-     * @param dependencies
+     * @return The Minecraft server instance, or null if not available.
      */
-    fun registerResourceReloader(identifier: ResourceLocation, reloader: PreparableReloadListener, type: PackType, dependencies: Collection<ResourceLocation>)
-
-    /**
-     * TODO
-     *
-     * @return
-     */
-    fun server(): MinecraftServer?
+    MinecraftServer server();
 
     /**
      * Registers an item to the [ComposterBlock].
      *
-     * @param item The [ItemLike] being registered.
+     * @param item   The [ItemLike] being registered.
      * @param chance The chance % of increasing the composter level, 0 to 1 expected.
      */
-    fun registerCompostable(item: ItemLike, chance: Float)
+    void registerCompostable(ItemLike item, float chance);
 }
 
-enum class ResourcePackActivationBehaviour {
-
+public enum ResourcePackActivationBehaviour {
     /**
      * The resource pack will start disabled.
      */
@@ -200,23 +190,5 @@ enum class ResourcePackActivationBehaviour {
      * The resource pack will always be enabled.
      * The user can reorder it but cannot remove it.
      */
-    ALWAYS_ENABLED;
-
-}
-
-enum class ModAPI {
-    FABRIC,
-    FORGE,
-    NEOFORGE
-}
-
-interface NetworkManager {
-    fun sendPacketToPlayer(player: ServerPlayer, packet: NetworkPacket<*>)
-
-    fun sendToServer(packet: NetworkPacket<*>)
-}
-
-enum class Environment {
-    CLIENT,
-    SERVER
+    ALWAYS_ENABLED
 }

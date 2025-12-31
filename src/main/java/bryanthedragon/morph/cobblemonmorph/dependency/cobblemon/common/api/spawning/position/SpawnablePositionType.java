@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @since January 31st, 2022
  */
 record SpawnablePositionType<T : SpawnablePosition>(
-    val name: String,
+    val String name,
     val clazz: Class<T>,
     val defaultCondition: String
 ) {

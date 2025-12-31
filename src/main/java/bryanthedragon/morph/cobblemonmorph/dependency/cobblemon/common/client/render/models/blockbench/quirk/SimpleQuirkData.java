@@ -8,7 +8,7 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.quirk
 
-class SimpleQuirkData : QuirkData() {
+public class SimpleQuirkData : QuirkData() {
     var nextOccurrenceSeconds = -1F
     var remainingLoops = 0
 }

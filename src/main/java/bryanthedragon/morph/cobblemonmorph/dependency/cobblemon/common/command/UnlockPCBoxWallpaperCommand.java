@@ -21,7 +21,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
-final class UnlockPCBoxWallpaperCommand {
+public final class UnlockPCBoxWallpaperCommand {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(Commands.literal("unlockpcboxwallpaper")
             .permission(CobblemonPermissions.UNLOCK_PC_BOX_WALLPAPER)
@@ -39,7 +39,7 @@ final class UnlockPCBoxWallpaperCommand {
         )
     }
 
-    private fun execute(ctx: CommandContext<CommandSourceStack>, playSound: Boolean): Int {
+    private fun execute(ctx: CommandContext<CommandSourceStack>, Boolean playSound): Int {
         val source = ctx.source
         val wallpaperId = UnlockablePCBoxWallpaperArgumentType.getUnlockablePCBoxWallpaper(ctx, "wallpaper")
         val player = EntityArgument.getPlayer(ctx, "player")
@@ -50,7 +50,7 @@ final class UnlockPCBoxWallpaperCommand {
             } else {
                 source.sendFailure(commandLang("unlockboxwallpaper.already", player.effectiveName(), wallpaperId.toString()))
             }
-        } catch (exception: Exception) {
+        } catch (Exception exception) {
             exception.printStackTrace()
         }
         return Command.SINGLE_SUCCESS

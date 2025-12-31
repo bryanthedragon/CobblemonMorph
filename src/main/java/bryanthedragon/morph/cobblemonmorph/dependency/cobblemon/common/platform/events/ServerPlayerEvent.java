@@ -30,12 +30,12 @@ import net.minecraft.world.item.ItemStack
  * @author Licious
  * @since February 15th, 2023
  */
-interface ServerPlayerEvent {
+public interface ServerPlayerEvent {
 
     /**
      * The [ServerPlayer] triggering the platform specific events.
      */
-    val player: ServerPlayer
+    val ServerPlayer player
 
     val context: MutableMap<String, MoValue>
         get() = mutableMapOf("player" to player.asMoLangValue())
@@ -43,18 +43,18 @@ interface ServerPlayerEvent {
     /**
      * Fired when the [player] logs in.
      */
-    record Login(override val player: ServerPlayer) : ServerPlayerEvent
+    record Login(override val ServerPlayer player) : ServerPlayerEvent
 
     /**
      * Fired when the [player] logs out.
      */
-    record Logout(override val player: ServerPlayer) : ServerPlayerEvent
+    record Logout(override val ServerPlayer player) : ServerPlayerEvent
 
     /**
      * Fired when the [player] dies.
      * If canceled the death will be prevented but healing is required in order to not be stuck in a loop.
      */
-    record Death(override val player: ServerPlayer) : ServerPlayerEvent, Cancelable()
+    record Death(override val ServerPlayer player) : ServerPlayerEvent, Cancelable()
 
     /**
      * Fired when the [player] right clicks a block.
@@ -64,7 +64,7 @@ interface ServerPlayerEvent {
      * @property hand The [InteractionHand] that hit the block.
      * @property face The [Direction] of the block if any.
      */
-    record RightClickBlock(override val player: ServerPlayer, val pos: BlockPos, val hand: InteractionHand, val face: Direction?) : ServerPlayerEvent, Cancelable() {
+    record RightClickBlock(override val ServerPlayer player, val (BlockPos pos, val hand: InteractionHand, val face: Direction?) : ServerPlayerEvent, Cancelable() {
         override val context: MutableMap<String, MoValue>
             get() = super.context.apply {
                 put("x", DoubleValue(pos.x))
@@ -85,7 +85,7 @@ interface ServerPlayerEvent {
      * @property hand The [InteractionHand] that clicked the [entity].
      * @property entity The [Entity] the [player] clicked.
      */
-    record RightClickEntity(override val player: ServerPlayer, val item: ItemStack, val hand: InteractionHand, val entity: Entity): ServerPlayerEvent, Cancelable() {
+    record RightClickEntity(override val ServerPlayer player, val item: ItemStack, val hand: InteractionHand, val Entity entity): ServerPlayerEvent, Cancelable() {
         override val context: MutableMap<String, MoValue>
             get() = super.context.apply {
                 put("item", item.asMoLangValue(player.registryAccess()))
@@ -96,7 +96,7 @@ interface ServerPlayerEvent {
         val functions = moLangFunctionMap(cancelFunc)
     }
 
-    record AdvancementEarned(override val player: ServerPlayer, val advancement: AdvancementHolder): ServerPlayerEvent {
+    record AdvancementEarned(override val ServerPlayer player, val advancement: AdvancementHolder): ServerPlayerEvent {
         override val context: MutableMap<String, MoValue>
             get() = super.context.apply {
                 put("advancement", StringValue(advancement.id.toString()))

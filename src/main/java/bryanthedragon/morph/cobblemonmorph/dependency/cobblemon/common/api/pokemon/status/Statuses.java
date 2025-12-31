@@ -28,7 +28,8 @@ import net.minecraft.resources.ResourceLocation
  * Its because volatile is a reserved keyword in Java. Cant use it in a package name
  *
  * @author Deltric
- */final class Statuses {
+ */
+public final class Statuses {
     private val persistentStatuses = mutableListOf<Status>()
     private val volatileStatuses = mutableListOf<Status>()
     private val allStatuses = mutableListOf<Status>()

@@ -23,7 +23,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class MarkGiveCommand {
+public final class MarkGiveCommand {
 
     private const val NAME = "givemark"
     private const val PLAYER = "player"
@@ -43,7 +43,7 @@ final class MarkGiveCommand {
         dispatcher.register(command)
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player) : Int {
         val pokemon = PartySlotArgumentType.getPokemonOf(context, SLOT, player)
         val mark = MarkArgumentType.getMark(context, MARK)
 

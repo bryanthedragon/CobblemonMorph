@@ -14,9 +14,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.Poke
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Nature
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.ItemStack
-final class PokePuffUtils {
+public final class PokePuffUtils {
 
-    fun calculateFriendshipChange(stack: ItemStack, nature: Nature): Int {
+    fun calculateFriendshipChange(ItemStack stack, nature: Nature): Int {
         val dominantFlavour = getDominantFlavour(stack) ?: return 0
         val isNeutralNature = nature.favouriteFlavour == nature.dislikedFlavour
 
@@ -30,7 +30,7 @@ final class PokePuffUtils {
         return (baseFriendship / multiplier).toInt()
     }
 
-    fun calculateBaseFriendship(stack: ItemStack): Pair<Double, Double> {
+    fun calculateBaseFriendship(ItemStack stack): Pair<Double, Double> {
         val ingredientIds = stack.get(CobblemonItemComponents.INGREDIENT)?.ingredientIds ?: emptyList()
         var baseFriendship = 0.0
 
@@ -58,7 +58,7 @@ final class PokePuffUtils {
         return finalBaseFriendship to multiplier
     }
 
-    fun getDominantFlavour(stack: ItemStack): Flavour? {
+    fun getDominantFlavour(ItemStack stack): Flavour? {
         val flavours = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours ?: return null
         val max = flavours.values.maxOrNull() ?: return null
         val dominant = flavours.filterValues { it == max }.keys
@@ -81,12 +81,12 @@ final class PokePuffUtils {
         }
     }
 
-    fun getFriendshipChangeLiked(stack: ItemStack): Int {
+    fun getFriendshipChangeLiked(ItemStack stack): Int {
         val (baseFriendship) = calculateBaseFriendship(stack)
         return (baseFriendship / LIKED_FLAVOR_MULTIPLIER).toInt()
     }
 
-    fun getFriendshipChangeDisliked(stack: ItemStack): Int {
+    fun getFriendshipChangeDisliked(ItemStack stack): Int {
         val (baseFriendship) = calculateBaseFriendship(stack)
         return (baseFriendship / DISLIKED_FLAVOR_MULTIPLIER).toInt()
     }

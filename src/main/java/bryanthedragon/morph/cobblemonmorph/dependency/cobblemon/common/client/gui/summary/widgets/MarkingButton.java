@@ -18,7 +18,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.resources.ResourceLocation
 
-class MarkingButton(
+public class MarkingButton(
     val buttonX: Number,
     val buttonY: Number,
     var buttonState: Int,
@@ -27,7 +27,7 @@ class MarkingButton(
     val clickAction: OnPress
 ): Button(buttonX.toInt(), buttonY.toInt(), (SIZE / 2), (SIZE / 2), "".text(), clickAction, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val SIZE = 12
         const val SCALE = 0.5F
     }

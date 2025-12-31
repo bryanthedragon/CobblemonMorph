@@ -13,12 +13,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 import com.mojang.blaze3d.vertex.PoseStack
-class PokeNavFillerButton(
+public class PokeNavFillerButton(
     posX: Int, posY: Int,
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     pXTexStart: Int, pYTexStart: Int, pYDiffText: Int,
-    pTextureWidth: Int, pTextureHeight: Int
+    pTextureInt width, pTextureInt height
 ): PokeNavImageButton(posX, posY, pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffText, FILLER, pTextureWidth, pTextureHeight, {}, "".text()) {
 
     override fun renderWidget(context: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTicks: Float) {
@@ -39,7 +39,7 @@ class PokeNavFillerButton(
         )
     }
 
-    companion object {
+    final class Companion {
 
         const val RED = .28235
         const val GREEN = .29412

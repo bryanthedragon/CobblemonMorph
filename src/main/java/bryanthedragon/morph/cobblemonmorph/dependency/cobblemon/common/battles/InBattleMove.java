@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class InBattleMove {
+public class InBattleMove {
     lateinit var id: String
     lateinit var move: String
     var pp: Int = 100
@@ -21,14 +21,14 @@ class InBattleMove {
     var disabled: Boolean = false
     var gimmickMove: InBattleGimmickMove? = null
 
-    companion object {
-        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): InBattleMove {
+    final class Companion {
+        fun loadFromBuffer(RegistryFriendlyByteBuf buffer): InBattleMove {
             return InBattleMove().apply {
                 id = buffer.readString()
                 move = buffer.readString()
                 pp = buffer.readSizedInt(IntSize.U_BYTE)
                 maxpp = buffer.readSizedInt(IntSize.U_BYTE)
-                target = buffer.readEnumConstant(MoveTarget::class.java)
+                target = buffer.readEnumConstant(MoveTarget.class)
                 disabled = buffer.readBoolean()
             }
         }
@@ -37,7 +37,7 @@ class InBattleMove {
     fun getTargets(user: ActiveBattlePokemon) = target.targetList(user)
     fun canBeUsed() = (pp > 0 && !disabled) || mustBeUsed() // Second case is like Thrash, forced choice
     fun mustBeUsed() = maxpp == 100 && pp == 100 && target == MoveTarget.self
-    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun saveToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(id)
         buffer.writeString(move)
         buffer.writeSizedInt(IntSize.U_BYTE, pp)
@@ -48,22 +48,22 @@ class InBattleMove {
 }
 
 // Defined in sim/battle-actions.ts canZMove and getMaxMove
-class InBattleGimmickMove {
+public class InBattleGimmickMove {
     lateinit var move: String
     var target: MoveTarget = MoveTarget.self
     var disabled: Boolean = false
 
-    companion object {
-        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): InBattleGimmickMove {
+    final class Companion {
+        fun loadFromBuffer(RegistryFriendlyByteBuf buffer): InBattleGimmickMove {
             return InBattleGimmickMove().apply {
                 move = buffer.readString()
-                target = buffer.readEnumConstant(MoveTarget::class.java)
+                target = buffer.readEnumConstant(MoveTarget.class)
                 disabled = buffer.readBoolean()
             }
         }
     }
 
-    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun saveToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(move)
         buffer.writeEnumConstant(target)
         buffer.writeBoolean(disabled)

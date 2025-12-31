@@ -17,4 +17,4 @@ import com.google.gson.JsonSerializer
  * @author Licious
  * @since November 6th, 2022
  */
-interface StatTypeAdapter : JsonDeserializer<Stat>, JsonSerializer<Stat>
+public interface StatTypeAdapter : JsonDeserializer<Stat>, JsonSerializer<Stat>

@@ -16,8 +16,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 
-class DescriptionWidget(descX: Int, descY: Int): InfoTextScrollWidget(pX = descX, pY = descY) {
-    companion object {
+public class DescriptionWidget(descX: Int, descY: Int): InfoTextScrollWidget(pX = descX, pY = descY) {
+    final class Companion {
         private val unknownIcon = cobblemonResource("textures/gui/pokedex/pokedex_slot_unknown.png")
     }
 

@@ -57,8 +57,8 @@ abstract class GroundedTypeSpawningCondition<T : GroundedSpawnablePosition> : Ar
  * @since February 7th, 2022
  */
 open class GroundedSpawningCondition : GroundedTypeSpawningCondition<GroundedSpawnablePosition>() {
-    override fun spawnablePositionClass() = GroundedSpawnablePosition::class.java
-    companion object {
+    override fun spawnablePositionClass() = GroundedSpawnablePosition.class
+    final class Companion {
         const val NAME = "grounded"
     }
 }

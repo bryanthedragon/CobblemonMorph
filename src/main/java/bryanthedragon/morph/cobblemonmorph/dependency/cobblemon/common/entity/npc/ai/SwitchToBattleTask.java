@@ -22,7 +22,8 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
  *
  * @author Hiroku
  * @since February 24th, 2024
- */final class SwitchToBattleTask {
+ */
+public final class SwitchToBattleTask {
     fun create(): OneShot<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(

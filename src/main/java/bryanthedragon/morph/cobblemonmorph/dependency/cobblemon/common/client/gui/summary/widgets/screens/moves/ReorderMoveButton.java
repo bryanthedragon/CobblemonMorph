@@ -18,13 +18,13 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 
-class ReorderMoveButton(
+public class ReorderMoveButton(
     val pX: Int, val pY: Int,
     private val isUp: Boolean,
     onPress: OnPress
 ): Button((pX - OFFSET_X).toInt(), (pY + (if (isUp) OFFSET_Y_UP else OFFSET_Y_DOWN)), (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val WIDTH = 8
         private const val HEIGHT = 6
         private const val OFFSET_X = 11.5F

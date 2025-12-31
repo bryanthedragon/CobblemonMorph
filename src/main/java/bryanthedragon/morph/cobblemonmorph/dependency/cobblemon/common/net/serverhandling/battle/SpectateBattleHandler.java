@@ -25,12 +25,12 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.ClipContext
 import org.apache.logging.log4j.LogManager
-final class SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> {
+public final class SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePacket> {
     val LOGGER = LogManager.getLogger()
     override fun handle(
         packet: SpectateBattlePacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         val battle = BattleRegistry.getBattleByParticipatingPlayerId(packet.targetedEntityId)
         if (battle != null && Cobblemon.config.allowSpectating) {
@@ -39,7 +39,7 @@ final class SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePac
             // Check los and range
             val targetedPlayerEntity = packet.targetedEntityId.getPlayer() ?: return
             if (player.traceFirstEntityCollision(
-                            entityClass = LivingEntity::class.java,
+                            entityClass = LivingEntity.class,
                             ignoreEntity = player,
                             maxDistance = Cobblemon.config.battleSpectateMaxDistance,
                             collideBlock = ClipContext.Fluid.NONE) != targetedPlayerEntity) {
@@ -57,7 +57,7 @@ final class SpectateBattleHandler : ServerNetworkPacketHandler<SpectateBattlePac
         }
     }
 
-    fun spectateBattle(target: ServerPlayer, player: ServerPlayer) {
+    fun spectateBattle(target: ServerPlayer, ServerPlayer player) {
         if (player == target) {
             player.sendSystemMessage(lang("command.spectatebattle.self_spectate_disallowed").red())
             return

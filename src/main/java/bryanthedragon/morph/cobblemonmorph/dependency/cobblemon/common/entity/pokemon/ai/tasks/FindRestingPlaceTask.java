@@ -18,7 +18,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.phys.AABB
-final class FindRestingPlaceTask {
+public final class FindRestingPlaceTask {
     fun create(horizontalSearchDistance: Int, verticalSearchDistance: Int): OneShot<PokemonEntity> {
         return BehaviorBuilder.create {
             it.group(

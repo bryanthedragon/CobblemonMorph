@@ -24,9 +24,10 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since June 20th, 2022
- */final class SpawnBucketAdapter : JsonDeserializer<SpawnBucket>, JsonSerializer<SpawnBucket> {
-    override fun serialize(bucket: SpawnBucket, type: Type, ctx: JsonSerializationContext) = JsonPrimitive(bucket.name)
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): SpawnBucket {
+ */
+public final class SpawnBucketAdapter : JsonDeserializer<SpawnBucket>, JsonSerializer<SpawnBucket> {
+    override fun serialize(bucket: SpawnBucket, Type type, JsonSerializationContext ctx) = JsonPrimitive(bucket.name)
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): SpawnBucket {
         return Cobblemon.bestSpawner.config.buckets.find { it.name == json.asString }
             ?: throw IllegalStateException("Spawn referred to invalid spawn bucket: ${json.asString}. Is it missing from the config?")
     }

@@ -30,45 +30,45 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since November 29th, 2021
  */
-open class PokemonStoreManager {
+public open class PokemonStoreManager {
     private val factories = PrioritizedList<PokemonStoreFactory>()
 
-    open fun registerFactory(priority: Priority, factory: PokemonStoreFactory) {
+    open fun registerFactory(Priority priority, factory: PokemonStoreFactory) {
         factories.add(priority, factory)
     }
 
-    open fun unregisterFactory(factory: PokemonStoreFactory, registryAccess: RegistryAccess) {
+    open fun unregisterFactory(factory: PokemonStoreFactory, RegistryAccess registryAccess) {
         factory.shutdown(registryAccess)
         factories.remove(factory)
     }
 
-    open fun unregisterAll(registryAccess: RegistryAccess) {
+    open fun unregisterAll(RegistryAccess registryAccess) {
         factories.toList().forEach { unregisterFactory(it, registryAccess) }
     }
 
-    open fun getParty(player: ServerPlayer) = getParty(player.uuid, player.registryAccess())
+    open fun getParty(ServerPlayer player) = getParty(player.uuid, player.registryAccess())
 
-    open fun getParty(playerID: UUID, registryAccess: RegistryAccess): PlayerPartyStore {
+    open fun getParty(playerID: UUID, RegistryAccess registryAccess): PlayerPartyStore {
         return factories.firstNotNullOfOrNull { it.getPlayerParty(playerID, registryAccess) }
             ?: throw NoPokemonStoreException(
                 "No factory was able to provide a party for $playerID - this should not be possible unless someone has removed the default provider!"
             )
     }
 
-    open fun getPC(player: ServerPlayer) = getPC(player.uuid, player.registryAccess())
+    open fun getPC(ServerPlayer player) = getPC(player.uuid, player.registryAccess())
 
-    open fun getPC(playerID: UUID, registryAccess: RegistryAccess): PCStore {
+    open fun getPC(playerID: UUID, RegistryAccess registryAccess): PCStore {
         return factories.firstNotNullOfOrNull { it.getPC(playerID, registryAccess) }
             ?: throw NoPokemonStoreException(
                 "No factory was able to provide a PC for $playerID - this should not be possible unless someone has removed the default provider!"
             )
     }
 
-    open fun getPCForPlayer(player: ServerPlayer, pcBlockEntity: PCBlockEntity): PCStore? {
+    open fun getPCForPlayer(ServerPlayer player, pcBlockEntity: PCBlockEntity): PCStore? {
         return factories.firstNotNullOfOrNull { it.getPCForPlayer(player, pcBlockEntity) }
     }
 
-    open fun getParties(playerID: UUID, registryAccess: RegistryAccess): Iterable<PartyStore> {
+    open fun getParties(playerID: UUID, RegistryAccess registryAccess): Iterable<PartyStore> {
         val parties = mutableListOf<PartyStore>()
         for (factory in factories) {
             factory.getPlayerParty(playerID, registryAccess)?.let { parties.add(it) }
@@ -76,7 +76,7 @@ open class PokemonStoreManager {
         return parties.asIterable()
     }
 
-    open fun getPCs(playerID: UUID, registryAccess: RegistryAccess): Iterable<PCStore> {
+    open fun getPCs(playerID: UUID, RegistryAccess registryAccess): Iterable<PCStore> {
         val pcs = mutableListOf<PCStore>()
         for (factory in factories) {
             factory.getPC(playerID, registryAccess)?.let { pcs.add(it) }
@@ -84,11 +84,11 @@ open class PokemonStoreManager {
         return pcs.asIterable()
     }
     inline fun <E : StorePosition, reified T : PokemonStore<E>> getCustomStore(
-        uuid: UUID,
-        registryAccess: RegistryAccess
-    ) = getCustomStore(T::class.java, uuid, registryAccess)
+        UUID uuid,
+        RegistryAccess registryAccess
+    ) = getCustomStore(T.class, uuid, registryAccess)
 
-    open fun <E : StorePosition, T : PokemonStore<E>> getCustomStore(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+    open fun <E : StorePosition, T : PokemonStore<E>> getCustomStore(storeClass: Class<T>, UUID uuid, RegistryAccess registryAccess): T? {
         for (factory in factories) {
             factory.getCustomStore(storeClass, uuid, registryAccess)?.run { return this }
         }
@@ -96,14 +96,14 @@ open class PokemonStoreManager {
         return null
     }
 
-    open fun onPlayerDataSync(player: ServerPlayer) {
+    open fun onPlayerDataSync(ServerPlayer player) {
         val parties = getParties(player.uuid, player.registryAccess())
         parties.forEach { party -> party.sendTo(player) }
         getPCs(player.uuid, player.registryAccess()).forEach { pc -> pc.sendTo(player) }
         player.sendPacket(SetPartyReferencePacket(parties.first().uuid))
     }
 
-    open fun onPlayerDisconnect(player: ServerPlayer) {
+    open fun onPlayerDisconnect(ServerPlayer player) {
         for (factory in factories) {
             factory.onPlayerDisconnect(player)
         }

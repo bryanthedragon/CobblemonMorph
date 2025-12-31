@@ -23,11 +23,11 @@ import java.util.UUID
  * @since February 27th, 2023
  * @author landonjw
  */
-interface ShowdownService {
+public interface ShowdownService {
     fun openConnection()
     fun closeConnection()
     fun startBattle(battle: PokemonBattle, messages: Array<String>)
-    fun send(battleId: UUID, messages: Array<String>)
+    fun send(UUID battleId, messages: Array<String>)
     fun getRegistryData(type: String): JsonArray
     fun sendRegistryData(data: Map<String, String>, type: String)
     fun sendRegistryEntry(data: String, type: String)
@@ -35,7 +35,7 @@ interface ShowdownService {
     fun resetAllRegistries()
     fun indicateSpeciesInitialized() {}
 
-    companion object {
+    final class Companion {
         val service: ShowdownService by lazy { GraalShowdownService() }
     }
 }

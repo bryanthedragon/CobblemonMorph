@@ -22,25 +22,25 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
 // An item that modifies a Pokémon's IVs according to a given modifier and valid range.
-class HyperTrainingItem(val ivIncreaseAmount: Int, val targetStats: Set<Stat>, val validRange: IntRange) : CobblemonItem(Properties()), PokemonSelectingItem {
+public class HyperTrainingItem(val ivIncreaseAmount: Int, val targetStats: Set<Stat>, val Int validRangeRange) : CobblemonItem(Properties()), PokemonSelectingItem {
 
     override val bagItem = null
 
     // Helper to ensure prospective IVs are within the valid range
-    private fun canChangeIV(stat: Stat, pokemon: Pokemon): Boolean {
+    private fun canChangeIV(Stat stat , Pokemon pokemon): Boolean {
         val effectiveIV = pokemon.ivs.getEffectiveBattleIV(stat)
         return effectiveIV in validRange && effectiveIV + ivIncreaseAmount in 0..IVs.MAX_VALUE
     }
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon): Boolean {
         // Check if at least one stat's effective IV can be modified
         return targetStats.any { stat -> canChangeIV(stat, pokemon) }
     }
 
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack> {
         if(!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
@@ -58,7 +58,7 @@ class HyperTrainingItem(val ivIncreaseAmount: Int, val targetStats: Set<Stat>, v
         return InteractionResultHolder.success(stack)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

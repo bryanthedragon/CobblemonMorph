@@ -17,8 +17,8 @@ import com.google.gson.JsonObject
  * @author Deltric
  * @since 2023-10-01
  */
-class DummyPlayerDataExtension(
-    val json: JsonObject
+public class DummyPlayerDataExtension(
+    val JsonObject json
 ): PlayerDataExtension {
 
     override fun name(): String {
@@ -29,7 +29,7 @@ class DummyPlayerDataExtension(
         return this.json
     }
 
-    override fun deserialize(json: JsonObject): PlayerDataExtension {
+    override fun deserialize(JsonObject json): PlayerDataExtension {
         return DummyPlayerDataExtension(json)
     }
 }

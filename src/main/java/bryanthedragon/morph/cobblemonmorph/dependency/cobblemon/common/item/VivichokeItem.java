@@ -20,8 +20,8 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 
-class VivichokeItem(block: VivichokeBlock) : ItemNameBlockItem(block, Properties()) {
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+public class VivichokeItem(block: VivichokeBlock) : ItemNameBlockItem(block, Properties()) {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val blockHitResult = PlaceOnWaterBlockItem.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY)
         val blockHitResult2 = blockHitResult.withPosition(blockHitResult.blockPos.above())
         val actionResult: InteractionResult = super.useOn(UseOnContext(user, hand, blockHitResult2))

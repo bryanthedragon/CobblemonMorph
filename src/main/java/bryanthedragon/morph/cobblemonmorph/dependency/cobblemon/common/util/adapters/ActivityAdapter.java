@@ -15,8 +15,8 @@ import java.lang.reflect.Type
 import com.google.gson.JsonElement
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.schedule.Activity
-final class ActivityAdapter : JsonDeserializer<Activity> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Activity {
+public final class ActivityAdapter : JsonDeserializer<Activity> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): Activity {
         val identifier = json.asString.asIdentifierDefaultingNamespace("minecraft")
         return BuiltInRegistries.ACTIVITY.get(identifier)
             ?: throw IllegalArgumentException("Unknown activity: $identifier")

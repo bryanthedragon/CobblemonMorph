@@ -14,13 +14,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readSizedInt
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ExperienceUpdatePacket(pokemon: () -> Pokemon?, value: Int) : IntUpdatePacket<ExperienceUpdatePacket>(pokemon, value) {
+public class ExperienceUpdatePacket(pokemon: () -> Pokemon?, Int value) : IntUpdatePacket<ExperienceUpdatePacket>(pokemon, value) {
     override val id = ID
     override fun getSize() = IntSize.INT
-    override fun set(pokemon: Pokemon, value: Int) = pokemon.setExperienceAndUpdateLevel(value)
+    override fun set(Pokemon pokemon, Int value) = pokemon.setExperienceAndUpdateLevel(value)
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("experience_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = ExperienceUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.INT))
+        fun decode(RegistryFriendlyByteBuf buffer) = ExperienceUpdatePacket(decodePokemon(buffer), buffer.readSizedInt(IntSize.INT))
     }
 }

@@ -24,14 +24,14 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 
 //todo(broccoli): add a cooldown
-class FertilizerTask : Behavior<PokemonEntity>(
+public class FertilizerTask : Behavior<PokemonEntity>(
         ImmutableMap.of(
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT,
                 MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT
         )
 ) {
 
-    companion object {
+    final class Companion {
         private const val MAX_DURATION = 80
     }
 
@@ -40,23 +40,23 @@ class FertilizerTask : Behavior<PokemonEntity>(
     private var duration = 0
     private var pos = Optional.empty<BlockPos>()
 
-    override fun checkExtraStartConditions(world: ServerLevel, entity: PokemonEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel world, entity: PokemonEntity): Boolean {
         this.pos = entity.brain.getMemory(CobblemonMemories.NEARBY_GROWABLE_CROPS)
         return pos.isPresent
     }
 
-    override fun canStillUse(world: ServerLevel, entity: PokemonEntity, time: Long): Boolean {
+    override fun canStillUse(ServerLevel world, entity: PokemonEntity, time: Long): Boolean {
         return duration < MAX_DURATION && pos.isPresent
     }
 
-    override fun start(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun start(ServerLevel world, entity: PokemonEntity, time: Long) {
         addLookWalkTargets(entity)
         startTime = time
         duration = 0
     }
 
     private fun addLookWalkTargets(entity: PokemonEntity) {
-        pos.ifPresent { pos: BlockPos ->
+        pos.ifPresent { (BlockPos pos ->
             val blockPosLookTarget = BlockPosTracker(pos)
             entity.brain.setMemory(
                     MemoryModuleType.LOOK_TARGET,
@@ -69,11 +69,11 @@ class FertilizerTask : Behavior<PokemonEntity>(
         }
     }
 
-    override fun stop(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun stop(ServerLevel world, entity: PokemonEntity, time: Long) {
         lastEndEntityAge = entity.age.toLong()
     }
 
-    override fun tick(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun tick(ServerLevel world, entity: PokemonEntity, time: Long) {
         val blockPos = pos.get()
 
         if (time >= this.startTime && blockPos.closerThan(entity.blockPosition(), 1.0)) {

@@ -33,17 +33,17 @@ import net.minecraft.world.entity.LivingEntity
  * @author Hiroku
  * @since October 13th, 2024
  */
-interface BehaviourConfig {
-    companion object {
+public interface BehaviourConfig {
+    final class Companion {
         val types = mutableMapOf<ResourceLocation, Class<out BehaviourConfig>>(
-            cobblemonResource("script") to ScriptBehaviourConfig::class.java,
-            cobblemonResource("add_tasks_to_activity") to AddTasksToActivity::class.java,
-            cobblemonResource("apply_behaviours") to ApplyBehaviours::class.java,
-            cobblemonResource("set_default_activity") to SetDefaultActivity::class.java,
-            cobblemonResource("set_core_activities") to SetCoreActivities::class.java,
-            cobblemonResource("add_variables") to AddVariablesConfig::class.java,
-            cobblemonResource("set_variables") to SetVariablesConfig::class.java,
-            cobblemonResource("add_memories_and_sensors") to AddMemoriesAndSensorsConfig::class.java,
+            cobblemonResource("script") to ScriptBehaviourConfig.class,
+            cobblemonResource("add_tasks_to_activity") to AddTasksToActivity.class,
+            cobblemonResource("apply_behaviours") to ApplyBehaviours.class,
+            cobblemonResource("set_default_activity") to SetDefaultActivity.class,
+            cobblemonResource("set_core_activities") to SetCoreActivities.class,
+            cobblemonResource("add_variables") to AddVariablesConfig.class,
+            cobblemonResource("set_variables") to SetVariablesConfig.class,
+            cobblemonResource("add_memories_and_sensors") to AddMemoriesAndSensorsConfig.class,
         )
     }
 
@@ -52,11 +52,11 @@ interface BehaviourConfig {
         return behaviourConfigurationContext.runtime.resolveBoolean(expressionOrEntityVariable.map({ it }, { "q.entity.config.${it.variableName}".asExpression() }))
     }
 
-    fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable>
+    fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable>
 
-    fun preconfigure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    fun preconfigure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         // Default implementation does nothing, can be overridden if needed
     }
 
-    fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext)
+    fun configure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext)
 }

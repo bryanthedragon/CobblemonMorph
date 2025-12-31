@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stora
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.MarkPCBoxWallpapersSeenPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class MarkPCBoxWallpapersSeenHandler : ServerNetworkPacketHandler<MarkPCBoxWallpapersSeenPacket> {
-    override fun handle(packet: MarkPCBoxWallpapersSeenPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class MarkPCBoxWallpapersSeenHandler : ServerNetworkPacketHandler<MarkPCBoxWallpapersSeenPacket> {
+    override fun handle(packet: MarkPCBoxWallpapersSeenPacket, server: MinecraftServer, ServerPlayer player) {
         val pc = PCLinkManager.getPC(player) ?: return
         pc.markWallpapersSeen(packet.seenTextures)
     }

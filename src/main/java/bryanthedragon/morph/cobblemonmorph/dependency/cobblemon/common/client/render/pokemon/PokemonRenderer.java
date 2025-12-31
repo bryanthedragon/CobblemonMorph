@@ -65,10 +65,10 @@ import net.minecraft.world.phys.Vec3
 import org.joml.*
 import kotlin.math.*
 
-class PokemonRenderer(
+public class PokemonRenderer(
     context: EntityRendererProvider.Context
 ) : MobRenderer<PokemonEntity, PosablePokemonEntityModel>(context, PosablePokemonEntityModel(), 0.5f) {
-    companion object {
+    final class Companion {
         val recallBeamColour = Vector4f(1F, 0.1F, 0.1F, 1F)
         fun ease(x: Double): Double {
             return 1 - (1 - x).pow(3)
@@ -306,7 +306,7 @@ class PokemonRenderer(
      * @param colour The colour of the beam.
      * @param buffer The vertex consumer provider.
      */
-    fun renderBeam(matrixStack: PoseStack, partialTicks: Float, entity: PokemonEntity, beamTarget: Entity, buffer: MultiBufferSource, offset: Vec3) {
+    fun renderBeam(matrixStack: PoseStack, partialTicks: Float, entity: PokemonEntity, beamTarget: Entity, buffer: MultiBufferSource, Vec3 offset) {
         val clientDelegate = entity.delegate as PokemonClientDelegate
         val pokemonPosition = entity.position().add(0.0, entity.bbHeight / 2.0 * clientDelegate.entityScaleModifier.toDouble(), 0.0)
         var beamSourcePosition = if (beamTarget is EmptyPokeBallEntity) {

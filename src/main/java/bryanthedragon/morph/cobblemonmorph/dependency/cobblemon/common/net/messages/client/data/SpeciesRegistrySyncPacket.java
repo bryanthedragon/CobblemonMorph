@@ -17,27 +17,27 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 // We do not need to know every single attribute as a client, as such, we only sync the aspects that matter
-class SpeciesRegistrySyncPacket(species: Collection<Species>) : DataRegistrySyncPacket<Species, SpeciesRegistrySyncPacket>(species) {
+public class SpeciesRegistrySyncPacket(species: Collection<Species>) : DataRegistrySyncPacket<Species, SpeciesRegistrySyncPacket>(species) {
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Species) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Species) {
         try {
             buffer.writeIdentifier(entry.resourceIdentifier)
             entry.encode(buffer)
-        } catch (e: Exception) {
+        } catch (Exception e) {
             Cobblemon.LOGGER.error("Caught exception encoding the species {}", entry.resourceIdentifier, e)
         }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Species? {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Species? {
         val identifier = buffer.readIdentifier()
         val species = Species()
         species.resourceIdentifier = identifier
         return try {
             species.decode(buffer)
             species
-        } catch (e: Exception) {
+        } catch (Exception e) {
             Cobblemon.LOGGER.error("Caught exception decoding the species {}", identifier, e)
             null
         }
@@ -47,8 +47,8 @@ class SpeciesRegistrySyncPacket(species: Collection<Species>) : DataRegistrySync
         PokemonSpecies.reload(entries.associateBy { it.resourceIdentifier })
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("species_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf): SpeciesRegistrySyncPacket = SpeciesRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer): SpeciesRegistrySyncPacket = SpeciesRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 }

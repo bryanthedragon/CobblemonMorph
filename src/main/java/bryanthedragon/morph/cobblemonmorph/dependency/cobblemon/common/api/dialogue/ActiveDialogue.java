@@ -35,7 +35,7 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since December 27th, 2023
  */
-class ActiveDialogue(var playerEntity: ServerPlayer, var dialogueReference: Dialogue) {
+public class ActiveDialogue(var playerEntity: ServerPlayer, var dialogueReference: Dialogue) {
     var initialized = false
     val dialogueId = UUID.randomUUID()
     val runtime = MoLangRuntime().setup()
@@ -105,7 +105,7 @@ class ActiveDialogue(var playerEntity: ServerPlayer, var dialogueReference: Dial
         }
     }
 
-    fun setPage(index: Int) {
+    fun setPage(Int index) {
         if (index == dialogueReference.pages.size) {
             return close()
         }

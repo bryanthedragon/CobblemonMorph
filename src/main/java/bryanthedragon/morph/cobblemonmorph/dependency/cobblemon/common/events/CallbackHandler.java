@@ -18,7 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 
 /**
  * Handles the registration of the default Cobblemon event hooks into callbacks.
- */final class CallbackHandler {
+ */
+public final class CallbackHandler {
     fun setup() {
         CobblemonEvents.STARTER_CHOSEN.subscribe { CobblemonCallbacks.run(cobblemonResource("starter_chosen"), it.getContext(), it.functions) }
         CobblemonEvents.POKEMON_CAPTURED.subscribe { CobblemonCallbacks.run(cobblemonResource("pokemon_captured"), it.context) }

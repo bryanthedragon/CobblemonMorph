@@ -22,7 +22,7 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
     class Interpreter(
         val loadMove: (JsonElement, Learnset) -> Boolean
     ) {
-        companion object {
+        final class Companion {
             fun parseFromPrefixIntoList(prefix: String, list: (Learnset) -> MutableList<MoveTemplate>): Interpreter {
                 return Interpreter { element, learnset ->
                     val str = element.takeIf { it.isJsonPrimitive }?.asString ?: return@Interpreter false
@@ -39,7 +39,7 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
         }
     }
 
-    companion object {
+    final class Companion {
         val tmInterpreter = Interpreter.parseFromPrefixIntoList("tm") { it.tmMoves }
         val eggInterpreter = Interpreter.parseFromPrefixIntoList("egg") { it.eggMoves }
         val tutorInterpreter = Interpreter.parseFromPrefixIntoList("tutor") { it.tutorMoves }
@@ -111,7 +111,7 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
     // We only sync level up moves atm
     override fun shouldSynchronize(other: Learnset) = other.levelUpMoves != this.levelUpMoves
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         this.levelUpMoves.clear()
         repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
             val level = buffer.readSizedInt(IntSize.U_SHORT)
@@ -123,7 +123,7 @@ open class Learnset : ClientDataSynchronizer<Learnset> {
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeSizedInt(IntSize.U_BYTE, levelUpMoves.size)
         for ((level, moves) in levelUpMoves) {
             buffer.writeSizedInt(IntSize.U_SHORT, level)

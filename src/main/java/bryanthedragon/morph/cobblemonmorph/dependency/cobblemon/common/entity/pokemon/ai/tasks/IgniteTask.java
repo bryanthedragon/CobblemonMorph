@@ -29,13 +29,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.gameevent.GameEvent
 
 //todo(broccoli): add a cooldown
-class IgniteTask : Behavior<PokemonEntity>(
+public class IgniteTask : Behavior<PokemonEntity>(
     ImmutableMap.of(
         MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT
     )
 ) {
 
-    companion object {
+    final class Companion {
         private const val MAX_DURATION = 80
     }
 
@@ -44,16 +44,16 @@ class IgniteTask : Behavior<PokemonEntity>(
     private var duration = 0
     private var pos = Optional.empty<BlockPos>()
 
-    override fun checkExtraStartConditions(world: ServerLevel, entity: PokemonEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel world, entity: PokemonEntity): Boolean {
         this.pos = findIgnitionPos(world, entity)
         return pos.isPresent
     }
 
-    override fun canStillUse(world: ServerLevel, entity: PokemonEntity, time: Long): Boolean {
+    override fun canStillUse(ServerLevel world, entity: PokemonEntity, time: Long): Boolean {
         return duration < MAX_DURATION && pos.isPresent
     }
 
-    private fun findIgnitionPos(world: ServerLevel, entity: PokemonEntity): Optional<BlockPos> {
+    private fun findIgnitionPos(ServerLevel world, entity: PokemonEntity): Optional<BlockPos> {
         val mutable = BlockPos.MutableBlockPos()
         var optional = Optional.empty<BlockPos>()
         var i = 0
@@ -76,21 +76,21 @@ class IgniteTask : Behavior<PokemonEntity>(
         return optional
     }
 
-    private fun canLight(pos: BlockPos, world: ServerLevel): Boolean {
+    private fun canLight(BlockPos pos, ServerLevel world): Boolean {
         val blockState = world.getBlockState(pos)
         val block = blockState.block
 
         return block is CampfireBlock && !blockState.getValue(CampfireBlock.LIT)
     }
 
-    override fun start(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun start(ServerLevel world, entity: PokemonEntity, time: Long) {
         addLookWalkTargets(entity)
         startTime = time
         duration = 0
     }
 
     private fun addLookWalkTargets(entity: PokemonEntity) {
-        pos.ifPresent { pos: BlockPos? ->
+        pos.ifPresent { (BlockPos pos? ->
             val blockPosLookTarget = BlockPosTracker(pos)
             entity.brain.setMemory(
                 MemoryModuleType.LOOK_TARGET,
@@ -103,11 +103,11 @@ class IgniteTask : Behavior<PokemonEntity>(
         }
     }
 
-    override fun stop(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun stop(ServerLevel world, entity: PokemonEntity, time: Long) {
         lastEndEntityAge = entity.age.toLong()
     }
 
-    override fun tick(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun tick(ServerLevel world, entity: PokemonEntity, time: Long) {
         val blockPos = pos.get()
         val blockState = world.getBlockState(blockPos)
 

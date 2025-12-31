@@ -9,6 +9,6 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
-final class AllSpawnablePositionSelector : SpawnablePositionSelector {
+public final class AllSpawnablePositionSelector : SpawnablePositionSelector {
     override fun selects(spawnablePosition: SpawnablePosition) = true
 }

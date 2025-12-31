@@ -25,12 +25,12 @@ import kotlin.jvm.optionals.getOrNull
  * @author miasmus
  * @since September 12th, 2023
  */
-class BiomePredicate(
+public class BiomePredicate(
     val includedBiomes: Optional<MutableList<TagKey<Biome>>>,
     val excludedBiomes: Optional<MutableList<TagKey<Biome>>>
 ) : BlockPredicate {
 
-    override fun test(world: WorldGenLevel, block: BlockPos): Boolean {
+    override fun test(world: WorldGenLevel, Block blockPos): Boolean {
         val biome = world.getBiome(block)
         // If biomes are not specified, default to true -- exclusions override inclusions
         return (
@@ -40,7 +40,7 @@ class BiomePredicate(
 
     override fun type() = CobblemonBlockPredicates.BIOME
 
-    companion object {
+    final class Companion {
         val CODEC : MapCodec<BiomePredicate> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 TagKey.hashedCodec(Registries.BIOME).listOf().optionalFieldOf("includedBiomes").forGetter { it.includedBiomes },

@@ -40,7 +40,7 @@ import net.minecraft.client.sounds.SoundManager
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class BattleSwitchPokemonSelection(
+public class BattleSwitchPokemonSelection(
     battleGUI: BattleGUI,
     request: SingleActionRequest
 ) : BattleActionSelection(
@@ -53,7 +53,7 @@ class BattleSwitchPokemonSelection(
     height = Minecraft.getInstance().window.guiScaledHeight,
     battleLang("switch_pokemon")
 ) {
-    companion object {
+    final class Companion {
         const val SLOT_HORIZONTAL_SPACING = 4F
         const val SLOT_VERTICAL_SPACING = 2F
 
@@ -92,7 +92,7 @@ class BattleSwitchPokemonSelection(
         }
     }
 
-    fun getSlotPosition(index: Int): Pair<Float, Float> {
+    fun getSlotPosition(Int index): Pair<Float, Float> {
         val startX = ((width / 2) - SwitchTile.SELECT_WIDTH - 1)
         val startY = y + 34
         val row = index / 2
@@ -173,12 +173,12 @@ class BattleSwitchPokemonSelection(
         val selection: BattleSwitchPokemonSelection,
         val x: Float,
         val y: Float,
-        val pokemon: Pokemon,
+        val Pokemon pokemon,
         val showdownPokemon: ShowdownPokemon,
         val isFainted: Boolean,
         val isCurrentlyInBattle: Boolean
     ) {
-        companion object {
+        final class Companion {
             const val SELECT_WIDTH = 94
             const val SELECT_HEIGHT = 29
             const val SCALE = 0.5F
@@ -355,7 +355,7 @@ class BattleSwitchPokemonSelection(
                     centered = true
                 )
                 matrixStack.popPose()
-            } catch (exception: Exception) {
+            } catch (Exception exception) {
                 throw exception
             }
         }

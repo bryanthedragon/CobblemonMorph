@@ -19,7 +19,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
-final class TestStoreCommand {
+public final class TestStoreCommand {
 
     private const val NAME = "teststore"
     private const val PLAYER = "player"

@@ -23,7 +23,7 @@ import kotlin.math.roundToInt
  * @author Licious
  * @since February 8th, 2023
  */
-class SetHpInstruction(val actor: BattleActor, val publicMessage: BattleMessage, val privateMessage: BattleMessage): InterpreterInstruction {
+public class SetHpInstruction(val actor: BattleActor, val publicMessage: BattleMessage, val privateMessage: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting {

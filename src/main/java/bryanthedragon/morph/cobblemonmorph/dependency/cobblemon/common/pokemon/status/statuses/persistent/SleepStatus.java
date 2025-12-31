@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-class SleepStatus : PersistentStatus(
+public class SleepStatus : PersistentStatus(
     name = cobblemonResource("sleep"),
     showdownName = "slp",
     applyMessage = "cobblemon.status.sleep.apply",

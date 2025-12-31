@@ -15,17 +15,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class OpenBehaviourEditorPacket(val entityId: Int, val appliedPresets: Set<ResourceLocation>) : NetworkPacket<OpenBehaviourEditorPacket> {
-    companion object {
+public class OpenBehaviourEditorPacket(val entityId: Int, val appliedPresets: Set<ResourceLocation>) : NetworkPacket<OpenBehaviourEditorPacket> {
+    final class Companion {
         val ID = cobblemonResource("open_behaviour_editor")
-        fun decode(buffer: RegistryFriendlyByteBuf) = OpenBehaviourEditorPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = OpenBehaviourEditorPacket(
             buffer.readInt(),
             buffer.readList { it.readIdentifier() }.toSet()
         )
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(entityId)
         buffer.writeCollection(appliedPresets) { _, it -> buffer.writeIdentifier(it) }
     }

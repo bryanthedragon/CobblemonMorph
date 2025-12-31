@@ -17,14 +17,14 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 
-class DialogueTimerWidget(
+public class DialogueTimerWidget(
     val dialogueScreen: DialogueScreen,
     val x: Int,
     val y: Int,
-    val width: Int,
-    val height: Int,
+    val Int width,
+    val Int height,
 ) : CobblemonRenderable, GuiEventListener {
-    companion object {
+    final class Companion {
         val timerResource = cobblemonResource("textures/gui/dialogue/dialogue_timer_bar.png")
     }
 

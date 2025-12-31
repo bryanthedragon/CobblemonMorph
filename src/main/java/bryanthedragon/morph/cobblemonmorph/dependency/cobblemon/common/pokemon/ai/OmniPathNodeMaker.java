@@ -51,7 +51,7 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since September 10th, 2022
  */
-class OmniPathNodeMaker : NodeEvaluator() {
+public class OmniPathNodeMaker : NodeEvaluator() {
     private val nodePosToType: Long2ObjectMap<PathType> = Long2ObjectOpenHashMap()
     private val nodePosToState: Long2ObjectMap<BlockState> = Long2ObjectOpenHashMap()
 
@@ -71,7 +71,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         nodePosToState.clear()
     }
 
-    fun PathfindingContext.getCachedBlockState(pos: BlockPos): BlockState {
+    fun PathfindingContext.getCachedBlockState(BlockPos pos): BlockState {
         return nodePosToState.computeIfAbsent(pos.asLong()) { getBlockState(pos) }
     }
 
@@ -89,7 +89,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         return node
     }
 
-    fun getNodeType(entity: Mob, pos: BlockPos): PathType {
+    fun getNodeType(entity: Mob, (BlockPos pos): PathType {
         return this.getNodeType(entity, pos.x, pos.y, pos.z)
     }
 
@@ -114,7 +114,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         z: Int,
         verticalDeltaLimit: Int,
         nodeFloorLevel: Double,
-        direction: Direction?,
+        Direction direction?,
         pathType: PathType?
     ): Node? {
         var node: Node? = null
@@ -234,9 +234,9 @@ class OmniPathNodeMaker : NodeEvaluator() {
         z: Int,
         verticalDeltaLimit: Int,
         nodeFloorLevel: Double,
-        direction: Direction,
+        Direction direction,
         pathType: PathType,
-        pos: BlockPos.MutableBlockPos
+        (BlockPos pos.MutableBlockPos
     ): Node? {
         val node = findAcceptedNodeWalk(x, y + 1, z, verticalDeltaLimit - 1, nodeFloorLevel, direction, pathType)
         return if (node == null) {
@@ -275,7 +275,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         return node
     }
 
-    private fun hasCollisions(boundingBox: AABB): Boolean {
+    private fun hasCollisions(boundingAABB box): Boolean {
         return !currentContext.level().noCollision(mob, boundingBox)
     }
 
@@ -298,7 +298,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         }
     }
 
-    protected fun getFloorLevel(pos: BlockPos): Double {
+    protected fun getFloorLevel(BlockPos pos): Double {
         val blockGetter: BlockGetter = currentContext.level()
         if ((canFloat()) && blockGetter.getFluidState(pos).`is`(FluidTags.WATER)) {
             return pos.y.toDouble() + 0.5
@@ -310,9 +310,9 @@ class OmniPathNodeMaker : NodeEvaluator() {
 
     override fun getNeighbors(successors: Array<Node?>, node: Node): Int {
         var i = 0
-        val map = Maps.newEnumMap<Direction, Node?>(Direction::class.java)
-        val upperMap = Maps.newEnumMap<Direction, Node?>(Direction::class.java)
-        val lowerMap = Maps.newEnumMap<Direction, Node?>(Direction::class.java)
+        val map = Maps.newEnumMap<Direction, Node?>(Direction.class)
+        val upperMap = Maps.newEnumMap<Direction, Node?>(Direction.class)
+        val lowerMap = Maps.newEnumMap<Direction, Node?>(Direction.class)
 
         val d = getFloorLevel(BlockPos(node.x, node.y, node.z))
 
@@ -622,7 +622,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
     }
 
     override fun getPathTypeOfMob(pfContext: PathfindingContext, x: Int, y: Int, z: Int, mob: Mob): PathType {
-        val set = EnumSet.noneOf(PathType::class.java)
+        val set = EnumSet.noneOf(PathType.class)
         val sizeX = (mob.boundingBox.maxX - mob.boundingBox.minX).toInt() + 1
         val sizeY = (mob.boundingBox.maxY - mob.boundingBox.minY).toInt() + 1
         val sizeZ = (mob.boundingBox.maxZ - mob.boundingBox.minZ).toInt() + 1
@@ -686,7 +686,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         canEnterOpenDoors: Boolean,
         nearbyTypes: EnumSet<PathType>,
         type: PathType,
-        pos: BlockPos,
+        (BlockPos pos,
         returnedEarlyPathType: MutableList<PathType>
     ): PathType {
         var type = type
@@ -725,7 +725,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         pfContext: PathfindingContext,
         canOpenDoors: Boolean,
         canEnterOpenDoors: Boolean,
-        pos: BlockPos,
+        (BlockPos pos,
         type: PathType
     ): PathType {
         val blockState = pfContext.getCachedBlockState(pos)
@@ -763,7 +763,7 @@ class OmniPathNodeMaker : NodeEvaluator() {
         } else type
     }
 
-    companion object {
+    final class Companion {
         const val MAX_HITBOX_SIZE_FOR_WALKING = 1.6F
         const val MAX_HITBOX_FOR_VERTICAL_NEIGHBOURS = 2F
     }

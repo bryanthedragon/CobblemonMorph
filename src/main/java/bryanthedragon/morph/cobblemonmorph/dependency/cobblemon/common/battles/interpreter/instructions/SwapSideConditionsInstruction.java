@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.d
  * @author Segfault Guy
  * @since February 19th, 2024
  */
-class SwapSideConditionsInstruction(val message: BattleMessage): InterpreterInstruction {
+public class SwapSideConditionsInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchGo {

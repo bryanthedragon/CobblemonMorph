@@ -20,11 +20,11 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since January 10th, 2022
  */
-class ClassMapAdapter<T, K>(
+public class ClassMapAdapter<T, K>(
     val mapping: MutableMap<K, Class<out T>>,
     val keyFromElement: (JsonElement) -> K
 ) : JsonDeserializer<T> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): T {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): T {
         val key = keyFromElement(json)
         val clazz = mapping[key] ?: throw IllegalStateException("Could not find class registered for key: $key")
         return ctx.deserialize(json, clazz)

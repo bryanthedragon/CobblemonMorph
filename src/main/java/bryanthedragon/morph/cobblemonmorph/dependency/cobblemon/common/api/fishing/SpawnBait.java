@@ -22,7 +22,7 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 
-class SpawnBait(
+public class SpawnBait(
     val item: RegistryLikeCondition<Item>,
     val effects: List<Effect>,
 ) {
@@ -34,7 +34,7 @@ class SpawnBait(
     ) {
         constructor(type: ResourceLocation, subcategory: Optional<ResourceLocation>, chance: Double, value: Double) : this(type, subcategory.orElse(null), chance, value)
 
-        companion object {
+        final class Companion {
             val CODEC = RecordCodecBuilder.create<Effect> { instance ->
                 instance.group(
                     ResourceLocation.CODEC.fieldOf("type").forGetter { it.type },
@@ -46,7 +46,7 @@ class SpawnBait(
         }
     }
 
-    companion object {
+    final class Companion {
         val CODEC = RecordCodecBuilder.create<SpawnBait> { instance ->
             instance.group(
                 ITEM_REGISTRY_LIKE_CODEC.fieldOf("item").forGetter { it.item },

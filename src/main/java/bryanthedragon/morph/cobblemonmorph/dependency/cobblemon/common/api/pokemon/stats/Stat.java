@@ -6,14 +6,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.codec.CodecUtils
-import com.mojang.serialization.Codec
-import com.mojang.serialization.DataResult
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.codec.CodecUtils;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Represents a stat of a Pokémon.
@@ -23,33 +25,33 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since November 6th, 2022
  */
-interface Stat {
+public interface Stat {
 
     /**
      * The [ResourceLocation] of this stat.
      */
-    val identifier: ResourceLocation
+    val ResourceLocation identifier;
 
     /**
      * The display name of this stat.
      * This should ideally provide the lang.
      */
-    val displayName: Component
+    val Component displayName;
 
     /**
      * The type of this stat.
      */
-    val type: Type
+    val Type type;
 
     /**
      * The name used by Showdown to store the stats (attack is 'atk', for example)
      */
-    val showdownId: String
+    val String showdownId;
 
     /**
      * Represents the type of this stat.
      */
-    enum class Type {
+    public enum Type {
 
         /**
          * Represents stats that always exist.
@@ -65,34 +67,24 @@ interface Stat {
 
     }
 
-    companion object {
+    final class Companion {
 
         /**
          * A [Codec] for [Stat] without filtering the [Stat.Type].
          */
-        @JvmStatic
-        val ALL_CODEC: Codec<Stat> = CodecUtils.createByIdentifierCodec(
-            Cobblemon.statProvider::fromIdentifier,
-            Stat::identifier
-        ) { identifier -> "No Stat for ID $identifier" }
+        val Codec<Stat> ALL_CODEC = CodecUtils.createByIdentifierCodec(Cobblemon.statProvider::fromIdentifier, Stat::identifier) { identifier -> "No Stat for ID $identifier" }
 
         /**
          * A [Codec] for [Stat] with the [Stat.Type.PERMANENT].
          */
         @JvmStatic
-        val PERMANENT_ONLY_CODEC: Codec<Stat> = ALL_CODEC.comapFlatMap(
-            { stat -> if (stat.type == Type.PERMANENT) DataResult.success(stat) else DataResult.error { "${stat.identifier} is not of type ${Type.PERMANENT}" } },
-            { stat -> stat }
-        )
+        val Codec<Stat> PERMANENT_ONLY_CODEC = ALL_CODEC.comapFlatMap({ stat -> if (stat.type == Type.PERMANENT) DataResult.success(stat) else DataResult.error { "${stat.identifier} is not of type ${Type.PERMANENT}" } }, { stat -> stat })
 
         /**
          * A [Codec] for [Stat] with the [Stat.Type.BATTLE_ONLY].
          */
         @JvmStatic
-        val BATTLE_ONLY_CODEC: Codec<Stat> = ALL_CODEC.comapFlatMap(
-            { stat -> if (stat.type == Type.BATTLE_ONLY) DataResult.success(stat) else DataResult.error { "${stat.identifier} is not of type ${Type.BATTLE_ONLY}" } },
-            { stat -> stat }
-        )
+        val Codec<Stat> BATTLE_ONLY_CODEC = ALL_CODEC.comapFlatMap({ stat -> if (stat.type == Type.BATTLE_ONLY) DataResult.success(stat) else DataResult.error { "${stat.identifier} is not of type ${Type.BATTLE_ONLY}" } }, { stat -> stat })
 
     }
 

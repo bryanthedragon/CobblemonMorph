@@ -18,8 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.pc
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class PCBoxWallpapersHandler : ServerNetworkPacketHandler<PCBoxWallpapersPacket> {
-    override fun handle(packet: PCBoxWallpapersPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class PCBoxWallpapersHandler : ServerNetworkPacketHandler<PCBoxWallpapersPacket> {
+    override fun handle(packet: PCBoxWallpapersPacket, server: MinecraftServer, ServerPlayer player) {
         val pc = player.pc()
 
         /*

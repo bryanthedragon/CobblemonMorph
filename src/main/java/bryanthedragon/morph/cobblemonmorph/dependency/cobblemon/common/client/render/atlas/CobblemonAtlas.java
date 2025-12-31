@@ -12,9 +12,9 @@ import net.minecraft.client.renderer.texture.TextureManager
 import net.minecraft.client.resources.TextureAtlasHolder
 import net.minecraft.resources.ResourceLocation
 
-class CobblemonAtlas(
+public class CobblemonAtlas(
     textureManager: TextureManager,
-    atlasId: ResourceLocation,
+    atlasResourceLocation id,
     sourcePath: ResourceLocation
 ) : TextureAtlasHolder(
     textureManager,

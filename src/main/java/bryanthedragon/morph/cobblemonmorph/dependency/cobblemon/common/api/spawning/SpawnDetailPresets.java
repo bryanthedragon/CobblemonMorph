@@ -43,46 +43,47 @@ import net.minecraft.world.level.material.Fluid
  *
  * @author Hiroku
  * @since December 9th, 2022
- */final class SpawnDetailPresets : JsonDataRegistry<SpawnDetailPreset> {
+ */
+public final class SpawnDetailPresets : JsonDataRegistry<SpawnDetailPreset> {
     val GSON = GsonBuilder()
         .setPrettyPrinting()
         .setLenient()
         .disableHtmlEscaping()
-        .registerTypeAdapter(SpawnBucket::class.java, SpawnBucketAdapter)
-        .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Fluid::class.java).type, FluidLikeConditionAdapter)
+        .registerTypeAdapter(SpawnBucket.class, SpawnBucketAdapter)
+        .registerTypeAdapter(SpawnablePositionType.class, RegisteredSpawnablePositionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Biome.class).type, BiomeLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Block.class).type, BlockLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Fluid.class).type, FluidLikeConditionAdapter)
         .registerTypeAdapter(
             TypeToken.getParameterized(
-                Either::class.java,
-                ResourceLocation::class.java,
+                Either.class,
+                ResourceLocation.class,
                 TypeToken.getParameterized(
-                    TagKey::class.java,
-                    Structure::class.java
+                    TagKey.class,
+                    Structure.class
                 ).type
             ).type,
             EitherIdentifierOrTagAdapter(Registries.STRUCTURE)
         )
-        .registerTypeAdapter(SpawnDetailPreset::class.java, SpawnDetailPresetAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(SpawningCondition::class.java, SpawningConditionAdapter)
-        .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
-        .registerTypeAdapter(MoonPhaseRange::class.java, IntRangesAdapter(MoonPhaseRange.moonPhaseRanges) { MoonPhaseRange(*it) })
-        .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-        .registerTypeAdapter(PossibleHeldItem::class.java, PossibleHeldItemAdapter)
-        .registerTypeAdapter(NPCClass::class.java, NPCClassReferenceAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+        .registerTypeAdapter(SpawnDetailPreset.class, SpawnDetailPresetAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(SpawningCondition.class, SpawningConditionAdapter)
+        .registerTypeAdapter(TimeRange.class, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
+        .registerTypeAdapter(MoonPhaseRange.class, IntRangesAdapter(MoonPhaseRange.moonPhaseRanges) { MoonPhaseRange(*it) })
+        .registerTypeAdapter(PokemonProperties.class, pokemonPropertiesShortAdapter)
+        .registerTypeAdapter(PossibleHeldItem.class, PossibleHeldItemAdapter)
+        .registerTypeAdapter(NPCClass.class, NPCClassReferenceAdapter)
+        .registerTypeAdapter(Expression.class, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
         .create()
 
     val presetTypes = mutableMapOf<String, Class<out SpawnDetailPreset>>()
-    fun <T : SpawnDetailPreset> registerPresetType(name: String, detailClass: Class<T>) {
+    fun <T : SpawnDetailPreset> registerPresetType(String name, detailClass: Class<T>) {
         presetTypes[name] = detailClass
     }
 
-    override val gson: Gson = GSON
-    override val typeToken = TypeToken.get(SpawnDetailPreset::class.java)
+    override val Gson gson = GSON
+    override val typeToken = TypeToken.get(SpawnDetailPreset.class)
     override val resourcePath = "spawn_detail_presets"
     override val id = cobblemonResource(resourcePath)
     override val type = PackType.SERVER_DATA
@@ -90,7 +91,7 @@ import net.minecraft.world.level.material.Fluid
 
     var presets = mutableMapOf<ResourceLocation, SpawnDetailPreset>()
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
     override fun reload(data: Map<ResourceLocation, SpawnDetailPreset>) {
         this.presets = data.toMutableMap()
         Cobblemon.LOGGER.info("Loaded ${presets.size} spawn detail presets.")

@@ -18,7 +18,7 @@ import net.minecraft.world.entity.LivingEntity
 /**
  * An influencer on capture results based on Pokedex data.
  */
-interface PokedexStatusCaptureInfluencer {
+public interface PokedexStatusCaptureInfluencer {
 
     /**
      * Attempts to influence the [context] of a capture.
@@ -28,7 +28,7 @@ interface PokedexStatusCaptureInfluencer {
      * @param context The calculated [CaptureContext].
      * @return The final [CaptureContext].
      */
-    fun influence(thrower: LivingEntity, target: PokemonEntity, context: CaptureContext): CaptureContext {
+    fun influence(LivingEntity thrower, PokemonEntity target, context: CaptureContext): CaptureContext {
         if (!context.isSuccessfulCapture) {
             return context
         }

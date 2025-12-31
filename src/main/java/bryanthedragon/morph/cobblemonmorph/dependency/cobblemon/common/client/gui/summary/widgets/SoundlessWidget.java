@@ -14,8 +14,8 @@ import net.minecraft.network.chat.Component
 
 abstract class SoundlessWidget(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
-    component: Component
+    pInt width, pInt height,
+    Component component
 ): ParentWidget(pX, pY, pWidth, pHeight, component) {
     /**
      * Do not play sounds when clicking, because clicking a Widget anywhere produces a sound... :(

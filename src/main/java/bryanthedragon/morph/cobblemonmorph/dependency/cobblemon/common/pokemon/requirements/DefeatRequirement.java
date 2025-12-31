@@ -22,19 +22,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
  * @author Licious
  * @since January 28th, 2022
  */
-class DefeatRequirement(target: PokemonProperties, amount: Int) : Requirement {
+public class DefeatRequirement(Pokemon targetProperties, amount: Int) : Requirement {
 
     constructor() : this(PokemonProperties(), 0)
 
-    val target: PokemonProperties = target
+    val Pokemon targetProperties = target
     val amount: Int = amount
 
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
+    override fun check(Pokemon pokemon): Boolean = pokemon.evolutionProxy.current()
         .progress()
         .filterIsInstance<DefeatEvolutionProgress>()
         .any { progress -> progress.currentProgress().target.originalString.equals(this.target.originalString, true) && progress.currentProgress().amount >= this.amount }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "defeat"
     }
 

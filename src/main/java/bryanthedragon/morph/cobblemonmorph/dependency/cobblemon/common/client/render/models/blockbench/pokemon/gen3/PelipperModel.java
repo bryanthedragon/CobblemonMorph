@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class PelipperModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame, BiWingedFrame {
+public class PelipperModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame, BiWingedFrame {
     override val rootPart = root.registerChildWithAllChildren("pelipper")
     override val leftWing = getPart("wing_left")
     override val rightWing = getPart("wing_right")

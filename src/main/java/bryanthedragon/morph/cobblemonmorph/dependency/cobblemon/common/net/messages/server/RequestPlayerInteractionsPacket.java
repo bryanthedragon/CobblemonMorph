@@ -20,18 +20,18 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @since November 5th, 2023
  */
 
-class RequestPlayerInteractionsPacket(
+public class RequestPlayerInteractionsPacket(
     val targetId: UUID,
     val targetNumericId: Int,
-    val pokemonId: UUID
+    val UUID pokemonId
 ) : NetworkPacket<RequestPlayerInteractionsPacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("request_interactions")
-        fun decode(buffer: RegistryFriendlyByteBuf) = RequestPlayerInteractionsPacket(buffer.readUUID(), buffer.readInt(), buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = RequestPlayerInteractionsPacket(buffer.readUUID(), buffer.readInt(), buffer.readUUID())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(targetId)
         buffer.writeInt(targetNumericId)
         buffer.writeUUID(pokemonId)

@@ -16,12 +16,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @author Hiroku
  * @since September 30th, 2023
  */
-interface SpawnRuleComponent : SpawningInfluence {
-    companion object {
+public interface SpawnRuleComponent : SpawningInfluence {
+    final class Companion {
         val types = mutableMapOf<String, Class<out SpawnRuleComponent>>()
 
         inline fun <reified T : SpawnRuleComponent> register(type: String) {
-            types[type] = T::class.java
+            types[type] = T.class
         }
     }
 }

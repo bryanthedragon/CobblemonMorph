@@ -42,7 +42,7 @@ import net.minecraft.network.chat.Component
  * @author Hiroku
  * @since March 11th, 2022
  */
-class DamageInstruction(
+public class DamageInstruction(
     val instructionSet: InstructionSet,
     val actor: BattleActor,
     val publicMessage: BattleMessage,
@@ -72,7 +72,7 @@ class DamageInstruction(
         source?.let { ShowdownInterpreter.broadcastOptionalAbility(battle, effect, it) }
     }
 
-    private fun doRecoilEvoChecks(battlePokemon: BattlePokemon) {
+    private fun doRecoilEvoChecks(BattlePokemon battlePokemon) {
         battlePokemon.effectedPokemon.let { pokemon ->
             if (RecoilEvolutionProgress.supports(pokemon)) {
                 val healthStr = privateMessage.argumentAt(1) ?: throw UnsupportedOperationException(
@@ -91,7 +91,7 @@ class DamageInstruction(
         }
     }
 
-    override fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime) {
+    override fun runActionEffect(battle: PokemonBattle, MoLangRuntime runtime) {
         val effect = privateMessage.effect()
         val battlePokemon = publicMessage.battlePokemon(0, actor.battle) ?: return
         var status = effect?.id?.let { Statuses.getStatus(it) }

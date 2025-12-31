@@ -42,14 +42,14 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundEvent
 
-class StorageWidget(
+public class StorageWidget(
     pX: Int, pY: Int,
     val pcGui: PCGUI,
     private val pc: ClientPC,
     private val party: ClientParty
 ) : SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("PCWidget")) {
 
-    companion object {
+    final class Companion {
         const val WIDTH = 263
         const val HEIGHT = 155
         const val SCREEN_WIDTH = 174
@@ -359,7 +359,7 @@ class StorageWidget(
         this.boxSlots.clear()
     }
 
-    private fun playSound(soundEvent: SoundEvent) {
+    private fun playSound(SoundEvent soundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 

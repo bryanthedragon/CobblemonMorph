@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Yaseen
  * @since April 22nd, 2023
  */
-class ErrorInstruction(val battleActor: BattleActor, val message: BattleMessage): InterpreterInstruction {
+public class ErrorInstruction(val battleActor: BattleActor, val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.log("Error Instruction")

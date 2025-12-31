@@ -32,16 +32,16 @@ import net.minecraft.world.entity.ai.sensing.SensorType
  * @author Hiroku
  * @since June 16th, 2025
  */
-class MaintainHerdLeaderTaskConfig : SingleTaskConfig {
+public class MaintainHerdLeaderTaskConfig : SingleTaskConfig {
     // How frequently to check for a better herd leader
     val checkTicks: ExpressionOrEntityVariable = Either.left("60".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(checkTicks).asVariables()
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {

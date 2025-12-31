@@ -26,8 +26,8 @@ import net.minecraft.world.level.block.state.BlockState
  * @author Hiroku
  * @since March 9th, 2025
  */
-interface SpawningInfluenceDetector {
-    companion object {
+public interface SpawningInfluenceDetector {
+    final class Companion {
         @JvmStatic
         val detectors = mutableSetOf<SpawningInfluenceDetector>(
             SaccharineLogSlatheredDetector,
@@ -36,5 +36,5 @@ interface SpawningInfluenceDetector {
     }
 
     fun detectFromInput(spawner: Spawner, input: SpawningZoneInput) : List<SpawningZoneInfluence>
-    fun detectFromBlock(world: ServerLevel, pos: BlockPos, blockState: BlockState): List<SpawningZoneInfluence>
+    fun detectFromBlock(ServerLevel world, (BlockPos pos, blockBlockState state): List<SpawningZoneInfluence>
 }

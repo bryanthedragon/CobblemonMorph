@@ -12,18 +12,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.N
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class FinishScanningPacket(val targetedId: Int, val zoomLevel: Int) : NetworkPacket<FinishScanningPacket> {
+public class FinishScanningPacket(val targetedId: Int, val zoomLevel: Int) : NetworkPacket<FinishScanningPacket> {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(targetedId)
         buffer.writeInt(zoomLevel)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("finish_scanning_packet")
 
-        fun decode(buffer: RegistryFriendlyByteBuf): FinishScanningPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): FinishScanningPacket {
             val targetId = buffer.readInt()
             val zoomAmount = buffer.readInt()
             return FinishScanningPacket(targetId, zoomAmount)

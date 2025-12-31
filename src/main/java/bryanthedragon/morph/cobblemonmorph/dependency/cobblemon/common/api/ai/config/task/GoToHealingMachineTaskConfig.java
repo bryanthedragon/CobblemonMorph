@@ -23,22 +23,22 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 
-class GoToHealingMachineTaskConfig : SingleTaskConfig {
+public class GoToHealingMachineTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SELF_HEALING, USE_HEALING_MACHINES, true).asExpressible()
     val horizontalSearchRange: ExpressionOrEntityVariable = Either.left("10".asExpression())
     val verticalSearchRange: ExpressionOrEntityVariable = Either.left("5".asExpression())
     val completionRange: ExpressionOrEntityVariable = Either.left("1".asExpression())
     val walkSpeed = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition, walkSpeed, horizontalSearchRange, verticalSearchRange, completionRange).asVariables()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition, walkSpeed, horizontalSearchRange, verticalSearchRange, completionRange).asVariables()
 
-    companion object {
+    final class Companion {
         const val SELF_HEALING = "self_healing"
         const val USE_HEALING_MACHINES = "use_healing_machines"
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null

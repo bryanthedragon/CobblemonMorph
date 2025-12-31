@@ -16,16 +16,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.batt
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 
-class MoomooMilk(properties: Properties) : CobblemonItem(properties), SimpleBagItemLike {
+public class MoomooMilk(properties: Properties) : CobblemonItem(properties), SimpleBagItemLike {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.moomoo_milk"
         override val returnItem = Items.GLASS_BOTTLE
 
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon): Boolean {
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon): Boolean {
             return target.health > 0
         }
 
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?): String {
             return "clear_boost"
         }
     }

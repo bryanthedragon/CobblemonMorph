@@ -25,7 +25,7 @@ import net.minecraft.util.FormattedCharSequence
  * @author Hiroku
  * @since June 24th, 2022
  */
-class BattleMessagePane(
+public class BattleMessagePane(
     messageQueue: ClientBattleMessageQueue
 ): ObjectSelectionList<BattleMessagePane.BattleMessageLine>(
     Minecraft.getInstance(),
@@ -61,7 +61,7 @@ class BattleMessagePane(
         this.x = appropriateX
     }
 
-    companion object {
+    final class Companion {
         const val LINE_HEIGHT = 10
         const val LINE_WIDTH = 146
         const val FRAME_WIDTH = 169
@@ -85,7 +85,7 @@ class BattleMessagePane(
         return super.getRowLeft() + 4
     }
 
-    override fun renderSelection(guiGraphics: GuiGraphics, top: Int, width: Int, height: Int, outerColor: Int, innerColor: Int) {
+    override fun renderSelection(GuiGraphics guiGraphics, top: Int, Int width, Int height, outerColor: Int, innerColor: Int) {
         blitk(
             matrixStack = guiGraphics.pose(),
             texture = battleMessageHighlight,
@@ -197,11 +197,11 @@ class BattleMessagePane(
         override fun getNarration() = "".text()
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             rowTop: Int,
             rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
+            rowInt width,
+            rowInt height,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,

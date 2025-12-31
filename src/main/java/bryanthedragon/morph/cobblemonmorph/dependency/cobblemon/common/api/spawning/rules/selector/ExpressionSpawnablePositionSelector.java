@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveBoolean
 
-class ExpressionSpawnablePositionSelector : SpawnablePositionSelector {
+public class ExpressionSpawnablePositionSelector : SpawnablePositionSelector {
     @Transient
     val runtime = MoLangRuntime().setup()
     var expression = "true".asExpressionLike()

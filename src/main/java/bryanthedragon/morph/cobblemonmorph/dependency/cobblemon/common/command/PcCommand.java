@@ -23,7 +23,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.Commands.argument
-final class PcCommand {
+public final class PcCommand {
 
     private const val NAME = "pc"
     private val IN_BATTLE_EXCEPTION = SimpleCommandExceptionType(lang("pc.inbattle").red())

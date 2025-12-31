@@ -22,7 +22,7 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since June 20th, 2022
  */
-class ProximityPCLink(
+public class ProximityPCLink(
     pc: PCStore,
     playerID: UUID,
     pcBlockEntity: PCBlockEntity,
@@ -31,7 +31,7 @@ class ProximityPCLink(
     val world = pcBlockEntity.level
     val pos = pcBlockEntity.blockPos
 
-    override fun isPermitted(player: ServerPlayer): Boolean {
+    override fun isPermitted(ServerPlayer player): Boolean {
         val isWithinRange = player.level() == world && player.position().closerThan(pos.toVec3d(), maxDistance)
         val pcStillStanding = player.level().getBlockEntity(pos) is PCBlockEntity
         if (!isWithinRange || !pcStillStanding) {

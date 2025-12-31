@@ -23,8 +23,8 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since August 16th, 2023
  */
-interface NPCPartyProvider {
-    companion object {
+public interface NPCPartyProvider {
+    final class Companion {
         val types = mutableMapOf<String, (String) -> NPCPartyProvider>(
             SimplePartyProvider.TYPE to { SimplePartyProvider() },
             PoolPartyProvider.TYPE to { PoolPartyProvider() },
@@ -36,5 +36,5 @@ interface NPCPartyProvider {
     val isStatic: Boolean
     fun provide(npc: NPCEntity, level: Int, players: List<ServerPlayer> = emptyList()): NPCPartyStore
     // Why did I opt for manual JSON loading??? I must have had a reason but I can't remember. Maybe for S2C? Use a codec doofus
-    fun loadFromJSON(json: JsonElement)
+    fun loadFromJSON(JsonElement json)
 }

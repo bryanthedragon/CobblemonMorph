@@ -14,8 +14,8 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.lang.reflect.Type
 import net.minecraft.world.phys.AABB
-final class BoxAdapter : JsonDeserializer<AABB> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): AABB {
+public final class BoxAdapter : JsonDeserializer<AABB> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): AABB {
         json as JsonObject
         return AABB(
             json.get("minX")?.asDouble ?: -9999999.0,

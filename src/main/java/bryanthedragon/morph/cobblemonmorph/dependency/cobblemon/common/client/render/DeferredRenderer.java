@@ -19,7 +19,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.
  *
  * @author Segfault Guy
  * @since September 11th, 2024
- */final class DeferredRenderer {
+ */
+public final class DeferredRenderer {
 
     private val renderQueues = HashMap<RenderEvent.Stage, ArrayDeque<RenderEventConsumer>>()
 

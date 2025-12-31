@@ -7,7 +7,7 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch
-class WaitDispatch(delaySeconds: Float) : DispatchResult {
+public class WaitDispatch(Float delaySeconds) : DispatchResult {
     val readyTime = System.currentTimeMillis() + (delaySeconds * 1000).toInt()
     override fun canProceed() = System.currentTimeMillis() >= readyTime
 }

@@ -12,16 +12,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.N
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RequestOpenRidingStatsDebugGUIPacket : NetworkPacket<RequestOpenRidingStatsDebugGUIPacket> {
+public class RequestOpenRidingStatsDebugGUIPacket : NetworkPacket<RequestOpenRidingStatsDebugGUIPacket> {
     override val id = ID
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("request_open_riding_stats_debug_gui")
 
-        fun decode(buffer: RegistryFriendlyByteBuf): RequestOpenRidingStatsDebugGUIPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): RequestOpenRidingStatsDebugGUIPacket {
             return RequestOpenRidingStatsDebugGUIPacket()
         }
     }
 
-    override fun encode(buf: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buf) {}
 }

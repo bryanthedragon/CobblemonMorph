@@ -21,11 +21,11 @@ import net.minecraft.world.phys.Vec3
  * @author Licious
  * @since March 21st, 2022
  */
-class AreaRequirement : EntityQueryRequirement {
-    companion object {
+public class AreaRequirement : EntityQueryRequirement {
+    final class Companion {
         const val ADAPTER_VARIANT = "area"
     }
 
-    val box: AABB = AABB.unitCubeFromLowerCorner(Vec3.ZERO)
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity) = box.contains(queriedEntity.position())
+    val AABB box = AABB.unitCubeFromLowerCorner(Vec3.ZERO)
+    override fun check(Pokemon pokemon, LivingEntity queriedEntity) = box.contains(queriedEntity.position())
 }

@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialo
  * @author Hiroku
  * @since December 27th, 2023
  */
-class DialogueTextInput : DialogueInput {
+public class DialogueTextInput : DialogueInput {
     override var timeout: DialogueTimeout? = null
     var action: DialogueAction = FunctionDialogueAction { dialogue, _ -> dialogue.setPage(dialogue.currentPageIndex + 1) }
     override fun toMoLangStruct(activeInput: ActiveInput) = QueryStruct(hashMapOf())

@@ -27,20 +27,20 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since February 14th, 2022
  */
-open class PlayerLevelRangeInfluence(
-    player: ServerPlayer,
+public open class PlayerLevelRangeInfluence(
+    ServerPlayer player,
     val variation: Int,
-    val noPokemonRange: IntRange = 1 .. config.minimumLevelRangeMax,
+    val noPokemonIntRange range = 1 .. config.minimumLevelRangeMax,
     val recalculationMillis: Long = 5000L
 ) : SpawningInfluence {
-    companion object {
+    final class Companion {
         /** The internally tuned variation for player level range influences */
         val TYPICAL_VARIATION = 5
     }
 
     val uuid = player.uuid
     var lastCalculatedTime: Long = 0
-    var previousRange: IntRange = noPokemonRange
+    var previousIntRange range = noPokemonRange
 
     fun getPlayerLevelRange(): IntRange {
         return if (System.currentTimeMillis() - lastCalculatedTime > recalculationMillis) {

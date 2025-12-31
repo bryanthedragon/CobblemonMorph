@@ -23,20 +23,20 @@ import java.util.UUID
  * @since October 26, 2024
  */
 
-class DexDataMongoBackend(mongoClient: MongoClient, databaseName: String, collectionName: String) :
+public class DexDataMongoBackend(mongoClient: MongoClient, databaseName: String, collectionName: String) :
     MongoBackedPlayerDataStoreBackend<PokedexManager>(mongoClient, databaseName, collectionName, PlayerInstancedDataStoreTypes.POKEDEX) {
     override val gson = GsonBuilder()
-        .registerTypeAdapter(PokedexManager::class.java, CodecBackedAdapter(PokedexManager.CODEC))
+        .registerTypeAdapter(PokedexManager.class, CodecBackedAdapter(PokedexManager.CODEC))
         .create()
-    override val classToken = TypeToken.get(PokedexManager::class.java)
+    override val classToken = TypeToken.get(PokedexManager.class)
     override val defaultData = defaultDataFunc
 
     override fun initialize(store: PokedexManager) {
         store.initialize()
     }
 
-    companion object {
-        val defaultDataFunc = { uuid: UUID ->
+    final class Companion {
+        val defaultDataFunc = { UUID uuid ->
             PokedexManager(uuid, mutableMapOf())
         }
     }

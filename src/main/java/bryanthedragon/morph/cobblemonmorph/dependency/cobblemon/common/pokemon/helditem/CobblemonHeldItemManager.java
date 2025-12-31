@@ -32,7 +32,7 @@ import java.util.function.Function
  * @author Licious
  * @since December 30th, 2022
  */
-@Suppress("unused")final class CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
+@Suppress("unused")public final class CobblemonHeldItemManager : BaseCobblemonHeldItemManager() {
 
     /**
      * A collection of literal effect IDs that will trigger the Pokémon receiving the associated held item.
@@ -182,7 +182,7 @@ override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattl
         battle.broadcastChatMessage(text)
     }
 
-    override fun shouldConsumeItem(pokemon: BattlePokemon, battle: PokemonBattle, showdownId: String): Boolean {
+    override fun shouldConsumeItem(pokemon: BattlePokemon, battle: PokemonBattle, String showdownId): Boolean {
         val itemStack = pokemon.effectedPokemon.heldItem()
 
         if (itemStack.has(HELD_ITEM_EFFECT))
@@ -203,7 +203,7 @@ override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattl
      * @param item The Minecraft [Item] instance that has a specific showdownId.
      * @param showdownId The showdown name of this item.
      */
-    fun registerRemap(item: Item, showdownId: String) {
+    fun registerRemap(item: Item, String showdownId) {
         this.remaps[item] = showdownId
     }
 
@@ -216,7 +216,7 @@ override fun handleStartInstruction(pokemon: BattlePokemon, battle: PokemonBattl
         this.stackRemaps.add(remap)
     }
 
-    override fun nameOf(showdownId: String): Component {
+    override fun nameOf(String showdownId): Component {
         // Check Remaps before defaulting to super
         for (remap in remaps) {
             if (remap.value == showdownId) {

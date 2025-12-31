@@ -12,7 +12,8 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.sche
  * More precise than the [ServerTaskTracker], still runs on the server, and uses epoch time deltas for
  * the scheduling delta so that it is working by real time and not by ticks. This is useful for some
  * applications but is generally not what you want.
- */final class ServerRealTimeTaskTracker : Schedulable, SchedulingTracker() {
+ */
+public final class ServerRealTimeTaskTracker : Schedulable, SchedulingTracker() {
     override val schedulingTracker = this
     var lastTicked = System.currentTimeMillis()
 
@@ -24,9 +25,9 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.sche
     }
 }
 
-final class ServerTaskTracker: Schedulable, SchedulingTracker() {
+public final class ServerTaskTracker: Schedulable, SchedulingTracker() {
     override val schedulingTracker = this
 }
-final class ClientTaskTracker : Schedulable, SchedulingTracker() {
+public final class ClientTaskTracker : Schedulable, SchedulingTracker() {
     override val schedulingTracker = this
 }

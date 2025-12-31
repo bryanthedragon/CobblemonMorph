@@ -25,7 +25,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @author Hiroku
  * @since July 8th, 2022
  */
-class WeightMultiplier : SpawningInfluence {
+public class WeightMultiplier : SpawningInfluence {
     var conditions = mutableListOf<SpawningCondition<*>>()
     var anticonditions = mutableListOf<SpawningCondition<*>>()
     var multiplier = 1F

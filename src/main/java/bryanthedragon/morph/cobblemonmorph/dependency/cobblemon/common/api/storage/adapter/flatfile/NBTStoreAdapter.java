@@ -30,19 +30,19 @@ open class NBTStoreAdapter(
     useNestedFolders: Boolean,
     folderPerClass: Boolean,
 ) : OneToOneFileStoreAdapter<CompoundTag>(rootFolder, useNestedFolders, folderPerClass, "dat") {
-    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess) = store.saveToNBT(CompoundTag(), registryAccess)
+    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, RegistryAccess registryAccess) = store.saveToNBT(CompoundTag(), registryAccess)
     override fun save(file: File, serialized: CompoundTag) = NbtIo.writeCompressed(serialized, file.toPath())
-    override fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+    override fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, UUID uuid, RegistryAccess registryAccess): T? {
         val store = try {
-            storeClass.getConstructor(UUID::class.java, UUID::class.java).newInstance(uuid, uuid)
+            storeClass.getConstructor(UUID.class, UUID.class).newInstance(uuid, uuid)
         } catch (exception: NoSuchMethodException) {
-            storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+            storeClass.getConstructor(UUID.class).newInstance(uuid)
         }
         return try {
             val nbt = NbtIo.readCompressed(file.toPath(), NbtAccounter.unlimitedHeap())
             store.loadFromNBT(nbt, registryAccess)
             store
-        } catch (e: Exception) {
+        } catch (Exception e) {
             e.printStackTrace()
             return null
         }

@@ -74,10 +74,10 @@ abstract class RequestManager<T : ServerPlayerActionRequest> {
         ?: this.getInboundRequest(receiver.uuid, requestID)
 
     /** Determines whether [player] can receive a [T]. */
-    open fun isBusy(player: ServerPlayer): Boolean = player.isInBattle() || player.isTrading() || player.party().find { it.entity?.isBusy == true } != null
+    open fun isBusy(ServerPlayer player): Boolean = player.isInBattle() || player.isTrading() || player.party().find { it.entity?.isBusy == true } != null
 
     /** Determines if the [target] is a valid interaction request target. */
-    abstract fun isValidInteraction(player: ServerPlayer, target: ServerPlayer): Boolean
+    abstract fun isValidInteraction(ServerPlayer player, target: ServerPlayer): Boolean
 
     /** Determines whether [request] response is valid and can be accepted. If invalid, notifies the sender and receiver of the request why. */
     protected abstract fun canAccept(request: T): Boolean
@@ -165,7 +165,7 @@ abstract class RequestManager<T : ServerPlayerActionRequest> {
     }
 
     /** Accepts a pending inbound [requestID] for [player]. */
-    fun acceptRequest(player: ServerPlayer, requestID: UUID, target: ServerPlayer? = null): Boolean {
+    fun acceptRequest(ServerPlayer player, requestID: UUID, target: ServerPlayer? = null): Boolean {
         var accepted = false
         val request = this.getInboundRequest(player, requestID)
 
@@ -208,7 +208,7 @@ abstract class RequestManager<T : ServerPlayerActionRequest> {
     }
 
     /** Cancels pending outbound requests sent from, and pending inbound request sent to, [player]. */
-    protected open fun onLogoff(player: ServerPlayer) {
+    protected open fun onLogoff(ServerPlayer player) {
         // ONLY regarding the player. see TeamManager for how team requests are canceled on team disband.
         outboundRequests.get(player.uuid)?.let { request ->
             this.cancelRequest(request)
@@ -220,11 +220,11 @@ abstract class RequestManager<T : ServerPlayerActionRequest> {
         }
     }
 
-    companion object {
+    final class Companion {
         private val managers = mutableListOf<RequestManager<*>>()
 
         fun register(manager: RequestManager<*>) = managers.add(manager)
 
-        fun onLogoff(player: ServerPlayer) = managers.forEach { it.onLogoff(player) }
+        fun onLogoff(ServerPlayer player) = managers.forEach { it.onLogoff(player) }
     }
 }

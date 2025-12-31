@@ -18,7 +18,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-final class GiveAllPokemon {
+public final class GiveAllPokemon {
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(
             Commands.literal("giveallpokemon")
@@ -37,7 +37,7 @@ final class GiveAllPokemon {
         )
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, range: IntRange) : Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, IntRange range) : Int {
         val player = context.source.playerOrException
         val pc = player.party().getOverflowPC(player.registryAccess()) ?: return 0
 

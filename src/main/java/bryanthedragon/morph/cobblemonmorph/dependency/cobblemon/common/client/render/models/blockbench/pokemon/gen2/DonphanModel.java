@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class DonphanModel (root: ModelPart) : PokemonPosableModel(root), QuadrupedFrame {
+public class DonphanModel (root: ModelPart) : PokemonPosableModel(root), QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("donphan")
 
     override val foreLeftLeg = getPart("leg_front_left")

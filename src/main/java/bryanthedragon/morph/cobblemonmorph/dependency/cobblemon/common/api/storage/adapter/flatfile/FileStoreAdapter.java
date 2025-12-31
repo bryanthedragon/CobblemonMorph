@@ -20,9 +20,9 @@ import net.minecraft.core.RegistryAccess
  * @author Hiroku
  * @since November 29th, 2021
  */
-interface FileStoreAdapter<S> : CobblemonAdapter<S> {
+public interface FileStoreAdapter<S> : CobblemonAdapter<S> {
     /** Converts the specified store into a serialized form. This is expected to run on the server thread, and as fast as possible. */
-    fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess): S
+    fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, RegistryAccess registryAccess): S
     /** Writes the serialized form of a store into the appropriate file. This should be threadsafe. */
-    fun save(storeClass: Class<out PokemonStore<*>>, uuid: UUID, serialized: S)
+    fun save(storeClass: Class<out PokemonStore<*>>, UUID uuid, serialized: S)
 }

@@ -22,26 +22,26 @@ import net.minecraft.network.chat.MutableComponent
  * @author Hiroku
  * @since December 29th, 2023
  */
-interface DialogueText {
-    companion object {
+public interface DialogueText {
+    final class Companion {
         val types = mutableMapOf<String, Class<out DialogueText>>(
-            "expression" to ExpressionLikeDialogueText::class.java,
+            "expression" to ExpressionLikeDialogueText.class,
         )
     }
 
-    operator fun invoke(activeDialogue: ActiveDialogue): MutableComponent
+    operator fun invoke(ActiveDialogue activeDialogue): MutableComponent
 }
 
-class FunctionDialogueText(val function: (ActiveDialogue) -> MutableComponent = { "".text() }) : DialogueText {
-    override fun invoke(activeDialogue: ActiveDialogue) = function(activeDialogue)
+public class FunctionDialogueText(val function: (ActiveDialogue) -> MutableComponent = { "".text() }) : DialogueText {
+    override fun invoke(ActiveDialogue activeDialogue) = function(activeDialogue)
 }
 
-class WrappedDialogueText(val text: MutableComponent = "".text()) : DialogueText {
-    override fun invoke(activeDialogue: ActiveDialogue) = text.copy()
+public class WrappedDialogueText(val text: MutableComponent = "".text()) : DialogueText {
+    override fun invoke(ActiveDialogue activeDialogue) = text.copy()
 }
 
-class ExpressionLikeDialogueText(val expression: ExpressionLike = "''".asExpressionLike()) : DialogueText {
-    override fun invoke(activeDialogue: ActiveDialogue): MutableComponent {
+public class ExpressionLikeDialogueText(val expression: ExpressionLike = "''".asExpressionLike()) : DialogueText {
+    override fun invoke(ActiveDialogue activeDialogue): MutableComponent {
         return activeDialogue.runtime.resolveString(expression).text()
     }
 }

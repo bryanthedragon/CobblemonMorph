@@ -21,10 +21,10 @@ import net.minecraft.util.Mth
 abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
     top: Int = 0,
     val left: Int = 0,
-    width: Int = 10,
-    height: Int = 10,
-    slotHeight: Int = 10,
-    val scrollBarWidth: Int = 5
+    Int width = 10,
+    Int height = 10,
+    slotInt height = 10,
+    val scrollBarInt width = 5
 ) : ObjectSelectionList<T>(
     Minecraft.getInstance(),
     width, // Width
@@ -32,8 +32,8 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
     top, // Top
     slotHeight // Slot Height
 ), CobblemonRenderable {
-    override fun renderListBackground(guiGraphics: GuiGraphics) {}
-    override fun renderSelection(context: GuiGraphics, y: Int, entryWidth: Int, entryHeight: Int, borderColor: Int, fillColor: Int) {}
+    override fun renderListBackground(GuiGraphics guiGraphics) {}
+    override fun renderSelection(context: GuiGraphics, y: Int, entryInt width, entryInt height, borderColor: Int, fillColor: Int) {}
     override fun renderDecorations(context: GuiGraphics, mouseX: Int, mouseY: Int) {}
 
 
@@ -42,7 +42,7 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
         setLeft(left)
     }
 
-    final override fun setRectangle(width: Int, height: Int, top: Int, bottom: Int) {
+    final override fun setRectangle(Int width, Int height, top: Int, bottom: Int) {
         this.width = width
         this.height = height
         this.y = bottom
@@ -170,11 +170,11 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
         mouseX: Int,
         mouseY: Int,
         delta: Float,
-        index: Int,
+        Int index,
         x: Int,
         y: Int,
-        entryWidth: Int,
-        entryHeight: Int
+        entryInt width,
+        entryInt height
     ) {
         val entry =  this.getEntry(index)
         entry.render(
@@ -195,11 +195,11 @@ abstract class ScrollingWidget<T : ObjectSelectionList.Entry<T>>(
         return this.width
     }
 
-    override fun getRowTop(index: Int): Int {
+    override fun getRowTop(Int index): Int {
         return this.y - scrollAmount.toInt() + (index * this.itemHeight)
     }
 
-    override fun getRowBottom(index: Int): Int {
+    override fun getRowBottom(Int index): Int {
         return this.getRowTop(index) + this.itemHeight
     }
 

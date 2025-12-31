@@ -25,8 +25,9 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author Hiroku
  * @since February 6th, 2023
- */final class ModelTextureSupplierAdapter : JsonDeserializer<ModelTextureSupplier> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): ModelTextureSupplier {
+ */
+public final class ModelTextureSupplierAdapter : JsonDeserializer<ModelTextureSupplier> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): ModelTextureSupplier {
         if (json.isJsonPrimitive) {
             if (json.asString == "variable") {
                 return VariableModelTextureSupplier()

@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
 
 
-class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
+public class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
         mapOf(
                 MemoryModuleType.WALK_TARGET to MemoryStatus.VALUE_ABSENT,
                 CobblemonMemories.NEARBY_SWEET_BERRY_BUSH to MemoryStatus.VALUE_PRESENT
@@ -36,11 +36,11 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
 ) {
 
     var startTime : Int = 0
-    companion object {
+    final class Companion {
         const val WAIT_TIME = 40
     }
 
-    override fun canStillUse(world: ServerLevel, entity: LivingEntity, l: Long): Boolean {
+    override fun canStillUse(ServerLevel world, LivingEntity entity, l: Long): Boolean {
         if (startTime > WAIT_TIME) {
             return false
         }
@@ -51,7 +51,7 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
                 || CaveVines.hasGlowBerries(blockState)
     }
 
-    override fun checkExtraStartConditions(world: ServerLevel, entity: LivingEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel world, LivingEntity entity): Boolean {
 
         val blockPos = entity.brain.getMemory(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH).get()
 
@@ -69,7 +69,7 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
         }
     }
 
-    override fun tick(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
+    override fun tick(ServerLevel level, LivingEntity entity, gameTime: Long) {
         startTime += 1
         if (startTime == WAIT_TIME) {
             entity as PokemonEntity
@@ -101,7 +101,7 @@ class HarvestSweetBerryBushTask : Behavior<LivingEntity>(
         }
     }
 
-    override fun start(world: ServerLevel, entity: LivingEntity, l: Long) {
+    override fun start(ServerLevel world, LivingEntity entity, l: Long) {
         startTime = 0
     }
 }

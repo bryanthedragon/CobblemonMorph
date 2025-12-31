@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.b
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ActiveClientBattlePokemon
 
-interface TileAnimation {
+public interface TileAnimation {
     /** Returns true if the animation is done. */
     operator fun invoke(activeBattlePokemon: ActiveClientBattlePokemon, deltaTicks: Float): Boolean
     fun shouldHoldUntilNextAnimation(): Boolean

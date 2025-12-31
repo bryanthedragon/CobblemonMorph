@@ -19,7 +19,7 @@ import java.util.EnumSet
  * @author JazzMcNade
  * @since September 29th, 2024
  */
-enum class PlatformType {
+public enum PlatformType {
     NONE,
     WATER_XS,
     WATER_S,
@@ -28,7 +28,7 @@ enum class PlatformType {
     WATER_XL;
 
 
-    companion object {
+    final class Companion {
         val WATER = EnumSet.of(WATER_XS, WATER_S, WATER_M, WATER_L, WATER_XL)
 
         fun getModelWithTexture(type: PlatformType) : Pair<ResourceLocation, ResourceLocation> {

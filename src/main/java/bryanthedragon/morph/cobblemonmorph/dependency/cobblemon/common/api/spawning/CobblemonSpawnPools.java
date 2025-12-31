@@ -23,7 +23,8 @@ import net.minecraft.server.MinecraftServer
  *
  * @author Hiroku
  * @since February 10th, 2022
- */final class CobblemonSpawnPools {
+ */
+public final class CobblemonSpawnPools {
     /** [SpawnPool] used for standard world spawning. */
     lateinit var WORLD_SPAWN_POOL: SpawnPool
 

@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.k
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.CobblemonKeyBinding
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.KeybindCategories
 import com.mojang.blaze3d.platform.InputConstants
-final class HidePartyBinding : CobblemonKeyBinding(
+public final class HidePartyBinding : CobblemonKeyBinding(
     "key.cobblemon.hideparty",
     InputConstants.Type.KEYSYM,
     InputConstants.KEY_O,

@@ -18,7 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
  *
  * @author Hiroku
  * @since July 1st, 2022
- */final class UncatchableProperty : CustomPokemonPropertyType<FlagProperty> {
+ */
+public final class UncatchableProperty : CustomPokemonPropertyType<FlagProperty> {
     override val keys = setOf("uncatchable")
     override val needsKey = true
 

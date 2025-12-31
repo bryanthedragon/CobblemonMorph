@@ -24,9 +24,9 @@ import net.minecraft.network.chat.Component
  *
  * The blocked var was added to prevent the switching the order of Buttons triggering another switch
  */
-class SwapMoveButton(
+public class SwapMoveButton(
     val pX: Int, val pY: Int,
-    var move: MoveTemplate?,
+    var MoveTemplate move?,
     var movesWidget: MovesWidget,
     onPress: OnPress
 ): Button((pX + OFFSET_X).toInt(), (pY + OFFSET_Y).toInt(), (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
@@ -35,7 +35,7 @@ class SwapMoveButton(
         return false
     }
 
-    companion object {
+    final class Companion {
         private const val WIDTH = 12
         private const val HEIGHT = 18
         private const val OFFSET_X = 114.5F

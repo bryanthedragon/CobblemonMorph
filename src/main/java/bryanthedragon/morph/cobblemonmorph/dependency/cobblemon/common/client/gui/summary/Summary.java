@@ -65,10 +65,10 @@ import net.minecraft.sounds.SoundEvent
  *
  * @param selection The index the [party] will have as the base [selectedPokemon].
  */
-class Summary private constructor(party: Collection<Pokemon?>, private val editable: Boolean, private val selection: Int): Screen(
+public class Summary private constructor(party: Collection<Pokemon?>, private val editable: Boolean, private val selection: Int): Screen(
     Component.translatable("cobblemon.ui.summary.title")), Schedulable, CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val BASE_WIDTH = 331
         const val BASE_HEIGHT = 161
         private const val PORTRAIT_SIZE = 66
@@ -123,7 +123,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
     override val schedulingTracker = SchedulingTracker()
 
     private val party = ArrayList(party)
-    internal var selectedPokemon: Pokemon = this.party[selection] ?: this.party.first { it != null }!!
+    internal var selectedPokemon pokemon = this.party[selection] ?: this.party.first { it != null }!!
     private lateinit var mainScreen: AbstractWidget
     lateinit var sideScreen: GuiEventListener
     private lateinit var modelWidget: ModelWidget
@@ -301,7 +301,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         updatePokemonInfo()
     }
 
-    fun swapPartySlot(sourceIndex: Int, targetIndex: Int) {
+    fun swapPartySlot(sourceInt index, targetInt index) {
         if (sourceIndex >= this.party.size || targetIndex >= this.party.size) {
             return
         }
@@ -690,7 +690,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         val nicknameSelected = this::nicknameEntryWidget.isInitialized && nicknameEntryWidget.isFocused
 
         if (keyCode == InputConstants.KEY_ESCAPE) {
@@ -736,7 +736,7 @@ class Summary private constructor(party: Collection<Pokemon?>, private val edita
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    fun playSound(soundEvent: SoundEvent) {
+    fun playSound(SoundEvent soundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 

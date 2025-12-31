@@ -6,11 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.aspect.AspectProvider
-import com.google.gson.JsonObject
-import net.minecraft.nbt.CompoundTag
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.aspect.AspectProvider;
+
+import com.google.gson.JsonObject;
+
+import net.minecraft.nbt.CompoundTag;
 
 /**
  * A piece of state that can be added to some species of Pokémon. Registering an implementing class
@@ -24,10 +26,19 @@ import net.minecraft.nbt.CompoundTag
  * @author Hiroku
  * @since May 13th, 2022
  */
-interface SpeciesFeature {
-    val name: String
-    fun saveToNBT(pokemonNBT: CompoundTag): CompoundTag
-    fun loadFromNBT(pokemonNBT: CompoundTag): SpeciesFeature
-    fun saveToJSON(pokemonJSON: JsonObject): JsonObject
-    fun loadFromJSON(pokemonJSON: JsonObject): SpeciesFeature
+public interface SpeciesFeature {
+    String name = "";
+
+    default CompoundTag saveToNBT(pokemonCompoundTag nbt) {
+        return nbt;
+    }
+    default SpeciesFeature loadFromNBT(pokemonCompoundTag nbt) {
+        return nbt;
+    }
+    default JsonObject saveToJSON(JsonObject pokemonJSON) {
+        return pokemonJSON;
+    }
+    default SpeciesFeature loadFromJSON(JsonObject pokemonJSON) {
+        return null;
+    }
 }

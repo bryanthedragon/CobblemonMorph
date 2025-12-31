@@ -46,8 +46,8 @@ import kotlin.random.Random
  * @author Hiroku
  * @since July 12th, 2024
  */
-class PoolPartyProvider : NPCPartyProvider {
-    companion object {
+public class PoolPartyProvider : NPCPartyProvider {
+    final class Companion {
         const val TYPE = "pool"
     }
 
@@ -60,7 +60,7 @@ class PoolPartyProvider : NPCPartyProvider {
     var maxPokemon: Expression = "6".asExpression()
     var pool = mutableListOf<DynamicPokemon>()
 
-    override fun loadFromJSON(json: JsonElement) {
+    override fun loadFromJSON(JsonElement json) {
         json as JsonObject
         this.minPokemon = json.getAsJsonPrimitive("minPokemon").asString?.asExpression() ?: "1".asExpression()
         this.maxPokemon = json.getAsJsonPrimitive("maxPokemon").asString?.asExpression() ?: "6".asExpression()
@@ -100,18 +100,18 @@ class PoolPartyProvider : NPCPartyProvider {
     }
 
     class DynamicPokemon(
-        val pokemon: PokemonProperties,
+        val Pokemon pokemonProperties,
         val levelVariation: Expression,
         val level: Expression? = null,
         val npcLevels: IntRange,
         val selectableTimes: Expression,
         val weight: Expression = "1".asExpression()
     ) {
-        fun getWeight(runtime: MoLangRuntime): Float {
+        fun getWeight(MoLangRuntime runtime): Float {
             return runtime.resolveFloat(weight)
         }
 
-        fun hasWeight(runtime: MoLangRuntime): Boolean {
+        fun hasWeight(MoLangRuntime runtime): Boolean {
             return runtime.resolveFloat(weight) != 0F
         }
     }

@@ -18,8 +18,8 @@ import com.google.gson.JsonObject
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import java.lang.reflect.Type
-final class ShoulderEffectAdapter: JsonDeserializer<ShoulderEffect> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ShoulderEffect {
+public final class ShoulderEffectAdapter: JsonDeserializer<ShoulderEffect> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): ShoulderEffect {
         val (typeId, obj) = if (json.isJsonPrimitive) {
             json.asString to JsonObject()
         } else {

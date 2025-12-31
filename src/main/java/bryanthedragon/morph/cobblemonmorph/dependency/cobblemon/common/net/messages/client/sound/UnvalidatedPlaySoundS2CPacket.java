@@ -25,19 +25,19 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since December 29th, 2022
  */
-class UnvalidatedPlaySoundS2CPacket(
+public class UnvalidatedPlaySoundS2CPacket(
     var sound: ResourceLocation,
-    var category: SoundSource,
+    var SoundSource category,
     var x: Double,
     var y: Double,
     var z: Double,
-    var volume: Float,
-    var pitch: Float
+    var Float volume,
+    var Float pitch
 ) : NetworkPacket<UnvalidatedPlaySoundS2CPacket> {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(this.sound)
         buffer.writeEnumConstant(this.category)
         buffer.writeDouble(this.x)
@@ -47,11 +47,11 @@ class UnvalidatedPlaySoundS2CPacket(
         buffer.writeFloat(this.pitch)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("unvalidated_play_sound")
-        fun decode(buffer: RegistryFriendlyByteBuf) = UnvalidatedPlaySoundS2CPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = UnvalidatedPlaySoundS2CPacket(
             buffer.readIdentifier(),
-            buffer.readEnumConstant(SoundSource::class.java),
+            buffer.readEnumConstant(SoundSource.class),
             buffer.readDouble(),
             buffer.readDouble(),
             buffer.readDouble(),

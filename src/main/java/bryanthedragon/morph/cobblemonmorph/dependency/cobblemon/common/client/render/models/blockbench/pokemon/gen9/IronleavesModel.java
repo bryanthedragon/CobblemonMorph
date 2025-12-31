@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class IronleavesModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class IronleavesModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("ironleaves")
     override val head = getPart("head")
     val neck_sword_left = getPart("neck_sword_left")

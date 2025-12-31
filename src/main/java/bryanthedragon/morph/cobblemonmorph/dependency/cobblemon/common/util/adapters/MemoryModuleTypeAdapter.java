@@ -21,11 +21,12 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
  *
  * @author Hiroku
  * @since June 24th, 2025
- */final class MemoryModuleTypeAdapter : JsonDeserializer<MemoryModuleType<*>> {
+ */
+public final class MemoryModuleTypeAdapter : JsonDeserializer<MemoryModuleType<*>> {
     override fun deserialize(
-        json: JsonElement,
+        JsonElement json,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        JsonDeserializationContext context
     ): MemoryModuleType<*>? {
         val identifier = ResourceLocation.tryParse(json.asString)
             ?: throw IllegalArgumentException("Invalid identifier: ${json.asString}")

@@ -16,7 +16,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.permissi
 //        PokemonCobblemon.LOGGER.info("Booting LuckPermsPermissionValidator, permissions will be checked through LuckPerms, see https://luckperms.net/ for more information")
 //    }
 //
-//    override fun hasPermission(player: ServerPlayer, permission: String) = this.luckPerms.userManager.getUser(player.uuid)?.cachedData?.permissionData?.checkPermission(permission)?.asBoolean() ?: false
+//    override fun hasPermission(ServerPlayer player, permission: String) = this.luckPerms.userManager.getUser(player.uuid)?.cachedData?.permissionData?.checkPermission(permission)?.asBoolean() ?: false
 //
 //    override fun hasPermission(source: CommandSource, permission: String): Boolean {
 //        val serverSource = source as? ServerCommandSource ?: return true

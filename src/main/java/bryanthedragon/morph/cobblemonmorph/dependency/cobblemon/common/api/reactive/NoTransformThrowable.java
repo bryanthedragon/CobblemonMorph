@@ -1,12 +1,4 @@
-/*
- * Copyright (C) 2023 Cobblemon Contributors
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive;
 
 /**
  * A specific exception that allows canceled transformations to occur in pipes.
@@ -14,4 +6,16 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reac
  * @author Hiroku
  * @since November 26th, 2021
  */
-class NoTransformThrowable(val terminate: Boolean) : Throwable()
+public class NoTransformThrowable extends RuntimeException {
+
+    final boolean terminate;
+
+    public NoTransformThrowable(boolean terminate) {
+        super();
+        this.terminate = terminate;
+    }
+
+    public boolean shouldTerminate() {
+        return terminate;
+    }
+}

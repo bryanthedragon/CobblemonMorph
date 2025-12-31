@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.npc.NPCEditorScreen
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.npc.CloseNPCEditorPacket
 import net.minecraft.client.Minecraft
-final class CloseNPCEditorHandler : ClientNetworkPacketHandler<CloseNPCEditorPacket> {
-    override fun handle(packet: CloseNPCEditorPacket, client: Minecraft) {
+public final class CloseNPCEditorHandler : ClientNetworkPacketHandler<CloseNPCEditorPacket> {
+    override fun handle(packet: CloseNPCEditorPacket, Minecraft client) {
         val screen = client.screen
         if (screen is NPCEditorScreen) {
             screen.onClose()

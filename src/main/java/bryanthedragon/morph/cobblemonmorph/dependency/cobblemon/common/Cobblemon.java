@@ -8,7 +8,6 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBuildDetails.smallCommitHash;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.SeasonResolver;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.DataProvider;
@@ -17,7 +16,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.EvolutionItemDropEntry;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.ItemDropEntry;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents.DATA_SYNCHRONIZED;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.interaction.RequestManager;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangLoadedFilesCache;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue;
@@ -30,12 +28,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.experience.ExperienceGroups;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.experience.StandardExperienceCalculator;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.ChoiceSpeciesFeatureProvider;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.FlagSpeciesFeatureProvider;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.IntSpeciesFeatureProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatures;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.helditem.HeldItemProvider;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.EvCalculator;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Generation8EvCalculator;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.StatProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonProperty;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ServerRealTimeTaskTracker;
@@ -72,7 +66,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.a
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.DispenserBehaviorRegistry;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonPack;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ResourcePackActivationBehaviour;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.command.arguments.*;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.CobblemonConfig;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.LastChangedVersion;
@@ -88,33 +81,21 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.events.St
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.settings.ServerSettingsPacket;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.permission.LaxPermissionValidator;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.PlatformEvents;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.aspects.CHARACTERISTIC_RAINBOW_ASPECT;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.aspects.COSMETIC_SLOT_ASPECT;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.aspects.GENDER_ASPECT;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.aspects.SHINY_ASPECT;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.BlockClickEvolution;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeature;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.feature.SlowpokeTailRegrowthSpeciesFeatureProvider;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.feature.TagSeasonResolver;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.helditem.CobblemonHeldItemManager;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.AspectPropertyType;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.FreezeFrameProperty;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.HiddenAbilityPropertyType;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.NoAIProperty;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.UnaspectPropertyType;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.tags.BattleCloneProperty;
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.tags.UncatchableProperty;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.tags.PokemonFlagProperty;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.stat.CobblemonStatProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.starter.CobblemonStarterHandler;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.feature.CobblemonPlacedFeatures;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.feature.ore.CobblemonOrePlacedFeatures;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.gamerules.CobblemonGameRules;
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBuildDetails;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.ResourceKey;
@@ -125,24 +106,25 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.NameTagItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelResource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
 
-class Cobblemon {
+public class Cobblemon {
     const val MODID = CobblemonBuildDetails.MOD_ID;
     const val VERSION = CobblemonBuildDetails.VERSION;
     const val CONFIG_PATH = "config/$MODID/main.json";
-    @JvmField
-    val LOGGER: Logger = LogManager.getLogger()
 
-    lateinit var implementation: CobblemonImplementation
-    @Deprecated("This field is now a config value", ReplaceWith("Cobblemon.config.captureCalculator"))
-    var captureCalculator: CaptureCalculator
+    Logger log = Cobblemon.LOGGER;
+
+    lateinit CobblemonImplementation  implementation;
+    var CaptureCalculator captureCalculator
         get() = this.config.captureCalculator
         set(value) {
             this.config.captureCalculator = value
@@ -210,9 +192,9 @@ class Cobblemon {
         implementation.registerEntitySubPredicates()
         DispenserBehaviorRegistry.registerDispenserBehaviors()
 
-        DropEntry.register("command", CommandDropEntry::class.java)
-        DropEntry.register("item", ItemDropEntry::class.java, isDefault = true)
-        DropEntry.register("evolution", EvolutionItemDropEntry::class.java)
+        DropEntry.register("command", CommandDropEntry.class)
+        DropEntry.register("item", ItemDropEntry.class, isDefault = true)
+        DropEntry.register("evolution", EvolutionItemDropEntry.class)
 
         ExperienceGroups.registerDefaults()
         CaptureCalculators.registerDefaults()
@@ -283,7 +265,7 @@ class Cobblemon {
         HeldItemProvider.register(CobblemonHeldItemManager, Priority.LOWEST)
     }
 
-    fun sendServerSettingsPacketToPlayer(player: ServerPlayer) {
+    fun sendServerSettingsPacketToPlayer(ServerPlayer player) {
         ServerSettingsPacket(
             this.config.preventCompletePartyDeposit,
             this.config.displayEntityLevelLabel,
@@ -305,9 +287,9 @@ class Cobblemon {
         COSMETIC_SLOT_ASPECT.register()
         CHARACTERISTIC_RAINBOW_ASPECT.register()
 
-        SpeciesFeatures.types["choice"] = ChoiceSpeciesFeatureProvider::class.java
-        SpeciesFeatures.types["flag"] = FlagSpeciesFeatureProvider::class.java
-        SpeciesFeatures.types["integer"] = IntSpeciesFeatureProvider::class.java
+        SpeciesFeatures.types["choice"] = ChoiceSpeciesFeatureProvider.class
+        SpeciesFeatures.types["flag"] = FlagSpeciesFeatureProvider.class
+        SpeciesFeatures.types["integer"] = IntSpeciesFeatureProvider.class
 
         SpeciesFeatures.register(
             DataKeys.HAS_BEEN_SHEARED,
@@ -485,9 +467,9 @@ class Cobblemon {
         if (configFile.exists()) {
             try {
                 val fileReader = FileReader(configFile)
-                this.config = CobblemonConfig.GSON.fromJson(fileReader, CobblemonConfig::class.java)
+                this.config = CobblemonConfig.GSON.fromJson(fileReader, CobblemonConfig.class)
                 fileReader.close()
-            } catch (exception: Exception) {
+            } catch (Exception exception) {
                 LOGGER.error("Failed to load the config! Using default config until the following has been addressed:")
                 this.config = CobblemonConfig()
                 exception.printStackTrace()
@@ -534,7 +516,7 @@ class Cobblemon {
                 return config
             }
             val reader = FileReader(file)
-            val config = StarterConfig.GSON.fromJson(reader, StarterConfig::class.java)
+            val config = StarterConfig.GSON.fromJson(reader, StarterConfig.class)
             reader.close()
             return config
         } else {
@@ -552,7 +534,7 @@ class Cobblemon {
             CobblemonConfig.GSON.toJson(config, fileWriter)
             fileWriter.flush()
             fileWriter.close()
-        } catch (exception: Exception) {
+        } catch (Exception exception) {
             LOGGER.error("Failed to save the config! Please consult the following stack trace:")
             exception.printStackTrace()
         }

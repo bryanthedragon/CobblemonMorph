@@ -18,19 +18,19 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-final class PlayerDataExtensionAdapter: JsonSerializer<PlayerDataExtension>, JsonDeserializer<PlayerDataExtension> {
+public final class PlayerDataExtensionAdapter: JsonSerializer<PlayerDataExtension>, JsonDeserializer<PlayerDataExtension> {
     override fun serialize(
         src: PlayerDataExtension,
-        typeOfSrc: Type,
+        typeOfT srcype,
         context: JsonSerializationContext
     ): JsonElement {
         return src.serialize()
     }
 
     override fun deserialize(
-        json: JsonElement,
+        JsonElement json,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        JsonDeserializationContext context
     ): PlayerDataExtension {
         val jObject = json.asJsonObject
         val name = jObject.get(PlayerDataExtension.NAME_KEY)

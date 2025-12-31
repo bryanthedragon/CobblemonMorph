@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState
  * @author Licious
  * @since December 2nd, 2022
  */
-interface GrowthFactor {
+public interface GrowthFactor {
 
     /**
      * Validates the arguments contained in this factor, this is invoked during loading.
@@ -36,7 +36,7 @@ interface GrowthFactor {
      * @param pos The [BlockPos] of the berry tree.
      * @return If the bonus should activate.
      */
-    fun isValid(world: LevelReader, state: BlockState, pos: BlockPos): Boolean
+    fun isValid(Level worldReader, BlockState state, (BlockPos pos): Boolean
 
     /**
      * Resolves the amount of bonus berries to grow if [isValid] was true.

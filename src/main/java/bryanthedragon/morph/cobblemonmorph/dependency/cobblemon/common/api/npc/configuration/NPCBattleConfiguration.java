@@ -12,14 +12,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.Data
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class NPCBattleConfiguration {
+public class NPCBattleConfiguration {
     var canChallenge = false
     @Deprecated("This is not likely to get used")
     var simultaneousBattles = false
     @Deprecated("This is not likely to get used")
     var healAfterwards = true
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(canChallenge)
         buffer.writeBoolean(simultaneousBattles)
         buffer.writeBoolean(healAfterwards)
@@ -29,7 +29,7 @@ class NPCBattleConfiguration {
 //        }
     }
 
-    fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(RegistryFriendlyByteBuf buffer) {
         canChallenge = buffer.readBoolean()
         simultaneousBattles = buffer.readBoolean()
         healAfterwards = buffer.readBoolean()
@@ -44,7 +44,7 @@ class NPCBattleConfiguration {
 //        }
     }
 
-    fun saveToNBT(nbt: CompoundTag) {
+    fun saveToNBT(CompoundTag nbt) {
         nbt.putBoolean(DataKeys.NPC_CAN_CHALLENGE, canChallenge)
         nbt.putBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES, simultaneousBattles)
         nbt.putBoolean(DataKeys.NPC_HEAL_AFTERWARDS, healAfterwards)
@@ -57,7 +57,7 @@ class NPCBattleConfiguration {
 //        }
     }
 
-    fun loadFromNBT(nbt: CompoundTag) {
+    fun loadFromNBT(CompoundTag nbt) {
         canChallenge = nbt.getBoolean(DataKeys.NPC_CAN_CHALLENGE)
         simultaneousBattles = nbt.getBoolean(DataKeys.NPC_SIMULTANEOUS_BATTLES)
         healAfterwards = nbt.getBoolean(DataKeys.NPC_HEAL_AFTERWARDS)

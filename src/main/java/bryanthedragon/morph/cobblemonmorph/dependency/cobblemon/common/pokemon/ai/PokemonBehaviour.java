@@ -46,12 +46,12 @@ open class PokemonBehaviour(
         it.addFunction("item_interact") { itemInteract.struct }
     }
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         combat.encode(buffer)
     }
 
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf): PokemonBehaviour {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer): PokemonBehaviour {
             val combat = CombatBehaviour.decode(buffer)
 
             val decodedPokemonBehaviour = PokemonBehaviour(combat = combat)

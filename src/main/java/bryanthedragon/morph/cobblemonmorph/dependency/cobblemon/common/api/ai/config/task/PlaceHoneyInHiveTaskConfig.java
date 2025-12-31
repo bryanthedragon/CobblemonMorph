@@ -16,19 +16,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
-class PlaceHoneyInHiveTaskConfig : SingleTaskConfig {
-    companion object {
+public class PlaceHoneyInHiveTaskConfig : SingleTaskConfig {
+    final class Companion {
         const val HONEY = "honey"
     }
 
     val condition = booleanVariable(HONEY, "can_add_honey", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {
@@ -39,7 +39,7 @@ class PlaceHoneyInHiveTaskConfig : SingleTaskConfig {
         }
         return WrapperLivingEntityTask(
             PlaceHoneyInHiveTask.create(),
-            PokemonEntity::class.java
+            PokemonEntity.class
         )
     }
 }

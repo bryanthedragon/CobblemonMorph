@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
  * @author Hiroku
  * @since July 8th, 2022
  */
-interface ModDependant {
+public interface ModDependant {
     var neededInstalledMods: List<String>
     var neededUninstalledMods: List<String>
 

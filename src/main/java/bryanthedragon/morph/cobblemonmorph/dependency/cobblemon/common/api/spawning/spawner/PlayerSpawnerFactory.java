@@ -25,7 +25,8 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Hiroku
  * @since February 14th, 2022
- */final class PlayerSpawnerFactory {
+ */
+public final class PlayerSpawnerFactory {
     var spawnPool: SpawnPool by mutableLazy {
         CobblemonSpawnPools.WORLD_SPAWN_POOL
     }
@@ -37,14 +38,14 @@ import net.minecraft.server.level.ServerPlayer
      * [PlayerLevelRangeInfluence] adjusts the level range of Pokémon that can spawn based on the player's level.
      * [RestrictedSpawnBlocksInfluence] prevents Pokémon from spawning on certain blocks.
      */
-    var influenceBuilders = mutableListOf<(player: ServerPlayer) -> SpawningInfluence?>({
+    var influenceBuilders = mutableListOf<(ServerPlayer player) -> SpawningInfluence?>({
         PlayerLevelRangeInfluence(
             it,
             variation = TYPICAL_VARIATION
         )
     })
 
-    fun create(player: ServerPlayer): PlayerSpawner {
+    fun create(ServerPlayer player): PlayerSpawner {
         val influences = influenceBuilders.mapNotNull { it(player) }
         return PlayerSpawner(player, spawnPool).also {
             it.influences.addAll(influences)

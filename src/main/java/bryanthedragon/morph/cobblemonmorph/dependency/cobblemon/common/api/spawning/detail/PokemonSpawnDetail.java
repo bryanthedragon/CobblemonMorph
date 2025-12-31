@@ -33,15 +33,15 @@ import net.minecraft.network.chat.MutableComponent
  * @author Hiroku
  * @since February 13th, 2022
  */
-class PokemonSpawnDetail : SpawnDetail() {
-    companion object {
+public class PokemonSpawnDetail : SpawnDetail() {
+    final class Companion {
         val TYPE = "pokemon"
     }
 
     override val type: String = TYPE
     var pokemon = PokemonProperties()
     @SerializedName("level", alternate = ["levelRange"])
-    var levelRange: IntRange? = null
+    var levelIntRange range? = null
     val drops: DropTable? = null
     val heldItems: MutableList<PossibleHeldItem>? = null
 

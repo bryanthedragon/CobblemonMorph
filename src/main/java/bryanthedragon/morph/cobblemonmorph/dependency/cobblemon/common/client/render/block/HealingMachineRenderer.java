@@ -23,8 +23,8 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
 @Suppress("UNUSED_PARAMETER")
-class HealingMachineRenderer<T: BlockEntity>(ctx: BlockEntityRendererProvider.Context): BlockEntityRenderer<T> {
-    companion object {
+public class HealingMachineRenderer<T: BlockEntity>(ctx: BlockEntityRendererProvider.Context): BlockEntityRenderer<T> {
+    final class Companion {
         private val offsets = listOf(
             0.2 to 0.385,
             -0.2 to 0.385,

@@ -6,30 +6,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion;
 
-import com.mojang.serialization.Codec
-import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger
-import net.minecraft.server.level.ServerPlayer
-import java.util.*
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.server.level.ServerPlayer;
 
-class SimpleCriterionTrigger<T, C : SimpleCriterionCondition<T>>(
-    val codec: Codec<C>,
-) : SimpleCriterionTrigger<C>() {
-    override fun codec() = codec
+import java.util.*;
 
-    fun trigger(player: ServerPlayer, context: T) {
-        return this.trigger(player) {
-            it.matches(player, context)
-        }
-    }
-}
+public class SimpleCriterionCondition<T>(Optional<ContextAwarePredicate> playerCtx) extends SimpleCriterionTrigger {
+    fun player() = playerCtx;
 
-abstract class SimpleCriterionCondition<T>(
-    val playerCtx: Optional<ContextAwarePredicate>
-) : SimpleCriterionTrigger.SimpleInstance {
-    override fun player() = playerCtx
-
-    abstract fun matches(player: ServerPlayer, context: T): Boolean
+    abstract boolean matches(ServerPlayer player, T context);
 }

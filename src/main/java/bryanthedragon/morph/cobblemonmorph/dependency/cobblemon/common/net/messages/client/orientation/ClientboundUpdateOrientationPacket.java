@@ -23,9 +23,9 @@ import org.joml.Matrix3f
  * @since March 30th, 2025
  */
 
-class ClientboundUpdateOrientationPacket internal constructor(val orientation: Matrix3f?, val active: Boolean?, val entityId: Int) : NetworkPacket<ClientboundUpdateOrientationPacket> {
+public class ClientboundUpdateOrientationPacket internal constructor(val orientation: Matrix3f?, val active: Boolean?, val entityId: Int) : NetworkPacket<ClientboundUpdateOrientationPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeVarInt(entityId)
         buffer.writeBoolean(orientation != null)
         if (orientation != null && active != null) {
@@ -34,9 +34,9 @@ class ClientboundUpdateOrientationPacket internal constructor(val orientation: M
         }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("s2c_update_orientation")
-        fun decode(buffer: RegistryFriendlyByteBuf): ClientboundUpdateOrientationPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): ClientboundUpdateOrientationPacket {
             val entityId = buffer.readVarInt()
             val valid = buffer.readBoolean()
             val orientation = if (valid) buffer.readMatrix3f() else null

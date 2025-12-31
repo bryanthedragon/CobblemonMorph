@@ -6,25 +6,31 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 
-import net.minecraft.core.BlockPos
-import net.minecraft.world.phys.Vec3
-import org.joml.Vector3f
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
-/**
- * For conversion from Vec3dto BlockPos, loses accuracy
- */
-fun Vec3.toBlockPos(): BlockPos {
-    return BlockPos.containing(this.x, this.y, this.z)
-}
+import org.joml.Vector3f;
 
-fun Vec3.toVec3f(): Vector3f = Vector3f(x.toFloat(), y.toFloat(), z.toFloat())
-fun Vector3f.toVec3d(): Vec3 =
-    Vec3(x.toDouble(), y.toDouble(), z.toDouble())
-fun Vector3f.set(vec3d: Vec3): Vector3f {
-    x = vec3d.x.toFloat()
-    y = vec3d.y.toFloat()
-    z = vec3d.z.toFloat()
-    return this
+public class Vec3Extensions {
+    /**
+     * For conversion from Vec3dto BlockPos, loses accuracy
+     */
+    BlockPos toBlockPos(Vec3 vec3) {
+        return BlockPos.containing(this.x, this.y, this.z);
+    }
+
+    Vector3f toVec3f(Vec3 vec3) { 
+        Vector3f(x.toFloat(), y.toFloat(), z.toFloat())
+    }
+    Vec3 toVec3d(Vector3f vector3f) { 
+        Vec3(x.toDouble(), y.toDouble(), z.toDouble())
+    }
+    Vector3f set(Vector3f vector3f, Vec3 vec3d) {
+        x = vec3d.x.toFloat();
+        y = vec3d.y.toFloat();
+        z = vec3d.z.toFloat();
+        return this;
+    }
 }

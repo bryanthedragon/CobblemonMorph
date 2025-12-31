@@ -27,11 +27,11 @@ import java.util.concurrent.CompletableFuture
  * @author Hiroku
  * @since October 20th, 2023
  */
-class ActionEffectTimeline(
+public class ActionEffectTimeline(
     val timeline: List<ActionEffectKeyframe> = mutableListOf(),
     val condition: ExpressionLike = "true".asExpressionLike()
 ) {
-    companion object {
+    final class Companion {
         val NONE = ActionEffectTimeline()
     }
 
@@ -63,34 +63,34 @@ class ActionEffectTimeline(
     }
 }
 
-class ActionEffectContext(
+public class ActionEffectContext(
     val actionEffect: ActionEffectTimeline,
     val holds: MutableSet<String> = mutableSetOf(),
     val providers: MutableList<Any> = mutableListOf(),
-    val runtime: MoLangRuntime,
+    val MoLangRuntime runtime,
     var canBeInterrupted: Boolean = false,
     var interrupted: Boolean = false,
     var currentKeyframes: MutableList<ActionEffectKeyframe> = mutableListOf(),
-    var level: Level? = null
+    var Level level? = null
 ) {
     inline fun <reified T> findOneProvider() = providers.filterIsInstance<T>().firstOrNull()
 }
 
-class UsersProvider(users: List<Entity>): EntityProvider {
+public class UsersProvider(users: List<Entity>): EntityProvider {
     override val entities = users
     constructor(vararg users: Entity): this(users.toList())
 }
 
-class TargetsProvider(targets: List<Entity>): EntityProvider {
+public class TargetsProvider(targets: List<Entity>): EntityProvider {
     override val entities = targets
     constructor(vararg targets: Entity): this(targets.toList())
 }
 
-class NPCProvider(npc: NPCEntity): EntityProvider {
+public class NPCProvider(npc: NPCEntity): EntityProvider {
     override val entities = listOf(npc)
 }
 
-interface EntityProvider {
+public interface EntityProvider {
     val entities: List<Entity>
 }
 

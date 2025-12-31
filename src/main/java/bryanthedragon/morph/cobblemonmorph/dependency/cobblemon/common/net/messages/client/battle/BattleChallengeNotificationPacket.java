@@ -32,7 +32,7 @@ import java.util.*
  * @author Hiroku
  * @since August 5th, 2022
  */
-class BattleChallengeNotificationPacket(
+public class BattleChallengeNotificationPacket(
     val challengeID: UUID,
     val senderID: UUID,
     val challengerIDs: List<UUID>,
@@ -56,7 +56,7 @@ class BattleChallengeNotificationPacket(
         expiryTime = challenge.expiryTime
     )
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(challengeID)
         buffer.writeUUID(senderID)
         buffer.writeCollection(challengerIDs) { _, value -> buffer.writeUUID(value) }
@@ -64,9 +64,9 @@ class BattleChallengeNotificationPacket(
         buffer.writeInt(expiryTime)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_challenge_notification")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleChallengeNotificationPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleChallengeNotificationPacket(
             buffer.readUUID(),
             buffer.readUUID(),
             buffer.readList { it.readUUID() },

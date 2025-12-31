@@ -34,7 +34,7 @@ import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
-class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Properties()), PokemonSelectingItem, HealingSource {
+public class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Properties()), PokemonSelectingItem, HealingSource {
 
     init {
         // 65% to raise composter level
@@ -46,14 +46,14 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.revival_herb"
         override val returnItem = Items.AIR
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) = target.health <= 0
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?): String {
             battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("revival_herb", runtime))
             return "revive 0.25"
         }
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             val result = use(user, user.getItemInHand(hand))
             if (result.result != InteractionResult.PASS) {
@@ -63,11 +63,11 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
         return InteractionResultHolder.success(user.getItemInHand(hand))
     }
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.isFainted()
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = pokemon.isFainted()
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack>? {
         return if (pokemon.isFainted()) {
             var amount = ceil(pokemon.maxHealth / 4F).toInt()
@@ -85,7 +85,7 @@ class RevivalHerbItem(block: RevivalHerbBlock) : ItemNameBlockItem(block, Proper
         }
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
     }

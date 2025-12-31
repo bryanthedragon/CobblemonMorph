@@ -18,16 +18,16 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 
-class FreshStartMochiItem : CobblemonItem(Properties()), PokemonSelectingItem {
+public class FreshStartMochiItem : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = null
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.evs.any { it.value > 0 }
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = pokemon.evs.any { it.value > 0 }
             && super.canUseOnPokemon(stack, pokemon)
 
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack> {
         if (!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
@@ -44,7 +44,7 @@ class FreshStartMochiItem : CobblemonItem(Properties()), PokemonSelectingItem {
         return InteractionResultHolder.success(stack)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

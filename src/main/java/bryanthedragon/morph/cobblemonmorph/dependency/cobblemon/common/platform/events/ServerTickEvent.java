@@ -18,7 +18,7 @@ import net.minecraft.server.MinecraftServer
  * @author Licious
  * @since February 15th, 2023
  */
-interface ServerTickEvent {
+public interface ServerTickEvent {
 
     /**
      * The [MinecraftServer] instance.

@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialo
  * @author Hiroku
  * @since December 27th, 2023
  */
-class DialogueOptionSetInput(
+public class DialogueOptionSetInput(
     var options: MutableList<DialogueOption>,
     override var timeout: DialogueTimeout? = null,
     /** Whether the buttons should be stacked vertically. */
@@ -28,7 +28,7 @@ class DialogueOptionSetInput(
     // JSON uses this. Basically so that the main constructor can force people to specify options
     constructor() : this(mutableListOf(), null, false)
 
-    fun getVisibleOptions(activeDialogue: ActiveDialogue) = options.filter { it.isVisible(activeDialogue) }
+    fun getVisibleOptions(ActiveDialogue activeDialogue) = options.filter { it.isVisible(activeDialogue) }
     override fun toMoLangStruct(activeInput: ActiveInput) = QueryStruct(hashMapOf())
     override fun handle(activeInput: ActiveInput, value: String) {
         val option = options.firstOrNull { it.value == value }

@@ -12,6 +12,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
 import net.minecraft.sounds.SoundEvent
 
-class FeatherItem(stat: Stat) : EVIncreaseItem(stat, 1) {
-    override val sound: SoundEvent = CobblemonSounds.MEDICINE_FEATHER_USE
+public class FeatherItem(Stat stat ) : EVIncreaseItem(stat, 1) {
+    override val SoundEvent sound = CobblemonSounds.MEDICINE_FEATHER_USE
 }

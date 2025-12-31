@@ -12,11 +12,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.D
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.Encodable
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class DialogueOptionSetDTO(
+public class DialogueOptionSetDTO(
     var deadline: Float = 0F,
     var options: List<DialogueOptionDTO> = emptyList()
 ): Encodable, Decodable {
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeFloat(deadline)
         buffer.writeInt(options.size)
         options.forEach { option ->
@@ -24,7 +24,7 @@ class DialogueOptionSetDTO(
         }
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         deadline = buffer.readFloat()
         val size = buffer.readInt()
         options = (0 until size).map { DialogueOptionDTO().apply { decode(buffer) } }

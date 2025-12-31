@@ -22,23 +22,23 @@ import java.util.concurrent.CompletableFuture
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.resources.ResourceLocation
 
-class UnlockablePCBoxWallpaperArgumentType : ArgumentType<ResourceLocation> {
+public class UnlockablePCBoxWallpaperArgumentType : ArgumentType<ResourceLocation> {
 
-    companion object {
+    final class Companion {
         val EXAMPLES: List<String> = listOf("cobblemon:charcadet")
         val INVALID_WALLPAPER = "cobblemon.command.unlockablepcboxwallpaper.invalid-wallpaper".asTranslated()
 
         fun wallpaper() = UnlockablePCBoxWallpaperArgumentType()
 
-        fun <S> getUnlockablePCBoxWallpaper(context: CommandContext<S>, name: String): ResourceLocation {
-            return context.getArgument(name, ResourceLocation::class.java)
+        fun <S> getUnlockablePCBoxWallpaper(context: CommandContext<S>, String name): ResourceLocation {
+            return context.getArgument(name, ResourceLocation.class)
         }
     }
 
     override fun parse(reader: StringReader): ResourceLocation {
         try {
             return reader.asIdentifierDefaultingNamespace()
-        } catch (e: Exception) {
+        } catch (Exception e) {
             throw SimpleCommandExceptionType(INVALID_WALLPAPER).createWithContext(reader)
         }
     }

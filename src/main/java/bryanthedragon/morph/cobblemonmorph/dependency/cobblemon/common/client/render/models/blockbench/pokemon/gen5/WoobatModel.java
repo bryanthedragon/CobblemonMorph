@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class WoobatModel (root: ModelPart) : PokemonPosableModel(root), BiWingedFrame {
+public class WoobatModel (root: ModelPart) : PokemonPosableModel(root), BiWingedFrame {
     override val rootPart = root.registerChildWithAllChildren("woobat")
     override val leftWing = getPart("left_wing")
     override val rightWing = getPart("right_wing")

@@ -17,8 +17,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tr
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeStartedPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeStartedPacket.TradeablePokemon
 import net.minecraft.client.Minecraft
-final class TradeStartedHandler : ClientNetworkPacketHandler<TradeStartedPacket> {
-    override fun handle(packet: TradeStartedPacket, client: Minecraft) {
+public final class TradeStartedHandler : ClientNetworkPacketHandler<TradeStartedPacket> {
+    override fun handle(packet: TradeStartedPacket, Minecraft client) {
         Cobblemon.LOGGER.error("handle trade start from: " + packet.traderId)
         val trade = ClientTrade()
         CobblemonClient.trade = trade

@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class PetililHisuiBiasModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class PetililHisuiBiasModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("petilil_hisui_bias")
     override val head = getPart("head")
     val leaf_back = getPart("leaf_back_rotation")

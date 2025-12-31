@@ -17,13 +17,13 @@ import com.google.gson.JsonObject
  * @author Qu
  * @since 2022-05-20
  */
-interface PlayerDataExtension {
+public interface PlayerDataExtension {
 
-    companion object {
+    final class Companion {
         val NAME_KEY = "name"
     }
 
     fun name(): String
     fun serialize(): JsonObject
-    fun deserialize(json: JsonObject): PlayerDataExtension
+    fun deserialize(JsonObject json): PlayerDataExtension
 }

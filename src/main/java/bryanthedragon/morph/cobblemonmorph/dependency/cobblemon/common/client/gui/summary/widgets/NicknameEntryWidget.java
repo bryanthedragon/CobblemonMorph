@@ -27,8 +27,8 @@ import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.resources.language.I18n
 import net.minecraft.network.chat.Component
 
-class NicknameEntryWidget(
-    var pokemon: Pokemon, x: Int, y: Int, width: Int, height: Int, val isParty: Boolean, text: Component
+public class NicknameEntryWidget(
+    var Pokemon pokemon, x: Int, y: Int, Int width, Int height, val isParty: Boolean, text: Component
 ): EditBox(
     Minecraft.getInstance().font,
     x, y, width, height, text
@@ -43,7 +43,7 @@ class NicknameEntryWidget(
         focusedTime = Util.getMillis()
     }
 
-    fun setSelectedPokemon(pokemon: Pokemon) {
+    fun setSelectedPokemon(Pokemon pokemon) {
         if (isFocused) {
             isFocused = false
         }
@@ -79,7 +79,7 @@ class NicknameEntryWidget(
         }
     }
 
-    private fun updateNickname(newNickname: String) {
+    private fun updateNickname(newNickString name) {
         if (pokemon.nickname == null || pokemon.nickname?.string != newNickname) {
             val effectiveNickname = if (newNickname == pokemonName) null else newNickname
             CobblemonNetwork.sendToServer(
@@ -117,7 +117,7 @@ class NicknameEntryWidget(
         }
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         if (keyCode == InputConstants.KEY_ESCAPE) {
             this.updateNickname(value.trim().ifBlank { this.pokemonName })
         }

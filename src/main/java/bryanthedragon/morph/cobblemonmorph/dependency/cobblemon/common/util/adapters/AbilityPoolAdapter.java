@@ -22,8 +22,9 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since July 28th, 2022
- */final class AbilityPoolAdapter : JsonDeserializer<AbilityPool> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): AbilityPool {
+ */
+public final class AbilityPoolAdapter : JsonDeserializer<AbilityPool> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): AbilityPool {
         val pool = AbilityPool()
         json.asJsonArray.forEach { element ->
             val potentialAbility = PotentialAbility.types.firstNotNullOfOrNull { it.parseFromJSON(element) }

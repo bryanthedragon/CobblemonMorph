@@ -6,7 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties;
+
+import java.util.Collection;
 
 /**
  * A provider of a particular sort of [CustomPokemonProperty]. This interface
@@ -15,16 +17,11 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.prop
  * @author Hiroku
  * @since February 12th, 2022
  */
-interface CustomPokemonPropertyType<T : CustomPokemonProperty> {
-    /** All the keys that will match this property type. */
-    val keys: Iterable<String>
-    /**
-     * Whether or not an argument needs to include a key to have this type try parsing it. If this is false,
-     * [fromString] will be run even if none of the [keys] was present in the argument.
-     */
-    val needsKey: Boolean
+public interface CustomPokemonPropertyType<T extends CustomPokemonProperty> {
+    public static final Iterable<String> keys = null;
+    public static final Boolean needsKey = true;
     /** Tries parsing a new instance of this generic type based off a nullable string. */
-    fun fromString(value: String?):  T?
+    T fromString(String value);
 
     /**
      * Returns a list of literal examples of the values this property will accept.
@@ -32,6 +29,6 @@ interface CustomPokemonPropertyType<T : CustomPokemonProperty> {
      *
      * @return A list of literal examples.
      */
-    fun examples(): Collection<String>
+    Collection<String> examples();
 
 }

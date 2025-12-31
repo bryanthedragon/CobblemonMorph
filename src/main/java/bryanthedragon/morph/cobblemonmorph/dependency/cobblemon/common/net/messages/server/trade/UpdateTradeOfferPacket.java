@@ -20,14 +20,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
 
-class UpdateTradeOfferPacket(val newOffer: Pair<UUID, PartyPosition>?): NetworkPacket<UpdateTradeOfferPacket> {
-    companion object {
+public class UpdateTradeOfferPacket(val newOffer: Pair<UUID, PartyPosition>?): NetworkPacket<UpdateTradeOfferPacket> {
+    final class Companion {
         val ID = cobblemonResource("update_trade_offer")
-        fun decode(buffer: RegistryFriendlyByteBuf) = UpdateTradeOfferPacket(buffer.readNullable { buffer.readUUID() to buffer.readPartyPosition() })
+        fun decode(RegistryFriendlyByteBuf buffer) = UpdateTradeOfferPacket(buffer.readNullable { buffer.readUUID() to buffer.readPartyPosition() })
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(newOffer) { buffer, (pokemonId, partyPosition) ->
             buffer.writeUUID(pokemonId)
             buffer.writePartyPosition(partyPosition)

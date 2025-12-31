@@ -17,12 +17,12 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-final class ElementalTypeAdapter: JsonSerializer<ElementalType>, JsonDeserializer<ElementalType> {
-    override fun serialize(src: ElementalType, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+public final class ElementalTypeAdapter: JsonSerializer<ElementalType>, JsonDeserializer<ElementalType> {
+    override fun serialize(src: ElementalType, typeOfT srcype, context: JsonSerializationContext): JsonElement {
         return JsonPrimitive(src.showdownId)
     }
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ElementalType {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): ElementalType {
         return ElementalTypes.getOrException(json.asString)
     }
 }

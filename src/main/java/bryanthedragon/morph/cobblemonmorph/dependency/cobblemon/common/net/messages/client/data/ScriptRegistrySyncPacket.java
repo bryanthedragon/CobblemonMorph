@@ -14,18 +14,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class ScriptRegistrySyncPacket(entries: Collection<Map.Entry<ResourceLocation, ExpressionLike>>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, ExpressionLike>, ScriptRegistrySyncPacket>(entries){
-    companion object {
+public class ScriptRegistrySyncPacket(entries: Collection<Map.Entry<ResourceLocation, ExpressionLike>>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, ExpressionLike>, ScriptRegistrySyncPacket>(entries){
+    final class Companion {
         val ID = cobblemonResource("script_registry_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf): ScriptRegistrySyncPacket = ScriptRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer): ScriptRegistrySyncPacket = ScriptRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<ResourceLocation, ExpressionLike>) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Map.Entry<ResourceLocation, ExpressionLike>) {
         buffer.writeIdentifier(entry.key)
         buffer.writeString(entry.value.toString())
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<ResourceLocation, ExpressionLike> {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Map.Entry<ResourceLocation, ExpressionLike> {
         val key = buffer.readIdentifier()
         val value = buffer.readString().asExpressionLike()
         return object : Map.Entry<ResourceLocation, ExpressionLike> {

@@ -30,14 +30,14 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since June 20th, 2022
  */
-class OpenPCPacket : NetworkPacket<OpenPCPacket> {
-    val storeID: UUID
+public class OpenPCPacket : NetworkPacket<OpenPCPacket> {
+    val UUID storeID
     val box: Int?
     val unseenWallpapers: Set<ResourceLocation>
 
     @JvmOverloads
     @Deprecated("Use the constructor with the PCStore object instead, this will become private in a future title update", level = DeprecationLevel.WARNING)
-    constructor(storeID: UUID, box: Int? = null, unseenWallpapers: Set<ResourceLocation> = emptySet()) {
+    constructor(UUID storeID, box: Int? = null, unseenWallpapers: Set<ResourceLocation> = emptySet()) {
         this.storeID = storeID
         this.box = box
         this.unseenWallpapers = unseenWallpapers
@@ -48,15 +48,15 @@ class OpenPCPacket : NetworkPacket<OpenPCPacket> {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(storeID)
         buffer.writeNullable(box) { buf, value -> buf.writeInt(value)}
         buffer.writeCollection(unseenWallpapers) { _, it -> buffer.writeResourceLocation(it) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("open_pc")
-        fun decode(buffer: RegistryFriendlyByteBuf) = OpenPCPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = OpenPCPacket(
             buffer.readUUID(),
             buffer.readNullable { it.readInt() },
             buffer.readList { buffer.readResourceLocation() }.toSet()

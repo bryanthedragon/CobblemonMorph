@@ -38,7 +38,7 @@ import kotlin.collections.toMutableList
 import kotlin.collections.toTypedArray
 import kotlin.time.measureTime
 
-@Suppress("KotlinPlaceholderCountMatchesArgumentCount", "UNUSED_PARAMETER")final class ShowdownInterpreter {
+@Suppress("KotlinPlaceholderCountMatchesArgumentCount", "UNUSED_PARAMETER")public final class ShowdownInterpreter {
     // Stores a reference to the previous ability, activate, or move message in a battle so a minor action can refer back to it (Battle UUID :  BattleMessage)
     val lastCauser = mutableMapOf<UUID, BattleMessage>()
 
@@ -141,7 +141,7 @@ import kotlin.time.measureTime
     }
 
 
-    fun interpretMessage(battleId: UUID, message: String) {
+    fun interpretMessage(UUID battleId, message: String) {
         // Check key map and use function if matching
         if (message.startsWith("{\"winner\":\"")) {
             // The post-win message is something we don't care about just yet. It's basically a summary of what happened in the battle.
@@ -207,7 +207,7 @@ import kotlin.time.measureTime
             }
 
         }
-        catch (e: Exception) {
+        catch (Exception e) {
             battle.broadcastChatMessage("A fatal error occurred. Please report to developers.".red())
             LOGGER.error("Caught exception interpreting battle instructions.", e)
         }

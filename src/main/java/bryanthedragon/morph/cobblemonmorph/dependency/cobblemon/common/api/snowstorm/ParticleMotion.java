@@ -26,32 +26,32 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.phys.Vec3
 
-interface ParticleMotion : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<ParticleMotion, ParticleMotionType>(
+public interface ParticleMotion : CodecMapped {
+    final class Companion : ArbitrarilyMappedSerializableCompanion<ParticleMotion, ParticleMotionType>(
         keyFromValue = { it.type },
         keyFromString = ParticleMotionType::valueOf,
         stringFromKey = { it.name }
     ) {
         init {
-            registerSubtype(ParticleMotionType.DYNAMIC, DynamicParticleMotion::class.java, DynamicParticleMotion.CODEC)
-            registerSubtype(ParticleMotionType.STATIC, StaticParticleMotion::class.java, StaticParticleMotion.CODEC)
-            registerSubtype(ParticleMotionType.PARAMETRIC, ParametricParticleMotion::class.java, ParametricParticleMotion.CODEC)
+            registerSubtype(ParticleMotionType.DYNAMIC, DynamicParticleMotion.class, DynamicParticleMotion.CODEC)
+            registerSubtype(ParticleMotionType.STATIC, StaticParticleMotion.class, StaticParticleMotion.CODEC)
+            registerSubtype(ParticleMotionType.PARAMETRIC, ParametricParticleMotion.class, ParametricParticleMotion.CODEC)
         }
     }
 
     val type: ParticleMotionType
-    fun getInitialVelocity(runtime: MoLangRuntime, storm: ParticleStorm, particlePos: Vec3, emitterPos: Vec3): Vec3
-    fun getVelocity(runtime: MoLangRuntime, particle: SnowstormParticle, velocity: Vec3): Vec3
-    fun getParticleDirection(runtime: MoLangRuntime, storm: ParticleStorm, velocity: Vec3, minSpeed: Float): Vec3
+    fun getInitialVelocity(MoLangRuntime runtime, storm: ParticleStorm, particlePos: Vec3, emitterPos: Vec3): Vec3
+    fun getVelocity(MoLangRuntime runtime, particle: SnowstormParticle, velocity: Vec3): Vec3
+    fun getParticleDirection(MoLangRuntime runtime, storm: ParticleStorm, velocity: Vec3, minSpeed: Float): Vec3
 }
 
-enum class ParticleMotionType {
+public enum ParticleMotionType {
     DYNAMIC,
     PARAMETRIC,
     STATIC
 }
 
-class ParametricParticleMotion(
+public class ParametricParticleMotion(
     var offset: Triple<Expression, Expression, Expression> = Triple(
         NumberExpression(0.0),
         NumberExpression(0.0),
@@ -63,7 +63,7 @@ class ParametricParticleMotion(
         NumberExpression(0.0)
     )
 ) : ParticleMotion {
-    companion object {
+    final class Companion {
         val CODEC: Codec<ParametricParticleMotion> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -75,8 +75,8 @@ class ParametricParticleMotion(
 
     override val type = ParticleMotionType.PARAMETRIC
 
-    override fun getInitialVelocity(runtime: MoLangRuntime, storm: ParticleStorm, particlePos: Vec3, emitterPos: Vec3) = Vec3.ZERO
-    override fun getVelocity(runtime: MoLangRuntime, particle: SnowstormParticle, velocity: Vec3): Vec3 {
+    override fun getInitialVelocity(MoLangRuntime runtime, storm: ParticleStorm, particlePos: Vec3, emitterPos: Vec3) = Vec3.ZERO
+    override fun getVelocity(MoLangRuntime runtime, particle: SnowstormParticle, velocity: Vec3): Vec3 {
         val particlePositionWS = Vec3(
             particle.getX(),
             particle.getY(),
@@ -90,9 +90,9 @@ class ParametricParticleMotion(
         return targetPosWS.subtract(particlePositionWS)
     }
 
-    override fun getParticleDirection(runtime: MoLangRuntime, storm: ParticleStorm, velocity: Vec3, minSpeed: Float) = runtime.resolveVec3d(direction).normalize()
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun getParticleDirection(MoLangRuntime runtime, storm: ParticleStorm, velocity: Vec3, minSpeed: Float) = runtime.resolveVec3d(direction).normalize()
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         offset = Triple(
             MoLang.createParser(buffer.readString()).parseExpression(),
             MoLang.createParser(buffer.readString()).parseExpression(),
@@ -104,7 +104,7 @@ class ParametricParticleMotion(
             MoLang.createParser(buffer.readString()).parseExpression()
         )
     }
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(offset.first.getString())
         buffer.writeString(offset.second.getString())
         buffer.writeString(offset.third.getString())
@@ -114,7 +114,7 @@ class ParametricParticleMotion(
     }
 }
 
-class DynamicParticleMotion(
+public class DynamicParticleMotion(
     var direction: ParticleMotionDirection = InwardsMotionDirection(),
     var speed: Expression = NumberExpression(0.0),
     var acceleration: Triple<Expression, Expression, Expression> = Triple(
@@ -126,7 +126,7 @@ class DynamicParticleMotion(
 ) : ParticleMotion {
     override val type = ParticleMotionType.DYNAMIC
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<DynamicParticleMotion> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -140,11 +140,11 @@ class DynamicParticleMotion(
         }
     }
 
-    override fun getInitialVelocity(runtime: MoLangRuntime, storm: ParticleStorm, particlePos: Vec3, emitterPos: Vec3): Vec3 {
+    override fun getInitialVelocity(MoLangRuntime runtime, storm: ParticleStorm, particlePos: Vec3, emitterPos: Vec3): Vec3 {
         return direction.getDirectionVector(runtime, storm, emitterPos, particlePos).normalize().scale(runtime.resolveDouble(speed))
     }
 
-    override fun getVelocity(runtime: MoLangRuntime, particle: SnowstormParticle, velocity: Vec3): Vec3 {
+    override fun getVelocity(MoLangRuntime runtime, particle: SnowstormParticle, velocity: Vec3): Vec3 {
         val acceleration = Vec3(
             runtime.resolveDouble(acceleration.first),
             runtime.resolveDouble(acceleration.second),
@@ -160,10 +160,10 @@ class DynamicParticleMotion(
         )
     }
 
-    override fun getParticleDirection(runtime: MoLangRuntime, storm: ParticleStorm, velocity: Vec3, minSpeed: Float) = velocity.normalize()
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
+    override fun getParticleDirection(MoLangRuntime runtime, storm: ParticleStorm, velocity: Vec3, minSpeed: Float) = velocity.normalize()
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         direction = ParticleMotionDirection.readFromBuffer(buffer)
         speed = MoLang.createParser(buffer.readString()).parseExpression()
         acceleration = Triple(
@@ -174,7 +174,7 @@ class DynamicParticleMotion(
         drag = MoLang.createParser(buffer.readString()).parseExpression()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         ParticleMotionDirection.writeToBuffer(buffer, direction)
         buffer.writeString(speed.getString())
         buffer.writeString(acceleration.first.getString())
@@ -184,25 +184,25 @@ class DynamicParticleMotion(
     }
 }
 
-interface ParticleMotionDirection : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<ParticleMotionDirection, ParticleMotionDirectionType>(
+public interface ParticleMotionDirection : CodecMapped {
+    final class Companion : ArbitrarilyMappedSerializableCompanion<ParticleMotionDirection, ParticleMotionDirectionType>(
         keyFromString = ParticleMotionDirectionType::valueOf,
         stringFromKey = { it.name },
         keyFromValue = { it.type }
     ) {
         init {
             // class map adapter
-            registerSubtype(ParticleMotionDirectionType.INWARDS, InwardsMotionDirection::class.java, InwardsMotionDirection.CODEC)
-            registerSubtype(ParticleMotionDirectionType.OUTWARDS, OutwardsMotionDirection::class.java, OutwardsMotionDirection.CODEC)
-            registerSubtype(ParticleMotionDirectionType.CUSTOM, CustomMotionDirection::class.java, CustomMotionDirection.CODEC)
+            registerSubtype(ParticleMotionDirectionType.INWARDS, InwardsMotionDirection.class, InwardsMotionDirection.CODEC)
+            registerSubtype(ParticleMotionDirectionType.OUTWARDS, OutwardsMotionDirection.class, OutwardsMotionDirection.CODEC)
+            registerSubtype(ParticleMotionDirectionType.CUSTOM, CustomMotionDirection.class, CustomMotionDirection.CODEC)
         }
     }
     val type: ParticleMotionDirectionType
-    fun getDirectionVector(runtime: MoLangRuntime, storm: ParticleStorm, emitterPos: Vec3, particlePos: Vec3): Vec3
+    fun getDirectionVector(MoLangRuntime runtime, storm: ParticleStorm, emitterPos: Vec3, particlePos: Vec3): Vec3
 }
 
-class InwardsMotionDirection : ParticleMotionDirection {
-    companion object {
+public class InwardsMotionDirection : ParticleMotionDirection {
+    final class Companion {
         val CODEC: Codec<InwardsMotionDirection> = RecordCodecBuilder.create { instance ->
             instance.group(PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name })
                 .apply(instance) { InwardsMotionDirection() }
@@ -210,7 +210,7 @@ class InwardsMotionDirection : ParticleMotionDirection {
     }
 
     override val type = ParticleMotionDirectionType.INWARDS
-    override fun getDirectionVector(runtime: MoLangRuntime, storm: ParticleStorm, emitterPos: Vec3, particlePos: Vec3): Vec3 {
+    override fun getDirectionVector(MoLangRuntime runtime, storm: ParticleStorm, emitterPos: Vec3, particlePos: Vec3): Vec3 {
         return if (particlePos == emitterPos) {
             Vec3(
                 storm.world.random.nextDouble() - 0.5,
@@ -221,13 +221,13 @@ class InwardsMotionDirection : ParticleMotionDirection {
             emitterPos.subtract(particlePos)
         }.normalize()
     }
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }
 
-class OutwardsMotionDirection : ParticleMotionDirection {
-    companion object {
+public class OutwardsMotionDirection : ParticleMotionDirection {
+    final class Companion {
         val CODEC: Codec<OutwardsMotionDirection> = RecordCodecBuilder.create { instance ->
             instance.group(PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name })
                 .apply(instance) { OutwardsMotionDirection() }
@@ -235,7 +235,7 @@ class OutwardsMotionDirection : ParticleMotionDirection {
     }
 
     override val type = ParticleMotionDirectionType.OUTWARDS
-    override fun getDirectionVector(runtime: MoLangRuntime, storm: ParticleStorm, emitterPos: Vec3, particlePos: Vec3): Vec3 {
+    override fun getDirectionVector(MoLangRuntime runtime, storm: ParticleStorm, emitterPos: Vec3, particlePos: Vec3): Vec3 {
         return if (particlePos == emitterPos) {
             Vec3(
                 storm.world.random.nextDouble() - 0.5,
@@ -247,19 +247,19 @@ class OutwardsMotionDirection : ParticleMotionDirection {
         }.normalize()
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }
 
-class CustomMotionDirection(
+public class CustomMotionDirection(
     var direction: Triple<Expression, Expression, Expression> = Triple(
         NumberExpression(0.0),
         NumberExpression(0.0),
         NumberExpression(0.0)
     )
 ) : ParticleMotionDirection {
-    companion object {
+    final class Companion {
         val CODEC: Codec<CustomMotionDirection> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -272,7 +272,7 @@ class CustomMotionDirection(
 
     override val type = ParticleMotionDirectionType.CUSTOM
 
-    override fun getDirectionVector(runtime: MoLangRuntime, storm: ParticleStorm, emitterPos: Vec3, particlePos: Vec3): Vec3 {
+    override fun getDirectionVector(MoLangRuntime runtime, storm: ParticleStorm, emitterPos: Vec3, particlePos: Vec3): Vec3 {
         val v = Vec3(
             runtime.resolveDouble(direction.first),
             runtime.resolveDouble(direction.second),
@@ -281,8 +281,8 @@ class CustomMotionDirection(
         return storm.emitterSpaceMatrix.matrix.transformDirection(v)
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         direction = Triple(
             MoLang.createParser(buffer.readString()).parseExpression(),
             MoLang.createParser(buffer.readString()).parseExpression(),
@@ -290,21 +290,21 @@ class CustomMotionDirection(
         )
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(direction.first.getString())
         buffer.writeString(direction.second.getString())
         buffer.writeString(direction.third.getString())
     }
 }
 
-enum class ParticleMotionDirectionType {
+public enum ParticleMotionDirectionType {
     CUSTOM,
     INWARDS,
     OUTWARDS
 }
 
-class StaticParticleMotion : ParticleMotion {
-    companion object {
+public class StaticParticleMotion : ParticleMotion {
+    final class Companion {
         val CODEC: Codec<StaticParticleMotion> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -315,10 +315,10 @@ class StaticParticleMotion : ParticleMotion {
     @Transient
     override val type = ParticleMotionType.STATIC
 
-    override fun getInitialVelocity(runtime: MoLangRuntime, storm: ParticleStorm, particlePos: Vec3, emitterPos: Vec3) = Vec3.ZERO
-    override fun getVelocity(runtime: MoLangRuntime, particle: SnowstormParticle, velocity: Vec3) = velocity
-    override fun getParticleDirection(runtime: MoLangRuntime, storm: ParticleStorm, velocity: Vec3, minSpeed: Float) = velocity.normalize()
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun getInitialVelocity(MoLangRuntime runtime, storm: ParticleStorm, particlePos: Vec3, emitterPos: Vec3) = Vec3.ZERO
+    override fun getVelocity(MoLangRuntime runtime, particle: SnowstormParticle, velocity: Vec3) = velocity
+    override fun getParticleDirection(MoLangRuntime runtime, storm: ParticleStorm, velocity: Vec3, minSpeed: Float) = velocity.normalize()
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }

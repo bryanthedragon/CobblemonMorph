@@ -22,14 +22,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since March 9th, 2022
  */
-record BattleFormat(
+public record BattleFormat(
     val mod: String = "cobblemon",
     val battleType: BattleType = BattleTypes.SINGLES,
     var ruleSet: Set<String> = setOf(),
     val gen: Int = 9,
     var adjustLevel: Int = -1, // Stop gap rule before a more general system for rules enforced by Cobblemon is implemented.
 ) {
-    companion object {
+    final class Companion {
         fun setBattleRules(
             battleFormat: BattleFormat,
             rules: Set<String>? = null
@@ -80,7 +80,7 @@ record BattleFormat(
             ruleSet = mutableSetOf(BattleRules.OBTAINABLE, BattleRules.PAST, BattleRules.UNOBTAINABLE)
         )
 
-        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): BattleFormat {
+        fun loadFromBuffer(RegistryFriendlyByteBuf buffer): BattleFormat {
             val mod = buffer.readString()
             val battleType = BattleType.loadFromBuffer(buffer)
             val ruleSet = mutableSetOf<String>()
@@ -95,7 +95,7 @@ record BattleFormat(
         }
     }
 
-    fun saveToBuffer(buffer: RegistryFriendlyByteBuf): RegistryFriendlyByteBuf {
+    fun saveToBuffer(RegistryFriendlyByteBuf buffer): RegistryFriendlyByteBuf {
         buffer.writeString(mod)
         battleType.saveToBuffer(buffer)
         buffer.writeSizedInt(IntSize.U_BYTE, ruleSet.size)

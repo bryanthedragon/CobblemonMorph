@@ -22,7 +22,7 @@ import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 import kotlin.math.cos
 
-class PokeBallItem(
+public class PokeBallItem(
         val pokeBall: PokeBall
 ) : CobblemonItem(Properties().apply {
     when (pokeBall.name) {
@@ -34,7 +34,7 @@ class PokeBallItem(
     }
 }) {
 
-    override fun use(world: Level, player: Player, usedHand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, player: Player, usedHand: InteractionHand): InteractionResultHolder<ItemStack> {
         val itemStack = player.getItemInHand(usedHand)
         if (world.isServerSide()) {
             throwPokeBall(world, player as ServerPlayer)
@@ -43,7 +43,7 @@ class PokeBallItem(
         return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide)
     }
 
-    private fun throwPokeBall(world: Level, player: ServerPlayer) {
+    private fun throwPokeBall(Level world, ServerPlayer player) {
         val pokeBallEntity = EmptyPokeBallEntity(pokeBall, player.level(), player).apply {
             val overhandFactor: Float = if (player.xRot < 0) {
                 5f * cos(player.xRot.toRadians())

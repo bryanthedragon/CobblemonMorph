@@ -21,8 +21,8 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since October 29th, 2023
  */
-class SingleToPluralAdapter<T, C : Iterable<T>>(val clazz: Class<T>, val converter: (List<T>) -> C) : JsonDeserializer<C> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): C {
+public class SingleToPluralAdapter<T, C : Iterable<T>>(val clazz: Class<T>, val converter: (List<T>) -> C) : JsonDeserializer<C> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): C {
         return (if (json.isJsonArray) {
             json.asJsonArray.map<JsonElement, T> { ctx.deserialize(it, clazz) }
         } else {

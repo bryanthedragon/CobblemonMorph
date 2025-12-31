@@ -38,15 +38,15 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.server.packs.resources.ResourceManager
-final class CobblemonRideSettings : DataRegistry {
-    override val id: ResourceLocation = cobblemonResource("ride_settings")
+public final class CobblemonRideSettings : DataRegistry {
+    override val ResourceLocation id = cobblemonResource("ride_settings")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<CobblemonRideSettings>()
     val gson = GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(MinMaxBounds.Doubles::class.java, FloatNumberRangeAdapter)
+        .registerTypeAdapter(Expression.class, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+        .registerTypeAdapter(MinMaxBounds.Doubles.class, FloatNumberRangeAdapter)
         .create()
 
     var bird = BirdSettings()
@@ -65,7 +65,7 @@ final class CobblemonRideSettings : DataRegistry {
     var dolphin = DolphinSettings()
     var submarine = SubmarineSettings()
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         player.sendPacket(
             RideSettingsSyncPacket(
                 bird = bird,
@@ -85,23 +85,23 @@ final class CobblemonRideSettings : DataRegistry {
         )
     }
 
-    override fun reload(manager: ResourceManager) {
-        bird = loadStyle(manager, "bird", BirdSettings::class.java)
-        glider = loadStyle(manager, "glider", GliderSettings::class.java)
-        helicopter = loadStyle(manager, "helicopter", HelicopterSettings::class.java)
-        hover = loadStyle(manager, "hover", HoverSettings::class.java)
-        jet = loadStyle(manager, "jet", JetSettings::class.java)
-        rocket = loadStyle(manager, "rocket", RocketSettings::class.java)
-        horse = loadStyle(manager, "horse", HorseSettings::class.java)
-        minekart = loadStyle(manager, "minekart", MinekartSettings::class.java)
-        vehicle = loadStyle(manager, "vehicle", VehicleSettings::class.java)
-        boat = loadStyle(manager, "boat", BoatSettings::class.java)
-        burst = loadStyle(manager, "burst", BurstSettings::class.java)
-        dolphin = loadStyle(manager, "dolphin", DolphinSettings::class.java)
-        submarine = loadStyle(manager, "submarine", SubmarineSettings::class.java)
+    override fun reload(ResourceManager manager) {
+        bird = loadStyle(manager, "bird", BirdSettings.class)
+        glider = loadStyle(manager, "glider", GliderSettings.class)
+        helicopter = loadStyle(manager, "helicopter", HelicopterSettings.class)
+        hover = loadStyle(manager, "hover", HoverSettings.class)
+        jet = loadStyle(manager, "jet", JetSettings.class)
+        rocket = loadStyle(manager, "rocket", RocketSettings.class)
+        horse = loadStyle(manager, "horse", HorseSettings.class)
+        minekart = loadStyle(manager, "minekart", MinekartSettings.class)
+        vehicle = loadStyle(manager, "vehicle", VehicleSettings.class)
+        boat = loadStyle(manager, "boat", BoatSettings.class)
+        burst = loadStyle(manager, "burst", BurstSettings.class)
+        dolphin = loadStyle(manager, "dolphin", DolphinSettings.class)
+        submarine = loadStyle(manager, "submarine", SubmarineSettings.class)
     }
 
-    private fun <T : RidingBehaviourSettings> loadStyle(manager: ResourceManager, name: String, clazz: Class<T>): T {
+    private fun <T : RidingBehaviourSettings> loadStyle(ResourceManager manager, String name, clazz: Class<T>): T {
         manager.getResourceOrThrow(cobblemonResource("ride_settings/$name.json")).open().use {
             return gson.fromJson(it.reader(), clazz)
         }

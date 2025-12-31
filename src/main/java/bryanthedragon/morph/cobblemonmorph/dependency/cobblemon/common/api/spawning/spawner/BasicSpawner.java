@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @since October 27th, 2025
  */
 open class BasicSpawner(
-    override val name: String,
+    override val String name,
     override var spawnPool: SpawnPool,
     override var maxPokemonPerChunk: Float = Cobblemon.config.pokemonPerChunk
 ) : Spawner {

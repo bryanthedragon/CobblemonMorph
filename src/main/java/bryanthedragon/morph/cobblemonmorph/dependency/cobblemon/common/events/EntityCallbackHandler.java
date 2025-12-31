@@ -27,7 +27,8 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author Hiroku
  * @since July 26th, 2025
- */final class EntityCallbackHandler {
+ */
+public final class EntityCallbackHandler {
     fun setup() {
         bindCallback(THROWN_POKEBALL_HIT, HIT_BY_POKEBALL, ThrownPokeballHitEvent::pokemon, ThrownPokeballHitEvent::functions)
     }

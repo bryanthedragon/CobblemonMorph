@@ -20,7 +20,7 @@ import net.minecraft.world.level.material.Fluid
  * @author Hiroku
  * @since December 15th, 2022
  */
-class FluidTagCondition(tag: TagKey<Fluid>) : RegistryLikeTagCondition<Fluid>(tag)
+public class FluidTagCondition(tag: TagKey<Fluid>) : RegistryLikeTagCondition<Fluid>(tag)
 
 /**
  * An identifier condition for fluids. Built off of [RegistryLikeIdentifierCondition].
@@ -28,4 +28,4 @@ class FluidTagCondition(tag: TagKey<Fluid>) : RegistryLikeTagCondition<Fluid>(ta
  * @author Hiroku
  * @since December 15th, 2022
  */
-class FluidIdentifierCondition(identifier: ResourceLocation) : RegistryLikeIdentifierCondition<Fluid>(identifier)
+public class FluidIdentifierCondition(ResourceLocation identifier) : RegistryLikeIdentifierCondition<Fluid>(identifier)

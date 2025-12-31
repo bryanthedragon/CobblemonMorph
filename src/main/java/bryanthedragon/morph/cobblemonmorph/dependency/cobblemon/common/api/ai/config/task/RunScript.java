@@ -33,8 +33,8 @@ import net.minecraft.world.entity.ai.sensing.SensorType
  * @author Hiroku
  * @since December 2nd, 2024
  */
-class RunScript : SingleTaskConfig {
-    companion object {
+public class RunScript : SingleTaskConfig {
+    final class Companion {
         const val SCRIPT_CATEGORY = "script"
     }
 
@@ -43,10 +43,10 @@ class RunScript : SingleTaskConfig {
     val memories = emptySet<MemoryModuleType<*>>()
     val sensors = emptySet<SensorType<*>>()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(script).asVariables() + variables
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(script).asVariables() + variables
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? = BehaviorBuilder.create {
         behaviourConfigurationContext.addMemories(memories + MemoryModuleType.LOOK_TARGET)

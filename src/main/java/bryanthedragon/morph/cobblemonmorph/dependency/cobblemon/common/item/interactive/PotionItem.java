@@ -34,7 +34,7 @@ import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.Level
 
-class PotionItem(
+public class PotionItem(
     val type: PotionType
 ) : CobblemonItem(Properties().apply {
     when (type.name) {
@@ -44,8 +44,8 @@ class PotionItem(
 }), PokemonSelectingItem, HealingSource {
 
     override val bagItem = type
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }
@@ -53,9 +53,9 @@ class PotionItem(
     }
 
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack>? {
         if (pokemon.isFullHealth()) {
             return InteractionResultHolder.fail(stack)
@@ -77,41 +77,41 @@ class PotionItem(
         return InteractionResultHolder.success(stack)
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
     }
 }
 
-enum class PotionType(val amountToHeal: () -> ExpressionLike, val curesStatus: Boolean) : BagItem {
+public enum PotionType(val amountToHeal: () -> ExpressionLike, val curesStatus: Boolean) : BagItem {
     POTION({ bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonMechanics.potions.potionRestoreAmount }, false) {
         override val itemName = "item.cobblemon.potion"
         override val returnItem = Items.GLASS_BOTTLE
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "potion ${genericRuntime.resolveInt(amountToHeal(), battlePokemon)}"
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "potion ${genericRuntime.resolveInt(amountToHeal(), battlePokemon)}"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
     },
     SUPER_POTION({ bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonMechanics.potions.superPotionRestoreAmount }, false) {
         override val itemName = "item.cobblemon.super_potion"
         override val returnItem = Items.GLASS_BOTTLE
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "potion ${genericRuntime.resolveInt(amountToHeal(), battlePokemon)}"
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "potion ${genericRuntime.resolveInt(amountToHeal(), battlePokemon)}"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
     },
     HYPER_POTION({ bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonMechanics.potions.hyperPotionRestoreAmount }, false) {
         override val itemName = "item.cobblemon.hyper_potion"
         override val returnItem = Items.GLASS_BOTTLE
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "potion ${genericRuntime.resolveInt(amountToHeal(), battlePokemon)}"
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "potion ${genericRuntime.resolveInt(amountToHeal(), battlePokemon)}"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
     },
     MAX_POTION({ 999999.0.asExpressionLike() }, false) {
         override val itemName = "item.cobblemon.max_potion"
         override val returnItem = Items.GLASS_BOTTLE
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "potion ${battlePokemon.maxHealth - battlePokemon.health}"
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "potion ${battlePokemon.maxHealth - battlePokemon.health}"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
     },
     FULL_RESTORE({ 999999.0.asExpressionLike() }, true) {
         override val itemName = "item.cobblemon.full_restore"
         override val returnItem = Items.GLASS_BOTTLE
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "full_restore"
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "full_restore"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
     }
 }

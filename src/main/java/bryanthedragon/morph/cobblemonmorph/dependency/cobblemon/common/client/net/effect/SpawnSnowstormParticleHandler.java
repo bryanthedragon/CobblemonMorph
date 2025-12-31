@@ -15,8 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormParticlePacket
 import net.minecraft.client.Minecraft
 import com.mojang.blaze3d.vertex.PoseStack
-final class SpawnSnowstormParticleHandler : ClientNetworkPacketHandler<SpawnSnowstormParticlePacket> {
-    override fun handle(packet: SpawnSnowstormParticlePacket, client: Minecraft) {
+public final class SpawnSnowstormParticleHandler : ClientNetworkPacketHandler<SpawnSnowstormParticlePacket> {
+    override fun handle(packet: SpawnSnowstormParticlePacket, Minecraft client) {
         val wrapper = MatrixWrapper()
         val matrix = PoseStack()
         wrapper.updateMatrix(matrix.last().pose())

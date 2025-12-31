@@ -17,8 +17,8 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import kotlin.math.max
 
-class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelOption>, title: Component) : Screen(title), CobblemonRenderable {
-    companion object {
+public class InteractWheelGUI(private val options: Multimap<Orientation, InteractWheelOption>, Component title) : Screen(title), CobblemonRenderable {
+    final class Companion {
         const val SIZE = 170
         private val backgroundResource = cobblemonResource("textures/gui/interact/interact_wheel_base.png")
     }

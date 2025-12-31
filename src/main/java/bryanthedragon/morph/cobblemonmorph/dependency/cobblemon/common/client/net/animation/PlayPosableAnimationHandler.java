@@ -15,8 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolve
 import net.minecraft.client.Minecraft
-final class PlayPosableAnimationHandler : ClientNetworkPacketHandler<PlayPosableAnimationPacket> {
-    override fun handle(packet: PlayPosableAnimationPacket, client: Minecraft) {
+public final class PlayPosableAnimationHandler : ClientNetworkPacketHandler<PlayPosableAnimationPacket> {
+    override fun handle(packet: PlayPosableAnimationPacket, Minecraft client) {
         val world = client.level ?: return
         val entity = world.getEntity(packet.entityId) ?: return
         if (entity is PosableEntity) {

@@ -6,8 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.duck.SoundManagerDuck
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.resources.ResourceLocation
@@ -19,7 +18,7 @@ import net.minecraft.sounds.SoundSource
  * @param id The [ResourceLocation] of the [SoundInstance] to pause. If null, will pause all sounds belonging to the specified [category].
  * @param category The [SoundSource] that [id] is queried from. If null, will query [id] from all categories.
  */
-fun SoundManager.pauseSounds(id: ResourceLocation?, category: SoundSource?) = (this as SoundManagerDuck).pauseSounds(id, category)
+fun SoundManager.pauseSounds(ResourceLocation id?, SoundSource category?) = (this as SoundManagerDuck).pauseSounds(id, category)
 
 /**
  * Resumes the audio [Source]s belonging to the queried [SoundInstance]s.
@@ -27,4 +26,4 @@ fun SoundManager.pauseSounds(id: ResourceLocation?, category: SoundSource?) = (t
  * @param id The [ResourceLocation] of the [SoundInstance] to resume. If null, will resume all sounds belonging to the specified [category].
  * @param category The [SoundSource] that [id] is queried from. If null, will query [id] from all categories.
  */
-fun SoundManager.resumeSounds(id: ResourceLocation?, category: SoundSource?) = (this as SoundManagerDuck).resumeSounds(id, category)
+fun SoundManager.resumeSounds(ResourceLocation id?, SoundSource category?) = (this as SoundManagerDuck).resumeSounds(id, category)

@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.ent
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.block.AdjustBlockEntityViewerCountPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class AdjustBlockEntityViewerCountHandler : ServerNetworkPacketHandler<AdjustBlockEntityViewerCountPacket> {
-    override fun handle(packet: AdjustBlockEntityViewerCountPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class AdjustBlockEntityViewerCountHandler : ServerNetworkPacketHandler<AdjustBlockEntityViewerCountPacket> {
+    override fun handle(packet: AdjustBlockEntityViewerCountPacket, server: MinecraftServer, ServerPlayer player) {
         val blockEntity = player.level().getBlockEntity(packet.blockPos)
         if (blockEntity != null && blockEntity is ViewerCountBlockEntity) {
             if (packet.increment) blockEntity.incrementViewerCount()

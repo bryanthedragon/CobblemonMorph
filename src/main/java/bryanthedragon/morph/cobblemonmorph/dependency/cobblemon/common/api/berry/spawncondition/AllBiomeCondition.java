@@ -14,7 +14,7 @@ import net.minecraft.core.Holder
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.biome.Biome
 
-class AllBiomeCondition(val minGroveSize: Int, val maxGroveSize: Int) : BerrySpawnCondition{
+public class AllBiomeCondition(val minGroveSize: Int, val maxGroveSize: Int) : BerrySpawnCondition{
     override fun canSpawn(berry: Berry, biome: Holder<Biome>): Boolean {
         return true
     }
@@ -23,7 +23,7 @@ class AllBiomeCondition(val minGroveSize: Int, val maxGroveSize: Int) : BerrySpa
         return random.nextIntBetweenInclusive(minGroveSize, maxGroveSize)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("all_biome")
     }
 }

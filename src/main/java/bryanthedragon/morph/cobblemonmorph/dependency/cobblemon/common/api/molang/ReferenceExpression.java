@@ -21,8 +21,8 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since August 9th, 2025
  */
-class ReferenceExpression(val identifier: ResourceLocation) : ExpressionLike {
-    override fun resolve(runtime: MoLangRuntime, context: Map<String, MoValue>): MoValue {
+public class ReferenceExpression(val ResourceLocation identifier) : ExpressionLike {
+    override fun resolve(MoLangRuntime runtime, Map<String, MoValue> context): MoValue {
         return getScript()?.resolve(runtime, context) ?: StringValue(identifier.toString())
     }
 

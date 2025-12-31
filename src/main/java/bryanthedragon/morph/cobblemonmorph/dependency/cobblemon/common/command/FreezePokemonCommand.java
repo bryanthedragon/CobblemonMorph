@@ -21,7 +21,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerPlayer
-final class FreezePokemonCommand {
+public final class FreezePokemonCommand {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(
             Commands.literal("freezepokemon")
@@ -35,8 +35,8 @@ final class FreezePokemonCommand {
         )
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer, freezeFrame: Float = 0F) : Int {
-        val targetEntity = player.traceFirstEntityCollision(entityClass = PokemonEntity::class.java)
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player, freezeFrame: Float = 0F) : Int {
+        val targetEntity = player.traceFirstEntityCollision(entityClass = PokemonEntity.class)
         if (targetEntity == null) {
             player.sendSystemMessage(commandLang("freezepokemon.non_pokemon").red())
             return 0

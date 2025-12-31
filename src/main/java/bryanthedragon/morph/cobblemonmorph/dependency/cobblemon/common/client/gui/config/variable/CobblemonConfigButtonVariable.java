@@ -45,11 +45,11 @@ abstract class CobblemonConfigButtonVariable(
 
     override fun render(
         context: GuiGraphics,
-        index: Int,
+        Int index,
         top: Int,
         left: Int,
-        width: Int,
-        height: Int,
+        Int width,
+        Int height,
         mouseX: Int,
         mouseY: Int,
         hovering: Boolean,
@@ -63,7 +63,7 @@ abstract class CobblemonConfigButtonVariable(
     }
 }
 
-class CobblemonConfigBooleanVariable(
+public class CobblemonConfigBooleanVariable(
     parent: CobblemonConfigVariableList,
     config: KMutableProperty1<out CobblemonConfig, Boolean>,
 ) : CobblemonConfigButtonVariable(parent, config) {
@@ -78,7 +78,7 @@ class CobblemonConfigBooleanVariable(
     private fun isSelected() = (config.getter.call(parent.parent.clonedConfig) as Boolean?) ?: false
 }
 
-class CobblemonConfigEnumVariable(
+public class CobblemonConfigEnumVariable(
     parent: CobblemonConfigVariableList,
     config: KMutableProperty1<out CobblemonConfig, Enum<*>>,
 ) : CobblemonConfigButtonVariable(parent, config) {

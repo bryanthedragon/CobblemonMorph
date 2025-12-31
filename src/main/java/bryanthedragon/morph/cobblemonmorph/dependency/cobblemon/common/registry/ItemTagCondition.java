@@ -1,0 +1,36 @@
+/*
+ * Copyright (C) 2023 Cobblemon Contributors
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.registry
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.conditional.RegistryLikeCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.conditional.RegistryLikeIdentifierCondition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.conditional.RegistryLikeTagCondition
+import net.minecraft.world.item.Item
+import net.minecraft.tags.TagKey
+import net.minecraft.resources.ResourceLocation
+
+/**
+ * A [RegistryLikeCondition] that expects a [TagKey] attached to the [Item] registry.
+ *
+ * @property tag The tag to check for the item to match.
+ *
+ * @author Licious
+ * @since October 28th, 2022
+ */
+public class ItemTagCondition(TagKey<Item> tag) : RegistryLikeTagCondition<Item>(tag)
+
+/**
+ * A [RegistryLikeCondition] that expects an [ResourceLocation] to match.
+ *
+ * @property identifier The identifier for the item being referenced.
+ *
+ * @author Licious
+ * @since October 28th, 2022
+ */
+public class ItemIdentifierCondition(ResourceLocation identifier) : RegistryLikeIdentifierCondition<Item>(identifier)

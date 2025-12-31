@@ -19,8 +19,8 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class EatGrassTaskConfig : SingleTaskConfig {
-    companion object {
+public class EatGrassTaskConfig : SingleTaskConfig {
+    final class Companion {
         const val EATING_GRASS = "eating_grass"
         const val COOLDOWN = "eating_grass_cooldown_ticks"
         const val EAT_GRASS_CHANCE = "eat_grass_chance"
@@ -29,7 +29,7 @@ class EatGrassTaskConfig : SingleTaskConfig {
     val cooldown = numberVariable(category = EATING_GRASS, name = COOLDOWN, default = 20 * 20).asExpressible()
     val eatGrassChance = numberVariable(category = EATING_GRASS, name = EAT_GRASS_CHANCE, default = 1 / (20 * 20F)).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(
             cooldown,
             eatGrassChance
@@ -37,7 +37,7 @@ class EatGrassTaskConfig : SingleTaskConfig {
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {
@@ -56,7 +56,7 @@ class EatGrassTaskConfig : SingleTaskConfig {
                 chance,
                 cooldown.resolveInt(behaviourConfigurationContext.runtime).toLong()
             ),
-            PokemonEntity::class.java
+            PokemonEntity.class
         )
     }
 }

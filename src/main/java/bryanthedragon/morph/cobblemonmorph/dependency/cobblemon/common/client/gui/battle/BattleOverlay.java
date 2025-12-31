@@ -58,8 +58,8 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.util.Mth.ceil
 import org.joml.Vector3f
 
-class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
-    companion object {
+public class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
+    final class Companion {
         const val MAX_OPACITY = 1.0
         const val MIN_OPACITY = 0.5
         const val OPACITY_CHANGE_PER_SECOND = 0.1
@@ -229,9 +229,9 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         reversed: Boolean,
         species: Species,
         level: Int,
-        displayName: MutableComponent,
+        MutableComponent displayName,
         gender: Gender,
-        status: PersistentStatus?,
+        PersistentStatus status?,
         state: PosableState,
         colour: Triple<Float, Float, Float>?,
         opacity: Float,
@@ -241,7 +241,7 @@ class BattleOverlay : Gui(Minecraft.getInstance()), Schedulable {
         isSelected: Boolean = false,
         isHovered: Boolean = false,
         isCompact: Boolean = false,
-        actorDisplayName: MutableComponent? = null,
+        actorMutableComponent displayName? = null,
         isFlatHealth: Boolean,
         dexState: PokedexEntryProgress
     ) {

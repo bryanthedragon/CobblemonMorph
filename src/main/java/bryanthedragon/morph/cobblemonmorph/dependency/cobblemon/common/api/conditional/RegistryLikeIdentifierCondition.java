@@ -18,8 +18,8 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since July 16th, 2022
  */
-open class RegistryLikeIdentifierCondition<T : Any>(val identifier: ResourceLocation) : RegistryLikeCondition<T> {
-    companion object {
+open class RegistryLikeIdentifierCondition<T : Any>(val ResourceLocation identifier) : RegistryLikeCondition<T> {
+    final class Companion {
         fun <T: Any> resolver(
             constructor: (ResourceLocation) -> RegistryLikeIdentifierCondition<T>
         ): (JsonElement) -> RegistryLikeIdentifierCondition<T>? = { constructor(ResourceLocation.parse(it.asString)) }

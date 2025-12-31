@@ -6,11 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.ItemInteractionEvolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.TradeEvolution
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.ItemInteractionEvolution;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.variants.TradeEvolution;
 
 /**
  * Represents an evolution of a [Pokemon] that can only occur during specific actions and with added context.
@@ -21,12 +21,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
  * @author Licious
  * @since March 19th, 2022
  */
-interface ContextEvolution<RC, TC> : Evolution {
+public interface ContextEvolution<RC, TC> : Evolution {
 
     /**
      * The target context for this [Evolution] to even be tested.
      */
-    val requiredContext: TC
+    public final TC requiredContext;
 
     /**
      * Attempts to evolve the given [Pokemon] under the given context of type [RC].
@@ -35,11 +35,11 @@ interface ContextEvolution<RC, TC> : Evolution {
      * @param context The context of this query.
      * @return If the evolution was successful.
      */
-    fun attemptEvolution(pokemon: Pokemon, context: RC): Boolean {
+    boolean attemptEvolution(Pokemon pokemon, RC context) {
         if (this.testContext(pokemon, context) && super.test(pokemon)) {
-            return super.evolve(pokemon)
+            return super.evolve(pokemon);
         }
-        return false
+        return false;
     }
 
     /**
@@ -49,6 +49,6 @@ interface ContextEvolution<RC, TC> : Evolution {
      * @param context The context of this query.
      * @return If the context matched the [requiredContext].
      */
-    fun testContext(pokemon: Pokemon, context: RC): Boolean
+    boolean testContext(Pokemon pokemon, RC context);
 
 }

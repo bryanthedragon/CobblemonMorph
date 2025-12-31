@@ -39,10 +39,10 @@ import net.minecraft.world.entity.LivingEntity
  * @author Hiroku
  * @since July 24th, 2022
  */
-class LootDroppedEvent(
+public class LootDroppedEvent(
     val table: DropTable,
-    val player: ServerPlayer?,
-    val entity: LivingEntity?,
+    val ServerPlayer player?,
+    val LivingEntity entity?,
     val drops: MutableList<DropEntry>
 ) : Cancelable() {
     val context = mapOf<String, MoValue>(

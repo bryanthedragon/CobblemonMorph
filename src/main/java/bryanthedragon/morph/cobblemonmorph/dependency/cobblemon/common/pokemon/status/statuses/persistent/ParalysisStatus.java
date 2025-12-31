@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-class ParalysisStatus : PersistentStatus(
+public class ParalysisStatus : PersistentStatus(
     name = cobblemonResource("paralysis"),
     showdownName = "par",
     applyMessage = "cobblemon.status.paralysis.apply",

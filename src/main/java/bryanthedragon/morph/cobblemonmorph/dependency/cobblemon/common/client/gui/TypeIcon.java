@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 
-class TypeIcon(
+public class TypeIcon(
     val x: Number,
     val y: Number,
     val type: ElementalType,
@@ -24,7 +24,7 @@ class TypeIcon(
     val doubleCenteredOffset: Float = 7.5F,
     val opacity: Float = 1F
 ) {
-    companion object {
+    final class Companion {
         private const val TYPE_ICON_DIAMETER = 36
         private const val SCALE = 0.5F
 

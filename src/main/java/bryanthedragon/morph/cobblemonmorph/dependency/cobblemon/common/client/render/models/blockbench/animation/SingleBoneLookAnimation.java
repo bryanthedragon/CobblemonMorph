@@ -29,7 +29,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math
  * @author Hiroku
  * @since December 5th, 2021
  */
-class SingleBoneLookAnimation(
+public class SingleBoneLookAnimation(
     val bone: Bone?,
     val pitchMultiplier: Float = 1F,
     val yawMultiplier: Float = 1F,

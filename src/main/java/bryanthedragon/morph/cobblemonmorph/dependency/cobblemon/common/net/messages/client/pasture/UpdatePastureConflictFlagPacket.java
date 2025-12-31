@@ -6,31 +6,33 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-import java.util.UUID
-import net.minecraft.network.RegistryFriendlyByteBuf
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import java.util.UUID;
 
-record UpdatePastureConflictFlagPacket(
-    val pokemonId: UUID,
-    val enabled: Boolean
-) : NetworkPacket<UpdatePastureConflictFlagPacket> {
-    override val id = ID
+import org.jetbrains.annotations.NotNull;
 
-    companion object {
-        val ID = cobblemonResource("update_pasture_conflict_flag")
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
-        fun decode(buf: RegistryFriendlyByteBuf): UpdatePastureConflictFlagPacket {
+public record UpdatePastureConflictFlagPacket(UUID pokemonId, Boolean enabled) implements NetworkPacket<UpdatePastureConflictFlagPacket> {
+    ID id;
+
+    final class Companion {
+        ID = MiscUtils.cobblemonResource("update_pasture_conflict_flag");
+
+        UpdatePastureConflictFlagPacket decode(RegistryFriendlyByteBuf buf) {
             return UpdatePastureConflictFlagPacket(buf.readUUID(), buf.readBoolean())
         }
     }
 
-    override fun encode(buf: RegistryFriendlyByteBuf) {
-        buf.writeUUID(pokemonId)
-        buf.writeBoolean(enabled)
+    fun encode(RegistryFriendlyByteBuf buf) {
+        buf.writeUUID(pokemonId);
+        buf.writeBoolean(enabled);
     }
 
-
+    @Override
+    public @NotNull ResourceLocation getId() {
+    }
 }

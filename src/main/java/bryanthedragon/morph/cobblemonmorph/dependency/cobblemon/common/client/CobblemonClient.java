@@ -6,130 +6,132 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBlockEntities
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBlocks
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonClientImplementation
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonEntities
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItems
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonMenuType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Berries
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ClientTaskTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.client.ClientGeneralPlayerData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.client.ClientPokedexManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonItemTags
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.TintBlockEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattle
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.PartyOverlay
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.PartyOverlayDataControl
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.RideControlsOverlay
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.BattleOverlay
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.cookingpot.CookingPotScreen
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.BedrockParticleOptionsRepository
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.ClientPlayerIcon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.DeferredRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.BerryBlockRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.CampfireBlockEntityRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.DisplayCaseRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.FossilAnalyzerRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.GildedChestBlockRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.HealingMachineRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.LecternBlockEntityRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.PokeSnackBlockEntityRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.RestorationTankRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.boat.CobblemonBoatRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.AprijuiceItemColorProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.PokeBaitItemColorProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.PokeSnackItemColorProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.PonigiriItemColorProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.SinisterTeaItemColorProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.entity.PokeBobberEntityRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.generic.GenericBedrockRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.item.CobblemonBuiltinItemRendererRegistry
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.item.PokemonItemRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.layer.PokemonOnShoulderRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.BerryModelRepository
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.MiscModelRepository
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.VaryingModelRepository
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.npc.NPCRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.pokeball.PokeBallRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.pokemon.PokemonRenderer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.requests.ClientPlayerActionRequests
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.sound.BattleMusicController
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.sound.EntitySoundTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.storage.ClientStorageManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.AprijuiceTooltipGenerator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.CobblemonTooltipGenerator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.FishingBaitTooltipGenerator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.FishingRodTooltipGenerator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.PokePuffTooltipGenerator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.RecipeSeasoningAbsorptionTooltipGenerator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.SeasoningTooltipGenerator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.TooltipManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.trade.ClientTrade
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.boat.CobblemonBoatType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.PlatformEvents
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokedex.scanner.PokedexUsageContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isLookingAt
-import net.minecraft.client.Minecraft
-import net.minecraft.client.color.block.BlockColor
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.screens.MenuScreens
-import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.model.BoatModel
-import net.minecraft.client.model.ChestBoatModel
-import net.minecraft.client.model.PlayerModel
-import net.minecraft.client.renderer.RenderType
-import net.minecraft.client.renderer.blockentity.HangingSignRenderer
-import net.minecraft.client.renderer.blockentity.SignRenderer
-import net.minecraft.client.renderer.entity.EntityRenderer
-import net.minecraft.client.renderer.entity.LivingEntityRenderer
-import net.minecraft.client.resources.PlayerSkin
-import net.minecraft.server.packs.resources.ResourceManager
-import net.minecraft.world.InteractionHand
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.phys.AABB
-final class CobblemonClient {
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBlockEntities;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBlocks;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonClientImplementation;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonEntities;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItems;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonMenuType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry.Berries;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.ClientTaskTracker;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.client.ClientGeneralPlayerData;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.client.ClientPokedexManager;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonItemTags;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.entity.TintBlockEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattle;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.PartyOverlay;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.PartyOverlayDataControl;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.RideControlsOverlay;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.BattleOverlay;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.cookingpot.CookingPotScreen;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.particle.BedrockParticleOptionsRepository;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.ClientPlayerIcon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.DeferredRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.BerryBlockRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.CampfireBlockEntityRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.DisplayCaseRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.FossilAnalyzerRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.GildedChestBlockRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.HealingMachineRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.LecternBlockEntityRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.PokeSnackBlockEntityRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.block.RestorationTankRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.boat.CobblemonBoatRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.AprijuiceItemColorProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.PokeBaitItemColorProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.PokeSnackItemColorProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.PonigiriItemColorProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.color.SinisterTeaItemColorProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.entity.PokeBobberEntityRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.generic.GenericBedrockRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.item.CobblemonBuiltinItemRendererRegistry;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.item.PokemonItemRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.layer.PokemonOnShoulderRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.bedrock.animation.BedrockAnimationRepository;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.BerryModelRepository;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.MiscModelRepository;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.VaryingModelRepository;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.npc.NPCRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.pokeball.PokeBallRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.pokemon.PokemonRenderer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.requests.ClientPlayerActionRequests;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.sound.BattleMusicController;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.sound.EntitySoundTracker;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.storage.ClientStorageManager;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.AprijuiceTooltipGenerator;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.CobblemonTooltipGenerator;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.FishingBaitTooltipGenerator;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.FishingRodTooltipGenerator;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.PokePuffTooltipGenerator;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.RecipeSeasoningAbsorptionTooltipGenerator;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.SeasoningTooltipGenerator;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.tooltips.TooltipManager;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.trade.ClientTrade;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.boat.CobblemonBoatType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.PlatformEvents;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokedex.scanner.PokedexUsageContext;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isLookingAt;
 
-    lateinit var implementation: CobblemonClientImplementation
-    val storage = ClientStorageManager()
-    var trade: ClientTrade? = null
-    var battle: ClientBattle? = null
-    var clientPlayerData = ClientGeneralPlayerData()
-    var clientPokedexData = ClientPokedexManager(mutableMapOf())
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.ChestBoatModel;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
+import net.minecraft.client.renderer.blockentity.SignRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+
+public final class CobblemonClient {
+
+    lateinit var implementation: CobblemonClientImplementation;
+    val storage = ClientStorageManager();
+    var trade: ClientTrade? = null;
+    var battle: ClientBattle? = null;
+    var clientPlayerData = ClientGeneralPlayerData();
+    var clientPokedexData = ClientPokedexManager(mutableMapOf());
 
     /** If true then we won't bother them anymore about choosing a starter even if it's a thing they can do. */
-    var checkedStarterScreen = false
-    var lastPcBoxViewed = 0
-    var requests = ClientPlayerActionRequests()
-    var teamData = ClientPlayerTeamData()
-    val overlay: PartyOverlay by lazy { PartyOverlay() }
-    val battleOverlay: BattleOverlay by lazy { BattleOverlay() }
-    val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() }
-    val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() }
+    var checkedStarterScreen = false;
+    var lastPcBoxViewed = 0;
+    var requests = ClientPlayerActionRequests();
+    var teamData = ClientPlayerTeamData();
+    val overlay: PartyOverlay by lazy { PartyOverlay() };
+    val battleOverlay: BattleOverlay by lazy { BattleOverlay() };
+    val pokedexUsageContext: PokedexUsageContext by lazy { PokedexUsageContext() };
+    val rideControlsOverlay: RideControlsOverlay by lazy { RideControlsOverlay() };
 
-    fun onLogin() {
-        clientPlayerData = ClientGeneralPlayerData()
-        requests = ClientPlayerActionRequests()
-        teamData = ClientPlayerTeamData()
-        clientPokedexData = ClientPokedexManager(mutableMapOf())
-        storage.onLogin()
+    fun onLogin(); {
+        clientPlayerData = ClientGeneralPlayerData();
+        requests = ClientPlayerActionRequests();
+        teamData = ClientPlayerTeamData();
+        clientPokedexData = ClientPokedexManager(mutableMapOf();)
+        storage.onLogin();
 //        CobblemonDataProvider.canReload = false
     }
 
-    fun onLogout() {
-        storage.onLogout()
+    fun onLogout(); {
+        storage.onLogout();
         battle = null
-        battleOverlay.onLogout()
-        ClientTaskTracker.clear()
+        battleOverlay.onLogout();
+        ClientTaskTracker.clear();
         checkedStarterScreen = false
 //        CobblemonDataProvider.canReload = true
-        DeferredRenderer.clearAll()
-        ClientPlayerIcon.clear()
+        DeferredRenderer.clearAll();
+        ClientPlayerIcon.clear();
     }
 
     fun initialize(implementation: CobblemonClientImplementation) {
@@ -139,25 +141,25 @@ final class CobblemonClient {
         PlatformEvents.CLIENT_PLAYER_LOGIN.subscribe { onLogin() }
         PlatformEvents.CLIENT_PLAYER_LOGOUT.subscribe { onLogout() }
 
-        this.registerBlockEntityRenderers()
-        registerBlockRenderTypes()
-        registerColors()
-        registerFlywheelRenderers()
-        this.registerEntityRenderers()
-        this.registerItemColors()
+        this.registerBlockEntityRenderers();
+        registerBlockRenderTypes();
+        registerColors();
+        registerFlywheelRenderers();
+        this.registerEntityRenderers();
+        this.registerItemColors();
         Berries.observable.subscribe {
-            BerryModelRepository.patchModels()
+            BerryModelRepository.patchModels();
         }
-        this.registerTooltipManagers()
-        this.registerMenuScreens()
+        this.registerTooltipManagers();
+        this.registerMenuScreens();
 
         LOGGER.info("Registering custom BuiltinItemRenderers")
-        CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_MODEL, PokemonItemRenderer())
+        CobblemonBuiltinItemRendererRegistry.register(CobblemonItems.POKEMON_MODEL, PokemonItemRenderer();)
 
         PlatformEvents.CLIENT_ITEM_TOOLTIP.subscribe { event ->
             val stack = event.stack
             val lines = event.lines
-            TooltipManager.generateTooltips(stack, lines, Screen.hasShiftDown())
+            TooltipManager.generateTooltips(stack, lines, Screen.hasShiftDown();)
         }
 
         PlatformEvents.CLIENT_ENTITY_UNLOAD.subscribe { event -> EntitySoundTracker.clear(event.entity.id) }
@@ -179,24 +181,24 @@ final class CobblemonClient {
                     return@subscribe
                 }
 
-                val nearbyPokemon = player.level().getEntities(
+                val nearbyPokemon = player.level();.getEntities(
                     player,
-                    AABB.ofSize(player.position(), 16.0, 16.0, 16.0)
+                    AABB.ofSize(player.position();, 16.0, 16.0, 16.0)
                 ) { it is PokemonEntity }
 
                 nearbyPokemon?.forEach { entity ->
                     if (entity is PokemonEntity && !entity.isSilent && !entity.passengers.contains(player)) {
                         if (player.isLookingAt(entity) && !player.isSpectator && entity.pokemon.shiny) entity.delegate.spawnShinyParticle(player)
-                        entity.delegate.spawnAspectParticle()
+                        entity.delegate.spawnAspectParticle();
                     }
                 }
             }
-            ClientPlayerIcon.onTick()
+            ClientPlayerIcon.onTick();
             PartyOverlayDataControl.tick(event.client.isPaused)
         }
     }
 
-    private fun registerTooltipManagers() {
+    private fun registerTooltipManagers(); {
         TooltipManager.registerTooltipGenerator(CobblemonTooltipGenerator)
         TooltipManager.registerTooltipGenerator(RecipeSeasoningAbsorptionTooltipGenerator)
         TooltipManager.registerTooltipGenerator(FishingBaitTooltipGenerator)
@@ -206,36 +208,36 @@ final class CobblemonClient {
         TooltipManager.registerTooltipGenerator(PokePuffTooltipGenerator)
     }
 
-    fun registerFlywheelRenderers() {
+    fun registerFlywheelRenderers(); {
 //        InstancedRenderRegistry
 //            .configure(CobblemonBlockEntities.BERRY)
-//            .alwaysSkipRender()
+//            .alwaysSkipRender();
 //            .factory(::BerryEntityInstance)
-//            .apply()
+//            .apply();
     }
 
-    fun registerColors() {
+    fun registerColors(); {
         this.implementation.registerBlockColors(BlockColor { blockState, view, blockPos, tintIndex ->
             blockPos?.let { pos ->
                 view?.getBlockEntity(pos)?.let { blockEntity ->
-                    if (blockEntity is TintBlockEntity) return@BlockColor blockEntity.getTint()
+                    if (blockEntity is TintBlockEntity) return@BlockColor blockEntity.getTint();
                 }
             }
             return@BlockColor 0xFFFFFF
         }, CobblemonBlocks.POKE_SNACK, CobblemonBlocks.POKE_CAKE)
     }
 
-    private fun registerBlockRenderTypes() {
+    private fun registerBlockRenderTypes(); {
 
         this.implementation.registerBlockRenderType(
-            RenderType.cutoutMipped(),
+            RenderType.cutoutMipped();,
             CobblemonBlocks.APRICORN_LEAVES,
             CobblemonBlocks.SACCHARINE_LEAVES,
             CobblemonBlocks.POKE_CAKE
         )
 
         this.implementation.registerBlockRenderType(
-            RenderType.cutout(),
+            RenderType.cutout();,
             CobblemonBlocks.GILDED_CHEST,
             CobblemonBlocks.FOSSIL_ANALYZER,
             CobblemonBlocks.APRICORN_DOOR,
@@ -283,7 +285,7 @@ final class CobblemonClient {
             CobblemonBlocks.PEP_UP_FLOWER,
             CobblemonBlocks.POTTED_PEP_UP_FLOWER,
             CobblemonBlocks.REVIVAL_HERB,
-            *CobblemonBlocks.berries().values.toTypedArray(),
+            *CobblemonBlocks.berries();.values.toTypedArray();,
             CobblemonBlocks.GALARICA_NUT_BUSH,
             CobblemonBlocks.RESTORATION_TANK,
             CobblemonBlocks.SMALL_BUDDING_TUMBLESTONE,
@@ -321,11 +323,11 @@ final class CobblemonClient {
             CobblemonBlocks.YELLOW_CAMPFIRE_POT
         )
 
-        this.createBoatModelLayers()
+        this.createBoatModelLayers();
     }
 
     fun beforeChatRender(context: GuiGraphics, partialDeltaTicks: Float) {
-        val partialDeltaTicks = Minecraft.getInstance().timer // Checking that this even works
+        val partialDeltaTicks = Minecraft.getInstance();.timer // Checking that this even works
 //        ClientTaskTracker.update(partialDeltaTicks / 20f)
         if (battle == null) {
             overlay.render(context, partialDeltaTicks)
@@ -344,11 +346,11 @@ final class CobblemonClient {
         renderer?.addLayer(PokemonOnShoulderRenderer(renderer))
     }
 
-    private fun registerMenuScreens() {
+    private fun registerMenuScreens(); {
         MenuScreens.register(CobblemonMenuType.COOKING_POT, ::CookingPotScreen)
     }
 
-    private fun registerBlockEntityRenderers() {
+    private fun registerBlockEntityRenderers(); {
         this.implementation.registerBlockEntityRenderer(
             CobblemonBlockEntities.HEALING_MACHINE,
             ::HealingMachineRenderer
@@ -371,7 +373,7 @@ final class CobblemonClient {
         this.implementation.registerBlockEntityRenderer(CobblemonBlockEntities.POKE_SNACK, ::PokeSnackBlockEntityRenderer)
     }
 
-    private fun registerEntityRenderers() {
+    private fun registerEntityRenderers(); {
         LOGGER.info("Registering Pokémon renderer")
         this.implementation.registerEntityRenderer(CobblemonEntities.POKEMON, ::PokemonRenderer)
         LOGGER.info("Registering PokéBall renderer")
@@ -395,15 +397,15 @@ final class CobblemonClient {
         this.implementation.registerEntityRenderer(CobblemonEntities.NPC, ::NPCRenderer)
     }
 
-    private fun registerItemColors() {
-        implementation.registerItemColors(AprijuiceItemColorProvider, *CobblemonItems.aprijuices.toTypedArray())
+    private fun registerItemColors(); {
+        implementation.registerItemColors(AprijuiceItemColorProvider, *CobblemonItems.aprijuices.toTypedArray();)
         implementation.registerItemColors(PokeSnackItemColorProvider, CobblemonItems.POKE_SNACK, CobblemonItems.POKE_CAKE)
         implementation.registerItemColors(PokeBaitItemColorProvider, CobblemonItems.POKE_BAIT)
         implementation.registerItemColors(PonigiriItemColorProvider, CobblemonItems.PONIGIRI)
         implementation.registerItemColors(SinisterTeaItemColorProvider, CobblemonItems.SINISTER_TEA)
     }
 
-    fun reloadCodedAssets(resourceManager: ResourceManager) {
+    fun reloadCodedAssets(resourceResourceManager manager) {
         LOGGER.info("Loading assets...")
         // Particles come first because animations need them.
         BedrockParticleOptionsRepository.loadEffects(resourceManager)
@@ -419,13 +421,13 @@ final class CobblemonClient {
         LOGGER.info("Loaded assets")
     }
 
-    fun endBattle() {
+    fun endBattle(); {
         battle = null
         battleOverlay.lastKnownBattle = null
-        BattleMusicController.endMusic()
+        BattleMusicController.endMusic();
     }
 
-    private fun createBoatModelLayers() {
+    private fun createBoatModelLayers(); {
         CobblemonBoatType.entries.forEach { type ->
             this.implementation.registerLayer(
                 CobblemonBoatRenderer.createBoatModelLayer(type, false),

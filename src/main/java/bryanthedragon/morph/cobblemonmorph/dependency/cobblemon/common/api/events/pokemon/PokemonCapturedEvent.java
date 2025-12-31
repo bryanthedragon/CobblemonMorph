@@ -17,9 +17,9 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerPlayer
 
 record PokemonCapturedEvent (
-    val pokemon: Pokemon,
-    val player: ServerPlayer,
-    val pokeBallEntity: EmptyPokeBallEntity
+    val Pokemon pokemon,
+    val ServerPlayer player,
+    val EmptyPokeBallEntity pokeBallEntity
 ) {
     val context = mutableMapOf<String, MoValue>(
         "pokemon" to pokemon.struct,

@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonPropertyType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.StringProperty
-final class PokemonFlagProperty : CustomPokemonPropertyType<StringProperty> {
+public final class PokemonFlagProperty : CustomPokemonPropertyType<StringProperty> {
 
     private const val KEY = "tag"
 

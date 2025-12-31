@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Hiroku
  * @since August 20th, 2022
  */
-class NothingInstruction() : InterpreterInstruction {
+public class NothingInstruction() : InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchGo { battle.broadcastChatMessage(battleLang("nothing")) }

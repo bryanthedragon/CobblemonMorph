@@ -8,6 +8,6 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.events
 
-interface EventHandler {
+public interface EventHandler {
     fun registerListeners()
 }

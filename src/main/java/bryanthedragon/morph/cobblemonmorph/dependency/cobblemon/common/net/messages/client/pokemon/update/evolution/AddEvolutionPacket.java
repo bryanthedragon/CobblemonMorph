@@ -21,27 +21,27 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.core.RegistryAccess
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class AddEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : SingleUpdatePacket<EvolutionDisplay, AddEvolutionPacket>(pokemon, value) {
+public class AddEvolutionPacket(pokemon: () -> Pokemon?, EvolutionDisplay value) : SingleUpdatePacket<EvolutionDisplay, AddEvolutionPacket>(pokemon, value) {
 
     override val id = ID
 
-    constructor(pokemon: Pokemon, value: Evolution, registryAccess: RegistryAccess) : this({ pokemon }, value.convertToDisplay(pokemon, registryAccess))
+    constructor(Pokemon pokemon, value: Evolution, RegistryAccess registryAccess) : this({ pokemon }, value.convertToDisplay(pokemon, registryAccess))
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         this.value.encode(buffer)
     }
 
-    override fun set(pokemon: Pokemon, value: EvolutionDisplay) {
+    override fun set(Pokemon pokemon, EvolutionDisplay value) {
         pokemon.evolutionProxy.client().add(value)
     }
 
-    companion object {
+    final class Companion {
 
         val ID = cobblemonResource("add_evolution")
 
-        fun decode(buffer: RegistryFriendlyByteBuf) = AddEvolutionPacket(decodePokemon(buffer), decodeDisplay(buffer))
+        fun decode(RegistryFriendlyByteBuf buffer) = AddEvolutionPacket(decodePokemon(buffer), decodeDisplay(buffer))
 
-        internal fun Evolution.convertToDisplay(pokemon: Pokemon, registryAccess: RegistryAccess): EvolutionDisplay {
+        internal fun Evolution.convertToDisplay(Pokemon pokemon, RegistryAccess registryAccess): EvolutionDisplay {
             val result = pokemon.clone(registryAccess = registryAccess)
             this.result.apply(result)
             val expectedDisplay = CobblemonEvolutionDisplay(this.id, result)
@@ -50,13 +50,13 @@ class AddEvolutionPacket(pokemon: () -> Pokemon?, value: EvolutionDisplay) : Sin
             return event.display
         }
 
-        internal fun EvolutionDisplay.encode(buffer: RegistryFriendlyByteBuf) {
+        internal fun EvolutionDisplay.encode(RegistryFriendlyByteBuf buffer) {
             buffer.writeString(this.id)
             buffer.writeIdentifier(this.species.resourceIdentifier)
             buffer.writeCollection(this.aspects) { pb, value -> pb.writeString(value) }
         }
 
-        internal fun decodeDisplay(buffer: RegistryFriendlyByteBuf): EvolutionDisplay {
+        internal fun decodeDisplay(RegistryFriendlyByteBuf buffer): EvolutionDisplay {
             val id = buffer.readString()
             val speciesIdentifier = buffer.readIdentifier()
             val species = PokemonSpecies.getByIdentifier(speciesIdentifier)

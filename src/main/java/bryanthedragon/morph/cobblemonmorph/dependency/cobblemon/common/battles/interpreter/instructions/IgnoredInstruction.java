@@ -17,6 +17,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.d
  * @author Hiroku
  * @since December 25th, 2023
  */
-class IgnoredInstruction : InterpreterInstruction {
+public class IgnoredInstruction : InterpreterInstruction {
     override fun invoke(pokemonBattle: PokemonBattle) = Unit
 }

@@ -24,7 +24,7 @@ import kotlin.reflect.KClass
  * @author Licious
  * @since March 22nd, 2022
  */
-class LazySet<T : Any>(
+public class LazySet<T : Any>(
     private val type: KClass<T>,
     values: JsonArray
 ) : MutableSet<T> {

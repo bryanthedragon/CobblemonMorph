@@ -27,7 +27,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
  * @author Licious
  * @since January 28th, 2022
  */
-class DefeatEvolutionProgress : EvolutionProgress<DefeatEvolutionProgress.Progress> {
+public class DefeatEvolutionProgress : EvolutionProgress<DefeatEvolutionProgress.Progress> {
 
     private var progress = Progress(PokemonProperties(), 0)
 
@@ -43,7 +43,7 @@ class DefeatEvolutionProgress : EvolutionProgress<DefeatEvolutionProgress.Progre
         this.progress = Progress(PokemonProperties(), 0)
     }
 
-    override fun shouldKeep(pokemon: Pokemon): Boolean {
+    override fun shouldKeep(Pokemon pokemon): Boolean {
         return pokemon.form.evolutions.any { evolution ->
             evolution.requirements.any { requirement ->
                 requirement is DefeatRequirement && requirement.target.originalString.equals(this.progress.target.originalString, true)
@@ -54,11 +54,11 @@ class DefeatEvolutionProgress : EvolutionProgress<DefeatEvolutionProgress.Progre
     override fun type(): EvolutionProgressType<*> = EvolutionProgressTypes.DEFEAT
 
     record Progress(
-        val target: PokemonProperties,
+        val Pokemon targetProperties,
         val amount: Int
     )
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("defeat")
         private const val TARGET = "target"
         private const val AMOUNT = "amount"

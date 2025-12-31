@@ -24,14 +24,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 abstract class ParticleUVMode : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<ParticleUVMode, ParticleUVModeType>(
+    final class Companion : ArbitrarilyMappedSerializableCompanion<ParticleUVMode, ParticleUVModeType>(
         keyFromValue = { it.type },
         stringFromKey = { it.name },
         keyFromString = ParticleUVModeType::valueOf
     ) {
         init {
-            registerSubtype(ParticleUVModeType.ANIMATED, AnimatedParticleUVMode::class.java, AnimatedParticleUVMode.CODEC)
-            registerSubtype(ParticleUVModeType.STATIC, StaticParticleUVMode::class.java, StaticParticleUVMode.CODEC)
+            registerSubtype(ParticleUVModeType.ANIMATED, AnimatedParticleUVMode.class, AnimatedParticleUVMode.CODEC)
+            registerSubtype(ParticleUVModeType.STATIC, StaticParticleUVMode.class, StaticParticleUVMode.CODEC)
         }
     }
 
@@ -43,15 +43,15 @@ abstract class ParticleUVMode : CodecMapped {
     open var uSize: Expression = NumberExpression(8.0)
     open var vSize: Expression = NumberExpression(8.0)
 
-    abstract fun get(moLangRuntime: MoLangRuntime, age: Double, maxAge: Double, uvDetails: UVDetails): UVDetails
+    abstract fun get(moLangMoLangRuntime runtime, age: Double, maxAge: Double, uvDetails: UVDetails): UVDetails
 }
 
-enum class ParticleUVModeType {
+public enum ParticleUVModeType {
     STATIC,
     ANIMATED
 }
 
-class AnimatedParticleUVMode(
+public class AnimatedParticleUVMode(
     override var startU: Expression = NumberExpression(0.0),
     override var startV: Expression = NumberExpression(0.0),
     override var textureSizeX: Int = 8,
@@ -67,7 +67,7 @@ class AnimatedParticleUVMode(
 ) : ParticleUVMode() {
     override val type = ParticleUVModeType.ANIMATED
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<AnimatedParticleUVMode> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -89,11 +89,11 @@ class AnimatedParticleUVMode(
         }
     }
 
-    override fun <T> encode(ops: DynamicOps<T>): DataResult<T> {
+    override fun <T> encode(DynamicOps<T> ops): DataResult<T> {
         return CODEC.encodeStart(ops, this)
     }
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         startU = MoLang.createParser(buffer.readString()).parseExpression()
         startV = MoLang.createParser(buffer.readString()).parseExpression()
         textureSizeX = buffer.readInt()
@@ -108,7 +108,7 @@ class AnimatedParticleUVMode(
         loop = buffer.readBoolean()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(startU.getString())
         buffer.writeString(startV.getString())
         buffer.writeInt(textureSizeX)
@@ -123,7 +123,7 @@ class AnimatedParticleUVMode(
         buffer.writeBoolean(loop)
     }
 
-    override fun get(runtime: MoLangRuntime, age: Double, maxAge: Double, uvDetails: UVDetails): UVDetails {
+    override fun get(MoLangRuntime runtime, age: Double, maxAge: Double, uvDetails: UVDetails): UVDetails {
         val maxFrame = runtime.resolveInt(maxFrame) - 1
         val stepU = runtime.resolveDouble(stepU)
         val stepV = runtime.resolveDouble(stepV)
@@ -163,7 +163,7 @@ class AnimatedParticleUVMode(
     }
 }
 
-class StaticParticleUVMode(
+public class StaticParticleUVMode(
     override var startU: Expression = NumberExpression(0.0),
     override var startV: Expression = NumberExpression(0.0),
     override var textureSizeX: Int = 8,
@@ -173,7 +173,7 @@ class StaticParticleUVMode(
 ) : ParticleUVMode() {
     override val type = ParticleUVModeType.STATIC
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<StaticParticleUVMode> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -189,7 +189,7 @@ class StaticParticleUVMode(
         }
     }
 
-    override fun get(moLangRuntime: MoLangRuntime, age: Double, maxAge: Double, uvDetails: UVDetails): UVDetails {
+    override fun get(moLangMoLangRuntime runtime, age: Double, maxAge: Double, uvDetails: UVDetails): UVDetails {
         return uvDetails.set(
             startU = moLangRuntime.resolveDouble(startU) / textureSizeX,
             startV = moLangRuntime.resolveDouble(startV) / textureSizeY,
@@ -198,11 +198,11 @@ class StaticParticleUVMode(
         )
     }
 
-    override fun <T> encode(ops: DynamicOps<T>): DataResult<T> {
+    override fun <T> encode(DynamicOps<T> ops): DataResult<T> {
         return CODEC.encodeStart(ops, this)
     }
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         startU = MoLang.createParser(buffer.readString()).parseExpression()
         startV = MoLang.createParser(buffer.readString()).parseExpression()
         textureSizeX = buffer.readInt()
@@ -210,7 +210,7 @@ class StaticParticleUVMode(
         uSize = MoLang.createParser(buffer.readString()).parseExpression()
         vSize = MoLang.createParser(buffer.readString()).parseExpression()
     }
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(startU.getString())
         buffer.writeString(startV.getString())
         buffer.writeInt(textureSizeX)
@@ -220,7 +220,7 @@ class StaticParticleUVMode(
     }
 }
 
-class UVDetails {
+public class UVDetails {
     var startU: Float = 0F
     var startV: Float = 0F
     var endU: Float = 0F

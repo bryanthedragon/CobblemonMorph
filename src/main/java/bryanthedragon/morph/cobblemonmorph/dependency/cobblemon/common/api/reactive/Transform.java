@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive;
 
 /**
  * A transformation function that can be used in [Observable.pipe] to translate the [Observable] in some way.
@@ -17,15 +17,17 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reac
  * @author Hiroku
  * @since November 26th, 2021
  */
-interface Transform<I, O> {
-    companion object {
-        private val noTransformNoTerminateThrowable = NoTransformThrowable(false)
-        private val noTransformTerminateThrowable = NoTransformThrowable(true)
+public interface Transform<I, O> {
+
+    // Kotlin companion object → Java static members
+    final class Companion {
+        private static final NoTransformThrowable NO_TRANSFORM_NO_TERMINATE = new NoTransformThrowable(false);
+        private static final NoTransformThrowable NO_TRANSFORM_TERMINATE = new NoTransformThrowable(true);
     }
 
-    @Throws
-    operator fun invoke(input: I): O
+    O invoke(I input) throws NoTransformThrowable;
 
-    @Throws
-    fun noTransform(terminate: Boolean): Nothing = throw if (terminate) noTransformTerminateThrowable else noTransformNoTerminateThrowable
+    default void noTransform(boolean terminate) throws NoTransformThrowable {
+        throw terminate ? Companion.NO_TRANSFORM_TERMINATE : Companion.NO_TRANSFORM_NO_TERMINATE;
+    }
 }

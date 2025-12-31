@@ -18,7 +18,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.p
  * @author Hiroku
  * @since December 16th, 2021
  */
-enum class PokemonBehaviourFlag {
+public enum PokemonBehaviourFlag {
     LOOKING,
     EXCITED,
     FLYING,

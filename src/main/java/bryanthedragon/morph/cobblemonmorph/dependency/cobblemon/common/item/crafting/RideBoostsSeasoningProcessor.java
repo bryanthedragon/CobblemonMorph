@@ -33,7 +33,8 @@ import net.minecraft.world.item.ItemStack
  *
  * @author Hiroku
  * @since November 7th, 2025
- */final class RideBoostsSeasoningProcessor : SeasoningProcessor {
+ */
+public final class RideBoostsSeasoningProcessor : SeasoningProcessor {
     override val type = "ride_boosts"
 
     override fun apply(result: ItemStack, seasoning: List<ItemStack>) {

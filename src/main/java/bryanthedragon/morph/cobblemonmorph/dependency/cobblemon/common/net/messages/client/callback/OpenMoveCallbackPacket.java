@@ -22,10 +22,10 @@ import java.util.*
  * @author Hiroku
  * @since June 30th, 2023
  */
-class OpenMoveCallbackPacket(val uuid: UUID, val title: MutableComponent, val moves: List<MoveSelectDTO>) : NetworkPacket<OpenMoveCallbackPacket> {
-    companion object {
+public class OpenMoveCallbackPacket(val UUID uuid, val title: MutableComponent, val moves: List<MoveSelectDTO>) : NetworkPacket<OpenMoveCallbackPacket> {
+    final class Companion {
         val ID = cobblemonResource("open_move_callback")
-        fun decode(buffer: RegistryFriendlyByteBuf) = OpenMoveCallbackPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = OpenMoveCallbackPacket(
             uuid = buffer.readUUID(),
             title = ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC.decode(buffer).copy(),
             moves = buffer.readList { _ -> MoveSelectDTO(buffer) }
@@ -33,7 +33,7 @@ class OpenMoveCallbackPacket(val uuid: UUID, val title: MutableComponent, val mo
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(uuid)
         ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC.encode(buffer, title)
         buffer.writeCollection(moves) { _, v -> v.writeToBuffer(buffer) }

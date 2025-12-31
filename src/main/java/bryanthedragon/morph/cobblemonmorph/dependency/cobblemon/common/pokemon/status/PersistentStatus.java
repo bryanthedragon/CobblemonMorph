@@ -33,14 +33,14 @@ open class PersistentStatus(
     /**
      * Called when a status duration is expired.
      */
-    open fun onStatusExpire(player: ServerPlayer, pokemon: Pokemon, random: Random) {
+    open fun onStatusExpire(ServerPlayer player, Pokemon pokemon, random: Random) {
         player.sendSystemMessage(removeMessage.asTranslated(pokemon.getDisplayName()))
     }
 
     /**
      * Called every second on the Pokémon for the status
      */
-    open fun onSecondPassed(player: ServerPlayer, pokemon: Pokemon, random: Random) {
+    open fun onSecondPassed(ServerPlayer player, Pokemon pokemon, random: Random) {
 
     }
 
@@ -60,7 +60,7 @@ open class PersistentStatus(
         return name.toString() to defaultDuration
     }
 
-    companion object {
+    final class Companion {
 
         /**
          * A [Codec] for [PersistentStatus].

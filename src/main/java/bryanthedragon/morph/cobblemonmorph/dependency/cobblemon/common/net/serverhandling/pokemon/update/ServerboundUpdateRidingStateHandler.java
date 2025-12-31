@@ -13,9 +13,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pokemon.update.ServerboundUpdateRidingStatePacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class ServerboundUpdateRidingStateHandler : ServerNetworkPacketHandler<ServerboundUpdateRidingStatePacket> {
+public final class ServerboundUpdateRidingStateHandler : ServerNetworkPacketHandler<ServerboundUpdateRidingStatePacket> {
 
-    override fun handle(packet: ServerboundUpdateRidingStatePacket, server: MinecraftServer, player: ServerPlayer) {
+    override fun handle(packet: ServerboundUpdateRidingStatePacket, server: MinecraftServer, ServerPlayer player) {
         val entity = player.level().getEntity(packet.entity) ?: return
         if (entity !is PokemonEntity) return
         if (entity.controllingPassenger != player) return

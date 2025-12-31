@@ -21,17 +21,17 @@ import net.minecraft.world.entity.LivingEntity
  * @author Licious
  * @since January 29th, 2023
  */
-class DynamicMultiplierModifier(private val multiplier: (thrower: LivingEntity, pokemon: Pokemon) -> Float, private val condition: (thrower: LivingEntity, pokemon: Pokemon) -> Boolean) : CatchRateModifier {
+public class DynamicMultiplierModifier(private val multiplier: (LivingEntity thrower, Pokemon pokemon) -> Float, private val condition: (LivingEntity thrower, Pokemon pokemon) -> Boolean) : CatchRateModifier {
 
     override fun isGuaranteed(): Boolean = false
 
-    override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = this.multiplier(thrower, pokemon)
+    override fun value(LivingEntity thrower, Pokemon pokemon): Float = this.multiplier(thrower, pokemon)
 
-    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
+    override fun behavior(LivingEntity thrower, Pokemon pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
 
-    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean = this.condition(thrower, pokemon)
+    override fun isValid(LivingEntity thrower, Pokemon pokemon): Boolean = this.condition(thrower, pokemon)
 
-    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float {
+    override fun modifyCatchRate(currentFloat catchRate, LivingEntity thrower, Pokemon pokemon): Float {
         return if(this.isValid(thrower, pokemon)) {
             currentCatchRate * this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
         } else {

@@ -13,7 +13,8 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.poke
  *
  * @author Licious
  * @since August 8th, 2022
- */final class CobblemonPokemonLabels {
+ */
+public final class CobblemonPokemonLabels {
 
     /**
      * Represents a legendary Pokémon.

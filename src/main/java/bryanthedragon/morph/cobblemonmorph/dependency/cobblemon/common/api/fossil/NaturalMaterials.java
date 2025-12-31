@@ -23,22 +23,22 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.ItemStack
-final class NaturalMaterials : JsonDataRegistry<List<NaturalMaterial>>{
+public final class NaturalMaterials : JsonDataRegistry<List<NaturalMaterial>>{
     override val id = cobblemonResource("natural_materials")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<NaturalMaterials>()
     override val typeToken: TypeToken<List<NaturalMaterial>> =
-        TypeToken.getParameterized(List::class.java, NaturalMaterial::class.java) as TypeToken<List<NaturalMaterial>>
+        TypeToken.getParameterized(List.class, NaturalMaterial.class) as TypeToken<List<NaturalMaterial>>
     override val resourcePath = "natural_materials"
-    override val gson: Gson = GsonBuilder()
+    override val Gson gson = GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(ItemTagCondition::class.java, ItemLikeConditionAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(ItemTagCondition.class, ItemLikeConditionAdapter)
         .create()
 
     private val itemMap = mutableMapOf<ResourceLocation, NaturalMaterial>()
     private val tagMap = mutableMapOf<ItemTagCondition, NaturalMaterial>()
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         NaturalMaterialRegistrySyncPacket(this.itemMap.values.toList() + this.tagMap.values.toList()).sendToPlayer(player)
     }
 

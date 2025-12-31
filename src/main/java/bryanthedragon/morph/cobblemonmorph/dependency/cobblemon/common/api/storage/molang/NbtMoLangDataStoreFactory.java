@@ -18,7 +18,7 @@ import net.minecraft.nbt.NbtIo
 import net.minecraft.world.level.storage.LevelResource
 import java.nio.file.Path
 import java.util.*
-final class NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
+public final class NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
     const val DEFAULT_PATH = "playermolangdata/"
     const val DEFAULT_FOLDER_STRUCTURE = "%s/%s.dat"
     lateinit var savePath: Path
@@ -54,11 +54,11 @@ final class NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
         dirty.toList().forEach(::save)
     }
 
-    override fun markDirty(uuid: UUID) {
+    override fun markDirty(UUID uuid) {
         dirty.add(uuid)
     }
 
-    override fun load(uuid: UUID, filePath: String?): VariableStruct {
+    override fun load(UUID uuid, fileString path?): VariableStruct {
         return if (cache.contains(uuid))
             cache[uuid]!!
         else {
@@ -78,7 +78,7 @@ final class NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
         }
     }
 
-    fun save(uuid: UUID, filePath: String? = null) {
+    fun save(UUID uuid, fileString path? = null) {
         val file = file(uuid, filePath ?: DEFAULT_PATH)
         val data = cache[uuid] ?: return
         val nbt = writeMoValueToNBT(data)!! as CompoundTag
@@ -87,5 +87,5 @@ final class NbtMoLangDataStoreFactory : MoLangDataStoreFactory {
         dirty -= uuid
     }
 
-    private fun file(uuid: UUID, filePath: String = DEFAULT_PATH) = savePath.resolve(filePath + DEFAULT_FOLDER_STRUCTURE.format(uuid.toString().substring(0, 2), uuid))
+    private fun file(UUID uuid, fileString path = DEFAULT_PATH) = savePath.resolve(filePath + DEFAULT_FOLDER_STRUCTURE.format(uuid.toString().substring(0, 2), uuid))
 }

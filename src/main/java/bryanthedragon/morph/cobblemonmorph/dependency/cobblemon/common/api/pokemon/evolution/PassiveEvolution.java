@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
  * @author Licious
  * @since March 19th, 2022
  */
-interface PassiveEvolution : Evolution {
+public interface PassiveEvolution : Evolution {
 
     /**
      * Checks if the given [Pokemon] satisfies the requirements.
@@ -27,7 +27,7 @@ interface PassiveEvolution : Evolution {
      * @param pokemon The [Pokemon] being tested.
      * @return If the [Pokemon] will evolve.
      */
-    fun attemptEvolution(pokemon: Pokemon): Boolean {
+    fun attemptEvolution(Pokemon pokemon): Boolean {
         if (super.test(pokemon)) {
             return super.evolve(pokemon)
         }

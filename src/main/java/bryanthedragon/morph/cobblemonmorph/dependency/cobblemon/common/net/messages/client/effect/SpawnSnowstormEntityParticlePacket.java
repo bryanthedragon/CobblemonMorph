@@ -23,17 +23,17 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since January 21st, 2024
  */
-class SpawnSnowstormEntityParticlePacket(
-    val effectId: ResourceLocation,
+public class SpawnSnowstormEntityParticlePacket(
+    val effectResourceLocation id,
     val sourceEntityId: Int,
     val sourceLocators: List<String> = listOf("root"),
     val targetedEntityId: Int? = null,
     val targetLocators: List<String>? = null
 ) : NetworkPacket<SpawnSnowstormEntityParticlePacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("spawn_snowstorm_entity_particle")
 
-        fun decode(buffer: RegistryFriendlyByteBuf): SpawnSnowstormEntityParticlePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SpawnSnowstormEntityParticlePacket {
             val effectId = buffer.readIdentifier()
             val sourceEntityId = buffer.readInt()
             val sourceLocators = buffer.readList { buffer.readString() }
@@ -45,7 +45,7 @@ class SpawnSnowstormEntityParticlePacket(
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(effectId)
         buffer.writeInt(sourceEntityId)
         buffer.writeCollection(sourceLocators) { _, value -> buffer.writeString(value) }

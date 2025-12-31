@@ -24,19 +24,19 @@ import net.minecraft.resources.ResourceLocation
  *
  * Handled by [ServerConfirmedRegisterHandler]
  */
-class ServerConfirmedRegisterPacket(
+public class ServerConfirmedRegisterPacket(
     val species: ResourceLocation,
     val newInformation: PokedexLearnedInformation
 ): NetworkPacket<ServerConfirmedRegisterPacket> {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(species)
         buffer.writeEnumConstant(newInformation)
     }
 
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf) = ServerConfirmedRegisterPacket(buffer.readIdentifier(), buffer.readEnumConstant(PokedexLearnedInformation::class.java))
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer) = ServerConfirmedRegisterPacket(buffer.readIdentifier(), buffer.readEnumConstant(PokedexLearnedInformation.class))
         val ID = cobblemonResource("server_confirmed_scan")
     }
 }

@@ -23,10 +23,10 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 
-class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelectingItem {
+public class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelectingItem {
     override val bagItem = null
 
-    override fun use(world: Level, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, player: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val stack = player.getItemInHand(hand)
 
         if (player !is ServerPlayer) {
@@ -49,9 +49,9 @@ class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelect
     }
 
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack> {
         if (pokemon.status != null) {
             pokemon.status = null
@@ -63,13 +63,13 @@ class RegionalFoodItem(properties: Properties) : Item(properties), PokemonSelect
         return InteractionResultHolder.fail(stack)
     }
 
-    override fun getUseAnimation(stack: ItemStack): UseAnim = UseAnim.EAT
+    override fun getUseAnimation(ItemStack stack): UseAnim = UseAnim.EAT
 
-    override fun getUseDuration(stack: ItemStack, entity: LivingEntity): Int = 32
+    override fun getUseDuration(ItemStack stack, LivingEntity entity): Int = 32
 
     override fun getEatingSound(): SoundEvent = SoundEvents.GENERIC_EAT
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon): Boolean {
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon): Boolean {
         return pokemon.status != null && pokemon.currentHealth > 0
     }
 }

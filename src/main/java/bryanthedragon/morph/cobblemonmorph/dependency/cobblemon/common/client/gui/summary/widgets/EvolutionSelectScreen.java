@@ -31,17 +31,17 @@ import net.minecraft.sounds.SoundEvent
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class EvolutionSelectScreen(
+public class EvolutionSelectScreen(
     x: Int,
     y: Int,
-    val pokemon: Pokemon
+    val Pokemon pokemon
 ): SummaryScrollList<EvolutionSelectScreen.EvolveSlot>(
     x,
     y,
     lang("ui.evolution"),
     SLOT_HEIGHT + SLOT_SPACING
 ) {
-    companion object {
+    final class Companion {
         const val SLOT_HEIGHT = 25
         const val SLOT_SPACING = 5
         const val PORTRAIT_DIAMETER = 25
@@ -64,8 +64,8 @@ class EvolutionSelectScreen(
         super.renderWidget(context, mouseX, mouseY, partialTicks)
     }
 
-    class EvolveSlot(private val pokemon: Pokemon, private val evolution: EvolutionDisplay) : Entry<EvolveSlot>() {
-        val client: Minecraft = Minecraft.getInstance()
+    class EvolveSlot(private val Pokemon pokemon, private val evolution: EvolutionDisplay) : Entry<EvolveSlot>() {
+        val Minecraft client = Minecraft.getInstance()
         val state = FloatingState()
         val form: FormData = evolution.species.getForm(evolution.aspects)
         val selectButton: SummaryButton = SummaryButton(
@@ -85,7 +85,7 @@ class EvolutionSelectScreen(
             textScale = 0.5F
         )
 
-        fun playSound(soundEvent: SoundEvent) {
+        fun playSound(SoundEvent soundEvent) {
             Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
         }
 
@@ -93,11 +93,11 @@ class EvolutionSelectScreen(
 
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             rowTop: Int,
             rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
+            rowInt width,
+            rowInt height,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,

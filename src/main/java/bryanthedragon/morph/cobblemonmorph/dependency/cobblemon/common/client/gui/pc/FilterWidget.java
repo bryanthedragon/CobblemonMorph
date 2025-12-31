@@ -22,14 +22,14 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 
-class FilterWidget(
+public class FilterWidget(
     private var pX: Int,
     private var pY: Int,
     text: Component = "FilterWidget".text(),
     update: () -> (Unit)
 ): TextWidget(pX, pY, text = text, update = update) {
 
-    companion object {
+    final class Companion {
         const val ICON_SIZE = 16
         const val SCALE = 0.5F
 

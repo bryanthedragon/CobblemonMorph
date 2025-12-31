@@ -78,11 +78,11 @@ abstract class CobblemonConfigVariable(
 
     override fun render(
         context: GuiGraphics,
-        index: Int,
+        Int index,
         top: Int,
         left: Int,
-        width: Int,
-        height: Int,
+        Int width,
+        Int height,
         mouseX: Int,
         mouseY: Int,
         hovering: Boolean,

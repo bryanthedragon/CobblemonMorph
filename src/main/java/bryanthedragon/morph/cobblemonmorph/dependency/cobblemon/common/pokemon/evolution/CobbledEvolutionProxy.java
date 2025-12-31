@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.controller.ClientEvolutionController
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.controller.ServerEvolutionController
 
-class CobblemonEvolutionProxy(
-    private val pokemon: Pokemon,
+public class CobblemonEvolutionProxy(
+    private val Pokemon pokemon,
 ) : EvolutionProxy<EvolutionDisplay, Evolution, ClientEvolutionController.Intermediate, ServerEvolutionController.Intermediate> {
 
     private var clientController = ClientEvolutionController(this.pokemon, emptySet())

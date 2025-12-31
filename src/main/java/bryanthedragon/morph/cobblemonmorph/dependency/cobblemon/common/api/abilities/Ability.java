@@ -30,9 +30,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * @author Qu
  * @since January 9th, 2022
  */
-open class Ability internal constructor(var template: AbilityTemplate, forced: Boolean, priority: Priority) {
+open class Ability internal constructor(var template: AbilityTemplate, forced: Boolean, Priority priority) {
 
-    public static final name: String
+    public static final String name
         get() = template.name
 
     public static final displayName: String
@@ -53,7 +53,7 @@ open class Ability internal constructor(var template: AbilityTemplate, forced: B
      *
      * @see [Pokemon.updateAbility].
      */
-    var index: Int = -1
+    var Int index = -1
         internal set
 
     /**
@@ -65,7 +65,7 @@ open class Ability internal constructor(var template: AbilityTemplate, forced: B
         internal set
 
     @Deprecated("Please use the Codec instead", ReplaceWith("Ability.CODEC"))
-    open fun saveToNBT(nbt: CompoundTag): CompoundTag {
+    open fun saveToNBT(CompoundTag nbt): CompoundTag {
         CODEC.encodeStart(NbtOps.INSTANCE, this).ifSuccess { nElement ->
             if (nElement is CompoundTag) {
                 nbt.merge(nElement)
@@ -75,7 +75,7 @@ open class Ability internal constructor(var template: AbilityTemplate, forced: B
     }
 
     @Deprecated("Please use the Codec instead", ReplaceWith("Ability.CODEC"))
-    open fun saveToJSON(json: JsonObject): JsonObject {
+    open fun saveToJSON(JsonObject json): JsonObject {
         CODEC.encodeStart(JsonOps.INSTANCE, this).ifSuccess { jElement ->
             if (jElement is JsonObject) {
                 jElement.asMap().forEach(json::add)
@@ -85,7 +85,7 @@ open class Ability internal constructor(var template: AbilityTemplate, forced: B
     }
 
     @Deprecated("Please use the Codec instead", ReplaceWith("Ability.CODEC"))
-    open fun loadFromNBT(nbt: CompoundTag): Ability {
+    open fun loadFromNBT(CompoundTag nbt): Ability {
         CODEC.parse(NbtOps.INSTANCE, nbt).ifSuccess { ability ->
             this.template = ability.template
             this.forced = ability.forced
@@ -96,7 +96,7 @@ open class Ability internal constructor(var template: AbilityTemplate, forced: B
     }
 
     @Deprecated("Please use the Codec instead", ReplaceWith("Ability.CODEC"))
-    open fun loadFromJSON(json: JsonObject): Ability {
+    open fun loadFromJSON(JsonObject json): Ability {
         CODEC.parse(JsonOps.INSTANCE, json).ifSuccess { ability ->
             this.template = ability.template
             this.forced = ability.forced
@@ -106,7 +106,7 @@ open class Ability internal constructor(var template: AbilityTemplate, forced: B
         return this
     }
 
-    companion object {
+    final class Companion {
 
         @JvmStatic
         public static final CODEC: Codec<Ability> = RecordCodecBuilder.create {

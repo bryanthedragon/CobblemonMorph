@@ -6,15 +6,21 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload
-import net.minecraft.resources.ResourceKey
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.level.Level
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork;
+
+import com.cobblemon.mod.common.CobblemonNetwork;
+import com.cobblemon.mod.common.util.server;
+
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.MinecraftServer;
+import org.jetbrains.annotations.NotNull;
+import java.util.function.Predicate;
 
 /**
  * Platform abstract blueprint of a packet being sent out.
@@ -23,68 +29,100 @@ import net.minecraft.world.level.Level
  * @author Hiroku, Licious
  * @since November 27th, 2021
  */
-interface NetworkPacket<T: NetworkPacket<T>> : CustomPacketPayload, Encodable {
+public interface NetworkPacket<T extends NetworkPacket<T>> extends CustomPacketPayload, Encodable {
 
     /**
+     * Gets the unique identifier for this packet.
      *
+     * @return The ResourceLocation ID.
      */
-    val id: ResourceLocation
+    @NotNull
+    ResourceLocation getId();
 
     /**
-     * TODO
+     * Sends this packet to a specific player.
      *
-     * @param player
+     * @param player The player to receive the packet.
      */
-    fun sendToPlayer(player: ServerPlayer) = CobblemonNetwork.sendPacketToPlayer(player, this)
+    default void sendToPlayer(ServerPlayer player) {
+        CobblemonNetwork.sendPacketToPlayer(player, this);
+    }
 
     /**
-     * TODO
+     * Sends this packet to a collection of players.
      *
-     * @param players
+     * @param players The players to receive the packet.
      */
-    fun sendToPlayers(players: Iterable<ServerPlayer>) {
-        if (players.any()) {
-            CobblemonNetwork.sendPacketToPlayers(players, this)
+    default void sendToPlayers(Iterable<ServerPlayer> players) {
+        if (players.iterator().hasNext()) {
+            CobblemonNetwork.sendPacketToPlayers(players, this);
         }
     }
 
     /**
-     * TODO
-     *
+     * Sends this packet to all players currently online.
      */
-    fun sendToAllPlayers() = CobblemonNetwork.sendToAllPlayers(this)
-
-    /**
-     * TODO
-     *
-     */
-    fun sendToServer() = CobblemonNetwork.sendToServer(this)
-
-    // A copy from PlayerManager#sendToAround to work with our packets
-    /**
-     * TODO
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param distance
-     * @param worldKey
-     * @param exclusionCondition
-     */
-    fun sendToPlayersAround(x: Double, y: Double, z: Double, distance: Double, worldKey: ResourceKey<Level>, exclusionCondition: (ServerPlayer) -> Boolean = { false }) {
-        val server = server() ?: return
-        server.playerList.players.filter { player ->
-            if (exclusionCondition.invoke(player))
-                return@filter false
-            if (player.level().dimension() != worldKey)
-                return@filter false
-            val xDiff = x - player.x
-            val yDiff = y - player.y
-            val zDiff = z - player.z
-            return@filter (xDiff * xDiff + yDiff * yDiff + zDiff) < distance * distance
-        }
-        .forEach { player -> CobblemonNetwork.sendPacketToPlayer(player, this) }
+    default void sendToAllPlayers() {
+        CobblemonNetwork.sendToAllPlayers(this);
     }
 
-    override fun type() = CustomPacketPayload.Type<T>(id)
+    /**
+     * Sends this packet from the client to the server.
+     */
+    default void sendToServer() {
+        CobblemonNetwork.sendToServer(this);
+    }
+
+    /**
+     * Overload for sendToPlayersAround without an exclusion condition.
+     */
+    default void sendToPlayersAround(double x, double y, double z, double distance, ResourceKey<Level> worldKey) {
+        sendToPlayersAround(x, y, z, distance, worldKey, player -> false);
+    }
+
+    /**
+     * Sends this packet to players within a certain distance of a coordinate.
+     * 
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param z Z coordinate.
+     * @param distance The maximum distance.
+     * @param worldKey The dimension key.
+     * @param exclusionCondition A condition to exclude specific players.
+     */
+    default void sendToPlayersAround(double x, double y, double z, double distance, ResourceKey<Level> worldKey, Predicate<ServerPlayer> exclusionCondition) {
+        MinecraftServer server = ServerKt.server(); // Accessing the Kotlin top-level utility function
+        if (server == null) {
+            return;
+        }
+
+        double distSq = distance * distance;
+
+        server.getPlayerList().getPlayers().stream()
+            .filter(player -> {
+                // Check exclusion condition
+                if (exclusionCondition.test(player)) {
+                    return false;
+                }
+                // Check dimension
+                if (!player.level().dimension().equals(worldKey)) {
+                    return false;
+                }
+                
+                // Calculate distance squared
+                double xDiff = x - player.getX();
+                double yDiff = y - player.getY();
+                double zDiff = z - player.getZ();
+                
+                // Note: Fixed the potential logic error in original snippet where zDiff was not squared
+                return (xDiff * xDiff + yDiff * yDiff + zDiff * zDiff) < distSq;
+            })
+            .forEach(player -> CobblemonNetwork.sendPacketToPlayer(player, this));
+    }
+
+    @Override
+    @NotNull
+    default CustomPacketPayload.Type<T> type() {
+        return new CustomPacketPayload.Type<>(getId());
+    }
 }

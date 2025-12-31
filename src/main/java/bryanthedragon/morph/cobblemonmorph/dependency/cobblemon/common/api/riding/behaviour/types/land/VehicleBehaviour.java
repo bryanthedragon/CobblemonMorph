@@ -52,8 +52,8 @@ import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Matrix3f
 
-class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
-    companion object {
+public class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
+    final class Companion {
         val KEY = cobblemonResource("land/vehicle")
     }
 
@@ -422,7 +422,7 @@ class VehicleBehaviour : RidingBehaviour<VehicleSettings, VehicleState> {
     }
 }
 
-class VehicleSettings : RidingBehaviourSettings {
+public class VehicleSettings : RidingBehaviourSettings {
     override val key = VehicleBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -467,7 +467,7 @@ class VehicleSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
@@ -484,7 +484,7 @@ class VehicleSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(handlingExpr)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
@@ -502,7 +502,7 @@ class VehicleSettings : RidingBehaviourSettings {
     }
 }
 
-class VehicleState : RidingBehaviourState() {
+public class VehicleState : RidingBehaviourState() {
     var currSpeed = ridingState(0.0, Side.BOTH)
     var deltaRotation = ridingState(Vec2.ZERO, Side.BOTH)
     var drifting = ridingState(false, Side.CLIENT)

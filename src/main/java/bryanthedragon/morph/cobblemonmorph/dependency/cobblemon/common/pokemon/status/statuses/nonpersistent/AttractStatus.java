@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.VolatileStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 
-class AttractStatus : VolatileStatus(
+public class AttractStatus : VolatileStatus(
     cobblemonResource("attract"),
     "attract",
     "cobblemon.battle.attract_start",

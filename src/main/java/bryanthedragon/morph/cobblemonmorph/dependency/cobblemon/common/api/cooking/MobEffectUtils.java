@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.cook
 import net.minecraft.world.effect.MobEffectInstance
 import kotlin.math.ceil
 import kotlin.math.max
-final class MobEffectUtils {
+public final class MobEffectUtils {
     fun mergeEffects(effects: List<SerializableMobEffectInstance>): List<SerializableMobEffectInstance> {
         val grouped = effects.groupBy { it.effect }
 

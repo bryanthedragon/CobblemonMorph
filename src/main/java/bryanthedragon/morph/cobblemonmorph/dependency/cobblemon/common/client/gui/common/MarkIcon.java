@@ -13,14 +13,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.mark.
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 
-class MarkIcon(
+public class MarkIcon(
     val x: Number,
     val y: Number,
-    val mark: Mark,
+    val Mark mark,
     val showTooltip: Boolean = true,
     val opacity: Float = 1F
 ) {
-    companion object {
+    final class Companion {
         const val SIZE = 32
         const val SCALE = 0.5F
     }

@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialogue.DialogueFaceProvider
 import net.minecraft.network.chat.MutableComponent
 
-class DialogueSpeakerDTO(
+public class DialogueSpeakerDTO(
     val name: MutableComponent? = null,
     val face: DialogueFaceProvider?,
     val gibber: DialogueGibberDTO? = null

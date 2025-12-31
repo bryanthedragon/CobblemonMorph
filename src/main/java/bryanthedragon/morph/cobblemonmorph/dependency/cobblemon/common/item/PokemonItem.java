@@ -20,11 +20,11 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import org.joml.Vector4f
 
-class PokemonItem : CobblemonItem(Properties().stacksTo(1).component(CobblemonItemComponents.POKEMON_ITEM, null)) {
+public class PokemonItem : CobblemonItem(Properties().stacksTo(1).component(CobblemonItemComponents.POKEMON_ITEM, null)) {
 
-    override fun getName(stack: ItemStack): Component = this.species(stack)?.translatedName ?: super.getName(stack)
+    override fun getName(ItemStack stack): Component = this.species(stack)?.translatedName ?: super.getName(stack)
 
-    fun asPokemon(stack: ItemStack): Pokemon? {
+    fun asPokemon(ItemStack stack): Pokemon? {
         val species = this.species(stack) ?: return null
         val aspects = this.aspects(stack) ?: setOf()
         return Pokemon().apply {
@@ -33,28 +33,28 @@ class PokemonItem : CobblemonItem(Properties().stacksTo(1).component(CobblemonIt
         }
     }
 
-    fun getSpeciesAndAspects(stack: ItemStack): Pair<Species, Set<String>>? {
+    fun getSpeciesAndAspects(ItemStack stack): Pair<Species, Set<String>>? {
         return (species(stack) ?: return null) to (aspects(stack) ?: setOf())
     }
 
-    fun asRenderablePokemon(stack: ItemStack): RenderablePokemon? = this.asPokemon(stack)?.asRenderablePokemon()
+    fun asRenderablePokemon(ItemStack stack): RenderablePokemon? = this.asPokemon(stack)?.asRenderablePokemon()
 
-    private fun species(stack: ItemStack): Species? {
+    private fun species(ItemStack stack): Species? {
         return stack.get(CobblemonItemComponents.POKEMON_ITEM)?.species?.let(PokemonSpecies::getByIdentifier)
     }
 
-    private fun aspects(stack: ItemStack): Set<String>? {
+    private fun aspects(ItemStack stack): Set<String>? {
         return stack.get(CobblemonItemComponents.POKEMON_ITEM)?.aspects
     }
 
-    fun tint(stack: ItemStack): Vector4f {
+    fun tint(ItemStack stack): Vector4f {
         return stack.get(CobblemonItemComponents.POKEMON_ITEM)?.tint ?: Vector4f(1f, 1f, 1f, 1f)
     }
 
-    companion object {
+    final class Companion {
         @JvmOverloads
         @JvmStatic
-        fun from(pokemon: Pokemon, count: Int = 1, tint: Vector4f? = null): ItemStack = from(pokemon.species, pokemon.aspects, count, tint)
+        fun from(Pokemon pokemon, count: Int = 1, tint: Vector4f? = null): ItemStack = from(pokemon.species, pokemon.aspects, count, tint)
 
         @JvmOverloads
         @JvmStatic

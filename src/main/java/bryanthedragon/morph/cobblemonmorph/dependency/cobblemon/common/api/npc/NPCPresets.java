@@ -45,53 +45,53 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.phys.AABB
-final class NPCPresets : JsonDataRegistry<NPCPreset> {
+public final class NPCPresets : JsonDataRegistry<NPCPreset> {
 
     override val id = cobblemonResource("npc_preset")
     override val type = PackType.SERVER_DATA
 
-    override val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(EntityDimensions::class.java, EntityDimensionsAdapter)
-        .registerTypeAdapter(AABB::class.java, BoxAdapter)
-        .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
-        .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(TimeRange::class.java, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
-        .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
-        .registerTypeAdapter(SleepDepth::class.java, SleepDepth.adapter)
-        .registerTypeAdapter(DropEntry::class.java, DropEntryAdapter)
-        .registerTypeAdapter(CompoundTag::class.java, NbtCompoundAdapter)
-        .registerTypeAdapter(NPCPartyProvider::class.java, NPCPartyProviderAdapter)
-        .registerTypeAdapter(NPCInteractConfiguration::class.java, NPCInteractConfigurationAdapter)
-        .registerTypeAdapter(WeightedAspect::class.java, WeightedAspectAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(NPCVariationProvider::class.java, NPCVariationProviderAdapter)
-        .registerTypeAdapter(Activity::class.java, ActivityAdapter)
-        .registerTypeAdapter(MoValue::class.java, MoValueAdapter)
-        .registerTypeAdapter(Component::class.java, TranslatedTextAdapter)
-        .registerTypeAdapter(MemoryModuleType::class.java, MemoryModuleTypeAdapter)
-        .registerTypeAdapter(SensorType::class.java, SensorTypeAdapter)
-        .registerTypeAdapter(BehaviourConfig::class.java, BehaviourConfigAdapter)
-        .registerTypeAdapter(TaskConfig::class.java, TaskConfigAdapter)
+    override val Gson gson = GsonBuilder()
+        .registerTypeAdapter(EntityDimensions.class, EntityDimensionsAdapter)
+        .registerTypeAdapter(AABB.class, BoxAdapter)
+        .registerTypeAdapter(IntRange.class, IntRangeAdapter)
+        .registerTypeAdapter(PokemonProperties.class, pokemonPropertiesShortAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(TimeRange.class, IntRangesAdapter(TimeRange.timeRanges) { TimeRange(*it) })
+        .registerTypeAdapter(ItemDropMethod.class, ItemDropMethod.adapter)
+        .registerTypeAdapter(SleepDepth.class, SleepDepth.adapter)
+        .registerTypeAdapter(DropEntry.class, DropEntryAdapter)
+        .registerTypeAdapter(CompoundTag.class, NbtCompoundAdapter)
+        .registerTypeAdapter(NPCPartyProvider.class, NPCPartyProviderAdapter)
+        .registerTypeAdapter(NPCInteractConfiguration.class, NPCInteractConfigurationAdapter)
+        .registerTypeAdapter(WeightedAspect.class, WeightedAspectAdapter)
+        .registerTypeAdapter(Expression.class, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+        .registerTypeAdapter(NPCVariationProvider.class, NPCVariationProviderAdapter)
+        .registerTypeAdapter(Activity.class, ActivityAdapter)
+        .registerTypeAdapter(MoValue.class, MoValueAdapter)
+        .registerTypeAdapter(Component.class, TranslatedTextAdapter)
+        .registerTypeAdapter(MemoryModuleType.class, MemoryModuleTypeAdapter)
+        .registerTypeAdapter(SensorType.class, SensorTypeAdapter)
+        .registerTypeAdapter(BehaviourConfig.class, BehaviourConfigAdapter)
+        .registerTypeAdapter(TaskConfig.class, TaskConfigAdapter)
         .registerTypeAdapter(
-            TypeToken.getParameterized(Either::class.java, Expression::class.java, MoLangConfigVariable::class.java).type,
+            TypeToken.getParameterized(Either.class, Expression.class, MoLangConfigVariable.class).type,
             ExpressionOrEntityVariableAdapter
         )
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Biome::class.java).type, BiomeLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Block::class.java).type, BlockLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(Either::class.java, ResourceLocation::class.java, ExpressionLike::class.java).type, NPCScriptAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Biome.class).type, BiomeLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Block.class).type, BlockLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Item.class).type, ItemLikeConditionAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(Either.class, ResourceLocation.class, ExpressionLike.class).type, NPCScriptAdapter)
         .disableHtmlEscaping()
         .enableComplexMapKeySerialization()
         .create()
 
-    override val typeToken: TypeToken<NPCPreset> = TypeToken.get(NPCPreset::class.java)
+    override val typeToken: TypeToken<NPCPreset> = TypeToken.get(NPCPreset.class)
     override val resourcePath = "npc_presets"
     override val observable = SimpleObservable<NPCPresets>()
     private val npcPresetsByIdentifier = mutableMapOf<ResourceLocation, NPCPreset>()
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         // TODO probably do want to sync the presets
     }
 
@@ -102,7 +102,7 @@ final class NPCPresets : JsonDataRegistry<NPCPreset> {
     }
 
     @JvmStatic
-    fun getPreset(identifier: ResourceLocation): NPCPreset? {
+    fun getPreset(ResourceLocation identifier): NPCPreset? {
         return npcPresetsByIdentifier[identifier]
     }
 }

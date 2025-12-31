@@ -31,18 +31,19 @@ import net.minecraft.server.packs.PackType
  *
  * @author Hiroku
  * @since December 1st, 2022
- */final class SpeciesFeatureAssignments : JsonDataRegistry<SpeciesFeatureAssignment> {
-    override val id: ResourceLocation = cobblemonResource("species_feature_assignments")
+ */
+public final class SpeciesFeatureAssignments : JsonDataRegistry<SpeciesFeatureAssignment> {
+    override val ResourceLocation id = cobblemonResource("species_feature_assignments")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<SpeciesFeatureAssignments>()
 
-    override val gson: Gson = GsonBuilder().setPrettyPrinting().create()
-    override val typeToken = TypeToken.get(SpeciesFeatureAssignment::class.java)
+    override val Gson gson = GsonBuilder().setPrettyPrinting().create()
+    override val typeToken = TypeToken.get(SpeciesFeatureAssignment.class)
     override val resourcePath = "species_feature_assignments"
 
     private val assignments = mutableMapOf<ResourceLocation, MutableSet<String>>()
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         player.sendPacket(SpeciesFeatureAssignmentSyncPacket(assignments))
     }
     override fun reload(data: Map<ResourceLocation, SpeciesFeatureAssignment>) {

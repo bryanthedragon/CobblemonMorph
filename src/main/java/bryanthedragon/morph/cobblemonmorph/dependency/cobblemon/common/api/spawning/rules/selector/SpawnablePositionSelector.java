@@ -10,12 +10,12 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spaw
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.SpawnablePosition
 
-interface SpawnablePositionSelector {
-    companion object {
+public interface SpawnablePositionSelector {
+    final class Companion {
         val types = mutableMapOf<String, Class<out SpawnablePositionSelector>>()
 
         inline fun <reified T : SpawnablePositionSelector> register(type: String) {
-            types[type] = T::class.java
+            types[type] = T.class
         }
     }
 

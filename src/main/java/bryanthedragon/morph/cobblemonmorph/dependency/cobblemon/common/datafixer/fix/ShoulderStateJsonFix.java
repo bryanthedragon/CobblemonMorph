@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.Data
 import com.mojang.datafixers.schemas.Schema
 import com.mojang.serialization.Dynamic
 
-class ShoulderStateJsonFix(output: Schema) : PokemonFix(output) {
+public class ShoulderStateJsonFix(output: Schema) : PokemonFix(output) {
     override fun fixPokemonData(dynamic: Dynamic<*>): Dynamic<*> {
         val stateJson = dynamic.get("State").result()
         //State not here

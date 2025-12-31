@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
 
-class IdleBehaviour {
+public class IdleBehaviour {
     @Transient
     val struct = ObjectValue(this)
 }

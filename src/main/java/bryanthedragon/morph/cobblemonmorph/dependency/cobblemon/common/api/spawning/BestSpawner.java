@@ -82,7 +82,8 @@ import net.minecraft.server.MinecraftServer
  *
  * @author Hiroku
  * @since July 8th, 2022
- */final class BestSpawner {
+ */
+public final class BestSpawner {
     var config = BestSpawnerConfig()
 
     lateinit var defaultPokemonDespawner: Despawner<PokemonEntity>
@@ -91,13 +92,13 @@ import net.minecraft.server.MinecraftServer
     fun init() {
         LOGGER.info("Starting the Best Spawner...")
 
-        SpawningCondition.register(BasicSpawningCondition.NAME, BasicSpawningCondition::class.java)
-        SpawningCondition.register(AreaSpawningCondition.NAME, AreaSpawningCondition::class.java)
-        SpawningCondition.register(SubmergedSpawningCondition.NAME, SubmergedSpawningCondition::class.java)
-        SpawningCondition.register(GroundedSpawningCondition.NAME, GroundedSpawningCondition::class.java)
-        SpawningCondition.register(SurfaceSpawningCondition.NAME, SurfaceSpawningCondition::class.java)
-        SpawningCondition.register(SeafloorSpawningCondition.NAME, SeafloorSpawningCondition::class.java)
-        SpawningCondition.register(FishingSpawningCondition.NAME, FishingSpawningCondition::class.java)
+        SpawningCondition.register(BasicSpawningCondition.NAME, BasicSpawningCondition.class)
+        SpawningCondition.register(AreaSpawningCondition.NAME, AreaSpawningCondition.class)
+        SpawningCondition.register(SubmergedSpawningCondition.NAME, SubmergedSpawningCondition.class)
+        SpawningCondition.register(GroundedSpawningCondition.NAME, GroundedSpawningCondition.class)
+        SpawningCondition.register(SurfaceSpawningCondition.NAME, SurfaceSpawningCondition.class)
+        SpawningCondition.register(SeafloorSpawningCondition.NAME, SeafloorSpawningCondition.class)
+        SpawningCondition.register(FishingSpawningCondition.NAME, FishingSpawningCondition.class)
 
         LOGGER.info("Loaded ${SpawningCondition.conditionTypes.size} spawning condition types.")
 
@@ -107,24 +108,24 @@ import net.minecraft.server.MinecraftServer
         SpawnablePositionCalculator.register(SubmergedSpawnablePositionCalculator)
         SpawnablePositionCalculator.register(SurfaceSpawnablePositionCalculator)
 
-        SpawnablePosition.register(name = "grounded", clazz = GroundedSpawnablePosition::class.java, defaultCondition = GroundedSpawningCondition.NAME)
-        SpawnablePosition.register(name = "seafloor", clazz = SeafloorSpawnablePosition::class.java, defaultCondition = SeafloorSpawningCondition.NAME)
-        SpawnablePosition.register(name = "lavafloor", clazz = LavafloorSpawnablePosition::class.java, defaultCondition = GroundedSpawningCondition.NAME)
-        SpawnablePosition.register(name = "submerged", clazz = SubmergedSpawnablePosition::class.java, defaultCondition = SubmergedSpawningCondition.NAME)
-        SpawnablePosition.register(name = "surface", clazz = SurfaceSpawnablePosition::class.java, defaultCondition = SurfaceSpawningCondition.NAME)
-        SpawnablePosition.register(name = "fishing", clazz = FishingSpawnablePosition::class.java, defaultCondition = FishingSpawningCondition.NAME)
+        SpawnablePosition.register(name = "grounded", clazz = GroundedSpawnablePosition.class, defaultCondition = GroundedSpawningCondition.NAME)
+        SpawnablePosition.register(name = "seafloor", clazz = SeafloorSpawnablePosition.class, defaultCondition = SeafloorSpawningCondition.NAME)
+        SpawnablePosition.register(name = "lavafloor", clazz = LavafloorSpawnablePosition.class, defaultCondition = GroundedSpawningCondition.NAME)
+        SpawnablePosition.register(name = "submerged", clazz = SubmergedSpawnablePosition.class, defaultCondition = SubmergedSpawningCondition.NAME)
+        SpawnablePosition.register(name = "surface", clazz = SurfaceSpawnablePosition.class, defaultCondition = SurfaceSpawningCondition.NAME)
+        SpawnablePosition.register(name = "fishing", clazz = FishingSpawnablePosition.class, defaultCondition = FishingSpawningCondition.NAME)
 
         LOGGER.info("Loaded ${SpawnablePosition.spawnablePositionTypes.size} spawnable position types.")
 
-        SpawnDetail.registerSpawnType(name = PokemonSpawnDetail.TYPE, PokemonSpawnDetail::class.java)
-        SpawnDetail.registerSpawnType(name = NPCSpawnDetail.TYPE, NPCSpawnDetail::class.java)
-        SpawnDetail.registerSpawnType(name = PokemonHerdSpawnDetail.TYPE, PokemonHerdSpawnDetail::class.java)
+        SpawnDetail.registerSpawnType(name = PokemonSpawnDetail.TYPE, PokemonSpawnDetail.class)
+        SpawnDetail.registerSpawnType(name = NPCSpawnDetail.TYPE, NPCSpawnDetail.class)
+        SpawnDetail.registerSpawnType(name = PokemonHerdSpawnDetail.TYPE, PokemonHerdSpawnDetail.class)
         LOGGER.info("Loaded ${SpawnDetail.spawnDetailTypes.size} spawn detail types.")
 
         loadConfig()
 
-        SpawnDetailPresets.registerPresetType(BasicSpawnDetailPreset.NAME, BasicSpawnDetailPreset::class.java)
-        SpawnDetailPresets.registerPresetType(PokemonSpawnDetailPreset.NAME, PokemonSpawnDetailPreset::class.java)
+        SpawnDetailPresets.registerPresetType(BasicSpawnDetailPreset.NAME, BasicSpawnDetailPreset.class)
+        SpawnDetailPresets.registerPresetType(PokemonSpawnDetailPreset.NAME, PokemonSpawnDetailPreset.class)
     }
 
     fun loadConfig() {

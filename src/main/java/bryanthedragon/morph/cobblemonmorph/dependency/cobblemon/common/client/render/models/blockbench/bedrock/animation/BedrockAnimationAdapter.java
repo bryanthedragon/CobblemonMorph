@@ -26,8 +26,9 @@ import java.lang.reflect.Type
  *
  * @author landonjw
  * @since January 5, 2022
- */final class BedrockAnimationAdapter : JsonDeserializer<BedrockAnimation> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): BedrockAnimation {
+ */
+public final class BedrockAnimationAdapter : JsonDeserializer<BedrockAnimation> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): BedrockAnimation {
         if (json is JsonObject) {
             val animationLength = json["animation_length"]?.asDouble ?: -1.0
             val shouldLoop = animationLength > 0 && json["loop"]?.asBoolean == true
@@ -144,7 +145,7 @@ import java.lang.reflect.Type
                 z = MoLang.createParser(cleanExpression(array[2].asString)).parseExpression(),
                 transformation = transformation
             )
-        } catch (e: Exception) {
+        } catch (Exception e) {
             LOGGER.error(array.joinToString { it.toString() })
             throw e
         }

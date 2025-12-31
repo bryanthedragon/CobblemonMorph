@@ -32,9 +32,9 @@ import java.util.UUID
  * @author Hiroku
  * @since April 18th, 2022
  */
-class BenchMovePacket(val isParty: Boolean, val uuid: UUID, val oldMove: MoveTemplate?, val newMove: MoveTemplate?) : NetworkPacket<BenchMovePacket> {
+public class BenchMovePacket(val isParty: Boolean, val UUID uuid, val MoveTemplate oldMove?, val MoveTemplate newMove?) : NetworkPacket<BenchMovePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(isParty)
         buffer.writeUUID(uuid)
         buffer.writeBoolean(oldMove != null)
@@ -47,9 +47,9 @@ class BenchMovePacket(val isParty: Boolean, val uuid: UUID, val oldMove: MoveTem
         }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("bench_move")
-        fun decode(buffer: RegistryFriendlyByteBuf): BenchMovePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): BenchMovePacket {
             val isParty = buffer.readBoolean()
             val uuid = buffer.readUUID()
             val oldMoveName = if(buffer.readBoolean()) buffer.readString() else null

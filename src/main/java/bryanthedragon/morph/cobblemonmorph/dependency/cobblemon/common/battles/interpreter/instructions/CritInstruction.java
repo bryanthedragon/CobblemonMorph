@@ -24,7 +24,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.d
  * @author Hunter
  * @since August 18th, 2022
  */
-class CritInstruction(val message: BattleMessage, val instructionSet: InstructionSet,
+public class CritInstruction(val message: BattleMessage, val instructionSet: InstructionSet,
 ): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {

@@ -11,8 +11,8 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.t
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItemComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-final class RecipeSeasoningAbsorptionTooltipGenerator : TooltipGenerator() {
-    override fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+public final class RecipeSeasoningAbsorptionTooltipGenerator : TooltipGenerator() {
+    override fun generateCategoryTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         // Skip if this is a crafting result preview. Vera wanted to be able to give extra context to things not fully crafted for added guidance in crafting UIs
         if (stack.get(CobblemonItemComponents.CRAFTED) == true) {
             return mutableListOf()

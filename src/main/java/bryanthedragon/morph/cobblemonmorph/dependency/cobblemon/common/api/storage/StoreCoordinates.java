@@ -14,7 +14,7 @@ record StoreCoordinates<T : StorePosition>(
     val store: PokemonStore<T>,
     val position: T
 ) {
-    fun saveToNBT(nbt: CompoundTag) {
+    fun saveToNBT(CompoundTag nbt) {
         store.savePositionToNBT(position, nbt)
     }
 

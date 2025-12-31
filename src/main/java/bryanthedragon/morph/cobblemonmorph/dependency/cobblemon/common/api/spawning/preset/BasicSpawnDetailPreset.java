@@ -7,8 +7,8 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.preset
-class BasicSpawnDetailPreset : SpawnDetailPreset() {
-    companion object {
+public class BasicSpawnDetailPreset : SpawnDetailPreset() {
+    final class Companion {
         const val NAME = "basic"
     }
 }

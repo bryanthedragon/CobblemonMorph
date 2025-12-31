@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.ClientboundUpdateRidingStatePacket
 import net.minecraft.client.Minecraft
-final class ClientboundUpdateRidingStateHandler : ClientNetworkPacketHandler<ClientboundUpdateRidingStatePacket> {
-    override fun handle(packet: ClientboundUpdateRidingStatePacket, client: Minecraft) {
+public final class ClientboundUpdateRidingStateHandler : ClientNetworkPacketHandler<ClientboundUpdateRidingStatePacket> {
+    override fun handle(packet: ClientboundUpdateRidingStatePacket, Minecraft client) {
         client.executeIfPossible {
             val player = client.player ?: return@executeIfPossible
             val entity = player.level().getEntity(packet.entity) ?: return@executeIfPossible

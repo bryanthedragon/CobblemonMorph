@@ -27,7 +27,7 @@ import net.minecraft.world.level.biome.Biome
  * @author Hiroku
  * @since January 26th, 2022
  */
-class CompositeSpawningCondition {
+public class CompositeSpawningCondition {
     var conditions = mutableListOf<SpawningCondition<*>>()
     var anticonditions = mutableListOf<SpawningCondition<*>>()
 

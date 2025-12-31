@@ -6,8 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import com.bedrockk.molang.Expression
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.stats.RidingStat
@@ -87,7 +86,7 @@ fun <T> ByteBuf.writeNullable(obj: T?, writer: StreamEncoder<ByteBuf, T>) {
     }
 }
 
-fun ByteBuf.writeString(string: String): ByteBuf {
+fun ByteBuf.writeString(String string): ByteBuf {
     Utf8String.write(this, string, 32767)
     return this
 }
@@ -121,7 +120,7 @@ fun ByteBuf.writeRidingStats(stats: Map<RidingStat, IntRange>) {
 
 fun ByteBuf.readRidingStats(): Map<RidingStat, IntRange> {
     return this.readMap(
-        { buf -> buf.readEnumConstant(RidingStat::class.java) },
+        { buf -> buf.readEnumConstant(RidingStat.class) },
         { buf -> IntRange(buf.readInt(), buf.readInt()) }
     )
 }
@@ -172,7 +171,7 @@ fun ByteBuf.readIdentifier(): ResourceLocation {
     return ResourceLocation.tryParse(str)!!
 }
 
-fun ByteBuf.writeIdentifier(id: ResourceLocation) {
+fun ByteBuf.writeIdentifier(ResourceLocation id) {
     writeString(id.toString())
 }
 
@@ -189,7 +188,7 @@ fun ByteBuf.writePCPosition(pcPosition: PCPosition) {
 
 fun ByteBuf.readPCPosition() = PCPosition(readSizedInt(IntSize.U_SHORT), readSizedInt(IntSize.U_BYTE))
 
-fun ByteBuf.writeUUID(uuid: UUID) {
+fun ByteBuf.writeUUID(UUID uuid) {
     writeLong(uuid.mostSignificantBits)
     writeLong(uuid.leastSignificantBits)
 }

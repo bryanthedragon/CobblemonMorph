@@ -20,14 +20,14 @@ import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ParticleCollision(
+public class ParticleCollision(
     var enabled: Expression = NumberExpression(0.0),
     var radius: Expression = NumberExpression(0.1),
     var friction: Expression = NumberExpression(10.0),
     var bounciness: Expression = NumberExpression(0.0),
     var expiresOnContact: Boolean = false
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<ParticleCollision> = RecordCodecBuilder.create { instance ->
             instance.group(
                 EXPRESSION_CODEC.fieldOf("enabled").forGetter { it.enabled },
@@ -39,7 +39,7 @@ class ParticleCollision(
         }
     }
 
-    fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(enabled.getString())
         buffer.writeString(radius.getString())
         buffer.writeString(friction.getString())
@@ -47,7 +47,7 @@ class ParticleCollision(
         buffer.writeBoolean(expiresOnContact)
     }
 
-    fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         enabled = MoLang.createParser(buffer.readString()).parseExpression()
         radius = MoLang.createParser(buffer.readString()).parseExpression()
         friction = MoLang.createParser(buffer.readString()).parseExpression()

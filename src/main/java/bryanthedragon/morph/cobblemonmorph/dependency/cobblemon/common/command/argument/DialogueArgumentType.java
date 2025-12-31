@@ -22,23 +22,23 @@ import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.resources.ResourceLocation
 import java.util.concurrent.CompletableFuture
 
-class DialogueArgumentType : ArgumentType<ResourceLocation> {
+public class DialogueArgumentType : ArgumentType<ResourceLocation> {
 
-    companion object {
+    final class Companion {
         val EXAMPLES: List<String> = listOf("cobblemon:example")
         val INVALID_DIALOGUE = "cobblemon.command.dialogue.invalid-dialogue".asTranslated()
 
         fun dialogue() = DialogueArgumentType()
 
-        fun <S> getDialogue(context: CommandContext<S>, name: String): ResourceLocation {
-            return context.getArgument(name, ResourceLocation::class.java)
+        fun <S> getDialogue(context: CommandContext<S>, String name): ResourceLocation {
+            return context.getArgument(name, ResourceLocation.class)
         }
     }
 
     override fun parse(reader: StringReader): ResourceLocation {
         try {
             return reader.asIdentifierDefaultingNamespace()
-        } catch (e: Exception) {
+        } catch (Exception e) {
             throw SimpleCommandExceptionType(INVALID_DIALOGUE).createWithContext(reader)
         }
     }

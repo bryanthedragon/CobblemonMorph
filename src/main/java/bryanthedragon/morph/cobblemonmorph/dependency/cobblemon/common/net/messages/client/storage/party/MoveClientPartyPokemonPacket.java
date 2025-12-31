@@ -25,11 +25,11 @@ import java.util.UUID
  * @author Hiroku
  * @since November 29th, 2021
  */
-class MoveClientPartyPokemonPacket(storeID: UUID, pokemonID: UUID, newPosition: PartyPosition) : MoveClientPokemonPacket<PartyPosition, MoveClientPartyPokemonPacket>(storeID, pokemonID, newPosition) {
+public class MoveClientPartyPokemonPacket(UUID storeID, UUID pokemonId, newPosition: PartyPosition) : MoveClientPokemonPacket<PartyPosition, MoveClientPartyPokemonPacket>(storeID, pokemonID, newPosition) {
     override val id = ID
-    override fun encodePosition(buffer: RegistryFriendlyByteBuf, position: PartyPosition) = buffer.writePartyPosition(newPosition)
-    companion object {
+    override fun encodePosition(RegistryFriendlyByteBuf buffer, position: PartyPosition) = buffer.writePartyPosition(newPosition)
+    final class Companion {
         val ID = cobblemonResource("move_client_party_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = MoveClientPartyPokemonPacket(buffer.readUUID(), buffer.readUUID(), buffer.readPartyPosition())
+        fun decode(RegistryFriendlyByteBuf buffer) = MoveClientPartyPokemonPacket(buffer.readUUID(), buffer.readUUID(), buffer.readPartyPosition())
     }
 }

@@ -27,9 +27,9 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.RotatedPillarBlock
 import org.joml.Vector3d
 
-class SaccharineLogSlatheredInfluence(val pos: BlockPos? = null) : SpawningInfluence {
+public class SaccharineLogSlatheredInfluence(val (BlockPos pos? = null) : SpawningInfluence {
 
-    companion object {
+    final class Companion {
         const val HONEY_DRENCHED_ASPECT = "honey_drenched"
         const val SACCHARINE_LOG_SLATHERED_MARKER = "saccharine_log_slathered"
         const val HIDDEN_ABILITY_CHANCE = 0.05
@@ -42,7 +42,7 @@ class SaccharineLogSlatheredInfluence(val pos: BlockPos? = null) : SpawningInflu
         spawnablePosition.markers.add(SACCHARINE_LOG_SLATHERED_MARKER)
     }
 
-    override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
+    override fun affectSpawn(action: SpawnAction<*>, Entity entity) {
         if (entity is PokemonEntity) {
             // avoid double application or applying to a pokemon that already has a hidden ability
             if (entity.pokemon.forcedAspects.contains(HONEY_DRENCHED_ASPECT)
@@ -82,7 +82,7 @@ class SaccharineLogSlatheredInfluence(val pos: BlockPos? = null) : SpawningInflu
         }
     }
 
-    fun attemptSafeMove(level: ServerLevel, entity: PokemonEntity, startPos: BlockPos, direction: Direction): BlockPos? {
+    fun attemptSafeMove(ServerLevel level, entity: PokemonEntity, start(BlockPos pos, Direction direction): BlockPos? {
         val inWater = entity.isInWater
         val originalPos = startPos.relative(direction)
         val maxRadius = SAFE_BLOCK_SEARCH_DISTANCE
@@ -101,7 +101,7 @@ class SaccharineLogSlatheredInfluence(val pos: BlockPos? = null) : SpawningInflu
         return null
     }
 
-    fun searchInHalfCircle(level: ServerLevel, entity: PokemonEntity, centerPos: BlockPos, direction: Direction, searchRadius: Int, allowWater: Boolean): BlockPos? {
+    fun searchInHalfCircle(ServerLevel level, entity: PokemonEntity, center(BlockPos pos, Direction direction, searchRadius: Int, allowWater: Boolean): BlockPos? {
         for (dx in -searchRadius..searchRadius) {
             for (dz in -searchRadius..searchRadius) {
                 if (dx * dx + dz * dz <= searchRadius * searchRadius) {

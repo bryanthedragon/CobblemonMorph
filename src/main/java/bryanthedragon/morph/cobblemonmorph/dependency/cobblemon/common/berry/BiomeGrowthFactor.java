@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.LevelReader
 
-class PreferredBiomeGrowthFactor(
+public class PreferredBiomeGrowthFactor(
     val bonusYield: IntRange
 ) : GrowthFactor{
     override fun validateArguments() {
@@ -24,7 +24,7 @@ class PreferredBiomeGrowthFactor(
         }
     }
 
-    override fun isValid(world: LevelReader, state: BlockState, pos: BlockPos): Boolean {
+    override fun isValid(Level worldReader, BlockState state, (BlockPos pos): Boolean {
         val biome = world.getBiome(pos)
         val block = state.block as BerryBlock
         val biomeTags = block.berry()?.preferredBiomeTags ?: emptyList()
@@ -38,7 +38,7 @@ class PreferredBiomeGrowthFactor(
 
     override fun maxYield() = this.bonusYield.last
 
-    companion object {
+    final class Companion {
 
         val ID = cobblemonResource("preferred_biome")
 

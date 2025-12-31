@@ -31,15 +31,15 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
-class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlockItem(block, settings), PokemonSelectingItem, HealingSource {
+public class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlockItem(block, settings), PokemonSelectingItem, HealingSource {
 
     private val runtime = MoLangRuntime().setup()
 
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.energy_root"
         override val returnItem = Items.AIR
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.health < target.maxHealth
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.health < target.maxHealth
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?): String {
             battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop("root", runtime))
             return "potion ${getHealAmount()}"
         }
@@ -47,9 +47,9 @@ class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlo
 
     fun getHealAmount() = CobblemonMechanics.remedies.getHealingAmount("root", runtime, 150)
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && !pokemon.isFainted()
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = !pokemon.isFullHealth() && !pokemon.isFainted()
 
-    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon): InteractionResultHolder<ItemStack> {
+    override fun applyToPokemon(ServerPlayer player, ItemStack stack, Pokemon pokemon): InteractionResultHolder<ItemStack> {
         return if (this.canUseOnPokemon(stack, pokemon)) {
             var amount = this.getHealAmount()
             CobblemonEvents.POKEMON_HEALED.postThen(PokemonHealedEvent(pokemon, amount, this), { cancelledEvent -> return InteractionResultHolder.fail(stack)}) { event ->
@@ -65,12 +65,12 @@ class EnergyRootItem(block: EnergyRootBlock, settings: Properties) : ItemNameBlo
         }
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

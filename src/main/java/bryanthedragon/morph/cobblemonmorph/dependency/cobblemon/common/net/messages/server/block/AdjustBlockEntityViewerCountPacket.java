@@ -17,15 +17,15 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 /**
  * Handled by [AdjustBlockEntityViewerCountHandler].
  */
-class AdjustBlockEntityViewerCountPacket(val blockPos: BlockPos, val increment: Boolean) : NetworkPacket<AdjustBlockEntityViewerCountPacket> {
+public class AdjustBlockEntityViewerCountPacket(val blockBlockPos pos, val increment: Boolean) : NetworkPacket<AdjustBlockEntityViewerCountPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBlockPos(blockPos)
         buffer.writeBoolean(increment)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("adjust_block_entity_viewer_count")
-        fun decode(buffer: RegistryFriendlyByteBuf): AdjustBlockEntityViewerCountPacket = AdjustBlockEntityViewerCountPacket(buffer.readBlockPos(), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer): AdjustBlockEntityViewerCountPacket = AdjustBlockEntityViewerCountPacket(buffer.readBlockPos(), buffer.readBoolean())
     }
 }

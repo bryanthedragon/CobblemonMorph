@@ -25,21 +25,21 @@ import java.util.UUID
  * @author Hiroku
  * @since June 18th, 2022
  */
-class SwapClientPokemonPacket internal constructor(val storeIsParty: Boolean, val storeID: UUID, val pokemonID1: UUID, val pokemonID2: UUID) : NetworkPacket<SwapClientPokemonPacket> {
+public class SwapClientPokemonPacket internal constructor(val storeIsParty: Boolean, val UUID storeID, val pokemonID1: UUID, val pokemonID2: UUID) : NetworkPacket<SwapClientPokemonPacket> {
 
     override val id = ID
 
     constructor(store: PokemonStore<*>, pokemonID1: UUID, pokemonID2: UUID): this(store is PartyStore, store.uuid, pokemonID1, pokemonID2)
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(storeIsParty)
         buffer.writeUUID(storeID)
         buffer.writeUUID(pokemonID1)
         buffer.writeUUID(pokemonID2)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("swap_client_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SwapClientPokemonPacket(buffer.readBoolean(), buffer.readUUID(), buffer.readUUID(), buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = SwapClientPokemonPacket(buffer.readBoolean(), buffer.readUUID(), buffer.readUUID(), buffer.readUUID())
     }
 }

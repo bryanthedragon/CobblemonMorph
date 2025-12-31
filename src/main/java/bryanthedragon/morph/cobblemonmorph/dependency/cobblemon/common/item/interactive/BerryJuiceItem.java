@@ -27,18 +27,18 @@ import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.level.Level
 import net.minecraft.world.item.Items
 
-class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, HealingSource {
+public class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, HealingSource {
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.berry_juice"
         override val returnItem = Items.BOWL
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "potion 20"
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "potion 20"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) =  target.health < target.maxHealth && target.health > 0
     }
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
             && super.canUseOnPokemon(stack, pokemon)
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }
@@ -46,9 +46,9 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
     }
 
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack>? {
         if (!canUseOnPokemon(stack, pokemon)) {
             return InteractionResultHolder.fail(stack)
@@ -72,7 +72,7 @@ class BerryJuiceItem : CobblemonItem(Properties()), PokemonSelectingItem, Healin
         return InteractionResultHolder.success(stack)
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.originalPokemon.feedPokemon(1)
         if (!player.hasInfiniteMaterials())  {

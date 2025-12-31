@@ -17,14 +17,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  *
  * Handled by [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.net.trade.TradeProcessStartedHandler]
  */
-class TradeProcessStartedPacket(val isTradeInitiator: Boolean) : NetworkPacket<TradeProcessStartedPacket> {
-    companion object {
+public class TradeProcessStartedPacket(val isTradeInitiator: Boolean) : NetworkPacket<TradeProcessStartedPacket> {
+    final class Companion {
         val ID = cobblemonResource("trade_process_started")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TradeProcessStartedPacket(buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = TradeProcessStartedPacket(buffer.readBoolean())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(isTradeInitiator)
     }
 }

@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.np
  * @author Hiroku
  * @since August 14th, 2024
  */
-class RandomNPCVariationProvider(
+public class RandomNPCVariationProvider(
     override val aspects: Set<String> = emptySet()
 ) : NPCVariationProvider {
     override fun provideAspects(npcEntity: NPCEntity) = setOf(aspects.random())

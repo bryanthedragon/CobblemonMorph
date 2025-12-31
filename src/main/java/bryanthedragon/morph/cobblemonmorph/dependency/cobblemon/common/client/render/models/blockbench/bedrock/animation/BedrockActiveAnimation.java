@@ -58,7 +58,7 @@ open class BedrockActiveAnimation(
         }
     }
 
-    override fun applyEffects(entity: Entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
+    override fun applyEffects(Entity entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
         val previousSecondsOffset = previousSeconds - startedSeconds
         val currentSecondsOffset = newSeconds - startedSeconds
         animation.applyEffects(entity, state, previousSecondsOffset, currentSecondsOffset)

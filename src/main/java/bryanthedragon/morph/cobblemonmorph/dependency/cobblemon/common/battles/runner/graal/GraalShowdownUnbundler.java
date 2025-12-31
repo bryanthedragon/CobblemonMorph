@@ -29,7 +29,7 @@ import java.nio.file.StandardCopyOption
  * @since  February 27, 2023
  * @author Deltric
  */
-class GraalShowdownUnbundler {
+public class GraalShowdownUnbundler {
 
     private val gson = GsonBuilder()
         .disableHtmlEscaping()
@@ -77,7 +77,7 @@ class GraalShowdownUnbundler {
         try {
             val inputStream = javaClass.getResourceAsStream("/data/${Cobblemon.MODID}/showdown.json")!!
             return gson.fromJson<ShowdownMetadata>(InputStreamReader(inputStream))
-        } catch (exception: Exception) {
+        } catch (Exception exception) {
             exception.printStackTrace()
         }
         return null
@@ -88,7 +88,7 @@ class GraalShowdownUnbundler {
             InputStreamReader(FileInputStream(target)).use {
                 return gson.fromJson<ShowdownMetadata>(it)
             }
-        } catch (exception: Exception) {
+        } catch (Exception exception) {
             exception.printStackTrace()
             return null
         }

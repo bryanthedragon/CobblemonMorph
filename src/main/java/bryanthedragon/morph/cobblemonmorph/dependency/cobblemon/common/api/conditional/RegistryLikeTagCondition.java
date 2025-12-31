@@ -24,7 +24,7 @@ import net.minecraft.tags.TagKey
  */
 open class RegistryLikeTagCondition<T : Any>(val tag: TagKey<T>) : RegistryLikeCondition<T> {
 
-    companion object {
+    final class Companion {
         const val PREFIX = "#"
         fun <T : Any> resolver(
             resourceKey: ResourceKey<Registry<T>>,

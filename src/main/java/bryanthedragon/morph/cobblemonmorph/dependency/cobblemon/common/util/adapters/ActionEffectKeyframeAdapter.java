@@ -20,8 +20,9 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since October 21st, 2023
- */final class ActionEffectKeyframeAdapter : JsonDeserializer<ActionEffectKeyframe> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): ActionEffectKeyframe {
+ */
+public final class ActionEffectKeyframeAdapter : JsonDeserializer<ActionEffectKeyframe> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): ActionEffectKeyframe {
         return if (json.isJsonPrimitive) {
             val clazz = ActionEffectKeyframe.types[json.asString]
                 ?: throw IllegalArgumentException("Unrecognized action effect keyframe type: ${json.asJsonPrimitive}")

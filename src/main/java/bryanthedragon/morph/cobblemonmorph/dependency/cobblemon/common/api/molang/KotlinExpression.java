@@ -6,11 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang
-
-import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.value.MoValue
-import net.minecraft.resources.ResourceLocation
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang;
+import com.bedrockk.molang.runtime.MoLangRuntime;
+import com.bedrockk.molang.runtime.value.MoValue;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Used to fill into most MoLang sites with Kotlin code.
@@ -18,10 +17,8 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since August 23rd, 2025
  */
-class KotlinExpression(
-    val id: ResourceLocation,
-    val function: (runtime: MoLangRuntime, context: Map<String, MoValue>) -> MoValue
-) : ExpressionLike {
+public class KotlinExpression(val ResourceLocation id, val ExpressionLike function (MoLangRuntime runtime, Map<String, MoValue> context) -> MoValue)
+{
     override fun toString() = id.toString()
-    override fun resolve(runtime: MoLangRuntime, context: Map<String, MoValue>) = function(runtime, context)
+    override fun resolve(MoLangRuntime runtime, Map<String, MoValue> context) = function(runtime, context)
 }

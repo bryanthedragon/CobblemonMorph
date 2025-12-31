@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation
  * An enumeration of the default implemented [Stat]s.
  * Contains all the traditional stats in official Pokémon games.
  */
-enum class Stats(override val identifier: ResourceLocation, override val displayName: Component, override val type: Stat.Type, override val showdownId: String) : Stat {
+public enum Stats(override val ResourceLocation identifier, override val Component displayName, override val type: Stat.Type, override val String showdownId) : Stat {
 
     HP(cobblemonResource("hp"), lang("stat.hp.name"), Stat.Type.PERMANENT, "hp"),
     ATTACK(cobblemonResource("attack"), lang("stat.attack.name"), Stat.Type.PERMANENT, "atk"),
@@ -29,13 +29,13 @@ enum class Stats(override val identifier: ResourceLocation, override val display
     EVASION(cobblemonResource("evasion"), lang("stat.evasion.name"), Stat.Type.BATTLE_ONLY, "evasion"),
     ACCURACY(cobblemonResource("accuracy"), lang("stat.accuracy.name"), Stat.Type.BATTLE_ONLY, "accuracy");
 
-    companion object {
+    final class Companion {
 
         /**
          * All the stats, an alternative to [values].
          * Using [StatProvider.all] is recommended instead for maximum addon compatibility.
          */
-        val ALL: Set<Stat> = EnumSet.allOf(Stats::class.java)
+        val ALL: Set<Stat> = EnumSet.allOf(Stats.class)
 
         /**
          * All the stats with type of [Stat.Type.PERMANENT].
@@ -50,7 +50,7 @@ enum class Stats(override val identifier: ResourceLocation, override val display
         val BATTLE_ONLY: Set<Stat> = EnumSet.of(EVASION, ACCURACY)
 
         /** Gets the [Stat] from the respective Showdown id. */
-        fun getStat(statKey: String) = when(statKey.lowercase()) {
+        fun getStat(statString Key) = when(statKey.lowercase()) {
             "hp" -> HP
             "atk", "attack" -> ATTACK // Hyper Cutter states the full stat name "Attack"
             "def", "defense", "defence" -> DEFENCE // Big Pecks states the full stat name "Defense"

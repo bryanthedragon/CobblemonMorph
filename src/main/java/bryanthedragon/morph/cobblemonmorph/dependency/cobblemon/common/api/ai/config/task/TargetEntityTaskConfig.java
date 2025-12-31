@@ -35,13 +35,13 @@ import net.minecraft.world.entity.ai.sensing.SensorType
  * @author Hiroku
  * @since June 23rd, 2025
  */
-class TargetEntityTaskConfig : SingleTaskConfig {
+public class TargetEntityTaskConfig : SingleTaskConfig {
     val entityCondition: Expression = "true".asExpression()
     val range: ExpressionOrEntityVariable = Either.left("24".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         val range = range.resolveFloat(behaviourConfigurationContext.runtime)

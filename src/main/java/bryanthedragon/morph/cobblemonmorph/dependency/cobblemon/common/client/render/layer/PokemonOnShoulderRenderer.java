@@ -40,7 +40,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 
-class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, PlayerModel<T>>) : RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
+public class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent<T, PlayerModel<T>>) : RenderLayer<T, PlayerModel<T>>(renderLayerParent) {
 
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
@@ -192,7 +192,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
     )
 
     record ShoulderData(
-        val uuid: UUID,
+        val UUID uuid,
         val species: Species,
         val form: FormData,
         val aspects: Set<String>,
@@ -200,18 +200,18 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
         val shownItem: ItemStack
     )
 
-    companion object {
+    final class Companion {
 
         private val playerCache = hashMapOf<UUID, ShoulderCache>()
 
-        private fun extractUuid(shoulderNbt: CompoundTag): UUID {
+        private fun extractUuid(shoulderCompoundTag nbt): UUID {
             if (!shoulderNbt.contains(DataKeys.SHOULDER_UUID)) {
                 return shoulderNbt.getCompound(DataKeys.POKEMON).getUUID(DataKeys.POKEMON_UUID)
             }
             return shoulderNbt.getUUID(DataKeys.SHOULDER_UUID)
         }
 
-        private fun extractData(shoulderNbt: CompoundTag, pokemonUUID: UUID): ShoulderData? {
+        private fun extractData(shoulderCompoundTag nbt, pokemonUUID uuid): ShoulderData? {
             // To not crash with existing ones, this will still have the aspect issue
             if (!shoulderNbt.contains(DataKeys.SHOULDER_SPECIES)) {
                 return Pokemon.CLIENT_CODEC.decode(NbtOps.INSTANCE, shoulderNbt.getCompound(DataKeys.POKEMON))
@@ -260,7 +260,7 @@ class PokemonOnShoulderRenderer<T : Player>(renderLayerParent: RenderLayerParent
          * @return [ShoulderData] or null
          */
         @JvmStatic
-        fun shoulderDataFrom(compoundTag: CompoundTag): ShoulderData? {
+        fun shoulderDataFrom(compoundCompoundTag tag): ShoulderData? {
             if (compoundTag.isPokemonEntity()) {
                 val uuid = this.extractUuid(compoundTag)
                 return this.extractData(compoundTag, uuid)

@@ -23,8 +23,9 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Hiroku
  * @since March 12th, 2023
- */final class OfferTradeHandler : ServerNetworkPacketHandler<OfferTradePacket> {
-    override fun handle(packet: OfferTradePacket, server: MinecraftServer, player: ServerPlayer) {
+ */
+public final class OfferTradeHandler : ServerNetworkPacketHandler<OfferTradePacket> {
+    override fun handle(packet: OfferTradePacket, server: MinecraftServer, ServerPlayer player) {
         val targetPlayerEntity = packet.offeredPlayerId.getPlayer() ?: return
         TradeManager.sendRequest(TradeRequest(player, targetPlayerEntity))
     }

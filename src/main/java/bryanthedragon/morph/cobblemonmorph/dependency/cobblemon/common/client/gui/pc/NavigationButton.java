@@ -18,13 +18,13 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 
-class NavigationButton(
+public class NavigationButton(
     pX: Int, pY: Int,
     private val forward: Boolean,
     onPress: OnPress
 ): Button(pX, pY, (SIZE * SCALE).toInt(), (SIZE * SCALE).toInt(), Component.literal("Navigation"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val SIZE = 14
         private const val SCALE = 0.5F
         private val forwardButtonResource = cobblemonResource("textures/gui/pc/pc_arrow_next.png")

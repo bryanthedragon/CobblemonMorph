@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.orientation.ClientboundUpdateDriverInputPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.RemotePlayer
-final class ClientboundUpdateDriverInputHandler : ClientNetworkPacketHandler<ClientboundUpdateDriverInputPacket> {
-    override fun handle(packet: ClientboundUpdateDriverInputPacket, client: Minecraft) {
+public final class ClientboundUpdateDriverInputHandler : ClientNetworkPacketHandler<ClientboundUpdateDriverInputPacket> {
+    override fun handle(packet: ClientboundUpdateDriverInputPacket, Minecraft client) {
         client.executeIfPossible {
             val level = client.level ?: return@executeIfPossible
             val entity = level.getEntity(packet.entityId)

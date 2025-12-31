@@ -24,21 +24,21 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since June 6th, 2022
  */
-class BattleSwitchPokemonPacket(val pnx: String, val newPokemon: BattleInitializePacket.ActiveBattlePokemonDTO, val isAlly: Boolean) : NetworkPacket<BattleSwitchPokemonPacket> {
+public class BattleSwitchPokemonPacket(val pnx: String, val newPokemon: BattleInitializePacket.ActiveBattlePokemonDTO, val isAlly: Boolean) : NetworkPacket<BattleSwitchPokemonPacket> {
 
     override val id = ID
 
     constructor(pnx: String, newPokemon: BattlePokemon, isAlly: Boolean, illusion: BattlePokemon?) :
         this(pnx, BattleInitializePacket.ActiveBattlePokemonDTO.fromPokemon(newPokemon, isAlly, illusion), isAlly)
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(pnx)
         newPokemon.saveToBuffer(buffer)
         buffer.writeBoolean(isAlly)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_switch_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleSwitchPokemonPacket(buffer.readString(), BattleInitializePacket.ActiveBattlePokemonDTO.loadFromBuffer(buffer), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleSwitchPokemonPacket(buffer.readString(), BattleInitializePacket.ActiveBattlePokemonDTO.loadFromBuffer(buffer), buffer.readBoolean())
     }
 }

@@ -24,7 +24,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class ArbokModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class ArbokModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("arbok")
     override val head = getPart("head_ai")
 

@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry
  * @author Licious
  * @since November 28th, 2022
  */
-interface BerryEvent {
+public interface BerryEvent {
 
     /**
      * The [Berry] related to the event trigger

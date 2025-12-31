@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku, landonjw
  * @since April 19th, 2025
  */
-class DialogueGibber(
+public class DialogueGibber(
     /** Whether text will gradually appear while the gibbering occurs. */
     val graduallyShowText: Boolean = true,
     /** Whether clicking will make the gibber skip to the end. */

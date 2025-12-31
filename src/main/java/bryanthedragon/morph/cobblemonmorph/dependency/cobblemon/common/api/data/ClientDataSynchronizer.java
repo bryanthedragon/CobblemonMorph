@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.E
  * @author Licious
  * @since October 14th, 2022
  */
-interface ClientDataSynchronizer<T> : Decodable, Encodable {
+public interface ClientDataSynchronizer<T> : Decodable, Encodable {
 
     /**
      * Compares an object of type [T] with this instance to see if synchronization is necessary.

@@ -15,14 +15,14 @@ import kotlin.math.max
 import kotlin.math.round
 import kotlin.random.Random
 import net.minecraft.server.level.ServerPlayer
-class PoisonBadlyStatus : PersistentStatus(
+public class PoisonBadlyStatus : PersistentStatus(
     name = cobblemonResource("poisonbadly"),
     showdownName = "tox",
     applyMessage = "cobblemon.status.poisonbadly.apply",
     removeMessage = "cobblemon.status.poison.cure",
     defaultDuration = IntRange(180, 300)
 ) {
-    override fun onSecondPassed(player: ServerPlayer, pokemon: Pokemon, random: Random) {
+    override fun onSecondPassed(ServerPlayer player, Pokemon pokemon, random: Random) {
         // 1 in 15 chance to damage 10% of their HP with a minimum of 1
         if (!pokemon.isFainted() && random.nextInt(15) == 0) {
             pokemon.currentHealth -= max(1, round(pokemon.maxHealth * 0.1).toInt()) * (if (pokemon.ability.template.name == "poisonheal") -1 else 1)

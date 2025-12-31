@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerPlayer
  * @author Licious
  * @since January 29th, 2023
  */
-interface PokedexProgressCaptureMultiplierProvider {
+public interface PokedexProgressCaptureMultiplierProvider {
 
     /**
      * Resolves the multiplier based on the Pokedex progression of the given [player].
@@ -26,7 +26,7 @@ interface PokedexProgressCaptureMultiplierProvider {
      * @param player The [ServerPlayer] being queried.
      * @return The multiplier based on the caught count.
      */
-    fun caughtMultiplierFor(player: ServerPlayer): Float {
+    fun caughtMultiplierFor(ServerPlayer player): Float {
         val caughtCount = Cobblemon.playerDataManager.getPokedexData(player).getGlobalCalculatedValue(CaughtCount)
         return when {
             caughtCount < 30 -> 1229F / 4096F

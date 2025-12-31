@@ -19,7 +19,7 @@ import java.nio.file.Path
  * @author Hiroku
  * @since January 27th, 2022
  */
-class SpawnSet : Iterable<SpawnDetail>, ModDependant {
+public class SpawnSet : Iterable<SpawnDetail>, ModDependant {
     var enabled = true
     override var neededInstalledMods = listOf<String>()
     override var neededUninstalledMods = listOf<String>()

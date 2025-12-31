@@ -15,7 +15,7 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.HitResult
 
-//Handles the actual raycasting to figure out what pokemon we are looking atfinal class PokemonScanner {
+//Handles the actual raycasting to figure out what pokemon we are looking atpublic final class PokemonScanner {
     //This basically draws a box around the casting entity, finds all entities in the box, then finds the one that a ray emanating from the player hits first
     fun detectEntity(castingEntity: Entity, zoomLevel: Int): Entity? {
         val eyePos = castingEntity.getEyePosition(1.0F)
@@ -32,10 +32,10 @@ import net.minecraft.world.phys.HitResult
         )
 
         // Get all entities within the boundingBox
-        val entities = castingEntity.level().getEntitiesOfClass(Entity::class.java, boundingBox) { it !== castingEntity }
+        val entities = castingEntity.level().getEntitiesOfClass(Entity.class, boundingBox) { it !== castingEntity }
 
         for (entity in entities) {
-            val entityBox: AABB = entity.boundingBox
+            val entityAABB box = entity.boundingBox
 
             // Calculate the size of the bounding box
             val boxWidth = entityBox.xsize

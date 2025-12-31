@@ -22,11 +22,12 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since August 11th, 2024
- */final class NPCVariationProviderAdapter : JsonDeserializer<NPCVariationProvider> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): NPCVariationProvider {
+ */
+public final class NPCVariationProviderAdapter : JsonDeserializer<NPCVariationProvider> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): NPCVariationProvider {
         if (json.isJsonArray) {
             val provider = WeightedNPCVariationProvider()
-            provider.options = json.asJsonArray.map { ctx.deserialize(it, WeightedAspect::class.java) }
+            provider.options = json.asJsonArray.map { ctx.deserialize(it, WeightedAspect.class) }
             return provider
         }
 

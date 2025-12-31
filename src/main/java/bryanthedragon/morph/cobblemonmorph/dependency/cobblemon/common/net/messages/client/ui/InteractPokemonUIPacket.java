@@ -24,8 +24,8 @@ import java.util.UUID
  * @author Village
  * @since January 7th, 2023
  */
-class InteractPokemonUIPacket(
-    val pokemonID: UUID,
+public class InteractPokemonUIPacket(
+    val UUID pokemonId,
     val canMountShoulder: Boolean,
     val canGiveHeld: Boolean,
     val canGiveCosmetic: Boolean,
@@ -34,7 +34,7 @@ class InteractPokemonUIPacket(
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(pokemonID)
         buffer.writeBoolean(canMountShoulder)
         buffer.writeBoolean(canGiveHeld)
@@ -42,9 +42,9 @@ class InteractPokemonUIPacket(
         buffer.writeBoolean(canRide)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("interact_pokemon_ui")
-        fun decode(buffer: RegistryFriendlyByteBuf) = InteractPokemonUIPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = InteractPokemonUIPacket(
             buffer.readUUID(),
             buffer.readBoolean(),
             buffer.readBoolean(),

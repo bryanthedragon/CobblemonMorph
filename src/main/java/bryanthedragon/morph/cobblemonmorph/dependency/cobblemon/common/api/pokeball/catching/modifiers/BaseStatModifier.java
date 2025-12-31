@@ -24,9 +24,9 @@ import net.minecraft.world.entity.LivingEntity
  * @author Licious
  * @since May 7th, 2022
  */
-class BaseStatModifier(
-    val stat: Stat,
-    val comparator: (value: Int) -> Boolean,
+public class BaseStatModifier(
+    val Stat stat ,
+    val comparator: (Int value) -> Boolean,
     val multiplier: Float
 ) : CatchRateModifier {
 
@@ -38,15 +38,15 @@ class BaseStatModifier(
 
     override fun isGuaranteed(): Boolean = false
 
-    override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = this.multiplier
+    override fun value(LivingEntity thrower, Pokemon pokemon): Float = this.multiplier
 
-    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
+    override fun behavior(LivingEntity thrower, Pokemon pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
 
-    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean {
+    override fun isValid(LivingEntity thrower, Pokemon pokemon): Boolean {
         val valStat = pokemon.form.baseStats[this.stat] ?: return false
         return comparator(valStat)
     }
 
-    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
+    override fun modifyCatchRate(currentFloat catchRate, LivingEntity thrower, Pokemon pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
 
 }

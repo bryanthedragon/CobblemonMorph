@@ -9,7 +9,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fishing
 
 import kotlin.math.ceil
-final class SpawnBaitUtils {
+public final class SpawnBaitUtils {
     @JvmStatic
     fun mergeEffects(effects: List<SpawnBait.Effect>): List<SpawnBait.Effect> {
         val grouped = effects.groupBy { Pair(it.type, it.subcategory) }

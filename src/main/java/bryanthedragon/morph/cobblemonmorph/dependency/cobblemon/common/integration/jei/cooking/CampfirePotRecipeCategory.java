@@ -38,10 +38,10 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.crafting.Ingredient
 
-class CampfirePotRecipeCategory(registration: IRecipeCategoryRegistration) : IRecipeCategory<CookingPotRecipeBase> {
+public class CampfirePotRecipeCategory(registration: IRecipeCategoryRegistration) : IRecipeCategory<CookingPotRecipeBase> {
 
-    companion object {
-        val RECIPE_TYPE = RecipeType.create("cobblemon", "campfire_pot_recipe", CookingPotRecipeBase::class.java)!!
+    final class Companion {
+        val RECIPE_TYPE = RecipeType.create("cobblemon", "campfire_pot_recipe", CookingPotRecipeBase.class)!!
         val CAMPFIRE_POT_TEXTURE: ResourceLocation = cobblemonResource("textures/gui/jei/campfire_pot.png")
 
         const val TEXTURE_WIDTH = 146
@@ -111,7 +111,7 @@ class CampfirePotRecipeCategory(registration: IRecipeCategoryRegistration) : IRe
     override fun draw(
         recipe: CookingPotRecipeBase,
         recipeSlotsView: IRecipeSlotsView,
-        guiGraphics: GuiGraphics,
+        GuiGraphics guiGraphics,
         mouseX: Double,
         mouseY: Double
     ) {

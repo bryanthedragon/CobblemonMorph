@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Hunter
  * @since August 18th, 2022
  */
-class SuperEffectiveInstruction(val message: BattleMessage,val instructionSet: InstructionSet,
+public class SuperEffectiveInstruction(val message: BattleMessage,val instructionSet: InstructionSet,
 ): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {

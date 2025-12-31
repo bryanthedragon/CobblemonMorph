@@ -34,7 +34,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType
  * @author Hiroku
  * @since December 7th, 2024
  */
-interface MoLangScriptingEntity {
+public interface MoLangScriptingEntity {
     var behavioursAreCustom: Boolean
     val behaviours: MutableList<ResourceLocation>
     val registeredVariables: MutableList<MoLangConfigVariable>
@@ -79,14 +79,14 @@ interface MoLangScriptingEntity {
         config.map.keys.filter { key -> registeredVariables.none { it.variableName == key } }.forEach { config.map.remove(it) }
     }
 
-    fun saveScriptingToNBT(nbt: CompoundTag) {
+    fun saveScriptingToNBT(CompoundTag nbt) {
         nbt.putBoolean(DataKeys.SCRIPTED_BEHAVIOURS_ARE_CUSTOM, behavioursAreCustom)
         nbt.put(DataKeys.SCRIPTED_BEHAVIOURS, ListTag().also { it.addAll(behaviours.map { StringTag.valueOf(it.toString()) }) })
         nbt.put(DataKeys.SCRIPTED_DATA, MoLangFunctions.writeMoValueToNBT(data))
         nbt.put(DataKeys.SCRIPTED_CONFIG, MoLangFunctions.writeMoValueToNBT(config))
     }
 
-    fun loadScriptingFromNBT(nbt: CompoundTag) {
+    fun loadScriptingFromNBT(CompoundTag nbt) {
         behavioursAreCustom = nbt.getBoolean(DataKeys.SCRIPTED_BEHAVIOURS_ARE_CUSTOM)
         behaviours.clear()
         behaviours.addAll(nbt.getList(DataKeys.SCRIPTED_BEHAVIOURS, ListTag.TAG_STRING.toInt()).map { ResourceLocation.parse(it.asString) })

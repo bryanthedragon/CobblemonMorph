@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class MaschiffModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+public class MaschiffModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("maschiff")
     override val head = getPart("head")
 
