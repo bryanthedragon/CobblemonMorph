@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
  * @author Hiroku
  * @since October 3rd, 2022
  */
-class EndInstruction(val message: BattleMessage): InterpreterInstruction {
+public class EndInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting {

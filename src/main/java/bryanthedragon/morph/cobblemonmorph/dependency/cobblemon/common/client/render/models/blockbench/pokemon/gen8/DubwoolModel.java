@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asEx
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class DubwoolModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+public class DubwoolModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("dubwool")
     override val head = getPart("head")
     override val foreLeftLeg= getPart("leg_front_left")

@@ -28,35 +28,35 @@ import net.minecraft.util.Mth
 import org.joml.Vector4f
 import kotlin.math.abs
 
-interface ParticleTinting : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<ParticleTinting, ParticleTintingType>(
+public interface ParticleTinting : CodecMapped {
+    final class Companion : ArbitrarilyMappedSerializableCompanion<ParticleTinting, ParticleTintingType>(
         keyFromString = ParticleTintingType::valueOf,
         stringFromKey = { it.name },
         keyFromValue = { it.type }
     ) {
         init {
-            registerSubtype(ParticleTintingType.EXPRESSION, ExpressionParticleTinting::class.java, ExpressionParticleTinting.CODEC)
-            registerSubtype(ParticleTintingType.GRADIENT, GradientParticleTinting::class.java, GradientParticleTinting.CODEC)
+            registerSubtype(ParticleTintingType.EXPRESSION, ExpressionParticleTinting.class, ExpressionParticleTinting.CODEC)
+            registerSubtype(ParticleTintingType.GRADIENT, GradientParticleTinting.class, GradientParticleTinting.CODEC)
         }
     }
 
     val type: ParticleTintingType
 
-    fun getTint(runtime: MoLangRuntime): Vector4f
+    fun getTint(MoLangRuntime runtime): Vector4f
 }
 
-enum class ParticleTintingType {
+public enum ParticleTintingType {
     EXPRESSION,
     GRADIENT
 }
 
-class ExpressionParticleTinting(
+public class ExpressionParticleTinting(
     var red: Expression = NumberExpression(1.0),
     var green: Expression = NumberExpression(1.0),
     var blue: Expression = NumberExpression(1.0),
     var alpha: Expression = NumberExpression(1.0)
 ) : ParticleTinting {
-    companion object {
+    final class Companion {
         val CODEC: Codec<ExpressionParticleTinting> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -69,22 +69,22 @@ class ExpressionParticleTinting(
     }
 
     override val type = ParticleTintingType.EXPRESSION
-    override fun getTint(runtime: MoLangRuntime) = Vector4f(
+    override fun getTint(MoLangRuntime runtime) = Vector4f(
         runtime.resolveDouble(red).toFloat(),
         runtime.resolveDouble(green).toFloat(),
         runtime.resolveDouble(blue).toFloat(),
         runtime.resolveDouble(alpha).toFloat()
     )
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         red = MoLang.createParser(buffer.readString()).parseExpression()
         green = MoLang.createParser(buffer.readString()).parseExpression()
         blue = MoLang.createParser(buffer.readString()).parseExpression()
         alpha = MoLang.createParser(buffer.readString()).parseExpression()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(red.getString())
         buffer.writeString(green.getString())
         buffer.writeString(blue.getString())
@@ -92,12 +92,12 @@ class ExpressionParticleTinting(
     }
 }
 
-class GradientParticleTinting(
+public class GradientParticleTinting(
     var interpolant: Expression = NumberExpression(0.0),
     var gradient: Map<Double, Vector4f> = emptyMap()
 ) : ParticleTinting {
     class GradientEntry(val key: Double, val colour: Vector4f) {
-        companion object {
+        final class Companion {
             val CODEC: Codec<GradientEntry> = RecordCodecBuilder.create { instance ->
                 instance.group(
                     PrimitiveCodec.DOUBLE.fieldOf("key").forGetter { it.key },
@@ -112,7 +112,7 @@ class GradientParticleTinting(
         fun toEntry() = key to colour
     }
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<GradientParticleTinting> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -128,7 +128,7 @@ class GradientParticleTinting(
     }
 
     override val type = ParticleTintingType.GRADIENT
-    override fun getTint(runtime: MoLangRuntime): Vector4f {
+    override fun getTint(MoLangRuntime runtime): Vector4f {
         val interpolant = runtime.resolveDouble(interpolant)
         val closestBelowNode = gradient.entries
             .filter { it.key <= interpolant }
@@ -157,16 +157,16 @@ class GradientParticleTinting(
 
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
 
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         interpolant = MoLang.createParser(buffer.readString()).parseExpression()
         gradient = buffer
             .readList { buffer.readDouble() to Vector4f(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat()) }
             .toMap()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(interpolant.getString())
         buffer.writeCollection(gradient.entries) { pb, (key, colour) ->
             buffer.writeDouble(key)

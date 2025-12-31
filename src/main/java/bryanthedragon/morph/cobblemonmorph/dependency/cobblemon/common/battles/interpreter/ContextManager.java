@@ -19,7 +19,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battl
 @Deprecated(message =
     "This was designed before Doubles and Multi battle formats were introduce and has not been maintained since." +
     "Accurate context for formats other than Singles is not guaranteed. This will be replaced in the near future.")
-class ContextManager {
+public
+public class ContextManager {
 
     /** [BattleContext.Type] buckets containing [BattleContexts] of that type. */
     val buckets = hashMapOf<BattleContext.Type, MutableCollection<BattleContext>>()
@@ -90,7 +91,7 @@ class ContextManager {
         return buckets[bucketType]
     }
 
-    companion object {
+    final class Companion {
 
         /**
          * Extracts a [BattleContext] from multiple context buckets.

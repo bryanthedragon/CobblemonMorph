@@ -27,13 +27,13 @@ import kotlin.reflect.KClass
  * @author Licious
  * @since March 22nd, 2022
  */
-class LazySetAdapter<T : Any>(
+public class LazySetAdapter<T : Any>(
     private val type: KClass<T>
 ) : JsonDeserializer<LazySet<T>>, JsonSerializer<LazySet<T>> {
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext) = LazySet(type, json.asJsonArray)
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context) = LazySet(type, json.asJsonArray)
 
-    override fun serialize(src: LazySet<T>, typeOfSrc: Type, context: JsonSerializationContext) = JsonArray().apply {
+    override fun serialize(src: LazySet<T>, typeOfT srcype, context: JsonSerializationContext) = JsonArray().apply {
         src.forEach { element -> add(context.serialize(element, type.java)) }
     }
 

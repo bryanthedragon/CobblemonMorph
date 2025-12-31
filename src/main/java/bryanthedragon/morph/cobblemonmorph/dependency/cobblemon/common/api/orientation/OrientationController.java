@@ -20,9 +20,9 @@ import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.sign
 
-open class OrientationController(val entity: LivingEntity) {
+open class OrientationController(val LivingEntity entity) {
 
-    companion object {
+    final class Companion {
         val FORWARDS: Vector3f = Vector3f(0.0f, 0.0f, -1.0f)
         val UP: Vector3f = Vector3f(0.0f, 1.0f, 0.0f)
         val LEFT: Vector3f = Vector3f(-1.0f, 0.0f, 0.0f)
@@ -57,7 +57,7 @@ open class OrientationController(val entity: LivingEntity) {
         active = false
     }
 
-    fun rotate(yaw: Float, pitch: Float, roll: Float) {
+    fun rotate(yaw: Float, Float pitch, roll: Float) {
         rotateYaw(yaw)
         rotatePitch(pitch)
         rotateRoll(roll)
@@ -102,13 +102,13 @@ open class OrientationController(val entity: LivingEntity) {
         get() = orientation?.transform(UP, Vector3f()) ?: Vector3f(UP)
 
     fun rotateYaw(yaw: Float) = updateOrientation { it.rotateY(-yaw.toRadians()) }
-    fun rotatePitch(pitch: Float) = updateOrientation { it.rotateX(-pitch.toRadians()) }
+    fun rotatePitch(Float pitch) = updateOrientation { it.rotateX(-pitch.toRadians()) }
     fun rotateRoll(roll: Float) = updateOrientation { it.rotateZ(-roll.toRadians()) }
 
     val yaw: Float
         get() = Mth.wrapDegrees(-FORWARDS.angleSigned(forwardVector, UP).toDegrees() + 180)
 
-    val pitch: Float
+    val Float pitch
         get() = Mth.wrapDegrees(-asin(forwardVector.y).toDegrees())
 
     val roll: Float

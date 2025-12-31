@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-final class MoveToTargetTask {
+public final class MoveToTargetTask {
     fun create(): OneShot<NPCEntity> {
         return BehaviorBuilder.create {
             it.group(

@@ -37,8 +37,8 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 import kotlin.math.*
 
-class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
-    companion object {
+public class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
+    final class Companion {
         val KEY = cobblemonResource("air/bird")
     }
 
@@ -586,7 +586,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
         settings: BirdSettings,
         state: BirdState,
         vehicle: PokemonEntity,
-        impactVec: Vec3
+        impactVec3 vec
     ): Boolean {
         if (!state.gliding.get()) return false
         val impactSpeed = impactVec.horizontalDistance().toFloat() * 10f
@@ -615,7 +615,7 @@ class BirdBehaviour : RidingBehaviour<BirdSettings, BirdState> {
     }
 }
 
-class BirdSettings : RidingBehaviourSettings {
+public class BirdSettings : RidingBehaviourSettings {
     override val key = BirdBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -657,7 +657,7 @@ class BirdSettings : RidingBehaviourSettings {
         private set
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteAltitude)
@@ -675,7 +675,7 @@ class BirdSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(timeToRollCorrect)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteAltitude = buffer.readNullableExpression()
@@ -694,7 +694,7 @@ class BirdSettings : RidingBehaviourSettings {
     }
 }
 
-class BirdState : RidingBehaviourState() {
+public class BirdState : RidingBehaviourState() {
     var gliding = ridingState(false, Side.BOTH)
     var lastGlide = ridingState(-100L, Side.CLIENT)
     var currRollCorrectionForce = ridingState(0.0, Side.CLIENT)

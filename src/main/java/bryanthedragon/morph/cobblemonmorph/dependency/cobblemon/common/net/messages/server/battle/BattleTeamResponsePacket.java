@@ -27,15 +27,15 @@ import java.util.*
  * @author JazzMcNade
  * @since July 7th, 2024
  */
-class BattleTeamResponsePacket(val targetedEntityId: Int, val requestID: UUID, val accept: Boolean) : NetworkPacket<BattleTeamResponsePacket> {
+public class BattleTeamResponsePacket(val targetedEntityId: Int, val requestID: UUID, val accept: Boolean) : NetworkPacket<BattleTeamResponsePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(targetedEntityId)
         buffer.writeUUID(requestID)
         buffer.writeBoolean(accept)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_team_request_response")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleTeamResponsePacket(buffer.readInt(), buffer.readUUID(), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleTeamResponsePacket(buffer.readInt(), buffer.readUUID(), buffer.readBoolean())
     }
 }

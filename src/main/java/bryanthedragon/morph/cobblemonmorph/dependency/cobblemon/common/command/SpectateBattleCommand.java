@@ -18,7 +18,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
-final class SpectateBattleCommand {
+public final class SpectateBattleCommand {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         val command = literal("spectateBattle")
             .permission(CobblemonPermissions.SPECTATE_BATTLE)

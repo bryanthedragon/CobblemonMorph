@@ -32,7 +32,7 @@ import net.minecraft.world.level.levelgen.feature.TreeFeature
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration
 import kotlin.random.Random.Default.nextInt
 
-class ApricornTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfiguration.CODEC) {
+public class ApricornTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfiguration.CODEC) {
 
     override fun place(context: FeaturePlaceContext<BlockStateConfiguration>) : Boolean {
         val worldGenLevel: WorldGenLevel = context.level()
@@ -68,7 +68,7 @@ class ApricornTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigura
             try {
                 val logPos = origin.relative(UP, y)
                 worldGenLevel.setBlock(logPos, logState, 2)
-            } catch (exception: Exception) {
+            } catch (Exception exception) {
                 exception.printStackTrace()
             }
         }
@@ -177,7 +177,7 @@ class ApricornTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigura
         return true
     }
 
-    private fun setBlockIfClear(worldGenLevel: WorldGenLevel, blockPos: BlockPos, blockState: BlockState) {
+    private fun setBlockIfClear(worldGenLevel: WorldGenLevel, blockBlockPos pos, blockBlockState state) {
         if (!TreeFeature.isAirOrLeaves(worldGenLevel, blockPos)) {
             return
         }
@@ -202,7 +202,7 @@ class ApricornTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigura
         val usedDirections = mutableListOf<Direction>()
 
         for (i in 1..nextInt(2,4)) {
-            var direction: Direction? = null
+            var Direction direction? = null
 
             while (direction == null || usedDirections.contains(direction)) {
                 when (random.nextInt(4)) {
@@ -225,8 +225,8 @@ class ApricornTreeFeature : Feature<BlockStateConfiguration>(BlockStateConfigura
         return variationList
     }
 
-    private fun isAir(testableWorld: LevelSimulatedReader, blockPos: BlockPos?): Boolean {
-        return testableWorld.isStateAtPosition(blockPos) { blockState: BlockState ->
+    private fun isAir(testableWorld: LevelSimulatedReader, blockBlockPos pos?): Boolean {
+        return testableWorld.isStateAtPosition(blockPos) { blockBlockState state ->
             blockState.`is`(Blocks.AIR)
         }
     }

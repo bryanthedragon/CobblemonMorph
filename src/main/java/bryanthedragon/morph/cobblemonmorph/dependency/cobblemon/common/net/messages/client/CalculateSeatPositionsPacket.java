@@ -23,18 +23,18 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since March 12th, 2025
  */
-class CalculateSeatPositionsPacket(val speciesIdentifier: ResourceLocation, val aspects: Set<String>, val poseType: PoseType) : NetworkPacket<CalculateSeatPositionsPacket> {
-    override val id: ResourceLocation = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+public class CalculateSeatPositionsPacket(val speciesResourceLocation identifier, val aspects: Set<String>, val poseType: PoseType) : NetworkPacket<CalculateSeatPositionsPacket> {
+    override val ResourceLocation id = ID
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeResourceLocation(speciesIdentifier)
         buffer.writeCollection(aspects) { _, aspect -> buffer.writeString(aspect) }
         buffer.writeString(poseType.name)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("calculate_seat_positions")
 
-        fun decode(buffer: RegistryFriendlyByteBuf): CalculateSeatPositionsPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): CalculateSeatPositionsPacket {
             return CalculateSeatPositionsPacket(
                 buffer.readResourceLocation(),
                 buffer.readList { _ -> buffer.readString() }.toSet(),

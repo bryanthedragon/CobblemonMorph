@@ -24,16 +24,17 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since December 28th, 2024
- */final class ExpressionOrEntityVariableAdapter : JsonDeserializer<Either<Expression, MoLangConfigVariable>> {
+ */
+public final class ExpressionOrEntityVariableAdapter : JsonDeserializer<Either<Expression, MoLangConfigVariable>> {
     override fun deserialize(
-        json: JsonElement,
+        JsonElement json,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        JsonDeserializationContext context
     ): Either<Expression, MoLangConfigVariable> {
         return if (json.isJsonObject) {
-            Either.right(context.deserialize(json, MoLangConfigVariable::class.java))
+            Either.right(context.deserialize(json, MoLangConfigVariable.class))
         } else {
-            val expression = context.deserialize<Expression>(json, Expression::class.java)
+            val expression = context.deserialize<Expression>(json, Expression.class)
             if (expression is NameExpression) {
                 // In this case, it was PROBABLY an attempt at doing a string and it all went horribly wrong.
                 // Interpret it as a string of the original expression.

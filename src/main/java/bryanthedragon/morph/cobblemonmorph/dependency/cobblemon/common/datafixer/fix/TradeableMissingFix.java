@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.Data
 import com.mojang.datafixers.schemas.Schema
 import com.mojang.serialization.Dynamic
 
-class TradeableMissingFix(outputSchema: Schema) : PokemonFix(outputSchema) {
+public class TradeableMissingFix(outputSchema: Schema) : PokemonFix(outputSchema) {
     override fun fixPokemonData(dynamic: Dynamic<*>): Dynamic<*> {
         if (dynamic.get(DataKeys.POKEMON_TRADEABLE).result().isPresent) {
             return dynamic

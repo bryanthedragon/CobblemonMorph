@@ -25,20 +25,20 @@ import net.minecraft.world.item.crafting.RecipeManager
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.Level
 
-class BrewingStandRecipe(
+public class BrewingStandRecipe(
     val groupName: String,
-    val input: Ingredient,
+    val I inputngredient,
     val bottle: Ingredient,
     val result: ItemStack
 ) : Recipe<BrewingStandInput> {
 
     override fun getType() = CobblemonRecipeTypes.BREWING_STAND
-    override fun canCraftInDimensions(width: Int, height: Int) = true
+    override fun canCraftInDimensions(Int width, Int height) = true
     override fun getSerializer() = CobblemonRecipeSerializers.BREWING_STAND
-    override fun assemble(input: BrewingStandInput, registries: HolderLookup.Provider): ItemStack? = result.copy()
-    override fun getResultItem(registries: HolderLookup.Provider): ItemStack? = result.copy()
+    override fun assemble(input: BrewingStandInput, HolderLookup.Provider registries): ItemStack? = result.copy()
+    override fun getResultItem(HolderLookup.Provider registries): ItemStack? = result.copy()
 
-    override fun matches(input: BrewingStandInput, level: Level): Boolean {
+    override fun matches(input: BrewingStandInput, Level level): Boolean {
         val ingredientMatches = this.input.test(input.getIngredient())
         val validBottles = input.getBottles()
             .filter { !it.isEmpty }
@@ -47,7 +47,7 @@ class BrewingStandRecipe(
         return ingredientMatches && validBottles
     }
 
-    companion object {
+    final class Companion {
         fun isBottle(itemStack: ItemStack, recipeManager: RecipeManager): Boolean {
             val recipes = recipeManager.getAllRecipesFor(CobblemonRecipeTypes.BREWING_STAND)
             return recipes.any { recipe ->
@@ -64,7 +64,7 @@ class BrewingStandRecipe(
     }
 
     class Serializer : RecipeSerializer<BrewingStandRecipe> {
-        companion object {
+        final class Companion {
             val CODEC: MapCodec<BrewingStandRecipe> = RecordCodecBuilder.mapCodec { instance ->
                 instance.group(
                     Codec.STRING.optionalFieldOf("group", "").forGetter { recipe -> recipe.groupName },
@@ -77,7 +77,7 @@ class BrewingStandRecipe(
             val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, BrewingStandRecipe> =
                 StreamCodec.of(::toNetwork, ::fromNetwork)
 
-            private fun fromNetwork(buffer: RegistryFriendlyByteBuf): BrewingStandRecipe {
+            private fun fromNetwork(RegistryFriendlyByteBuf buffer): BrewingStandRecipe {
                 val group = buffer.readUtf(32767)
                 val input = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer)
                 val bottle = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer)
@@ -85,7 +85,7 @@ class BrewingStandRecipe(
                 return BrewingStandRecipe(group, input, bottle, result)
             }
 
-            private fun toNetwork(buffer: RegistryFriendlyByteBuf, recipe: BrewingStandRecipe) {
+            private fun toNetwork(RegistryFriendlyByteBuf buffer, recipe: BrewingStandRecipe) {
                 buffer.writeUtf(recipe.groupName)
                 Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.input)
                 Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.bottle)

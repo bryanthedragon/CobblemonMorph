@@ -21,19 +21,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Prior
 open class SettableObservable<T>(private var value: T) : Observable<T> {
     val subscriptions = PrioritizedList<ObservableSubscription<T>>()
 
-    fun subscribeIncludingCurrent(priority: Priority = Priority.NORMAL, handler: (T) -> Unit): ObservableSubscription<T> {
+    fun subscribeIncludingCurrent(Priority priority = Priority.NORMAL, handler: (T) -> Unit): ObservableSubscription<T> {
         val subscription = subscribe(priority, handler)
         subscription.handle(value)
         return subscription
     }
 
-    override fun subscribe(priority: Priority, handler: (T) -> Unit): ObservableSubscription<T> {
+    override fun subscribe(Priority priority, handler: (T) -> Unit): ObservableSubscription<T> {
         val subscription = ObservableSubscription(this, handler)
         subscriptions.add(priority, subscription)
         return subscription
     }
 
-    override fun unsubscribe(subscription: ObservableSubscription<T>) {
+    override fun unsubscribe(ObservableSubscription<T> subscription) {
         subscriptions.remove(subscription)
     }
 

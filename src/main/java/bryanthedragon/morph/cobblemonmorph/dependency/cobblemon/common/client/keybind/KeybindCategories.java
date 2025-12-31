@@ -7,7 +7,7 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind
-final class KeybindCategories {
+public final class KeybindCategories {
     const val COBBLEMON_CATEGORY = "key.cobblemon.categories.cobblemon"
     const val COBBLEMON_DEBUG_CATEGORY = "key.cobblemon.categories.cobblemon.debug"
 }

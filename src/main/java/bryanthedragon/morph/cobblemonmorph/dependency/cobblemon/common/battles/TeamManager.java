@@ -24,7 +24,8 @@ import java.util.*
  *
  * @author Segfault Guy, JazzMcNade
  * @since October 26th, 2024
- */final class TeamManager : RequestManager<TeamManager.TeamRequest>() {
+ */
+public final class TeamManager : RequestManager<TeamManager.TeamRequest>() {
 
     init {
         register(this)
@@ -45,7 +46,7 @@ import java.util.*
         override val expiryTime: Int = 60
     ) : ServerPlayerActionRequest
     {
-        override val key: String = "team"
+        override val String Key = "team"
         override val requestID: UUID = UUID.randomUUID()
     }
     // TODO right now team requests are sent PLAYER-to-PLAYER. May want to redesign once larger teams are implemented? Or have a 'team lead' who is responsible for inviting?
@@ -66,7 +67,7 @@ import java.util.*
     private val playerToTeam = mutableMapOf<UUID, MultiBattleTeam>()
     private val multiBattleTeams = mutableMapOf<UUID, MultiBattleTeam>()
 
-    fun getTeam(player: ServerPlayer) = playerToTeam.get(player.uuid)
+    fun getTeam(ServerPlayer player) = playerToTeam.get(player.uuid)
 
     fun getTeam(teamID: UUID) = multiBattleTeams.get(teamID)
 
@@ -99,7 +100,7 @@ import java.util.*
     }
 
     /** Removes a [player] from their [MultiBattleTeam]. Will disband the team if the last remaining member. */
-    fun removeTeamMember(player: ServerPlayer) {
+    fun removeTeamMember(ServerPlayer player) {
         val teamEntry = playerToTeam.get(player.uuid) ?: return
         teamEntry.teamPlayers.remove(player)
         playerToTeam.remove(player.uuid)
@@ -114,7 +115,7 @@ import java.util.*
     }
 
     /** Adds [player] as a member of existing [team]. */
-    fun joinTeam(player: ServerPlayer, team: MultiBattleTeam) {
+    fun joinTeam(ServerPlayer player, team: MultiBattleTeam) {
         // decline any other incoming requests to team up
         this.getInboundRequests(player.uuid)?.forEach { this.cancelRequest(it) }    // this is guaranteed to not contain the request currently being accepted
 
@@ -190,7 +191,7 @@ import java.util.*
         return false
     }
 
-    override fun isValidInteraction(player: ServerPlayer, target: ServerPlayer): Boolean = player.canInteractWith(target, Cobblemon.config.tradeMaxDistance)
+    override fun isValidInteraction(ServerPlayer player, target: ServerPlayer): Boolean = player.canInteractWith(target, Cobblemon.config.tradeMaxDistance)
 
     override fun onLogoff(sender: ServerPlayer) {
         super.onLogoff(sender)

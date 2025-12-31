@@ -11,14 +11,14 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 import com.mojang.serialization.Codec
 import net.minecraft.util.StringRepresentable
 
-enum class PokemonGUIAnimationStyle : StringRepresentable {
+public enum public class PokemonGUIAnimationStyle : StringRepresentable {
 
     NEVER_ANIMATE,
     ANIMATE_SELECTED,
     ALWAYS_ANIMATE;
 
     override fun getSerializedName() = this.name
-    companion object {
+    final class Companion {
         @JvmStatic
         val CODEC: Codec<PokemonGUIAnimationStyle> = StringRepresentable.fromEnum(PokemonGUIAnimationStyle::values)
     }

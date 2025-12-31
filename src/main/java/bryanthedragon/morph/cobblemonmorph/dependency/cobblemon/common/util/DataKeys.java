@@ -6,8 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-final class DataKeys {
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;public final class DataKeys {
     const val POKEMON = "Pokemon"
     const val POKEMON_UUID = "UUID"
     const val POKEMON_SPECIES_IDENTIFIER = "Species"

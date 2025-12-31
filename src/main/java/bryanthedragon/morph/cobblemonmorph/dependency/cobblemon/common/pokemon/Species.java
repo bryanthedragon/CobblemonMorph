@@ -59,8 +59,8 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.EntityDimensions
 
-class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
-    var name: String = "Bulbasaur"
+public class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
+    var String name = "Bulbasaur"
     val translatedName: MutableComponent
         get() = Component.translatable("${this.resourceIdentifier.namespace}.species.${this.unformattedShowdownId()}.name")
     var nationalPokedexNumber = 1
@@ -162,7 +162,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         private set
 
     @Transient
-    lateinit var resourceIdentifier: ResourceLocation
+    lateinit var resourceResourceLocation identifier
 
     val types: Iterable<ElementalType>
         get() = secondaryType?.let { listOf(primaryType, it) } ?: listOf(primaryType)
@@ -206,8 +206,8 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
     fun create(level: Int = 10) = PokemonProperties.parse("species=\"${this.resourceIdentifier}\" level=${level}").create()
 
     fun getForm(aspects: Set<String>) = forms.lastOrNull { it.aspects.all { it in aspects } } ?: standardForm
-    fun getFormByName(name: String) = forms.firstOrNull { it.name == name } ?: standardForm
-    fun getFormByShowdownId(formOnlyShowdownId: String) = forms.firstOrNull { it.formOnlyShowdownId() == formOnlyShowdownId } ?: standardForm
+    fun getFormByName(String name) = forms.firstOrNull { it.name == name } ?: standardForm
+    fun getFormByShowdownId(formOnlyString showdownId) = forms.firstOrNull { it.formOnlyShowdownId() == formOnlyShowdownId } ?: standardForm
 
     fun eyeHeight(entity: PokemonEntity): Float {
         return this.resolveEyeHeight(entity) ?: VANILLA_DEFAULT_EYE_HEIGHT
@@ -221,7 +221,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
 
     fun canGmax() = this.forms.find { it.formOnlyShowdownId() == "gmax" } != null
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(this.implemented)
         buffer.writeString(this.name)
         buffer.writeInt(this.nationalPokedexNumber)
@@ -262,7 +262,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.riding.encode(buffer)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         this.implemented = buffer.readBoolean()
         this.name = buffer.readString()
         this.nationalPokedexNumber = buffer.readInt()
@@ -287,7 +287,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
         this.features.clear()
         this.features += buffer.readList { pb -> pb.readString() }
         this.behaviour = PokemonBehaviour.decode(buffer)
-        this.lightingData = buffer.readNullable { pb -> LightingData(pb.readInt(), pb.readEnumConstant(LightingData.LiquidGlowMode::class.java)) }
+        this.lightingData = buffer.readNullable { pb -> LightingData(pb.readInt(), pb.readEnumConstant(LightingData.LiquidGlowMode.class)) }
         this.drops.decode(buffer)
         this.abilities = AbilityPool().also { pool ->
             buffer.readList { pb ->
@@ -354,7 +354,7 @@ class Species : ClientDataSynchronizer<Species>, ShowdownIdentifiable {
 
     override fun toString() = this.showdownId()
 
-    companion object {
+    final class Companion {
         private const val VANILLA_DEFAULT_EYE_HEIGHT = .85F
 
         // TODO: Registries have dedicated Codecs, migrate to that once this is a proper registry impl

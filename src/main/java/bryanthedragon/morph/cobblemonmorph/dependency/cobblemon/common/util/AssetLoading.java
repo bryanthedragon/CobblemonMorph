@@ -6,8 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import java.io.File
 import java.nio.file.FileVisitResult
@@ -26,9 +25,10 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author Hiroku
  * @since February 10th, 2022
- */final class AssetLoading {
+ */
+public final class AssetLoading {
     fun ResourceLocation.toPath() = toURL()?.toPath()
-    fun ResourceLocation.toURL() = Cobblemon::class.java.getResource(String.format("/assets/%s/%s", namespace, path))?.toURI()
+    fun ResourceLocation.toURL() = Cobblemon.class.getResource(String.format("/assets/%s/%s", namespace, path))?.toURI()
     fun fileSearch(dir: Path, filter: (Path) -> Boolean, recursive: Boolean): List<Path> {
         val files = mutableListOf<Path>()
         Files.walkFileTree(dir, object : SimpleFileVisitor<Path>() {

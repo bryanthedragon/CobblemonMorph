@@ -22,7 +22,7 @@ import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-final class OpenDialogueCommand {
+public final class OpenDialogueCommand {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         val command = dispatcher.register(Commands.literal("opendialogue")
             .permission(CobblemonPermissions.OPEN_DIALOGUE)
@@ -45,14 +45,14 @@ final class OpenDialogueCommand {
         dispatcher.register(command.alias("opendialogue"))
     }
 
-    private fun execute(source: CommandSourceStack, dialogueId: ResourceLocation, player: ServerPlayer): Int {
+    private fun execute(source: CommandSourceStack, dialogueResourceLocation id, ServerPlayer player): Int {
         val dialogue = Dialogues.dialogues[dialogueId] ?: return run {
             source.sendSystemMessage("Invalid dialogue ID: $dialogueId".text())
             Command.SINGLE_SUCCESS
         }
         try {
             player.openDialogue(dialogue)
-        } catch (exception: Exception) {
+        } catch (Exception exception) {
             exception.printStackTrace()
         }
         return Command.SINGLE_SUCCESS

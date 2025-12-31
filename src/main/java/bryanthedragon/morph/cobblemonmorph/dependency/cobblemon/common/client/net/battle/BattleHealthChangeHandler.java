@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.animations.HealthChangeAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleHealthChangePacket
 import net.minecraft.client.Minecraft
-final class BattleHealthChangeHandler : ClientNetworkPacketHandler<BattleHealthChangePacket> {
-    override fun handle(packet: BattleHealthChangePacket, client: Minecraft) {
+public final class BattleHealthChangeHandler : ClientNetworkPacketHandler<BattleHealthChangePacket> {
+    override fun handle(packet: BattleHealthChangePacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val (_, activePokemon) = battle.getPokemonFromPNX(packet.pnx)
         packet.newMaxHealth?.let { activePokemon.battlePokemon?.maxHp = it }

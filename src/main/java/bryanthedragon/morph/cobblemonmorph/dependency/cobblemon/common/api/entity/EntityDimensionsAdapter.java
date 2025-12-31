@@ -24,7 +24,8 @@ import net.minecraft.world.entity.EntityDimensions
  *
  * @author Hiroku
  * @since April 4th, 2022
- */final class EntityDimensionsAdapter : JsonSerializer<EntityDimensions>, JsonDeserializer<EntityDimensions> {
+ */
+public final class EntityDimensionsAdapter : JsonSerializer<EntityDimensions>, JsonDeserializer<EntityDimensions> {
     const val WIDTH = "width"
     const val HEIGHT = "height"
 
@@ -32,14 +33,14 @@ import net.minecraft.world.entity.EntityDimensions
         "player" to { EntityDimensions.scalable(0.6F, 1.8F) }
     )
 
-    override fun serialize(dimensions: EntityDimensions, type: Type, ctx: JsonSerializationContext): JsonElement {
+    override fun serialize(dimensions: EntityDimensions, Type type, JsonSerializationContext ctx): JsonElement {
         val json = JsonObject()
         json.addProperty(WIDTH, dimensions.width)
         json.addProperty(HEIGHT, dimensions.height)
         return json
     }
 
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): EntityDimensions {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): EntityDimensions {
         if (json is JsonPrimitive) {
             return templates[json.asString]?.invoke() ?: throw IllegalStateException("Dimensions provided by template name $json but no such template is set.")
         }

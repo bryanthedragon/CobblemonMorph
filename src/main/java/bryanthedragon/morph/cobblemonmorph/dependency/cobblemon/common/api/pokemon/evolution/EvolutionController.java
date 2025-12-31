@@ -6,12 +6,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgress
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.controller.ClientEvolutionController
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.controller.ServerEvolutionController
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgress;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.controller.ClientEvolutionController;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.controller.ServerEvolutionController;
 
 /**
  * Responsible for holding all available [EvolutionLike]s in the [Pokemon].
@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
  * @author Licious
  * @since April 28th, 2022
  */
-interface EvolutionController<T : EvolutionLike, out I : PreProcessor> : MutableSet<T> {
+public interface EvolutionController<T extends EvolutionLike, I extends PreProcessor> extends MutableSet<T> {
 
     /**
      * Resolves the [Pokemon] attached to this controller.

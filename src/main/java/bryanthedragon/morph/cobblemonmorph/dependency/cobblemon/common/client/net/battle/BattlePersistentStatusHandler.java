@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattlePersistentStatusPacket
 import net.minecraft.client.Minecraft
-final class BattlePersistentStatusHandler : ClientNetworkPacketHandler<BattlePersistentStatusPacket> {
-    override fun handle(packet: BattlePersistentStatusPacket, client: Minecraft) {
+public final class BattlePersistentStatusHandler : ClientNetworkPacketHandler<BattlePersistentStatusPacket> {
+    override fun handle(packet: BattlePersistentStatusPacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val (_, activeBattlePokemon) = battle.getPokemonFromPNX(packet.pnx)
         activeBattlePokemon.battlePokemon?.status = packet.status

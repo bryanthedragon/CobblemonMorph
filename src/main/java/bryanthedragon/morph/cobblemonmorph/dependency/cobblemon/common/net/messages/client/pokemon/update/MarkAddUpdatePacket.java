@@ -16,19 +16,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class MarkAddUpdatePacket(pokemon: () -> Pokemon?, value: Mark?): SingleUpdatePacket<Mark?, MarkAddUpdatePacket>(pokemon, value) {
+public class MarkAddUpdatePacket(pokemon: () -> Pokemon?, value: Mark?): SingleUpdatePacket<Mark?, MarkAddUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(this.value) { _, v -> buffer.writeIdentifier(v.identifier) }
     }
 
-    override fun set(pokemon: Pokemon, value: Mark?) {
+    override fun set(Pokemon pokemon, value: Mark?) {
         if (value != null) pokemon.exchangeMark(value, true)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("mark_add_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): MarkAddUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): MarkAddUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val markIdentifier = buffer.readNullable { buffer.readIdentifier() }
             val mark = if (markIdentifier == null) null else Marks.getByIdentifier(markIdentifier)

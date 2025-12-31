@@ -16,11 +16,11 @@ import net.minecraft.ChatFormatting
 import net.minecraft.client.color.item.ItemColor
 import net.minecraft.util.FastColor
 import net.minecraft.world.item.ItemStack
-final class PonigiriItemColorProvider : ItemColor {
+public final class PonigiriItemColorProvider : ItemColor {
 
     private const val PONIGIRI_INDEX = 0
 
-    override fun getColor(stack: ItemStack, layer: Int): Int {
+    override fun getColor(ItemStack stack, layer: Int): Int {
         if (layer == 1 || layer == 2) return -1
 
         val colorComponent = stack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1

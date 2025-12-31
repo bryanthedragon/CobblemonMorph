@@ -20,7 +20,7 @@ import net.minecraft.world.entity.LivingEntity
 import java.util.*
 
 @Suppress("MemberVisibilityCanBePrivate")
-class PotionBaseEffect(
+public class PotionBaseEffect(
     val effect: MobEffect,
     val amplifier: Int,
     val ambient: Boolean,
@@ -28,7 +28,7 @@ class PotionBaseEffect(
     val showIcon: Boolean
 ) : ShoulderEffect {
 
-    override fun applyEffect(pokemon: Pokemon, player: ServerPlayer, isLeft: Boolean) {
+    override fun applyEffect(Pokemon pokemon, ServerPlayer player, isLeft: Boolean) {
         val effect = player.getEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect))
         // We handle part of our own type.
         if (effect is ShoulderStatusEffectInstance && effect.amplifier >= this.amplifier) {
@@ -44,7 +44,7 @@ class PotionBaseEffect(
         player.addEffect(this.createStatus(pokemon))
     }
 
-    override fun removeEffect(pokemon: Pokemon, player: ServerPlayer, isLeft: Boolean) {
+    override fun removeEffect(Pokemon pokemon, ServerPlayer player, isLeft: Boolean) {
         val effect = player.getEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect)) as? ShoulderStatusEffectInstance ?: return
         if (effect.amplifier == this.amplifier && effect.ambient == this.ambient && effect.isVisible() == this.showParticles && effect.showIcon() == this.showIcon) {
             effect.shoulderSources.remove(pokemon.uuid)
@@ -52,7 +52,7 @@ class PotionBaseEffect(
     }
 
     // Note on the -1 on level, we do this because we want to be user-friendly and not make them think about indexes :)
-    private fun createStatus(pokemon: Pokemon): ShoulderStatusEffectInstance = ShoulderStatusEffectInstance(this.effect, this.amplifier, this.ambient, this.showParticles, this.showIcon, pokemon)
+    private fun createStatus(Pokemon pokemon): ShoulderStatusEffectInstance = ShoulderStatusEffectInstance(this.effect, this.amplifier, this.ambient, this.showParticles, this.showIcon, pokemon)
 
     /*
      Long term we need to do this differently. There is a restriction in minecraft that for a StatusEffect, i.e. SLOW_FALLING,
@@ -66,13 +66,13 @@ class PotionBaseEffect(
         ambient: Boolean,
         showParticles: Boolean,
         showIcon: Boolean,
-        startingPokemon: Pokemon
+        startingPokemon pokemon
     ) : MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect), -1, amplifier, ambient, showParticles, showIcon) {
 
         internal val shoulderSources: MutableSet<UUID> = hashSetOf(startingPokemon.uuid)
         private var upgrade: MobEffectInstance? = null
 
-        fun save(nbt: CompoundTag): CompoundTag {
+        fun save(CompoundTag nbt): CompoundTag {
             /**
              * No need for this operation.
              * [StatusEffectInstance.fromNbt] tosses it out immediately if the ID is invalid.
@@ -113,7 +113,7 @@ class PotionBaseEffect(
             return false
         }
 
-        override fun tick(entity: LivingEntity, overwriteCallback: Runnable): Boolean {
+        override fun tick(LivingEntity entity, overwriteCallback: Runnable): Boolean {
             if (this.effect.value().shouldApplyEffectTickThisTick(entity.tickCount, this.amplifier)) {
                 this.onEffectStarted(entity)
             }
@@ -126,7 +126,7 @@ class PotionBaseEffect(
             return this.shoulderSources.isNotEmpty()
         }
 
-        override fun onEffectStarted(entity: LivingEntity) {
+        override fun onEffectStarted(LivingEntity entity) {
             this.effect.value().applyEffectTick(entity, this.upgrade?.amplifier ?: this.amplifier)
         }
 

@@ -22,11 +22,11 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 28th, 2021
  */
-abstract class IntUpdatePacket<T : NetworkPacket<T>>(pokemon: () -> Pokemon?, value: Int) : SingleUpdatePacket<Int, T>(pokemon, value) {
+abstract class IntUpdatePacket<T : NetworkPacket<T>>(pokemon: () -> Pokemon?, Int value) : SingleUpdatePacket<Int, T>(pokemon, value) {
 
     abstract fun getSize(): IntSize
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeSizedInt(this.getSize(), this.value)
     }
 }

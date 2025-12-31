@@ -41,7 +41,7 @@ import org.joml.Vector3f
 import kotlin.math.floor
 import kotlin.math.sin
 
-class BattleTargetSelection(
+public class BattleTargetSelection(
         battleGUI: BattleGUI,
         request: SingleActionRequest,
         val move: InBattleMove,
@@ -57,7 +57,7 @@ class BattleTargetSelection(
     height = 100,
     battleLang("ui.select_move")
 ) {
-    companion object {
+    final class Companion {
         const val TARGET_WIDTH = 93
         const val TARGET_HEIGHT = 33
         const val MOVE_VERTICAL_SPACING = 1F

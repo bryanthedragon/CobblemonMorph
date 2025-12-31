@@ -15,8 +15,8 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Entity.MoveFunction
 import net.minecraft.world.entity.player.Player
 
-interface PokemonSideDelegate : EntitySideDelegate<PokemonEntity> {
-    fun changePokemon(pokemon: Pokemon)
+public interface PokemonSideDelegate : EntitySideDelegate<PokemonEntity> {
+    fun changePokemon(Pokemon pokemon)
     fun drop(source: DamageSource?) {}
     fun updatePostDeath() {}
     fun handleStatus(status: Byte) {}

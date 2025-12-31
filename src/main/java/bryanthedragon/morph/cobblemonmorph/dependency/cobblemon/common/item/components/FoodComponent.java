@@ -18,7 +18,7 @@ record FoodComponent(
         val hunger: Int,
         val saturation: Float
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<FoodComponent> = RecordCodecBuilder.create { builder ->
             builder.group(
                     Codec.INT.fieldOf("hunger").forGetter { it.hunger },

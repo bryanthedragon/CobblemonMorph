@@ -14,7 +14,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.
  * @author Hiroku
  * @since July 31st, 2022
  */
-class UntilDispatch(val condition: () -> Boolean) : DispatchResult {
+public class UntilDispatch(val condition: () -> Boolean) : DispatchResult {
     var afterAction: (() -> Unit) = {}
     override fun canProceed(): Boolean {
         val shouldContinue = condition()

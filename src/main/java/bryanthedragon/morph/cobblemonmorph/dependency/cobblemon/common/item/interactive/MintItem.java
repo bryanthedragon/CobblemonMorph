@@ -21,14 +21,14 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.level.Level
 
-class MintItem(val nature: Nature) : CobblemonItem(Properties()), PokemonSelectingItem {
+public class MintItem(val nature: Nature) : CobblemonItem(Properties()), PokemonSelectingItem {
 
     override val bagItem = null
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.effectiveNature != nature
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = pokemon.effectiveNature != nature
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack> {
         return if (pokemon.effectiveNature != nature) {
             stack.consume(1, player)
@@ -42,7 +42,7 @@ class MintItem(val nature: Nature) : CobblemonItem(Properties()), PokemonSelecti
         }
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

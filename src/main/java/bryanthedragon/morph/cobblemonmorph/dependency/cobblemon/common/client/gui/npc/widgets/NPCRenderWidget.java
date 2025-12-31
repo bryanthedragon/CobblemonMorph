@@ -17,11 +17,11 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.resources.ResourceLocation
 
-class NPCRenderWidget(
+public class NPCRenderWidget(
     val x: Int,
     val y: Int,
     val entityId: UUID,
-    var identifier: ResourceLocation,
+    var ResourceLocation identifier,
     val aspects: MutableSet<String>
 ) : CobblemonRenderable, GuiEventListener {
     val state = FloatingState().also {
@@ -29,7 +29,7 @@ class NPCRenderWidget(
         it.runtime.environment.setSimpleVariable("texture", StringValue(entityId.toString()))
     }
 
-    companion object {
+    final class Companion {
         const val WIDTH = 116
         const val HEIGHT = 112
     }

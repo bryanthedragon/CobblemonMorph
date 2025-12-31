@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.reso
  * @author Hiroku
  * @since October 22nd, 2023
  */
-class ListExpression(val exprs: List<Expression>): ExpressionLike {
+public class ListExpression(val exprs: List<Expression>): ExpressionLike {
     override fun toString() = exprs.joinToString("\n") { it.getString().let { if (it.endsWith(";")) it else "$it;" } }
-    override fun resolve(runtime: MoLangRuntime, context: Map<String, MoValue>) = exprs.resolve(runtime, context)
+    override fun resolve(MoLangRuntime runtime, Map<String, MoValue> context) = exprs.resolve(runtime, context)
 }

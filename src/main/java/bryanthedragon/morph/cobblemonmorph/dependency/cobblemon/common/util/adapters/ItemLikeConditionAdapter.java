@@ -21,7 +21,8 @@ import net.minecraft.world.item.Item
  *
  * @author Licious
  * @since October 28th, 2022
- */final class ItemLikeConditionAdapter : RegistryLikeAdapter<Item> {
+ */
+public final class ItemLikeConditionAdapter : RegistryLikeAdapter<Item> {
     override val registryLikeConditions = mutableListOf(
         RegistryLikeTagCondition.resolver(Registries.ITEM, ::ItemTagCondition),
         RegistryLikeIdentifierCondition.resolver(::ItemIdentifierCondition)

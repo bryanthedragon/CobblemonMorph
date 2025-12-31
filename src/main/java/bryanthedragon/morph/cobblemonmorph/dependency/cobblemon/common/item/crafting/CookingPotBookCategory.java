@@ -17,7 +17,7 @@ import net.minecraft.util.ByIdMap
 import net.minecraft.util.StringRepresentable
 import java.util.function.IntFunction
 
-enum class CookingPotBookCategory(
+public enum CookingPotBookCategory(
     private val categoryName: String,
     private val categoryId: Int
 ) : StringRepresentable {
@@ -29,7 +29,7 @@ enum class CookingPotBookCategory(
     override fun getSerializedName() = categoryName
     private fun getCategoryId() = categoryId
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<CookingPotBookCategory> = Codec.STRING.flatXmap(
             { name ->
                 val category = CookingPotBookCategory.entries.firstOrNull { it.categoryName.equals(name, ignoreCase = true) }

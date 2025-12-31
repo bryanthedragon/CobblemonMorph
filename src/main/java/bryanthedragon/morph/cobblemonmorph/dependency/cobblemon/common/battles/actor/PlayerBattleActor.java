@@ -28,8 +28,8 @@ import net.minecraft.sounds.SoundEvent
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.phys.Vec3
 
-class PlayerBattleActor(
-    uuid: UUID,
+public class PlayerBattleActor(
+    UUID uuid,
     pokemonList: List<BattlePokemon>,
 ) : BattleActor(uuid, pokemonList.toMutableList()), EntityBackedBattleActor<ServerPlayer> {
 
@@ -48,10 +48,10 @@ class PlayerBattleActor(
         }
 
     override fun getName(): MutableComponent = this.entity?.name?.copy() ?: "Offline Player".red()
-    override fun nameOwned(name: String): MutableComponent = battleLang("owned_pokemon", this.getName(), name)
+    override fun nameOwned(String name): MutableComponent = battleLang("owned_pokemon", this.getName(), name)
     override val type = ActorType.PLAYER
     override fun getPlayerUUIDs() = setOf(uuid)
-    override fun awardExperience(battlePokemon: BattlePokemon, experience: Int) {
+    override fun awardExperience(BattlePokemon battlePokemon, experience: Int) {
         if (battle.isPvP && !Cobblemon.config.allowExperienceFromPvP) {
             return
         }
@@ -64,7 +64,7 @@ class PlayerBattleActor(
         }
     }
 
-    override fun sendUpdate(packet: NetworkPacket<*>) {
+    override fun sendUpdate( NetworkPacket<*> packet) {
         CobblemonNetwork.sendPacketToPlayers(getPlayerUUIDs().mapNotNull { it.getPlayer() }, packet)
     }
 }

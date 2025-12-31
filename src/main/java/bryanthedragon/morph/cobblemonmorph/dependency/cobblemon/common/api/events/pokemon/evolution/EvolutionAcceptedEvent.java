@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @since April 28th, 2022
  */
 record EvolutionAcceptedEvent(
-    override val pokemon: Pokemon,
+    override val Pokemon pokemon,
     override val evolution: Evolution
 ) : Cancelable(), EvolutionEvent {
     val context = mutableMapOf<String, MoValue>(

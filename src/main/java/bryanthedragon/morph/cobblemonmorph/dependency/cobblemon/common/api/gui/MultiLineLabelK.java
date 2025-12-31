@@ -16,17 +16,17 @@ import net.minecraft.network.chat.FormattedText
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 
-class MultiLineLabelK(
+public class MultiLineLabelK(
     private val comps: List<TextWithWidth>,
     private val font: ResourceLocation? = null
 ) {
 
-    companion object {
+    final class Companion {
         private val mcFont = Minecraft.getInstance().font
 
-        fun create(component: Component, width: Number, maxLines: Number) = create(component, width, maxLines, null)
+        fun create(Component component, width: Number, maxLines: Number) = create(component, width, maxLines, null)
 
-        fun create(component: Component, width: Number, maxLines: Number, font: ResourceLocation?): MultiLineLabelK {
+        fun create(Component component, width: Number, maxLines: Number, font: ResourceLocation?): MultiLineLabelK {
             return MultiLineLabelK(
                 mcFont.splitter.splitLines(component, width.toInt(), Style.EMPTY).stream()
                     .limit(maxLines.toLong())
@@ -64,5 +64,5 @@ class MultiLineLabelK(
         context.pose().popPose()
     }
 
-    class TextWithWidth internal constructor(val text: FormattedText, val width: Int)
+    class TextWithWidth internal constructor(val text: FormattedText, val Int width)
 }

@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
-final class CobblemonResources {
+public final class CobblemonResources {
     /**
      * Textures
      */

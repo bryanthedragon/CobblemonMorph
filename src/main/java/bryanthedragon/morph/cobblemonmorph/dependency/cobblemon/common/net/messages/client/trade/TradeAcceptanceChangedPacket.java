@@ -26,14 +26,14 @@ import java.util.UUID
  * @author Hiroku
  * @since March 5th, 2023
  */
-class TradeAcceptanceChangedPacket(val pokemonId: UUID, val accepted: Boolean) : NetworkPacket<TradeAcceptanceChangedPacket> {
-    companion object {
+public class TradeAcceptanceChangedPacket(val UUID pokemonId, val accepted: Boolean) : NetworkPacket<TradeAcceptanceChangedPacket> {
+    final class Companion {
         val ID = cobblemonResource("trade_acceptance_changed")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TradeAcceptanceChangedPacket(buffer.readUUID(), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = TradeAcceptanceChangedPacket(buffer.readUUID(), buffer.readBoolean())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(pokemonId)
         buffer.writeBoolean(accepted)
     }

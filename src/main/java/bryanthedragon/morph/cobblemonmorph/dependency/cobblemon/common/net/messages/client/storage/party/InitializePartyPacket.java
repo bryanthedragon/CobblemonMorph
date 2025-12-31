@@ -30,18 +30,18 @@ import java.util.UUID
  * @author Hiroku
  * @since November 29th, 2021
  */
-class InitializePartyPacket(val isThisPlayerParty: Boolean, val uuid: UUID, val slots: Int) : NetworkPacket<InitializePartyPacket> {
+public class InitializePartyPacket(val isThisPlayerParty: Boolean, val UUID uuid, val slots: Int) : NetworkPacket<InitializePartyPacket> {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(isThisPlayerParty)
         buffer.writeUUID(uuid)
         buffer.writeSizedInt(IntSize.U_BYTE, slots)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("initialize_party")
-        fun decode(buffer: RegistryFriendlyByteBuf) = InitializePartyPacket(buffer.readBoolean(), buffer.readUUID(), buffer.readSizedInt(IntSize.U_BYTE))
+        fun decode(RegistryFriendlyByteBuf buffer) = InitializePartyPacket(buffer.readBoolean(), buffer.readUUID(), buffer.readSizedInt(IntSize.U_BYTE))
     }
 }

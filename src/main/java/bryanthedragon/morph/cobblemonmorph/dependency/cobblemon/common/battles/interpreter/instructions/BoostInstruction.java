@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture
  * @author Hiroku
  * @since August 20th, 2022
  */
-class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val isBoost: Boolean = true): ActionEffectInstruction {
+public class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val isBoost: Boolean = true): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
     override var holds = mutableSetOf<String>()
     override val id = cobblemonResource("boost")
@@ -44,7 +44,7 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
     val stages = message.argumentAt(2)?.toInt() ?: throw InvalidInstructionException(message)
     val stat = Stats.getStat(statKey).displayName
 
-    override fun addMolangQueries(runtime: MoLangRuntime) {
+    override fun addMolangQueries(MoLangRuntime runtime) {
         super.addMolangQueries(runtime)
         runtime.environment.query.addBattleMessageFunctions(message)
     }
@@ -53,7 +53,7 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
 
     }
 
-    override fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime) {
+    override fun runActionEffect(battle: PokemonBattle, MoLangRuntime runtime) {
         if (stages == 0) return // only play effect if there was a stat change
         battle.dispatch {
             val actionEffect = if (isBoost) BOOST_EFFECT else UNBOOST_EFFECT
@@ -92,7 +92,7 @@ class BoostInstruction(battle: PokemonBattle, val message: BattleMessage, val is
         }
     }
 
-    companion object {
+    final class Companion {
         val BOOST_EFFECT = ActionEffects.actionEffects[cobblemonResource("boost")]!!
         val UNBOOST_EFFECT = ActionEffects.actionEffects[cobblemonResource("unboost")]!!
     }

@@ -14,14 +14,14 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.schedule.Activity
 
-class ActivityConfigurationContext(val activity: Activity) {
+public class ActivityConfigurationContext(val activity: Activity) {
     val tasks = mutableListOf<Pair<Int, BehaviorControl<in LivingEntity>>>()
 
     fun addTasks(weight: Int, vararg tasks: BehaviorControl<in LivingEntity>) {
         this.tasks.addAll(tasks.map { Pair.of(weight, it) })
     }
 
-    fun apply(entity: LivingEntity) {
+    fun apply(LivingEntity entity) {
         tasks.forEach {
             val activityAwareBehavior = it.second as? ActivityAwareBehavior<*>
                 ?: (it.second as? WrapperLivingEntityTask<*>)?.task as? ActivityAwareBehavior

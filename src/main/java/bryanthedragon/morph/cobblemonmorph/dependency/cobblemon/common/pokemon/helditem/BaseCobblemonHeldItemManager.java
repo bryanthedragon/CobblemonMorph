@@ -54,16 +54,16 @@ abstract class BaseCobblemonHeldItemManager : HeldItemManager {
         return null
     }
 
-    override fun nameOf(showdownId: String): Component = this.itemIds[showdownId]?.description ?: Component.literal(showdownId)
+    override fun nameOf(String showdownId): Component = this.itemIds[showdownId]?.description ?: Component.literal(showdownId)
 
     // This is safe to do as any item triggers will only happen if a Pokémon has a valid held item to begin with.
-    override fun give(pokemon: BattlePokemon, showdownId: String) {
+    override fun give(pokemon: BattlePokemon, String showdownId) {
         val stack = this.itemIds[showdownId]?.let { ItemStack(it) } ?: ItemStack.EMPTY
         pokemon.effectedPokemon.swapHeldItem(stack, false, false)
     }
 
     // This is safe to do as any item triggers will only happen if a Pokémon has a valid held item to begin with.
-    override fun take(pokemon: BattlePokemon, showdownId: String) {
+    override fun take(pokemon: BattlePokemon, String showdownId) {
         pokemon.effectedPokemon.removeHeldItem()
     }
 

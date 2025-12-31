@@ -6,11 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events;
 
-import com.bedrockk.molang.runtime.MoParams
-import com.bedrockk.molang.runtime.value.DoubleValue
-import com.bedrockk.molang.runtime.value.MoValue
+import com.bedrockk.molang.runtime.MoParams;
+import com.bedrockk.molang.runtime.value.DoubleValue;
+import com.bedrockk.molang.runtime.value.MoValue;
 
 /**
  * Something that can be canceled. This is a highly complex class and should only be read by professional engineers.
@@ -18,16 +18,16 @@ import com.bedrockk.molang.runtime.value.MoValue
  * @author Hiroku
  * @since February 18th, 2022
  */
-abstract class Cancelable {
-    var isCanceled: Boolean = false
-        private set
+public abstract class Cancelable {
+    boolean isCanceled = false
+        private set;
 
     fun cancel() {
-        isCanceled = true
+        isCanceled = true;
     }
 
     val cancelFunc: Pair<String, (MoParams) -> MoValue> = "cancel" to {
-        cancel()
-        DoubleValue.ONE
+        cancel();
+        DoubleValue.ONE;
     }
 }

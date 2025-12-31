@@ -29,17 +29,18 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since January 1st, 2024
- */final class DialogueFaceProviderAdapter : JsonDeserializer<DialogueFaceProvider> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DialogueFaceProvider {
+ */
+public final class DialogueFaceProviderAdapter : JsonDeserializer<DialogueFaceProvider> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): DialogueFaceProvider {
         return when (json) {
             is JsonPrimitive -> ExpressionLikeDialogueFaceProvider(json.asString.asExpressionLike())
             is JsonArray -> ExpressionLikeDialogueFaceProvider(json.asJsonArray.map { it.asString }.asExpressionLike())
             else -> {
                 val jsonObject = json.asJsonObject
                 if (jsonObject.get("type")?.asString == "player") {
-                    context.deserialize(json, PlayerDialogueFaceProvider::class.java)
+                    context.deserialize(json, PlayerDialogueFaceProvider.class)
                 } else {
-                    context.deserialize(json, ArtificialDialogueFaceProvider::class.java)
+                    context.deserialize(json, ArtificialDialogueFaceProvider.class)
                 }
             }
         }

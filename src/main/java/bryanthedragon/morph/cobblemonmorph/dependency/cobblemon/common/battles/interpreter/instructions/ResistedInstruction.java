@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Hunter
  * @since August 18th, 2022
  */
-class ResistedInstruction(
+public class ResistedInstruction(
     val publicMessage: BattleMessage,
     val instructionSet: InstructionSet,
 ) : InterpreterInstruction {

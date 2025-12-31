@@ -29,24 +29,24 @@ import org.joml.AxisAngle4d
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-interface ParticleCameraMode : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<ParticleCameraMode, ParticleCameraModeType>(
+public interface ParticleCameraMode : CodecMapped {
+    final class Companion : ArbitrarilyMappedSerializableCompanion<ParticleCameraMode, ParticleCameraModeType>(
         keyFromString = ParticleCameraModeType::valueOf,
         stringFromKey = { it.name },
         keyFromValue = { it.type }
     ) {
         init {
-            registerSubtype(ParticleCameraModeType.ROTATE_XYZ, RotateXYZCameraMode::class.java, RotateXYZCameraMode.CODEC)
-            registerSubtype(ParticleCameraModeType.ROTATE_Y, RotateYCameraMode::class.java, RotateYCameraMode.CODEC)
-            registerSubtype(ParticleCameraModeType.LOOK_AT_XYZ, LookAtXYZ::class.java, LookAtXYZ.CODEC)
-            registerSubtype(ParticleCameraModeType.LOOK_AT_Y, LookAtY::class.java, LookAtY.CODEC)
-            registerSubtype(ParticleCameraModeType.DIRECTION_X, DirectionX::class.java, DirectionX.CODEC)
-            registerSubtype(ParticleCameraModeType.DIRECTION_Y, DirectionY::class.java, DirectionY.CODEC)
-            registerSubtype(ParticleCameraModeType.DIRECTION_Z, DirectionZ::class.java, DirectionZ.CODEC)
-            registerSubtype(ParticleCameraModeType.LOOK_AT_DIRECTION, LookAtDirection::class.java, LookAtDirection.CODEC)
-            registerSubtype(ParticleCameraModeType.EMITTER_XZ_PLANE, EmitterXZPlane::class.java, EmitterXZPlane.CODEC)
-            registerSubtype(ParticleCameraModeType.EMITTER_XY_PLANE, EmitterXYPlane::class.java, EmitterXYPlane.CODEC)
-            registerSubtype(ParticleCameraModeType.EMITTER_YZ_PLANE, EmitterYZPlane::class.java, EmitterYZPlane.CODEC)
+            registerSubtype(ParticleCameraModeType.ROTATE_XYZ, RotateXYZCameraMode.class, RotateXYZCameraMode.CODEC)
+            registerSubtype(ParticleCameraModeType.ROTATE_Y, RotateYCameraMode.class, RotateYCameraMode.CODEC)
+            registerSubtype(ParticleCameraModeType.LOOK_AT_XYZ, LookAtXYZ.class, LookAtXYZ.CODEC)
+            registerSubtype(ParticleCameraModeType.LOOK_AT_Y, LookAtY.class, LookAtY.CODEC)
+            registerSubtype(ParticleCameraModeType.DIRECTION_X, DirectionX.class, DirectionX.CODEC)
+            registerSubtype(ParticleCameraModeType.DIRECTION_Y, DirectionY.class, DirectionY.CODEC)
+            registerSubtype(ParticleCameraModeType.DIRECTION_Z, DirectionZ.class, DirectionZ.CODEC)
+            registerSubtype(ParticleCameraModeType.LOOK_AT_DIRECTION, LookAtDirection.class, LookAtDirection.CODEC)
+            registerSubtype(ParticleCameraModeType.EMITTER_XZ_PLANE, EmitterXZPlane.class, EmitterXZPlane.CODEC)
+            registerSubtype(ParticleCameraModeType.EMITTER_XY_PLANE, EmitterXYPlane.class, EmitterXYPlane.CODEC)
+            registerSubtype(ParticleCameraModeType.EMITTER_YZ_PLANE, EmitterYZPlane.class, EmitterYZPlane.CODEC)
         }
     }
 
@@ -65,8 +65,8 @@ interface ParticleCameraMode : CodecMapped {
     ): Quaternionf
 }
 
-class RotateXYZCameraMode : ParticleCameraMode {
-    companion object {
+public class RotateXYZCameraMode : ParticleCameraMode {
+    final class Companion {
         val CODEC: Codec<RotateXYZCameraMode> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -94,13 +94,13 @@ class RotateXYZCameraMode : ParticleCameraMode {
         return q
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }
 
-class RotateYCameraMode : ParticleCameraMode {
-    companion object {
+public class RotateYCameraMode : ParticleCameraMode {
+    final class Companion {
         val CODEC: Codec<RotateYCameraMode> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -129,13 +129,13 @@ class RotateYCameraMode : ParticleCameraMode {
         return q2
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }
 
-class LookAtXYZ : ParticleCameraMode {
-    companion object {
+public class LookAtXYZ : ParticleCameraMode {
+    final class Companion {
         val CODEC: Codec<LookAtXYZ> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -144,9 +144,9 @@ class LookAtXYZ : ParticleCameraMode {
     }
 
     override val type = ParticleCameraModeType.LOOK_AT_XYZ
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 
     override fun getRotation(
         matrixWrapper: MatrixWrapper,
@@ -169,9 +169,9 @@ class LookAtXYZ : ParticleCameraMode {
     }
 }
 
-class LookAtY : ParticleCameraMode {
+public class LookAtY : ParticleCameraMode {
     override val type: ParticleCameraModeType = ParticleCameraModeType.LOOK_AT_Y
-    companion object {
+    final class Companion {
         val CODEC: Codec<LookAtY> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -196,13 +196,13 @@ class LookAtY : ParticleCameraMode {
         return q2
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }
-class DirectionZ : ParticleCameraMode {
+public class DirectionZ : ParticleCameraMode {
     override val type: ParticleCameraModeType = ParticleCameraModeType.DIRECTION_Z
-    companion object {
+    final class Companion {
         val CODEC: Codec<DirectionZ> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -230,14 +230,14 @@ class DirectionZ : ParticleCameraMode {
         return rotation
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }
 
-class EmitterYZPlane : ParticleCameraMode {
+public class EmitterYZPlane : ParticleCameraMode {
     override val type: ParticleCameraModeType = ParticleCameraModeType.EMITTER_YZ_PLANE
-    companion object {
+    final class Companion {
         val CODEC: Codec<EmitterYZPlane> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -268,15 +268,15 @@ class EmitterYZPlane : ParticleCameraMode {
         return rotation
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 
 }
 
-class EmitterXZPlane : ParticleCameraMode {
+public class EmitterXZPlane : ParticleCameraMode {
     override val type: ParticleCameraModeType = ParticleCameraModeType.EMITTER_XZ_PLANE
-    companion object {
+    final class Companion {
         val CODEC: Codec<EmitterXZPlane> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -306,15 +306,15 @@ class EmitterXZPlane : ParticleCameraMode {
         return rotation
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 
 }
 
-class EmitterXYPlane : ParticleCameraMode {
+public class EmitterXYPlane : ParticleCameraMode {
     override val type: ParticleCameraModeType = ParticleCameraModeType.EMITTER_XY_PLANE
-    companion object {
+    final class Companion {
         val CODEC: Codec<EmitterXYPlane> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -345,14 +345,14 @@ class EmitterXYPlane : ParticleCameraMode {
         return rotation
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 
 }
-class DirectionY : ParticleCameraMode {
+public class DirectionY : ParticleCameraMode {
     override val type: ParticleCameraModeType = ParticleCameraModeType.DIRECTION_Y
-    companion object {
+    final class Companion {
         val CODEC: Codec<DirectionY> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -380,14 +380,14 @@ class DirectionY : ParticleCameraMode {
         return rotation
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }
 
-class DirectionX : ParticleCameraMode {
+public class DirectionX : ParticleCameraMode {
     override val type: ParticleCameraModeType = ParticleCameraModeType.DIRECTION_X
-    companion object {
+    final class Companion {
         val CODEC: Codec<DirectionX> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -415,9 +415,9 @@ class DirectionX : ParticleCameraMode {
         return rotation
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }
 
 /**
@@ -443,9 +443,9 @@ class DirectionX : ParticleCameraMode {
  * @author Hiroku
  * @since June 29th, 2023
  */
-class LookAtDirection : ParticleCameraMode {
+public class LookAtDirection : ParticleCameraMode {
     override val type: ParticleCameraModeType = ParticleCameraModeType.LOOK_AT_DIRECTION
-    companion object {
+    final class Companion {
         val CODEC: Codec<LookAtDirection> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -503,11 +503,11 @@ class LookAtDirection : ParticleCameraMode {
         return rotation
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {}
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {}
 }
-enum class ParticleCameraModeType {
+public enum ParticleCameraModeType {
     ROTATE_XYZ,
     ROTATE_Y,
     LOOK_AT_XYZ,

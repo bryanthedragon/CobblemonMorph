@@ -25,11 +25,11 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since May 7th, 2023
  */
-class EitherIdentifierOrTagAdapter<E, T : Registry<E>>(val resourceKey: ResourceKey<T>) : JsonDeserializer<Either<ResourceLocation, TagKey<E>>> {
+public class EitherIdentifierOrTagAdapter<E, T : Registry<E>>(val resourceKey: ResourceKey<T>) : JsonDeserializer<Either<ResourceLocation, TagKey<E>>> {
     override fun deserialize(
-        element: JsonElement,
-        type: Type,
-        ctx: JsonDeserializationContext
+        JsonElement jElement,
+        Type type,
+        JsonDeserializationContext ctx
     ): Either<ResourceLocation, TagKey<E>> {
         val string = element.asString
         return if (string.startsWith("#")) {

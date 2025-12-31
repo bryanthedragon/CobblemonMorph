@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Hiroku
  * @since October 3rd, 2022
  */
-class ImmuneInstruction(val message: BattleMessage): InterpreterInstruction {
+public class ImmuneInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting {

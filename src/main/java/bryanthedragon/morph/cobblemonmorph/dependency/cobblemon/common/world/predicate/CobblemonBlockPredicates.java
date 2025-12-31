@@ -14,7 +14,7 @@ import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType
-final class CobblemonBlockPredicates {
+public final class CobblemonBlockPredicates {
     @JvmField
     val ALTITUDE = register("altitude", AltitudePredicate.CODEC)
     val BIOME = register("biome", BiomePredicate.CODEC)

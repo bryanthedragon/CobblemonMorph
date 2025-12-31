@@ -36,12 +36,12 @@ import net.minecraft.resources.ResourceLocation
  * @author Renaissance
  * @since March 24th, 2023
  */
-class PrepareInstruction(val message: BattleMessage): ActionEffectInstruction {
+public class PrepareInstruction(val message: BattleMessage): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
     override var holds = mutableSetOf<String>()
     override val id = cobblemonResource("prepare")
 
-    override fun addMolangQueries(runtime: MoLangRuntime) {
+    override fun addMolangQueries(MoLangRuntime runtime) {
         super.addMolangQueries(runtime)
         runtime.environment.query.addBattleMessageFunctions(message)
     }
@@ -58,7 +58,7 @@ class PrepareInstruction(val message: BattleMessage): ActionEffectInstruction {
         }
     }
 
-    override fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime) {
+    override fun runActionEffect(battle: PokemonBattle, MoLangRuntime runtime) {
         val effect = message.effectAt(1)
         val battlePokemon = message.battlePokemon(0, battle) ?: return
         battle.dispatch {

@@ -25,7 +25,8 @@ import net.minecraft.world.phys.Vec3
 
 /**
  * @author landonjw
- */final class MountedPlayerRenderer {
+ */
+public final class MountedPlayerRenderer {
     @JvmField
     var shouldApplyRootAnimation = false
 

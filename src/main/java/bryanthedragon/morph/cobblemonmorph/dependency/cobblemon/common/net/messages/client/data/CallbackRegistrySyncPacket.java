@@ -25,20 +25,20 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since February 24th, 2024
  */
-class CallbackRegistrySyncPacket(entries: Collection<Map.Entry<ResourceLocation, List<ExpressionLike>>>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, List<ExpressionLike>>, CallbackRegistrySyncPacket>(entries){
-    companion object {
+public class CallbackRegistrySyncPacket(entries: Collection<Map.Entry<ResourceLocation, List<ExpressionLike>>>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, List<ExpressionLike>>, CallbackRegistrySyncPacket>(entries){
+    final class Companion {
         val ID = cobblemonResource("callback_registry_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf): CallbackRegistrySyncPacket = CallbackRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer): CallbackRegistrySyncPacket = CallbackRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<ResourceLocation, List<ExpressionLike>>) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Map.Entry<ResourceLocation, List<ExpressionLike>>) {
         buffer.writeIdentifier(entry.key)
         buffer.writeCollection(entry.value) { _, expression -> buffer.writeString(expression.toString()) }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<ResourceLocation, List<ExpressionLike>> {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Map.Entry<ResourceLocation, List<ExpressionLike>> {
         val key = buffer.readIdentifier()
         val value = buffer.readList { buffer.readString().asExpressionLike() }
         return object : Map.Entry<ResourceLocation, List<ExpressionLike>> {

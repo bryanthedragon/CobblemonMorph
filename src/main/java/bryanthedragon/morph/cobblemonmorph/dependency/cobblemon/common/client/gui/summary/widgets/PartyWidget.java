@@ -25,7 +25,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.sounds.SoundEvent
 import java.security.InvalidParameterException
 
-class PartyWidget(
+public class PartyWidget(
     pX: Int,
     pY: Int,
     val isParty: Boolean,
@@ -33,7 +33,7 @@ class PartyWidget(
     private val partyList: List<Pokemon?>
 ) : SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("PartyOverlay")) {
 
-    companion object {
+    final class Companion {
         const val WIDTH = 114
         const val HEIGHT = 113
         private const val SCALE = 0.5F
@@ -44,7 +44,7 @@ class PartyWidget(
         private val swapButtonIconResource = cobblemonResource("textures/gui/summary/summary_party_swap_icon.png")
     }
 
-    var swapEnabled: Boolean = false
+    var swapBoolean enabled = false
     var swapSource: Int? = null
     var draggedSlot: PartySlotWidget? = null
 
@@ -213,7 +213,7 @@ class PartyWidget(
         return -1
     }
 
-    fun playSound(soundEvent: SoundEvent) {
+    fun playSound(SoundEvent soundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 

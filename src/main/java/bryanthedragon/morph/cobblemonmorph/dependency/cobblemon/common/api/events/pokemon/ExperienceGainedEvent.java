@@ -22,15 +22,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Hiroku
  * @since August 5th, 2022
  */
-interface ExperienceGainedEvent {
+public interface ExperienceGainedEvent {
     /**
      * The [Pokemon] gaining experience.
      */
-    val pokemon: Pokemon
+    val Pokemon pokemon
     /**
      * The source of the experience being gained.
      */
-    val source: ExperienceSource
+    val ExperienceSource source
     /**
      * The amount of experience being gained.
      */
@@ -44,8 +44,8 @@ interface ExperienceGainedEvent {
      * @since August 5th, 2022
      */
     record Pre(
-        override val pokemon: Pokemon,
-        override val source: ExperienceSource,
+        override val Pokemon pokemon,
+        override val ExperienceSource source,
         override var experience: Int
     ) : ExperienceGainedEvent, Cancelable() {
         val context = mutableMapOf(
@@ -78,8 +78,8 @@ interface ExperienceGainedEvent {
      * @since August 5th, 2022
      */
     record Post(
-        override val pokemon: Pokemon,
-        override val source: ExperienceSource,
+        override val Pokemon pokemon,
+        override val ExperienceSource source,
         override var experience: Int,
         val previousLevel: Int,
         val currentLevel: Int,

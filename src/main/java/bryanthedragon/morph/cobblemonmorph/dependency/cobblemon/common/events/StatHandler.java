@@ -45,7 +45,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import java.util.UUID
-final class StatHandler : EventHandler {
+public final class StatHandler : EventHandler {
     override fun registerListeners() {
         POKEMON_CAPTURED.subscribe(Priority.NORMAL, ::onCapture)
         POKEMON_RELEASED_EVENT_POST.subscribe(Priority.NORMAL, ::onRelease)

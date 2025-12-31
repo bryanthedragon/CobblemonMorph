@@ -16,9 +16,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.ServerboundUpdateRidingStatRangePacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class ServerboundUpdateRidingStatRangeHandler : ServerNetworkPacketHandler<ServerboundUpdateRidingStatRangePacket> {
+public final class ServerboundUpdateRidingStatRangeHandler : ServerNetworkPacketHandler<ServerboundUpdateRidingStatRangePacket> {
 
-    override fun handle(packet: ServerboundUpdateRidingStatRangePacket, server: MinecraftServer, player: ServerPlayer) {
+    override fun handle(packet: ServerboundUpdateRidingStatRangePacket, server: MinecraftServer, ServerPlayer player) {
         if (!Cobblemon.config.enableDebugKeys) return
         if (!Cobblemon.permissionValidator.hasPermission(player, USE_RIDING_STATS_DEBUG)) return
 

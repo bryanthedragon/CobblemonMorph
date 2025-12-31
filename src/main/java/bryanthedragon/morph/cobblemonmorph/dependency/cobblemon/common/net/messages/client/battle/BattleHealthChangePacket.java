@@ -22,16 +22,16 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since June 5th, 2022
  */
-class BattleHealthChangePacket(val pnx: String, val newHealth: Float, val newMaxHealth: Float? = null) : NetworkPacket<BattleHealthChangePacket> {
+public class BattleHealthChangePacket(val pnx: String, val newHealth: Float, val newMaxHealth: Float? = null) : NetworkPacket<BattleHealthChangePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(pnx)
         buffer.writeFloat(newHealth)
         buffer.writeNullable(newMaxHealth) { _, newMaxHealth -> buffer.writeFloat(newMaxHealth) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_health_change")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleHealthChangePacket(buffer.readString(), buffer.readFloat(), buffer.readNullable { buffer.readFloat() })
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleHealthChangePacket(buffer.readString(), buffer.readFloat(), buffer.readNullable { buffer.readFloat() })
     }
 }

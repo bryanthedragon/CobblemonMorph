@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack
  * @author Hiroku
  * @since August 5th, 2022
  */
-interface ExperienceSource {
+public interface ExperienceSource {
     fun isBattle() = this is BattleExperienceSource
     fun isInteraction() = this is CandyExperienceSource
     fun isCommand() = this is CommandExperienceSource
@@ -28,12 +28,12 @@ interface ExperienceSource {
 }
 
 open class SidemodExperienceSource(
-    val sidemodId: String
+    val sideString modId
 ) : ExperienceSource
 
 open class CandyExperienceSource(
-    val player: ServerPlayer,
-    val stack: ItemStack
+    val ServerPlayer player,
+    val ItemStack stack
 ) : ExperienceSource
 
 open class CommandExperienceSource(

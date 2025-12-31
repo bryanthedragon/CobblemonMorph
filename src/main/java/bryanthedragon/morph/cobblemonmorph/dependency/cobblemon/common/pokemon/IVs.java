@@ -18,16 +18,16 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 
-class IVs : PokemonStats() {
+public class IVs : PokemonStats() {
     override val acceptableRange = 0..MAX_VALUE
     override val defaultValue = 0
     val hyperTrainedIVs = mutableMapOf<Stat, Int>()
 
-    fun isHyperTrained(stat: Stat): Boolean {
+    fun isHyperTrained(Stat stat ): Boolean {
         return hyperTrainedIVs.containsKey(stat)
     }
 
-    fun setHyperTrainedIV(stat: Stat, value: Int) {
+    fun setHyperTrainedIV(Stat stat , Int value) {
         if (value in acceptableRange) {
             if(value == this[stat]) {
                 //not hypertrained any more if it ends up being the same as natural IV
@@ -44,7 +44,7 @@ class IVs : PokemonStats() {
     }
 
     // Used to get the value that should be used for stat calculation.
-    fun getEffectiveBattleIV(stat: Stat): Int {
+    fun getEffectiveBattleIV(Stat stat ): Int {
         return (this.hyperTrainedIVs[stat] ?: this[stat]) as Int
     }
 
@@ -56,7 +56,7 @@ class IVs : PokemonStats() {
         return total
     }
 
-    companion object {
+    final class Companion {
         const val MAX_VALUE = 31
         const val MAX_TOTAL = 186
 

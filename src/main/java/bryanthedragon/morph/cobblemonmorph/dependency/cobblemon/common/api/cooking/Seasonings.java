@@ -31,21 +31,21 @@ import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-final class Seasonings : JsonDataRegistry<Seasoning> {
+public final class Seasonings : JsonDataRegistry<Seasoning> {
     override val id = cobblemonResource("seasonings")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<Seasonings>()
-    override val typeToken: TypeToken<Seasoning> = TypeToken.get(Seasoning::class.java)
+    override val typeToken: TypeToken<Seasoning> = TypeToken.get(Seasoning.class)
     override val resourcePath = "seasonings"
-    override val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
+    override val Gson gson = GsonBuilder()
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Item.class).type, ItemLikeConditionAdapter)
         .setPrettyPrinting()
         .create()
 
     val seasonings = mutableListOf<Seasoning>()
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         SeasoningRegistrySyncPacket(seasonings.toList()).sendToPlayer(player)
     }
 
@@ -70,7 +70,7 @@ final class Seasonings : JsonDataRegistry<Seasoning> {
         this.seasonings.addAll(seasonings)
     }
 
-    fun getFlavoursFromItemStack(stack: ItemStack): Map<Flavour, Int>? {
+    fun getFlavoursFromItemStack(ItemStack stack): Map<Flavour, Int>? {
         val holder = stack.itemHolder
         val seasoning = seasonings.find { it.ingredient.fits(holder) }
         val inherentFlavours = stack.get(CobblemonItemComponents.FLAVOUR)?.flavours
@@ -84,29 +84,29 @@ final class Seasonings : JsonDataRegistry<Seasoning> {
         }
     }
 
-    fun hasFlavors(stack: ItemStack): Boolean {
+    fun hasFlavors(ItemStack stack): Boolean {
         val flavors = getFlavoursFromItemStack(stack)
         return !flavors.isNullOrEmpty() && flavors.any { it.value != 0 }
     }
 
-    fun getFoodComponentFromItemStack(stack: ItemStack): FoodComponent? {
+    fun getFoodComponentFromItemStack(ItemStack stack): FoodComponent? {
         return getFromItemStack(stack)?.food?.toComponent()
     }
 
-    fun hasFood(stack: ItemStack): Boolean {
+    fun hasFood(ItemStack stack): Boolean {
         val effects = getFromItemStack(stack)?.food ?: return false
         return effects.hunger > 0 || effects.saturation > 0f
     }
 
-    fun getMobEffectsFromItemStack(stack: ItemStack): List<SerializableMobEffectInstance> {
+    fun getMobEffectsFromItemStack(ItemStack stack): List<SerializableMobEffectInstance> {
         return getFromItemStack(stack)?.mobEffects ?: emptyList()
     }
 
-    fun hasMobEffect(stack: ItemStack): Boolean {
+    fun hasMobEffect(ItemStack stack): Boolean {
         return !getFromItemStack(stack)?.mobEffects.isNullOrEmpty()
     }
 
-    fun getBaitEffectsFromItemStack(stack: ItemStack): List<SpawnBait.Effect> {
+    fun getBaitEffectsFromItemStack(ItemStack stack): List<SpawnBait.Effect> {
         val primaryEffects = SpawnBaitEffects.getEffectsFromItemStack(stack)
         return if (primaryEffects.isNotEmpty()) {
             primaryEffects
@@ -115,15 +115,15 @@ final class Seasonings : JsonDataRegistry<Seasoning> {
         }
     }
 
-    fun hasBaitEffects(stack: ItemStack): Boolean {
+    fun hasBaitEffects(ItemStack stack): Boolean {
         return SpawnBaitEffects.getEffectsFromItemStack(stack).isNotEmpty() ||
                !(getFromItemStack(stack)?.baitEffects.isNullOrEmpty())
     }
 
-    fun getFromItemStack(stack: ItemStack): Seasoning? {
+    fun getFromItemStack(ItemStack stack): Seasoning? {
         val holder = stack.itemHolder
         return seasonings.find { it.ingredient.fits(holder) }
     }
 
-    fun isSeasoning(stack: ItemStack) = getFromItemStack(stack) != null
+    fun isSeasoning(ItemStack stack) = getFromItemStack(stack) != null
 }

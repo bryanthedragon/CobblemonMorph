@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class GrotleModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+public class GrotleModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("grotle")
     override val head = getPart("head")
     override val hindLeftLeg = getPart("leg_back_left")

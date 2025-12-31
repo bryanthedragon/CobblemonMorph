@@ -11,8 +11,8 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItemComponents
 import net.minecraft.client.color.item.ItemColor
 import net.minecraft.world.item.ItemStack
-final class PokeBaitItemColorProvider : ItemColor {
-    override fun getColor(stack: ItemStack, layer: Int): Int {
+public final class PokeBaitItemColorProvider : ItemColor {
+    override fun getColor(ItemStack stack, layer: Int): Int {
         val colourComponent = stack.get(CobblemonItemComponents.FOOD_COLOUR) ?: return -1
 
         val primaryColor = colourComponent.colours.getOrNull(0)

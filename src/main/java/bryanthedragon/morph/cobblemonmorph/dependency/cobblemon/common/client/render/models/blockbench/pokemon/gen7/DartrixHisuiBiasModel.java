@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class DartrixHisuiBiasModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BiWingedFrame {
+public class DartrixHisuiBiasModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BiWingedFrame {
     override val rootPart = root.registerChildWithAllChildren("dartrix_hisui_bias")
 
     private val wingsOpen = getPart("wings_open")

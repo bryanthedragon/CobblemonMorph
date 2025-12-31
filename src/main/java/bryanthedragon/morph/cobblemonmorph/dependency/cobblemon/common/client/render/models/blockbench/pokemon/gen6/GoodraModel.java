@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class GoodraModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame, HeadedFrame {
+public class GoodraModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame, HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("goodra")
     override val head = getPart("head_ai")
 

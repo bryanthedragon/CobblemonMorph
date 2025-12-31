@@ -24,11 +24,12 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Hiroku
  * @since July 2nd, 2023
- */final class PasturePermissionControllers {
+ */
+public final class PasturePermissionControllers {
     val controllers = PrioritizedList<PasturePermissionController>()
 
     @JvmStatic
-    fun permit(player: ServerPlayer, pastureBlockEntity: PokemonPastureBlockEntity): PasturePermissions {
+    fun permit(ServerPlayer player, pastureBlockEntity: PokemonPastureBlockEntity): PasturePermissions {
         return controllers.firstNotNullOfOrNull { it.permit(player, pastureBlockEntity) }
             ?: PasturePermissions(
                 canUnpastureOthers = true,

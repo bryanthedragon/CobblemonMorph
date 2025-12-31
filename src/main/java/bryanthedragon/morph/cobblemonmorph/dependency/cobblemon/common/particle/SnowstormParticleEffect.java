@@ -11,6 +11,6 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.particle
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.snowstorm.BedrockParticleOptions
 import net.minecraft.core.particles.ParticleOptions
 
-class SnowstormParticleOptions(val effect: BedrockParticleOptions) : ParticleOptions {
+public class SnowstormParticleOptions(val effect: BedrockParticleOptions) : ParticleOptions {
     override fun getType() = CobblemonParticles.SNOWSTORM_PARTICLE_TYPE
 }

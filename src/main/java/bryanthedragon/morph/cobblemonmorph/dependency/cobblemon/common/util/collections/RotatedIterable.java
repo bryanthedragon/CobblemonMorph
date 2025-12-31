@@ -13,7 +13,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.col
  *
  * e.g. a list [0, 1, 2, 3] with a startAt of 2 will be iterated over as if the list read [2, 3, 0, 1]
  */
-class RotatedIterable<out T>: Iterable<T> {
+public class RotatedIterable<out T>: Iterable<T> {
     private val iter: RotatedListIterator<T>
 
     constructor(list: List<T>, startAt: Int) {

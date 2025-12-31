@@ -25,14 +25,14 @@ import java.util.UUID
  * @author Village
  * @since January 7th, 2023
  */
-class InteractPokemonPacket(val pokemonID: UUID, val interactType: InteractTypePokemon) : NetworkPacket<InteractPokemonPacket> {
+public class InteractPokemonPacket(val UUID pokemonId, val interactType: InteractTypePokemon) : NetworkPacket<InteractPokemonPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(pokemonID)
         buffer.writeEnumConstant(interactType)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("interact_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = InteractPokemonPacket(buffer.readUUID(), buffer.readEnumConstant(InteractTypePokemon::class.java))
+        fun decode(RegistryFriendlyByteBuf buffer) = InteractPokemonPacket(buffer.readUUID(), buffer.readEnumConstant(InteractTypePokemon.class))
     }
 }

@@ -37,10 +37,10 @@ import net.minecraft.world.level.block.state.BlockState
  */
 record BerryHarvestEvent(
     override val berry: Berry,
-    val player: ServerPlayer,
-    val world: Level,
-    val pos: BlockPos,
-    val state: BlockState,
+    val ServerPlayer player,
+    val Level world,
+    val (BlockPos pos,
+    val BlockState state,
     val blockEntity: BerryBlockEntity,
     val drops: MutableList<ItemStack>
 ) : BerryEvent {

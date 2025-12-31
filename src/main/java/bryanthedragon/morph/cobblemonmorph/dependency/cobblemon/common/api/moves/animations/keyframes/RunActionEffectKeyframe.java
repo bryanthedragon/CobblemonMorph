@@ -21,7 +21,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since January 21st, 2024
  */
-class RunActionEffectKeyframe : ConditionalActionEffectKeyframe() {
+public class RunActionEffectKeyframe : ConditionalActionEffectKeyframe() {
     val actionEffect: ResourceLocation? = null
     val waitForActionEffect = true
     override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {

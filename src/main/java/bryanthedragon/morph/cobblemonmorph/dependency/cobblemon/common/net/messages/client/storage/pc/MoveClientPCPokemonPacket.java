@@ -25,11 +25,11 @@ import java.util.UUID
  * @author Hiroku
  * @since June 18th, 2022
  */
-class MoveClientPCPokemonPacket(storeID: UUID, pokemonID: UUID, newPosition: PCPosition) : MoveClientPokemonPacket<PCPosition, MoveClientPCPokemonPacket>(storeID, pokemonID, newPosition) {
+public class MoveClientPCPokemonPacket(UUID storeID, UUID pokemonId, newPosition: PCPosition) : MoveClientPokemonPacket<PCPosition, MoveClientPCPokemonPacket>(storeID, pokemonID, newPosition) {
     override val id = ID
-    override fun encodePosition(buffer: RegistryFriendlyByteBuf, position: PCPosition) = buffer.writePCPosition(position)
-    companion object {
+    override fun encodePosition(RegistryFriendlyByteBuf buffer, position: PCPosition) = buffer.writePCPosition(position)
+    final class Companion {
         val ID = cobblemonResource("move_client_pc_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = MoveClientPCPokemonPacket(buffer.readUUID(), buffer.readUUID(), buffer.readPCPosition())
+        fun decode(RegistryFriendlyByteBuf buffer) = MoveClientPCPokemonPacket(buffer.readUUID(), buffer.readUUID(), buffer.readPCPosition())
     }
 }

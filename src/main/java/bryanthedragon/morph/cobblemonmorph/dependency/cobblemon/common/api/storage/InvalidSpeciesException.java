@@ -16,4 +16,4 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since October 9th, 2023
  */
-class InvalidSpeciesException(val identifier: ResourceLocation) : IllegalStateException("Invalid species: $identifier")
+public class InvalidSpeciesException(val ResourceLocation identifier) : IllegalStateException("Invalid species: $identifier")

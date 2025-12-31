@@ -6,11 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import net.minecraft.world.entity.LivingEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import net.minecraft.world.entity.LivingEntity;
 
 /**
  * An [Requirement] that expects a [LivingEntity] to be attached to the [Pokemon].
@@ -21,10 +21,10 @@ import net.minecraft.world.entity.LivingEntity
  * @author Licious
  * @since March 21st, 2022
  */
-interface EntityQueryRequirement : Requirement {
-    override fun check(pokemon: Pokemon): Boolean {
-        val queriedEntity = pokemon.entity ?: pokemon.getOwnerPlayer() ?: return false
-        return this.check(pokemon, queriedEntity)
+public interface EntityQueryRequirement extends Requirement {
+    boolean check(Pokemon pokemon) {
+        val queriedEntity = pokemon.entity ?: pokemon.getOwnerPlayer() ?: return false;
+        return this.check(pokemon, queriedEntity);
     }
 
     /**
@@ -34,5 +34,5 @@ interface EntityQueryRequirement : Requirement {
      * @param queriedEntity The [LivingEntity] that can be compared in context of a [Level].
      * @return If the requirement was satisfied.
      */
-    fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean
+    boolean check(Pokemon pokemon, LivingEntity queriedEntity);
 }

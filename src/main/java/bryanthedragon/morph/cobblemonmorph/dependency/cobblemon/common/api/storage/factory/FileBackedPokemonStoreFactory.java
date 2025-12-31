@@ -61,16 +61,16 @@ open class FileBackedPokemonStoreFactory<S>(
 
     private val dirtyStores = mutableSetOf<PokemonStore<*>>()
 
-    override fun getPlayerParty(playerID: UUID, registryAccess: RegistryAccess) = getStore(PlayerPartyStore::class.java, playerID, registryAccess, partyConstructor)
-    override fun getPC(playerID: UUID, registryAccess: RegistryAccess) = getStore(PCStore::class.java, playerID, registryAccess, pcConstructor)
+    override fun getPlayerParty(playerID: UUID, RegistryAccess registryAccess) = getStore(PlayerPartyStore.class, playerID, registryAccess, partyConstructor)
+    override fun getPC(playerID: UUID, RegistryAccess registryAccess) = getStore(PCStore.class, playerID, registryAccess, pcConstructor)
 
-    override fun <E : StorePosition, T : PokemonStore<E>> getCustomStore(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess) = getStore(storeClass, uuid, registryAccess)
+    override fun <E : StorePosition, T : PokemonStore<E>> getCustomStore(storeClass: Class<T>, UUID uuid, RegistryAccess registryAccess) = getStore(storeClass, uuid, registryAccess)
 
     fun <E : StorePosition, T : PokemonStore<E>> getStore(
         storeClass: Class<T>,
-        uuid: UUID,
-        registryAccess: RegistryAccess,
-        constructor: ((UUID) -> T) = { storeClass.getConstructor(UUID::class.java).newInstance(it) }
+        UUID uuid,
+        RegistryAccess registryAccess,
+        constructor: ((UUID) -> T) = { storeClass.getConstructor(UUID.class).newInstance(it) }
     ): T? {
         val cache = getStoreCache(storeClass).cacheMap
         val cached = cache[uuid]
@@ -94,15 +94,15 @@ open class FileBackedPokemonStoreFactory<S>(
         }
     }
 
-    fun save(store: PokemonStore<*>, registryAccess: RegistryAccess) {
-        val serialized = SerializedStore(store::class.java, store.uuid, adapter.serialize(store, registryAccess))
+    fun save(store: PokemonStore<*>, RegistryAccess registryAccess) {
+        val serialized = SerializedStore(store.class, store.uuid, adapter.serialize(store, registryAccess))
         dirtyStores.remove(store)
         saveExecutor.execute { adapter.save(serialized.storeClass, serialized.uuid, serialized.serializedForm) }
     }
 
-    fun saveAll(registryAccess: RegistryAccess) {
+    fun saveAll(RegistryAccess registryAccess) {
         LOGGER.debug("Serializing ${dirtyStores.size} Pokémon stores.")
-        val serializedStores = dirtyStores.map { SerializedStore(it::class.java, it.uuid, adapter.serialize(it, registryAccess)) }
+        val serializedStores = dirtyStores.map { SerializedStore(it.class, it.uuid, adapter.serialize(it, registryAccess)) }
         dirtyStores.clear()
         LOGGER.debug("Queueing save.")
         saveExecutor.execute {
@@ -111,7 +111,7 @@ open class FileBackedPokemonStoreFactory<S>(
         }
     }
 
-    fun isCached(store: PokemonStore<*>) = storeCaches[store::class.java]?.cacheMap?.containsKey(store.uuid) == true
+    fun isCached(store: PokemonStore<*>) = storeCaches[store.class]?.cacheMap?.containsKey(store.uuid) == true
 
     fun track(store: PokemonStore<*>) {
         store.getAnyChangeObservable()
@@ -119,14 +119,14 @@ open class FileBackedPokemonStoreFactory<S>(
             .subscribeOnServer { dirtyStores.add(store) }
     }
 
-    override fun shutdown(registryAccess: RegistryAccess) {
+    override fun shutdown(RegistryAccess registryAccess) {
         saveSubscription.unsubscribe()
         saveAll(registryAccess)
         saveExecutor.shutdown()
         saveExecutor.awaitTermination(30L, TimeUnit.SECONDS)
     }
 
-    override fun onPlayerDisconnect(player: ServerPlayer) {
+    override fun onPlayerDisconnect(ServerPlayer player) {
         dirtyStores.filter { it.uuid == player.uuid }.forEach { save(it, player.registryAccess()) }
         storeCaches.forEach { (_, cache) -> cache.cacheMap.remove(player.uuid) }
     }

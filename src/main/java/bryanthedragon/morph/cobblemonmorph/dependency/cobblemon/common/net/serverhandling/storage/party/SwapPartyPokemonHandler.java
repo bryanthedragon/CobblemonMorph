@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class SwapPartyPokemonHandler : ServerNetworkPacketHandler<SwapPartyPokemonPacket> {
-    override fun handle(packet: SwapPartyPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class SwapPartyPokemonHandler : ServerNetworkPacketHandler<SwapPartyPokemonPacket> {
+    override fun handle(packet: SwapPartyPokemonPacket, server: MinecraftServer, ServerPlayer player) {
         val party = player.party()
         val pokemon1 = party[packet.position1] ?: return
         val pokemon2 = party[packet.position2] ?: return

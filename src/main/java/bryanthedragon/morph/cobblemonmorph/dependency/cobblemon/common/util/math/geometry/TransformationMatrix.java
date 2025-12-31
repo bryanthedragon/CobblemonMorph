@@ -39,7 +39,7 @@ record TransformationMatrix internal constructor(val values: ImmutableArray<Immu
         """.trimIndent()
     }
 
-    companion object {
+    final class Companion {
 
         /**
          * Gets the [identity matrix](https://en.wikipedia.org/wiki/Identity_matrix) for a matrix of size 4x4.

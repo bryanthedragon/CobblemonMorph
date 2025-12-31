@@ -24,7 +24,7 @@ import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.server.level.ServerPlayer
 import java.util.concurrent.CompletableFuture
 
-class PartySlotArgumentType : ArgumentType<Int> {
+public class PartySlotArgumentType : ArgumentType<Int> {
 
     override fun parse(reader: StringReader): Int {
         val slot = reader.readInt()
@@ -40,7 +40,7 @@ class PartySlotArgumentType : ArgumentType<Int> {
 
     override fun getExamples() = EXAMPLES
 
-    companion object {
+    final class Companion {
 
         private const val MIN = 1
         private const val MAX = 6
@@ -49,16 +49,16 @@ class PartySlotArgumentType : ArgumentType<Int> {
 
         fun partySlot() = PartySlotArgumentType()
 
-        fun <S> getPokemon(context: CommandContext<S>, name: String): Pokemon {
-            val slot = context.getArgument(name, Int::class.java)
+        fun <S> getPokemon(context: CommandContext<S>, String name): Pokemon {
+            val slot = context.getArgument(name, Int.class)
             val source = context.source as? CommandSourceStack ?: throw CommandSourceStack.ERROR_NOT_PLAYER.create()
             val player = source.entity as? ServerPlayer ?: throw CommandSourceStack.ERROR_NOT_PLAYER.create()
             val party = Cobblemon.storage.getParty(player)
             return party.get(slot - 1) ?: throw INVALID_SLOT.create(slot)
         }
 
-        fun <S> getPokemonOf(context: CommandContext<S>, name: String, player: ServerPlayer): Pokemon {
-            val slot = context.getArgument(name, Int::class.java)
+        fun <S> getPokemonOf(context: CommandContext<S>, String name, ServerPlayer player): Pokemon {
+            val slot = context.getArgument(name, Int.class)
             val party = Cobblemon.storage.getParty(player)
             return party.get(slot - 1) ?: throw INVALID_SLOT.create(slot)
         }

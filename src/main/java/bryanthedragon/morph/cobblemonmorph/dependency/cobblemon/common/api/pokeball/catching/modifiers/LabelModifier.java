@@ -22,7 +22,7 @@ import net.minecraft.world.entity.LivingEntity
  * @property matching Will this multiplier should be applied if the labels match?
  * @property labels The literal labels being queried.
  */
-class LabelModifier(
+public class LabelModifier(
     val multiplier: Float,
     val matching: Boolean,
     vararg val labels: String
@@ -30,12 +30,12 @@ class LabelModifier(
 
     override fun isGuaranteed(): Boolean = false
 
-    override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = this.multiplier
+    override fun value(LivingEntity thrower, Pokemon pokemon): Float = this.multiplier
 
-    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
+    override fun behavior(LivingEntity thrower, Pokemon pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
 
-    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean = if (this.matching) pokemon.hasLabels(*this.labels) else !pokemon.hasLabels(*this.labels)
+    override fun isValid(LivingEntity thrower, Pokemon pokemon): Boolean = if (this.matching) pokemon.hasLabels(*this.labels) else !pokemon.hasLabels(*this.labels)
 
-    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
+    override fun modifyCatchRate(currentFloat catchRate, LivingEntity thrower, Pokemon pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
 
 }

@@ -34,20 +34,20 @@ import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class PartySlotButton(
+public class PartySlotButton(
     x: Int, y: Int,
-    val pokemon: PokemonProperties,
+    val Pokemon pokemonProperties,
     val aspects: Set<String>,
     val currentHealth: Int,
     val maxHealth: Int,
     val heldItem: ItemStack,
-    val enabled: Boolean = true,
+    val Boolean enabled = true,
     val hoverText: List<Component>,
     val parent: PartySelectGUI,
     onPress: OnPress
 ) : Button(x, y, WIDTH, HEIGHT, Component.literal("Pokemon"), onPress, CreateNarration { "".text() }), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private val slotResource = cobblemonResource("textures/gui/interact/party_select_slot.png")
         private val slotFaintedResource = cobblemonResource("textures/gui/interact/party_select_slot_fainted.png")
 

@@ -15,7 +15,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.poke
  *
  * @property showdownID used for data synchronization with Showdown data format.
  */
-enum class EggGroup(val showdownID: String) {
+public enum EggGroup(val String showdownId) {
 
     MONSTER("Monster"),
     WATER_1("Water 1"),
@@ -33,7 +33,7 @@ enum class EggGroup(val showdownID: String) {
     DRAGON("Dragon"),
     UNDISCOVERED("Undiscovered");
 
-    companion object {
+    final class Companion {
         private val identifierMap: Map<String, EggGroup> = entries.associateBy {
             it.showdownID.lowercase().replace(" ", "_").replace("-", "_")
         }

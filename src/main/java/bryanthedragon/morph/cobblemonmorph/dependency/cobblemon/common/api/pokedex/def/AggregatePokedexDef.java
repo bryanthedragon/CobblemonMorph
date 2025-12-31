@@ -26,8 +26,8 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 
-class AggregatePokedexDef(
-    override val id: ResourceLocation,
+public class AggregatePokedexDef(
+    override val ResourceLocation id,
 ) : PokedexDef() {
     override val typeId = ID
     private val subDexIds = mutableListOf<ResourceLocation>()
@@ -59,7 +59,7 @@ class AggregatePokedexDef(
 
     override fun shouldSynchronize(other: PokedexDef) = true
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         sortOrder = buffer.readSizedInt(IntSize.U_BYTE)
         val size = buffer.readInt()
         for (i in 0 until size) {
@@ -67,7 +67,7 @@ class AggregatePokedexDef(
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeSizedInt(IntSize.U_BYTE, sortOrder)
         buffer.writeInt(subDexIds.size)
         subDexIds.forEach {
@@ -75,7 +75,7 @@ class AggregatePokedexDef(
         }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("aggregate_pokedex_def")
         val CODEC: MapCodec<AggregatePokedexDef> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(

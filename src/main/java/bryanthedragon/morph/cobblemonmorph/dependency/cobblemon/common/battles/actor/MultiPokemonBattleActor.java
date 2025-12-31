@@ -18,12 +18,12 @@ import java.util.UUID
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Component
 
-class MultiPokemonBattleActor(
+public class MultiPokemonBattleActor(
     pokemonList: List<BattlePokemon>,
     artificialDecider: BattleAI = RandomBattleAI(),
-    uuid: UUID = UUID.randomUUID()
+    UUID uuid = UUID.randomUUID()
 ) : AIBattleActor(uuid, pokemonList, artificialDecider) {
     override fun getName(): MutableComponent = "Wild Pokémon".text() // TODO probably remove by making it nullable
-    override fun nameOwned(name: String): MutableComponent = Component.literal(name)
+    override fun nameOwned(String name): MutableComponent = Component.literal(name)
     override val type = ActorType.WILD
 }

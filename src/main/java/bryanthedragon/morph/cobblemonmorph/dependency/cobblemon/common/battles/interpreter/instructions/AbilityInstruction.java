@@ -29,7 +29,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Xylopia
  * @since January 31st, 2023
  */
-class AbilityInstruction(val instructionSet: InstructionSet, val message: BattleMessage) : InterpreterInstruction, CauserInstruction {
+public class AbilityInstruction(val instructionSet: InstructionSet, val message: BattleMessage) : InterpreterInstruction, CauserInstruction {
     override fun invoke(battle: PokemonBattle) {
         val pokemon = message.battlePokemon(0, battle) ?: return
         val effect = message.effectAt(1) ?: return

@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.np
  * @author Hiroku
  * @since August 16th, 2023
  */
-class NPCConfiguration {
+public class NPCConfiguration {
     var battle: NPCBattleConfiguration? = null
 
     fun applyTo(npc: NPCEntity) {

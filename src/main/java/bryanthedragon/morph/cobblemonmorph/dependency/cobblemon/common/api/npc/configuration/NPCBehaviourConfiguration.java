@@ -11,22 +11,22 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class NPCBehaviourConfiguration {
+public class NPCBehaviourConfiguration {
     var canBeHurt = true
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
 
     }
 
-    fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(RegistryFriendlyByteBuf buffer) {
 
     }
 
-    fun saveToNBT(nbt: CompoundTag) {
+    fun saveToNBT(CompoundTag nbt) {
 
     }
 
-    fun loadFromNBT(nbt: CompoundTag) {
+    fun loadFromNBT(CompoundTag nbt) {
 
     }
 }

@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.p
  * @author Segfault Guy
  * @since April 10th, 2023
  */
-interface BattleContext {
+public interface BattleContext {
 
     /** The effect or condition this [BattleContext] represents. */
     val id: String

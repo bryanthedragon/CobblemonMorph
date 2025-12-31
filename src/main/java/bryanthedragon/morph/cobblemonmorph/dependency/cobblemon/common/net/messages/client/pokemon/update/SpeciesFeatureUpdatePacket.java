@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.mess
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.PokemonSpecies
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatures
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeature
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.species.provider.SynchronizedSpeciesFeatureProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readIdentifier
@@ -27,10 +27,10 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since November 13th, 2023
  */
-class SpeciesFeatureUpdatePacket(pokemon: () -> Pokemon?, val species: ResourceLocation, speciesFeature: SynchronizedSpeciesFeature) : SingleUpdatePacket<SynchronizedSpeciesFeature, SpeciesFeatureUpdatePacket>(pokemon, speciesFeature) {
-    companion object {
+public class SpeciesFeatureUpdatePacket(pokemon: () -> Pokemon?, val species: ResourceLocation, speciesFeature: SynchronizedSpeciesFeature) : SingleUpdatePacket<SynchronizedSpeciesFeature, SpeciesFeatureUpdatePacket>(pokemon, speciesFeature) {
+    final class Companion {
         val ID = cobblemonResource("species_feature_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): SpeciesFeatureUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SpeciesFeatureUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val speciesIdentifier = buffer.readIdentifier()
             val species = PokemonSpecies.getByIdentifier(speciesIdentifier)
@@ -44,13 +44,13 @@ class SpeciesFeatureUpdatePacket(pokemon: () -> Pokemon?, val species: ResourceL
     }
 
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(species)
         buffer.writeString(value.name)
         value.saveToBuffer(buffer, toClient = true)
     }
 
-    override fun set(pokemon: Pokemon, value: SynchronizedSpeciesFeature) {
+    override fun set(Pokemon pokemon, value: SynchronizedSpeciesFeature) {
         pokemon.features.removeIf { it.name == value.name }
         pokemon.features.add(value)
     }

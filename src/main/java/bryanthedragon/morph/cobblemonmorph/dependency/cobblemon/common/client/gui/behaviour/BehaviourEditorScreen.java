@@ -22,11 +22,11 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 
-class BehaviourEditorScreen(
-    val entity: LivingEntity,
+public class BehaviourEditorScreen(
+    val LivingEntity entity,
     val appliedBehaviours: MutableSet<ResourceLocation>,
 ) : Screen(Component.literal("Behaviour Editor")) {
-    companion object {
+    final class Companion {
         const val BASE_WIDTH = 360
         const val BASE_HEIGHT = 220
 

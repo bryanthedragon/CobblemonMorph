@@ -12,13 +12,13 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 
 abstract class TooltipGenerator {
-    open fun generateTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+    open fun generateTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         return null
     }
-    open fun generateAdditionalTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+    open fun generateAdditionalTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         return null
     }
-    open fun generateCategoryTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+    open fun generateCategoryTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         return null
     }
 }

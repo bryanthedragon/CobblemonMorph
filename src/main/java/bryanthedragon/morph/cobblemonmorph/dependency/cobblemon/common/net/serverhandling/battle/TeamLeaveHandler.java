@@ -20,8 +20,9 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author JazzMcNade
  * @since April 15th, 2024
- */final class TeamLeaveHandler : ServerNetworkPacketHandler<BattleTeamLeavePacket> {
-    override fun handle(packet: BattleTeamLeavePacket, server: MinecraftServer, player: ServerPlayer) {
+ */
+public final class TeamLeaveHandler : ServerNetworkPacketHandler<BattleTeamLeavePacket> {
+    override fun handle(packet: BattleTeamLeavePacket, server: MinecraftServer, ServerPlayer player) {
         TeamManager.removeTeamMember(player)
     }
 

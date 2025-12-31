@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.SwapClientPokemonPacket
 import net.minecraft.client.Minecraft
-final class SwapClientPokemonHandler : ClientNetworkPacketHandler<SwapClientPokemonPacket> {
-    override fun handle(packet: SwapClientPokemonPacket, client: Minecraft) {
+public final class SwapClientPokemonHandler : ClientNetworkPacketHandler<SwapClientPokemonPacket> {
+    override fun handle(packet: SwapClientPokemonPacket, Minecraft client) {
         if (packet.storeIsParty) {
             CobblemonClient.storage.swapInParty(packet.storeID, packet.pokemonID1, packet.pokemonID2)
         } else {

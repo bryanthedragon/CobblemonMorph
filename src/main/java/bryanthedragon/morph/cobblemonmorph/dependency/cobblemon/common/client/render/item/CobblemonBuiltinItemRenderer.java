@@ -20,8 +20,8 @@ import net.minecraft.world.item.ItemStack
  * @author Nick, Licious
  * @since December 28th, 2022
  */
-interface CobblemonBuiltinItemRenderer {
+public interface CobblemonBuiltinItemRenderer {
 
-    fun render(stack: ItemStack, mode: ItemDisplayContext, matrices: PoseStack, vertexConsumers: MultiBufferSource, light: Int, overlay: Int)
+    fun render(ItemStack stack, mode: ItemDisplayContext, matrices: PoseStack, vertexConsumers: MultiBufferSource, light: Int, overlay: Int)
 
 }

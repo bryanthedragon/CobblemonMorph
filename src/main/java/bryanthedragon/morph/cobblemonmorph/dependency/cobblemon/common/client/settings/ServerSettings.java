@@ -18,7 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
  *
  * @author Licious
  * @since September 27th, 2022
- */final class ServerSettings {
+ */
+public final class ServerSettings {
 
     var preventCompletePartyDeposit = Cobblemon.config.preventCompletePartyDeposit
     var displayEntityLevelLabel = Cobblemon.config.displayEntityLevelLabel

@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class ClientBox(var name : MutableComponent?, var wallpaper : ResourceLocation) : Iterable<Pokemon?> {
+public class ClientBox(var name : MutableComponent?, var wallpaper : ResourceLocation) : Iterable<Pokemon?> {
     constructor() : this(null, PCBoxWallpaperRepository.defaultWallpaper)
 
     val slots = MutableList<Pokemon?>(POKEMON_PER_BOX) { null }

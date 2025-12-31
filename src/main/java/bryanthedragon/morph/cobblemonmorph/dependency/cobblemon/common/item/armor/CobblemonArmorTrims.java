@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.arm
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 
-@Suppress("UNUSED")final class CobblemonArmorTrims {
+@Suppress("UNUSED")public final class CobblemonArmorTrims {
 
     val AUTOMATON = cobblemonResource("automaton")
 

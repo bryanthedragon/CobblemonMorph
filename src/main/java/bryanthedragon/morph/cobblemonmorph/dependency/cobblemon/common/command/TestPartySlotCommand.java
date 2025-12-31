@@ -21,7 +21,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
-final class TestPartySlotCommand {
+public final class TestPartySlotCommand {
 
     private const val NAME = "testpartyslot"
     private const val PLAYER = "player"

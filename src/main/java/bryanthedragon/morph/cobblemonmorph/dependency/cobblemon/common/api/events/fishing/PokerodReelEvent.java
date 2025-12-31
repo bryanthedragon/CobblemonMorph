@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack
  * Event that is fired when a fishing rod is reeled.
  * @param rod The ItemStack of the rod that is being reeled.
  */
-class PokerodReelEvent(val player: Player, val rod: ItemStack) : Cancelable() {
+public class PokerodReelEvent(val player: Player, val rod: ItemStack) : Cancelable() {
     val context = mutableMapOf(
         "player" to player.asMoLangValue(),
         "rod" to rod.asMoLangValue(server()!!.registryAccess())

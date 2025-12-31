@@ -32,7 +32,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.effectiveName
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
 import java.util.*
-final class AdvancementHandler : EventHandler {
+public final class AdvancementHandler : EventHandler {
     override fun registerListeners() {
         PlatformEvents.RIGHT_CLICK_BLOCK.subscribe(Priority.LOWEST, ::onTumbleStonePlaced)
         POKEMON_CAPTURED.subscribe(Priority.LOWEST, ::onCapture)

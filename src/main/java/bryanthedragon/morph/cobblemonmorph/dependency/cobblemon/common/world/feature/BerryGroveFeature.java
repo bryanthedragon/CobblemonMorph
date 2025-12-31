@@ -28,7 +28,7 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.stateproviders.RandomizedIntStateProvider
 import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter
 
-class BerryGroveFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConfiguration.CODEC){
+public class BerryGroveFeature : Feature<NoneFeatureConfiguration>(NoneFeatureConfiguration.CODEC){
     override fun place(context: FeaturePlaceContext<NoneFeatureConfiguration>): Boolean {
         val worldGenLevel: WorldGenLevel = context.level()
         val random = context.random()

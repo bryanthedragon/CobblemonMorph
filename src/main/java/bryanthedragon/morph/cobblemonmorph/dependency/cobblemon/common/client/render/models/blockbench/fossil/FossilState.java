@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
  * @author Hiroku
  * @since October 30th, 2023
  */
-class FossilState(startAge: Int = -1, startPartialTicks: Float = 0F) : PosableState() {
+public class FossilState(startAge: Int = -1, startPartialTicks: Float = 0F) : PosableState() {
     var totalPartialTicks = 0F
     init {
         // generate phase offset if new

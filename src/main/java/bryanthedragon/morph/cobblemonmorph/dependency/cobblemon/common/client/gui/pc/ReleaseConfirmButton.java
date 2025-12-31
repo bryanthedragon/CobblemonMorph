@@ -20,14 +20,14 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 
-class ReleaseConfirmButton(
+public class ReleaseConfirmButton(
     x: Int, y: Int,
     private val parent: StorageWidget,
-    private val subKey: String,
+    private val String subKey,
     onPress: OnPress
 ) : Button(x, y, WIDTH, HEIGHT, Component.literal("ReleaseConfirm"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val WIDTH = 30
         private const val HEIGHT = 13
 

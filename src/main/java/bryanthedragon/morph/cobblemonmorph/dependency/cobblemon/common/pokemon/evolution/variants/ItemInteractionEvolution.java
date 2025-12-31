@@ -50,7 +50,7 @@ open class ItemInteractionEvolution(
         drops = DropTable(),
     )
 
-    override fun testContext(pokemon: Pokemon, context: ItemInteractionContext): Boolean = this.requiredContext.test(context.stack)
+    override fun testContext(Pokemon pokemon, context: ItemInteractionContext): Boolean = this.requiredContext.test(context.stack)
 
     override fun equals(other: Any?) = other is ItemInteractionEvolution && other.id.equals(this.id, true)
 
@@ -61,11 +61,11 @@ open class ItemInteractionEvolution(
     }
 
     record ItemInteractionContext(
-        val stack: ItemStack,
-        val world: Level
+        val ItemStack stack,
+        val Level world
     )
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "item_interact"
     }
 }

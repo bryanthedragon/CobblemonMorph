@@ -32,14 +32,14 @@ import net.minecraft.nbt.NbtIo
 import net.minecraft.resources.ResourceLocation
 
 const val REFORGED_POKEMON_PER_BOX = 30
-class ReforgedConversion(val base: Path) : CobblemonConverter<CompoundTag> {
+public class ReforgedConversion(val base: Path) : CobblemonConverter<CompoundTag> {
 
     override fun root(): Path {
         return this.base.resolve("data").resolve("pokemon")
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <E : StorePosition, T : PokemonStore<E>> load(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+    override fun <E : StorePosition, T : PokemonStore<E>> load(storeClass: Class<T>, UUID uuid, RegistryAccess registryAccess): T? {
         val extension = if (storeClass.simpleName.lowercase() == "playerpartystore") "pk" else "comp"
         val target = this.root().resolve("$uuid.$extension")
 
@@ -55,7 +55,7 @@ class ReforgedConversion(val base: Path) : CobblemonConverter<CompoundTag> {
         return null
     }
 
-    override fun party(user: UUID, nbt: CompoundTag) : PlayerPartyStore {
+    override fun party(user: UUID, CompoundTag nbt) : PlayerPartyStore {
         val result = PlayerPartyStore(user)
         for (x in 0..5) {
             val key = "party$x"
@@ -67,7 +67,7 @@ class ReforgedConversion(val base: Path) : CobblemonConverter<CompoundTag> {
         return result
     }
 
-    override fun pc(user: UUID, nbt: CompoundTag) : PCStore {
+    override fun pc(user: UUID, CompoundTag nbt) : PCStore {
         val result = PCStore(user)
         var box = 0
         while (nbt.contains("BoxNumber$box")) {
@@ -87,7 +87,7 @@ class ReforgedConversion(val base: Path) : CobblemonConverter<CompoundTag> {
         return result
     }
 
-    override fun translate(nbt: CompoundTag) : Pokemon {
+    override fun translate(CompoundTag nbt) : Pokemon {
         val result = Pokemon()
         result.uuid = nbt.getUUID("UUID")
         result.species = PokemonSpecies.getByPokedexNumber(nbt.getInt("ndex"))
@@ -150,7 +150,7 @@ class ReforgedConversion(val base: Path) : CobblemonConverter<CompoundTag> {
         return result
     }
 
-    fun <T> find(nbt: CompoundTag, key: String, translator: Translator<T?>) : T? {
+    fun <T> find(CompoundTag nbt, String Key, translator: Translator<T?>) : T? {
         if (nbt.contains(key)) {
             return translator.from(nbt, key)
         }
@@ -159,7 +159,7 @@ class ReforgedConversion(val base: Path) : CobblemonConverter<CompoundTag> {
     }
 
     fun interface Translator<out R> {
-        fun from(nbt: CompoundTag, key: String) : R?
+        fun from(CompoundTag nbt, String Key) : R?
     }
 
     enum class ReforgedNatures {

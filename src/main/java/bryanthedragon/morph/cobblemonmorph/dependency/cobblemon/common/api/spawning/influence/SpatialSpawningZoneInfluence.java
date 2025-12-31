@@ -19,8 +19,8 @@ import net.minecraft.core.BlockPos
  * @author Hiroku
  * @since March 9th, 2025
  */
-class SpatialSpawningZoneInfluence(
-    val pos: BlockPos,
+public class SpatialSpawningZoneInfluence(
+    val (BlockPos pos,
     val radius: Float,
     override val influence: SpawningInfluence
 ) : ConditionalSpawningZoneInfluence {

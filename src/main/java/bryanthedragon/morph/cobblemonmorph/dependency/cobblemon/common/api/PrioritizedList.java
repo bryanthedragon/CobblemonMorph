@@ -31,7 +31,7 @@ open class PrioritizedList<T> : Iterable<T> {
         }
     }
 
-    fun add(priority: Priority, value: T) {
+    fun add(Priority priority, value: T) {
         // Please don't change arraylist, we need insertion order
         priorityMap.putIfAbsent(priority, arrayListOf())
         priorityMap[priority]?.add(value)
@@ -43,7 +43,7 @@ open class PrioritizedList<T> : Iterable<T> {
         reorder()
     }
 
-    fun remove(priority: Priority, value: T) {
+    fun remove(Priority priority, value: T) {
         priorityMap[priority]?.remove(value)
         reorder()
     }

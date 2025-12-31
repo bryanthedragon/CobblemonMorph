@@ -6,107 +6,69 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.server.level.ServerPlayer
-import java.util.Optional
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
 
-open class BattleCountableContext(var battle : PokemonBattle, times : Int) : CountableContext(times)
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-class BattleCountableCriterion(
-    playerCtx: Optional<ContextAwarePredicate>,
-    val battleTypes: List<String>,
-    count: Int
-): CountableCriterion<BattleCountableContext>(playerCtx, count) {
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.server.level.ServerPlayer;
 
-    companion object {
-        val CODEC: Codec<BattleCountableCriterion> = RecordCodecBuilder.create { it.group(
-            ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(BattleCountableCriterion::playerCtx),
-            Codec.STRING.listOf().optionalFieldOf("battle_types", listOf("any")).forGetter(BattleCountableCriterion::battleTypes),
-            Codec.INT.optionalFieldOf("count", 0).forGetter(BattleCountableCriterion::count)
-        ).apply(it, ::BattleCountableCriterion) }
+import java.util.List;
+import java.util.Optional;
+
+public class BattleCountableCriterion(Optional<ContextAwarePredicate> playerCtx, List<String> battleTypes, int count): CountableCriterion<BattleCountableContext>(playerCtx, count) {
+
+    private var battleTypes = mutableListOf("any");
+
+    final class Companion {
+        public final Codec<BattleCountableCriterion> CODEC = RecordCodecBuilder.create { it.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(BattleCountableCriterion::playerCtx), Codec.STRING.listOf().optionalFieldOf("battle_types", listOf("any")).forGetter(BattleCountableCriterion::battleTypes), Codec.INT.optionalFieldOf("count", 0).forGetter(BattleCountableCriterion::count)).apply(it, ::BattleCountableCriterion) }
     }
 
-    override fun matches(player: ServerPlayer, context: BattleCountableContext): Boolean {
-        var typeCheck = false
-        val advancementData = Cobblemon.playerDataManager.getGenericData(player).advancementData
+    public boolean matches(ServerPlayer player, BattleCountableContext context) {
+        var typeCheck = false;
+        val advancementData = Cobblemon.playerDataManager.getGenericData(player).advancementData;
+
         if (battleTypes.isEmpty() || battleTypes.contains("any")) {
-            typeCheck = true
+            typeCheck = true;
         }
 
         if (battleTypes.contains("pvp")) {
-            typeCheck = context.battle.isPvP
-            context.times = advancementData.totalPvPBattleVictoryCount
+            typeCheck = context.battle.isPvP;
+            context.times = advancementData.totalPvPBattleVictoryCount;
         }
 
         if (battleTypes.contains("pvw")) {
-            typeCheck = context.battle.isPvW
-            context.times = advancementData.totalPvWBattleVictoryCount
+            typeCheck = context.battle.isPvW;
+            context.times = advancementData.totalPvWBattleVictoryCount;
         }
 
         if (battleTypes.contains("pvn")) {
-            typeCheck = context.battle.isPvN
-            context.times = advancementData.totalPvWBattleVictoryCount
+            typeCheck = context.battle.isPvN;
+            context.times = advancementData.totalPvWBattleVictoryCount;
         }
 
         if (battleTypes.size > 1) {
-            context.times = advancementData.totalBattleVictoryCount
+            context.times = advancementData.totalBattleVictoryCount;
         }
-
-        return typeCheck && super.matches(player, context)
+        return typeCheck && super.matches(player, context);
     }
 
-}
+    fun fromJson(JsonObject json) {
+       super.fromJson(json);
+       if(!json.get("battle_types").isJsonNull) {
+           battleTypes.clear();
+           json.get("battle_types").asJsonArray.asList().forEach() {
+               battleTypes.add(it.asString);
+           }
+       }
+   }
 
-//open class BattleCountableCriterionTrigger(identifier: Identifier, criterionClass: Class<BattleCountableCriterion>) : SimpleCriterionTrigger<BattleCountableContext, BattleCountableCriterion>(identifier, criterionClass) {
-//
-//}
-//
-//class BattleCountableCriterion(id: Identifier, predicate: LootContextPredicate) : CountableCriterion<BattleCountableContext>(id, predicate) {
-//
-//    private var battleTypes = mutableListOf("any")
-//
-//    override fun fromJson(json: JsonObject) {
-//        super.fromJson(json)
-//        if(!json.get("battle_types").isJsonNull) {
-//            battleTypes.clear()
-//            json.get("battle_types").asJsonArray.asList().forEach() {
-//                battleTypes.add(it.asString)
-//            }
-//        }
-//    }
-//
-//    override fun toJson(json: JsonObject) {
-//        super.toJson(json)
-//        json.add("battle_types", battleTypes.toJsonArray())
-//    }
-//
-//    override fun matches(player: ServerPlayer, context: BattleCountableContext): Boolean {
-//        var typeCheck = false
-//        val advancementData = Cobblemon.playerData.get(player).advancementData
-//        if (battleTypes.isEmpty() || battleTypes.contains("any")) {
-//            typeCheck = true
-//        }
-//        if (battleTypes.contains("pvp")) {
-//            typeCheck = context.battle.isPvP
-//            context.times = advancementData.totalPvPBattleVictoryCount
-//        }
-//        if (battleTypes.contains("pvw")) {
-//            typeCheck = context.battle.isPvW
-//            context.times = advancementData.totalPvWBattleVictoryCount
-//        }
-//        if (battleTypes.contains("pvn")) {
-//            typeCheck = context.battle.isPvN
-//            context.times = advancementData.totalPvWBattleVictoryCount
-//        }
-//        if (battleTypes.size > 1) {
-//            context.times = advancementData.totalBattleVictoryCount
-//        }
-//        return context.times >= count && typeCheck
-//    }
-//}
+   fun toJson(JsonObject json) {
+       super.toJson(json);
+       json.add("battle_types", battleTypes.toJsonArray());
+   }
+
+}

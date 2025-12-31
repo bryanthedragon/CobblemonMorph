@@ -19,7 +19,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import kotlin.math.max
 
-class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit)): ScrollingWidget<FormsWidget.FormSlot>(
+public class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit)): ScrollingWidget<FormsWidget.FormSlot>(
         left = pX,
         top = pY,
         width = PokedexGUIConstants.POKEMON_FORMS_WIDTH,
@@ -48,17 +48,17 @@ class FormsWidget (val pX: Int, val pY: Int, val setFormData : (String) -> (Unit
 
     class FormSlot(val form : String, val setFormData: (String) -> Unit) : Slot<FormSlot>() {
 
-        companion object {
+        final class Companion {
             private val scrollSlotResource = cobblemonResource("textures/gui/pokedex/scroll_slot_base.png")// Render Scroll Slot Background
         }
 
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             y: Int,
             x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
+            entryInt width,
+            entryInt height,
             mouseX: Int,
             mouseY: Int,
             hovered: Boolean,

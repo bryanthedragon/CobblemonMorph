@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.gui.blitk
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatures
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.species.provider.SynchronizedSpeciesFeatureProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.RidingStyle
@@ -46,13 +46,13 @@ import net.minecraft.util.Mth.floor
 import net.minecraft.world.phys.Vec2
 import org.joml.Vector3f
 
-class StatWidget(
+public class StatWidget(
     pX: Int, pY: Int,
-    val pokemon: Pokemon,
-    val tabIndex: Int = 0
+    val Pokemon pokemon,
+    val tabInt index = 0
 ): SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("StatWidget")) {
 
-    companion object {
+    final class Companion {
         // Stat tab options
         private const val STATS = "stats"
         private const val IV = "ivs"
@@ -114,15 +114,15 @@ class StatWidget(
 
     private val statOptions = if (pokemon.form.riding.behaviours != null) listOf(STATS, IV, EV, RIDE, OTHER) else listOf(STATS, IV, EV, OTHER)
 
-    private var _statTabIndex: Int = tabIndex
-    var statTabIndex: Int
+    private var _statTabInt index = tabIndex
+    var statTabInt index
         get() = _statTabIndex.coerceIn(0, statOptions.size - 1)
         set(value) {
             _statTabIndex = value.coerceIn(0, statOptions.size - 1)
         }
 
-    private var _rideBehaviourIndex: Int = 0
-    var rideBehaviourIndex: Int
+    private var _rideBehaviourInt index = 0
+    var rideBehaviourInt index
         get() = _rideBehaviourIndex.coerceIn(0, (pokemon.form.riding.behaviours?.size ?: 1) - 1)
         set(value) {
             _rideBehaviourIndex = value.coerceIn(0, (pokemon.form.riding.behaviours?.size ?: 1) - 1)
@@ -138,7 +138,7 @@ class StatWidget(
         .filterIsInstance<SynchronizedSpeciesFeatureProvider<*>>()
         .mapNotNull { it.getRenderer(pokemon) }
 
-    var otherStatsPageIndex: Int = 0
+    var otherStatsPageInt index = 0
 
     var otherStatLeftButton: SummaryButton? = null
     var otherStatRightButton: SummaryButton? = null
@@ -514,7 +514,7 @@ class StatWidget(
         }
     }
 
-    private fun renderModifiedStatIcon(pPoseStack: PoseStack, stat: Stat?, increasedStat: Boolean) {
+    private fun renderModifiedStatIcon(pPoseStack: PoseStack, Stat stat ?, increasedStat: Boolean) {
         if (stat != null) {
             var posX = x.toDouble()
             var posY = y.toDouble()
@@ -540,7 +540,7 @@ class StatWidget(
         }
     }
 
-    private fun getModifiedStatColour(stat: Stat?, enableColour: Boolean): Int {
+    private fun getModifiedStatColour(Stat stat ?, enableColour: Boolean): Int {
         if (statOptions.get(statTabIndex) == STATS && enableColour) {
             val nature = pokemon.effectiveNature
 

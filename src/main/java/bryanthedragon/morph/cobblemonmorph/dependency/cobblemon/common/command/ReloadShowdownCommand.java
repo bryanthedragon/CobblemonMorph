@@ -20,7 +20,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.network.chat.Component
-final class ReloadShowdownCommand {
+public final class ReloadShowdownCommand {
 
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("reloadshowdown")
@@ -40,7 +40,7 @@ final class ReloadShowdownCommand {
             ShowdownService.service.sendRegistryData(Moves.moveScripts, "move")
             ShowdownService.service.sendRegistryData(PokemonSpecies.allShowdownSpecies(), "species")
             context.source.sendSystemMessage(Component.literal("Reloaded showdown"))
-        } catch (e: Exception) {
+        } catch (Exception e) {
             e.printStackTrace()
         }
         return Command.SINGLE_SUCCESS

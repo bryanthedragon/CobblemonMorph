@@ -22,10 +22,10 @@ import kotlin.collections.iterator
  *
  * @author whatsy
  */
-class AdvancementRequirement(val requiredAdvancement: ResourceLocation) : OwnerQueryRequirement {
+public class AdvancementRequirement(val requiredAdvancement: ResourceLocation) : OwnerQueryRequirement {
 
     override fun checkPlayer(
-        pokemon: Pokemon,
+        Pokemon pokemon,
         owner: ServerPlayer
     ): Boolean {
         for (entry in owner.advancements.progress) {
@@ -37,14 +37,14 @@ class AdvancementRequirement(val requiredAdvancement: ResourceLocation) : OwnerQ
     }
 
     override fun checkNPC(
-        pokemon: Pokemon,
+        Pokemon pokemon,
         owner: NPCEntity
     ): Boolean {
         //TODO some sort of config?
         return true
     }
 
-    companion object {
+    final class Companion {
         val ADAPTER_VARIANT = "advancement"
     }
 }

@@ -10,13 +10,13 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net
 
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-interface Decodable {
+public interface Decodable {
 
     /**
      * Reads an updates this instance based on the given buffer.
      *
      * @param buffer The [RegistryFriendlyByteBuf] being read from.
      */
-    fun decode(buffer: RegistryFriendlyByteBuf)
+    fun decode(RegistryFriendlyByteBuf buffer)
 
 }

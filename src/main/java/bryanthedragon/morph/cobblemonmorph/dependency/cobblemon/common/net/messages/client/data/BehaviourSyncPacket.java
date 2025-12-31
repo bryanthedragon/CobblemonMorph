@@ -18,14 +18,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class BehaviourSyncPacket(entries: Map<ResourceLocation, CobblemonBehaviour>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, CobblemonBehaviour>, BehaviourSyncPacket>(entries.entries.toList()) {
-    companion object {
+public class BehaviourSyncPacket(entries: Map<ResourceLocation, CobblemonBehaviour>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, CobblemonBehaviour>, BehaviourSyncPacket>(entries.entries.toList()) {
+    final class Companion {
         val ID = cobblemonResource("behaviour_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf): BehaviourSyncPacket = BehaviourSyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer): BehaviourSyncPacket = BehaviourSyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
     }
 
     override val id = ID
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<ResourceLocation, CobblemonBehaviour>? {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Map.Entry<ResourceLocation, CobblemonBehaviour>? {
         val identifier = buffer.readIdentifier()
         val name = buffer.readText()
         val description = buffer.readText()
@@ -42,7 +42,7 @@ class BehaviourSyncPacket(entries: Map<ResourceLocation, CobblemonBehaviour>) : 
         }
     }
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<ResourceLocation, CobblemonBehaviour>) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Map.Entry<ResourceLocation, CobblemonBehaviour>) {
         buffer.writeIdentifier(entry.key)
         buffer.writeText(entry.value.name)
         buffer.writeText(entry.value.description)

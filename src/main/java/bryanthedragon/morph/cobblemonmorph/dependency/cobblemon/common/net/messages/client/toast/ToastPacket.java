@@ -6,60 +6,28 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
-import net.minecraft.network.RegistryFriendlyByteBuf
-import java.util.UUID
-import net.minecraft.world.item.ItemStack
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import java.util.UUID;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
-class ToastPacket(
-    val title: Component,
-    val description: Component,
-    val icon: ItemStack,
-    val frameTexture: ResourceLocation,
-    val progress: Float,
-    val progressColor: Int,
-    val uuid: UUID,
-    val behaviour: Behaviour
-) : NetworkPacket<ToastPacket> {
+public class ToastPacket(Component title, Component description, ItemStack icon, ResourceLocation frameTexture, Float progress, Int progressColor, UUID uuid, Behaviour behaviour) extends NetworkPacket<ToastPacket> {
 
-    override val id: ResourceLocation = ID
+    override ResourceLocation id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
-        buffer.writeText(this.title)
-        buffer.writeText(this.description)
-        buffer.writeItemStack(this.icon)
-        buffer.writeIdentifier(this.frameTexture)
-        buffer.writeFloat(this.progress)
-        buffer.writeInt(this.progressColor)
-        buffer.writeUUID(this.uuid)
-        buffer.writeEnumConstant(this.behaviour)
+    override fun encode(RegistryFriendlyByteBuf buffer) {buffer.writeText(this.title), buffer.writeText(this.description), buffer.writeItemStack(this.icon), buffer.writeIdentifier(this.frameTexture), buffer.writeFloat(this.progress), buffer.writeInt(this.progressColor), buffer.writeUUID(this.uuid), buffer.writeEnumConstant(this.behaviour)}
+
+    final class Companion {
+
+        ID = cobblemonResource("toast");
+
+        ToastPacket decode(RegistryFriendlyByteBuf buffer) = ToastPacket(buffer.readText(), buffer.readText(), buffer.readItemStack(), buffer.readIdentifier(), buffer.readFloat(), buffer.readInt(), buffer.readUUID(), buffer.readEnumConstant(Behaviour.class))
     }
 
-    companion object {
-
-        val ID = cobblemonResource("toast")
-
-        fun decode(buffer: RegistryFriendlyByteBuf): ToastPacket = ToastPacket(
-            buffer.readText(),
-            buffer.readText(),
-            buffer.readItemStack(),
-            buffer.readIdentifier(),
-            buffer.readFloat(),
-            buffer.readInt(),
-            buffer.readUUID(),
-            buffer.readEnumConstant(Behaviour::class.java)
-        )
-
-    }
-
-    enum class Behaviour {
-        SHOW_OR_UPDATE,
-        HIDE
-    }
-
+    enum Behaviour {SHOW_OR_UPDATE, HIDE}
 }

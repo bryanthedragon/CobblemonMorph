@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
 import net.minecraft.client.model.geom.ModelPart
 
 /** Two arms */
-interface BimanualFrame : ModelFrame {
+public interface BimanualFrame : ModelFrame {
     val leftArm: ModelPart
     val rightArm: ModelPart
 }

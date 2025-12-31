@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class LileepModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class LileepModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("lileep")
     override val head = getPart("head")
 

@@ -30,8 +30,9 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since January 31st, 2022
- */final class SpawnDetailAdapter : JsonDeserializer<SpawnDetail> {
-    override fun deserialize(element: JsonElement, type: Type, ctx: JsonDeserializationContext): SpawnDetail {
+ */
+public final class SpawnDetailAdapter : JsonDeserializer<SpawnDetail> {
+    override fun deserialize(JsonElement jElement, Type type, JsonDeserializationContext ctx): SpawnDetail {
         element as JsonObject
         element.singularToPluralList("preset")
         val presetNames = element.get("presets")?.asJsonArray?.map { it.asString }?.toMutableSet() ?: mutableSetOf()

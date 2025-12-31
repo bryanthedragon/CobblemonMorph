@@ -14,17 +14,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.poked
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class PokedexDexSyncPacket(
+public class PokedexDexSyncPacket(
     dexes: Collection<PokedexDef>
 ) : DataRegistrySyncPacket<PokedexDef, PokedexDexSyncPacket>(dexes) {
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: PokedexDef) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: PokedexDef) {
         PokedexDef.PACKET_CODEC.encode(buffer, entry)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): PokedexDef? {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): PokedexDef? {
         return PokedexDef.PACKET_CODEC.decode(buffer)
     }
 
@@ -32,8 +32,8 @@ class PokedexDexSyncPacket(
         Dexes.reload(entries.associateBy { it.id })
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("pokedex_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf) = PokedexDexSyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = PokedexDexSyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 }

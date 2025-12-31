@@ -15,8 +15,8 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 
-record HeldItemEffectComponent(val showdownId: String, val consumed: Boolean = false) {
-    companion object {
+record HeldItemEffectComponent(val String showdownId, val consumed: Boolean = false) {
+    final class Companion {
         val CODEC: Codec<HeldItemEffectComponent> = RecordCodecBuilder.create { builder ->
             builder.group(
                 Codec.STRING.fieldOf("showdownId").forGetter { it.showdownId },

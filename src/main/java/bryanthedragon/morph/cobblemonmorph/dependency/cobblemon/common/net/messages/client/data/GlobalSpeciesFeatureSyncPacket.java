@@ -9,8 +9,8 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.GlobalSpeciesFeatures
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatureProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.species.provider.SpeciesFeatureProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.species.provider.SynchronizedSpeciesFeatureProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
@@ -20,12 +20,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 13th, 2023
  */
-class GlobalSpeciesFeatureSyncPacket(speciesFeatures: Map<String, SpeciesFeatureProvider<*>>) : SpeciesFeatureSyncPacket<GlobalSpeciesFeatureSyncPacket>(speciesFeatures) {
+public class GlobalSpeciesFeatureSyncPacket(speciesFeatures: Map<String, SpeciesFeatureProvider<*>>) : SpeciesFeatureSyncPacket<GlobalSpeciesFeatureSyncPacket>(speciesFeatures) {
     override val id = ID
 
     override fun synchronizeDecoded(entries: Collection<Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>>) = GlobalSpeciesFeatures.loadOnClient(entries)
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("global_species_feature_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf) = GlobalSpeciesFeatureSyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = GlobalSpeciesFeatureSyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
     }
 }

@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.registry.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.registry.FluidTagCondition
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.material.Fluid
-final class FluidLikeConditionAdapter : RegistryLikeAdapter<Fluid> {
+public final class FluidLikeConditionAdapter : RegistryLikeAdapter<Fluid> {
     override val registryLikeConditions = mutableListOf(
         RegistryLikeTagCondition.resolver(Registries.FLUID, ::FluidTagCondition),
         RegistryLikeIdentifierCondition.resolver(::FluidIdentifierCondition)

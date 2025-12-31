@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class NidorinaModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+public class NidorinaModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("nidorina")
     override val head = getPart("head")
     override val foreLeftLeg= getPart("left_upper_arm")

@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleCaptureShakePacket
 import net.minecraft.client.Minecraft
-final class BattleCaptureShakeHandler : ClientNetworkPacketHandler<BattleCaptureShakePacket> {
-    override fun handle(packet: BattleCaptureShakePacket, client: Minecraft) {
+public final class BattleCaptureShakeHandler : ClientNetworkPacketHandler<BattleCaptureShakePacket> {
+    override fun handle(packet: BattleCaptureShakePacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val (_, activeBattlePokemon) = battle.getPokemonFromPNX(packet.targetPNX)
         val ballState = activeBattlePokemon.ballCapturing ?: return

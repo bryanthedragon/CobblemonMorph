@@ -21,7 +21,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Jackowes
  * @since April 26th, 2025
  */
-class RideSoundManager(
+public class RideSoundManager(
     private val ride: PokemonEntity
 ) {
     private val activeSounds = mutableListOf<RideLoopSound>()

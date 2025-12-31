@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asEx
 import java.util.concurrent.CompletableFuture
 import net.minecraft.server.level.ServerLevel
 
-class AnimationActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityConditionalActionEffectKeyframe {
+public class AnimationActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityConditionalActionEffectKeyframe {
     var delay = "0".asExpressionLike()
     var visibilityRange = 200
     var animation: Set<String> = setOf("physical")
@@ -37,7 +37,7 @@ class AnimationActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityC
         val animation = animation.map {
             try {
                 it.asExpressionLike().resolveString(context.runtime).takeIf { it != "0" } ?: it
-            } catch (e: Exception) {
+            } catch (Exception e) {
                 it
             }
         }.toSet()

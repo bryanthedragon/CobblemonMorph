@@ -16,4 +16,4 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.d
  * @author Segfault Guy
  * @since November 10th, 2024
  */
-class InvalidInstructionException(battleMessage: BattleMessage) : Exception("Failed to interpret ${battleMessage.rawMessage}")
+public class InvalidInstructionException(battleMessage: BattleMessage) : Exception("Failed to interpret ${battleMessage.rawMessage}")

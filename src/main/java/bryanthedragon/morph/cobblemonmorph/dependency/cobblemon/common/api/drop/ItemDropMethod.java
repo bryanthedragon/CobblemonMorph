@@ -6,10 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.serialization.StringIdentifiedObjectAdapter
-import com.google.gson.annotations.SerializedName
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.serialization.StringIdentifiedObjectAdapter;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * The way an item will be dropped.
@@ -17,7 +17,7 @@ import com.google.gson.annotations.SerializedName
  * @author Hiroku
  * @since July 25th, 2022
  */
-enum class ItemDropMethod(val methodName: String) {
+public enum ItemDropMethod {
     /** Drops the item on the entity that is dying, if it exists. If not, drops at the position parsed into drops. */
     ON_ENTITY("on-entity"),
     /** Drops the item on the player that caused the drop, if they exist. If not, drops at the position parsed into drops. */
@@ -28,10 +28,7 @@ enum class ItemDropMethod(val methodName: String) {
      */
     TO_INVENTORY("to-inventory");
 
-    companion object {
-        val adapter = StringIdentifiedObjectAdapter(
-            { str -> ItemDropMethod.entries.firstOrNull { it.methodName == str } },
-            { value -> (value ?: ON_ENTITY).methodName },
-        )
+final class Companion {
+        val adapter = StringIdentifiedObjectAdapter({ str -> ItemDropMethod.entries.firstOrNull { it.methodName == str } }, { value -> (value ?: ON_ENTITY).methodName })
     }
 }

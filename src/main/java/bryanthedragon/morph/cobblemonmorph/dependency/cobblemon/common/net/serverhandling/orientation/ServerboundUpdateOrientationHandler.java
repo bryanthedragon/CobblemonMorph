@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.orientation.ServerboundUpdateOrientationPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class ServerboundUpdateOrientationHandler : ServerNetworkPacketHandler<ServerboundUpdateOrientationPacket> {
-    override fun handle(packet: ServerboundUpdateOrientationPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class ServerboundUpdateOrientationHandler : ServerNetworkPacketHandler<ServerboundUpdateOrientationPacket> {
+    override fun handle(packet: ServerboundUpdateOrientationPacket, server: MinecraftServer, ServerPlayer player) {
         val entity = player.level().getEntity(packet.entity) ?: return
 
         if (entity !is PokemonEntity) return

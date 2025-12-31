@@ -20,13 +20,13 @@ import net.minecraft.world.item.Items
  * @author Licious
  * @since March 21st, 2022
  */
-class HeldItemRequirement(val itemCondition: ItemPredicate) : Requirement {
+public class HeldItemRequirement(val itemCondition: ItemPredicate) : Requirement {
 
     constructor() : this(ItemPredicate.Builder.item().of(Items.EGG).build())
 
-    override fun check(pokemon: Pokemon): Boolean = this.itemCondition.test(pokemon.heldItemNoCopy())
+    override fun check(Pokemon pokemon): Boolean = this.itemCondition.test(pokemon.heldItemNoCopy())
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "held_item"
     }
 }

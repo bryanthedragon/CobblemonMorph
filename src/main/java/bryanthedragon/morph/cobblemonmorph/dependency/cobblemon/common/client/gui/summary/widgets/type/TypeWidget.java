@@ -17,11 +17,11 @@ import net.minecraft.network.chat.Component
 
 abstract class TypeWidget(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     pMessage: Component
 ): SoundlessWidget(pX, pY, pWidth, pHeight, pMessage) {
 
-    companion object {
+    final class Companion {
         val typeResource = cobblemonResource("textures/gui/types.png")
         private const val OFFSET = 0.5
     }

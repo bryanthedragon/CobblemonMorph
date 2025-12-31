@@ -24,7 +24,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.server.level.ServerPlayer
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
-final class PcSearchCommand {
+public final class PcSearchCommand {
 
     private const val NAME = "pcsearch"
     private const val PROPERTIES = "properties"
@@ -56,7 +56,7 @@ final class PcSearchCommand {
         return label.add(": ").aqua().add(value.yellow())
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer): Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player): Int {
         if (player.isInBattle()) {
             throw IN_BATTLE_EXCEPTION.create()
         }

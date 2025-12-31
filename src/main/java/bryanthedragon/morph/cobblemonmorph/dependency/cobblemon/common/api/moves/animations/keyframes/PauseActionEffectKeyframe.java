@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.delayedFuture
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
 
-class PauseActionEffectKeyframe : ConditionalActionEffectKeyframe() {
+public class PauseActionEffectKeyframe : ConditionalActionEffectKeyframe() {
     val pause = "1".asExpressionLike()
     override fun playWhenTrue(context: ActionEffectContext) = delayedFuture(seconds = pause.resolveFloat(context.runtime))
 }

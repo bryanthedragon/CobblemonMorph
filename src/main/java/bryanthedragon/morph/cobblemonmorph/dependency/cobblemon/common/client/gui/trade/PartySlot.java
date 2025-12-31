@@ -34,7 +34,7 @@ open class PartySlot(
     onPress: OnPress
 ) : Button(x, y, SIZE, SIZE, Component.literal("PartySlot"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
     val state = FloatingState()
-    companion object {
+    final class Companion {
         const val SIZE = 25
 
         private val hoverBackgroundResource = cobblemonResource("textures/gui/trade/trade_party_slot_hover.png")

@@ -34,14 +34,14 @@ import net.minecraft.world.level.pathfinder.PathComputationType
 /**
  * Seeks land if it's underwater.
  */
-class GoToLandTaskConfig : SingleTaskConfig {
+public class GoToLandTaskConfig : SingleTaskConfig {
     val walkSpeed = numberVariable(SharedEntityVariables.MOVEMENT_CATEGORY, SharedEntityVariables.WALK_SPEED, 0.35).asExpressible()
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(walkSpeed).asVariables()
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PathfinderMob) {
@@ -88,7 +88,7 @@ class GoToLandTaskConfig : SingleTaskConfig {
         }
     }
 
-    fun isSafeLandPos(world: ServerLevel, pos: BlockPos, mob: PathfinderMob): Boolean {
+    fun isSafeLandPos(ServerLevel world, (BlockPos pos, mob: PathfinderMob): Boolean {
         val blockState = world.getBlockState(pos)
 
         val isFluid = world.getFluidState(pos.above()).isEmpty.not()
@@ -112,7 +112,7 @@ class GoToLandTaskConfig : SingleTaskConfig {
         }
     }
 
-    fun isSafeLandPosAround(world: ServerLevel, pos: BlockPos, mob: PathfinderMob): Boolean {
+    fun isSafeLandPosAround(ServerLevel world, (BlockPos pos, mob: PathfinderMob): Boolean {
         val minX = pos.x
         val maxX = minX + floor(mob.bbWidth).toInt()
         val minZ = pos.z

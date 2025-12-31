@@ -27,16 +27,16 @@ import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.network.chat.Component
 
-class SearchWidget(
+public class SearchWidget(
     val posX: Number,
     val posY: Number,
-    width: Int,
-    height: Int,
+    Int width,
+    Int height,
     text: Component = "Search".text(),
     val update: () -> (Unit)
 ): EditBox(Minecraft.getInstance().font, posX.toInt(), posY.toInt(), width, height, text), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private val backgroundOverlay = cobblemonResource("textures/gui/pokedex/pokedex_screen_search_overlay.png")
         private val searchIcon = cobblemonResource("textures/gui/pokedex/search_icon.png")
     }

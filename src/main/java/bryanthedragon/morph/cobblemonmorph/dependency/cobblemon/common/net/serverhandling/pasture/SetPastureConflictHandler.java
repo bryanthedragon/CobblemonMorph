@@ -15,10 +15,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.UpdatePastureConflictFlagPacket
-final class SetPastureConflictHandler : ServerNetworkPacketHandler<SetPastureConflictPacket> {
-    override fun handle(packet: SetPastureConflictPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class SetPastureConflictHandler : ServerNetworkPacketHandler<SetPastureConflictPacket> {
+    override fun handle(packet: SetPastureConflictPacket, server: MinecraftServer, ServerPlayer player) {
         val world = player.level()
-        val entity = world.getEntitiesOfClass(PokemonEntity::class.java, player.boundingBox.inflate(64.0))
+        val entity = world.getEntitiesOfClass(PokemonEntity.class, player.boundingBox.inflate(64.0))
             .firstOrNull { it.pokemon.uuid == packet.pokemonId }
             ?: return
 

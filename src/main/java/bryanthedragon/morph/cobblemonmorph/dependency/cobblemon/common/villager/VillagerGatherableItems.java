@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.villager
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonItems
 import net.minecraft.world.item.Item
-final class VillagerGatherableItems {
+public final class VillagerGatherableItems {
     val villagerGatherableItems = setOf<Item>(
         CobblemonItems.BLUE_MINT_SEEDS,
         CobblemonItems.CYAN_MINT_SEEDS,

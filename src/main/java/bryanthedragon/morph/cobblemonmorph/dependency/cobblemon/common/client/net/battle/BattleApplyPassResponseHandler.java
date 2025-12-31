@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.BattleGUI
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleApplyPassResponsePacket
 import net.minecraft.client.Minecraft
-final class BattleApplyPassResponseHandler : ClientNetworkPacketHandler<BattleApplyPassResponsePacket> {
-    override fun handle(packet: BattleApplyPassResponsePacket, client: Minecraft) {
+public final class BattleApplyPassResponseHandler : ClientNetworkPacketHandler<BattleApplyPassResponsePacket> {
+    override fun handle(packet: BattleApplyPassResponsePacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val req = battle.pendingActionRequests.firstOrNull { it.response == null } ?: return
         val res = ForcePassActionResponse()

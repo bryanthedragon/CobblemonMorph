@@ -21,7 +21,8 @@ import net.minecraft.world.level.levelgen.structure.Structure
  *
  * @author Hiroku, Licious, whatsy
  * @since December 5th, 2023
- */final class StructureLikeConditionAdapter : RegistryLikeAdapter<Structure> {
+ */
+public final class StructureLikeConditionAdapter : RegistryLikeAdapter<Structure> {
     override val registryLikeConditions = mutableListOf(
         RegistryLikeTagCondition.resolver(Registries.STRUCTURE, ::StructureTagCondition),
         RegistryLikeIdentifierCondition.resolver(::StructureIdentifierCondition)

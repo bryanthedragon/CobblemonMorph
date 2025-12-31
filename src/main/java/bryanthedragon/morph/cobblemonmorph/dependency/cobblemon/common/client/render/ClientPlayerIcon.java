@@ -134,7 +134,7 @@ abstract class ClientPlayerIcon(expiryTime: Int? = null) {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
     }
 
-    companion object {
+    final class Companion {
         private val trackedIcons = mutableMapOf<UUID, ClientPlayerIcon>()
 
         fun onTick() = trackedIcons.values.forEach { it.onTick() }

@@ -10,4 +10,4 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stor
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCEntity
 
-class NPCPartyStore(val npc: NPCEntity) : PartyStore(npc.uuid)
+public class NPCPartyStore(val npc: NPCEntity) : PartyStore(npc.uuid)

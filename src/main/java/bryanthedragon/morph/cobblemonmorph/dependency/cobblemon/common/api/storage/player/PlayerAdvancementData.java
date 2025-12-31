@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.resources.ResourceLocation
 
-class PlayerAdvancementData {
+public class PlayerAdvancementData {
 
     var totalCaptureCount: Int = 0
         private set
@@ -97,7 +97,7 @@ class PlayerAdvancementData {
         }
     }
 
-    fun updateTotalDefeatedCount(pokemon: Pokemon) {
+    fun updateTotalDefeatedCount(Pokemon pokemon) {
         val count = totalDefeatedCounts[pokemon.species.resourceIdentifier] ?: 0
         if (count == 0) {
             totalDefeatedCounts[pokemon.species.resourceIdentifier] = 1
@@ -106,7 +106,7 @@ class PlayerAdvancementData {
         }
     }
 
-    fun updateAspectsCollected(player: ServerPlayer, pokemon: Pokemon) {
+    fun updateAspectsCollected(ServerPlayer player, Pokemon pokemon) {
         //TODO: take another look at using the Advancement progress
         /*val aspectConditions = player.advancements.progress.keys
             .flatMap { it.value.criteria.values }

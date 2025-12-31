@@ -12,12 +12,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.endsWith
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.packs.resources.ResourceManager
-final class PCBoxWallpaperRepository {
+public final class PCBoxWallpaperRepository {
     lateinit var allWallpapers: Set<Triple<ResourceLocation, ResourceLocation?, ResourceLocation?>>
     lateinit var availableWallpapers: MutableSet<ResourceLocation>
     val defaultWallpaper = cobblemonResource("textures/gui/pc/wallpaper/basic/wallpaper_basic_05.png")
 
-    fun findWallpapers(resourceManager: ResourceManager) {
+    fun findWallpapers(resourceResourceManager manager) {
         // Wallpaper resource, alternate wallpaper resource, and glow resource, if available as a triple
         val resources = mutableListOf<Triple<ResourceLocation, ResourceLocation?, ResourceLocation?>>()
         val wallpapers = mutableListOf<ResourceLocation>()

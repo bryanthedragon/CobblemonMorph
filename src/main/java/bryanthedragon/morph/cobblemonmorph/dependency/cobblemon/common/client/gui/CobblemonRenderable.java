@@ -10,4 +10,4 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.g
 
 import net.minecraft.client.gui.components.Renderable
 
-interface CobblemonRenderable : Renderable
+public interface CobblemonRenderable : Renderable

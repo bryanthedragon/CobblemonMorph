@@ -17,7 +17,7 @@ import net.minecraft.util.StringRepresentable
  * @author Licious
  * @since November 28th, 2022
  */
-enum class Flavour(val colour: Int): StringRepresentable {
+public enum Flavour(val colour: Int): StringRepresentable {
     SPICY(0xFA795E),
     DRY(0x65AFF3),
     SWEET(0xFF82CF),
@@ -26,7 +26,7 @@ enum class Flavour(val colour: Int): StringRepresentable {
     MILD(0x9D99BF);
 
     override fun getSerializedName() = name
-    companion object {
+    final class Companion {
         val CODEC = StringRepresentable.fromEnum<Flavour> { Flavour.entries.toTypedArray() }
     }
 }

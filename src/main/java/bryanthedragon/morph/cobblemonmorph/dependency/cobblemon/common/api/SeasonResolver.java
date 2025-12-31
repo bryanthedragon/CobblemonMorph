@@ -6,11 +6,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.feature.CobblemonSeason
-import net.minecraft.core.BlockPos
-import net.minecraft.world.level.LevelAccessor
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.seasons.CobblemonSeason;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 /**
  * Figures out what season it is at a particular position. Season is just a general approximation
@@ -19,6 +20,6 @@ import net.minecraft.world.level.LevelAccessor
  * @author Hiroku
  * @since November 25th, 2022
  */
-fun interface SeasonResolver {
-    operator fun invoke(world: LevelAccessor, pos: BlockPos): CobblemonSeason?
+public interface SeasonResolver {
+    CobblemonSeason invoke(Level worldAccessor, BlockPos pos);
 }

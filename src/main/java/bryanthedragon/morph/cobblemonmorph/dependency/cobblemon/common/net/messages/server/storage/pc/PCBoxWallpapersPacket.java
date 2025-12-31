@@ -17,13 +17,13 @@ import net.minecraft.resources.ResourceLocation
 open class PCBoxWallpapersPacket internal constructor(val wallpapers: Set<ResourceLocation>) : NetworkPacket<PCBoxWallpapersPacket>, UnsplittablePacket {
     override val id = ID
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("pc_box_wallpapers")
-        fun decode(buffer: RegistryFriendlyByteBuf): PCBoxWallpapersPacket =
+        fun decode(RegistryFriendlyByteBuf buffer): PCBoxWallpapersPacket =
             PCBoxWallpapersPacket(buffer.readList { reader -> reader.readResourceLocation() }.toSet())
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(wallpapers) { writer, value -> writer.writeResourceLocation(value) }
     }
 }

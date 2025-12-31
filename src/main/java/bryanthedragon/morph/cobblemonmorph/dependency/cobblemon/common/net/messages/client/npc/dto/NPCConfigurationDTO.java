@@ -30,11 +30,11 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class NPCConfigurationDTO : Encodable, Decodable {
-    var npcUUID: UUID = UUID.randomUUID()
+public class NPCConfigurationDTO : Encodable, Decodable {
+    var npcUUID uuid = UUID.randomUUID()
     var npcName: MutableComponent = "".text()
     var npcClass: ResourceLocation = cobblemonResource("default")
-    var resourceIdentifier: ResourceLocation = npcClass
+    var resourceResourceLocation identifier = npcClass
     var battle: NPCBattleConfiguration? = null
     var interactionInherited: Boolean = false
     var interaction: NPCInteractConfiguration? = null
@@ -59,7 +59,7 @@ class NPCConfigurationDTO : Encodable, Decodable {
         variables = npcEntity.config.map.map { it.key to it.value.asString() }.toMap().toMutableMap()
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(npcUUID)
         buffer.writeText(npcName)
         buffer.writeIdentifier(npcClass)
@@ -80,7 +80,7 @@ class NPCConfigurationDTO : Encodable, Decodable {
         )
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         npcUUID = buffer.readUUID()
         npcName = buffer.readText().copy()
         npcClass = buffer.readIdentifier()

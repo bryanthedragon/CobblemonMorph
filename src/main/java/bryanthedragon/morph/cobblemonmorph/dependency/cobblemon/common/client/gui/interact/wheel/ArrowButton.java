@@ -18,13 +18,13 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 
-class ArrowButton(
+public class ArrowButton(
     pX: Int, pY: Int,
     val isRight: Boolean,
     onPress: OnPress
 ) : Button(pX, pY, WIDTH, HEIGHT, Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private val ARROW_LEFT_RESOURCE = cobblemonResource("textures/gui/interact/interact_wheel_arrow_left.png")
         private val ARROW_RIGHT_RESOURCE = cobblemonResource("textures/gui/interact/interact_wheel_arrow_right.png")
 

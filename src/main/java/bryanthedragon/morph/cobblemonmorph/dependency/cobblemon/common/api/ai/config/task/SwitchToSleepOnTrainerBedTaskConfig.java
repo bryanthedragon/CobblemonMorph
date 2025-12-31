@@ -22,10 +22,10 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.level.block.BedBlock
 
-class SwitchToSleepOnTrainerBedTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+public class SwitchToSleepOnTrainerBedTaskConfig : SingleTaskConfig {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {

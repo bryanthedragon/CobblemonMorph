@@ -21,7 +21,8 @@ import net.minecraft.world.level.biome.Biome
  *
  * @author Hiroku, Licious
  * @since July 2nd, 2022
- */final class BiomeLikeConditionAdapter : RegistryLikeAdapter<Biome> {
+ */
+public final class BiomeLikeConditionAdapter : RegistryLikeAdapter<Biome> {
     override val registryLikeConditions = mutableListOf(
         RegistryLikeTagCondition.resolver(Registries.BIOME, ::BiomeTagCondition),
         RegistryLikeIdentifierCondition.resolver(::BiomeIdentifierCondition)

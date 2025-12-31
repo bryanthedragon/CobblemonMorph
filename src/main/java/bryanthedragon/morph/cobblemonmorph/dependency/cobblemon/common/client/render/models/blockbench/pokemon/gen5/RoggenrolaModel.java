@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class RoggenrolaModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame {
+public class RoggenrolaModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("roggenrola")
     override val leftLeg = getPart("feet_left")
     override val rightLeg = getPart("feet_right")

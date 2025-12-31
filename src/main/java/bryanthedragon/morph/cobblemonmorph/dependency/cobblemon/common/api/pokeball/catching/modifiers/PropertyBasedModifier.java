@@ -13,19 +13,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.world.entity.LivingEntity
 
-class PropertyBasedModifier(
+public class PropertyBasedModifier(
     val property: PokemonProperties,
     val multiplier: Float
 ) : CatchRateModifier {
 
     override fun isGuaranteed(): Boolean = false
 
-    override fun value(thrower: LivingEntity, pokemon: Pokemon): Float = this.multiplier
+    override fun value(LivingEntity thrower, Pokemon pokemon): Float = this.multiplier
 
-    override fun behavior(thrower: LivingEntity, pokemon: Pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
+    override fun behavior(LivingEntity thrower, Pokemon pokemon): CatchRateModifier.Behavior = CatchRateModifier.Behavior.MULTIPLY
 
-    override fun isValid(thrower: LivingEntity, pokemon: Pokemon): Boolean = this.property.matches(pokemon)
+    override fun isValid(LivingEntity thrower, Pokemon pokemon): Boolean = this.property.matches(pokemon)
 
-    override fun modifyCatchRate(currentCatchRate: Float, thrower: LivingEntity, pokemon: Pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
+    override fun modifyCatchRate(currentFloat catchRate, LivingEntity thrower, Pokemon pokemon): Float = this.behavior(thrower, pokemon).mutator(currentCatchRate, this.value(thrower, pokemon))
 
 }

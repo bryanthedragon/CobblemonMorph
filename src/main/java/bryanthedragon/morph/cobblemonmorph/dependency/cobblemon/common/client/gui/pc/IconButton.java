@@ -20,18 +20,18 @@ import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class IconButton(
+public class IconButton(
     pX: Int, pY: Int,
-    val buttonWidth: Int,
-    val buttonHeight: Int,
+    val buttonInt width,
+    val buttonInt height,
     val resource: ResourceLocation,
     val altResource: ResourceLocation? = null,
-    val tooltipKey: String? = null,
+    val tooltipString Key? = null,
     label: String,
     onPress: OnPress,
 ): Button(pX, pY, (buttonWidth * SCALE).toInt(), (buttonHeight * SCALE).toInt(), Component.literal(label), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val SCALE = 0.5F
     }
 

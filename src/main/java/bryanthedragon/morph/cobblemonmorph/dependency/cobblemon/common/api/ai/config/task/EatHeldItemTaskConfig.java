@@ -17,14 +17,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
-class EatHeldItemTaskConfig : SingleTaskConfig {
+public class EatHeldItemTaskConfig : SingleTaskConfig {
     override fun getVariables(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ) = emptyList<MoLangConfigVariable>()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {

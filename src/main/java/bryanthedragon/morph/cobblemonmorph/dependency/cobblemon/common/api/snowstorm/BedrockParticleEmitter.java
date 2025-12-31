@@ -25,7 +25,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since January 4th, 2023
  */
-class BedrockParticleEmitter(
+public class BedrockParticleEmitter(
     var startExpressions: MutableList<Expression> = mutableListOf(),
     var updateExpressions: MutableList<Expression> = mutableListOf(),
     var rate: ParticleEmitterRate = InstantParticleEmitterRate(),
@@ -38,7 +38,7 @@ class BedrockParticleEmitter(
     var travelDistanceEvents: EventTriggerTimeline = EventTriggerTimeline(mutableMapOf()),
     var loopingTravelDistanceEvents: MutableList<LoopingTravelDistanceEventTrigger> = mutableListOf()
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<BedrockParticleEmitter> = RecordCodecBuilder.create { instance ->
             instance.group(
                 EXPRESSION_CODEC.listOf().fieldOf("startExpressions").forGetter { it.startExpressions },
@@ -70,7 +70,7 @@ class BedrockParticleEmitter(
         }
     }
 
-    fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(startExpressions) { pb, expression -> pb.writeString(expression.getString()) }
         buffer.writeCollection(updateExpressions) { pb, expression -> pb.writeString(expression.getString()) }
         ParticleEmitterRate.writeToBuffer(buffer, rate)
@@ -83,7 +83,7 @@ class BedrockParticleEmitter(
         buffer.writeCollection(loopingTravelDistanceEvents) { _, event -> event.encode(buffer) }
     }
 
-    fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         startExpressions = buffer.readList { MoLang.createParser(buffer.readString()).parseExpression() }
         updateExpressions = buffer.readList { MoLang.createParser(buffer.readString()).parseExpression() }
         rate = ParticleEmitterRate.readFromBuffer(buffer)

@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.d
  * @author Licious
  * @since September 22nd, 2022
  */
-class PpUpdateInstruction( val message: BattleMessage): InterpreterInstruction {
+public class PpUpdateInstruction( val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatch {

@@ -32,7 +32,8 @@ import net.minecraft.world.phys.Vec3
  *
  * @author Hiroku
  * @since February 5th, 2022
- */final class CobblemonSpawningZoneGenerator : SpawningZoneGenerator {
+ */
+public final class CobblemonSpawningZoneGenerator : SpawningZoneGenerator {
     override fun generate(
         spawner: Spawner,
         input: SpawningZoneInput

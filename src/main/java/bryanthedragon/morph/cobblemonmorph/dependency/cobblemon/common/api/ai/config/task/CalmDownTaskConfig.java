@@ -19,11 +19,11 @@ import net.minecraft.world.entity.ai.behavior.VillagerCalmDown
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 
-class CalmDownTaskConfig : SingleTaskConfig {
+public class CalmDownTaskConfig : SingleTaskConfig {
     var condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null

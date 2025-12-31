@@ -19,13 +19,13 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.schedule.Activity
 
-class SwitchToFightTaskConfig : SingleTaskConfig {
+public class SwitchToFightTaskConfig : SingleTaskConfig {
     val activity = Activity.FIGHT
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ) = BehaviorBuilder.create {
         it.group(

@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client
 import org.joml.Quaternionf
 import org.spongepowered.asm.mixin.Unique
 
-interface RidingCameraInterface {
+public interface RidingCameraInterface {
     // Used to help in camera rotation rendering when transitioning
     // from rolled to unrolled.
     @Unique

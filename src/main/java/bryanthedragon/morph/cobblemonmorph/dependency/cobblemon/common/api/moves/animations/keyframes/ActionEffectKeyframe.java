@@ -19,12 +19,12 @@ import java.util.concurrent.CompletableFuture
  * @author Hiroku
  * @since October 26th, 2023
  */
-interface ActionEffectKeyframe {
-    companion object {
+public interface ActionEffectKeyframe {
+    final class Companion {
         val types = mutableMapOf<String, Class<out ActionEffectKeyframe>>()
 
         inline fun <reified T : ActionEffectKeyframe> register(type: String) {
-            types[type] = T::class.java
+            types[type] = T.class
         }
     }
 

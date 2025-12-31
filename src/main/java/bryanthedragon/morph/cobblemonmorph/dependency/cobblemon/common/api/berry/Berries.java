@@ -37,30 +37,31 @@ import java.awt.Color
  *
  * @author Licious
  * @since November 28th, 2022
- */final class Berries : JsonDataRegistry<Berry> {
+ */
+public final class Berries : JsonDataRegistry<Berry> {
 
-    override val id: ResourceLocation = cobblemonResource("berries")
+    override val ResourceLocation id = cobblemonResource("berries")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<Berries>()
 
     override val gson = GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
-        .registerTypeAdapter(MulchVariant::class.java, MulchVariantAdapter)
-        .registerTypeAdapter(MinMaxBounds.Doubles::class.java, FloatNumberRangeAdapter)
-        .registerTypeAdapter(Status::class.java, StatusAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(Collection::class.java, AABB::class.java).type, BoxCollectionAdapter)
-        .registerTypeAdapter(AABB::class.java, BoxAdapter)
-        .registerTypeAdapter(Vec3::class.java, VerboseVec3dAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(GrowthFactor::class.java, CobblemonGrowthFactorAdapter)
-        .registerTypeAdapter(IntRange::class.java, VerboseIntRangeAdapter)
-        .registerTypeAdapter(Color::class.java, LiteralHexColorAdapter)
-        .registerTypeAdapter(Stat::class.java, CobblemonStatTypeAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(TagKey::class.java, Biome::class.java).type, TagKeyAdapter(Registries.BIOME))
-        .registerTypeAdapter(BerrySpawnCondition::class.java, CobblemonBerrySpawnConditionAdapter)
+        .registerTypeAdapter(MulchVariant.class, MulchVariantAdapter)
+        .registerTypeAdapter(MinMaxBounds.Doubles.class, FloatNumberRangeAdapter)
+        .registerTypeAdapter(Status.class, StatusAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(Collection.class, AABB.class).type, BoxCollectionAdapter)
+        .registerTypeAdapter(AABB.class, BoxAdapter)
+        .registerTypeAdapter(Vec3.class, VerboseVec3dAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(GrowthFactor.class, CobblemonGrowthFactorAdapter)
+        .registerTypeAdapter(IntRange.class, VerboseIntRangeAdapter)
+        .registerTypeAdapter(Color.class, LiteralHexColorAdapter)
+        .registerTypeAdapter(Stat.class, CobblemonStatTypeAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(TagKey.class, Biome.class).type, TagKeyAdapter(Registries.BIOME))
+        .registerTypeAdapter(BerrySpawnCondition.class, CobblemonBerrySpawnConditionAdapter)
         .create()
-    override val typeToken: TypeToken<Berry> = TypeToken.get(Berry::class.java)
+    override val typeToken: TypeToken<Berry> = TypeToken.get(Berry.class)
     override val resourcePath = "berries"
 
     private val berries = hashMapOf<ResourceLocation, Berry>()
@@ -72,7 +73,7 @@ import java.awt.Color
                 berry.identifier = identifier
                 berry.validate()
                 this.berries[identifier] = berry
-            } catch (e: Exception) {
+            } catch (Exception e) {
                 Cobblemon.LOGGER.error("Skipped loading the {} berry", identifier, e)
             }
         }
@@ -80,7 +81,7 @@ import java.awt.Color
         this.observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         BerryRegistrySyncPacket(this.all()).sendToPlayer(player)
     }
 
@@ -94,7 +95,7 @@ import java.awt.Color
      * @return The [Berry] if loaded otherwise null.
      */
     @JvmStatic
-    fun getByIdentifier(identifier: ResourceLocation): Berry? = this.berries[identifier]
+    fun getByIdentifier(ResourceLocation identifier): Berry? = this.berries[identifier]
 
     /**
      * Gets a berry if loaded.
@@ -103,6 +104,6 @@ import java.awt.Color
      * @return The [Berry] if loaded otherwise null.
      */
     @JvmStatic
-    fun getByName(name: String): Berry? = this.getByIdentifier(cobblemonResource(name))
+    fun getByName(String name): Berry? = this.getByIdentifier(cobblemonResource(name))
 
 }

@@ -26,7 +26,7 @@ import java.util.function.Consumer
  * @author Hiroku
  * @since November 20th, 2023
  */
-class PrimaryAnimation(
+public class PrimaryAnimation(
     val animation: ActiveAnimation,
     /**
      * The transition curve.

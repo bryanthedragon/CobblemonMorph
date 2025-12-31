@@ -32,7 +32,7 @@ import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 import net.minecraft.util.Mth.floor
 
-class BattleMoveSelection(
+public class BattleMoveSelection(
     battleGUI: BattleGUI,
     request: SingleActionRequest,
 ) : BattleActionSelection(
@@ -44,7 +44,7 @@ class BattleMoveSelection(
     height = 100,
     battleLang("ui.select_move")
 ) {
-    companion object {
+    final class Companion {
         const val MOVE_WIDTH = 92
         const val MOVE_HEIGHT = 24
         const val MOVE_VERTICAL_SPACING = 5F

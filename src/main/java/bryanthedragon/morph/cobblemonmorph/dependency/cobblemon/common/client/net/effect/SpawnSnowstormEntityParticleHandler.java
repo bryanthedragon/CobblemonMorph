@@ -19,8 +19,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormEntityParticlePacket
 import net.minecraft.client.Minecraft
 import net.minecraft.world.entity.Entity
-final class SpawnSnowstormEntityParticleHandler : ClientNetworkPacketHandler<SpawnSnowstormEntityParticlePacket> {
-    override fun handle(packet: SpawnSnowstormEntityParticlePacket, client: Minecraft) {
+public final class SpawnSnowstormEntityParticleHandler : ClientNetworkPacketHandler<SpawnSnowstormEntityParticlePacket> {
+    override fun handle(packet: SpawnSnowstormEntityParticlePacket, Minecraft client) {
         val world = Minecraft.getInstance().level ?: return
         val effect = BedrockParticleOptionsRepository.getEffect(packet.effectId) ?: return
         val sourceEntity = world.getEntity(packet.sourceEntityId) as? PosableEntity ?: return

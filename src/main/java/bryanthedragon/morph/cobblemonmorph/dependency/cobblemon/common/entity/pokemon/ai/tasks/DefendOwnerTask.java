@@ -14,7 +14,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-final class DefendOwnerTask {
+public final class DefendOwnerTask {
     fun create(): OneShot<PokemonEntity> {
         return BehaviorBuilder.create {
             it.group(

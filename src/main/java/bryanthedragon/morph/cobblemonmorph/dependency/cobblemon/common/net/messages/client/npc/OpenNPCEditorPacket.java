@@ -14,13 +14,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class OpenNPCEditorPacket(
+public class OpenNPCEditorPacket(
     val npcId: Int,
     val dto: NPCConfigurationDTO
 ) : NetworkPacket<OpenNPCEditorPacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("open_npc_editor")
-        fun decode(buffer: RegistryFriendlyByteBuf) = OpenNPCEditorPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = OpenNPCEditorPacket(
             npcId = buffer.readInt(),
             dto = NPCConfigurationDTO().apply { decode(buffer) }
         )
@@ -30,7 +30,7 @@ class OpenNPCEditorPacket(
 
     constructor(npc: NPCEntity): this(npcId = npc.id, dto = NPCConfigurationDTO(npc))
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(npcId)
         dto.encode(buffer)
     }

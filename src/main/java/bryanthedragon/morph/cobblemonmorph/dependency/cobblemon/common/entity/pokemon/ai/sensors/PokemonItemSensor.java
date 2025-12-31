@@ -22,12 +22,12 @@ import net.minecraft.world.entity.ai.sensing.Sensor
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.level.GameRules
 
-class PokemonItemSensor(
+public class PokemonItemSensor(
     private val width: Double = 16.0, // TODO: Can we configure sensors dynamically? // Nope. Could be done with a config struct option but it's a bit crass.
     private val height: Double = 8.0,
     private val maxTravelDistance: Double = 16.0,
 ) : Sensor<PokemonEntity>(30) {
-    companion object {
+    final class Companion {
         const val PICKUP_ITEMS = "pickup_items"
     }
 
@@ -35,7 +35,7 @@ class PokemonItemSensor(
         return ImmutableSet.of<MemoryModuleType<*>?>(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM)
     }
 
-    override fun doTick(level: ServerLevel, entity: PokemonEntity) {
+    override fun doTick(ServerLevel level, entity: PokemonEntity) {
         val pickupItems = entity.config.getObjectList<ObtainableItem>(PICKUP_ITEMS)
         if (!level.gameRules.getBoolean(GameRules.RULE_MOBGRIEFING) || !entity.pokemon.canDropHeldItem || entity.brain.getMemorySafely(
                 CobblemonMemories.DISABLE_WALK_TO_WANTED_ITEM).orElse(false)) {
@@ -51,7 +51,7 @@ class PokemonItemSensor(
         }
 
         val list = level.getEntitiesOfClass(
-            ItemEntity::class.java,
+            ItemEntity.class,
             entity.boundingBox.inflate(width, height, width)
         ) {
             (pickupItems.findMatchingEntry(entity.registryAccess(), it.item)?.pickupPriority ?: 0) > heldItemValue

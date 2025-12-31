@@ -21,18 +21,18 @@ import com.google.gson.reflect.TypeToken
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
-final class DexEntryAdditions : JsonDataRegistry<DexEntryAdditions.DexEntryAddition> {
+public final class DexEntryAdditions : JsonDataRegistry<DexEntryAdditions.DexEntryAddition> {
     override val id = cobblemonResource("dex_entry_additions")
     override val type = PackType.SERVER_DATA
 
-    override val gson: Gson = GsonBuilder()
+    override val Gson gson = GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .create()
 
-    override val typeToken: TypeToken<DexEntryAddition> = TypeToken.get(DexEntryAddition::class.java)
+    override val typeToken: TypeToken<DexEntryAddition> = TypeToken.get(DexEntryAddition.class)
     override val resourcePath = "dex_entry_additions"
 
     override val observable = SimpleObservable<DexEntryAdditions>()
@@ -47,10 +47,10 @@ final class DexEntryAdditions : JsonDataRegistry<DexEntryAdditions.DexEntryAddit
         observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {} // It'd be synced as part of the DexEntries
+    override fun sync(ServerPlayer player) {} // It'd be synced as part of the DexEntries
 
     class DexEntryAddition {
-        val entryId: ResourceLocation = cobblemonResource("some_addition")
+        val entryResourceLocation id = cobblemonResource("some_addition")
         val forms: List<PokedexForm> = emptyList()
         val variations: List<PokedexCosmeticVariation> = emptyList()
     }

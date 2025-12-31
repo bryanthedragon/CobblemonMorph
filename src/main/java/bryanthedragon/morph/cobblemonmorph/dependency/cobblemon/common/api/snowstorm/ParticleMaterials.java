@@ -18,7 +18,7 @@ import com.mojang.blaze3d.vertex.VertexFormat
 import net.minecraft.client.particle.ParticleRenderType
 import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.client.renderer.texture.TextureManager
-final class ParticleMaterials {
+public final class ParticleMaterials {
     val ALPHA = object : ParticleRenderType {
         override fun begin(tessellator: Tesselator, textureManager: TextureManager): BufferBuilder {
             RenderSystem.enableBlend()

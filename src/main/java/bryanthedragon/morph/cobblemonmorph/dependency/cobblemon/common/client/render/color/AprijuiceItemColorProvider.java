@@ -12,11 +12,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.cooking.getColourMixFromRideStatBoosts
 import net.minecraft.client.color.item.ItemColor
 import net.minecraft.world.item.ItemStack
-final class AprijuiceItemColorProvider : ItemColor {
+public final class AprijuiceItemColorProvider : ItemColor {
 
     private const val JUICE_INDEX = 1
 
-    override fun getColor(stack: ItemStack, layer: Int): Int {
+    override fun getColor(ItemStack stack, layer: Int): Int {
         if (layer == 0) return -1
 
         // todo we are not coloring the leaf anymore

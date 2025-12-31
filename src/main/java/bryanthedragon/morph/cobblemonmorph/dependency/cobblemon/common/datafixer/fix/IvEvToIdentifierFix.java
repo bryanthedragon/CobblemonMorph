@@ -15,7 +15,7 @@ import com.mojang.datafixers.schemas.Schema
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Dynamic
 
-class IvEvToIdentifierFix(outputSchema: Schema) : PokemonFix(outputSchema) {
+public class IvEvToIdentifierFix(outputSchema: Schema) : PokemonFix(outputSchema) {
 
     private val stringToStat = Stats.entries.associate {
         it.identifier.path to it.identifier

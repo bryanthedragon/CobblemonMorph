@@ -26,7 +26,7 @@ import net.minecraft.network.chat.Component
  * @author Deltric
  * @since January 21st, 2022
  */
-class StartInstruction(val message: BattleMessage): InterpreterInstruction {
+public class StartInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatch {

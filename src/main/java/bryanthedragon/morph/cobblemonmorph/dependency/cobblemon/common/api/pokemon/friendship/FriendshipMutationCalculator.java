@@ -25,9 +25,9 @@ fun interface FriendshipMutationCalculator {
      * @param pokemon The [Pokemon] being mutated.
      * @return The amount of friendship to mutate.
      */
-    fun calculate(pokemon: Pokemon): Int
+    fun calculate(Pokemon pokemon): Int
 
-    companion object {
+    final class Companion {
 
         /**
          * The calculator used for level up friendship yields in generation 8 mainline games.

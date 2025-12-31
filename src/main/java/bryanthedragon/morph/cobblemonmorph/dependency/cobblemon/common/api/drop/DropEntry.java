@@ -22,12 +22,12 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since July 24th, 2022
  */
-interface DropEntry {
-    companion object {
+public interface DropEntry {
+    final class Companion {
         val entryTypes = mutableMapOf<String, Class<out DropEntry>>()
         var defaultType: Class<out DropEntry>? = null
-        fun getByName(name: String) = entryTypes[name]
-        fun <T : DropEntry> register(name: String, clazz: Class<T>, isDefault: Boolean = false) {
+        fun getByName(String name) = entryTypes[name]
+        fun <T : DropEntry> register(String name, clazz: Class<T>, isDefault: Boolean = false) {
             entryTypes[name] = clazz
             if (isDefault) {
                 defaultType = clazz
@@ -56,8 +56,8 @@ interface DropEntry {
     val maxSelectableTimes: Int
 
     /** Whether this is considered a possible drop at the moment or not */
-    fun canDrop(pokemon: Pokemon?): Boolean = true
+    fun canDrop(Pokemon pokemon?): Boolean = true
 
     /** The logic to use to actually drop the thing. */
-    fun drop(entity: LivingEntity?, world: ServerLevel, pos: Vec3, player: ServerPlayer?)
+    fun drop(LivingEntity entity?, ServerLevel world, Vec3 pos, ServerPlayer player?)
 }

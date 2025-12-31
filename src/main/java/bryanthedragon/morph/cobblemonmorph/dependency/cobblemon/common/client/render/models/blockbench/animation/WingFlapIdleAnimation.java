@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.RenderContext
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.wavefunction.WaveFunction
 
-class WingFlapIdleAnimation(
+public class WingFlapIdleAnimation(
     val leftWing: Bone?,
     val rightWing: Bone?,
     val rotation: WaveFunction,

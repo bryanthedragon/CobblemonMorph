@@ -13,8 +13,8 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
-final class NPCPartyProviderAdapter : JsonDeserializer<NPCPartyProvider> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): NPCPartyProvider {
+public final class NPCPartyProviderAdapter : JsonDeserializer<NPCPartyProvider> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): NPCPartyProvider {
         val typeName = if (json.isJsonPrimitive) json.asString else json.asJsonObject.get("type").asString
         return NPCPartyProvider.types[typeName]?.invoke(typeName)?.also { it.loadFromJSON(json) }
             ?: throw IllegalStateException("Unable to find party provider by type: $typeName")

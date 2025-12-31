@@ -32,12 +32,12 @@ import java.util.concurrent.CompletableFuture
  * @author Deltric
  * @since January 22nd, 2022
  */
-class CantInstruction(val message: BattleMessage): ActionEffectInstruction {
+public class CantInstruction(val message: BattleMessage): ActionEffectInstruction {
     override var future: CompletableFuture<*> = CompletableFuture.completedFuture(Unit)
     override var holds = mutableSetOf<String>()
     override val id = cobblemonResource("cant")
 
-    override fun addMolangQueries(runtime: MoLangRuntime) {
+    override fun addMolangQueries(MoLangRuntime runtime) {
         super.addMolangQueries(runtime)
         runtime.environment.query.addBattleMessageFunctions(message)
     }
@@ -46,7 +46,7 @@ class CantInstruction(val message: BattleMessage): ActionEffectInstruction {
 
     }
 
-    override fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime) {
+    override fun runActionEffect(battle: PokemonBattle, MoLangRuntime runtime) {
         battle.dispatch {
             val pokemon = message.battlePokemon(0, battle) ?: return@dispatch GO
             val effectID = message.effectAt(1)?.id ?: return@dispatch GO

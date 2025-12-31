@@ -21,13 +21,13 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.MutableComponent
 
-class BattleRequestButton(
+public class BattleRequestButton(
         pX: Int, pY: Int,
         var text: MutableComponent,
         onPress: OnPress
 ): Button(pX, pY, (WIDTH * SCALE).toInt(), (HEIGHT * SCALE).toInt(), text, onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val WIDTH = 69F
         private const val HEIGHT = 19F
         private const val SCALE = 1F

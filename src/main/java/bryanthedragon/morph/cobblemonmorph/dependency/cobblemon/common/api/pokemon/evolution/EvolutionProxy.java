@@ -20,7 +20,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.poke
  * @author Licious
  * @since June 18th, 2022
  */
-interface EvolutionProxy<C : EvolutionLike, S : EvolutionLike, CI : PreProcessor, SI : PreProcessor> {
+public interface EvolutionProxy<C : EvolutionLike, S : EvolutionLike, CI : PreProcessor, SI : PreProcessor> {
 
     /**
      * Checks if the current logical side is the client.

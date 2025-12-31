@@ -17,8 +17,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class BenchMoveHandler : ServerNetworkPacketHandler<BenchMovePacket> {
-    override fun handle(packet: BenchMovePacket, server: MinecraftServer, player: ServerPlayer) {
+public final class BenchMoveHandler : ServerNetworkPacketHandler<BenchMovePacket> {
+    override fun handle(packet: BenchMovePacket, server: MinecraftServer, ServerPlayer player) {
         val pokemonStore: PokemonStore<*> = if (packet.isParty) {
             player.party()
         } else {

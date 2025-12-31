@@ -22,10 +22,10 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since August 25th, 2025
  */
-class PokedexCosmeticVariation {
+public class PokedexCosmeticVariation {
     var displayName: String = "cobblemon.pokedex.variation.cosmetic"
     var icon: ResourceLocation = cobblemonResource("textures/gui/pokedex/variation/cosmetic.png")
-    var aspects: Set<String> = emptySet()
+    Set<String> aspects = emptySet()
 
     fun clone() = PokedexCosmeticVariation().also {
         it.displayName = displayName
@@ -33,13 +33,13 @@ class PokedexCosmeticVariation {
         it.aspects = aspects.toSet()
     }
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(displayName)
         buffer.writeResourceLocation(icon)
         buffer.writeCollection(aspects) { _, aspect -> buffer.writeString(aspect) }
     }
 
-    fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(RegistryFriendlyByteBuf buffer) {
         displayName = buffer.readString()
         icon = buffer.readResourceLocation()
         aspects = buffer.readList { buffer.readString() }.toSet()

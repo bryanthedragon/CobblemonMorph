@@ -22,7 +22,7 @@ import net.minecraft.network.chat.Component
  * @author Hiroku
  * @since March 9th, 2022
  */
-class BattleSide(vararg val actors: BattleActor) {
+public class BattleSide(vararg val actors: BattleActor) {
     val activePokemon: List<ActiveBattlePokemon>
         get() = actors.flatMap { it.activePokemon }
 
@@ -30,7 +30,7 @@ class BattleSide(vararg val actors: BattleActor) {
     val contextManager = ContextManager()
     fun getOppositeSide() = if (this == battle.side1) battle.side2 else battle.side1
 
-    fun broadcastChatMessage(component: Component) {
+    fun broadcastChatMessage(Component component) {
         return this.actors.forEach { it.sendMessage(component) }
     }
 

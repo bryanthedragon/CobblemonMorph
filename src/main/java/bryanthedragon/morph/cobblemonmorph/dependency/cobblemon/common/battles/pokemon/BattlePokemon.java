@@ -6,42 +6,44 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon;
 
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.value.DoubleValue
-import com.bedrockk.molang.runtime.value.StringValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asStruct
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveSet
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.helditem.HeldItemManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.helditem.HeldItemProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.MultiPokemonBattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PokemonBattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.ContextManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleUpdateTeamPokemonPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.IVs
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Nature
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.BattleCloneProperty
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.UncatchableProperty
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
-import java.util.UUID
-import net.minecraft.network.chat.MutableComponent
-import java.util.function.Function
+import com.bedrockk.molang.runtime.struct.QueryStruct;
+import com.bedrockk.molang.runtime.value.DoubleValue;
+import com.bedrockk.molang.runtime.value.StringValue;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asStruct;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveSet;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.helditem.HeldItemManager;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.helditem.HeldItemProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.MultiPokemonBattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PokemonBattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.ContextManager;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleUpdateTeamPokemonPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.IVs;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Nature;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.BattleCloneProperty;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties.UncatchableProperty;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server;
 
-open class BattlePokemon(
-    val originalPokemon: Pokemon,
-    val effectedPokemon: Pokemon = originalPokemon,
+import java.util.UUID;
+import java.util.function.Function;
+
+import net.minecraft.network.chat.MutableComponent;
+
+public open public class BattlePokemon(
+    val originalPokemon pokemon,
+    val effectedPokemon pokemon = originalPokemon,
     val postBattleEntityOperation: (PokemonEntity) -> Unit = {}
 ) {
     lateinit var actor: BattleActor
 
-    companion object {
-        fun safeCopyOf(pokemon: Pokemon): BattlePokemon {
+    final class Companion {
+        fun safeCopyOf(Pokemon pokemon): BattlePokemon {
             //TOOD figure out a closer registry access (might have to break some method signatures for this (1.7?)
             val effectedPokemon = pokemon.clone(registryAccess = server()?.registryAccess() ?: throw IllegalStateException("No registry access available"))
             BattleCloneProperty.isBattleClone().apply(effectedPokemon)
@@ -53,7 +55,7 @@ open class BattlePokemon(
             )
         }
 
-        fun playerOwned(pokemon: Pokemon): BattlePokemon = BattlePokemon(
+        fun playerOwned(Pokemon pokemon): BattlePokemon = BattlePokemon(
             originalPokemon = pokemon,
             effectedPokemon = pokemon,
             postBattleEntityOperation = { entity ->
@@ -78,7 +80,7 @@ open class BattlePokemon(
             "moveset" to Function { effectedPokemon.moveSet.toStruct() }
         ))
 
-    val uuid: UUID
+    val UUID uuid
         get() = effectedPokemon.uuid
     val health: Int
         get() = effectedPokemon.currentHealth

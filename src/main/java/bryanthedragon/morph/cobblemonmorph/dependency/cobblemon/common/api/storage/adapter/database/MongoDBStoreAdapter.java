@@ -39,11 +39,11 @@ open class MongoDBStoreAdapter(
     protected val databaseName: String,
 ) : CobblemonAdapterParent<JsonObject>(), FileStoreAdapter<JsonObject> {
 
-    protected val gson: Gson = this.createGson()
+    protected val Gson gson = this.createGson()
 
-    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess): JsonObject = store.saveToJSON(JsonObject(), registryAccess)
+    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, RegistryAccess registryAccess): JsonObject = store.saveToJSON(JsonObject(), registryAccess)
 
-    override fun save(storeClass: Class<out PokemonStore<*>>, uuid: UUID, serialized: JsonObject) {
+    override fun save(storeClass: Class<out PokemonStore<*>>, UUID uuid, serialized: JsonObject) {
         val document = Document.parse(this.gson.toJson(serialized))
         document["uuid"] = uuid.toString()
         document["lastUpdated"] = Date()
@@ -52,7 +52,7 @@ open class MongoDBStoreAdapter(
         collection.replaceOne(filter, document, ReplaceOptions().upsert(true))
     }
 
-    override fun <E : StorePosition, T : PokemonStore<E>> provide(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+    override fun <E : StorePosition, T : PokemonStore<E>> provide(storeClass: Class<T>, UUID uuid, RegistryAccess registryAccess): T? {
         val server = server()!!
         val pokemonStoreRoot = server.getWorldPath(LevelResource.ROOT).resolve("pokemon").toFile()
         val jsonAdapter = JSONStoreAdapter(
@@ -68,11 +68,11 @@ open class MongoDBStoreAdapter(
         val document = collection.find(filter).first()
 
         if (document != null) {
-            val json = this.gson.fromJson(document.toJson(), JsonObject::class.java)
+            val json = this.gson.fromJson(document.toJson(), JsonObject.class)
             val store = try {
-                storeClass.getConstructor(UUID::class.java, UUID::class.java).newInstance(uuid, uuid)
+                storeClass.getConstructor(UUID.class, UUID.class).newInstance(uuid, uuid)
             } catch (exception: NoSuchMethodException) {
-                storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                storeClass.getConstructor(UUID.class).newInstance(uuid)
             }
             store.loadFromJSON(json, registryAccess)
             return store
@@ -98,8 +98,8 @@ open class MongoDBStoreAdapter(
 
     protected open fun getCollection(storeClass: Class<out PokemonStore<*>>): MongoCollection<Document> {
         val collectionName = when (storeClass) {
-            PlayerPartyStore::class.java -> "PlayerPartyCollection"
-            PCStore::class.java -> "PCCollection"
+            PlayerPartyStore.class -> "PlayerPartyCollection"
+            PCStore.class -> "PCCollection"
             else -> "OtherCollection"
         }
         return this.mongoClient.getDatabase(this.databaseName).getCollection(collectionName)

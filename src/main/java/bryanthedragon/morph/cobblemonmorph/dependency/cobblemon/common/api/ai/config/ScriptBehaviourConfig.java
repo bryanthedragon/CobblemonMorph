@@ -30,27 +30,27 @@ import net.minecraft.world.entity.LivingEntity
  * @author Hiroku
  * @since August 11th, 2025
  */
-class ScriptBehaviourConfig : BehaviourConfig {
+public class ScriptBehaviourConfig : BehaviourConfig {
     /** If true, the script will execute as part of the getVariables phase. */
     val executeEarly: Boolean = false
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val script: ExpressionLike = "0".asExpressionLike()
     val variables = mutableListOf<MoLangConfigVariable>()
 
-    private fun runScript(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    private fun runScript(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (!checkCondition(behaviourConfigurationContext, condition)) return
         script.resolve(behaviourConfigurationContext.runtime)
     }
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = variables
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = variables
 
-    override fun preconfigure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    override fun preconfigure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (executeEarly) {
             runScript(entity = entity, behaviourConfigurationContext = behaviourConfigurationContext)
         }
     }
 
-    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    override fun configure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (!executeEarly) {
             runScript(entity = entity, behaviourConfigurationContext = behaviourConfigurationContext)
         }

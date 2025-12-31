@@ -17,8 +17,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.battle.BattleSelectActionsPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class BattleSelectActionsHandler : ServerNetworkPacketHandler<BattleSelectActionsPacket> {
-    override fun handle(packet: BattleSelectActionsPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class BattleSelectActionsHandler : ServerNetworkPacketHandler<BattleSelectActionsPacket> {
+    override fun handle(packet: BattleSelectActionsPacket, server: MinecraftServer, ServerPlayer player) {
         val battle = BattleRegistry.getBattle(packet.battleId) ?: return
         val actor = battle.actors.find { player.uuid in it.getPlayerUUIDs() } ?: return
         if (!actor.mustChoose) {

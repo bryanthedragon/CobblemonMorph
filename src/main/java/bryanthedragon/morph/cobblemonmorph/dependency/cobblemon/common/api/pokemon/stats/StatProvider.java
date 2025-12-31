@@ -27,7 +27,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since November 6th, 2022
  */
-interface StatProvider {
+public interface StatProvider {
 
     /**
      * The [StatTypeAdapter] implementation.
@@ -96,7 +96,7 @@ interface StatProvider {
      * @param stat The [Stat] being queried.
      * @return The stat numerical value.
      */
-    fun getStatForPokemon(pokemon: Pokemon, stat: Stat): Int
+    fun getStatForPokemon(Pokemon pokemon, Stat stat ): Int
 
     /**
      * Provides the [Stat] for the given identifier.
@@ -104,7 +104,7 @@ interface StatProvider {
      * @param identifier The identifier being queried.
      * @return The [Stat] if existing otherwise null.
      */
-    fun fromIdentifier(identifier: ResourceLocation): Stat?
+    fun fromIdentifier(ResourceLocation identifier): Stat?
 
     /**
      * Provides the [Stat] for the given identifier.
@@ -113,7 +113,7 @@ interface StatProvider {
      * @param identifier The identifier being queried.
      * @return The [Stat] if existing otherwise throws exception.
      */
-    fun fromIdentifierOrThrow(identifier: ResourceLocation): Stat
+    fun fromIdentifierOrThrow(ResourceLocation identifier): Stat
 
     /**
      * Decode a [Stat] from the given [buffer].
@@ -121,7 +121,7 @@ interface StatProvider {
      * @param buffer The [ByteBuf].
      * @return The decoded [Stat].
      */
-    fun decode(buffer: RegistryFriendlyByteBuf): Stat
+    fun decode(RegistryFriendlyByteBuf buffer): Stat
 
     /**
      * Encode the given [stat] to the [buffer].
@@ -129,6 +129,6 @@ interface StatProvider {
      * @param buffer The [ByteBuf].
      * @param stat The [Stat] being encoded.
      */
-    fun encode(buffer: RegistryFriendlyByteBuf, stat: Stat)
+    fun encode(RegistryFriendlyByteBuf buffer, Stat stat )
 
 }

@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.toast.ToastTracker
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast.ToastPacket
 import net.minecraft.client.Minecraft
-final class ToastPacketHandler : ClientNetworkPacketHandler<ToastPacket> {
-    override fun handle(packet: ToastPacket, client: Minecraft) {
+public final class ToastPacketHandler : ClientNetworkPacketHandler<ToastPacket> {
+    override fun handle(packet: ToastPacket, Minecraft client) {
         client.executeIfPossible { ToastTracker.handle(packet, client) }
     }
 }

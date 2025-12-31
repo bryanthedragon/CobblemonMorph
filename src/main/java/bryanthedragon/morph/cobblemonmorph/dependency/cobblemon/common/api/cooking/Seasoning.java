@@ -37,7 +37,7 @@ record Seasoning(
     @SerializedName("mobEffects")
     val mobEffects: List<SerializableMobEffectInstance>? = null
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<Seasoning> = RecordCodecBuilder.create { builder ->
             builder.group(
                 ITEM_REGISTRY_LIKE_CODEC.fieldOf("ingredient").forGetter { it.ingredient },

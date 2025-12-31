@@ -16,22 +16,22 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class SeasoningRegistrySyncPacket(seasonings: List<Seasoning>) :
+public class SeasoningRegistrySyncPacket(seasonings: List<Seasoning>) :
     DataRegistrySyncPacket<Seasoning, SeasoningRegistrySyncPacket>(seasonings) {
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("seasonings")
-        fun decode(buffer: RegistryFriendlyByteBuf) =
+        fun decode(RegistryFriendlyByteBuf buffer) =
             SeasoningRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Seasoning) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Seasoning) {
         Seasoning.STREAM_CODEC.encode(buffer, entry)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Seasoning {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Seasoning {
         return Seasoning.STREAM_CODEC.decode(buffer)
     }
 

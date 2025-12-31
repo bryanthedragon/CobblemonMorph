@@ -34,18 +34,19 @@ import net.minecraft.server.packs.PackType
  *
  * @author Hiroku
  * @since September 30th, 2023
- */final class CobblemonSpawnRules : JsonDataRegistry<SpawnRule> {
+ */
+public final class CobblemonSpawnRules : JsonDataRegistry<SpawnRule> {
     override val gson = GsonBuilder()
-        .registerTypeAdapter(SpawnRuleComponent::class.java, SpawnRuleComponentAdapter)
-        .registerTypeAdapter(SpawnDetailSelector::class.java, SpawnDetailSelectorAdapter)
-        .registerTypeAdapter(SpawnablePositionSelector::class.java, SpawnablePositionSelectorAdapter)
-        .registerTypeAdapter(SpawningCondition::class.java, SpawningConditionAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(Component::class.java, TextAdapter)
+        .registerTypeAdapter(SpawnRuleComponent.class, SpawnRuleComponentAdapter)
+        .registerTypeAdapter(SpawnDetailSelector.class, SpawnDetailSelectorAdapter)
+        .registerTypeAdapter(SpawnablePositionSelector.class, SpawnablePositionSelectorAdapter)
+        .registerTypeAdapter(SpawningCondition.class, SpawningConditionAdapter)
+        .registerTypeAdapter(Expression.class, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+        .registerTypeAdapter(Component.class, TextAdapter)
         .create()
 
-    override val typeToken = TypeToken.get(SpawnRule::class.java)
+    override val typeToken = TypeToken.get(SpawnRule.class)
     override val resourcePath = "spawn_rules"
 
     init {
@@ -68,9 +69,9 @@ import net.minecraft.server.packs.PackType
         observable.emit(this)
     }
 
-    override val id: ResourceLocation = cobblemonResource("spawn_rules")
+    override val ResourceLocation id = cobblemonResource("spawn_rules")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<CobblemonSpawnRules>()
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 }

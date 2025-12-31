@@ -23,8 +23,9 @@ import java.lang.reflect.Type
  *
  * @since January 28th, 2022
  * @author Hiroku
- */final class RegisteredSpawnablePositionAdapter : JsonSerializer<SpawnablePositionType<*>>, JsonDeserializer<SpawnablePositionType<*>> {
-    override fun serialize(spawnablePosition: SpawnablePositionType<*>, type: Type, ctx: JsonSerializationContext) = JsonPrimitive(spawnablePosition.name)
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = SpawnablePosition.getByName(json.asString)
+ */
+public final class RegisteredSpawnablePositionAdapter : JsonSerializer<SpawnablePositionType<*>>, JsonDeserializer<SpawnablePositionType<*>> {
+    override fun serialize(spawnablePosition: SpawnablePositionType<*>, Type type, JsonSerializationContext ctx) = JsonPrimitive(spawnablePosition.name)
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) = SpawnablePosition.getByName(json.asString)
         ?: throw IllegalArgumentException("No such spawnable position: ${json.asString}")
 }

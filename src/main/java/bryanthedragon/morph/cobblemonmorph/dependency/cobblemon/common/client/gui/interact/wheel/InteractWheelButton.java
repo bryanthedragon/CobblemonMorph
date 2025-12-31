@@ -21,20 +21,20 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import org.joml.Vector3f
 
-class InteractWheelButton(
+public class InteractWheelButton(
     private val iconResource: ResourceLocation?,
     private val secondaryIconResource: ResourceLocation? = null,
     private val orientation: Orientation,
     private val tooltipText: String?,
     x: Int,
     y: Int,
-    private val isEnabled: Boolean,
+    private val isBoolean enabled,
     private val colour: () -> Vector3f?,
     onPress: OnPress,
     private val canHover: (Double, Double) -> Boolean
 ) : Button(x, y, getButtonSize(orientation).first, getButtonSize(orientation).second, Component.literal("Interact"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val ICON_SIZE = 32
         const val ICON_SCALE = 0.5F
 

@@ -22,9 +22,9 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since February 9th, 2025
  */
-class UnlockablePCWallpaper {
+public class UnlockablePCWallpaper {
     @Transient
-    lateinit var id: ResourceLocation
+    lateinit var ResourceLocation id
     /** This is for when we provide a wallpaper but some server wants to remove it from the unlockables. */
     var enabled = true
     /** If unlocked with a notification toast, this is the name displayed in the toast. If blank, ??? will be used. */

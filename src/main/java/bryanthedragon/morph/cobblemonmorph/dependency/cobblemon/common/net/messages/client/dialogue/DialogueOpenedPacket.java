@@ -14,16 +14,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class DialogueOpenedPacket(val dialogueDTO: DialogueDTO) : NetworkPacket<DialogueOpenedPacket> {
-    companion object {
+public class DialogueOpenedPacket(val dialogueDTO: DialogueDTO) : NetworkPacket<DialogueOpenedPacket> {
+    final class Companion {
         val ID = cobblemonResource("dialogue_opened")
-        fun decode(buffer: RegistryFriendlyByteBuf) = DialogueOpenedPacket(DialogueDTO().apply { decode(buffer) })
+        fun decode(RegistryFriendlyByteBuf buffer) = DialogueOpenedPacket(DialogueDTO().apply { decode(buffer) })
     }
 
-    constructor(activeDialogue: ActiveDialogue, includeFaces: Boolean) : this(DialogueDTO(activeDialogue, includeFaces))
+    constructor(ActiveDialogue activeDialogue, includeFaces: Boolean) : this(DialogueDTO(activeDialogue, includeFaces))
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         dialogueDTO.encode(buffer)
     }
 }

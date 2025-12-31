@@ -32,11 +32,11 @@ import net.minecraft.world.entity.EntityDimensions
  * @author Hiroku
  * @since August 14th, 2023
  */
-class NPCClass {
+public class NPCClass {
     @Transient
-    lateinit var id: ResourceLocation
+    lateinit var ResourceLocation id
 
-    var resourceIdentifier: ResourceLocation = cobblemonResource("dummy")
+    var resourceResourceLocation identifier = cobblemonResource("dummy")
     var names: MutableList<Component> = mutableListOf()
     var aspects: MutableSet<String> = mutableSetOf() // These only make sense when applied via presets
     var hitbox = EntityDimensions.scalable(0.6F, 1.8F).withEyeHeight(1.62F)
@@ -62,7 +62,7 @@ class NPCClass {
 
     // If you're adding stuff here, add it to NPCPreset and NPCClassAdapter too
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(resourceIdentifier.toString())
         buffer.writeCollection(names) { _, v -> buffer.writeText(v) }
         buffer.writeFloat(hitbox.width)
@@ -102,7 +102,7 @@ class NPCClass {
         buffer.writeBoolean(hideNameTag)
     }
 
-    fun decode(buffer: RegistryFriendlyByteBuf) {
+    fun decode(RegistryFriendlyByteBuf buffer) {
         resourceIdentifier = ResourceLocation.parse(buffer.readString().toString())
         names = buffer.readList { buffer.readText().copy() }.toMutableList()
         val length = buffer.readFloat()
@@ -130,7 +130,7 @@ class NPCClass {
             val category = buffer.readText()
             val displayName = buffer.readText()
             val description = buffer.readText()
-            val type = buffer.readEnumConstant(MoLangConfigVariable.MoLangVariableType::class.java)
+            val type = buffer.readEnumConstant(MoLangConfigVariable.MoLangVariableType.class)
             val defaultValue = buffer.readString()
             MoLangConfigVariable(variableName, category, displayName, description, type, defaultValue)
         }.toMutableList()

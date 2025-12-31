@@ -32,7 +32,7 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.server.level.ServerPlayer
-final class CobblemonCaptureCalculator: CaptureCalculator, CriticalCaptureProvider, PokedexProgressCaptureMultiplierProvider, PokedexStatusCaptureInfluencer {
+public final class CobblemonCaptureCalculator: CaptureCalculator, CriticalCaptureProvider, PokedexProgressCaptureMultiplierProvider, PokedexStatusCaptureInfluencer {
 
     override fun id(): String = "cobblemon"
 
@@ -50,7 +50,7 @@ final class CobblemonCaptureCalculator: CaptureCalculator, CriticalCaptureProvid
      * if your highest level is 15 and the wild is 20 you will be hit with a 10% reduction. This reduction maxes out at
      * 90%. This 90% reduction would take place at a 45 level difference or higher.
      */
-    override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
+    override fun processCapture(LivingEntity thrower, EmptyPokeBallEntity pokeBallEntity, PokemonEntity target): CaptureContext {
         val pokeBall = pokeBallEntity.pokeBall
         val pokemon = target.pokemon
         if (pokeBall.catchRateModifier.isGuaranteed()) {
@@ -98,7 +98,7 @@ final class CobblemonCaptureCalculator: CaptureCalculator, CriticalCaptureProvid
 
     }
 
-    private fun findHighestThrowerLevel(player: ServerPlayer, pokemon: Pokemon): Int? {
+    private fun findHighestThrowerLevel(ServerPlayer player, Pokemon pokemon): Int? {
         val entity = pokemon.entity ?: return null
         val battleId = entity.battleId ?: return null
         val battle = BattleRegistry.getBattle(battleId) ?: return null

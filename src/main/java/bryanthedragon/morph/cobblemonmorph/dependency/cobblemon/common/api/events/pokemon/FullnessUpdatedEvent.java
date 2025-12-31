@@ -17,7 +17,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
  * Event that is fired when a player owned Pokémon has its fullness changed
  */
 record FullnessUpdatedEvent(
-        val pokemon: Pokemon,
+        val Pokemon pokemon,
         val newFullnessInitial: Int
 ) {
     var newFullness: Int = newFullnessInitial

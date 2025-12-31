@@ -6,65 +6,69 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.config
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Abilities
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Ability
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.ShinyChanceCalculationEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.PokeBalls
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.aspect.AspectProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Statuses
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonProperty
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalTypes
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.TeraTypes
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.elemental.ElementalTypeTeraType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.EVs
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.IVs
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.OriginalTrainerType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.stat.CobblemonStatProvider
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isDouble
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isFloat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isUuid
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.simplify
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.splitMap
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import com.mojang.brigadier.StringReader
-import com.mojang.serialization.Codec
-import com.mojang.serialization.JsonOps
-import java.util.UUID
-import kotlin.math.min
-import kotlin.random.Random
-import net.minecraft.ResourceLocationException
-import net.minecraft.commands.arguments.item.ItemParser
-import net.minecraft.core.HolderLookup
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.NbtOps
-import net.minecraft.nbt.StringTag
-import net.minecraft.nbt.Tag
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Level
-import kotlin.jvm.optionals.getOrNull
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.config;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Abilities;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abilities.Ability;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.ShinyChanceCalculationEvent;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Moves;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.PokeBalls;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.aspect.AspectProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Statuses;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonProperty;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalTypes;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.TeraTypes;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.tera.elemental.ElementalTypeTeraType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.EVs;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.FormData;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Gender;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.IVs;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.OriginalTrainerType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.RenderablePokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.stat.CobblemonStatProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isDouble;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isFloat;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isUuid;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.simplify;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.splitMap;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.mojang.brigadier.StringReader;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
+
+import java.util.UUID;
+
+import kotlin.math.min;
+import kotlin.random.Random;
+import kotlin.jvm.optionals.getOrNull;
+
+import net.minecraft.ResourceLocationException;
+import net.minecraft.commands.arguments.item.ItemParser;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 /**
  * A grouping of typical, selectable properties for a Pokémon. This is serializable
@@ -79,33 +83,24 @@ import kotlin.jvm.optionals.getOrNull
  * @author Hiroku
  * @since November 23rd, 2021
  */
-open class PokemonProperties {
-    companion object {
+public class PokemonProperties {
+    final class Companion {
 
-        @JvmStatic
-        val CODEC: Codec<PokemonProperties> = Codec.STRING.xmap(
-            { parse(it) },
-            { it.asString() }
-        )
+        public final Codec<PokemonProperties> CODEC = Codec.STRING.xmap({ parse(it) }, { it.asString() });
 
-        @JvmStatic
-        val CUSTOM_PROPERTIES_CODEC: Codec<MutableList<CustomPokemonProperty>> = Codec.list(Codec.STRING)
-            .xmap(
-                { string -> parse(string.joinToString(" ")).customProperties },
-                { customProperties -> customProperties.map { it.asString() } }
-            )
+        public final Codec<MutableList<CustomPokemonProperty>> CUSTOM_PROPERTIES_CODEC = Codec.list(Codec.STRING).xmap({ string -> parse(string.joinToString(" ")).customProperties }, { customProperties -> customProperties.map { it.asString() } });
 
         @JvmOverloads
-        fun parse(string: String, delimiter: String = " ", assigner: String = "="): PokemonProperties {
-            val props = PokemonProperties()
+        fun parse(String string, delimiter: String = " ", assigner: String = "="): PokemonProperties {
+            public final props = PokemonProperties()
             props.originalString = string
-            val keyPairs = string.splitMap(delimiter, assigner)
+            public final keyPairs = string.splitMap(delimiter, assigner)
             props.customProperties = CustomPokemonProperty.properties.flatMap { property ->
-                val matchedKeyPairs = keyPairs.filter { it.first.lowercase() in property.keys }
+                public final matchedKeyPairs = keyPairs.filter { it.first.lowercase() in property.keys }
                 if (matchedKeyPairs.isEmpty()) {
                     if (!property.needsKey) {
                         var savedProperty: CustomPokemonProperty? = null
-                        val keyPair = keyPairs.find { keyPair ->
+                        public final keyPair = keyPairs.find { keyPair ->
                             savedProperty = property.fromString(keyPair.second)
                             return@find savedProperty != null
                         }
@@ -117,9 +112,9 @@ open class PokemonProperties {
                         return@flatMap emptyList()
                     }
                 } else {
-                    val properties = mutableListOf<CustomPokemonProperty>()
+                    public final properties = mutableListOf<CustomPokemonProperty>()
                     for ((customKey, customValue) in matchedKeyPairs) {
-                        val property = property.fromString(customValue)
+                        public final property = property.fromString(customValue)
                         keyPairs.remove(customKey to customValue)
                         if (property != null) {
                             properties.add(property)
@@ -152,10 +147,10 @@ open class PokemonProperties {
             props.minPerfectIVs = parseIntProperty(keyPairs, listOf("min_perfect_ivs"))?.coerceIn(0, Stats.PERMANENT.size)
             props.scaleModifier = parseFloatProperty(keyPairs, listOf("scale_modifier"))
 
-            val maybeIVs = IVs()
-            val maybeEVs = EVs()
+            public final maybeIVs = IVs()
+            public final maybeEVs = EVs()
             Stats.PERMANENT.forEach{ stat ->
-                val statName = stat.toString().lowercase()
+                public final statName = stat.toString().lowercase()
                 parseIntProperty(keyPairs, listOf("${statName}_iv"))?.coerceIn(0, IVs.MAX_VALUE)?.let { maybeIVs[stat] = it }
                 parseIntProperty(keyPairs, listOf("${statName}_ev"))?.coerceIn(0, EVs.MAX_STAT_VALUE)?.let { maybeEVs[stat] = it }
             }
@@ -171,8 +166,8 @@ open class PokemonProperties {
         }
 
         private fun parseText(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): MutableComponent? {
-            val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
-            val value = matchingKeyPair.second
+            public final matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
+            public final value = matchingKeyPair.second
             return if (value.isNullOrBlank()) {
                 null
             } else {
@@ -181,8 +176,8 @@ open class PokemonProperties {
         }
 
         private fun parseString(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): String? {
-            val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
-            val value = matchingKeyPair.second
+            public final matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
+            public final value = matchingKeyPair.second
             return if (value.isNullOrBlank()) {
                 null
             } else {
@@ -191,8 +186,8 @@ open class PokemonProperties {
         }
 
         private fun parseIntProperty(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): Int? {
-            val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
-            val value = matchingKeyPair.second
+            public final matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
+            public final value = matchingKeyPair.second
             return if (value == null || !value.isDouble()) {
                 null
             } else {
@@ -201,8 +196,8 @@ open class PokemonProperties {
         }
 
         private fun parseFloatProperty(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): Float? {
-            val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
-            val value = matchingKeyPair.second
+            public final matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
+            public final value = matchingKeyPair.second
             return if (value == null || !value.isFloat()) {
                 null
             } else {
@@ -211,10 +206,10 @@ open class PokemonProperties {
         }
 
         private fun parseIdentifierOfRegistry(keyPairs: MutableList<Pair<String, String?>>, validKeys: List<String>, valueFetcher: (ResourceLocation) -> String?): String? {
-            val matched = getMatchedKeyPair(keyPairs, validKeys) ?: return null
-            val value = matched.second?.lowercase() ?: return null
+            public final matched = getMatchedKeyPair(keyPairs, validKeys) ?: return null
+            public final value = matched.second?.lowercase() ?: return null
             return try {
-                val identifier = value.asIdentifierDefaultingNamespace()
+                public final identifier = value.asIdentifierDefaultingNamespace()
                 valueFetcher(identifier)
             } catch (_: ResourceLocationException) {
                 null
@@ -222,8 +217,8 @@ open class PokemonProperties {
         }
 
         private fun parseStringOfRegistry(keyPairs: MutableList<Pair<String, String?>>, validKeys: List<String>, valueFetcher: (String) -> String?): String? {
-            val matched = getMatchedKeyPair(keyPairs, validKeys) ?: return null
-            val value = matched.second?.lowercase() ?: return null
+            public final matched = getMatchedKeyPair(keyPairs, validKeys) ?: return null
+            public final value = matched.second?.lowercase() ?: return null
             return try {
                 valueFetcher(value)
             } catch (_: ResourceLocationException) {
@@ -232,15 +227,15 @@ open class PokemonProperties {
         }
 
         private fun parseSpeciesIdentifier(keyPairs: MutableList<Pair<String, String?>>): String? {
-            fun cleanSpeciesName(string: String) = string.lowercase().replace("[^a-z0-9_:]".toRegex(), "")
-            val matched = getMatchedKeyPair(keyPairs, listOf("species"))
+            fun cleanSpeciesName(String string) = string.lowercase().replace("[^a-z0-9_:]".toRegex(), "")
+            public final matched = getMatchedKeyPair(keyPairs, listOf("species"))
             if (matched != null) {
-                val value = matched.second?.let(::cleanSpeciesName) ?: return null
+                public final value = matched.second?.let(::cleanSpeciesName) ?: return null
                 return if (value.lowercase() == "random") {
                     "random"
                 } else {
                     try {
-                        val species = PokemonSpecies.getByIdentifier(value.asIdentifierDefaultingNamespace()) ?: return null
+                        public final species = PokemonSpecies.getByIdentifier(value.asIdentifierDefaultingNamespace()) ?: return null
                         return if (species.resourceIdentifier.namespace == Cobblemon.MODID) species.resourceIdentifier.path else species.resourceIdentifier.toString()
                     } catch (e: ResourceLocationException) {
                         return null
@@ -249,13 +244,13 @@ open class PokemonProperties {
             } else {
                 var species: String? = null
 
-                val keyPair = keyPairs.find { pair ->
+                public final keyPair = keyPairs.find { pair ->
                     species = if (pair.second == null && pair.first.lowercase() == "random") {
                         "random"
                     } else {
                         try {
-                            val identifier = cleanSpeciesName(pair.first).asIdentifierDefaultingNamespace()
-                            val found = PokemonSpecies.getByIdentifier(identifier) ?: return@find false
+                            public final identifier = cleanSpeciesName(pair.first).asIdentifierDefaultingNamespace()
+                            public final found = PokemonSpecies.getByIdentifier(identifier) ?: return@find false
                             if (found.resourceIdentifier.namespace == Cobblemon.MODID) found.resourceIdentifier.path else found.resourceIdentifier.toString()
                         } catch (e: ResourceLocationException) {
                             return@find false
@@ -273,13 +268,13 @@ open class PokemonProperties {
         }
 
         private fun parseForm(keyPairs: MutableList<Pair<String, String?>>): String? {
-            val matchingKeyPair = getMatchedKeyPair(keyPairs, listOf("form")) ?: return null
+            public final matchingKeyPair = getMatchedKeyPair(keyPairs, listOf("form")) ?: return null
             keyPairs.remove(matchingKeyPair)
             return matchingKeyPair.second
         }
 
         private fun parseBooleanProperty(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): Boolean? {
-            val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
+            public final matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
             keyPairs.remove(matchingKeyPair)
             return when (matchingKeyPair.second?.lowercase()) {
                 null -> true
@@ -293,13 +288,13 @@ open class PokemonProperties {
          * Try and parse a Player reference, either as a Username (3 <= length <= 16) or a UUID (length == 36)
          */
         private fun parsePlayerProperty(keyPairs: MutableList<Pair<String, String?>>, labels: Iterable<String>): String? {
-            val matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
+            public final matchingKeyPair = getMatchedKeyPair(keyPairs, labels) ?: return null
             keyPairs.remove(matchingKeyPair)
 
             if (matchingKeyPair.second == null)
                 return null
 
-            val string = matchingKeyPair.second!!
+            public final string = matchingKeyPair.second!!
 
             return if (string.length in 3..16 || (string.length == 36 && isUuid(string)) ) string else null
         }
@@ -310,20 +305,20 @@ open class PokemonProperties {
             labelsOptional: Boolean = false,
             stringer: (T) -> String
         ): T? {
-            val matchingKeyPair = getMatchedKeyPair(keyPairs, labels)
+            public final matchingKeyPair = getMatchedKeyPair(keyPairs, labels)
             if (matchingKeyPair != null) {
-                val value = matchingKeyPair.second?.lowercase()
+                public final value = matchingKeyPair.second?.lowercase()
                 return if (value == null) {
                     null
                 } else {
-                    val matched = find { stringer(it).lowercase() == value }
+                    public final matched = find { stringer(it).lowercase() == value }
                     if (matched != null) {
                         keyPairs.remove(matchingKeyPair)
                     }
                     matched
                 }
             } else if (labelsOptional) {
-                val keyPair = keyPairs.firstOrNull { pair -> any { stringer(it).lowercase() == pair.first } }
+                public final keyPair = keyPairs.firstOrNull { pair -> any { stringer(it).lowercase() == pair.first } }
                 if (keyPair != null) {
                     keyPairs.remove(keyPair)
                     return first { stringer(it).lowercase() == keyPair.first }
@@ -333,7 +328,7 @@ open class PokemonProperties {
         }
     }
 
-    var originalString: String = ""
+    var originalString string = ""
 
     var species: String? = null
     var nickname: MutableComponent? = null
@@ -346,7 +341,7 @@ open class PokemonProperties {
     var pokeball: String? = null
     var nature: String? = null
     var ability: String? = null
-    var aspects: Set<String> = emptySet()
+    Set<String> aspects = emptySet()
     var status: String? = null
     var type: String? = null
     var teraType: String? = null
@@ -376,7 +371,7 @@ open class PokemonProperties {
         aspects = aspects
     )
 
-    fun apply(pokemon: Pokemon) {
+    fun apply(Pokemon pokemon) {
         // Custom properties check could be duplicated but can't assume 3rd party hasn't done anything type specific
         this.customProperties.forEach { it.apply(pokemon) }
         this.commonApply(pokemon)
@@ -392,7 +387,7 @@ open class PokemonProperties {
         this.customProperties.forEach { it.apply(pokemonEntity) }
     }
 
-    private fun commonApply(pokemon: Pokemon) {
+    private fun commonApply(Pokemon pokemon) {
         species?.let {
             return@let try {
                 if (it == "random") {
@@ -446,7 +441,7 @@ open class PokemonProperties {
             }
         }
         originalTrainer?.let { ot ->
-            val type = originalTrainerType ?: pokemon.originalTrainerType
+            public final type = originalTrainerType ?: pokemon.originalTrainerType
             when (type) {
                 OriginalTrainerType.PLAYER -> {
                     when (ot.length) {
@@ -464,11 +459,11 @@ open class PokemonProperties {
             if (pokemon.moveSet.getMoves().isEmpty()) {
                 pokemon.initializeMoveset(preferLatest = true)
             }
-            val moveTemplates = moves.mapNotNull(Moves::getByName).shuffled()
-            val replaceableIndices = (0..3).filterNot { pokemon.moveSet[it]?.template?.let(moveTemplates::contains) == true }.shuffled()
-            val insertableMoves = moveTemplates.filterNot { pokemon.moveSet.any { move -> move.template == it } }
+            public final moveTemplates = moves.mapNotNull(Moves::getByName).shuffled()
+            public final replaceableIndices = (0..3).filterNot { pokemon.moveSet[it]?.template?.let(moveTemplates::contains) == true }.shuffled()
+            public final insertableMoves = moveTemplates.filterNot { pokemon.moveSet.any { move -> move.template == it } }
             if (replaceableIndices.isNotEmpty() && insertableMoves.isNotEmpty()) {
-                val insertingMoves = insertableMoves.subList(0, min(replaceableIndices.size, insertableMoves.size))
+                public final insertingMoves = insertableMoves.subList(0, min(replaceableIndices.size, insertableMoves.size))
                 pokemon.moveSet.doWithoutEmitting {
                     insertingMoves.forEachIndexed { index, move -> pokemon.moveSet.setMove(replaceableIndices[index], move.create()); pokemon.moveSet[replaceableIndices[index]]!!.update() }
                 }
@@ -476,11 +471,11 @@ open class PokemonProperties {
             }
         }
         heldItem?.let { itemKey ->
-            val server = server() ?: return@let
-            val parser = ItemParser(server.registryAccess())
-            val result = parser.parse(StringReader(itemKey))
+            public final server = server() ?: return@let
+            public final parser = ItemParser(server.registryAccess())
+            public final result = parser.parse(StringReader(itemKey))
 
-            val stack = ItemStack(result.item)
+            public final stack = ItemStack(result.item)
             stack.applyComponents(result.components)
             if (stack.isEmpty) return@let
             pokemon.swapHeldItem(stack, decrement = true, aiCanDrop = false)
@@ -489,7 +484,7 @@ open class PokemonProperties {
         pokemon.updateAspects()
     }
 
-    fun matches(pokemon: Pokemon): Boolean {
+    fun matches(Pokemon pokemon): Boolean {
         // Custom properties check could be duplicated but can't assume 3rd party hasn't done anything type specific
         return this.commonMatches(pokemon) && this.customProperties.none { !it.matches(pokemon) }
     }
@@ -503,13 +498,13 @@ open class PokemonProperties {
         return properties.asString() == this.asString()
     }
 
-    private fun commonMatches(pokemon: Pokemon): Boolean {
+    private fun commonMatches(Pokemon pokemon): Boolean {
         level?.takeIf { it != pokemon.level }?.let { return false }
         shiny?.takeIf { it != pokemon.shiny }?.let { return false }
         gender?.takeIf { it != pokemon.gender }?.let { return false }
         species?.run {
             try {
-                val species = if (this == "random") {
+                public final species = if (this == "random") {
                     PokemonSpecies.species.random()
                 } else {
                     PokemonSpecies.getByIdentifier(this.asIdentifierDefaultingNamespace()) ?: return@run
@@ -545,14 +540,14 @@ open class PokemonProperties {
         originalTrainerType?.takeIf { it != pokemon.originalTrainerType }?.let { return false }
         moves?.takeIf { it.any { move -> pokemon.moveSet.none { it.template.name == move } } }?.let { return false }
         heldItem?.takeIf { itemKey ->
-            val server = server() ?: return@takeIf true
-            val parser = ItemParser(server.registryAccess())
-            val result = parser.parse(StringReader(itemKey))
+            public final server = server() ?: return@takeIf true
+            public final parser = ItemParser(server.registryAccess())
+            public final result = parser.parse(StringReader(itemKey))
 
             if (!pokemon.heldItem.`is`(result.item)) return@takeIf true
 
             for (entry in result.components.entrySet()) {
-                val targetPropValue = pokemon.heldItem.get(entry.key)
+                public final targetPropValue = pokemon.heldItem.get(entry.key)
                 if (targetPropValue != entry.value.get()) {
                     return@takeIf true
                 }
@@ -572,7 +567,7 @@ open class PokemonProperties {
         species?.run {
             try {
                 // TODO get context on this bit, it's highly unlikely two randoms would result in the same Pokémon, doesn't mean the prop is not equal?
-                val species = if (this == "random") {
+                public final species = if (this == "random") {
                     PokemonSpecies.species.random()
                 } else {
                     PokemonSpecies.getByIdentifier(this.asIdentifierDefaultingNamespace()) ?: return@run
@@ -593,14 +588,14 @@ open class PokemonProperties {
         ivs?.let{ ivs ->
             ivs.forEach{ stat ->
                 //If the potential subset has IV and the main set does not then it cant be a subset
-                val propertiesIVs = properties.ivs ?: return false
+                public final propertiesIVs = properties.ivs ?: return false
                 if (stat.value != propertiesIVs[stat.key]) { return false }
             }
         }
         evs?.let{ evs ->
             evs.forEach{ stat ->
                 //If the potential subset has EV and the main set does not then it cant be a subset
-                val propertiesEVs = properties.evs ?: return false
+                public final propertiesEVs = properties.evs ?: return false
                 if (stat.value != propertiesEVs[stat.key]) { return false }
             }
         }
@@ -618,8 +613,8 @@ open class PokemonProperties {
     }
 
     @JvmOverloads
-    fun create(player: ServerPlayer? = null): Pokemon {
-        val pokemon = Pokemon()
+    fun create(ServerPlayer player? = null): Pokemon {
+        public final pokemon = Pokemon()
         apply(pokemon)
         pokemon.initialize()
         roll(pokemon, player)
@@ -628,8 +623,8 @@ open class PokemonProperties {
 
     // TEST YOUR LUCK!
     @JvmOverloads
-    fun roll(pokemon: Pokemon, player: ServerPlayer? = null) {
-        val baseTypes = pokemon.form.types.toList()
+    fun roll(Pokemon pokemon, ServerPlayer player? = null) {
+        public final baseTypes = pokemon.form.types.toList()
         var shinyRate = Cobblemon.config.shinyRate
         CobblemonEvents.SHINY_CHANCE_CALCULATION.post(ShinyChanceCalculationEvent(shinyRate, pokemon)) { event ->
             shinyRate = event.calculate(player)
@@ -647,13 +642,13 @@ open class PokemonProperties {
     }
 
     @JvmOverloads
-    fun createEntity(world: Level, player: ServerPlayer? = null): PokemonEntity {
+    fun createEntity(Level world, ServerPlayer player? = null): PokemonEntity {
         return PokemonEntity(world, create(player)).also { applyCustomProperties(it) }
     }
 
     // TODO Codecs at some point
     fun saveToNBT(registryLookup: HolderLookup.Provider): CompoundTag {
-        val nbt = CompoundTag()
+        public final nbt = CompoundTag()
         originalString.let { nbt.putString(DataKeys.POKEMON_PROPERTIES_ORIGINAL_TEXT, it) }
         level?.let { nbt.putInt(DataKeys.POKEMON_LEVEL, it) }
         shiny?.let { nbt.putBoolean(DataKeys.POKEMON_SHINY, it) }
@@ -680,14 +675,14 @@ open class PokemonProperties {
         moves?.let { nbt.putString(DataKeys.POKEMON_PROPERTIES_MOVES, it.joinToString(separator = ",")) }
         heldItem?.let {nbt.putString(DataKeys.POKEMON_PROPERTIES_HELDITEM, it)}
         scaleModifier?.let { nbt.putFloat(DataKeys.POKEMON_SCALE_MODIFIER, it) }
-        val custom = ListTag()
+        public final custom = ListTag()
         customProperties.map { StringTag.valueOf(it.asString()) }.forEach { custom.add(it) }
         nbt.put(DataKeys.POKEMON_PROPERTIES_CUSTOM, custom)
         return nbt
     }
 
     // TODO Codecs at some point
-    fun loadFromNBT(tag: CompoundTag, registryLookup: HolderLookup.Provider): PokemonProperties {
+    fun loadFromNBT(CompoundTag tag, registryLookup: HolderLookup.Provider): PokemonProperties {
         originalString = tag.getString(DataKeys.POKEMON_PROPERTIES_ORIGINAL_TEXT)
         level = if (tag.contains(DataKeys.POKEMON_LEVEL)) tag.getInt(DataKeys.POKEMON_LEVEL) else null
         shiny = if (tag.contains(DataKeys.POKEMON_SHINY)) tag.getBoolean(DataKeys.POKEMON_SHINY) else null
@@ -714,7 +709,7 @@ open class PokemonProperties {
         moves = if (tag.contains(DataKeys.POKEMON_PROPERTIES_MOVES)) tag.getString(DataKeys.POKEMON_PROPERTIES_MOVES).split(",") else null
         heldItem = if (tag.contains(DataKeys.POKEMON_PROPERTIES_HELDITEM)) tag.getString(DataKeys.POKEMON_PROPERTIES_HELDITEM) else null
         scaleModifier = if (tag.contains(DataKeys.POKEMON_SCALE_MODIFIER)) tag.getFloat(DataKeys.POKEMON_SCALE_MODIFIER) else null
-        val custom = tag.getList(DataKeys.POKEMON_PROPERTIES_CUSTOM, Tag.TAG_STRING.toInt())
+        public final custom = tag.getList(DataKeys.POKEMON_PROPERTIES_CUSTOM, Tag.TAG_STRING.toInt())
         // This is kinda gross
         custom.forEach { customProperties.addAll(parse(it.asString).customProperties) }
         updateAspects()
@@ -723,7 +718,7 @@ open class PokemonProperties {
 
     // TODO Codecs at some point
     fun saveToJSON(): JsonObject {
-        val json = JsonObject()
+        public final json = JsonObject()
         originalString.let { json.addProperty(DataKeys.POKEMON_PROPERTIES_ORIGINAL_TEXT, it) }
         level?.let { json.addProperty(DataKeys.POKEMON_LEVEL, it) }
         shiny?.let { json.addProperty(DataKeys.POKEMON_SHINY, it) }
@@ -749,7 +744,7 @@ open class PokemonProperties {
         moves?.let { json.addProperty(DataKeys.POKEMON_PROPERTIES_MOVES, it.joinToString(separator = ",")) }
         heldItem?.let {json.addProperty(DataKeys.POKEMON_PROPERTIES_HELDITEM, it)}
         scaleModifier?.let { json.addProperty(DataKeys.POKEMON_SCALE_MODIFIER, it) }
-        val custom = JsonArray()
+        public final custom = JsonArray()
         customProperties.map { it.asString() }.forEach { custom.add(it) }
         json.add(DataKeys.POKEMON_PROPERTIES_CUSTOM, custom)
 
@@ -757,7 +752,7 @@ open class PokemonProperties {
     }
 
     // TODO Codecs at some point
-    fun loadFromJSON(json: JsonObject): PokemonProperties {
+    fun loadFromJSON(JsonObject json): PokemonProperties {
         originalString = json.get(DataKeys.POKEMON_PROPERTIES_ORIGINAL_TEXT)?.asString ?: ""
         level = json.get(DataKeys.POKEMON_LEVEL)?.asInt
         shiny = json.get(DataKeys.POKEMON_SHINY)?.asBoolean
@@ -783,7 +778,7 @@ open class PokemonProperties {
         moves = json.get(DataKeys.POKEMON_PROPERTIES_MOVES)?.asString?.split(",")
         heldItem = json.get(DataKeys.POKEMON_PROPERTIES_HELDITEM)?.asString
         scaleModifier = json.get(DataKeys.POKEMON_SCALE_MODIFIER)?.asFloat
-        val custom = json.get(DataKeys.POKEMON_PROPERTIES_CUSTOM)?.asJsonArray
+        public final custom = json.get(DataKeys.POKEMON_PROPERTIES_CUSTOM)?.asJsonArray
         // This is still kinda gross
         custom?.forEach { customProperties.addAll(parse(it.asString).customProperties) }
         updateAspects()
@@ -791,7 +786,7 @@ open class PokemonProperties {
     }
 
     fun asString(separator: String = " "): String {
-        val pieces = mutableListOf<String>()
+        public final pieces = mutableListOf<String>()
         species?.let { pieces.add(it) }
         nickname?.let { pieces.add("nickname=${it.string}") }
         form?.let { pieces.add("form=$it") }
@@ -826,7 +821,7 @@ open class PokemonProperties {
     }
 
     fun updateAspects() {
-        val aspects = mutableSetOf<String>()
+        public final aspects = mutableSetOf<String>()
         AspectProvider.providers.forEach { aspects.addAll(it.provide(this)) }
         this.aspects = aspects.toSet()
     }
@@ -846,8 +841,8 @@ open class PokemonProperties {
      * @return The [Ability] with the [Ability.forced] state necessary for the given [form].
      */
     private fun createAbility(id: String, form: FormData): Ability? {
-        val ability = Abilities.get(id) ?: return null
-        val potentialAbility = form.abilities.firstOrNull { potential -> potential.template == ability } ?: return ability.create(true)
+        public final ability = Abilities.get(id) ?: return null
+        public final potentialAbility = form.abilities.firstOrNull { potential -> potential.template == ability } ?: return ability.create(true)
         return potentialAbility.template.create(false, potentialAbility.priority)
     }
 
@@ -856,9 +851,9 @@ open class PokemonProperties {
      * kind of optional level range has been requested. Used mainly as a thing for spawning to avoid
      * copy-pasting code.
      */
-    fun deriveLevelRange(levelRange: IntRange?): IntRange {
+    fun deriveLevelRange(levelIntRange range?): IntRange {
         return levelRange.let { levelRange ->
-            val pokemonLevel = level
+            public final pokemonLevel = level
             levelRange
                 ?: pokemonLevel?.until(pokemonLevel)
                 ?: IntRange(1, config.maxPokemonLevel)

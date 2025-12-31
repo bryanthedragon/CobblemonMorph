@@ -22,7 +22,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import net.minecraft.resources.ResourceLocation
 
-class MoveToTargetActionEffectKeyframe : ActionEffectKeyframe {
+public class MoveToTargetActionEffectKeyframe : ActionEffectKeyframe {
     val speed = 1F
     val timeout = "4".asExpressionLike()
     var proximity = -1F

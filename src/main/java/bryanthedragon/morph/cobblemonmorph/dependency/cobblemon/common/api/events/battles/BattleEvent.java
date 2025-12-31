@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battl
  * @author Segfault Guy
  * @since March 25th 2023
  */
-interface BattleEvent {
+public interface BattleEvent {
 
     /**
      * The [PokemonBattle] that is the subject of the event.

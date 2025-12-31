@@ -13,12 +13,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.duck.Play
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.riding.ServerboundUpdateDriverInputPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class DriverInputPacketHandler : ServerNetworkPacketHandler<ServerboundUpdateDriverInputPacket> {
+public final class DriverInputPacketHandler : ServerNetworkPacketHandler<ServerboundUpdateDriverInputPacket> {
 
     override fun handle(
         packet: ServerboundUpdateDriverInputPacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         if (player is PlayerDuck) {
             player.setDriverInput(packet.driverInput)

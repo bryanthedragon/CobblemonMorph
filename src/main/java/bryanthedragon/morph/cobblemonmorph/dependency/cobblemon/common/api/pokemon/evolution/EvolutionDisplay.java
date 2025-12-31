@@ -21,7 +21,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
  * @author Licious
  * @since April 28th, 2022
  */
-interface EvolutionDisplay : EvolutionLike {
+public interface EvolutionDisplay : EvolutionLike {
 
     /**
      * The [Species] of the evolution result.
@@ -34,7 +34,7 @@ interface EvolutionDisplay : EvolutionLike {
      */
     val aspects: Set<String>
 
-    companion object {
+    final class Companion {
         @JvmStatic
         val CODEC: Codec<EvolutionDisplay> = RecordCodecBuilder.create { instance ->
             instance.group(

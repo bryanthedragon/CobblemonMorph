@@ -20,6 +20,6 @@ import net.minecraft.world.phys.Vec3
  * @since December 19th, 2022
  */
 record GrowthPoint(
-    val position: Vec3,
+    val Vec3 position,
     val rotation: Vec3
 )

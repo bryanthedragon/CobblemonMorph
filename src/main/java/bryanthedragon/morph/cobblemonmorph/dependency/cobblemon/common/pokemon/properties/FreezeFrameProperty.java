@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonPropertyType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-final class FreezeFrameProperty : CustomPokemonPropertyType<FloatProperty> {
+public final class FreezeFrameProperty : CustomPokemonPropertyType<FloatProperty> {
     override val keys = setOf("freeze_frame")
     override fun examples() = setOf("0.0", "1.5", "10")
     override val needsKey = true

@@ -25,8 +25,9 @@ import java.lang.reflect.Type
  * @see BehaviourConfig
  * @since October 13th, 2024
  * @author Hiroku
- */final class BehaviourConfigAdapter : JsonDeserializer<BehaviourConfig> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): BehaviourConfig? {
+ */
+public final class BehaviourConfigAdapter : JsonDeserializer<BehaviourConfig> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): BehaviourConfig? {
         if (json.isJsonPrimitive) {
             val type = json.asString.asIdentifierDefaultingNamespace()
             val clazz = BehaviourConfig.types[type]

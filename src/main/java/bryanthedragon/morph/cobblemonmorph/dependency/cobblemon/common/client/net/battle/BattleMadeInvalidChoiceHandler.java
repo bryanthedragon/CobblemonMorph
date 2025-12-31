@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.battle.BattleGUI
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMadeInvalidChoicePacket
 import net.minecraft.client.Minecraft
-final class BattleMadeInvalidChoiceHandler : ClientNetworkPacketHandler<BattleMadeInvalidChoicePacket> {
-    override fun handle(packet: BattleMadeInvalidChoicePacket, client: Minecraft) {
+public final class BattleMadeInvalidChoiceHandler : ClientNetworkPacketHandler<BattleMadeInvalidChoicePacket> {
+    override fun handle(packet: BattleMadeInvalidChoicePacket, Minecraft client) {
         //Remove previous selected action, so user can select a new action
         val battle = CobblemonClient.battle ?: return
         battle.mustChoose = true

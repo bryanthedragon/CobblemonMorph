@@ -28,7 +28,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 /**
  * Synchronizes the [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonRideSettings] registry.
  */
-class RideSettingsSyncPacket(
+public class RideSettingsSyncPacket(
     val bird: BirdSettings,
     val glider: GliderSettings,
     val helicopter: HelicopterSettings,
@@ -45,7 +45,7 @@ class RideSettingsSyncPacket(
 ) : NetworkPacket<RideSettingsSyncPacket> {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         bird.encode(buffer)
         glider.encode(buffer)
         helicopter.encode(buffer)
@@ -61,9 +61,9 @@ class RideSettingsSyncPacket(
         submarine.encode(buffer)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("mechanics_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf): RideSettingsSyncPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): RideSettingsSyncPacket {
             return RideSettingsSyncPacket(
                 bird = BirdSettings(),
                 glider = GliderSettings(),

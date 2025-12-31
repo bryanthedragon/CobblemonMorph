@@ -17,18 +17,18 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
 import java.lang.reflect.Type
 
-class CodecBackedAdapter<T>(val codec: Codec<T>) : JsonDeserializer<T>, JsonSerializer<T> {
+public class CodecBackedAdapter<T>(val codec: Codec<T>) : JsonDeserializer<T>, JsonSerializer<T> {
     override fun deserialize(
         jElement: JsonElement,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        JsonDeserializationContext context
     ): T {
         return JsonOps.INSTANCE.withDecoder(codec).apply(jElement).result().get().first as T
     }
 
     override fun serialize(
-        src: T,
-        typeOfSrc: Type?,
+        T src,
+        typeOfT srcype?,
         context: JsonSerializationContext?
     ): JsonElement {
         return JsonOps.INSTANCE.withEncoder(codec).apply(src).result().get()

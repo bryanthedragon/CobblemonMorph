@@ -16,7 +16,7 @@ import java.util.*
 
 record PokemonAspectsChangedEvent(
     val ownerId: UUID?,
-    val pokemon: Pokemon,
+    val Pokemon pokemon,
 ) {
     val context = mutableMapOf(
         "player" to (ownerId?.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),

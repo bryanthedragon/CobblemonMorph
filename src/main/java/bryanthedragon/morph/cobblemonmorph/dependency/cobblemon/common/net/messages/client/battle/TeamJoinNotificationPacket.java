@@ -27,21 +27,21 @@ import net.minecraft.network.chat.MutableComponent
  * @author JazzMcNade
  * @since April 9th, 2024
  */
-class TeamJoinNotificationPacket(
+public class TeamJoinNotificationPacket(
     val teamMemberUUIDs: List<UUID>,
     val teamMemberNames: List<MutableComponent>,
 ): NetworkPacket<TeamJoinNotificationPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(teamMemberUUIDs) { writer, value ->
             writer.writeUUID(value)
         }
         buffer.writeCollection(teamMemberNames) { _, v -> buffer.writeText(v) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("team_join_notification")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TeamJoinNotificationPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = TeamJoinNotificationPacket(
             buffer.readList { pb -> pb.readUUID() },
             buffer.readList { buffer.readText().copy() }.toMutableList()
 

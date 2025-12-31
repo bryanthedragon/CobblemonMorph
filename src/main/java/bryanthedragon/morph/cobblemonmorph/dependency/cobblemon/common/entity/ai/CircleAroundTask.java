@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
  * @author Hiroku
  * @since June 6th, 2025
  */
-class CircleAroundTask(
+public class CircleAroundTask(
     val poseTypes: Set<PoseType>,
     val minTurnAngleDegrees: Float,
     val maxTurnAngleDegrees: Float,
@@ -39,17 +39,17 @@ class CircleAroundTask(
 ) {
     var chosenTurnAngle = 0F
 
-    override fun checkExtraStartConditions(level: ServerLevel, entity: PokemonEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel level, entity: PokemonEntity): Boolean {
         return entity.getCurrentPoseType() in poseTypes
     }
 
-    override fun canStillUse(level: ServerLevel, entity: PokemonEntity, l: Long): Boolean {
+    override fun canStillUse(ServerLevel level, entity: PokemonEntity, l: Long): Boolean {
         return entity.getCurrentPoseType() in poseTypes
                 && entity.brain.getMemory(MemoryModuleType.WALK_TARGET).isEmpty
                 && entity.brain.getMemory(MemoryModuleType.PATH).isEmpty
     }
 
-    override fun stop(world: ServerLevel, entity: PokemonEntity, l: Long) {
+    override fun stop(ServerLevel world, entity: PokemonEntity, l: Long) {
         (entity.moveControl as? PokemonMoveControl)?.stopBanking()
     }
 
@@ -60,7 +60,7 @@ class CircleAroundTask(
         }
     }
 
-    override fun tick(world: ServerLevel, entity: PokemonEntity, l: Long) {
+    override fun tick(ServerLevel world, entity: PokemonEntity, l: Long) {
         (entity.moveControl as? PokemonMoveControl)?.startBanking(
             forwardBlocksPerTick = speed,
             upwardsBlocksPerTick = verticalSpeed,

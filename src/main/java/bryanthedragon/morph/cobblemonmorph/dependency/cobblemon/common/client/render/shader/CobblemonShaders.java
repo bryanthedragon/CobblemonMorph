@@ -14,7 +14,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import net.minecraft.client.renderer.ShaderInstance
 import net.minecraft.server.packs.resources.ResourceProvider
 import java.util.function.Consumer
-final class CobblemonShaders {
+public final class CobblemonShaders {
     val SHADERS_TO_REGISTER = mutableListOf<Pair<(ResourceProvider) -> ShaderRegistryData, Consumer<ShaderInstance>>>()
     lateinit var PARTICLE_BLEND: ShaderInstance
     // This is Material.ALPHA. Weird internal name for "alphatest" shader.

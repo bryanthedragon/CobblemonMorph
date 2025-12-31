@@ -19,7 +19,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-final class ChangeWalkSpeed {
+public final class ChangeWalkSpeed {
 
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("changewalkspeed")

@@ -16,14 +16,14 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 
-class ExitButton(
+public class ExitButton(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     pXTexStart: Int, pYTexStart: Int, pYDiffText: Int,
     onPress: OnPress
 ): Button(pX, pY, EXIT_BUTTON_WIDTH.toInt(), EXIT_BUTTON_HEIGHT.toInt(), "cobblemon.ui.starter.narrator.backbutton".asTranslated(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val EXIT_BUTTON_WIDTH = 15.95F
         private const val EXIT_BUTTON_HEIGHT = 11.95F
         private val exitButtonResource = cobblemonResource("textures/gui/starterselection/starterselection_exit.png")

@@ -19,15 +19,15 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.DoNothing
 
-class DoNothingTaskConfig : SingleTaskConfig {
+public class DoNothingTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val minDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
     val maxDurationTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(minDurationTicks, maxDurationTicks).asVariables()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(minDurationTicks, maxDurationTicks).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null

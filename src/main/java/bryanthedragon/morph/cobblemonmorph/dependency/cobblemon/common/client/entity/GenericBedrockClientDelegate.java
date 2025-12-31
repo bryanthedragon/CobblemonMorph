@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.repository.VaryingModelRepository
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.generic.GenericBedrockEntity
 
-class GenericBedrockClientDelegate : EntitySideDelegate<GenericBedrockEntity>, PosableState() {
+public class GenericBedrockClientDelegate : EntitySideDelegate<GenericBedrockEntity>, PosableState() {
     lateinit var currentEntity: GenericBedrockEntity
     override val schedulingTracker
         get() = getEntity().schedulingTracker

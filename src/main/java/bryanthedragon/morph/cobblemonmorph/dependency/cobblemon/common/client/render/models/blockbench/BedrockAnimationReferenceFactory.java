@@ -19,13 +19,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
  *
  * @author Hiroku
  * @since June 28th, 2023
- */final class BedrockAnimationReferenceFactory : AnimationReferenceFactory {
-    override fun pose(model: PosableModel, animString: String): PoseAnimation {
+ */
+public final class BedrockAnimationReferenceFactory : AnimationReferenceFactory {
+    override fun pose(model: PosableModel, animString string): PoseAnimation {
         val split = animString.replace("bedrock(", "").replace(")", "").split(",").map(String::trim)
         return model.bedrock(animationGroup = split[0], animation = split[1])
     }
 
-    override fun active(model: PosableModel, animString: String, ): ActiveAnimation {
+    override fun active(model: PosableModel, animString string, ): ActiveAnimation {
         val split = animString.replace("bedrock(", "").replace(")", "").split(",").map(String::trim)
         return model.bedrockStateful(
             animationGroup = split[0],

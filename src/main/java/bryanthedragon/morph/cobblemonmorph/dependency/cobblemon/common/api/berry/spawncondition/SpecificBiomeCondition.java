@@ -15,7 +15,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.biome.Biome
 
-class SpecificBiomeCondition : BerrySpawnCondition {
+public class SpecificBiomeCondition : BerrySpawnCondition {
     lateinit var biome: TagKey<Biome>
     val minGroveSize: Int = 1
     val maxGroveSize: Int = 1
@@ -23,7 +23,7 @@ class SpecificBiomeCondition : BerrySpawnCondition {
     override fun canSpawn(berry: Berry, biome: Holder<Biome>) = biome.`is`(this.biome)
     override fun getGroveSize(random: RandomSource) = random.nextIntBetweenInclusive(minGroveSize, maxGroveSize)
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("specific_biome")
     }
 }

@@ -10,11 +10,11 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-class TradeOffer {
-    var pokemon: Pokemon? = null
+public class TradeOffer {
+    var Pokemon pokemon? = null
     var accepted = false
 
-    fun updateOffer(pokemon: Pokemon?) {
+    fun updateOffer(Pokemon pokemon?) {
         this.pokemon = pokemon
         accepted = false
     }

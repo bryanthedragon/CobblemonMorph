@@ -12,15 +12,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import net.minecraft.world.entity.LivingEntity
 
-class WeatherRequirement : EntityQueryRequirement {
-    companion object {
+public class WeatherRequirement : EntityQueryRequirement {
+    final class Companion {
         const val ADAPTER_VARIANT = "weather"
     }
 
     val isRaining: Boolean? = null
     val isThundering: Boolean? = null
 
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
+    override fun check(Pokemon pokemon, LivingEntity queriedEntity): Boolean {
         val world = queriedEntity.level()
         return when {
             isRaining == true && !world.isRaining -> false

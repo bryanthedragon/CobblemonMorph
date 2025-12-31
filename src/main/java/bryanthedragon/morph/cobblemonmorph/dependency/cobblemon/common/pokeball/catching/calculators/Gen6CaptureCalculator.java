@@ -33,7 +33,8 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Licious
  * @since January 29th, 2022
- */final class Gen6CaptureCalculator : CaptureCalculator, CriticalCaptureProvider, PokedexProgressCaptureMultiplierProvider {
+ */
+public final class Gen6CaptureCalculator : CaptureCalculator, CriticalCaptureProvider, PokedexProgressCaptureMultiplierProvider {
 
     private val apricornPokeballs = setOf(
         PokeBalls.HEAVY_BALL,
@@ -47,7 +48,7 @@ import net.minecraft.server.level.ServerPlayer
 
     override fun id(): String = "generation_6"
 
-    override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
+    override fun processCapture(LivingEntity thrower, EmptyPokeBallEntity pokeBallEntity, PokemonEntity target): CaptureContext {
         val pokeBall = pokeBallEntity.pokeBall
         val pokemon = target.pokemon
         if (pokeBall.catchRateModifier.isGuaranteed()) {

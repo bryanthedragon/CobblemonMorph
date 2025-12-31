@@ -17,14 +17,14 @@ import net.minecraft.client.gui.components.Renderable
 import net.minecraft.client.gui.components.events.GuiEventListener
 import kotlin.math.ceil
 
-class DialoguePortraitWidget(
+public class DialoguePortraitWidget(
     val dialogueScreen: DialogueScreen,
     val x: Int,
     val y: Int,
-    val width: Int,
-    val height: Int
+    val Int width,
+    val Int height
 ) : CobblemonRenderable, GuiEventListener {
-    companion object {
+    final class Companion {
         val DIALOGUE_ARROW_HEIGHT = 11
         val DIALOGUE_ARROW_WIDTH = 6
         val frameLeftResource = cobblemonResource("textures/gui/dialogue/dialogue_portrait_left.png")

@@ -22,7 +22,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import com.mojang.serialization.Codec
 import kotlin.math.min
 
-class MoveSet : Iterable<Move> {
+public class MoveSet : Iterable<Move> {
     var changeFunction: (MoveSet) -> Unit = {}
     private var emit = true
 
@@ -47,7 +47,7 @@ class MoveSet : Iterable<Move> {
 
     override fun iterator() = moves.filterNotNull().iterator()
 
-    operator fun get(index: Int) = index.takeIf { it in 0 until MOVE_COUNT }?.let { moves[it] }
+    operator fun get(Int index) = index.takeIf { it in 0 until MOVE_COUNT }?.let { moves[it] }
 
     /**
      * Gets all Moves from the Pokémon but skips null Moves
@@ -118,14 +118,14 @@ class MoveSet : Iterable<Move> {
     /**
      * Writes the MoveSet to Buffer
      */
-    fun saveToBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun saveToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeSizedInt(IntSize.U_BYTE, getMoves().size)
         getMoves().forEach {
             it.saveToBuffer(buffer)
         }
     }
 
-    fun saveToJSON(json: JsonObject): JsonObject {
+    fun saveToJSON(JsonObject json): JsonObject {
         for ((i, move) in moves.filterNotNull().withIndex()) {
             val moveJSON = move.saveToJSON(JsonObject())
             json.add(DataKeys.POKEMON_MOVESET + i, moveJSON)
@@ -167,7 +167,7 @@ class MoveSet : Iterable<Move> {
     /**
      * Returns a MoveSet built from given NBT
      */
-    fun loadFromNBT(nbt: CompoundTag): MoveSet {
+    fun loadFromNBT(CompoundTag nbt): MoveSet {
         doWithoutEmitting {
             clear()
             nbt.getList(DataKeys.POKEMON_MOVESET, Tag.TAG_COMPOUND.toInt()).forEachIndexed { index, tag ->
@@ -181,7 +181,7 @@ class MoveSet : Iterable<Move> {
     /**
      * Returns a MoveSet build from given Buffer
      */
-    fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): MoveSet {
+    fun loadFromBuffer(RegistryFriendlyByteBuf buffer): MoveSet {
         doWithoutEmitting {
             clear()
             val amountMoves = buffer.readSizedInt(IntSize.U_BYTE)
@@ -193,7 +193,7 @@ class MoveSet : Iterable<Move> {
         return this
     }
 
-    fun loadFromJSON(json: JsonObject): MoveSet {
+    fun loadFromJSON(JsonObject json): MoveSet {
         doWithoutEmitting {
             clear()
             for (i in 0 until MOVE_COUNT) {
@@ -206,7 +206,7 @@ class MoveSet : Iterable<Move> {
         return this
     }
 
-    companion object {
+    final class Companion {
         const val MOVE_COUNT = 4
         @JvmStatic
         val CODEC: Codec<MoveSet> = Codec.list(Move.CODEC, 0, MOVE_COUNT)

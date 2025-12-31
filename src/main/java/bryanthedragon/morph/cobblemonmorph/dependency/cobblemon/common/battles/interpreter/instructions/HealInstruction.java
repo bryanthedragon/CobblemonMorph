@@ -29,7 +29,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Licious
  * @since February 6th, 2023
  */
-class HealInstruction(val actor: BattleActor, val publicMessage: BattleMessage, val privateMessage: BattleMessage): InterpreterInstruction {
+public class HealInstruction(val actor: BattleActor, val publicMessage: BattleMessage, val privateMessage: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val activePokemon = privateMessage.actorAndActivePokemon(0, battle)?.second // this can be null if pokemon is healed in bench

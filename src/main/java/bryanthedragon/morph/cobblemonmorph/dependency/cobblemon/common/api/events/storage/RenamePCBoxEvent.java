@@ -19,12 +19,12 @@ import net.minecraft.server.level.ServerPlayer
  * @author JustAHuman-xD
  * @since February 14th, 2025
  */
-interface RenamePCBoxEvent {
+public interface RenamePCBoxEvent {
 
     /**
      * The [ServerPlayer] who is changing their wallpaper
      */
-    val player: ServerPlayer
+    val ServerPlayer player
 
     /**
      * The [PCBox] whose wallpaper is being changed
@@ -34,17 +34,17 @@ interface RenamePCBoxEvent {
     /**
      * The new box name being used. This can be modified in the [Pre] event.
      */
-    val name: String
+    val String name
 
     class Pre(
-        override val player: ServerPlayer,
+        override val ServerPlayer player,
         override val box: PCBox,
-        override var name: String
+        override var String name
     ) : RenamePCBoxEvent, Cancelable()
 
     class Post(
-        override val player: ServerPlayer,
+        override val ServerPlayer player,
         override val box: PCBox,
-        override val name: String
+        override val String name
     ) : RenamePCBoxEvent
 }

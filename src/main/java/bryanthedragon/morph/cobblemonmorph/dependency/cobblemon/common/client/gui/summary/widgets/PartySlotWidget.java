@@ -30,17 +30,17 @@ import net.minecraft.resources.ResourceLocation
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class PartySlotWidget(
+public class PartySlotWidget(
     pX: Number,
     pY: Number,
     private val partyWidget: PartyWidget,
     private val summary: Summary,
-    private val pokemon: Pokemon?,
-    private val index: Int,
+    private val Pokemon pokemon?,
+    private val Int index,
     private val isClientPartyMember: Boolean,
 ) : SoundlessWidget(pX.toInt(), pY.toInt(), WIDTH, HEIGHT, Component.literal("PartyMember")) {
     val state = FloatingState()
-    companion object {
+    final class Companion {
         const val WIDTH = 46
         const val HEIGHT = 27
         private const val PORTRAIT_DIAMETER = 25
@@ -52,7 +52,7 @@ class PartySlotWidget(
         val genderIconFemale = cobblemonResource("textures/gui/party/party_gender_female.png")
     }
 
-    private fun getSlotTexture(pokemon: Pokemon?): ResourceLocation {
+    private fun getSlotTexture(Pokemon pokemon?): ResourceLocation {
         if (pokemon != null) {
             if (pokemon.isFainted()) return slotFaintedResource
             return slotResource
@@ -60,7 +60,7 @@ class PartySlotWidget(
         return slotEmptyResource
     }
 
-    private fun getSlotVOffset(pokemon: Pokemon?, isHovered: Boolean, isSelected: Boolean): Int {
+    private fun getSlotVOffset(Pokemon pokemon?, isHovered: Boolean, isSelected: Boolean): Int {
         if (isHovered || isSelected) {
             if (pokemon == null) {
                 if (partyWidget.swapEnabled) return height

@@ -23,7 +23,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class FletchinderModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BiWingedFrame {
+public class FletchinderModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BiWingedFrame {
     override val rootPart = root.registerChildWithAllChildren("fletchinder")
     override val leftWing = getPart("wing_left")
     override val rightWing = getPart("wing_right")

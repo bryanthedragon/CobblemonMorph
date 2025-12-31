@@ -16,7 +16,7 @@ import net.minecraft.server.MinecraftServer
  * @author Licious
  * @since February 15th, 2023
  */
-interface ServerEvent {
+public interface ServerEvent {
 
     /**
      * The [MinecraftServer] backing the event trigger.

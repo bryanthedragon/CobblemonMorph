@@ -19,8 +19,8 @@ abstract class BattleActionSelection(
     val request: SingleActionRequest,
     x: Int,
     y: Int,
-    width: Int,
-    height: Int,
+    Int width,
+    Int height,
     name: MutableComponent
 ) : ParentWidget(x, y, width, height, name) {
     val opacity: Float

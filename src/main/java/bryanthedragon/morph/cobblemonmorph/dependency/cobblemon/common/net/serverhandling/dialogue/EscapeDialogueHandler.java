@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.activeDialogue
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class EscapeDialogueHandler : ServerNetworkPacketHandler<EscapeDialoguePacket> {
-    override fun handle(packet: EscapeDialoguePacket, server: MinecraftServer, player: ServerPlayer) {
+public final class EscapeDialogueHandler : ServerNetworkPacketHandler<EscapeDialoguePacket> {
+    override fun handle(packet: EscapeDialoguePacket, server: MinecraftServer, ServerPlayer player) {
         val dialogue = player.activeDialogue ?: return
         dialogue.escape()
     }

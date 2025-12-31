@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority;
 
 /**
  * An [SimpleObservable] implementation created by piping a root [Observable]. It will try to emit values
@@ -22,30 +22,27 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Prior
  * @author Hiroku
  * @since November 26th, 2021
  */
-class TransformObservable<I, O>(
-    private val observable: Observable<I>,
-    private val transform: Transform<I, O>
-) : SimpleObservable<O>() {
-    var rootSubscription: ObservableSubscription<I>? = null
+public class TransformObservable<I, O>(private Observable<I> observable, private Transform<I, O> transform) extends SimpleObservable<O>() {
+    var ObservableSubscription<I>? rootSubscription = null;
 
-    override fun subscribe(priority: Priority, handler: (O) -> Unit): ObservableSubscription<O> {
+    override ObservableSubscription<O> subscribe(Priority priority, handler: (O) -> Unit) {
         if (rootSubscription == null) {
-            rootSubscription = observable.subscribe(priority) { parentHandler(it) }
+            rootSubscription = observable.subscribe(priority) { parentHandler(it) };
         }
-
-        return super.subscribe(priority, handler)
+        return super.subscribe(priority, handler);
     }
 
     fun terminate() {
-        rootSubscription?.let { observable.unsubscribe(it) }
+        rootSubscription?.let { observable.unsubscribe(it) };
     }
 
-    fun parentHandler(input: I) {
+    fun parentHandler(I input) {
         try {
             emit(transform(input))
-        } catch (throwable: NoTransformThrowable) {
+        } 
+        catch (NoTransformThrowable throwable) {
             if (throwable.terminate) {
-                terminate()
+                terminate();
             }
         }
     }

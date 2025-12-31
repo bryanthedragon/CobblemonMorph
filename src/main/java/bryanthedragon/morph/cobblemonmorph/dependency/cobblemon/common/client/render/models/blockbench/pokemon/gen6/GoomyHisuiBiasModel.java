@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class GoomyHisuiBiasModel (root: ModelPart) : PokemonPosableModel(root) {
+public class GoomyHisuiBiasModel (root: ModelPart) : PokemonPosableModel(root) {
     override val rootPart = root.registerChildWithAllChildren("goomy_hisui_bias")
     override var portraitScale = 1.73F
     override var portraitTranslation = Vec3(-0.09, -0.98, 0.0)

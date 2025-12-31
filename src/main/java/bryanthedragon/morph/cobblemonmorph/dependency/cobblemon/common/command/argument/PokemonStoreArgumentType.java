@@ -17,14 +17,14 @@ import net.minecraft.commands.arguments.StringRepresentableArgument
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.StringRepresentable
 
-class PokemonStoreArgumentType : StringRepresentableArgument<StoreType>(StoreType.CODEC, StoreType::values) {
-    companion object {
+public class PokemonStoreArgumentType : StringRepresentableArgument<StoreType>(StoreType.CODEC, StoreType::values) {
+    final class Companion {
         fun pokemonStore() = PokemonStoreArgumentType()
-        fun pokemonStoreFrom(context: CommandContext<CommandSourceStack>, id: String): StoreType = context.getArgument(id, StoreType::class.java)
+        fun pokemonStoreFrom(context: CommandContext<CommandSourceStack>, id: String): StoreType = context.getArgument(id, StoreType.class)
     }
 }
 
-enum class StoreType(val storeFetcher: (ServerPlayer) -> Collection<Pokemon>) : StringRepresentable {
+public enum StoreType(val storeFetcher: (ServerPlayer) -> Collection<Pokemon>) : StringRepresentable {
 
     PARTY({ player -> player.party().filterNotNull() }),
     PC({ player -> player.pc().filterNotNull() }),
@@ -32,7 +32,7 @@ enum class StoreType(val storeFetcher: (ServerPlayer) -> Collection<Pokemon>) : 
 
     override fun getSerializedName(): String = name.lowercase()
 
-    companion object {
+    final class Companion {
         val CODEC = StringRepresentable.fromEnum(::values)
     }
 

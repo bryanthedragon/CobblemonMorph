@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.T
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.animations.TileAnimation
 import java.util.concurrent.ConcurrentLinkedQueue
 import net.minecraft.client.Minecraft
-class ActiveClientBattlePokemon(val actor: ClientBattleActor, var battlePokemon: ClientBattlePokemon?) : Targetable {
+public class ActiveClientBattlePokemon(val actor: ClientBattleActor, var battlePokemon: ClientBattlePokemon?) : Targetable {
     var animations = ConcurrentLinkedQueue<TileAnimation>()
     var xDisplacement = 0F
     var invisibleX = -1F

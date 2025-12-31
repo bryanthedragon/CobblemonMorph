@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
  * @since October 2nd, 2022
  */
 @Suppress("unused", "CanBePrimaryConstructorProperty")
-class BattleCriticalHitsRequirement(amount: Int) : Requirement {
+public class BattleCriticalHitsRequirement(amount: Int) : Requirement {
 
     constructor() : this(0)
 
@@ -30,12 +30,12 @@ class BattleCriticalHitsRequirement(amount: Int) : Requirement {
      */
     val amount = amount
 
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
+    override fun check(Pokemon pokemon): Boolean = pokemon.evolutionProxy.current()
         .progress()
         .filterIsInstance<LastBattleCriticalHitsEvolutionProgress>()
         .any { progress -> progress.currentProgress().amount >= this.amount }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "battle_critical_hits"
     }
 

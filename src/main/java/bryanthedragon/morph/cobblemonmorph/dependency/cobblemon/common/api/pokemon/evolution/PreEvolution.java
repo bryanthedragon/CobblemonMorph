@@ -19,13 +19,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
  * @author Licious
  * @since March 22nd, 2022
  */
-interface PreEvolution {
+public interface PreEvolution {
 
     val species: Species
 
     val form: FormData
 
-    companion object {
+    final class Companion {
 
         fun of(species: Species, form: FormData = species.standardForm): PreEvolution = StandardPreEvolution(species, form)
 

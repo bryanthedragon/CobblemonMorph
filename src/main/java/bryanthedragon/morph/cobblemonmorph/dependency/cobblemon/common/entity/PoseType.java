@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since December 5th, 2021
  */
-enum class PoseType {
+public enum PoseType {
     STAND,
     WALK,
     SLEEP,
@@ -40,8 +40,8 @@ enum class PoseType {
     /** A simple type for non-living entities or errant cases. */
     NONE;
 
-    companion object {
-        val ALL_POSES = EnumSet.allOf(PoseType::class.java)
+    final class Companion {
+        val ALL_POSES = EnumSet.allOf(PoseType.class)
         val FLYING_POSES = EnumSet.of(FLY, HOVER)
         val SWIMMING_POSES = EnumSet.of(SWIM, FLOAT)
         val STANDING_POSES = EnumSet.of(STAND, WALK)

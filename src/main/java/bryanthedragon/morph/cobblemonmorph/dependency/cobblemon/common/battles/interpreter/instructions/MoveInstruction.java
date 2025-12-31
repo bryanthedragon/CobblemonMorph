@@ -46,7 +46,7 @@ import net.minecraft.world.entity.LivingEntity
  * @author Deltric
  * @since January 22nd, 2022
  */
-class MoveInstruction(
+public class MoveInstruction(
     val instructionSet: InstructionSet,
     val message: BattleMessage
 ) : InterpreterInstruction, CauserInstruction {

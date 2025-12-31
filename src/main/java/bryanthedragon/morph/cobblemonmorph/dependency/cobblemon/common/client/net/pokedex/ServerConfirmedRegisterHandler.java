@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokedex.ServerConfirmedRegisterPacket
 import net.minecraft.client.Minecraft
-final class ServerConfirmedRegisterHandler : ClientNetworkPacketHandler<ServerConfirmedRegisterPacket> {
-    override fun handle(packet: ServerConfirmedRegisterPacket, client: Minecraft) {
+public final class ServerConfirmedRegisterHandler : ClientNetworkPacketHandler<ServerConfirmedRegisterPacket> {
+    override fun handle(packet: ServerConfirmedRegisterPacket, Minecraft client) {
         CobblemonClient.pokedexUsageContext.onServerConfirmedRegister(packet)
     }
 }

@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.dialogue.DialogueScreen
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.dialogue.DialogueClosedPacket
 import net.minecraft.client.Minecraft
-final class DialogueClosedHandler : ClientNetworkPacketHandler<DialogueClosedPacket> {
-    override fun handle(packet: DialogueClosedPacket, client: Minecraft) {
+public final class DialogueClosedHandler : ClientNetworkPacketHandler<DialogueClosedPacket> {
+    override fun handle(packet: DialogueClosedPacket, Minecraft client) {
         val currentScreen = client.screen as? DialogueScreen ?: return
         if (packet.dialogueId == null || currentScreen.dialogueId == packet.dialogueId) {
             client.setScreen(null)

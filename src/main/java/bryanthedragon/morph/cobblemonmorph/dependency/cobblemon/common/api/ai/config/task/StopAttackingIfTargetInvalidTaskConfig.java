@@ -32,10 +32,10 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
  * @author Hiroku
  * @since June 23rd, 2025
  */
-class StopAttackingIfTargetInvalidTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+public class StopAttackingIfTargetInvalidTaskConfig : SingleTaskConfig {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity> {
         behaviourConfigurationContext.addMemories(CobblemonMemories.ATTACK_TARGET_DATA, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE)

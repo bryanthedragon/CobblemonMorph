@@ -43,17 +43,17 @@ import net.minecraft.world.item.crafting.CraftingInput
 import kotlin.math.ceil
 
 @Environment(EnvType.CLIENT)
-class CookingPotScreen(
+public class CookingPotScreen(
     menu: CookingPotMenu,
     playerInventory: Inventory,
-    title: Component
+    Component title
 ) : AbstractContainerScreen<CookingPotMenu>(
     menu,
     playerInventory,
     Component.translatable("cobblemon.container.campfire_pot")
 ), RecipeUpdateListener {
 
-    companion object {
+    final class Companion {
         private const val BACKGROUND_HEIGHT = 166
         private const val BACKGROUND_WIDTH = 176
 
@@ -129,7 +129,7 @@ class CookingPotScreen(
         addRenderableWidget(cookButton)
     }
 
-    override fun renderLabels(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int) {
+    override fun renderLabels(GuiGraphics guiGraphics, mouseX: Int, mouseY: Int) {
         guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false)
     }
 
@@ -200,7 +200,7 @@ class CookingPotScreen(
         this.recipeBookComponent.renderTooltip(context, this.leftPos, this.topPos, mouseX, mouseY)
     }
 
-    override fun renderSlot(guiGraphics: GuiGraphics, slot: Slot) {
+    override fun renderSlot(GuiGraphics guiGraphics, slot: Slot) {
         if (slot is SeasoningSlot && ((!menu.carried.isEmpty && !slot.mayPlace(menu.carried)) || (slot.hasItem() && !slot.mayPlace(slot.item))) ) {
             val x = slot.x
             val y = slot.y
@@ -249,7 +249,7 @@ class CookingPotScreen(
     }
 
     override fun renderTooltip(
-        guiGraphics: GuiGraphics,
+        GuiGraphics guiGraphics,
         mouseX: Int,
         mouseY: Int
     ) {

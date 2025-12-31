@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-final class LookAtSpeakerTask {
+public final class LookAtSpeakerTask {
     fun create(closeEnough: Float = 0.5F): OneShot<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(

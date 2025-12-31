@@ -21,7 +21,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class MarkGiveAllCommand {
+public final class MarkGiveAllCommand {
 
     private const val NAME = "giveallmarks"
     private const val PLAYER = "player"
@@ -37,7 +37,7 @@ final class MarkGiveAllCommand {
         dispatcher.register(command)
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player) : Int {
         val pokemon = PartySlotArgumentType.getPokemonOf(context, SLOT, player)
 
         pokemon.marks = Marks.all().toMutableSet()

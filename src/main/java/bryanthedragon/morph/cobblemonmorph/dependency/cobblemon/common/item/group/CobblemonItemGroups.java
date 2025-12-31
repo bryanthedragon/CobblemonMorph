@@ -27,7 +27,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.ItemLike
 
-@Suppress("unused", "UNUSED_PARAMETER")final class CobblemonItemGroups {
+@Suppress("unused", "UNUSED_PARAMETER")public final class CobblemonItemGroups {
 
     // See https://docs.google.com/spreadsheets/d/1QgaIlW-S9A-Blqhc-5G7OO3igaQdEAiYQqVEPnEBFmc/edit#gid=978365418 for what goes what
 
@@ -84,10 +84,10 @@ import net.minecraft.world.level.ItemLike
         val key: ResourceKey<CreativeModeTab>,
         val displayIconProvider: () -> ItemStack,
         val entryCollector: DisplayItemsGenerator,
-        val displayName: Component = Component.translatable("itemGroup.${key.location().namespace}.${key.location().path}")
+        val Component displayName = Component.translatable("itemGroup.${key.location().namespace}.${key.location().path}")
     )
 
-    private fun create(name: String, entryCollector: DisplayItemsGenerator, displayIconProvider: () -> ItemStack): ResourceKey<CreativeModeTab> {
+    private fun create(String name, entryCollector: DisplayItemsGenerator, displayIconProvider: () -> ItemStack): ResourceKey<CreativeModeTab> {
         val key = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), cobblemonResource(name))
         this.ALL += ItemGroupHolder(key, displayIconProvider, entryCollector)
         return key

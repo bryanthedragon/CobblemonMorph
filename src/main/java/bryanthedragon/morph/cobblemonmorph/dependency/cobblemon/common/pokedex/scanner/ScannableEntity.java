@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokedex.
 
 import net.minecraft.world.entity.LivingEntity
 
-interface ScannableEntity {
+public interface ScannableEntity {
     fun resolvePokemonScan(): PokedexEntityData?
     fun resolveEntityScan(): LivingEntity
 }

@@ -22,7 +22,8 @@ import net.minecraft.world.entity.Entity
  * between different riding behaviours. This is dependent on a config option, but the general idea is we
  * want the camera to be whatever the player feels most comfy with without them having to fiddle with it
  * more than once.
- */final class MountedCameraTypeHandler {
+ */
+public final class MountedCameraTypeHandler {
     var unmountedCameraType: CameraType = CameraType.FIRST_PERSON
 
     fun handleMount(passenger: Entity, vehicle: PokemonEntity) {

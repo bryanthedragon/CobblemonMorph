@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture
  * @author Deltric
  * @since January 22nd, 2022
  */
-class FaintInstruction(battle: PokemonBattle, val message: BattleMessage) : InterpreterInstruction {
+public class FaintInstruction(battle: PokemonBattle, val message: BattleMessage) : InterpreterInstruction {
     var waitTime = 2.5F
     val faintingPokemon = message.battlePokemon(0, battle)!!
 

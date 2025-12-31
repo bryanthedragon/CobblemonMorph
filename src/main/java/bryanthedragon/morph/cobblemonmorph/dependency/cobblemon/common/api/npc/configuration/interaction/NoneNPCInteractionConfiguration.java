@@ -23,12 +23,12 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since July 5th, 2024
  */
-class NoneNPCInteractionConfiguration : NPCInteractConfiguration {
+public class NoneNPCInteractionConfiguration : NPCInteractConfiguration {
     override val type = "none"
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
-    override fun decode(buffer: RegistryFriendlyByteBuf) {}
-    override fun writeToNBT(compoundTag: CompoundTag) {}
-    override fun readFromNBT(compoundTag: CompoundTag) {}
-    override fun interact(npc: NPCEntity, player: ServerPlayer) = false
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
+    override fun decode(RegistryFriendlyByteBuf buffer) {}
+    override fun writeToNBT(compoundCompoundTag tag) {}
+    override fun readFromNBT(compoundCompoundTag tag) {}
+    override fun interact(npc: NPCEntity, ServerPlayer player) = false
     override fun isDifferentTo(other: NPCInteractConfiguration) = other !is NoneNPCInteractionConfiguration
 }

@@ -11,4 +11,4 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stor
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.PokemonStore
 import java.util.UUID
 
-record SerializedStore<S>(val storeClass: Class<out PokemonStore<*>>, val uuid: UUID, val serializedForm: S)
+record SerializedStore<S>(val storeClass: Class<out PokemonStore<*>>, val UUID uuid, val serializedForm: S)

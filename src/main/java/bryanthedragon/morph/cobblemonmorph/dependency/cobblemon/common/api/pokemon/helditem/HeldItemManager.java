@@ -27,7 +27,7 @@ import net.minecraft.network.chat.Component
  * @author Licious
  * @since December 30th, 2022
  */
-interface HeldItemManager {
+public interface HeldItemManager {
 
     /**
      * Queries the given [pokemon] for the presence of a held item.
@@ -43,7 +43,7 @@ interface HeldItemManager {
      * @param showdownId The literal ID of the held item on Showdown.
      * @return The [Component] representation.
      */
-    fun nameOf(showdownId: String): Component
+    fun nameOf(String showdownId): Component
 
     /**
      * Invoked when an action instruction is sent from the Showdown server of type '-item'
@@ -69,7 +69,7 @@ interface HeldItemManager {
      * @param pokemon The [BattlePokemon] being affected.
      * @param showdownId The literal ID of the held item on Showdown.
      */
-    fun give(pokemon: BattlePokemon, showdownId: String)
+    fun give(pokemon: BattlePokemon, String showdownId)
 
     /**
      * Takes the given [showdownId] held item based from the [pokemon].
@@ -77,7 +77,7 @@ interface HeldItemManager {
      * @param pokemon The [BattlePokemon] being affected.
      * @param showdownId The literal ID of the held item on Showdown.
      */
-    fun take(pokemon: BattlePokemon, showdownId: String)
+    fun take(pokemon: BattlePokemon, String showdownId)
 
     /**
      * Tests if the given [BattlePokemon] should have their item consumed.
@@ -87,9 +87,9 @@ interface HeldItemManager {
      * @param battle The [PokemonBattle] the [pokemon] is participating in.
      * @param showdownId The literal ID of the held item on Showdown.
      */
-    fun shouldConsumeItem(pokemon: BattlePokemon, battle: PokemonBattle, showdownId: String): Boolean = false
+    fun shouldConsumeItem(pokemon: BattlePokemon, battle: PokemonBattle, String showdownId): Boolean = false
 
-    companion object {
+    final class Companion {
 
         /**
          * A [HeldItemManager] that never finds an item ID.

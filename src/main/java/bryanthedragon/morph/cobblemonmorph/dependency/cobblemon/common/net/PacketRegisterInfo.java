@@ -21,8 +21,8 @@ import net.minecraft.resources.ResourceLocation
  * @author Apion, Hiroku
  * @since June 7th, 2024
  */
-class PacketRegisterInfo<T : NetworkPacket<T>>(
-    val id: ResourceLocation,
+public class PacketRegisterInfo<T : NetworkPacket<T>>(
+    val ResourceLocation id,
     val decoder: (RegistryFriendlyByteBuf) -> T,
     val handler: PacketHandler<T>,
     codec: StreamCodec<RegistryFriendlyByteBuf, T>? = null

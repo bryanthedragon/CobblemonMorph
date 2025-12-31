@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeCancelledPacket
 import net.minecraft.client.Minecraft
-final class TradeCancelledHandler : ClientNetworkPacketHandler<TradeCancelledPacket> {
-    override fun handle(packet: TradeCancelledPacket, client: Minecraft) {
+public final class TradeCancelledHandler : ClientNetworkPacketHandler<TradeCancelledPacket> {
+    override fun handle(packet: TradeCancelledPacket, Minecraft client) {
         val trade = CobblemonClient.trade ?: return
         trade.cancelEmitter.emit(Unit)
         CobblemonClient.trade = null

@@ -15,8 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.SortPCBoxPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class SortPCBoxHandler : ServerNetworkPacketHandler<SortPCBoxPacket> {
-    override fun handle(packet: SortPCBoxPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class SortPCBoxHandler : ServerNetworkPacketHandler<SortPCBoxPacket> {
+    override fun handle(packet: SortPCBoxPacket, server: MinecraftServer, ServerPlayer player) {
         val pc = PCLinkManager.getPC(player) ?: return run { ClosePCPacket(null).sendToPlayer(player) }
         if (pc.boxes.size <= packet.boxNumber) {
             return

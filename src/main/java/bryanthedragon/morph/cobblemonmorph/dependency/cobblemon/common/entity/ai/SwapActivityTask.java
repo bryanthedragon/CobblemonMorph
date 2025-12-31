@@ -23,7 +23,8 @@ import net.minecraft.world.entity.schedule.Activity
  *
  * @author Hiroku
  * @since September 30th, 2024
- */final class SwapActivityTask {
+ */
+public final class SwapActivityTask {
     fun <P1> possessing(
         memory: MemoryModuleType<P1>,
         activity: Activity

@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.MovePCPokemonPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class MovePCPokemonHandler : ServerNetworkPacketHandler<MovePCPokemonPacket> {
-    override fun handle(packet: MovePCPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class MovePCPokemonHandler : ServerNetworkPacketHandler<MovePCPokemonPacket> {
+    override fun handle(packet: MovePCPokemonPacket, server: MinecraftServer, ServerPlayer player) {
         val pc = PCLinkManager.getPC(player) ?: return run { ClosePCPacket(null).sendToPlayer(player) }
         val pokemon = pc[packet.oldPosition] ?: return
         if (pokemon.uuid != packet.pokemonID) {

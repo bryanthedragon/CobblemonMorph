@@ -13,7 +13,7 @@ import net.minecraft.world.entity.schedule.Activity;
 import java.util.ArrayList;
 import java.util.List;
 
-class CobblemonActivities {
+public class CobblemonActivities {
   public static final List<Activity> activities = new ArrayList<>();
 
     public static final Activity BATTLING =

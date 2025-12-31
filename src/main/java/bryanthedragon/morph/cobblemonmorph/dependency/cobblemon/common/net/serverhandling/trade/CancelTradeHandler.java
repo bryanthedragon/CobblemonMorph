@@ -15,8 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.TradeManager
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class CancelTradeHandler : ServerNetworkPacketHandler<CancelTradePacket> {
-    override fun handle(packet: CancelTradePacket, server: MinecraftServer, player: ServerPlayer) {
+public final class CancelTradeHandler : ServerNetworkPacketHandler<CancelTradePacket> {
+    override fun handle(packet: CancelTradePacket, server: MinecraftServer, ServerPlayer player) {
         val trade = TradeManager.getActiveTrade(player.uuid) ?: return player.sendPacket(TradeCancelledPacket())
         trade.cancelTrade()
     }

@@ -24,7 +24,7 @@ import java.util.concurrent.CompletableFuture
  * @author Hiroku
  * @since January 21st, 2024
  */
-class EntitySoundActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityConditionalActionEffectKeyframe {
+public class EntitySoundActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityConditionalActionEffectKeyframe {
     override val entityCondition = "q.entity.is_user".asExpressionLike()
     var sound: String? = null
     val delay: ExpressionLike = "0".asExpressionLike()
@@ -36,7 +36,7 @@ class EntitySoundActionEffectKeyframe : ConditionalActionEffectKeyframe(), Entit
 
         val soundIdentifier = try {
             sound?.asExpressionLike()?.resolveString(context.runtime)?.takeIf { it != "0" } ?: sound
-        } catch (e: Exception) {
+        } catch (Exception e) {
             sound
         }?.asIdentifierDefaultingNamespace() ?: return skip()
 

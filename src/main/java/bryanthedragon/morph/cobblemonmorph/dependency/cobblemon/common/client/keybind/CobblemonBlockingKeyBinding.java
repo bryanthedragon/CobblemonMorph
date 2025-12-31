@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft
  * @since 2022-02-23
  */
 abstract class CobblemonBlockingKeyBinding(
-    name: String,
+    String name,
     type: InputConstants.Type = InputConstants.Type.KEYSYM,
     key: Int,
     category: String

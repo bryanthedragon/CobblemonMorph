@@ -15,19 +15,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.ai
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class LookInDirectionTaskConfig : SingleTaskConfig {
+public class LookInDirectionTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(LOOKING_CATEGORY, "locked_rotation", true).asExpressible()
     var yaw = numberVariable(LOOKING_CATEGORY, "locked_yaw", 0F).asExpressible()
     var pitch = numberVariable(LOOKING_CATEGORY, "locked_pitch", 0F).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         yaw,
         pitch
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ) = LookInDirectionTask(
         shouldLock = condition.asExpression(),

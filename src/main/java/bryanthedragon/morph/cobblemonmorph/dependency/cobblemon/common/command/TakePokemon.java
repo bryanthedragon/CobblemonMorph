@@ -20,7 +20,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class TakePokemon {
+public final class TakePokemon {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("takepokemon")
             .permission(CobblemonPermissions.TAKE_POKEMON)
@@ -66,7 +66,7 @@ final class TakePokemon {
 
             context.source.sendSuccess({ "${pokemon.species.name} was removed.".text() }, true)
             return Command.SINGLE_SUCCESS
-        } catch (e: Exception) {
+        } catch (Exception e) {
             e.printStackTrace()
         }
         return Command.SINGLE_SUCCESS

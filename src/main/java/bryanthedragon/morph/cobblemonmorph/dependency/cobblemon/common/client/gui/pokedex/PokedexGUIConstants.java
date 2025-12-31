@@ -7,7 +7,7 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pokedex
-final class PokedexGUIConstants {
+public final class PokedexGUIConstants {
     const val BASE_WIDTH = 345
     const val BASE_HEIGHT = 207
     const val HALF_OVERLAY_WIDTH = 139

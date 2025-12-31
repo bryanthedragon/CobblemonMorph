@@ -10,18 +10,18 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonProperty
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-class StringProperty(
-    val key: String,
+public class StringProperty(
+    val String Key,
     val value: String,
-    private val applicator: (pokemon: Pokemon, value: String) -> Unit,
-    private val matcher: (pokemon: Pokemon, value: String) -> Boolean
+    private val applicator: (Pokemon pokemon, value: String) -> Unit,
+    private val matcher: (Pokemon pokemon, value: String) -> Boolean
 ) : CustomPokemonProperty {
 
-    override fun apply(pokemon: Pokemon) {
+    override fun apply(Pokemon pokemon) {
         this.applicator.invoke(pokemon, this.value)
     }
 
-    override fun matches(pokemon: Pokemon) = this.matcher.invoke(pokemon, this.value)
+    override fun matches(Pokemon pokemon) = this.matcher.invoke(pokemon, this.value)
 
     override fun asString() = "${this.key}=${this.value}"
 }

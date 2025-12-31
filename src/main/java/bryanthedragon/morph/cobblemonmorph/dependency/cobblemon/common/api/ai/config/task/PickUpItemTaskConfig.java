@@ -20,17 +20,17 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class PickUpItemTaskConfig : SingleTaskConfig {
+public class PickUpItemTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     var maxReach: ExpressionOrEntityVariable = Either.left("1.0".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         maxReach
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         behaviourConfigurationContext.addMemories(
@@ -43,7 +43,7 @@ class PickUpItemTaskConfig : SingleTaskConfig {
                 condition = condition.asExpression(),
                 maxReach = maxReach.asExpression()
             ),
-            PokemonEntity::class.java
+            PokemonEntity.class
         )
     }
 }

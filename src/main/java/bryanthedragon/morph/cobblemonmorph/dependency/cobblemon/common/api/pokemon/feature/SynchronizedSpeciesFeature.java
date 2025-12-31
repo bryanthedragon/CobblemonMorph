@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.serialization.BufferSerializer
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.serialization.BufferSerializer;
 
 /**
  * A species feature that can be synchronized to the client. These must be managed by a [SynchronizedSpeciesFeatureProvider].
@@ -16,4 +16,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.seria
  * @author Hiroku
  * @since November 13th, 2023
  */
-interface SynchronizedSpeciesFeature : SpeciesFeature, BufferSerializer
+public interface SynchronizedSpeciesFeature extends SpeciesFeature, BufferSerializer {
+
+}

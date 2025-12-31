@@ -20,7 +20,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import kotlin.math.max
-final class MoveToSweetBerryBushTask {
+public final class MoveToSweetBerryBushTask {
     fun create(
         executionRange: UniformInt,
         speed: Float

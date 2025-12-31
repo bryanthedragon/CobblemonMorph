@@ -31,9 +31,9 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<CampfireBlockEntity> {
+public class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<CampfireBlockEntity> {
 
-    companion object {
+    final class Companion {
         const val CIRCLE_RADIUS = 0.4F
         const val ROTATION_SPEED = 1.5F
         const val JUMP_AMPLITUDE = 0.025F
@@ -183,7 +183,7 @@ class CampfireBlockEntityRenderer(ctx: BlockEntityRendererProvider.Context) : Bl
     private fun drawVertex(
         builder: VertexConsumer,
         poseStack: PoseStack,
-        x: Float, y: Float, z: Float,
+        Float x, Float y, z: Float,
         u: Float, v: Float,
         packedLight: Int, color: Int
     ) {

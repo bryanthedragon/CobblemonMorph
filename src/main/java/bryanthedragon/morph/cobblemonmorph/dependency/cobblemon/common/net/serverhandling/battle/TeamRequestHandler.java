@@ -23,8 +23,9 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author JazzMcNade
  * @since April 15th, 2024
- */final class TeamRequestHandler : ServerNetworkPacketHandler<BattleTeamRequestPacket> {
-    override fun handle(packet: BattleTeamRequestPacket, server: MinecraftServer, player: ServerPlayer) {
+ */
+public final class TeamRequestHandler : ServerNetworkPacketHandler<BattleTeamRequestPacket> {
+    override fun handle(packet: BattleTeamRequestPacket, server: MinecraftServer, ServerPlayer player) {
         val targetedEntity = player.level().getEntity(packet.targetedEntityId)?.let {
             when (it) {
                 is PokemonEntity -> it.owner

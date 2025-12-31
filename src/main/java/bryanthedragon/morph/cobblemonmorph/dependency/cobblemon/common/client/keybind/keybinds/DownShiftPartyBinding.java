@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.CobblemonKeyBinding
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.KeybindCategories
 import com.mojang.blaze3d.platform.InputConstants
-final class DownShiftPartyBinding : CobblemonKeyBinding(
+public final class DownShiftPartyBinding : CobblemonKeyBinding(
     "key.cobblemon.downshiftparty",
     InputConstants.Type.KEYSYM,
     InputConstants.KEY_DOWN,

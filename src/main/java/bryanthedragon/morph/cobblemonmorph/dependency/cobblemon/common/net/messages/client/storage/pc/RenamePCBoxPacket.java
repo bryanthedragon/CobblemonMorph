@@ -6,28 +6,30 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.UnsplittablePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
-import net.minecraft.network.RegistryFriendlyByteBuf
-import java.util.*
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.UnsplittablePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*;
 
-open class RenamePCBoxPacket internal constructor(val storeID: UUID, val boxNumber: Int, val name: String?) : NetworkPacket<RenamePCBoxPacket>, UnsplittablePacket {
+import net.minecraft.network.RegistryFriendlyByteBuf;
+
+import java.util.*;
+
+public class RenamePCBoxPacket internal constructor(val UUID storeID, val Int boxNumber, val String name?) : NetworkPacket<RenamePCBoxPacket>, UnsplittablePacket {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(storeID)
         buffer.writeSizedInt(IntSize.U_SHORT, boxNumber)
         buffer.writeString(name ?: "")
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("rename_pc_box")
-        fun decode(buffer: RegistryFriendlyByteBuf): RenamePCBoxPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): RenamePCBoxPacket {
             val storeID = buffer.readUUID()
             val boxNumber = buffer.readSizedInt(IntSize.U_SHORT)
             val name = buffer.readString()

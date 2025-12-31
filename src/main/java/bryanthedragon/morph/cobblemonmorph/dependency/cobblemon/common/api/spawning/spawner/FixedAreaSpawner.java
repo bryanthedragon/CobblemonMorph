@@ -22,10 +22,10 @@ import net.minecraft.core.BlockPos
  * @since February 5th, 2022
  */
 open class FixedAreaSpawner(
-    name: String,
+    String name,
     spawnPool: SpawnPool,
-    val world: ServerLevel,
-    val position: BlockPos,
+    val ServerLevel world,
+    val BlockPos position,
     val horizontalRadius: Int,
     val verticalRadius: Int,
     maxPokemonPerChunk: Float = Cobblemon.config.pokemonPerChunk

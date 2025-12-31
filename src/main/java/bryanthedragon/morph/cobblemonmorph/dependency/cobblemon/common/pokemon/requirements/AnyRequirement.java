@@ -16,9 +16,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  *
  * @property possibilities A collection of possible [Requirement]s that can allow this requirement to be valid.
  */
-class AnyRequirement(val possibilities: Collection<Requirement>) : Requirement {
-    override fun check(pokemon: Pokemon) = this.possibilities.any { it.check(pokemon) }
-    companion object {
+public class AnyRequirement(val possibilities: Collection<Requirement>) : Requirement {
+    override fun check(Pokemon pokemon) = this.possibilities.any { it.check(pokemon) }
+    final class Companion {
         const val ADAPTER_VARIANT = "any"
     }
 }

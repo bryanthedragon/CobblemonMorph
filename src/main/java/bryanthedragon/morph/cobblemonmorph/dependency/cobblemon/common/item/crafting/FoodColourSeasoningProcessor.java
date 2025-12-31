@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.cooki
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.components.FoodColourComponent
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
-final class FoodColourSeasoningProcessor : SeasoningProcessor {
+public final class FoodColourSeasoningProcessor : SeasoningProcessor {
     override val type = "food_colour"
     override fun apply(result: ItemStack, seasoning: List<ItemStack>) {
         val colours = mutableListOf<DyeColor>()

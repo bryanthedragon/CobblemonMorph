@@ -14,10 +14,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 
 abstract class DataRegistrySyncPacket<T, N : NetworkPacket<N>>(private val registryEntries: Collection<T>) : NetworkPacket<N> {
 
-    var buffer: RegistryFriendlyByteBuf? = null
+    var RegistryFriendlyByteBuf buffer? = null
     internal val entries = arrayListOf<T>()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         val newBuffer = RegistryFriendlyByteBuf(Unpooled.buffer(), buffer.registryAccess())
         newBuffer.writeCollection(registryEntries) { _, entry -> encodeEntry(newBuffer, entry) }
         buffer.writeInt(newBuffer.readableBytes())
@@ -25,7 +25,7 @@ abstract class DataRegistrySyncPacket<T, N : NetworkPacket<N>>(private val regis
         // TODO (techdaan): should newBuffer be released here? I don't think writeBytes does that for us.
     }
 
-    internal fun decodeBuffer(buffer: RegistryFriendlyByteBuf) {
+    internal fun decodeBuffer(RegistryFriendlyByteBuf buffer) {
         val size = buffer.readInt()
         val newBuffer = RegistryFriendlyByteBuf(buffer.readBytes(size), buffer.registryAccess())
         this.buffer = newBuffer
@@ -37,7 +37,7 @@ abstract class DataRegistrySyncPacket<T, N : NetworkPacket<N>>(private val regis
      * @param buffer The [RegistryFriendlyByteBuf] being encoded to.
      * @param entry The entry of type [T].
      */
-    abstract fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: T)
+    abstract fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: T)
 
     /**
      * Attempts to decode this entry, if null it will be skipped.
@@ -46,7 +46,7 @@ abstract class DataRegistrySyncPacket<T, N : NetworkPacket<N>>(private val regis
      * @param buffer The [RegistryFriendlyByteBuf] being decoded from.
      * @return The entry of type [T].
      */
-    abstract fun decodeEntry(buffer: RegistryFriendlyByteBuf): T?
+    abstract fun decodeEntry(RegistryFriendlyByteBuf buffer): T?
 
     /**
      * Synchronizes the final product the final product with the backing registry.

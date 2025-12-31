@@ -17,19 +17,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class AcceptEvolutionPacket(val pokemonUUID: UUID, val evolutionId: String) : NetworkPacket<AcceptEvolutionPacket> {
+public class AcceptEvolutionPacket(val pokemonUUID uuid, val evolutionId: String) : NetworkPacket<AcceptEvolutionPacket> {
 
-    constructor(pokemon: Pokemon, evolution: EvolutionDisplay) : this(pokemon.uuid, evolution.id)
+    constructor(Pokemon pokemon, evolution: EvolutionDisplay) : this(pokemon.uuid, evolution.id)
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(this.pokemonUUID)
         buffer.writeString(this.evolutionId)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("accept_evolution")
-        fun decode(buffer: RegistryFriendlyByteBuf) = AcceptEvolutionPacket(buffer.readUUID(), buffer.readString())
+        fun decode(RegistryFriendlyByteBuf buffer) = AcceptEvolutionPacket(buffer.readUUID(), buffer.readString())
     }
 }

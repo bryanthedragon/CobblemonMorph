@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.S
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.move.MoveSelectedPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class MoveSelectedHandler : ServerNetworkPacketHandler<MoveSelectedPacket> {
-    override fun handle(packet: MoveSelectedPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class MoveSelectedHandler : ServerNetworkPacketHandler<MoveSelectedPacket> {
+    override fun handle(packet: MoveSelectedPacket, server: MinecraftServer, ServerPlayer player) {
         MoveSelectCallbacks.handleCallback(player, packet.uuid, packet.index)
     }
 }

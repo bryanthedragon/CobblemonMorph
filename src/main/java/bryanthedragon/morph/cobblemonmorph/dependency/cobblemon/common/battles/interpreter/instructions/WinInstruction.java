@@ -32,7 +32,7 @@ import java.util.UUID
  * @author Deltric
  * @since January 22nd, 2022
  */
-class WinInstruction(val message: BattleMessage): InterpreterInstruction {
+public class WinInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val user = message.argumentAt(0) ?: return

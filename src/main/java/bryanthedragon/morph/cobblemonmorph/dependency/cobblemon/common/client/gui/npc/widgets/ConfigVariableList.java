@@ -26,7 +26,7 @@ import net.minecraft.client.gui.components.WidgetTooltipHolder
 import net.minecraft.client.gui.components.events.GuiEventListener
 import net.minecraft.client.gui.narration.NarratableEntry
 
-class ConfigVariableList(
+public class ConfigVariableList(
     val listX: Int,
     var listY: Int,
     val parent: NPCEditorScreen
@@ -37,7 +37,7 @@ class ConfigVariableList(
     0, // top
     SLOT_HEIGHT + SLOT_SPACING
 ), CobblemonRenderable {
-    companion object {
+    final class Companion {
         const val WIDTH = 211
         const val HEIGHT = 160
         const val SLOT_WIDTH = 196
@@ -68,7 +68,7 @@ class ConfigVariableList(
     public override fun addEntry(entry: ConfigVariable) = super.addEntry(entry)
     public override fun removeEntry(entry: ConfigVariable) = super.removeEntry(entry)
 
-    override fun renderListSeparators(guiGraphics: GuiGraphics) {}
+    override fun renderListSeparators(GuiGraphics guiGraphics) {}
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         correctSize()
@@ -114,7 +114,7 @@ class ConfigVariableList(
     fun isHovered(mouseX: Double, mouseY: Double) = mouseX.toFloat() in (x.toFloat()..(x.toFloat() + WIDTH)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + HEIGHT))
 
     class ConfigVariable(val variable: MoLangConfigVariable, val value: String, private val parent: ConfigVariableList) : Entry<ConfigVariable>() {
-        val client: Minecraft = Minecraft.getInstance()
+        val Minecraft client = Minecraft.getInstance()
         var _focused = false
         var children = mutableListOf<GuiEventListener>()
 
@@ -179,11 +179,11 @@ class ConfigVariableList(
 
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             rowTop: Int,
             rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
+            rowInt width,
+            rowInt height,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,

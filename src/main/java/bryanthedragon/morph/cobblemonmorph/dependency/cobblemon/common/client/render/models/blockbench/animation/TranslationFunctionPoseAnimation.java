@@ -18,7 +18,7 @@ import net.minecraft.client.model.geom.ModelPart
 /**
  * Animation simply works by moving a part along a particular function
  */
-class TranslationFunctionPoseAnimation(
+public class TranslationFunctionPoseAnimation(
     val part: ModelPart,
     val function: WaveFunction,
     val axis: Int,

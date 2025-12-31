@@ -21,5 +21,5 @@ open class IntRanges() {
 
     var ranges = mutableListOf<IntRange>()
 
-    operator fun contains(value: Int) = ranges.any { value in it }
+    operator fun contains(Int value) = ranges.any { value in it }
 }

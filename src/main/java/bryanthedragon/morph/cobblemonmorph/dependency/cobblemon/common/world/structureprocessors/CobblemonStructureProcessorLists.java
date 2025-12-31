@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.st
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
-final class CobblemonStructureProcessorLists {
+public final class CobblemonStructureProcessorLists {
     @JvmField
     val CROP_TO_BERRY = ResourceKey.create(Registries.PROCESSOR_LIST, cobblemonResource("crop_to_berry"))
 }

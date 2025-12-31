@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.datafixe
 import com.mojang.datafixers.schemas.Schema
 import com.mojang.serialization.Dynamic
 
-class RaisedPPStagesFix(output: Schema) : PokemonFix(output) {
+public class RaisedPPStagesFix(output: Schema) : PokemonFix(output) {
 
     override fun fixPokemonData(dynamic: Dynamic<*>): Dynamic<*> {
         var result = processPPStages(dynamic, "MoveSet")
@@ -19,7 +19,7 @@ class RaisedPPStagesFix(output: Schema) : PokemonFix(output) {
         return result
     }
 
-    private fun processPPStages(dynamic: Dynamic<*>, key: String): Dynamic<*> {
+    private fun processPPStages(dynamic: Dynamic<*>, String Key): Dynamic<*> {
         var moveSetJson = dynamic.get(key).asListOpt { it }.result()
         if (!moveSetJson.isPresent) {
             return dynamic

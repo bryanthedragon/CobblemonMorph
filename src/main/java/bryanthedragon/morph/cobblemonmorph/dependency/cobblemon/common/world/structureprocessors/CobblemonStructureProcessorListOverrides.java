@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world.st
 
 import net.minecraft.core.registries.Registries
 import net.minecraft.server.MinecraftServer
-final class CobblemonStructureProcessorListOverrides {
+public final class CobblemonStructureProcessorListOverrides {
     val ResourceKey = Registries.PROCESSOR_LIST
 
     fun register(server: MinecraftServer) {

@@ -23,7 +23,7 @@ import net.minecraft.world.level.biome.Biome
  * @author Licious
  * @since July 1st, 2022
  */
-class BiomeTagCondition(tag: TagKey<Biome>) : RegistryLikeTagCondition<Biome>(tag)
+public class BiomeTagCondition(tag: TagKey<Biome>) : RegistryLikeTagCondition<Biome>(tag)
 
 /**
  * A [RegistryLikeCondition] that expects an [ResourceLocation] to match.
@@ -33,4 +33,4 @@ class BiomeTagCondition(tag: TagKey<Biome>) : RegistryLikeTagCondition<Biome>(ta
  * @author Licious
  * @since July 1st, 2022
  */
-class BiomeIdentifierCondition(identifier: ResourceLocation) : RegistryLikeIdentifierCondition<Biome>(identifier)
+public class BiomeIdentifierCondition(ResourceLocation identifier) : RegistryLikeIdentifierCondition<Biome>(identifier)

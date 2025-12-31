@@ -41,7 +41,7 @@ import net.minecraft.util.Mth
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (PokedexEntry) -> (Unit)): ScrollingWidget<PokemonScrollSlotRow>(
+public class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (PokedexEntry) -> (Unit)): ScrollingWidget<PokemonScrollSlotRow>(
     width = PokedexGUIConstants.HALF_OVERLAY_WIDTH,
     height = SCROLL_BASE_HEIGHT,
     left = pX,
@@ -91,11 +91,11 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         mouseX: Int,
         mouseY: Int,
         delta: Float,
-        index: Int,
+        Int index,
         x: Int,
         y: Int,
-        entryWidth: Int,
-        entryHeight: Int
+        entryInt width,
+        entryInt height
     ) {
         val entry =  this.getEntry(index)
         entry.x = x
@@ -106,7 +106,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         )
     }
 
-    override fun getEntry(index: Int): PokemonScrollSlotRow {
+    override fun getEntry(Int index): PokemonScrollSlotRow {
         return children()[index] as PokemonScrollSlotRow
     }
 
@@ -115,7 +115,7 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
         val discoveryLevelList: MutableList<PokedexEntryProgress>,
         val setPokedexEntry : (PokedexEntry) -> (Unit)
     ): Slot<PokemonScrollSlotRow>() {
-        companion object {
+        final class Companion {
             private val slotResource = cobblemonResource("textures/gui/pokedex/pokedex_slot.png")
             private val slotHighlight = cobblemonResource("textures/gui/pokedex/slot_select.png")
             private val caughtIcon = cobblemonResource("textures/gui/pokedex/caught_icon_small.png")
@@ -131,11 +131,11 @@ class EntriesScrollingWidget(val pX: Int, val pY: Int, val setPokedexEntry: (Pok
 
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             y: Int,
             x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
+            entryInt width,
+            entryInt height,
             mouseX: Int,
             mouseY: Int,
             hovered: Boolean,

@@ -12,6 +12,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
 import net.minecraft.sounds.SoundEvent
 
-class VitaminItem(stat: Stats) : EVIncreaseItem(stat, 10) {
-    override val sound: SoundEvent = CobblemonSounds.MEDICINE_PILLS_USE
+public class VitaminItem(Stat stat s) : EVIncreaseItem(stat, 10) {
+    override val SoundEvent sound = CobblemonSounds.MEDICINE_PILLS_USE
 }

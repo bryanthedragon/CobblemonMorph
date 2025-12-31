@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack
  * @param rod The ItemStack of the rod that the bait is set on.
  * @param bait The ItemStack of the bait that is set on the rod.
  */
-class BaitSetEvent(val rod: ItemStack, val bait: ItemStack) : Cancelable() {
+public class BaitSetEvent(val rod: ItemStack, val bait: ItemStack) : Cancelable() {
     val context = server()?.let { server ->
         mutableMapOf(
             "rod" to rod.asMoLangValue(server.registryAccess()),

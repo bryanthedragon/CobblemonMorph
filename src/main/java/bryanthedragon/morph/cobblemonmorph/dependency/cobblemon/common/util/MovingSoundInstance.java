@@ -6,20 +6,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
 import net.minecraft.sounds.SoundSource
 import net.minecraft.sounds.SoundEvent
 import net.minecraft.world.phys.Vec3
 
-class MovingSoundInstance(
-    val sound: SoundEvent,
-    private val category: SoundSource,
+public class MovingSoundInstance(
+    val SoundEvent sound,
+    private val SoundSource category,
     val pos: () -> Vec3?,
     private val startingVol: Float,
-    private val pitch: Float,
+    private val Float pitch,
     var loop: Boolean = true,
     var duration: Int = 20,
     private val repeatDelay: Int = 0

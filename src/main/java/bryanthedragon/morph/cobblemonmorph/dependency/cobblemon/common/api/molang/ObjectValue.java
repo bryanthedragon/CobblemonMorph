@@ -18,7 +18,7 @@ import com.bedrockk.molang.runtime.value.MoValue
  * @author Hiroku
  * @since October 2nd, 2023
  */
-class ObjectValue<T>(
+public class ObjectValue<T>(
     var obj: T,
     val stringify: (T) -> String = { it.toString() },
     val doublify: (T) -> Double = { DoubleValue.ONE.value }

@@ -23,7 +23,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
     val listX: Int,
     val listY: Int,
     val label: MutableComponent,
-    slotHeight: Int
+    slotInt height
 ) : ObjectSelectionList<T>(
     Minecraft.getInstance(),
     WIDTH, // width
@@ -31,7 +31,7 @@ abstract class SummaryScrollList<T : ObjectSelectionList.Entry<T>>(
     0, // top
     slotHeight
 ), CobblemonRenderable {
-    companion object {
+    final class Companion {
         const val WIDTH = 108
         const val HEIGHT = 112
         const val SLOT_WIDTH = 91

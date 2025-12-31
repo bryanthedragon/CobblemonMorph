@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class GligarModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame {
+public class GligarModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("gligar")
 
     override var portraitScale = 2.4F

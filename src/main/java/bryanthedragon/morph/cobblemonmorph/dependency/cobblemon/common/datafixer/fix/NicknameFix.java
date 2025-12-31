@@ -19,7 +19,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.resources.RegistryOps
 
-class NicknameFix(outputSchema: Schema) : PokemonFix(outputSchema) {
+public class NicknameFix(outputSchema: Schema) : PokemonFix(outputSchema) {
     override fun fixPokemonData(dynamic: Dynamic<*>): Dynamic<*> {
         val nickname = dynamic.get("Nickname").asString().result()
         if (!nickname.isPresent) {
@@ -46,7 +46,7 @@ class NicknameFix(outputSchema: Schema) : PokemonFix(outputSchema) {
         return dynamic
     }
 
-    private fun <T> asJsonOps(ops: DynamicOps<T>): DynamicOps<JsonElement> {
+    private fun <T> asJsonOps(DynamicOps<T> ops): DynamicOps<JsonElement> {
         return if (ops is RegistryOps<T>) {
             ops.withParent(JsonOps.INSTANCE)
         } else {

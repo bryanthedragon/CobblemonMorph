@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class BoldoreModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame {
+public class BoldoreModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("boldore")
     override val leftLeg = getPart("leg_left")
     override val rightLeg = getPart("leg_right")

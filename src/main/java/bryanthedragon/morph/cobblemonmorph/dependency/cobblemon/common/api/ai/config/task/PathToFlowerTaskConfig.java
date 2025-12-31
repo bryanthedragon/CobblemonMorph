@@ -17,19 +17,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
-class PathToFlowerTaskConfig : SingleTaskConfig {
-    companion object {
+public class PathToFlowerTaskConfig : SingleTaskConfig {
+    final class Companion {
         const val POLLINATE = "pollinate"
     }
 
     val condition = booleanVariable(POLLINATE, "can_pollinate", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {

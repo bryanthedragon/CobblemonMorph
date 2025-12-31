@@ -32,7 +32,7 @@ import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
-final class RunMolangCommand {
+public final class RunMolangCommand {
     private const val NAME = "runmolang"
     private const val MOLANG = "molang"
     private const val PLAYER = "player"
@@ -78,7 +78,7 @@ final class RunMolangCommand {
         )
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, molang: String, player: ServerPlayer?, npc: Entity?, pokemon: Entity? = null): Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, moString lang, ServerPlayer player?, npc: Entity?, pokemon: Entity? = null): Int {
         try {
             val runtime = MoLangRuntime().setup()
             val entity = context.source.entity
@@ -91,7 +91,7 @@ final class RunMolangCommand {
             val out = molang.asExpressionLike().resolve(runtime)
             context.source.sendSuccess({ commandLang("molang.out", out.asString()) }, true)
 
-        } catch (e: Exception) {
+        } catch (Exception e) {
             e.printStackTrace()
         }
         return Command.SINGLE_SUCCESS

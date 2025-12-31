@@ -35,7 +35,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.schedule.Activity
 
-class NPCServerDelegate : NPCSideDelegate {
+public class NPCServerDelegate : NPCSideDelegate {
     lateinit var entity: NPCEntity
 
     override fun initialize(entity: NPCEntity) {

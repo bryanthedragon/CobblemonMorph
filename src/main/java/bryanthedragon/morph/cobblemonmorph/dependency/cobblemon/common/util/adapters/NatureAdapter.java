@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asId
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-final class NatureAdapter : TypeAdapter<Nature>() {
+public final class NatureAdapter : TypeAdapter<Nature>() {
 
     override fun write(writer: JsonWriter, value: Nature) {
         writer.value(value.name.toString())

@@ -19,9 +19,9 @@ import net.minecraft.resources.ResourceLocation
  * @param displayName: A Component used to display the name, normally a TranslatableText
  * @param resourceLocation: The location of the resource used in the GUI
  */
-class DamageCategory(
-    val name: String,
-    val displayName: Component,
+public class DamageCategory(
+    val String name,
+    val Component displayName,
     val textureXMultiplier: Int,
     val resourceLocation: ResourceLocation = cobblemonResource("textures/gui/categories.png")
 ) {

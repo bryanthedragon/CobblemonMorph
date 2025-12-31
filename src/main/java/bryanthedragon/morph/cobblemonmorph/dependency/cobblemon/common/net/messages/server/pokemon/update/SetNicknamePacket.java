@@ -25,16 +25,16 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author selfdot
  * @since March 29th, 2023
  */
-class SetNicknamePacket(val pokemonUUID: UUID, val isParty: Boolean, val nickname: String?) : NetworkPacket<SetNicknamePacket> {
+public class SetNicknamePacket(val pokemonUUID uuid, val isParty: Boolean, val nickString name?) : NetworkPacket<SetNicknamePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(pokemonUUID)
         buffer.writeBoolean(isParty)
         buffer.writeNullable(nickname) { _, v -> buffer.writeString(v) }
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("set_nickname")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SetNicknamePacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = SetNicknamePacket(
             buffer.readUUID(), buffer.readBoolean(), buffer.readNullable { buffer.readString() }
         )
     }

@@ -19,7 +19,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 
-class HuntPlayerTask : Behavior<LivingEntity>(
+public class HuntPlayerTask : Behavior<LivingEntity>(
         ImmutableMap.of(
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT,
                 MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT,
@@ -28,7 +28,7 @@ class HuntPlayerTask : Behavior<LivingEntity>(
         )
 ) {
 
-    companion object {
+    final class Companion {
         private const val MAX_SEARCH_DURATION = 1000
         private const val SEARCH_RADIUS = 20
         private const val ATTACK_RANGE = 2.0
@@ -40,12 +40,12 @@ class HuntPlayerTask : Behavior<LivingEntity>(
     private var searching = false
     private var searchTime = 0
 
-    override fun checkExtraStartConditions(world: ServerLevel, entity: LivingEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel world, LivingEntity entity): Boolean {
         this.targetEntity = findPlayer(world, entity)
         return targetEntity.isPresent
     }
 
-    override fun canStillUse(world: ServerLevel, entity: LivingEntity, time: Long): Boolean {
+    override fun canStillUse(ServerLevel world, LivingEntity entity, time: Long): Boolean {
         val canSeePlayer = targetEntity.isPresent && entity.hasLineOfSight(targetEntity.get())
         // if entity cannot see player then searching is true
         if (!canSeePlayer)
@@ -60,7 +60,7 @@ class HuntPlayerTask : Behavior<LivingEntity>(
             return false
     }
 
-    private fun findPlayer(world: ServerLevel, entity: LivingEntity): Optional<LivingEntity> {
+    private fun findPlayer(ServerLevel world, LivingEntity entity): Optional<LivingEntity> {
         return world.players()
                 // filter all players that are alive that the entity can see and are within a certain radius of the entity
                 .filter { it.isAlive && entity.hasLineOfSight(it) && entity.distanceToSqr(it) <= SEARCH_RADIUS * SEARCH_RADIUS }
@@ -69,7 +69,7 @@ class HuntPlayerTask : Behavior<LivingEntity>(
                 ?.let { Optional.of(it) } ?: Optional.empty()
     }
 
-    override fun start(world: ServerLevel, entity: LivingEntity, time: Long) {
+    override fun start(ServerLevel world, LivingEntity entity, time: Long) {
         addLookWalkTargets(entity)
         searching = false
         searchTime = 0
@@ -77,7 +77,7 @@ class HuntPlayerTask : Behavior<LivingEntity>(
         super.start(world, entity, time)
     }
 
-    private fun addLookWalkTargets(entity: LivingEntity) {
+    private fun addLookWalkTargets(LivingEntity entity) {
         targetEntity.ifPresent { target ->
             val lookTarget = EntityTracker(target, true)
             entity.brain.setMemory(MemoryModuleType.LOOK_TARGET, lookTarget)
@@ -85,12 +85,12 @@ class HuntPlayerTask : Behavior<LivingEntity>(
         }
     }
 
-    override fun stop(world: ServerLevel, entity: LivingEntity, time: Long) {
+    override fun stop(ServerLevel world, LivingEntity entity, time: Long) {
         targetEntity = Optional.empty()
         searching = false
     }
 
-    override fun tick(world: ServerLevel, entity: LivingEntity, time: Long) {
+    override fun tick(ServerLevel world, LivingEntity entity, time: Long) {
         // if in the searching state
         if (searching) {
             // increase the searchTime counter
@@ -136,7 +136,7 @@ class HuntPlayerTask : Behavior<LivingEntity>(
         }
     }
 
-    private fun startSearching(entity: LivingEntity) {
+    private fun startSearching(LivingEntity entity) {
         // if there is a last known location of the player
         if (lastKnownLocation.isPresent) {
             searching = true
@@ -145,7 +145,7 @@ class HuntPlayerTask : Behavior<LivingEntity>(
         }
     }
 
-    private fun performSearch(entity: LivingEntity) {
+    private fun performSearch(LivingEntity entity) {
         if (!lastKnownLocation.isPresent) {
             searching = false
             return
@@ -171,7 +171,7 @@ class HuntPlayerTask : Behavior<LivingEntity>(
         disturbanceLocation.ifPresent { onEntityHeard(entity, it) }
     }
 
-    fun onEntityHeard(entity: LivingEntity, pos: BlockPos) {
+    fun onEntityHeard(LivingEntity entity, (BlockPos pos) {
         if (searching && !targetEntity.isPresent) {
             searchTime = 0
             lastKnownLocation = Optional.of(pos)

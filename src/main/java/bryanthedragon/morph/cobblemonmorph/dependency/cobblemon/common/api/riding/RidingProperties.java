@@ -14,19 +14,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.RidingBehaviourSettingsAdapter
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RidingProperties(
+public class RidingProperties(
         val seats: List<Seat> = listOf(),
         val conditions: List<Expression> = listOf(),
         val behaviours: Map<RidingStyle, RidingBehaviourSettings>? = null
 ) {
 
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf): RidingProperties {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer): RidingProperties {
             val seats: List<Seat> = buffer.readList { _ -> Seat.decode(buffer) }
             val conditions = buffer.readList { buffer.readString().asExpression() }
             val behaviours = buffer.readNullable { _ ->
                 buffer.readMap(
-                    { buffer.readEnumConstant(RidingStyle::class.java) },
+                    { buffer.readEnumConstant(RidingStyle.class) },
                     {
                         val key = buffer.readResourceLocation()
                         val behaviour = RidingBehaviourSettingsAdapter.types[key]?.getConstructor()?.newInstance()
@@ -41,7 +41,7 @@ class RidingProperties(
         }
     }
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeCollection(seats) { _, seat -> seat.encode(buffer) }
         buffer.writeCollection(conditions) { _, condition -> buffer.writeString(condition.getString()) }
         buffer.writeNullable(behaviours) { _, v ->

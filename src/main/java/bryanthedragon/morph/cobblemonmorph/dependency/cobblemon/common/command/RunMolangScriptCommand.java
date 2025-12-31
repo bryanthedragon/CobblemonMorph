@@ -32,7 +32,7 @@ import net.minecraft.commands.arguments.ResourceLocationArgument
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
-final class RunMolangScriptCommand {
+public final class RunMolangScriptCommand {
     private const val NAME = "runmolangscript"
     private const val SCRIPT = "script"
     private const val PLAYER = "player"
@@ -70,7 +70,7 @@ final class RunMolangScriptCommand {
         )
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, scriptId: ResourceLocation, player: ServerPlayer?, npc: Entity?, pokemon: Entity? = null): Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, scriptResourceLocation id, ServerPlayer player?, npc: Entity?, pokemon: Entity? = null): Int {
         try {
             val runtime = MoLangRuntime().setup()
             val entity = context.source.entity
@@ -81,7 +81,7 @@ final class RunMolangScriptCommand {
             entity?.let { runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue()) }
 
             CobblemonScripts.run(scriptId, runtime)
-        } catch (e: Exception) {
+        } catch (Exception e) {
             e.printStackTrace()
         }
         return Command.SINGLE_SUCCESS

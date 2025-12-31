@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
  * @author Licious
  * @since January 27th, 2022
  */
-class DamageTakenRequirement(amount: Int) : Requirement {
+public class DamageTakenRequirement(amount: Int) : Requirement {
 
     constructor() : this(0)
 
@@ -30,12 +30,12 @@ class DamageTakenRequirement(amount: Int) : Requirement {
      */
     val amount: Int = amount
 
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
+    override fun check(Pokemon pokemon): Boolean = pokemon.evolutionProxy.current()
         .progress()
         .filterIsInstance<DamageTakenEvolutionProgress>()
         .any { progress -> progress.currentProgress().amount >= this.amount }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "damage_taken"
     }
 

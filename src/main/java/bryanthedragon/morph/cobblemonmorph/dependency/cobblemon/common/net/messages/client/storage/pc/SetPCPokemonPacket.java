@@ -27,19 +27,19 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since June 18th, 2022
  */
-class SetPCPokemonPacket internal constructor(val storeID: UUID, val storePosition: PCPosition, val pokemon: (RegistryAccess) -> Pokemon) : NetworkPacket<SetPCPokemonPacket>, UnsplittablePacket {
+public class SetPCPokemonPacket internal constructor(val UUID storeID, val storePosition: PCPosition, val pokemon: (RegistryAccess) -> Pokemon) : NetworkPacket<SetPCPokemonPacket>, UnsplittablePacket {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(this.storeID)
         buffer.writePCPosition(this.storePosition)
         Pokemon.S2C_CODEC.encode(buffer, this.pokemon(buffer.registryAccess()))
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("set_pc_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf): SetPCPokemonPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SetPCPokemonPacket {
             val uuid = buffer.readUUID()
             val position = buffer.readPCPosition()
             val bufferCache = buffer.readBytes(buffer.readableBytes())

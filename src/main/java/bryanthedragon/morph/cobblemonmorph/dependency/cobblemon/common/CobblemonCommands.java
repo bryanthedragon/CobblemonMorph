@@ -16,7 +16,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
-final class CobblemonCommands {
+public final class CobblemonCommands {
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>, registry: CommandBuildContext, selection: Commands.CommandSelection) {
         SpawnPokemon.register(dispatcher);
         SpawnNPCCommand.register(dispatcher);

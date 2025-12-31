@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.reso
  * @author Hiroku
  * @since October 22nd, 2023
  */
-class SingleExpression(val expr: Expression) : ExpressionLike {
+public class SingleExpression(val expr: Expression) : ExpressionLike {
     override fun toString() = expr.getString()
-    override fun resolve(runtime: MoLangRuntime, context: Map<String, MoValue>) = runtime.resolve(expr, context)
+    override fun resolve(MoLangRuntime runtime, Map<String, MoValue> context) = runtime.resolve(expr, context)
 }

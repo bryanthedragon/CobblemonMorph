@@ -56,7 +56,7 @@ import com.mojang.serialization.JsonOps
 import java.io.File
 import java.io.PrintWriter
 
-@Suppress("unused")final class TestCommand {
+@Suppress("unused")public final class TestCommand {
 
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("testcommand")
@@ -134,7 +134,7 @@ import java.io.PrintWriter
 
 //            val player = context.source.entity as ServerPlayerEntity
 //            player.giveItemStack(PokemonItem.from(PokemonSpecies.random(), "alolan"))
-        } catch (e: Exception) {
+        } catch (Exception e) {
             Cobblemon.LOGGER.error(e)
         }
         return Command.SINGLE_SUCCESS
@@ -216,7 +216,7 @@ import java.io.PrintWriter
         for (line in iterator) {
             val cols = line.split(",")
             val berryName = cols[1].lowercase() + "_berry"
-            val json = gson.fromJson(File("scripty/old/$berryName.json").reader(), JsonObject::class.java)
+            val json = gson.fromJson(File("scripty/old/$berryName.json").reader(), JsonObject.class)
             val growthPoints = mutableListOf<JsonObject>()
             var index = 7
             while (true) {
@@ -300,7 +300,7 @@ import java.io.PrintWriter
 //                val pw = PrintWriter(File(file, "$moveName.json"))
 //                pw.write(gson.toJson(obj))
 //                pw.close()
-//            } catch (e: Exception) {
+//            } catch (Exception e) {
 //                println("Issue when converting $moveName")
 //                e.printStackTrace()
 //            }
@@ -324,7 +324,7 @@ import java.io.PrintWriter
 //                val pw = PrintWriter(File(file, "$abilityName.json"))
 //                pw.write(gson.toJson(obj))
 //                pw.close()
-//            } catch (e: Exception) {
+//            } catch (Exception e) {
 //                println("Issue when converting $abilityName")
 //                e.printStackTrace()
 //            }
@@ -436,8 +436,8 @@ import java.io.PrintWriter
         }
     }
 
-    private fun tryTamePokemon(player: ServerPlayer) {
-        val pokemon = player.traceFirstEntityCollision(entityClass = PokemonEntity::class.java)
+    private fun tryTamePokemon(ServerPlayer player) {
+        val pokemon = player.traceFirstEntityCollision(entityClass = PokemonEntity.class)
         if (pokemon == null)
         {
             player.sendSystemMessage("Not looking at pokemon".text())

@@ -30,22 +30,22 @@ import net.minecraft.network.chat.Component
  * @author Hiroku
  * @since August 14th, 2023
  */
-class MoLangConfigVariable(
+public class MoLangConfigVariable(
     val variableName: String = "variable",
     val category: Component = "Variables".asTranslated(),
-    val displayName: Component = "Variable".asTranslated(),
-    val description: Component = "A variable that can be used in the entity's configuration.".asTranslated(),
+    val Component displayName = "Variable".asTranslated(),
+    val Component description = "A variable that can be used in the entity's configuration.".asTranslated(),
     val type: MoLangVariableType = MoLangVariableType.NUMBER,
     val defaultValue: String = "0",
 ) {
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf): MoLangConfigVariable {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer): MoLangConfigVariable {
             return MoLangConfigVariable(
                 buffer.readString(),
                 buffer.readText(),
                 buffer.readText(),
                 buffer.readText(),
-                buffer.readEnum(MoLangVariableType::class.java),
+                buffer.readEnum(MoLangVariableType.class),
                 buffer.readString()
             )
         }
@@ -67,7 +67,7 @@ class MoLangConfigVariable(
         }
     }
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(variableName)
         buffer.writeText(category)
         buffer.writeText(displayName)

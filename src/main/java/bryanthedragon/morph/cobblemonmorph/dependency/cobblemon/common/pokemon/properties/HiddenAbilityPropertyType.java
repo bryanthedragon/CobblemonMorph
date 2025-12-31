@@ -20,7 +20,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.a
  *
  * @author Hiroku
  * @since November 1st, 2022
- */final class HiddenAbilityPropertyType : CustomPokemonPropertyType<HiddenAbilityProperty> {
+ */
+public final class HiddenAbilityPropertyType : CustomPokemonPropertyType<HiddenAbilityProperty> {
     override val keys = setOf("hiddenability", "ha")
     override val needsKey = true
     override fun fromString(value: String?) =
@@ -32,16 +33,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.a
     override fun examples() = setOf("yes", "no")
 }
 
-class HiddenAbilityProperty (var value: Boolean) : CustomPokemonProperty {
+public class HiddenAbilityProperty (var value: Boolean) : CustomPokemonProperty {
     override fun asString() = "hiddenability"
-    override fun apply(pokemon: Pokemon) {
+    override fun apply(Pokemon pokemon) {
         val possible = pokemon.form.abilities.mapping.flatMap { it.value }
             .filter { it.type == getAbilityType() }
         val picked = possible.randomOrNull() ?: return
         pokemon.updateAbility(picked.template.create(false, picked.priority))
     }
 
-    override fun matches(pokemon: Pokemon) = pokemon.form.abilities.mapping
+    override fun matches(Pokemon pokemon) = pokemon.form.abilities.mapping
         .flatMap { it.value }
         .find { it.template == pokemon.ability.template }
         ?.type == getAbilityType()

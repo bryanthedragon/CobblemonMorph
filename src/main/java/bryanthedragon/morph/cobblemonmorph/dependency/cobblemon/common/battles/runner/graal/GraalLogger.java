@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import java.util.logging.Handler
 import java.util.logging.Level
 import java.util.logging.LogRecord
-final class GraalLogger : Handler() {
+public final class GraalLogger : Handler() {
     override fun publish(record: LogRecord?) {
         if(record == null) {
             return

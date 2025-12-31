@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ServerboundUpdateRidingSettingsPacket(
+public class ServerboundUpdateRidingSettingsPacket(
     val entity: Int,
     val ridingStyle: RidingStyle,
     val variable: String,
@@ -23,19 +23,19 @@ class ServerboundUpdateRidingSettingsPacket(
 ) : NetworkPacket<ServerboundUpdateRidingSettingsPacket> {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(entity)
         buffer.writeEnum(ridingStyle)
         buffer.writeString(variable)
         buffer.writeString(expression)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("c2s_update_ride_settings")
-        fun decode(buffer: RegistryFriendlyByteBuf): ServerboundUpdateRidingSettingsPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): ServerboundUpdateRidingSettingsPacket {
             return ServerboundUpdateRidingSettingsPacket(
                 entity = buffer.readInt(),
-                ridingStyle = buffer.readEnum(RidingStyle::class.java),
+                ridingStyle = buffer.readEnum(RidingStyle.class),
                 variable = buffer.readString(),
                 expression = buffer.readString()
             )

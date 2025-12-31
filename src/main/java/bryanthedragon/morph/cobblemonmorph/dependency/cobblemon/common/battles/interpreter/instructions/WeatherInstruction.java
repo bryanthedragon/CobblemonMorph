@@ -25,7 +25,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Hunter
  * @since September 25th, 2022
  */
-class WeatherInstruction(val message: BattleMessage): InterpreterInstruction {
+public class WeatherInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val weather = message.effectAt(0)?.id ?: return

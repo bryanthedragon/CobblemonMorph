@@ -23,11 +23,11 @@ import net.minecraft.world.level.levelgen.placement.PlacementFilter
  * @author Hiroku
  * @since September 23rd, 2023
  */
-class ConditionalRarityFilterPlacementModifier(
+public class ConditionalRarityFilterPlacementModifier(
     val predicate: BlockPredicate,
     val chance: Int
 ) : PlacementFilter() {
-    companion object {
+    final class Companion {
         val MODIFIER_CODEC: MapCodec<ConditionalRarityFilterPlacementModifier> = RecordCodecBuilder.mapCodec { instance ->
             instance
                 .group(
@@ -40,7 +40,7 @@ class ConditionalRarityFilterPlacementModifier(
 
     override fun type() = CobblemonPlacementModifierTypes.CONDITIONAL_RARITY_FILTER
 
-    override fun shouldPlace(context: PlacementContext, random: RandomSource, pos: BlockPos): Boolean {
+    override fun shouldPlace(context: PlacementContext, random: RandomSource, (BlockPos pos): Boolean {
         return if (predicate.test(context.level, pos)) random.nextFloat() < 1.0f / this.chance.toFloat() else true
     }
 }

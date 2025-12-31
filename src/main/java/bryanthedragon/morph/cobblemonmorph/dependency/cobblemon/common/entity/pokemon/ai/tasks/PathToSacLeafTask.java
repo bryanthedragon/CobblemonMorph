@@ -19,7 +19,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
-final class PathToSacLeafTask {
+public final class PathToSacLeafTask {
 
 
     fun create(): OneShot<in LivingEntity> {

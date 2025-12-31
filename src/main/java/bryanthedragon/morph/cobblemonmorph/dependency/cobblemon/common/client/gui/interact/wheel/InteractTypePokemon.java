@@ -8,7 +8,7 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.wheel
 
-enum class InteractTypePokemon {
+public enum InteractTypePokemon {
     SHOULDER,
     HELD_ITEM,
     COSMETIC_ITEM,

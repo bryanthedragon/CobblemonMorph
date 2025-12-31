@@ -18,7 +18,7 @@ import net.minecraft.client.model.geom.ModelPart
 /**
  * Animation simply works by moving a part's rotation along a particular function
  */
-class RotationFunctionPoseAnimation(
+public class RotationFunctionPoseAnimation(
     val part: ModelPart,
     val function: WaveFunction,
     val axis: Int,

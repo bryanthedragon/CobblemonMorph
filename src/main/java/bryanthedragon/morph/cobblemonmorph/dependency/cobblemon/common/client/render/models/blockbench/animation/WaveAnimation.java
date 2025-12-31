@@ -39,7 +39,7 @@ import kotlin.math.atan
  * @author Hiroku
  * @since December 13, 2021
  */
-class WaveAnimation(
+public class WaveAnimation(
     val waveFunction: WaveFunction,
     val oscillationsScalar: Float,
     val head: ModelPart,
@@ -93,7 +93,7 @@ class WaveAnimation(
         }
     }
 }
-class WaveSegment(
+public class WaveSegment(
     val modelPart: ModelPart,
     val length: Float
 )

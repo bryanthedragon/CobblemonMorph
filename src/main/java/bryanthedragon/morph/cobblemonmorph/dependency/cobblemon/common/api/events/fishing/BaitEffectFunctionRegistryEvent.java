@@ -17,10 +17,10 @@ import net.minecraft.resources.ResourceLocation
  * @see SpawnBait.Effect
  * @see SpawnBait.Effects
  */
-class BaitEffectFunctionRegistryEvent {
+public class BaitEffectFunctionRegistryEvent {
     val functions = mutableMapOf<ResourceLocation, (PokemonEntity, SpawnBait.Effect) -> Unit>()
 
-    fun registerFunction(id: ResourceLocation, function: (PokemonEntity, SpawnBait.Effect) -> Unit) {
+    fun registerFunction(ResourceLocation id, function: (PokemonEntity, SpawnBait.Effect) -> Unit) {
         functions[id] = function
     }
 }

@@ -60,8 +60,8 @@ abstract class SubmergedTypeSpawningCondition<T : SubmergedSpawnablePosition> : 
  * @since February 7th, 2022
  */
 open class SubmergedSpawningCondition : SubmergedTypeSpawningCondition<SubmergedSpawnablePosition>() {
-    override fun spawnablePositionClass() = SubmergedSpawnablePosition::class.java
-    companion object {
+    override fun spawnablePositionClass() = SubmergedSpawnablePosition.class
+    final class Companion {
         const val NAME = "submerged"
     }
 }

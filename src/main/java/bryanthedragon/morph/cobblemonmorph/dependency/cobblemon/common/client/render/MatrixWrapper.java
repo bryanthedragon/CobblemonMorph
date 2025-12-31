@@ -19,8 +19,8 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since February 10th, 2023
  */
-class MatrixWrapper {
-    var position: Vec3 = Vec3.ZERO
+public class MatrixWrapper {
+    var Vec3 position = Vec3.ZERO
     var matrix: Matrix4f = Matrix4f()
     var updateFunction: ((MatrixWrapper) -> Unit)? = null
 
@@ -28,7 +28,7 @@ class MatrixWrapper {
         this.matrix = Matrix4f(rotationMatrix)
     }
 
-    fun updatePosition(position: Vec3) = apply {
+    fun updatePosition(Vec3 position) = apply {
         this.position = position
     }
 
@@ -36,7 +36,7 @@ class MatrixWrapper {
         updateFunction?.invoke(this)
         return position.add(matrix.getOrigin())
     }
-    fun transformPosition(position: Vec3) = this.position.add(matrix.transformPosition(position))
-    fun transformWorldToParticle(position: Vec3) = Matrix4f(matrix).invertAffine().transformPosition(position.subtract(this.position))
+    fun transformPosition(Vec3 position) = this.position.add(matrix.transformPosition(position))
+    fun transformWorldToParticle(Vec3 position) = Matrix4f(matrix).invertAffine().transformPosition(position.subtract(this.position))
     fun clone() = MatrixWrapper().updateMatrix(matrix).updatePosition(position)
 }

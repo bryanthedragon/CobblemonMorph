@@ -23,14 +23,14 @@ import net.minecraft.world.entity.ai.sensing.Sensor
  * @author Hiroku
  * @since January 6th, 2024
  */
-class BattlingPokemonSensor : Sensor<LivingEntity>(20) {
-    companion object {
+public class BattlingPokemonSensor : Sensor<LivingEntity>(20) {
+    final class Companion {
         val OUTPUT_MEMORY_MODULES = setOf<MemoryModuleType<*>>(CobblemonMemories.BATTLING_POKEMON)
     }
 
     override fun requires() = OUTPUT_MEMORY_MODULES
 
-    override fun doTick(world: ServerLevel, entity: LivingEntity) {
+    override fun doTick(ServerLevel world, LivingEntity entity) {
         val battles = when (entity) {
             is PokemonEntity -> entity.battleId?.let { BattleRegistry.getBattle(it) }?.let { listOf(it) } ?: emptyList()
             is NPCEntity -> entity.battleIds.mapNotNull(BattleRegistry::getBattle)

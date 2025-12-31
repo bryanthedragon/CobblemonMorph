@@ -7,7 +7,7 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle
-class ClientBattleSide {
+public class ClientBattleSide {
     lateinit var battle: ClientBattle
     val actors = mutableListOf<ClientBattleActor>()
     val activeClientBattlePokemon: Iterable<ActiveClientBattlePokemon>

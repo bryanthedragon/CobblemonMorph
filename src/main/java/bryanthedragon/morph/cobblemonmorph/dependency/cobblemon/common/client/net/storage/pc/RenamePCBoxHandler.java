@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.RenamePCBoxPacket
 import net.minecraft.client.Minecraft
-final class RenamePCBoxHandler : ClientNetworkPacketHandler<RenamePCBoxPacket> {
-    override fun handle(packet: RenamePCBoxPacket, client: Minecraft) {
+public final class RenamePCBoxHandler : ClientNetworkPacketHandler<RenamePCBoxPacket> {
+    override fun handle(packet: RenamePCBoxPacket, Minecraft client) {
         CobblemonClient.storage.renameBox(packet.storeID, packet.boxNumber, packet.name)
     }
 }

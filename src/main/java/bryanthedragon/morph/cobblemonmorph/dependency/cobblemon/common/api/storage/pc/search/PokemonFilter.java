@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * Functional interface used in [Search]es
  */
 fun interface PokemonFilter {
-    fun test(pokemon: Pokemon): Boolean
+    fun test(Pokemon pokemon): Boolean
 
     fun inverted(): PokemonFilter {
         return PokemonFilter { pokemon -> !this.test(pokemon) }

@@ -27,8 +27,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @author Hiroku
  * @since January 26th, 2022
  */
-class TimeRange : IntRanges {
-    companion object {
+public class TimeRange : IntRanges {
+    final class Companion {
         val timeRanges = mutableMapOf(
             "any" to TimeRange(0..23999),
             "day" to TimeRange(23460..23999, 0..12541),

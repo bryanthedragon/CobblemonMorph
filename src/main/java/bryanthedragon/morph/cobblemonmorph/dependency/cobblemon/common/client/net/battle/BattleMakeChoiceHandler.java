@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMakeChoicePacket
 import net.minecraft.client.Minecraft
-final class BattleMakeChoiceHandler : ClientNetworkPacketHandler<BattleMakeChoicePacket> {
-    override fun handle(packet: BattleMakeChoicePacket, client: Minecraft) {
+public final class BattleMakeChoiceHandler : ClientNetworkPacketHandler<BattleMakeChoicePacket> {
+    override fun handle(packet: BattleMakeChoicePacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         CobblemonClient.battleOverlay.passedSeconds = 0F
         battle.mustChoose = true

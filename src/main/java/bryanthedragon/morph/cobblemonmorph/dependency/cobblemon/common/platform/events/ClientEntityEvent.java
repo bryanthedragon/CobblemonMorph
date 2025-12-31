@@ -17,17 +17,17 @@ import net.minecraft.world.entity.Entity
  * @author Segfault Guy
  * @since August 18th, 2024
  */
-interface ClientEntityEvent {
+public interface ClientEntityEvent {
 
     /** The [Entity] triggering the event. */
-    val entity: Entity
+    val Entity entity
 
     /** The client's [ClientLevel]. */
     val level: ClientLevel
 
     /** Event when [entity] loads into the client's [level]. */
-    record Load(override val entity: Entity, override val level: ClientLevel) : ClientEntityEvent
+    record Load(override val Entity entity, override val level: ClientLevel) : ClientEntityEvent
 
     /** Event when [entity] unloads from the client's [level]. */
-    record Unload(override val entity: Entity, override val level: ClientLevel) : ClientEntityEvent
+    record Unload(override val Entity entity, override val level: ClientLevel) : ClientEntityEvent
 }

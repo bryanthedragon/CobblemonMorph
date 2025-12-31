@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class BuizelModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class BuizelModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("buizel")
     override val head = getPart("head")
 

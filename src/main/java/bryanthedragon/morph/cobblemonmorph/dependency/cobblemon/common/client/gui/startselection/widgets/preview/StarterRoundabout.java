@@ -26,15 +26,15 @@ import org.joml.Vector3f
  * @author Qu
  * @since 2022-07-30
  */
-class StarterRoundabout(
+public class StarterRoundabout(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     var pokemon: RenderablePokemon,
     private val clickAction: (mouseX: Double, mouseY: Double) -> Unit = { _, _ -> },
     private val rotationVector: Vector3f
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("StarterRoundabout")) {
     val state = FloatingState()
-    companion object {
+    final class Companion {
         const val MODEL_WIDTH = 30
         const val MODEL_HEIGHT = 30
     }

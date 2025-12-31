@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class KommoOModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame {
+public class KommoOModel (root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame {
     override val rootPart = root.registerChildWithAllChildren("kommo_o")
 
     override val leftArm = getPart("arm_right")

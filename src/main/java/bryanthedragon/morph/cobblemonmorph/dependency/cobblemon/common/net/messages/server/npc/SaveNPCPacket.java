@@ -20,20 +20,20 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since February 10th, 2024
  */
-class SaveNPCPacket(
+public class SaveNPCPacket(
     val npcId: Int,
     val npcConfigurationDTO: NPCConfigurationDTO
 ) : NetworkPacket<SaveNPCPacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("save_npc")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SaveNPCPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = SaveNPCPacket(
             npcId = buffer.readInt(),
             npcConfigurationDTO = NPCConfigurationDTO().also { it.decode(buffer) }
         )
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(npcId)
         npcConfigurationDTO.encode(buffer)
     }

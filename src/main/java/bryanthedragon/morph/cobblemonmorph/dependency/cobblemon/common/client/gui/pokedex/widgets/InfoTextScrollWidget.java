@@ -34,7 +34,7 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
     width = HALF_OVERLAY_WIDTH,
     height = POKEMON_DESCRIPTION_HEIGHT
 ) {
-    companion object {
+    final class Companion {
         private val scrollBorder = cobblemonResource("textures/gui/pokedex/info_scroll_border.png")
     }
 
@@ -98,11 +98,11 @@ abstract class InfoTextScrollWidget(val pX: Int, val pY: Int): ScrollingWidget<I
     class TextSlot(val text : String) : Slot<TextSlot>() {
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             y: Int,
             x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
+            entryInt width,
+            entryInt height,
             mouseX: Int,
             mouseY: Int,
             hovered: Boolean,

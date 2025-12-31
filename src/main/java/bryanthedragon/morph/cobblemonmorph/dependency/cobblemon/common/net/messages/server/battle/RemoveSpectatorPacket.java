@@ -13,14 +13,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RemoveSpectatorPacket(val battleId: UUID) : NetworkPacket<RemoveSpectatorPacket> {
+public class RemoveSpectatorPacket(val UUID battleId) : NetworkPacket<RemoveSpectatorPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(battleId)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("remove_spectator")
-        fun decode(buffer: RegistryFriendlyByteBuf) = RemoveSpectatorPacket(buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = RemoveSpectatorPacket(buffer.readUUID())
     }
 }

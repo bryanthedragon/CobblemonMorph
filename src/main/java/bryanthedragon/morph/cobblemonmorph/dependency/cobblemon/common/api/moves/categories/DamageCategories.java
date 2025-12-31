@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.move
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-final class DamageCategories {
+public final class DamageCategories {
     private val allCategories = mutableListOf<DamageCategory>()
 
     val PHYSICAL = register(
@@ -31,8 +31,8 @@ final class DamageCategories {
     )
 
     fun register(
-        name: String,
-        displayName: Component,
+        String name,
+        Component displayName,
         resourceLocation: ResourceLocation = cobblemonResource("textures/gui/categories.png"),
         textureXMultiplier: Int
     ): DamageCategory {
@@ -51,11 +51,11 @@ final class DamageCategories {
         return damageCategory
     }
 
-    fun get(name: String): DamageCategory? {
+    fun get(String name): DamageCategory? {
         return allCategories.firstOrNull { cat -> cat.name.equals(name, ignoreCase = true) }
     }
 
-    fun getOrException(name: String): DamageCategory {
+    fun getOrException(String name): DamageCategory {
         return allCategories.first { cat -> cat.name.equals(name, ignoreCase = true) }
     }
 

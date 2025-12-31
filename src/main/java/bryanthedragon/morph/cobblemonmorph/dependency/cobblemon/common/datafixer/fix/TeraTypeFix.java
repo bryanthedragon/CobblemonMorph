@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import com.mojang.datafixers.schemas.Schema
 import com.mojang.serialization.Dynamic
 
-class TeraTypeFix(outputSchema: Schema) : PokemonFix(outputSchema) {
+public class TeraTypeFix(outputSchema: Schema) : PokemonFix(outputSchema) {
 
     // Don't access the regular types directly.
     private val literalToIdentifier = mapOf(

@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-final class JumpStrategy : CompositeRidingStrategy<CompositeSettings> {
+public final class JumpStrategy : CompositeRidingStrategy<CompositeSettings> {
 
     override val key = cobblemonResource("strategy/jump")
 

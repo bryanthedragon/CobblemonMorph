@@ -6,8 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.pc;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.StorePosition
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.StorePosition;
 
-record PCPosition(val box: Int, val slot: Int) : StorePosition
+public record PCPosition(Int box, Int slot) : StorePosition

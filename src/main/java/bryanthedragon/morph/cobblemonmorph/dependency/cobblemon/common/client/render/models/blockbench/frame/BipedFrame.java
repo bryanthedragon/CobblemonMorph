@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
 
 import net.minecraft.client.model.geom.ModelPart
 
-interface BipedFrame : ModelFrame {
+public interface BipedFrame : ModelFrame {
     val leftLeg: ModelPart
     val rightLeg: ModelPart
 }

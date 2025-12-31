@@ -26,7 +26,7 @@ import java.util.UUID
  * @author Apion
  * @since February 21, 2024
  */
-class PlayerDataMongoBackend(mongoClient: MongoClient, databaseName: String, collectionName: String): MongoBackedPlayerDataStoreBackend<GeneralPlayerData>(
+public class PlayerDataMongoBackend(mongoClient: MongoClient, databaseName: String, collectionName: String): MongoBackedPlayerDataStoreBackend<GeneralPlayerData>(
     mongoClient, databaseName, collectionName, PlayerInstancedDataStoreTypes.GENERAL
 ){
     override val defaultData = { forPlayer: UUID -> GeneralPlayerData(
@@ -41,9 +41,9 @@ class PlayerDataMongoBackend(mongoClient: MongoClient, databaseName: String, col
     )}
 
     override val gson = GsonBuilder()
-        .registerTypeAdapter(PlayerDataExtension::class.java, PlayerDataExtensionAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(PlayerDataExtension.class, PlayerDataExtensionAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .create()
 
-    override val classToken = TypeToken.get(GeneralPlayerData::class.java)
+    override val classToken = TypeToken.get(GeneralPlayerData.class)
 }

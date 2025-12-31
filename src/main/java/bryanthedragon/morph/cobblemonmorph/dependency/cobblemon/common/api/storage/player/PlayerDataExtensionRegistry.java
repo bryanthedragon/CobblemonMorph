@@ -7,22 +7,22 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player
-final class PlayerDataExtensionRegistry {
+public final class PlayerDataExtensionRegistry {
 
     private val allExtensions = mutableMapOf<String, Class<out PlayerDataExtension>>()
 
-    fun register(name: String, extension: Class<out PlayerDataExtension>, overwrite: Boolean = false): Boolean {
+    fun register(String name, extension: Class<out PlayerDataExtension>, overwrite: Boolean = false): Boolean {
         if (allExtensions.contains(name) && !overwrite)
             return false
         allExtensions[name] = extension
         return true
     }
 
-    fun get(name: String) = allExtensions[name]
-    fun getOrException(name: String) = get(name)
+    fun get(String name) = allExtensions[name]
+    fun getOrException(String name) = get(name)
         ?: throw IllegalStateException("PlayerDataExtension with name $name was not found.")
     fun count() = allExtensions.size
-    fun remove(name: String) = allExtensions.remove(name)
-    fun contains(name: String) = allExtensions.containsKey(name)
+    fun remove(String name) = allExtensions.remove(name)
+    fun contains(String name) = allExtensions.containsKey(name)
 
 }

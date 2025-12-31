@@ -21,11 +21,12 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author Hiroku
  * @since May 22nd, 2023
- */final class IdentifierDataSerializer : EntityDataSerializer<ResourceLocation> {
+ */
+public final class IdentifierDataSerializer : EntityDataSerializer<ResourceLocation> {
     val ID = cobblemonResource("identifier")
     override fun copy(value: ResourceLocation) = ResourceLocation.fromNamespaceAndPath(value.namespace, value.path)
-    fun read(buf: RegistryFriendlyByteBuf) = ResourceLocation.fromNamespaceAndPath(buf.readString(), buf.readString())
-    fun write(buf: RegistryFriendlyByteBuf, value: ResourceLocation) {
+    fun read(RegistryFriendlyByteBuf buf) = ResourceLocation.fromNamespaceAndPath(buf.readString(), buf.readString())
+    fun write(RegistryFriendlyByteBuf buf, value: ResourceLocation) {
         buf.writeString(value.namespace)
         buf.writeString(value.path)
     }

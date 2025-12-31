@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeUpdatedPacket
 import net.minecraft.client.Minecraft
-final class TradeUpdatedHandler : ClientNetworkPacketHandler<TradeUpdatedPacket> {
-    override fun handle(packet: TradeUpdatedPacket, client: Minecraft) {
+public final class TradeUpdatedHandler : ClientNetworkPacketHandler<TradeUpdatedPacket> {
+    override fun handle(packet: TradeUpdatedPacket, Minecraft client) {
         val trade = CobblemonClient.trade ?: return
 
         if (packet.playerId == Minecraft.getInstance().player?.uuid) {

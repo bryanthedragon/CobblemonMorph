@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isSt
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class HippowdonModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class HippowdonModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("hippowdon")
     override val head = getPart("head")
 

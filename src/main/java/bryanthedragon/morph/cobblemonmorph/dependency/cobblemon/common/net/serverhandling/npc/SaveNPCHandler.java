@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.np
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.npc.SaveNPCPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class SaveNPCHandler : ServerNetworkPacketHandler<SaveNPCPacket> {
-    override fun handle(packet: SaveNPCPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class SaveNPCHandler : ServerNetworkPacketHandler<SaveNPCPacket> {
+    override fun handle(packet: SaveNPCPacket, server: MinecraftServer, ServerPlayer player) {
         val npcEntity = player.level().getEntity(packet.npcId) as? NPCEntity ?: return
         if (!BehaviourEditingTracker.isPlayerEditing(player, npcEntity)) {
             return

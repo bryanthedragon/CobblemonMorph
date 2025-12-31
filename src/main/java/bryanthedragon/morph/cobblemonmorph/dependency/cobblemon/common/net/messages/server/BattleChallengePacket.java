@@ -27,15 +27,15 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author JazzMcNade
  * @since April 15th, 2024
  */
-class BattleChallengePacket(val targetedEntityId: Int, val selectedPokemonId: UUID, val battleFormat: BattleFormat) : NetworkPacket<BattleChallengePacket> {
+public class BattleChallengePacket(val targetedEntityId: Int, val selectedUUID pokemonId, val battleFormat: BattleFormat) : NetworkPacket<BattleChallengePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(this.targetedEntityId)
         buffer.writeUUID(this.selectedPokemonId)
         battleFormat.saveToBuffer(buffer)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_challenge")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleChallengePacket(buffer.readInt(), buffer.readUUID(), BattleFormat.loadFromBuffer(buffer))
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleChallengePacket(buffer.readInt(), buffer.readUUID(), BattleFormat.loadFromBuffer(buffer))
     }
 }

@@ -21,7 +21,7 @@ import com.mojang.brigadier.arguments.FloatArgumentType
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-final class TransformModelPartCommand {
+public final class TransformModelPartCommand {
 
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("transformmodelpart")
@@ -65,7 +65,7 @@ final class TransformModelPartCommand {
             }
         }
 
-        context.source.playerOrException.sendSystemMessage("Changed ${transformType.name.lowercase()} of ${context.getArgument("part", String::class.java )} to $x, $y, $z".text())
+        context.source.playerOrException.sendSystemMessage("Changed ${transformType.name.lowercase()} of ${context.getArgument("part", String.class )} to $x, $y, $z".text())
         return Command.SINGLE_SUCCESS
     }
 }

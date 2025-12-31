@@ -26,20 +26,21 @@ import net.minecraft.resources.ResourceLocation
 /**
  * The data registry responsible for berry fruit and flower models.
  * This is only present on the client.
- */final class BerryModelRepository : JsonDataRegistry<TexturedModel> {
+ */
+public final class BerryModelRepository : JsonDataRegistry<TexturedModel> {
 
     override val id = cobblemonResource("berry_models")
     override val type = PackType.CLIENT_RESOURCES
     override val observable = SimpleObservable<BerryModelRepository>()
-    override val gson: Gson = TexturedModel.GSON
-    override val typeToken: TypeToken<TexturedModel> = TypeToken.get(TexturedModel::class.java)
+    override val Gson gson = TexturedModel.GSON
+    override val typeToken: TypeToken<TexturedModel> = TypeToken.get(TexturedModel.class)
     override val resourcePath = "bedrock/berries"
     private val rawModels = hashMapOf<ResourceLocation, TexturedModel>()
     private val processedModels = hashMapOf<ResourceLocation, ModelPart>()
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 
-    override fun reload(data: Map<ResourceLocation, TexturedModel>) {
+    override fun reload(Map<ResourceLocation, T> dataexturedModel>) {
         data.forEach { (identifier, model) ->
             this.rawModels[identifier] = model
         }
@@ -71,5 +72,5 @@ import net.minecraft.resources.ResourceLocation
         }
     }
 
-    fun modelOf(identifier: ResourceLocation) = this.processedModels[identifier]
+    fun modelOf(ResourceLocation identifier) = this.processedModels[identifier]
 }

@@ -31,7 +31,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture
 import net.minecraft.core.Direction
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 
-class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<RestorationTankBlockEntity> {
+public class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<RestorationTankBlockEntity> {
     val context = RenderContext().also {
         it.put(RenderContext.DO_QUIRKS, true)
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.RESURRECTION_MACHINE)
@@ -192,7 +192,7 @@ class RestorationTankRenderer(ctx: BlockEntityRendererProvider.Context) : BlockE
         }
     }
 
-    companion object {
+    final class Companion {
         val FLUID_MODELS = listOf(
             CobblemonBakingOverrides.RESTORATION_TANK_FLUID_CHUNKED_1.getModel(),
             CobblemonBakingOverrides.RESTORATION_TANK_FLUID_CHUNKED_2.getModel(),

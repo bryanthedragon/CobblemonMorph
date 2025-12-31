@@ -23,7 +23,7 @@ record PokemonItemComponent(
     val aspects: Set<String>,
     val tint: Vector4f? = null
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<PokemonItemComponent> = RecordCodecBuilder.create { builder -> builder.group(
             ResourceLocation.CODEC.fieldOf("species").forGetter(PokemonItemComponent::species),
             Codec.STRING.listOf().fieldOf("aspects").forGetter { it.aspects.toList() },

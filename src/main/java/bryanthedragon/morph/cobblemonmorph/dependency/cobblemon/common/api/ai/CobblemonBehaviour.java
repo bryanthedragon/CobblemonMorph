@@ -22,9 +22,9 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 
-class CobblemonBehaviour(
+public class CobblemonBehaviour(
     val name: Component = "".asTranslated(),
-    val description: Component = "".asTranslated(),
+    val Component description = "".asTranslated(),
     /** Some behaviours aren't really worth showing on the client, namely ones that are simply conditional bundles of other behaviours. */
     val visible: Boolean = true,
     val entityType: ResourceLocation? = null,
@@ -35,8 +35,8 @@ class CobblemonBehaviour(
     val onRemove: ExpressionLike? = null,
     val onAdd: ExpressionLike? = null,
 ) {
-    fun canBeApplied(entity: LivingEntity) = entityType?.let { entityType == entity.type.builtInRegistryHolder().unwrapKey().get().location() } != false
-    fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    fun canBeApplied(LivingEntity entity) = entityType?.let { entityType == entity.type.builtInRegistryHolder().unwrapKey().get().location() } != false
+    fun configure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (onAdd != null) {
             behaviourConfigurationContext.addOnAddScript(onAdd)
         }
@@ -44,7 +44,7 @@ class CobblemonBehaviour(
     }
 
     /** Undoes anything that needs undoing once this configuration is being removed from an entity that had it before. */
-    fun onRemove(entity: LivingEntity) {
+    fun onRemove(LivingEntity entity) {
         val runtime = MoLangRuntime().setup()
         runtime.withQueryValue("entity", entity.asMostSpecificMoLangValue())
         if (onRemove != null) {

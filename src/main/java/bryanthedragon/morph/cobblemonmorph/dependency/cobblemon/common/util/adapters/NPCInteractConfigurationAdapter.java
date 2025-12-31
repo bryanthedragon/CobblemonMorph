@@ -19,8 +19,8 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import java.lang.reflect.Type
 import net.minecraft.resources.ResourceLocation
-final class NPCInteractConfigurationAdapter : JsonDeserializer<NPCInteractConfiguration> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): NPCInteractConfiguration {
+public final class NPCInteractConfigurationAdapter : JsonDeserializer<NPCInteractConfiguration> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): NPCInteractConfiguration {
         when (json) {
             is JsonPrimitive -> {
                 val config = json.asString

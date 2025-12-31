@@ -18,10 +18,10 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class LookAtTargetedBattlePokemonTaskConfig : SingleTaskConfig {
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+public class LookAtTargetedBattlePokemonTaskConfig : SingleTaskConfig {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {
@@ -32,6 +32,6 @@ class LookAtTargetedBattlePokemonTaskConfig : SingleTaskConfig {
             CobblemonMemories.TARGETED_BATTLE_POKEMON,
             MemoryModuleType.LOOK_TARGET,
         )
-        return WrapperLivingEntityTask(LookAtTargetedBattlePokemonTask.create(), PokemonEntity::class.java)
+        return WrapperLivingEntityTask(LookAtTargetedBattlePokemonTask.create(), PokemonEntity.class)
     }
 }

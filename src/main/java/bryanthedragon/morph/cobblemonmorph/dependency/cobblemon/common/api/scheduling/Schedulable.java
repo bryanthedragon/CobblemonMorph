@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture
  * @author Hiroku
  * @since November 5th, 2023
  */
-interface Schedulable {
+public interface Schedulable {
     val schedulingTracker: SchedulingTracker
 
     fun momentarily(action: () -> Unit): ScheduledTask = after(action = action)

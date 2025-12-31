@@ -52,8 +52,8 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 
-class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
-    companion object {
+public class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
+    final class Companion {
         val KEY = cobblemonResource("land/minekart")
     }
 
@@ -459,7 +459,7 @@ class MinekartBehaviour : RidingBehaviour<MinekartSettings, MinekartState> {
     }
 }
 
-class MinekartSettings : RidingBehaviourSettings {
+public class MinekartSettings : RidingBehaviourSettings {
     override val key = MinekartBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -490,7 +490,7 @@ class MinekartSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
@@ -503,7 +503,7 @@ class MinekartSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(handlingExpr)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
@@ -517,7 +517,7 @@ class MinekartSettings : RidingBehaviourSettings {
     }
 }
 
-class MinekartState : RidingBehaviourState() {
+public class MinekartState : RidingBehaviourState() {
     var currSpeed = ridingState(0.0, Side.BOTH)
     var deltaRotation = ridingState(Vec2.ZERO, Side.BOTH)
     var drifting = ridingState(false, Side.CLIENT)

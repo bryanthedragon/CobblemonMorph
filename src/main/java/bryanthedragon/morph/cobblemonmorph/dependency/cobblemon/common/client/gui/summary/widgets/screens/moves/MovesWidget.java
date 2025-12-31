@@ -25,11 +25,11 @@ import net.minecraft.network.chat.Component
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-class MovesWidget(
+public class MovesWidget(
     pX: Int, pY: Int,
     val summary: Summary
 ): SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("MovesWidget")) {
-    companion object {
+    final class Companion {
         private const val WIDTH = 134
         private const val HEIGHT = 148
         const val MOVE_ICON_SIZE = 10

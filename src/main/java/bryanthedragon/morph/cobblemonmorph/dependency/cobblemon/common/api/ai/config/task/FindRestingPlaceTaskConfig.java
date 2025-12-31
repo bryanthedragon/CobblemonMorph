@@ -25,14 +25,14 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class FindRestingPlaceTaskConfig : SingleTaskConfig {
+public class FindRestingPlaceTaskConfig : SingleTaskConfig {
     val condition: ExpressionLike = "true".asExpressionLike()
     val horizontalSearchDistance: ExpressionOrEntityVariable = Either.left("16".asExpression())
     val verticalSearchDistance: ExpressionOrEntityVariable = Either.left("5".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(horizontalSearchDistance, verticalSearchDistance).asVariables()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(horizontalSearchDistance, verticalSearchDistance).asVariables()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {
@@ -51,7 +51,7 @@ class FindRestingPlaceTaskConfig : SingleTaskConfig {
 
         return WrapperLivingEntityTask(
             FindRestingPlaceTask.create(horizontalSearchDistance.resolveInt(behaviourConfigurationContext.runtime), verticalSearchDistance.resolveInt(behaviourConfigurationContext.runtime)),
-            PokemonEntity::class.java
+            PokemonEntity.class
         )
     }
 }

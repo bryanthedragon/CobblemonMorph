@@ -24,7 +24,7 @@ import net.minecraft.world.item.ItemStack
  * @author Hiroku
  * @since February 13th, 2022
  */
-class PokemonSpawnAction(
+public class PokemonSpawnAction(
     spawnablePosition: SpawnablePosition,
     bucket: SpawnBucket,
     override val detail: SpawnDetail,
@@ -33,9 +33,9 @@ class PokemonSpawnAction(
      * Don't modify the contents of this, what you want to do is [updatePokemon] with a copy.
      */
     var props: PokemonProperties,
-    var heldItem: ItemStack?,
+    ItemStack heldItem?,
     var drops: DropTable? = null,
-    var levelRange: IntRange
+    var levelIntRange range
 ) : SingleEntitySpawnAction<PokemonEntity>(spawnablePosition, bucket, detail) {
     override fun createEntity(): PokemonEntity {
         val props = props.copy()
@@ -70,7 +70,7 @@ class PokemonSpawnAction(
         this.drops = drops
     }
 
-    fun updateLevelRange(levelRange: IntRange) {
+    fun updateLevelRange(levelIntRange range) {
         this.levelRange = levelRange
     }
 }

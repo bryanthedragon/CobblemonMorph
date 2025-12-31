@@ -22,7 +22,8 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author Hiroku
  * @since January 24th, 2022
- */final class IdentifierAdapter : JsonSerializer<ResourceLocation>, JsonDeserializer<ResourceLocation> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = ResourceLocation.parse(json.asString)
-    override fun serialize(src: ResourceLocation, type: Type, ctx: JsonSerializationContext) = JsonPrimitive(src.toString())
+ */
+public final class IdentifierAdapter : JsonSerializer<ResourceLocation>, JsonDeserializer<ResourceLocation> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) = ResourceLocation.parse(json.asString)
+    override fun serialize(src: ResourceLocation, Type type, JsonSerializationContext ctx) = JsonPrimitive(src.toString())
 }

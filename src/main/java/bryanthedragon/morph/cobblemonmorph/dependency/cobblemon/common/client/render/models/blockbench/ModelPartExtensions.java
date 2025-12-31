@@ -50,14 +50,14 @@ fun ModelPart.setPosition(axis: Int, position: Float): ModelPart {
 }
 fun Bone.addRotation(axis: Int, differenceInRadians: Float) = setRotation(axis, getRotation(axis) + differenceInRadians)
 fun ModelPart.addPosition(axis: Int, difference: Float) = setPosition(axis, getPosition(axis) + difference)
-fun ModelPart.getChildOf(vararg path: String): ModelPart {
+fun ModelPart.getChildOf(vararg String path): ModelPart {
     var part = this
     for (piece in path) {
         part = part.getChild(piece)
     }
     return part
 }
-fun ModelPart.childNamed(vararg path: String): Pair<String, ModelPart> {
+fun ModelPart.childNamed(vararg String path): Pair<String, ModelPart> {
     var final = path.last()
     return final to getChildOf(*path)
 }

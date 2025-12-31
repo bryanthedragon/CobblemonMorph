@@ -17,7 +17,7 @@ import net.minecraft.network.chat.MutableComponent
  * @author Hiroku
  * @since January 1st, 2024
  */
-class DialogueSpeaker(
+public class DialogueSpeaker(
     val name: DialogueText? = null,
     val face: DialogueFaceProvider? = null,
     val gibber: DialogueGibber? = null

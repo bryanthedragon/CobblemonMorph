@@ -21,7 +21,7 @@ import net.minecraft.network.chat.Component
  * @author Renaissance
  * @since March 24th, 2023
  */
-class SingleTurnInstruction(val message: BattleMessage): InterpreterInstruction {
+public class SingleTurnInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting(1.5F) {

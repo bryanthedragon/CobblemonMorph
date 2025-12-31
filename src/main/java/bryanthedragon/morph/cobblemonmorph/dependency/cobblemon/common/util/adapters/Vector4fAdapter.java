@@ -16,13 +16,13 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
 import org.joml.Vector4f
-final class Vector4fAdapter : JsonDeserializer<Vector4f>, JsonSerializer<Vector4f> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): Vector4f {
+public final class Vector4fAdapter : JsonDeserializer<Vector4f>, JsonSerializer<Vector4f> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): Vector4f {
         json as JsonArray
         return Vector4f(json[0].asFloat, json[1].asFloat, json[2].asFloat, json[3].asFloat)
     }
 
-    override fun serialize(src: Vector4f, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+    override fun serialize(src: Vector4f, typeOfT srcype?, context: JsonSerializationContext?): JsonElement {
         return JsonArray()
             .also {
                 it.add(src.x)

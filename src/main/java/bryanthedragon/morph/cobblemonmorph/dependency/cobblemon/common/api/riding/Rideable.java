@@ -15,4 +15,4 @@ import net.minecraft.world.entity.PlayerRideableJumping
  *
  * @since 1.7.0
  */
-interface Rideable : PlayerRideableJumping
+public interface Rideable : PlayerRideableJumping

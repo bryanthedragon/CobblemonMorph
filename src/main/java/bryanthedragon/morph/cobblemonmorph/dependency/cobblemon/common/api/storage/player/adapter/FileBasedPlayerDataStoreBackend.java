@@ -37,7 +37,7 @@ abstract class FileBasedPlayerDataStoreBackend<T : InstancedPlayerData>(
         savePath = server.getWorldPath(LevelResource.PLAYER_DATA_DIR).parent
     }
 
-    protected fun postSaveFileMoving(uuid: UUID) {
+    protected fun postSaveFileMoving(UUID uuid) {
         val tempFile = filePath(uuid, TEMPORARY_FILE_EXTENSION)
         val oldFile = filePath(uuid, OLD_FILE_EXTENSION)
         val file = filePath(uuid)
@@ -48,7 +48,7 @@ abstract class FileBasedPlayerDataStoreBackend<T : InstancedPlayerData>(
         tempFile.delete()
     }
 
-    protected fun loadWithFallback(uuid: UUID, loadFunction: (File) -> T): T {
+    protected fun loadWithFallback(UUID uuid, loadFunction: (File) -> T): T {
         val playerFile = filePath(uuid)
         val playerFileOld = filePath(uuid, OLD_FILE_EXTENSION)
         playerFile.parentFile.mkdirs()
@@ -60,7 +60,7 @@ abstract class FileBasedPlayerDataStoreBackend<T : InstancedPlayerData>(
                     playerFileOld.copyTo(playerFile)
                     Cobblemon.LOGGER.debug("Loaded .old {} for {}", subfolder, uuid)
                     result
-                } catch (e: Exception) {
+                } catch (Exception e) {
                     Cobblemon.LOGGER.error("Failed to load .old $subfolder for $uuid due to ${e.message}. Data is lost")
                     Cobblemon.LOGGER.error(e)
                     playerFileOld.delete()
@@ -77,7 +77,7 @@ abstract class FileBasedPlayerDataStoreBackend<T : InstancedPlayerData>(
             try {
                 loadFunction(playerFile)
             }
-            catch (e: Exception) {
+            catch (Exception e) {
                 Cobblemon.LOGGER.warn("Failed to load $subfolder for $uuid due to ${e.message}")
                 Cobblemon.LOGGER.warn(e)
                 loadFallback()
@@ -88,7 +88,7 @@ abstract class FileBasedPlayerDataStoreBackend<T : InstancedPlayerData>(
     }
 
     @JvmOverloads
-    fun getSubFile(uuid: UUID, extension: String? = null): String {
+    fun getSubFile(UUID uuid, extension: String? = null): String {
         return if (useNestedStructure) {
             "${uuid.toString().substring(0, 2)}/$uuid.$fileExt${if (extension != null) ".$extension" else ""}"
         } else {
@@ -97,9 +97,9 @@ abstract class FileBasedPlayerDataStoreBackend<T : InstancedPlayerData>(
     }
 
     @JvmOverloads
-    fun filePath(uuid: UUID, extension: String? = null): File = savePath.resolve("$subfolder/${getSubFile(uuid, extension)}").toFile()
+    fun filePath(UUID uuid, extension: String? = null): File = savePath.resolve("$subfolder/${getSubFile(uuid, extension)}").toFile()
 
-    companion object {
+    final class Companion {
         const val OLD_FILE_EXTENSION = "old"
         const val TEMPORARY_FILE_EXTENSION = "tmp"
     }

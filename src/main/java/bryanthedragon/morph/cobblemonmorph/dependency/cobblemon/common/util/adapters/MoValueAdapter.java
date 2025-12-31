@@ -16,12 +16,12 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import java.lang.reflect.Type
-final class MoValueAdapter : JsonSerializer<MoValue>, JsonDeserializer<MoValue> {
-    override fun serialize(src: MoValue, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+public final class MoValueAdapter : JsonSerializer<MoValue>, JsonDeserializer<MoValue> {
+    override fun serialize(src: MoValue, typeOfT srcype, context: JsonSerializationContext): JsonElement {
         return MoValue.writeToJson(src) ?: JsonObject()
     }
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): MoValue {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): MoValue {
         return MoValue.of(json)
     }
 }

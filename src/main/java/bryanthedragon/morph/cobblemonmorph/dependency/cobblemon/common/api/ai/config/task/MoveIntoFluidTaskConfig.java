@@ -35,7 +35,7 @@ import net.minecraft.world.level.material.FluidState
  * @author Hiroku
  * @since June 15th, 2025
  */
-class MoveIntoFluidTaskConfig : SingleTaskConfig {
+public class MoveIntoFluidTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val movesIntoWater: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val movesIntoLava: ExpressionOrEntityVariable = Either.left("false".asExpression())
@@ -44,7 +44,7 @@ class MoveIntoFluidTaskConfig : SingleTaskConfig {
     val horizontalSearchRange: ExpressionOrEntityVariable = Either.left("8".asExpression())
     val verticalSearchRange: ExpressionOrEntityVariable = Either.left("8".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(
             condition,
             movesIntoWater,
@@ -56,7 +56,7 @@ class MoveIntoFluidTaskConfig : SingleTaskConfig {
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null
@@ -111,7 +111,7 @@ class MoveIntoFluidTaskConfig : SingleTaskConfig {
     }
 
     private fun findTarget(
-        entity: LivingEntity,
+        LivingEntity entity,
         movesIntoWater: Boolean,
         movesIntoLava: Boolean,
         horizontalSearchRange: Int,

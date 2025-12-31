@@ -22,7 +22,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class BattleOptionTile(
+public class BattleOptionTile(
     val battleGUI: BattleGUI,
     val x: Int,
     val y: Int,
@@ -30,7 +30,7 @@ class BattleOptionTile(
     val text: MutableComponent,
     val onClick: () -> Unit
 ) : CobblemonRenderable, GuiEventListener, NarratableEntry {
-    companion object {
+    final class Companion {
         const val  OPTION_WIDTH = 90
         const val OPTION_HEIGHT = 26
     }

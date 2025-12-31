@@ -17,8 +17,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.pasture.UnpasturePokemonPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class UnpasturePokemonHandler : ServerNetworkPacketHandler<UnpasturePokemonPacket> {
-    override fun handle(packet: UnpasturePokemonPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class UnpasturePokemonHandler : ServerNetworkPacketHandler<UnpasturePokemonPacket> {
+    override fun handle(packet: UnpasturePokemonPacket, server: MinecraftServer, ServerPlayer player) {
         val pastureLink = PastureLinkManager.getLinkByPlayer(player) ?: return player.sendPacket(ClosePasturePacket())
         val pastureBlockEntity = player.level().getBlockEntity(pastureLink.pos) as? PokemonPastureBlockEntity ?: return
 

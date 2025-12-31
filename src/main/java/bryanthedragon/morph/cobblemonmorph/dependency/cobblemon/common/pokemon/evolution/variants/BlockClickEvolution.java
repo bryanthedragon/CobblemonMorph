@@ -52,7 +52,7 @@ open class BlockClickEvolution(
         drops = DropTable(),
     )
 
-    override fun testContext(pokemon: Pokemon, context: BlockInteractionContext): Boolean {
+    override fun testContext(Pokemon pokemon, context: BlockInteractionContext): Boolean {
         return this.requiredContext.fits(context.block, context.world.registryAccess().registryOrThrow(Registries.BLOCK))
     }
 
@@ -65,11 +65,11 @@ open class BlockClickEvolution(
     }
 
     record BlockInteractionContext(
-        val block: Block,
-        val world: Level
+        val Block block,
+        val Level world
     )
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "block_click"
     }
 }

@@ -17,11 +17,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class RequestOpenRidingStatsDebugGUIHandler : ServerNetworkPacketHandler<RequestOpenRidingStatsDebugGUIPacket> {
+public final class RequestOpenRidingStatsDebugGUIHandler : ServerNetworkPacketHandler<RequestOpenRidingStatsDebugGUIPacket> {
     override fun handle(
         packet: RequestOpenRidingStatsDebugGUIPacket,
         server: MinecraftServer,
-        player: ServerPlayer
+        ServerPlayer player
     ) {
         if (!Cobblemon.config.enableDebugKeys) {
             player.sendSystemMessage(lang("requires_debug_keys").red())

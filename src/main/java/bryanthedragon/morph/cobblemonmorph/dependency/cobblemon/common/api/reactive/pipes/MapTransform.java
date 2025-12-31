@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.pipes
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.pipes;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Transform
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Transform;
 
 /**
  * A transform that transforms the emitted values from one value to another using the given mapping function.
@@ -16,8 +16,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
  * @author Hiroku
  * @since November 26th, 2021
  */
-class MapTransform<I, O>(private val mapping: (I) -> O) : Transform<I, O> {
-    override fun invoke(input: I): O {
-        return mapping(input)
+public class MapTransform<I, O>(private val mapping: (I) -> O) implements Transform<I, O> {
+    O invoke(I input) {
+        return mapping(input);
     }
 }

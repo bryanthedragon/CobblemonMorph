@@ -27,13 +27,13 @@ import net.minecraft.world.entity.LivingEntity
  * @author Hiroku
  * @since August 20th, 2023
  */
-class PokeBallCaptureCalculatedEvent(
-    val thrower: LivingEntity,
+public class PokeBallCaptureCalculatedEvent(
+    val LivingEntity thrower,
     val pokemonEntity: PokemonEntity,
-    val pokeBallEntity: EmptyPokeBallEntity,
+    val EmptyPokeBallEntity pokeBallEntity,
     var captureResult: CaptureContext
 ) {
-    fun ifPlayer(action: PokeBallCaptureCalculatedEvent.(player: ServerPlayer) -> Unit) {
+    fun ifPlayer(action: PokeBallCaptureCalculatedEvent.(ServerPlayer player) -> Unit) {
         if (thrower is ServerPlayer) {
             action(this, thrower)
         }

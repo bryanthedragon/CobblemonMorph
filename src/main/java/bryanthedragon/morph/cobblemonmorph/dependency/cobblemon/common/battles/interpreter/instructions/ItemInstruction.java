@@ -25,7 +25,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.d
  * @author Licious
  * @since December 30th, 2022
  */
-class ItemInstruction(val message: BattleMessage): InterpreterInstruction {
+public class ItemInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         val source = message.battlePokemonFromOptional(battle)

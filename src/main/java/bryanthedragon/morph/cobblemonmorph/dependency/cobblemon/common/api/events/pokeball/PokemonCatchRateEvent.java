@@ -25,11 +25,11 @@ import net.minecraft.world.entity.LivingEntity
  * @author Hiroku
  * @since August 20th, 2023
  */
-class PokemonCatchRateEvent(
-    val thrower: LivingEntity,
-    val pokeBallEntity: EmptyPokeBallEntity,
+public class PokemonCatchRateEvent(
+    val LivingEntity thrower,
+    val EmptyPokeBallEntity pokeBallEntity,
     val pokemonEntity: PokemonEntity,
-    var catchRate: Float
+    var Float catchRate
 ) {
     val context = mutableMapOf(
         "thrower" to thrower.asMostSpecificMoLangValue(),

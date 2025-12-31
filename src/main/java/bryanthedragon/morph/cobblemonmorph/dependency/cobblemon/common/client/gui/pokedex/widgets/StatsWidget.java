@@ -30,7 +30,7 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.util.FastColor
 
-class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
+public class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
     pX,
     pY,
     HALF_OVERLAY_WIDTH,
@@ -38,7 +38,7 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
     lang("ui.pokedex.pokemon_info")
 ) {
 
-    companion object {
+    final class Companion {
         const val STAT_TYPE_BASE = 0
         const val STAT_TYPE_RIDE = 1
         const val MAX_BAR_WIDTH = 75
@@ -106,9 +106,9 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         clickAction = { switchRideBehaviour(true) }
     )
 
-    var selectedRideBehavioursIndex: Int = 0
+    var selectedRideBehavioursInt index = 0
 
-    var selectedStatTypeIndex: Int = STAT_TYPE_BASE
+    var selectedStatTypeInt index = STAT_TYPE_BASE
         set(value) {
             field = value
 
@@ -320,7 +320,7 @@ class StatsWidget(val pX: Int, val pY: Int) : SoundlessWidget(
         }
     }
 
-    private fun getStatValueRGB(value: Int): Triple<Float, Float, Float> {
+    private fun getStatValueRGB(Int value): Triple<Float, Float, Float> {
         when {
             value >= 150 -> return Triple(0.647F, 0.929F, 0.647F)
             value >= 120 -> return Triple(0.8F, 0.937F, 0.423F)

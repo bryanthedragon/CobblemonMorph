@@ -12,6 +12,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.resources.ResourceLocation
 
 record CobblemonSherd(
-    val patternId: ResourceLocation,
+    val patternResourceLocation id,
     val item: Item
 )

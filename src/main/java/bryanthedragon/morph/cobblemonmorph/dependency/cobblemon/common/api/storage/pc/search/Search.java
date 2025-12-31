@@ -18,12 +18,12 @@ import java.util.UUID
  * Client-side class containing currently applied filters, and cached results of which Pokémon pass or fail those filters.
  * Used in [bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pc.PCGUI]
  */
-class Search(
+public class Search(
     private val filters: Set<PokemonFilter>,
     private val passed: MutableSet<UUID> = HashSet(),
     private val failed: MutableSet<UUID> = HashSet()
 ) {
-    companion object {
+    final class Companion {
         val DEFAULT = Search(setOf())
         fun of(search: String): Search {
             if (search.isBlank()) return DEFAULT
@@ -72,7 +72,7 @@ class Search(
         }
     }
 
-    fun passes(pokemon: Pokemon?): Boolean {
+    fun passes(Pokemon pokemon?): Boolean {
         if (pokemon == null) return false
         val uuid = pokemon.uuid
         if (passed.contains(uuid)) return true

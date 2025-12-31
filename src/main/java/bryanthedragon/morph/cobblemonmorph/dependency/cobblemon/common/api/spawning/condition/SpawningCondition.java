@@ -30,10 +30,10 @@ import net.minecraft.world.level.levelgen.structure.Structure
  * @since January 24th, 2022
  */
 abstract class SpawningCondition<T : SpawnablePosition> {
-    companion object {
+    final class Companion {
         val conditionTypes = mutableMapOf<String, Class<out SpawningCondition<*>>>()
-        fun getByName(name: String) = conditionTypes[name]
-        fun <T : SpawnablePosition, C : SpawningCondition<T>> register(name: String, clazz: Class<C>) {
+        fun getByName(String name) = conditionTypes[name]
+        fun <T : SpawnablePosition, C : SpawningCondition<T>> register(String name, clazz: Class<C>) {
             conditionTypes[name] = clazz
         }
     }
@@ -64,7 +64,7 @@ abstract class SpawningCondition<T : SpawnablePosition> {
     var appendages = mutableListOf<AppendageCondition>()
 
     abstract fun spawnablePositionClass(): Class<out T>
-    fun spawnablePositionMatches(spawnablePosition: SpawnablePosition) = spawnablePositionClass().isAssignableFrom(spawnablePosition::class.java)
+    fun spawnablePositionMatches(spawnablePosition: SpawnablePosition) = spawnablePositionClass().isAssignableFrom(spawnablePosition.class)
 
     fun isSatisfiedBy(spawnablePosition: SpawnablePosition): Boolean {
         return if (spawnablePositionMatches(spawnablePosition)) {

@@ -8,7 +8,7 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config
 
-enum class Category(val lang: String) {
+public enum Category(val String lang) {
     Pokemon("pokemon"),
     Spawning("spawning"),
     Battles("battles"),

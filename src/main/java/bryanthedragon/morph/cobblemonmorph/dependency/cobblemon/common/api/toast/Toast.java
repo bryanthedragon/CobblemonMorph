@@ -6,20 +6,20 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.toast
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.toast;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.afterOnServer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.toast.Toast.Companion.VANILLA_PROGRESS_COLOR
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast.ToastPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.PlatformEvents
-import java.util.UUID
-import kotlin.properties.Delegates
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.util.Mth
-import net.minecraft.world.item.ItemStack
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.afterOnServer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.toast.Toast.Companion.VANILLA_PROGRESS_COLOR;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.toast.ToastPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform.events.PlatformEvents;
+import java.util.UUID;
+import kotlin.properties.Delegates;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Represents a toast that can be shown to multiple clients.
@@ -35,60 +35,53 @@ import net.minecraft.world.item.ItemStack
  *
  * @since June 2nd, 2023
  */
-class Toast(
-    title: Component,
-    description: Component,
-    icon: ItemStack,
-    frameTexture: ResourceLocation = VANILLA_BACKGROUND_SPRITE,
-    progress: Float = -1F,
-    progressColor: Int = VANILLA_PROGRESS_COLOR
-) {
+public class Toast(Component title, Component description, ItemStack icon, ResourceLocation frameTexture = VANILLA_BACKGROUND_SPRITE, Float progress = -1F, Int progressColor = VANILLA_PROGRESS_COLOR) {
 
     /**
      * The [Component] representing the toast title, this can be a [Component.empty].
      */
-    var title: Component by Delegates.observable(title) { _, old, new -> if (old != new) this.launchUpdate() }
+    var Component title by Delegates.observable(title) { _, old, new -> if (old != new) this.launchUpdate() };
 
     /**
      * The [Component] representing the toast description, this can be a [Component.empty].
      */
-    var description: Component by Delegates.observable(description) { _, old, new -> if (old != new) this.launchUpdate() }
+    var Component description by Delegates.observable(description) { _, old, new -> if (old != new) this.launchUpdate() };
 
     /**
      * The [ItemStack] that is rendered as the toast icon, this can be a [ItemStack.EMPTY].
      */
-    var icon: ItemStack by Delegates.observable(icon) { _, old, new -> if (old != new) this.launchUpdate() }
+    var ItemStack icon by Delegates.observable(icon) { _, old, new -> if (old != new) this.launchUpdate() };
 
     /**
      * The texture of the frame.
      */
-    var frameTexture: ResourceLocation by Delegates.observable(frameTexture) { _, old, new -> if (old != new) this.launchUpdate() }
+    var ResourceLocation frameTexture by Delegates.observable(frameTexture) { _, old, new -> if (old != new) this.launchUpdate() };
 
     /**
      * The value of the progress bar, this accepts a value between 0.0F and 1.0F, any other value will not render a progress bar.
      */
-    var progress: Float by Delegates.observable(progress) { _, old, new -> if (old != new) this.launchUpdate() }
+    var Float progress by Delegates.observable(progress) { _, old, new -> if (old != new) this.launchUpdate() };
 
     /**
      * The progress bar color in RGB.
      */
-    var progressColor: Int by Delegates.observable(progressColor) { _, old, new -> if (old != new) this.launchUpdate() }
+    var Int progressColor by Delegates.observable(progressColor) { _, old, new -> if (old != new) this.launchUpdate() };
 
     /**
      * The online listeners mapped to the [ServerPlayer].
      */
-    val listeners: Collection<ServerPlayer> get() = this.listenerUuids.mapNotNull { Cobblemon.implementation.server()?.playerList?.getPlayer(it) }
+    val Collection<ServerPlayer> listeners  get() = this.listenerUuids.mapNotNull { Cobblemon.implementation.server()?.playerList?.getPlayer(it) };
 
     /**
      * Used internally to track this toast on the client.
      */
-    internal val uuid: UUID = Mth.createInsecureUUID()
+    internal val UUID uuid = Mth.createInsecureUUID();
 
     /**
      * The listeners to this toast.
      * This contains all of them regardless of online status for online mapped to [ServerPlayer] use [listeners].
      */
-    private val listenerUuids = hashSetOf<UUID>()
+    private val hashSetOf<UUID> listenerUuids;
 
     /**
      * The subscription to the [PlatformEvents.SERVER_PLAYER_LOGIN].
@@ -96,9 +89,9 @@ class Toast(
      */
     private val subscription = PlatformEvents.SERVER_PLAYER_LOGIN.subscribe { event ->
         if (this.listenerUuids.contains(event.player.uuid)) {
-            this.updateFor(event.player, this.toPacket(ToastPacket.Behaviour.SHOW_OR_UPDATE))
+            this.updateFor(event.player, this.toPacket(ToastPacket.Behaviour.SHOW_OR_UPDATE));
         }
-    }
+    };
 
     /**
      * Add listeners to this toast.
@@ -106,11 +99,10 @@ class Toast(
      *
      * @param listeners The [ServerPlayer] being added.
      */
-    fun addListeners(vararg listeners: ServerPlayer) {
-        val packet = this.toPacket(ToastPacket.Behaviour.SHOW_OR_UPDATE)
-        listeners.forEach { listener ->
-            if (this.listenerUuids.add(listener.uuid)) {
-                this.updateFor(listener, packet)
+    fun addListeners(vararg ServerPlayer listeners) {
+        val packet = this.toPacket(ToastPacket.Behaviour.SHOW_OR_UPDATE);
+        listeners.forEach { listener -> if (this.listenerUuids.add(listener.uuid)) {
+                this.updateFor(listener, packet);
             }
         }
     }
@@ -123,7 +115,7 @@ class Toast(
      *
      * @param listeners The [ServerPlayer] being removed.
      */
-    fun removeListeners(vararg listeners: ServerPlayer) {
+    fun removeListeners(vararg ServerPlayer listeners) {
         val packet = this.toPacket(ToastPacket.Behaviour.HIDE)
         listeners.forEach { listener ->
             if (this.listenerUuids.remove(listener.uuid)) {
@@ -162,8 +154,8 @@ class Toast(
     }
 
     private fun launchUpdate() {
-        val packet = this.toPacket(ToastPacket.Behaviour.SHOW_OR_UPDATE)
-        this.listeners.forEach { player -> Cobblemon.implementation.networkManager.sendPacketToPlayer(player, packet) }
+        val packet = this.toPacket(ToastPacket.Behaviour.SHOW_OR_UPDATE);
+        this.listeners.forEach { player -> Cobblemon.implementation.networkManager.sendPacketToPlayer(player, packet) };
     }
 
     /**
@@ -172,7 +164,7 @@ class Toast(
      * @param player The [ServerPlayer] being updated.
      * @param packet The outbound [ToastPacket].
      */
-    private fun updateFor(player: ServerPlayer, packet: ToastPacket) {
+    private fun updateFor(ServerPlayer player, packet: ToastPacket) {
         Cobblemon.implementation.networkManager.sendPacketToPlayer(player, packet)
     }
 
@@ -182,21 +174,12 @@ class Toast(
      * @param behaviour The [ToastPacket.Behaviour] of this update.
      * @return The generated [ToastPacket].
      */
-    private fun toPacket(behaviour: ToastPacket.Behaviour): ToastPacket = ToastPacket(
-        this.title,
-        this.description,
-        this.icon,
-        this.frameTexture,
-        this.progress,
-        this.progressColor,
-        this.uuid,
-        behaviour
-    )
+    private fun toPacket(ToastPacket.Behaviour behaviour): ToastPacket = ToastPacket(this.title, this.description, this.icon, this.frameTexture, this.progress, this.progressColor, this.uuid, behaviour)
 
-    companion object {
-        val VANILLA_BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/advancement")
+    public final class Companion {
+        val VANILLA_BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("toast/advancement");
 
-        const val VANILLA_PROGRESS_COLOR = -1675545
+        const val VANILLA_PROGRESS_COLOR = -1675545;
 
     }
 

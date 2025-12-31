@@ -27,7 +27,7 @@ import java.util.UUID
  * @author Hiroku
  * @since December 29th, 2023
  */
-class DialogueInputDTO() : Encodable, Decodable {
+public class DialogueInputDTO() : Encodable, Decodable {
     enum class InputType {
         OPTION,
         TEXT,
@@ -45,7 +45,7 @@ class DialogueInputDTO() : Encodable, Decodable {
 
     var allowSkip = true
 
-    constructor(optionSet: DialogueOptionSetInput, activeDialogue: ActiveDialogue) : this() {
+    constructor(optionSet: DialogueOptionSetInput, ActiveDialogue activeDialogue) : this() {
         this.inputId = activeDialogue.activeInput.inputId
         this.options = optionSet.getVisibleOptions(activeDialogue).map {
             DialogueOptionDTO(
@@ -60,7 +60,7 @@ class DialogueInputDTO() : Encodable, Decodable {
         this.vertical = optionSet.vertical
     }
 
-    constructor(autoContinue: DialogueAutoContinueInput, activeDialogue: ActiveDialogue): this() {
+    constructor(autoContinue: DialogueAutoContinueInput, ActiveDialogue activeDialogue): this() {
         this.inputId = activeDialogue.activeInput.inputId
         this.deadline = autoContinue.timeout?.duration ?: -1F
         this.inputType = InputType.AUTO_CONTINUE
@@ -68,18 +68,18 @@ class DialogueInputDTO() : Encodable, Decodable {
         this.showTimer = autoContinue.showTimer
     }
 
-    constructor(text: DialogueTextInput, activeDialogue: ActiveDialogue): this() {
+    constructor(text: DialogueTextInput, ActiveDialogue activeDialogue): this() {
         this.inputId = activeDialogue.activeInput.inputId
         this.deadline = text.timeout?.duration ?: -1F
         this.inputType = InputType.TEXT
         this.showTimer = text.timeout?.showTimer ?: true
     }
 
-    constructor(activeDialogue: ActiveDialogue): this() {
+    constructor(ActiveDialogue activeDialogue): this() {
         this.inputId = activeDialogue.activeInput.inputId
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(inputId)
         buffer.writeEnumConstant(inputType)
         buffer.writeFloat(deadline)
@@ -98,9 +98,9 @@ class DialogueInputDTO() : Encodable, Decodable {
         }
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         inputId = buffer.readUUID()
-        inputType = buffer.readEnumConstant(InputType::class.java)
+        inputType = buffer.readEnumConstant(InputType.class)
         deadline = buffer.readFloat()
         showTimer = buffer.readBoolean()
         when (inputType) {

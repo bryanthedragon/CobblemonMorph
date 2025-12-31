@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleSetTeamPokemonPacket
 import net.minecraft.client.Minecraft
-final class BattleSetTeamPokemonHandler : ClientNetworkPacketHandler<BattleSetTeamPokemonPacket> {
-    override fun handle(packet: BattleSetTeamPokemonPacket, client: Minecraft) {
+public final class BattleSetTeamPokemonHandler : ClientNetworkPacketHandler<BattleSetTeamPokemonPacket> {
+    override fun handle(packet: BattleSetTeamPokemonPacket, Minecraft client) {
         CobblemonClient.battle!!.side1.actors
             .find { it.uuid == Minecraft.getInstance().player?.uuid }
             ?.pokemon = packet.team.toMutableList()

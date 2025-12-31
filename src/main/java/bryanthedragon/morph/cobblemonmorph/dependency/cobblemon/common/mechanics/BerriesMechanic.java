@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeExpressionLike
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class BerriesMechanic(
+public class BerriesMechanic(
     val portionHealRatio: ExpressionLike = "0.33".asExpressionLike(),
     val sitrusHealAmount: ExpressionLike = "v.pokemon.max_hp * 0.33".asExpressionLike(),
     val friendshipRaiseAmount: ExpressionLike = "v.pokemon.friendship < 100 ? 10 : (v.pokemon.friendship < 200 ? 5 : 1)".asExpressionLike(),
@@ -23,7 +23,7 @@ class BerriesMechanic(
     val oranRestoreAmount: ExpressionLike = "10".asExpressionLike(),
 ) {
 
-    internal fun encode(buffer: RegistryFriendlyByteBuf) {
+    internal fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeExpressionLike(portionHealRatio)
         buffer.writeExpressionLike(sitrusHealAmount)
         buffer.writeExpressionLike(friendshipRaiseAmount)
@@ -32,8 +32,8 @@ class BerriesMechanic(
         buffer.writeExpressionLike(oranRestoreAmount)
     }
 
-    companion object {
-        internal fun decode(buffer: RegistryFriendlyByteBuf): BerriesMechanic {
+    final class Companion {
+        internal fun decode(RegistryFriendlyByteBuf buffer): BerriesMechanic {
             val mechanic = BerriesMechanic(
                 buffer.readExpressionLike(),
                 buffer.readExpressionLike(),

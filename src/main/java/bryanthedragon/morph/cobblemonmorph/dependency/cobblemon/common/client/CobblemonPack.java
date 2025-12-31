@@ -12,9 +12,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.ResourceP
 import net.minecraft.network.chat.Component
 import net.minecraft.server.packs.PackType
 
-class CobblemonPack(
+public class CobblemonPack(
     val id: String,
-    val name: String,
+    val String name,
     val packType: PackType,
     val activationBehaviour: ResourcePackActivationBehaviour,
     val neededMods: Set<String> = setOf()

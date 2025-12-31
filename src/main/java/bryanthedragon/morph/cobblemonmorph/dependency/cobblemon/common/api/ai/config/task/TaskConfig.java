@@ -39,99 +39,99 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
  * @author Hiroku
  * @since October 14th, 2024
  */
-interface TaskConfig {
-    companion object {
+public interface TaskConfig {
+    final class Companion {
         val types = mutableMapOf<ResourceLocation, Class<out TaskConfig>>(
-            cobblemonResource("one_of") to OneOfTaskConfig::class.java,
-            cobblemonResource("wander") to WanderTaskConfig::class.java,
-            cobblemonResource("water_wander") to WaterWanderTaskConfig::class.java,
-            cobblemonResource("air_wander") to AirWanderTaskConfig::class.java,
-            cobblemonResource("look_at_target") to LookAtTargetTaskConfig::class.java,
-            cobblemonResource("follow_walk_target") to FollowWalkTargetTaskConfig::class.java,
-            cobblemonResource("random") to RandomTaskConfig::class.java,
-            cobblemonResource("stay_afloat") to StayAfloatTaskConfig::class.java,
-            cobblemonResource("look_at_entities") to LookAtEntitiesTaskConfig::class.java,
-            cobblemonResource("do_nothing") to DoNothingTaskConfig::class.java,
-            cobblemonResource("get_angry_at_attacker") to GetAngryAtAttackerTaskConfig::class.java,
-            cobblemonResource("stop_being_angry_if_attacker_dead") to StopBeingAngryIfAttackerDeadTaskConfig::class.java,
-            cobblemonResource("stop_attacking_if_target_invalid") to StopAttackingIfTargetInvalidTaskConfig::class.java,
-            cobblemonResource("switch_npc_to_battle") to SwitchToNPCBattleTaskConfig::class.java,
-            cobblemonResource("look_at_battling_pokemon") to LookAtBattlingPokemonTaskConfig::class.java,
-            cobblemonResource("switch_npc_from_battle") to SwitchFromNPCBattleTaskConfig::class.java,
-            cobblemonResource("switch_pokemon_to_battle") to SwitchToPokemonBattleTaskConfig::class.java,
-            cobblemonResource("look_at_targeted_battle_pokemon") to LookAtTargetedBattlePokemonTaskConfig::class.java,
-            cobblemonResource("switch_pokemon_from_battle") to SwitchFromPokemonBattleTaskConfig::class.java,
-            cobblemonResource("go_to_healing_machine") to GoToHealingMachineTaskConfig::class.java,
-            cobblemonResource("heal_using_healing_machine") to HealUsingHealingMachineTaskConfig::class.java,
-            cobblemonResource("pokemon_wander_control") to PokemonWanderControlTaskConfig::class.java,
-            cobblemonResource("all_of") to AllOfTaskConfig::class.java,
-            cobblemonResource("attack_angry_at") to AttackAngryAtTaskConfig::class.java,
-            cobblemonResource("move_to_attack_target") to MoveToAttackTargetTaskConfig::class.java,
-            cobblemonResource("melee_attack") to MeleeAttackTaskConfig::class.java,
-            cobblemonResource("switch_from_fight") to SwitchFromFightTaskConfig::class.java,
-            cobblemonResource("switch_to_fight") to SwitchToFightTaskConfig::class.java,
-            cobblemonResource("switch_to_chatting") to SwitchToChattingTaskConfig::class.java,
-            cobblemonResource("switch_from_chatting") to SwitchFromChattingTaskConfig::class.java,
-            cobblemonResource("look_at_speaker") to LookAtSpeakerTaskConfig::class.java,
-            cobblemonResource("switch_to_action_effect") to SwitchToActionEffectTaskConfig::class.java,
-            cobblemonResource("switch_from_action_effect") to SwitchFromActionEffectTaskConfig::class.java,
-            cobblemonResource("exit_battle_when_hurt") to ExitBattleWhenHurtTaskConfig::class.java,
-            cobblemonResource("switch_to_panic_when_hurt") to SwitchToPanicWhenHurtTaskConfig::class.java,
-            cobblemonResource("switch_to_panic_when_hostiles_nearby") to SwitchToPanicWhenHostilesNearbyTaskConfig::class.java,
-            cobblemonResource("calm_down") to CalmDownTaskConfig::class.java,
-            cobblemonResource("walk_away_from_avoid_target") to WalkAwayFromAvoidTargetTaskConfig::class.java,
-            cobblemonResource("flee_nearest_hostile") to FleeNearestHostileTaskConfig::class.java,
-            cobblemonResource("flee_attacker") to FleeAttackerTaskConfig::class.java,
-            cobblemonResource("fly_in_circles") to FlyInCirclesTaskConfig::class.java,
-            cobblemonResource("run_script") to RunScript::class.java,
-            cobblemonResource("look_in_direction") to LookInDirectionTaskConfig::class.java,
-            cobblemonResource("wake_up") to WakeUpTaskConfig::class.java,
-            cobblemonResource("go_to_sleep") to GoToSleepTaskConfig::class.java,
-            cobblemonResource("find_resting_place") to FindRestingPlaceTaskConfig::class.java,
-            cobblemonResource("move_to_owner") to MoveToOwnerTaskConfig::class.java,
-            cobblemonResource("switch_to_sleep_on_trainer_bed") to SwitchToSleepOnTrainerBedTaskConfig::class.java,
-            cobblemonResource("switch_from_sleep_on_trainer_bed") to SwitchFromSleepOnTrainerBedTaskConfig::class.java,
-            cobblemonResource("sleep_if_on_trainer_bed") to SleepIfOnTrainerBedTaskConfig::class.java,
-            cobblemonResource("point_to_spawn") to PointToSpawnTaskConfig::class.java,
-            cobblemonResource("eat_grass") to EatGrassTaskConfig::class.java,
-            cobblemonResource("find_air") to FindAirTaskConfig::class.java,
-            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
-            cobblemonResource("path_to_hive") to PathToBeeHiveTaskConfig::class.java,
-            cobblemonResource("place_honey_in_hive") to PlaceHoneyInHiveTaskConfig::class.java,
-            cobblemonResource("place_honey_in_sacc_leaves") to PlaceHoneyInSaccLeavesTaskConfig::class.java,
-            cobblemonResource("path_to_flower") to PathToFlowerTaskConfig::class.java,
-            cobblemonResource("path_to_sacc_leaves") to PathToSaccLeavesTaskConfig::class.java,
-            cobblemonResource("pollinate_flower") to PollinateFlowerTaskConfig::class.java,
-            cobblemonResource("go_to_land") to GoToLandTaskConfig::class.java,
-            cobblemonResource("manage_flight_in_battle") to ManageFlightInBattleTaskConfig::class.java,
-            cobblemonResource("attack_hostile_mobs") to AttackHostileMobsTaskConfig::class.java,
-            cobblemonResource("defend_owner") to DefendOwnerTaskConfig::class.java,
-            cobblemonResource("move_to_sweet_berry_bush") to MoveToSweetBerryBushTaskConfig::class.java,
-            cobblemonResource("stop_moving_to_sweet_berry_bush") to StopTryingToReachSweetBerryBushTaskConfig::class.java,
-            cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBushTaskConfig::class.java,
-            cobblemonResource("eat_held_item") to EatHeldItemTaskConfig::class.java,
-            cobblemonResource("move_to_item") to MoveToItemTaskConfig::class.java,
-            cobblemonResource("stop_moving_to_item") to StopTryingToReachWantedItemTaskConfig::class.java,
-            cobblemonResource("pickup_item") to PickUpItemTaskConfig::class.java,
-            cobblemonResource("move_into_fluid") to MoveIntoFluidTaskConfig::class.java,
-            cobblemonResource("find_herd_leader") to FindHerdLeaderTaskConfig::class.java,
-            cobblemonResource("follow_herd_leader") to FollowHerdLeaderTaskConfig::class.java,
-            cobblemonResource("switch_to_herd") to SwitchToHerdTaskConfig::class.java,
-            cobblemonResource("switch_from_herd") to SwitchFromHerdTaskConfig::class.java,
-            cobblemonResource("maintain_herd_leader") to MaintainHerdLeaderTaskConfig::class.java,
-            cobblemonResource("count_followers") to CountFollowersTaskConfig::class.java,
-            cobblemonResource("hate_entity") to HateEntityTaskConfig::class.java,
-            cobblemonResource("target_entity") to TargetEntityTaskConfig::class.java,
-            cobblemonResource("memory_aspect") to MemoryAspectTaskConfig::class.java,
-            cobblemonResource("activity_change") to ActivityChangeTaskConfig::class.java,
+            cobblemonResource("one_of") to OneOfTaskConfig.class,
+            cobblemonResource("wander") to WanderTaskConfig.class,
+            cobblemonResource("water_wander") to WaterWanderTaskConfig.class,
+            cobblemonResource("air_wander") to AirWanderTaskConfig.class,
+            cobblemonResource("look_at_target") to LookAtTargetTaskConfig.class,
+            cobblemonResource("follow_walk_target") to FollowWalkTargetTaskConfig.class,
+            cobblemonResource("random") to RandomTaskConfig.class,
+            cobblemonResource("stay_afloat") to StayAfloatTaskConfig.class,
+            cobblemonResource("look_at_entities") to LookAtEntitiesTaskConfig.class,
+            cobblemonResource("do_nothing") to DoNothingTaskConfig.class,
+            cobblemonResource("get_angry_at_attacker") to GetAngryAtAttackerTaskConfig.class,
+            cobblemonResource("stop_being_angry_if_attacker_dead") to StopBeingAngryIfAttackerDeadTaskConfig.class,
+            cobblemonResource("stop_attacking_if_target_invalid") to StopAttackingIfTargetInvalidTaskConfig.class,
+            cobblemonResource("switch_npc_to_battle") to SwitchToNPCBattleTaskConfig.class,
+            cobblemonResource("look_at_battling_pokemon") to LookAtBattlingPokemonTaskConfig.class,
+            cobblemonResource("switch_npc_from_battle") to SwitchFromNPCBattleTaskConfig.class,
+            cobblemonResource("switch_pokemon_to_battle") to SwitchToPokemonBattleTaskConfig.class,
+            cobblemonResource("look_at_targeted_battle_pokemon") to LookAtTargetedBattlePokemonTaskConfig.class,
+            cobblemonResource("switch_pokemon_from_battle") to SwitchFromPokemonBattleTaskConfig.class,
+            cobblemonResource("go_to_healing_machine") to GoToHealingMachineTaskConfig.class,
+            cobblemonResource("heal_using_healing_machine") to HealUsingHealingMachineTaskConfig.class,
+            cobblemonResource("pokemon_wander_control") to PokemonWanderControlTaskConfig.class,
+            cobblemonResource("all_of") to AllOfTaskConfig.class,
+            cobblemonResource("attack_angry_at") to AttackAngryAtTaskConfig.class,
+            cobblemonResource("move_to_attack_target") to MoveToAttackTargetTaskConfig.class,
+            cobblemonResource("melee_attack") to MeleeAttackTaskConfig.class,
+            cobblemonResource("switch_from_fight") to SwitchFromFightTaskConfig.class,
+            cobblemonResource("switch_to_fight") to SwitchToFightTaskConfig.class,
+            cobblemonResource("switch_to_chatting") to SwitchToChattingTaskConfig.class,
+            cobblemonResource("switch_from_chatting") to SwitchFromChattingTaskConfig.class,
+            cobblemonResource("look_at_speaker") to LookAtSpeakerTaskConfig.class,
+            cobblemonResource("switch_to_action_effect") to SwitchToActionEffectTaskConfig.class,
+            cobblemonResource("switch_from_action_effect") to SwitchFromActionEffectTaskConfig.class,
+            cobblemonResource("exit_battle_when_hurt") to ExitBattleWhenHurtTaskConfig.class,
+            cobblemonResource("switch_to_panic_when_hurt") to SwitchToPanicWhenHurtTaskConfig.class,
+            cobblemonResource("switch_to_panic_when_hostiles_nearby") to SwitchToPanicWhenHostilesNearbyTaskConfig.class,
+            cobblemonResource("calm_down") to CalmDownTaskConfig.class,
+            cobblemonResource("walk_away_from_avoid_target") to WalkAwayFromAvoidTargetTaskConfig.class,
+            cobblemonResource("flee_nearest_hostile") to FleeNearestHostileTaskConfig.class,
+            cobblemonResource("flee_attacker") to FleeAttackerTaskConfig.class,
+            cobblemonResource("fly_in_circles") to FlyInCirclesTaskConfig.class,
+            cobblemonResource("run_script") to RunScript.class,
+            cobblemonResource("look_in_direction") to LookInDirectionTaskConfig.class,
+            cobblemonResource("wake_up") to WakeUpTaskConfig.class,
+            cobblemonResource("go_to_sleep") to GoToSleepTaskConfig.class,
+            cobblemonResource("find_resting_place") to FindRestingPlaceTaskConfig.class,
+            cobblemonResource("move_to_owner") to MoveToOwnerTaskConfig.class,
+            cobblemonResource("switch_to_sleep_on_trainer_bed") to SwitchToSleepOnTrainerBedTaskConfig.class,
+            cobblemonResource("switch_from_sleep_on_trainer_bed") to SwitchFromSleepOnTrainerBedTaskConfig.class,
+            cobblemonResource("sleep_if_on_trainer_bed") to SleepIfOnTrainerBedTaskConfig.class,
+            cobblemonResource("point_to_spawn") to PointToSpawnTaskConfig.class,
+            cobblemonResource("eat_grass") to EatGrassTaskConfig.class,
+            cobblemonResource("find_air") to FindAirTaskConfig.class,
+            cobblemonResource("go_to_land") to GoToLandTaskConfig.class,
+            cobblemonResource("path_to_hive") to PathToBeeHiveTaskConfig.class,
+            cobblemonResource("place_honey_in_hive") to PlaceHoneyInHiveTaskConfig.class,
+            cobblemonResource("place_honey_in_sacc_leaves") to PlaceHoneyInSaccLeavesTaskConfig.class,
+            cobblemonResource("path_to_flower") to PathToFlowerTaskConfig.class,
+            cobblemonResource("path_to_sacc_leaves") to PathToSaccLeavesTaskConfig.class,
+            cobblemonResource("pollinate_flower") to PollinateFlowerTaskConfig.class,
+            cobblemonResource("go_to_land") to GoToLandTaskConfig.class,
+            cobblemonResource("manage_flight_in_battle") to ManageFlightInBattleTaskConfig.class,
+            cobblemonResource("attack_hostile_mobs") to AttackHostileMobsTaskConfig.class,
+            cobblemonResource("defend_owner") to DefendOwnerTaskConfig.class,
+            cobblemonResource("move_to_sweet_berry_bush") to MoveToSweetBerryBushTaskConfig.class,
+            cobblemonResource("stop_moving_to_sweet_berry_bush") to StopTryingToReachSweetBerryBushTaskConfig.class,
+            cobblemonResource("harvest_sweet_berry_bush") to HarvestSweetBerryBushTaskConfig.class,
+            cobblemonResource("eat_held_item") to EatHeldItemTaskConfig.class,
+            cobblemonResource("move_to_item") to MoveToItemTaskConfig.class,
+            cobblemonResource("stop_moving_to_item") to StopTryingToReachWantedItemTaskConfig.class,
+            cobblemonResource("pickup_item") to PickUpItemTaskConfig.class,
+            cobblemonResource("move_into_fluid") to MoveIntoFluidTaskConfig.class,
+            cobblemonResource("find_herd_leader") to FindHerdLeaderTaskConfig.class,
+            cobblemonResource("follow_herd_leader") to FollowHerdLeaderTaskConfig.class,
+            cobblemonResource("switch_to_herd") to SwitchToHerdTaskConfig.class,
+            cobblemonResource("switch_from_herd") to SwitchFromHerdTaskConfig.class,
+            cobblemonResource("maintain_herd_leader") to MaintainHerdLeaderTaskConfig.class,
+            cobblemonResource("count_followers") to CountFollowersTaskConfig.class,
+            cobblemonResource("hate_entity") to HateEntityTaskConfig.class,
+            cobblemonResource("target_entity") to TargetEntityTaskConfig.class,
+            cobblemonResource("memory_aspect") to MemoryAspectTaskConfig.class,
+            cobblemonResource("activity_change") to ActivityChangeTaskConfig.class,
         )
     }
 
-    fun checkCondition(runtime: MoLangRuntime, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
+    fun checkCondition(MoLangRuntime runtime, expressionOrEntityVariable: ExpressionOrEntityVariable): Boolean {
         return expressionOrEntityVariable.resolveBoolean(runtime)
     }
 
-    fun ExpressionOrEntityVariable.asSimplifiedExpression(entity: LivingEntity): Expression {
+    fun ExpressionOrEntityVariable.asSimplifiedExpression(LivingEntity entity): Expression {
         return map(
             { it },
             {
@@ -149,13 +149,13 @@ interface TaskConfig {
     }
 
     fun ExpressionOrEntityVariable.asExpression() = map({ it }, { "q.entity.config.${it.variableName}".asExpression() })
-    fun ExpressionOrEntityVariable.resolveString(runtime: MoLangRuntime) = runtime.resolveString(asExpression())
-    fun ExpressionOrEntityVariable.resolveBoolean(runtime: MoLangRuntime) = runtime.resolveBoolean(asExpression())
-    fun ExpressionOrEntityVariable.resolveInt(runtime: MoLangRuntime) = runtime.resolveInt(asExpression())
-    fun ExpressionOrEntityVariable.resolveDouble(runtime: MoLangRuntime) = runtime.resolveDouble(asExpression())
-    fun ExpressionOrEntityVariable.resolveFloat(runtime: MoLangRuntime) = runtime.resolveFloat(asExpression())
+    fun ExpressionOrEntityVariable.resolveString(MoLangRuntime runtime) = runtime.resolveString(asExpression())
+    fun ExpressionOrEntityVariable.resolveBoolean(MoLangRuntime runtime) = runtime.resolveBoolean(asExpression())
+    fun ExpressionOrEntityVariable.resolveInt(MoLangRuntime runtime) = runtime.resolveInt(asExpression())
+    fun ExpressionOrEntityVariable.resolveDouble(MoLangRuntime runtime) = runtime.resolveDouble(asExpression())
+    fun ExpressionOrEntityVariable.resolveFloat(MoLangRuntime runtime) = runtime.resolveFloat(asExpression())
 
-    private fun variable(category: String, name: String, type: MoLangConfigVariable.MoLangVariableType, default: String) = MoLangConfigVariable(
+    private fun variable(category: String, String name, type: MoLangConfigVariable.MoLangVariableType, default: String) = MoLangConfigVariable(
         variableName = name,
         category = lang("entity.variable.category.$category"),
         displayName = lang("entity.variable.$name.name"),
@@ -164,15 +164,15 @@ interface TaskConfig {
         defaultValue = default
     )
 
-    fun stringVariable(category: String, name: String, default: String) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.TEXT, default = default)
-    fun numberVariable(category: String, name: String, default: Number) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.NUMBER, default = default.toString())
-    fun booleanVariable(category: String, name: String, default: Boolean) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.BOOLEAN, default = default.toString())
+    fun stringVariable(category: String, String name, default: String) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.TEXT, default = default)
+    fun numberVariable(category: String, String name, default: Number) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.NUMBER, default = default.toString())
+    fun booleanVariable(category: String, String name, default: Boolean) = variable(category = category, name = name, type = MoLangConfigVariable.MoLangVariableType.BOOLEAN, default = default.toString())
 
-    fun getVariableExpression(name: String) = "q.entity.config.$name".asExpression()
-    fun resolveBooleanVariable(name: String, runtime: MoLangRuntime) = runtime.resolveBoolean(getVariableExpression(name))
+    fun getVariableExpression(String name) = "q.entity.config.$name".asExpression()
+    fun resolveBooleanVariable(String name, MoLangRuntime runtime) = runtime.resolveBoolean(getVariableExpression(name))
 
     /** The variables that this task config uses. These are used to declare variables on the entity cleanly. */
-    fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable>
+    fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable>
     /** Given the entity in construction, returns a list of tasks. */
-    fun createTasks(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<BehaviorControl<in LivingEntity>>
+    fun createTasks(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<BehaviorControl<in LivingEntity>>
 }

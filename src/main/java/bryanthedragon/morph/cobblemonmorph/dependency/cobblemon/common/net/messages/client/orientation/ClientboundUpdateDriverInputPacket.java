@@ -27,19 +27,19 @@ import org.joml.Vector3f
  * @since August 1st, 2025
  */
 
-class ClientboundUpdateDriverInputPacket internal constructor(
+public class ClientboundUpdateDriverInputPacket internal constructor(
     val driverInput: Vector3f,
     val entityId: Int
 ) : NetworkPacket<ClientboundUpdateDriverInputPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeVarInt(entityId)
         buffer.writeVector3f(driverInput)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("s2c_update_driver_input")
-        fun decode(buffer: RegistryFriendlyByteBuf): ClientboundUpdateDriverInputPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): ClientboundUpdateDriverInputPacket {
             val entityId = buffer.readVarInt()
             val driverInput = buffer.readVector3f()
             return ClientboundUpdateDriverInputPacket(driverInput, entityId)

@@ -6,12 +6,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
 
-import net.minecraft.client.RecipeBookCategories
-import net.minecraft.world.inventory.RecipeBookType
+import net.minecraft.client.RecipeBookCategories;
+import net.minecraft.world.inventory.RecipeBookType;
 
-enum class CobblemonRecipeCategories {
+public enum CobblemonRecipeCategories {
 
     COOKING_POT_SEARCH("COBBLEMON_COOKING_POT_SEARCH"),
     COOKING_POT_FOODS("COBBLEMON_COOKING_POT_FOODS"),
@@ -19,7 +19,7 @@ enum class CobblemonRecipeCategories {
     COOKING_POT_COMPLEX_DISHES("COBBLEMON_COOKING_POT_COMPLEX_DISHES"),
     COOKING_POT_MISC("COBBLEMON_COOKING_POT_MISC");
 
-    companion object {
+    final class Companion {
         val customAggregateCategories: Map<RecipeBookCategories, List<RecipeBookCategories>> = mapOf(
             COOKING_POT_SEARCH.toVanillaCategory() to listOf(
                 COOKING_POT_FOODS.toVanillaCategory(), COOKING_POT_MISC.toVanillaCategory(), COOKING_POT_MEDICINES.toVanillaCategory(), COOKING_POT_COMPLEX_DISHES.toVanillaCategory()
@@ -37,7 +37,7 @@ enum class CobblemonRecipeCategories {
         return RecipeBookCategories.valueOf(this.id)
     }
 }
-final class CobblemonRecipeBookTypes {
+public final class CobblemonRecipeBookTypes {
     const val COOKING_POT_NAME = "COBBLEMON_COOKING_POT"
     val COOKING_POT: RecipeBookType = RecipeBookType.valueOf(COOKING_POT_NAME)
 }

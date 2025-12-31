@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.serv
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class ServerboundUpdateRidingStatePacket(
+public class ServerboundUpdateRidingStatePacket(
     val entity: Int,
     val behaviour: ResourceLocation,
     val state: RidingBehaviourState? = null,
@@ -23,16 +23,16 @@ class ServerboundUpdateRidingStatePacket(
 ) : NetworkPacket<ServerboundUpdateRidingStatePacket> {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         if (state == null) error("Expected state to be populated for encoding")
         buffer.writeInt(entity)
         buffer.writeResourceLocation(behaviour)
         state.encode(buffer)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("c2s_update_ride_controller")
-        fun decode(buffer: RegistryFriendlyByteBuf): ServerboundUpdateRidingStatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): ServerboundUpdateRidingStatePacket {
             val entity = buffer.readInt()
             val behaviour = buffer.readResourceLocation()
             val state = RegistryFriendlyByteBuf(buffer.readBytes(buffer.readableBytes()), server()!!.registryAccess())

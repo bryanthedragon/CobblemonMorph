@@ -18,7 +18,7 @@ import net.minecraft.tags.TagKey
 
 val ITEM_REGISTRY_LIKE_CODEC = makeCodecForRegistryLikeCondition("item", Registries.ITEM)
 
-fun <T : Any> makeCodecForRegistryLikeCondition(name: String, registryKey: ResourceKey<Registry<T>>): Codec<RegistryLikeCondition<T>> {
+fun <T : Any> makeCodecForRegistryLikeCondition(String name, registryKey: ResourceKey<Registry<T>>): Codec<RegistryLikeCondition<T>> {
     return CodecUtils.createByStringCodec(
         from = { str ->
             if (str.startsWith("#")) {

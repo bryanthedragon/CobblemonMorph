@@ -19,17 +19,17 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 
-class GetAngryAtAttackerTaskConfig : SingleTaskConfig {
-    companion object {
+public class GetAngryAtAttackerTaskConfig : SingleTaskConfig {
+    final class Companion {
         const val GET_ANGRY_AT_ATTACKER = "get_angry_at_attacker"
     }
 
     val condition = booleanVariable(ATTACKING_CATEGORY, GET_ANGRY_AT_ATTACKER, true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null

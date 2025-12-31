@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.reso
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 
-interface PosableEntity {
+public interface PosableEntity {
     fun getCurrentPoseType(): PoseType
     val delegate: EntitySideDelegate<*>
     val struct: QueryStruct

@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import net.minecraft.data.worldgen.features.FeatureUtils
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature
-final class CobblemonOreConfiguredFeatures {
+public final class CobblemonOreConfiguredFeatures {
 
     @JvmField
     val ORE_DAWN_STONE = of("dawn_stone")

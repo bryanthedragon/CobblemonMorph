@@ -22,16 +22,16 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 5th, 2022
  */
-class BattlePersistentStatusPacket(val pnx: String, val status: PersistentStatus?) : NetworkPacket<BattlePersistentStatusPacket> {
+public class BattlePersistentStatusPacket(val pnx: String, val PersistentStatus status?) : NetworkPacket<BattlePersistentStatusPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(pnx)
         buffer.writeNullable(status) { buf, value -> buf.writeIdentifier(value.name)}
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_persistent_status")
-        fun decode(buffer: RegistryFriendlyByteBuf): BattlePersistentStatusPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): BattlePersistentStatusPacket {
             val pnx = buffer.readString()
             val statusId = buffer.readNullable { it.readIdentifier() } ?: return BattlePersistentStatusPacket(pnx, null)
             val status = Statuses.getStatus(statusId) as? PersistentStatus

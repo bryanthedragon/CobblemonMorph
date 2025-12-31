@@ -14,7 +14,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.batt
  * @author Hiroku
  * @since July 1st, 2022
  */
-enum class ActorType {
+public enum ActorType {
     WILD,
     PLAYER,
     NPC

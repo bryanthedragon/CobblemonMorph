@@ -19,8 +19,9 @@ import net.minecraft.client.Minecraft
  *
  * @author Segfault Guy
  * @since April 22nd, 2023
- */final class BattleTransformPokemonHandler : ClientNetworkPacketHandler<BattleTransformPokemonPacket> {
-    override fun handle(packet: BattleTransformPokemonPacket, client: Minecraft) {
+ */
+public final class BattleTransformPokemonHandler : ClientNetworkPacketHandler<BattleTransformPokemonPacket> {
+    override fun handle(packet: BattleTransformPokemonPacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val (_, activeBattlePokemon) = battle.getPokemonFromPNX(packet.pnx)
         val update = packet.updatedPokemon

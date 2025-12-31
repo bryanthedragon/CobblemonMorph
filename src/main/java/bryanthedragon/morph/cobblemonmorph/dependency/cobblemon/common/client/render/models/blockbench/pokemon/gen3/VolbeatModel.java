@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class VolbeatModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BiWingedFrame {
+public class VolbeatModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BiWingedFrame {
     override val rootPart = root.registerChildWithAllChildren("volbeat")
     override val leftWing = getPart("left_wing")
     override val rightWing = getPart("right_wing")

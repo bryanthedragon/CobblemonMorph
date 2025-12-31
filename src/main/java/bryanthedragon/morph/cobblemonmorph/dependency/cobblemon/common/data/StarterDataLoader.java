@@ -21,20 +21,20 @@ import com.google.gson.reflect.TypeToken
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
-final class StarterDataLoader : JsonDataRegistry<StarterCategory> {
+public final class StarterDataLoader : JsonDataRegistry<StarterCategory> {
 
-    override val id: ResourceLocation = cobblemonResource("starters")
+    override val ResourceLocation id = cobblemonResource("starters")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<StarterDataLoader>()
 
     override val gson = GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
-        .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
+        .registerTypeAdapter(PokemonProperties.class, pokemonPropertiesShortAdapter)
         .create()
 
-    override val typeToken: TypeToken<StarterCategory> = TypeToken.get(StarterCategory::class.java)
-    override val resourcePath: String = "starters"
+    override val typeToken: TypeToken<StarterCategory> = TypeToken.get(StarterCategory.class)
+    override val String resourcePath = "starters"
 
     private val categories = mutableListOf<StarterCategory>()
     fun getAllCategories(): List<StarterCategory> = categories.toList()
@@ -87,5 +87,5 @@ final class StarterDataLoader : JsonDataRegistry<StarterCategory> {
         observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 }

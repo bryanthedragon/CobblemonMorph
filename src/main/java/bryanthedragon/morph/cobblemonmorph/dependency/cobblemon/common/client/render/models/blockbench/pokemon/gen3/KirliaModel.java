@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class KirliaModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class KirliaModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("kirlia")
     override val head = getPart("head")
 

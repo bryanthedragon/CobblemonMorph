@@ -22,12 +22,12 @@ import java.util.concurrent.CompletableFuture
  * @author Apion
  * @since May 19, 2024
  */
-interface ActionEffectInstruction : InterpreterInstruction {
+public interface ActionEffectInstruction : InterpreterInstruction {
     var future: CompletableFuture<*>
     var holds: MutableSet<String>
     //To expose via molang, so action effects can do different stuff in different instructions
     //e.g. "x is confused" vs "x hit itself in confusion"
-    val id: ResourceLocation
+    val ResourceLocation id
     override fun invoke(battle: PokemonBattle) {
         preActionEffect(battle)
         val runtime = MoLangRuntime().setup()
@@ -38,10 +38,10 @@ interface ActionEffectInstruction : InterpreterInstruction {
     }
 
     fun preActionEffect(battle: PokemonBattle)
-    fun runActionEffect(battle: PokemonBattle, runtime: MoLangRuntime)
+    fun runActionEffect(battle: PokemonBattle, MoLangRuntime runtime)
     fun postActionEffect(battle: PokemonBattle)
 
-    fun addMolangQueries(runtime: MoLangRuntime) {
+    fun addMolangQueries(MoLangRuntime runtime) {
         runtime.environment.query.addFunction("instruction_id") { StringValue(id.toString()) }
     }
 

@@ -24,15 +24,15 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class HealUsingHealingMachineTaskConfig : SingleTaskConfig {
+public class HealUsingHealingMachineTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SELF_HEALING, USE_HEALING_MACHINES, true).asExpressible()
     val horizontalUseRange: ExpressionOrEntityVariable = Either.left("2".asExpression())
     val verticalUseRange: ExpressionOrEntityVariable = Either.left("1".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition, horizontalUseRange, verticalUseRange).asVariables()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition, horizontalUseRange, verticalUseRange).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null

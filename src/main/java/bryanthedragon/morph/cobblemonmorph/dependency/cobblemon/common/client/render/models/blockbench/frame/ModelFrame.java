@@ -17,6 +17,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
  * @author Hiroku
  * @since December 5th, 2021
  */
-interface ModelFrame {
+public interface ModelFrame {
     val rootPart: Bone
 }

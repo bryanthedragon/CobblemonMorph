@@ -30,6 +30,6 @@ fun interface Requirement {
      * @param pokemon The [Pokemon] being queried.
      * @return If the requirement was satisfied.
      */
-    fun check(pokemon: Pokemon): Boolean
+    fun check(Pokemon pokemon): Boolean
 
 }

@@ -25,7 +25,7 @@ import org.jetbrains.annotations.ApiStatus
  *
  * @since June 8th, 2023
  */
-@ApiStatus.Internalfinal class LootInjector {
+@ApiStatus.Internalpublic final class LootInjector {
 
     private const val PREFIX = "injection/"
 
@@ -71,7 +71,7 @@ import org.jetbrains.annotations.ApiStatus
      * @param provider The job invoked if the injection is possible, this is what the platform needs to do to append the loot table.
      * @return If the injection was made.
      */
-    fun attemptInjection(id: ResourceLocation, provider: (LootPool.Builder) -> Unit): Boolean {
+    fun attemptInjection(ResourceLocation id, provider: (LootPool.Builder) -> Unit): Boolean {
         if (!this.injectionIds.contains(id)) {
             return false
         }

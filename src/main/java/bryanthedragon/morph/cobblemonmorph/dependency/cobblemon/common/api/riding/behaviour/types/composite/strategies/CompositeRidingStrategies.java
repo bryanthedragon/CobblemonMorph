@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ridi
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding.behaviour.types.composite.CompositeSettings
 import net.minecraft.resources.ResourceLocation
-final class CompositeRidingStrategies {
+public final class CompositeRidingStrategies {
     val strategies = mutableMapOf<ResourceLocation, CompositeRidingStrategy<out CompositeSettings>>()
 
     init {

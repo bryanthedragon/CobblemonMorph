@@ -18,7 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  *
  * @author Licious
  * @since December 30th, 2022
- */final class HeldItemProvider {
+ */
+public final class HeldItemProvider {
 
     private val managers = PrioritizedList<HeldItemManager>()
 
@@ -48,7 +49,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
      */
     @JvmStatic
     @JvmOverloads
-    fun register(manager: HeldItemManager, priority: Priority = Priority.NORMAL) {
+    fun register(manager: HeldItemManager, Priority priority = Priority.NORMAL) {
         this.managers.add(priority, manager)
     }
 
@@ -61,7 +62,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
     @Suppress("unused")
     @JvmStatic
     @JvmOverloads
-    fun unregister(manager: HeldItemManager, priority: Priority? = null) {
+    fun unregister(manager: HeldItemManager, Priority priority? = null) {
         if (priority != null) {
             this.managers.remove(priority, manager)
             return

@@ -26,12 +26,12 @@ import net.minecraft.world.phys.shapes.VoxelShape
  *  @author Apion
  *  @since August 24th, 2023
  */
-class BlockRelativeCondition(
-    val relToBlock: BlockPredicate,
-    val targetBlock: BlockPredicate,
+public class BlockRelativeCondition(
+    val relToBlock blockPredicate,
+    val targetBlock blockPredicate,
     val directionsToCheck: Array<Direction> = Direction.values()
 ) : MultiblockCondition {
-    override fun test(world: ServerLevel, box: VoxelShape): Boolean {
+    override fun test(ServerLevel world, box: VoxelShape): Boolean {
         val relToBlockBlockPositions = box.blockPositionsAsList().filter { relToBlock.matches(world, it) }
         relToBlockBlockPositions.forEach { pos ->
             directionsToCheck.forEach {

@@ -16,16 +16,16 @@ import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class MappedCodec<A : CodecMapped, K>(
+public class MappedCodec<A : CodecMapped, K>(
     val codecRetriever: (K) -> Codec<out A>,
     val keyName: String = "type",
     val keyFromString: (String) -> K
 ) : Codec<A> {
-    override fun <T> encode(input: A, ops: DynamicOps<T>, prefix: T): DataResult<T> {
+    override fun <T> encode(input: A, DynamicOps<T> ops, prefix: T): DataResult<T> {
         return input.encode(ops)
     }
 
-    override fun <T> decode(ops: DynamicOps<T>, input: T): DataResult<Pair<A, T>> {
+    override fun <T> decode(DynamicOps<T> ops, input: T): DataResult<Pair<A, T>> {
         val thingCodec: Codec<ThingWithType> = RecordCodecBuilder.create { instance ->
             instance
                 .group(PrimitiveCodec.STRING.fieldOf(keyName).forGetter { it.string })
@@ -38,10 +38,10 @@ class MappedCodec<A : CodecMapped, K>(
     }
 }
 
-private class ThingWithType(val string: String)
+private class ThingWithType(val String string)
 
-interface CodecMapped {
-    fun <T> encode(ops: DynamicOps<T>): DataResult<T>
-    fun readFromBuffer(buffer: RegistryFriendlyByteBuf)
-    fun writeToBuffer(buffer: RegistryFriendlyByteBuf)
+public interface CodecMapped {
+    fun <T> encode(DynamicOps<T> ops): DataResult<T>
+    fun readFromBuffer(RegistryFriendlyByteBuf buffer)
+    fun writeToBuffer(RegistryFriendlyByteBuf buffer)
 }

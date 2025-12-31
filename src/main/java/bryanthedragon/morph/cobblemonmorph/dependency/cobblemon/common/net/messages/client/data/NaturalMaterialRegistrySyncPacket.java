@@ -18,25 +18,25 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class NaturalMaterialRegistrySyncPacket(naturalMaterials: List<NaturalMaterial>) : DataRegistrySyncPacket<NaturalMaterial, NaturalMaterialRegistrySyncPacket>(naturalMaterials) {
-    companion object {
+public class NaturalMaterialRegistrySyncPacket(naturalMaterials: List<NaturalMaterial>) : DataRegistrySyncPacket<NaturalMaterial, NaturalMaterialRegistrySyncPacket>(naturalMaterials) {
+    final class Companion {
         val ID = cobblemonResource("natural_materials")
-        fun decode(buffer: RegistryFriendlyByteBuf) = NaturalMaterialRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = NaturalMaterialRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 
 
     override val id = ID
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: NaturalMaterial) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: NaturalMaterial) {
         buffer.writeNullable(entry.item) {pb, type -> pb.writeIdentifier(entry.item!!)}
         buffer.writeNullable(entry.tag) { pb, type -> pb.writeString(NaturalMaterials.gson.toJson("#" + entry.tag?.tag?.location.toString()) ) }
         buffer.writeNullable(entry.returnItem) { pb, type -> pb.writeIdentifier(entry.returnItem!!) }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): NaturalMaterial {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): NaturalMaterial {
         return NaturalMaterial (
                 content = 0, // Server handles incrementing of the fossil machine
                 item = buffer.readNullable { pb -> pb.readIdentifier() },
-                tag = buffer.readNullable { pb -> NaturalMaterials.gson.fromJson(buffer.readString(), ItemTagCondition::class.java) },
+                tag = buffer.readNullable { pb -> NaturalMaterials.gson.fromJson(buffer.readString(), ItemTagCondition.class) },
                 returnItem = buffer.readNullable { pb -> pb.readIdentifier() }
         )
     }

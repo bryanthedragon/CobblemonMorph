@@ -26,7 +26,7 @@ import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult.Type
 import java.util.concurrent.CompletableFuture
 
-class ModelPartArgumentType(): ArgumentType<String> {
+public class ModelPartArgumentType(): ArgumentType<String> {
     override fun parse(reader: StringReader): String {
         return reader.readString()
     }
@@ -38,7 +38,7 @@ class ModelPartArgumentType(): ArgumentType<String> {
         return SharedSuggestionProvider.suggest(getModelParts(context).keys.toList(),builder)
     }
 
-    companion object {
+    final class Companion {
         fun modelPart() = ModelPartArgumentType()
 
         fun <S: Any> getModel(context: CommandContext<S> ): PosableModel? {
@@ -61,8 +61,8 @@ class ModelPartArgumentType(): ArgumentType<String> {
             return modelParts
         }
 
-        fun getModelPart(context: CommandContext<CommandSourceStack>, name: String): ModelPart? {
-            val partName = context.getArgument(name, String::class.java )
+        fun getModelPart(context: CommandContext<CommandSourceStack>, String name): ModelPart? {
+            val partName = context.getArgument(name, String.class )
             val part = getModelParts(context)[partName]
                 ?: run {
                     context.source.playerOrException.sendSystemMessage("No joint named $partName".red())

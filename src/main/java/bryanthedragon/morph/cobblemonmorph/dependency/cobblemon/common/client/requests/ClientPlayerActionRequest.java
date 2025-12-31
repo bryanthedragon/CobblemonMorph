@@ -26,9 +26,9 @@ import java.util.UUID
  */
 abstract class ClientPlayerActionRequest(expiryTime: Int) : ClientPlayerIcon(expiryTime), PlayerActionRequest {
 
-    companion object {
+    final class Companion {
         /** Client message to inform the player about a [langKey] request from [senderID]. */
-        fun notify(langKey: String, senderID: UUID, vararg params: Any) {
+        fun notify(langString Key, senderID: UUID, vararg params: Any) {
             val sender = Minecraft.getInstance().level?.players()?.find { it.uuid == senderID }
             val senderName = sender?.name?.copy()?.aqua() ?: Component.literal("NULL").red()
             val lang = lang(langKey, senderName, *params).yellow()

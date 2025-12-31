@@ -20,12 +20,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since March 5th, 2023
  */
-class TradeCancelledPacket : NetworkPacket<TradeCancelledPacket> {
-    companion object {
+public class TradeCancelledPacket : NetworkPacket<TradeCancelledPacket> {
+    final class Companion {
         val ID = cobblemonResource("trade_cancelled")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TradeCancelledPacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = TradeCancelledPacket()
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
 }

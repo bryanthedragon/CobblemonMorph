@@ -32,12 +32,12 @@ import net.minecraft.util.Mth
  * @author Hiroku
  * @since December 29th, 2023
  */
-class DialogueBox(
+public class DialogueBox(
     val dialogueScreen: DialogueScreen,
     val listX: Int = 0,
     val listY: Int = 0,
-    val frameWidth: Int,
-    height: Int,
+    val frameInt width,
+    Int height,
     val background: ResourceLocation?,
     messages: MutableList<MutableComponent>,
     textColor: String?
@@ -49,7 +49,7 @@ class DialogueBox(
     slotHeight = LINE_HEIGHT,
     scrollBarWidth = SCROLL_BAR_WIDTH
 ) {
-    companion object {
+    final class Companion {
         const val SCROLL_TRACK_WIDTH = 2
         const val SCROLL_BAR_WIDTH = 4
         const val LINE_HEIGHT = 12
@@ -187,11 +187,11 @@ class DialogueBox(
 
         override fun renderBack(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             y: Int,
             x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
+            entryInt width,
+            entryInt height,
             mouseX: Int,
             mouseY: Int,
             hovered: Boolean,
@@ -200,11 +200,11 @@ class DialogueBox(
 
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             rowTop: Int,
             rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
+            rowInt width,
+            rowInt height,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,

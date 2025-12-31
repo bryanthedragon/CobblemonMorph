@@ -22,7 +22,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class DialoguePageDTO : Encodable, Decodable {
+public class DialoguePageDTO : Encodable, Decodable {
     var speaker: String? = null
     lateinit var background: ResourceLocation
     var lines: MutableList<MutableComponent> = mutableListOf()
@@ -32,7 +32,7 @@ class DialoguePageDTO : Encodable, Decodable {
     var clientActions = mutableListOf<String>()
 
     constructor()
-    constructor(dialoguePage: DialoguePage, activeDialogue: ActiveDialogue) {
+    constructor(dialoguePage: DialoguePage, ActiveDialogue activeDialogue) {
         this.speaker = dialoguePage.speaker
         this.background = dialoguePage.background ?: activeDialogue.dialogueReference.background
         this.lines = dialoguePage.lines.map { it(activeDialogue) }.toMutableList()
@@ -40,7 +40,7 @@ class DialoguePageDTO : Encodable, Decodable {
         this.clientActions = dialoguePage.clientActions.map { it.originalString }.toMutableList()
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(speaker) { _, value -> buffer.writeString(value)}
         buffer.writeIdentifier(background)
         buffer.writeCollection(lines) { _, value -> buffer.writeText(value) }
@@ -50,7 +50,7 @@ class DialoguePageDTO : Encodable, Decodable {
         clientActions.forEach { buffer.writeString(it) }
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         speaker = buffer.readNullable { buffer.readString() }
         background = buffer.readIdentifier()
         lines = buffer.readList { (it as RegistryFriendlyByteBuf).readText().copy() }.toMutableList()

@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Segfault Guy
  * @since April 26th, 2023
  */
-class ClearAllBoostInstruction(val message: BattleMessage): InterpreterInstruction {
+public class ClearAllBoostInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting(1.5F) {

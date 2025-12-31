@@ -27,23 +27,23 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-final class Fossils: JsonDataRegistry<Fossil> {
+public final class Fossils: JsonDataRegistry<Fossil> {
 
-    override val id: ResourceLocation = cobblemonResource("fossils")
+    override val ResourceLocation id = cobblemonResource("fossils")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<Fossils>()
 
     override val gson = GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
-        .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(PokemonProperties.class, pokemonPropertiesShortAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Item.class).type, ItemLikeConditionAdapter)
+        .registerTypeAdapter(ItemPredicate.class, LegacyItemConditionWrapperAdapter)
         .create()
 
-    override val typeToken: TypeToken<Fossil> = TypeToken.get(Fossil::class.java)
-    override val resourcePath: String = "fossils"
+    override val typeToken: TypeToken<Fossil> = TypeToken.get(Fossil.class)
+    override val String resourcePath = "fossils"
 
     private val fossils = hashMapOf<ResourceLocation, Fossil>()
 
@@ -53,7 +53,7 @@ final class Fossils: JsonDataRegistry<Fossil> {
             try {
                 fossil.identifier = identifier
                 this.fossils[identifier] = fossil
-            } catch (e: Exception) {
+            } catch (Exception e) {
                 Cobblemon.LOGGER.error("Skipped loading the {} fossil", identifier, e)
             }
         }
@@ -61,7 +61,7 @@ final class Fossils: JsonDataRegistry<Fossil> {
         this.observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         FossilRegistrySyncPacket(this.all()).sendToPlayer(player)
     }
 
@@ -77,7 +77,7 @@ final class Fossils: JsonDataRegistry<Fossil> {
      * @return The [Fossil] if loaded, otherwise null.
      */
     @JvmStatic
-    fun getByIdentifier(identifier: ResourceLocation): Fossil? = this.fossils[identifier]
+    fun getByIdentifier(ResourceLocation identifier): Fossil? = this.fossils[identifier]
 
     /**
      * Looks for a [Fossil] that matches a [ItemStack].

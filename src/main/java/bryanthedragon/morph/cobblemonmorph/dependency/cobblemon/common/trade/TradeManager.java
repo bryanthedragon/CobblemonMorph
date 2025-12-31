@@ -31,7 +31,8 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Hiroku
  * @since March 4th, 2023
- */final class TradeManager : RequestManager<TradeManager.TradeRequest>() {
+ */
+public final class TradeManager : RequestManager<TradeManager.TradeRequest>() {
 
     init {
         register(this)
@@ -49,7 +50,7 @@ import net.minecraft.server.level.ServerPlayer
         override val receiver: ServerPlayer,
         override val expiryTime: Int = 20
     ) : ServerPlayerActionRequest {
-        override val key: String = "trade"
+        override val String Key = "trade"
         override val requestID: UUID = UUID.randomUUID()
     }
 
@@ -84,9 +85,9 @@ import net.minecraft.server.level.ServerPlayer
         return false
     }
 
-    override fun isValidInteraction(player: ServerPlayer, target: ServerPlayer): Boolean = player.canInteractWith(target, Cobblemon.config.tradeMaxDistance)
+    override fun isValidInteraction(ServerPlayer player, target: ServerPlayer): Boolean = player.canInteractWith(target, Cobblemon.config.tradeMaxDistance)
 
-    override fun onLogoff(player: ServerPlayer) {
+    override fun onLogoff(ServerPlayer player) {
         super.onLogoff(player)
         val trade = this.getActiveTrade(player.uuid)
         if (trade != null) {

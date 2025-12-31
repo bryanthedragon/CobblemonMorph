@@ -6,15 +6,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.serialization
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.serialization;
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
-import java.lang.reflect.Type
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
+import java.lang.reflect.Type;
 
 /**
  * Simple adapter which expects a String and will turn into an object based on some resolver.
@@ -22,13 +23,12 @@ import java.lang.reflect.Type
  * @author Hiroku
  * @since July 18th, 2022
  */
-class StringIdentifiedObjectAdapter<T>(
-    val fromString: (String) -> T,
-    val toString: ((T) -> String)? = null,
-) : JsonDeserializer<T>, JsonSerializer<T> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext) = fromString(json.asString)
-    override fun serialize(src: T, type: Type?, ctx: JsonSerializationContext?): JsonElement? {
-        val stringValue = toString?.invoke(src) ?: throw IllegalStateException("No toString function provided for serialization.")
-        return JsonPrimitive(stringValue)
+public class StringIdentifiedObjectAdapter<T>(val fromString: (String) -> T, val toString: ((T) -> String)? = null) extends JsonDeserializer<T>, JsonSerializer<T> {
+    fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx) {
+        fromString(json.asString);
+    }
+    JsonElement serialize(T src, Type type?, JsonSerializationContext ctx?) ? {
+        val stringValue = toString?.invoke(src) ?: throw IllegalStateException("No toString function provided for serialization.");
+        return JsonPrimitive(stringValue);
     }
 }

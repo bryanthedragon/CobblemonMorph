@@ -14,19 +14,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class SpawnBaitRegistrySyncPacket(spawnBaits: Map<ResourceLocation, SpawnBait>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, SpawnBait>, SpawnBaitRegistrySyncPacket>(spawnBaits.entries) {
-    companion object {
+public class SpawnBaitRegistrySyncPacket(spawnBaits: Map<ResourceLocation, SpawnBait>) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, SpawnBait>, SpawnBaitRegistrySyncPacket>(spawnBaits.entries) {
+    final class Companion {
         val ID = cobblemonResource("spawn_baits")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SpawnBaitRegistrySyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = SpawnBaitRegistrySyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
     }
 
     override val id = ID
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<ResourceLocation, SpawnBait>) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Map.Entry<ResourceLocation, SpawnBait>) {
         buffer.writeResourceLocation(entry.key)
         SpawnBait.STREAM_CODEC.encode(buffer, entry.value)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<ResourceLocation, SpawnBait> {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Map.Entry<ResourceLocation, SpawnBait> {
         val resourceLocation = buffer.readResourceLocation()
         val bait = SpawnBait.STREAM_CODEC.decode(buffer)
         return object : Map.Entry<ResourceLocation, SpawnBait> {

@@ -23,8 +23,9 @@ import kotlin.jvm.optionals.getOrNull
  *
  * @author Hiroku
  * @since February 17th, 2023
- */final class PossibleHeldItemAdapter : JsonDeserializer<PossibleHeldItem> {
-    override fun deserialize(json: JsonElement, tp: Type, ctx: JsonDeserializationContext): PossibleHeldItem {
+ */
+public final class PossibleHeldItemAdapter : JsonDeserializer<PossibleHeldItem> {
+    override fun deserialize(JsonElement json, tp: Type, JsonDeserializationContext ctx): PossibleHeldItem {
         if (json.isJsonPrimitive) {
             return PossibleHeldItem(
                 item = json.asString,

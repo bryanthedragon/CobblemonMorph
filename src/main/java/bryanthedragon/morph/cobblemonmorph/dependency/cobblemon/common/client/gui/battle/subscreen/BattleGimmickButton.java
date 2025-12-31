@@ -31,7 +31,7 @@ import net.minecraft.sounds.SoundEvents
  */
 abstract class BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, val x: Float, val y: Float) {
 
-    companion object {
+    final class Companion {
         const val WIDTH = 36
         const val HEIGHT = 34
         const val SCALE = 0.5F
@@ -40,7 +40,7 @@ abstract class BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, val x: Floa
         const val SPACING = 26
 
         /** Factory for creating an instance of [BattleGimmickButton] based on [ShowdownMoveset.Gimmick]. */
-        fun create(gimmick: ShowdownMoveset.Gimmick, moveSelection: BattleMoveSelection, x: Float, y: Float): BattleGimmickButton {
+        fun create(gimmick: ShowdownMoveset.Gimmick, moveSelection: BattleMoveSelection, Float x, Float y): BattleGimmickButton {
             return when(gimmick) {
                 ShowdownMoveset.Gimmick.Z_POWER, ShowdownMoveset.Gimmick.ULTRA_BURST ->
                     ZPowerButton(moveSelection, x, y)
@@ -152,7 +152,7 @@ abstract class BattleGimmickButton(gimmick: ShowdownMoveset.Gimmick, val x: Floa
  * @author Segfault Guy
  * @since July 15th, 2023
  */
-class ZPowerButton(moveSelection: BattleMoveSelection, x: Float, y: Float) : BattleGimmickButton(ShowdownMoveset.Gimmick.Z_POWER, x, y) {
+public class ZPowerButton(moveSelection: BattleMoveSelection, Float x, Float y) : BattleGimmickButton(ShowdownMoveset.Gimmick.Z_POWER, x, y) {
 
     override var tiles: List<BattleMoveSelection.MoveTile> = moveSelection.baseTiles.map { tile ->
         ZPowerTile(moveSelection, tile.move, tile.x, tile.y)
@@ -186,7 +186,7 @@ class ZPowerButton(moveSelection: BattleMoveSelection, x: Float, y: Float) : Bat
  * @author Segfault Guy
  * @since July 27th, 2023
  */
-class DynamaxButton(moveSelection: BattleMoveSelection, x: Float, y: Float) : BattleGimmickButton(ShowdownMoveset.Gimmick.DYNAMAX, x, y) {
+public class DynamaxButton(moveSelection: BattleMoveSelection, Float x, Float y) : BattleGimmickButton(ShowdownMoveset.Gimmick.DYNAMAX, x, y) {
 
     override var tiles: List<BattleMoveSelection.MoveTile> = moveSelection.baseTiles.map { tile ->
         DynamaxTile(moveSelection, tile.move, tile.x, tile.y)

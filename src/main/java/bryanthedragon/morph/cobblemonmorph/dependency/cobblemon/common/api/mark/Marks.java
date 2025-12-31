@@ -19,17 +19,17 @@ import com.google.gson.reflect.TypeToken
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
-final class Marks: JsonDataRegistry<Mark> {
+public final class Marks: JsonDataRegistry<Mark> {
 
-    override val id: ResourceLocation = cobblemonResource("marks")
+    override val ResourceLocation id = cobblemonResource("marks")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<Marks>()
-    override val typeToken: TypeToken<Mark> = TypeToken.get(Mark::class.java)
-    override val resourcePath: String = "marks"
+    override val typeToken: TypeToken<Mark> = TypeToken.get(Mark.class)
+    override val String resourcePath = "marks"
 
     override val gson = GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .create()
 
     private val marks = hashMapOf<ResourceLocation, Mark>()
@@ -40,7 +40,7 @@ final class Marks: JsonDataRegistry<Mark> {
             try {
                 mark.identifier = identifier
                 this.marks[identifier] = mark
-            } catch (e: Exception) {
+            } catch (Exception e) {
                 Cobblemon.LOGGER.error("Skipped loading the {} mark", identifier, e)
             }
         }
@@ -48,7 +48,7 @@ final class Marks: JsonDataRegistry<Mark> {
         this.observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         MarkRegistrySyncPacket(this.all()).sendToPlayer(player)
     }
 
@@ -66,5 +66,5 @@ final class Marks: JsonDataRegistry<Mark> {
      * @return The [Mark] if loaded, otherwise null.
      */
     @JvmStatic
-    fun getByIdentifier(identifier: ResourceLocation): Mark? = this.marks[identifier]
+    fun getByIdentifier(ResourceLocation identifier): Mark? = this.marks[identifier]
 }

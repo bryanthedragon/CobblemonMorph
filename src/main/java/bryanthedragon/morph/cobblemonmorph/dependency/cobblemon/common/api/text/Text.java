@@ -22,9 +22,9 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  * @author Hiroku, Craft (on Cable Libs)
  */
-class Text internal constructor() {
+public class Text internal constructor() {
 
-    companion object {
+    final class Companion {
         internal fun resolveComponent(text: Any): MutableComponent {
             return Component.translatable(text.toString().replace("&[A-Fa-f\\dk-oK-oRr]".toRegex()) { "§${it.value.substring(1)}" })
         }
@@ -105,7 +105,7 @@ fun click(onlyOnce: Boolean = false, action: (p: ServerPlayer) -> Unit): ClickEv
 fun hover(text: Component) = HoverEvent(HoverEvent.Action.SHOW_TEXT, text)
 fun hover(text: String) = hover(Component.literal(text))
 fun hover(item: ItemStack) = HoverEvent(HoverEvent.Action.SHOW_ITEM, HoverEvent.ItemStackInfo(item))
-fun hover(entity: LivingEntity) = HoverEvent(HoverEvent.Action.SHOW_ENTITY, HoverEvent.EntityTooltipInfo(entity.type, entity.uuid, entity.displayName))
+fun hover(LivingEntity entity) = HoverEvent(HoverEvent.Action.SHOW_ENTITY, HoverEvent.EntityTooltipInfo(entity.type, entity.uuid, entity.displayName))
 
 val BOLD = Object()
 val ITALIC = Object()
@@ -146,14 +146,14 @@ fun MutableComponent.aqua() = also { it.style = it.style.withColor(ChatFormattin
 fun MutableComponent.lightPurple() = also { it.style = it.style.withColor(ChatFormatting.LIGHT_PURPLE) }
 fun MutableComponent.yellow() = also { it.style = it.style.withColor(ChatFormatting.YELLOW) }
 fun MutableComponent.white() = also { it.style = it.style.withColor(ChatFormatting.WHITE) }
-fun MutableComponent.font(identifier: ResourceLocation) = also { it.style = it.style.withFont(identifier) }
+fun MutableComponent.font(ResourceLocation identifier) = also { it.style = it.style.withFont(identifier) }
 
 fun String.text() = text(this)
 fun String.stripCodes(): String = this.replace("[&§][A-Ea-e0-9K-Ok-oRr]".toRegex(), "")
 
 fun MutableComponent.onClick(consumed: AtomicBoolean, action: (p: ServerPlayer) -> Unit) = also { it.style = it.style.withClickEvent(click(consumed, action)) }
 fun MutableComponent.onClick(onlyOnce: Boolean = false, action: (p: ServerPlayer) -> Unit) = also { it.style = it.style.withClickEvent(click(onlyOnce, action)) }
-fun MutableComponent.onHover(string: String) = also { it.style = it.style.withHoverEvent(hover(string)) }
+fun MutableComponent.onHover(String string) = also { it.style = it.style.withHoverEvent(hover(string)) }
 fun MutableComponent.onHover(text: Component) = also { it.style = it.style.withHoverEvent(hover(text)) }
 fun MutableComponent.onHover(text: MutableComponent) = also { it.style = it.style.withHoverEvent(hover(text)) }
 fun MutableComponent.underline() = also { it.style = it.style.withUnderlined(true) }
@@ -168,12 +168,12 @@ fun MutableComponent.add(other: Component): MutableComponent {
     return this
 }
 
-fun MutableComponent.add(string: String): MutableComponent {
+fun MutableComponent.add(String string): MutableComponent {
     this.add(text(string))
     return this
 }
 
 operator fun MutableComponent.plus(component: MutableComponent) = this.add(component)
-operator fun MutableComponent.plus(string: String) = this.add(string)
+operator fun MutableComponent.plus(String string) = this.add(string)
 
 fun Iterable<MutableComponent>.sum(separator: MutableComponent = ", ".text()) = if (any()) reduce { acc, next -> acc + separator + next } else "".text()

@@ -23,9 +23,9 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.phys.HitResult
 
-class CobblemonBoatItem(val boatType: CobblemonBoatType, val hasChest: Boolean, settings: Properties) : CobblemonItem(settings) {
+public class CobblemonBoatItem(val boatType: CobblemonBoatType, val hasChest: Boolean, settings: Properties) : CobblemonItem(settings) {
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         val stack = user.getItemInHand(hand)
         val hitResult = getPlayerPOVHitResult(world, user, ClipContext.Fluid.ANY)
         if (hitResult.type == HitResult.Type.MISS) {
@@ -57,14 +57,14 @@ class CobblemonBoatItem(val boatType: CobblemonBoatType, val hasChest: Boolean, 
         return InteractionResultHolder.sidedSuccess(stack, world.isClientSide)
     }
 
-    private fun createBoat(world: Level, hitResult: HitResult): CobblemonBoatEntity {
+    private fun createBoat(Level world, hitResult: HitResult): CobblemonBoatEntity {
         if (this.hasChest) {
             return CobblemonChestBoatEntity(world, hitResult.location.x, hitResult.location.y, hitResult.location.z)
         }
         return CobblemonBoatEntity(world, hitResult.location.x, hitResult.location.y, hitResult.location.z)
     }
 
-    companion object {
+    final class Companion {
 
         private val RIDERS = EntitySelector.NO_SPECTATORS.and(Entity::isPickable)
 

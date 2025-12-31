@@ -31,7 +31,8 @@ import java.util.*
  *
  * @author Segfault Guy, JazzMcNade
  * @since October 28th, 2024
- */final class ChallengeManager : RequestManager<ChallengeManager.BattleChallenge>() {
+ */
+public final class ChallengeManager : RequestManager<ChallengeManager.BattleChallenge>() {
 
     init {
         register(this)
@@ -52,7 +53,7 @@ import java.util.*
      * @param expiryTime How long (in seconds) this request is active.
      */
     abstract class BattleChallenge : ServerPlayerActionRequest {
-        abstract val selectedPokemonId: UUID
+        abstract val selectedUUID pokemonId
         abstract val battleFormat: BattleFormat
         override val requestID: UUID = UUID.randomUUID()
     }
@@ -61,22 +62,22 @@ import java.util.*
     record SinglesBattleChallenge(
         override val sender: ServerPlayer,
         override val receiver: ServerPlayer,
-        override val selectedPokemonId: UUID,
+        override val selectedUUID pokemonId,
         override val battleFormat: BattleFormat,
         override val expiryTime: Int = 20
     ) : BattleChallenge() {
-        override val key: String = "challenge"
+        override val String Key = "challenge"
     }
 
     /** TEAM-to-TEAM BattleChallenge */
     record MultiBattleChallenge(
         override val sender: ServerPlayer,
         override val receiver: ServerPlayer,
-        override val selectedPokemonId: UUID,
+        override val selectedUUID pokemonId,
         override val battleFormat: BattleFormat,    // TODO force this to be multi battletype
         override val expiryTime: Int = 20
     ) : BattleChallenge(), ServerTeamActionRequest {
-        override val key: String = "challenge.multi"
+        override val String Key = "challenge.multi"
         override val senderTeam: MultiBattleTeam = sender.getBattleTeam() ?: throw IllegalArgumentException("Sending player is not part of a team!")
         override val receiverTeam: MultiBattleTeam = receiver.getBattleTeam() ?: throw IllegalArgumentException("Target player is not part of a team!")
     }
@@ -121,7 +122,7 @@ import java.util.*
         }
     }
 
-    override fun isValidInteraction(player: ServerPlayer, target: ServerPlayer) = player.canInteractWith(target, Cobblemon.config.battlePvPMaxDistance)
+    override fun isValidInteraction(ServerPlayer player, target: ServerPlayer) = player.canInteractWith(target, Cobblemon.config.battlePvPMaxDistance)
 
     override fun canAccept(request: BattleChallenge): Boolean {
         if (request is MultiBattleChallenge) {
@@ -189,5 +190,5 @@ import java.util.*
         return farAwayPlayer
     }
 
-    fun setLead(player: ServerPlayer, lead: UUID) = this.selectedLead.put(player.uuid, lead)
+    fun setLead(ServerPlayer player, lead: UUID) = this.selectedLead.put(player.uuid, lead)
 }

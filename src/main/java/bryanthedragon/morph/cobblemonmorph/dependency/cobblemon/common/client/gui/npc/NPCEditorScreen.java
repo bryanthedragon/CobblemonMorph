@@ -25,11 +25,11 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.world.entity.LivingEntity
 
-class NPCEditorScreen(
+public class NPCEditorScreen(
     val npcId: Int,
     val dto: NPCConfigurationDTO
 ) : Screen("gui.npc_editor.title".asTranslated()), CobblemonRenderable {
-    companion object {
+    final class Companion {
         const val BASE_WIDTH = 360
         const val BASE_HEIGHT = 220
 

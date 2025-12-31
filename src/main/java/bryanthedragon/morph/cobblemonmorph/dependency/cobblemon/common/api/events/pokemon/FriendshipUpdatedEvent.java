@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @since 2022-02-08
  */
 record FriendshipUpdatedEvent(
-    val pokemon: Pokemon,
+    val Pokemon pokemon,
     val newFriendshipInitial: Int
 ) {
     var newFriendship: Int = newFriendshipInitial

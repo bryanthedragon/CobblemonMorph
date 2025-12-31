@@ -21,19 +21,19 @@ import net.minecraft.resources.ResourceLocation
  *
  * Handled by [PokedexUIPacketHandler].
  */
-class PokedexUIPacket(val type: PokedexType, val initSpecies: ResourceLocation? = null, val blockPos: BlockPos? = null): NetworkPacket<PokedexUIPacket> {
+public class PokedexUIPacket(val type: PokedexType, val initSpecies: ResourceLocation? = null, val blockBlockPos pos? = null): NetworkPacket<PokedexUIPacket> {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeEnumConstant(type)
         buffer.writeNullable(initSpecies) { pb, value -> pb.writeIdentifier(value) }
         buffer.writeNullable(blockPos) { pb, value -> pb.writeBlockPos(value) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("pokedex_ui")
 
-        fun decode(buffer: RegistryFriendlyByteBuf) = PokedexUIPacket(buffer.readEnumConstant(PokedexType::class.java), buffer.readNullable { it.readIdentifier() }, buffer.readNullable { it.readBlockPos() })
+        fun decode(RegistryFriendlyByteBuf buffer) = PokedexUIPacket(buffer.readEnumConstant(PokedexType.class), buffer.readNullable { it.readIdentifier() }, buffer.readNullable { it.readBlockPos() })
     }
 }

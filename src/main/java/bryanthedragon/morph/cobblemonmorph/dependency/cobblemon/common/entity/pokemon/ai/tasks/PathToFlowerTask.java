@@ -19,7 +19,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.phys.Vec3
-final class PathToFlowerTask {
+public final class PathToFlowerTask {
 
 
     fun create(): OneShot<in LivingEntity> {

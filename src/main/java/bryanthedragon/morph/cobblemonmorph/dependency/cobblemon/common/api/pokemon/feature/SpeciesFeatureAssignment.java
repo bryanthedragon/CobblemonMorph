@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.S
  * @author Hiroku
  * @since December 1st, 2022
  */
-class SpeciesFeatureAssignment {
+public class SpeciesFeatureAssignment {
     val pokemon: List<String> = emptyList()
     val features: List<String> = emptyList()
 }

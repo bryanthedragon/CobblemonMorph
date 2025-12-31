@@ -24,14 +24,14 @@ import java.util.UUID
  * @author Hiroku
  * @since June 30th, 2023
  */
-class MoveSelectedPacket(val uuid: UUID, val index: Int) : NetworkPacket<MoveSelectedPacket> {
-    companion object {
+public class MoveSelectedPacket(val UUID uuid, val Int index) : NetworkPacket<MoveSelectedPacket> {
+    final class Companion {
         val ID = cobblemonResource("move_selected")
-        fun decode(buffer: RegistryFriendlyByteBuf) = MoveSelectedPacket(buffer.readUUID(), buffer.readSizedInt(IntSize.U_BYTE))
+        fun decode(RegistryFriendlyByteBuf buffer) = MoveSelectedPacket(buffer.readUUID(), buffer.readSizedInt(IntSize.U_BYTE))
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(uuid)
         buffer.writeSizedInt(IntSize.U_BYTE, index)
     }

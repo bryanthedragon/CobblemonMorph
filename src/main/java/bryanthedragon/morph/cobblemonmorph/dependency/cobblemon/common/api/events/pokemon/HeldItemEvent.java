@@ -23,12 +23,12 @@ import net.minecraft.world.item.ItemStack
  * @see [Pre]
  * @see [Post]
  */
-interface HeldItemEvent {
+public interface HeldItemEvent {
 
     /**
      * The [Pokemon] triggering this event.
      */
-    val pokemon: Pokemon
+    val Pokemon pokemon
 
     /**
      * Fired at the start of [Pokemon.swapHeldItem] and [Pokemon.swapCosmeticItem].
@@ -44,7 +44,7 @@ interface HeldItemEvent {
      *
      * @see [Post]
      */
-    record Pre(override val pokemon: Pokemon, var receiving: ItemStack, var returning: ItemStack, var decrement: Boolean) : HeldItemEvent, Cancelable() {
+    record Pre(override val Pokemon pokemon, var receiving: ItemStack, var returning: ItemStack, var Boolean decrement) : HeldItemEvent, Cancelable() {
         fun getContext(): MutableMap<String, MoValue> {
             return mutableMapOf(
                 "pokemon" to pokemon.struct,
@@ -68,7 +68,7 @@ interface HeldItemEvent {
      *
      * @see [Pre]
      */
-    record Post(override val pokemon: Pokemon, val received: ItemStack, val returned: ItemStack, val decremented: Boolean) : HeldItemEvent {
+    record Post(override val Pokemon pokemon, val received: ItemStack, val returned: ItemStack, val decremented: Boolean) : HeldItemEvent {
         fun getContext(): MutableMap<String, MoValue> {
             return mutableMapOf(
                 "pokemon" to pokemon.struct,

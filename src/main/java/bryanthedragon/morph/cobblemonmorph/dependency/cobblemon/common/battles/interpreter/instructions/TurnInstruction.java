@@ -30,7 +30,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Deltric
  * @since January 22nd, 2022
  */
-class TurnInstruction(val message: BattleMessage) : InterpreterInstruction {
+public class TurnInstruction(val message: BattleMessage) : InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
         // TODO maybe tell the client that the turn number has changed
         val turnNumber = message.argumentAt(0)?.toInt() ?: return

@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity
 import net.minecraft.client.model.geom.ModelPart
 
-class AncientPokeBallModel(root: ModelPart) : PokeBallModel(root), PokeBallFrame {
+public class AncientPokeBallModel(root: ModelPart) : PokeBallModel(root), PokeBallFrame {
     override val rootPart = root.registerChildWithAllChildren("poke_ball")
     override val base = getPart("bottom")
     override val lid = getPart("lid")

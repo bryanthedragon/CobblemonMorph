@@ -11,12 +11,12 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.s
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PartyPosition
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import java.util.UUID
-class ClientParty(uuid: UUID, slots: Int) : ClientStorage<PartyPosition>(uuid), Iterable<Pokemon?> {
+public class ClientParty(UUID uuid, slots: Int) : ClientStorage<PartyPosition>(uuid), Iterable<Pokemon?> {
     val slots = MutableList<Pokemon?>(slots) { null }
 
     override fun iterator() = slots.iterator()
-    override fun findByUUID(uuid: UUID) = slots.find { it?.uuid == uuid }
-    override fun set(position: PartyPosition, pokemon: Pokemon?) {
+    override fun findByUUID(UUID uuid) = slots.find { it?.uuid == uuid }
+    override fun set(position: PartyPosition, Pokemon pokemon?) {
         if (position.slot >= slots.size) {
             return
         }
@@ -35,8 +35,8 @@ class ClientParty(uuid: UUID, slots: Int) : ClientStorage<PartyPosition>(uuid), 
 
     fun isEmpty() = (slots.size == 0)
 
-    fun getPosition(pokemonID: UUID) = slots.indexOfFirst { it?.uuid == pokemonID }
-    override fun getPosition(pokemon: Pokemon): PartyPosition? {
+    fun getPosition(UUID pokemonId) = slots.indexOfFirst { it?.uuid == pokemonID }
+    override fun getPosition(Pokemon pokemon): PartyPosition? {
         for (slotNumber in slots.indices) {
             if (slots[slotNumber] == pokemon) {
                 return PartyPosition(slotNumber)

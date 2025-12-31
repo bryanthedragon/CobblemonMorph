@@ -19,11 +19,11 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spaw
  * @author Hiroku
  * @since June 20th, 2022
  */
-class SpawnBucket() {
-    lateinit var name: String
+public class SpawnBucket() {
+    lateinit var String name
     var weight = 0F
 
-    constructor(name: String, weight: Float): this() {
+    constructor(String name, weight: Float): this() {
         this.name = name
         this.weight = weight
     }

@@ -29,8 +29,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since March 2nd, 2024
  */
-class SimpleEventTrigger(var event: String): Encodable, Decodable {
-    companion object {
+public class SimpleEventTrigger(var event: String): Encodable, Decodable {
+    final class Companion {
         val CODEC = RecordCodecBuilder.create<SimpleEventTrigger> { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("event").forGetter { it.event }
@@ -38,11 +38,11 @@ class SimpleEventTrigger(var event: String): Encodable, Decodable {
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(event)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         event = buffer.readString()
     }
 
@@ -59,8 +59,8 @@ class SimpleEventTrigger(var event: String): Encodable, Decodable {
  * @author Hiroku
  * @since March 2nd, 2024
  */
-class EventTriggerTimeline(var map: MutableMap<Double, MutableList<String>>): Encodable, Decodable {
-    companion object {
+public class EventTriggerTimeline(var map: MutableMap<Double, MutableList<String>>): Encodable, Decodable {
+    final class Companion {
         val CODEC = RecordCodecBuilder.create<EventTriggerTimeline> { instance ->
             instance.group(
                 UnboundedMapCodec(PrimitiveCodec.DOUBLE, PrimitiveCodec.STRING.listOf()).fieldOf("map").forGetter { it.map }
@@ -68,11 +68,11 @@ class EventTriggerTimeline(var map: MutableMap<Double, MutableList<String>>): En
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeMap(map, { pb, k -> pb.writeDouble(k) }, { pb, v -> pb.writeCollection(v) { _, s -> pb.writeString(s) } })
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         map = buffer.readMap({ pb -> pb.readDouble() }, { pb -> pb.readList { pb.readString() }.toMutableList() }).toMutableMap()
     }
 
@@ -92,8 +92,8 @@ class EventTriggerTimeline(var map: MutableMap<Double, MutableList<String>>): En
  * @author Hiroku
  * @since March 2nd, 2024
  */
-class LoopingTravelDistanceEventTrigger(var distance: Double, var events: MutableList<String>): Encodable, Decodable {
-    companion object {
+public class LoopingTravelDistanceEventTrigger(var distance: Double, var events: MutableList<String>): Encodable, Decodable {
+    final class Companion {
         val CODEC = RecordCodecBuilder.create<LoopingTravelDistanceEventTrigger> { instance ->
             instance.group(
                 PrimitiveCodec.DOUBLE.fieldOf("distance").forGetter { it.distance },
@@ -102,12 +102,12 @@ class LoopingTravelDistanceEventTrigger(var distance: Double, var events: Mutabl
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeDouble(distance)
         buffer.writeCollection(events) { _, s -> buffer.writeString(s) }
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         distance = buffer.readDouble()
         events = buffer.readList { buffer.readString() }.toMutableList()
     }

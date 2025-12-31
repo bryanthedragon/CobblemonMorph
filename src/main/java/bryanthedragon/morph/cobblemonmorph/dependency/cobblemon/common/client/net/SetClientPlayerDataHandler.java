@@ -11,8 +11,8 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.n
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.ClientNetworkPacketHandler
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.SetClientPlayerDataPacket
 import net.minecraft.client.Minecraft
-final class SetClientPlayerDataHandler : ClientNetworkPacketHandler<SetClientPlayerDataPacket> {
-    override fun handle(packet: SetClientPlayerDataPacket, client: Minecraft) {
+public final class SetClientPlayerDataHandler : ClientNetworkPacketHandler<SetClientPlayerDataPacket> {
+    override fun handle(packet: SetClientPlayerDataPacket, Minecraft client) {
         if (packet.isIncremental) {
             packet.type.incrementalAfterDecodeAction.invoke(packet.playerData)
         }

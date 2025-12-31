@@ -15,8 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class InteractPokemonHandler : ServerNetworkPacketHandler<InteractPokemonPacket> {
-    override fun handle(packet: InteractPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class InteractPokemonHandler : ServerNetworkPacketHandler<InteractPokemonPacket> {
+    override fun handle(packet: InteractPokemonPacket, server: MinecraftServer, ServerPlayer player) {
         val pokemonEntity = player.serverLevel().getEntity(packet.pokemonID)
         if (pokemonEntity is PokemonEntity && !pokemonEntity.isBattleClone()) {
             when (packet.interactType) {

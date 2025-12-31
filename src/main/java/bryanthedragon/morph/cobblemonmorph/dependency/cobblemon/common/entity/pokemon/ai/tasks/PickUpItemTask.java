@@ -24,7 +24,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
-final class PickUpItemTask {
+public final class PickUpItemTask {
     fun create(condition: Expression, maxReach: Expression): OneShot<PokemonEntity> = BehaviorBuilder.create {
         it.group(
             it.absent(MemoryModuleType.WALK_TARGET),
@@ -63,7 +63,7 @@ final class PickUpItemTask {
         }
     }
 
-    fun dropItem(entity: Entity, stack: ItemStack) {
+    fun dropItem(Entity entity, ItemStack stack) {
         val itemEntity = ItemEntity(
             entity.level(),
             entity.x + entity.lookAngle.x,

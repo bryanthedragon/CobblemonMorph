@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack
 /**
  * Event that is fired when a fishing rod is cast.
  */
-interface PokerodCastEvent {
+public interface PokerodCastEvent {
     val rod: ItemStack
 
     /**

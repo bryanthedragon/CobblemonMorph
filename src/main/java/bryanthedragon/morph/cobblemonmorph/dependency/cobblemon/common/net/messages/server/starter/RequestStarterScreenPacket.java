@@ -19,12 +19,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since August 1st, 2022
  */
-class RequestStarterScreenPacket : NetworkPacket<RequestStarterScreenPacket> {
+public class RequestStarterScreenPacket : NetworkPacket<RequestStarterScreenPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("request_starter_screen")
-        fun decode(buffer: RegistryFriendlyByteBuf): RequestStarterScreenPacket = RequestStarterScreenPacket()
+        fun decode(RegistryFriendlyByteBuf buffer): RequestStarterScreenPacket = RequestStarterScreenPacket()
     }
 }

@@ -23,8 +23,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @author Hiroku
  * @since January 31st, 2022
  */
-interface SpawningSelector<T : SpawnSelectionData> {
-    companion object {
+public interface SpawningSelector<T : SpawnSelectionData> {
+    final class Companion {
         @JvmField
         val DEFAULT = FlatSpawnablePositionWeightedSelector()
     }

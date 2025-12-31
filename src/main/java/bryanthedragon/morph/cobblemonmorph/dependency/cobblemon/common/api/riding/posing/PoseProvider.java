@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ridin
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PoseType
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 
-class PoseProvider<Settings : RidingBehaviourSettings, State : RidingBehaviourState>(private val fallback: PoseType) {
+public class PoseProvider<Settings : RidingBehaviourSettings, State : RidingBehaviourState>(private val fallback: PoseType) {
 
     private val options = mutableListOf<PoseOption<Settings, State>>()
 

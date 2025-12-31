@@ -16,9 +16,9 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
-final class CobblemonTooltipGenerator : TooltipGenerator() {
+public final class CobblemonTooltipGenerator : TooltipGenerator() {
     @Suppress("DEPRECATION")
-    override fun generateTooltip(stack: ItemStack, lines: MutableList<Component>): MutableList<Component>? {
+    override fun generateTooltip(ItemStack stack, lines: MutableList<Component>): MutableList<Component>? {
         val resultLines = mutableListOf<Component>()
 
         if (stack.item.builtInRegistryHolder().unwrapKey().isPresent && stack.item.builtInRegistryHolder().unwrapKey().get().location().namespace == Cobblemon.MODID) {
@@ -38,7 +38,7 @@ final class CobblemonTooltipGenerator : TooltipGenerator() {
         return resultLines
     }
 
-    private fun baseLangKeyForItem(stack: ItemStack): String {
+    private fun baseLangKeyForItem(ItemStack stack): String {
         if (stack.item is PokeBallItem) {
             val asPokeball = stack.item as PokeBallItem
             return "item.${asPokeball.pokeBall.name.namespace}.${asPokeball.pokeBall.name.path}.tooltip"

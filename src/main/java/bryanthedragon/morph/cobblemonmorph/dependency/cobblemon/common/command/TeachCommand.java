@@ -26,7 +26,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class TeachCommand {
+public final class TeachCommand {
 
     private const val NAME = "teach"
     private const val PLAYER = "player"
@@ -47,7 +47,7 @@ final class TeachCommand {
         dispatcher.register(command)
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player) : Int {
         val pokemon = PartySlotArgumentType.getPokemonOf(context, SLOT, player)
         val move = MoveArgumentType.getMove(context, MOVE)
 

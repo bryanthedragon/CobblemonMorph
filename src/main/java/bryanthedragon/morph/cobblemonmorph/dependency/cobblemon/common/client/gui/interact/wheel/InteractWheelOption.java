@@ -14,7 +14,7 @@ import org.joml.Vector3f
 record InteractWheelOption(
     val iconResource: ResourceLocation,
     val secondaryIconResource: ResourceLocation? = null,
-    val enabled: Boolean = true,
+    val Boolean enabled = true,
     val tooltipText: String?,
     val colour: () -> Vector3f? = { null },
     val onPress: () -> Unit

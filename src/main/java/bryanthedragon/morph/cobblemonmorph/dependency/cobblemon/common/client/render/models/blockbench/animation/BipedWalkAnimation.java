@@ -25,7 +25,7 @@ import net.minecraft.util.Mth
  * @author Deltric
  * @since December 21st, 2021
  */
-class BipedWalkAnimation(
+public class BipedWalkAnimation(
     /** The multiplier to apply to the cosine movement of the legs. The smaller this value, the quicker the legs move. */
     val periodMultiplier: Float = 0.6662F,
     /** The multiplier to apply to the stride of the entity. The larger this is, the further the legs move. */

@@ -17,12 +17,12 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.StopBeingAngryIfTargetDead
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class StopBeingAngryIfAttackerDeadTaskConfig : SingleTaskConfig {
+public class StopBeingAngryIfAttackerDeadTaskConfig : SingleTaskConfig {
     val condition = booleanVariable(SharedEntityVariables.ATTACKING_CATEGORY, "stop_being_angry_if_attacker_dead", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(condition).asVariables()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null

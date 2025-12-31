@@ -60,14 +60,14 @@ import org.joml.Quaternionf
 import org.joml.Vector3f
 import java.io.FileNotFoundException
 
-class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) -> (Unit)) : SoundlessWidget(
+public class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) -> (Unit)) : SoundlessWidget(
     pX,
     pY,
     POKEMON_PORTRAIT_WIDTH,
     POKEMON_PORTRAIT_HEIGHT,
     lang("ui.pokedex.pokemon_info"),
 ) {
-    companion object {
+    final class Companion {
         val scaleAmount = 2F
         val portraitStartY = 25
 
@@ -107,7 +107,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     }
 
     var visibleForms = mutableListOf<PokedexForm>()
-    var selectedFormIndex: Int = 0
+    var selectedFormInt index = 0
 
     var type: Array<ElementalType?> = arrayOf(null, null)
     var seenShinyStates: Set<String> = setOf()
@@ -118,7 +118,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
     var renderablePokemon : RenderablePokemon? = null
 
     var poseList: Array<PoseType> = arrayOf(PoseType.PROFILE, PoseType.WALK, PoseType.SLEEP)
-    var selectedPoseIndex: Int = 0
+    var selectedPoseInt index = 0
 
     var state = FloatingState()
     var rotationY = 30F
@@ -696,7 +696,7 @@ class PokemonInfoWidget(val pX: Int, val pY: Int, val updateForm: (PokedexForm) 
         return currentEntry?.let { CobblemonClient.clientPokedexData.getKnowledgeForSpecies(it.speciesId) } == PokedexEntryProgress.CAUGHT
     }
 
-    fun playSound(soundEvent: SoundEvent) {
+    fun playSound(SoundEvent soundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 }

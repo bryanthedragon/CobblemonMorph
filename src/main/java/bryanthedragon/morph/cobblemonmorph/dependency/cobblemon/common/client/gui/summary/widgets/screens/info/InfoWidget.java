@@ -26,12 +26,12 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 
-class InfoWidget(
+public class InfoWidget(
     pX: Int,
     pY: Int,
-    private val pokemon: Pokemon
+    private val Pokemon pokemon
 ) : SoundlessWidget(pX, pY, WIDTH, HEIGHT, Component.literal("InfoWidget")) {
-    companion object {
+    final class Companion {
         private const val WIDTH = 134
         private const val HEIGHT = 148
         private val infoBaseResource = cobblemonResource("textures/gui/summary/summary_info_base.png")

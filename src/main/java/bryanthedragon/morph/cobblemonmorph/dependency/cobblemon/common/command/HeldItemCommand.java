@@ -21,7 +21,7 @@ import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.commands.arguments.item.ItemArgument
-final class HeldItemCommand {
+public final class HeldItemCommand {
 
     private const val NAME = "held_item"
     private const val TARGET = "target"

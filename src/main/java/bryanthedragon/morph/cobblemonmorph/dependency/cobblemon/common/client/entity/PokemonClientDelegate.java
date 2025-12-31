@@ -56,8 +56,8 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
 
-class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
-    companion object {
+public class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
+    final class Companion {
         const val BEAM_SHRINK_TIME = 0.4F
         const val BEAM_EXTEND_TIME = 0.2F
         const val POKEBALL_AIR_TIME = 0.5F
@@ -86,7 +86,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
     var ballOffset = 0f
     var ballRotOffset = 0f
     var sendOutPosition: Vec3? = null
-    var sendOutOffset: Vec3? = null
+    var sendOutVec3 offset? = null
     var playedSendOutSound: Boolean = false
     var playedThrowingSound: Boolean = false
 
@@ -125,7 +125,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
                     val model = currentModel ?: return
                     val animation = try {
                         model.getAnimation(this, "faint", runtime)
-                    } catch (e: Exception) {
+                    } catch (Exception e) {
                         e.printStackTrace()
                         null
                     } ?: return
@@ -347,7 +347,7 @@ class PokemonClientDelegate : PosableState(), PokemonSideDelegate {
         }
     }
 
-    override fun changePokemon(pokemon: Pokemon) {
+    override fun changePokemon(Pokemon pokemon) {
         pokemon.isClient = true
     }
 

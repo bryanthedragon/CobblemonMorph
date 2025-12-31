@@ -15,20 +15,20 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.item.ItemStack
 
-class CosmeticItemUpdatePacket(pokemon: () -> Pokemon?, value: ItemStack) : SingleUpdatePacket<ItemStack, CosmeticItemUpdatePacket>(pokemon, value) {
+public class CosmeticItemUpdatePacket(pokemon: () -> Pokemon?, value: ItemStack) : SingleUpdatePacket<ItemStack, CosmeticItemUpdatePacket>(pokemon, value) {
     override val id = ID
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeItemStack(this.value)
     }
 
-    override fun set(pokemon: Pokemon, value: ItemStack) {
+    override fun set(Pokemon pokemon, value: ItemStack) {
         pokemon.cosmeticItem = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("cosmetic_item_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): CosmeticItemUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): CosmeticItemUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val cosmeticItem = buffer.readItemStack()
             return CosmeticItemUpdatePacket(pokemon, cosmeticItem)

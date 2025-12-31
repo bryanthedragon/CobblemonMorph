@@ -26,11 +26,11 @@ record EvolutionCompleteEvent(
     /**
      * The [Pokemon] resulting from the evolution.
      */
-    override val pokemon: Pokemon,
+    override val Pokemon pokemon,
     /**
      * The [Pokemon] that was the source of the evolution.
      */
-    val sourcePokemon: Pokemon,
+    val sourcePokemon pokemon,
     /**
      * The [Evolution] that was used.
      */

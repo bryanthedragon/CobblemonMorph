@@ -17,27 +17,27 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 
 // We do not need to know every single attribute as a client, as such, we only sync the aspects that matter
-class NPCRegistrySyncPacket(npcs: Collection<NPCClass>) : DataRegistrySyncPacket<NPCClass, NPCRegistrySyncPacket>(npcs) {
+public class NPCRegistrySyncPacket(npcs: Collection<NPCClass>) : DataRegistrySyncPacket<NPCClass, NPCRegistrySyncPacket>(npcs) {
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: NPCClass) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: NPCClass) {
         try {
             buffer.writeIdentifier(entry.id)
             entry.encode(buffer)
-        } catch (e: Exception) {
+        } catch (Exception e) {
             Cobblemon.LOGGER.error("Caught exception encoding the NPC class {}", entry.id, e)
         }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): NPCClass? {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): NPCClass? {
         val identifier = buffer.readIdentifier()
         val npc = NPCClass()
         npc.id = identifier
         return try {
             npc.decode(buffer)
             npc
-        } catch (e: Exception) {
+        } catch (Exception e) {
             Cobblemon.LOGGER.error("Caught exception decoding the NPC class {}", identifier, e)
             null
         }
@@ -47,8 +47,8 @@ class NPCRegistrySyncPacket(npcs: Collection<NPCClass>) : DataRegistrySyncPacket
         NPCClasses.reload(entries.associateBy { it.id })
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("npcs_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf): NPCRegistrySyncPacket = NPCRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer): NPCRegistrySyncPacket = NPCRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 }

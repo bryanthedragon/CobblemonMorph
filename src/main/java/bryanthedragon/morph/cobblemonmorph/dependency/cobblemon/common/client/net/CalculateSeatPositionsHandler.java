@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.world.phys.Vec3
-final class CalculateSeatPositionsHandler : ClientNetworkPacketHandler<CalculateSeatPositionsPacket> {
+public final class CalculateSeatPositionsHandler : ClientNetworkPacketHandler<CalculateSeatPositionsPacket> {
     private const val FORMAT = "%.2f"
     private const val SEAT_PREFIX = "seat"
     private const val SIMULATION_PERIOD_TICKS = 15 * 20F
@@ -34,7 +34,7 @@ final class CalculateSeatPositionsHandler : ClientNetworkPacketHandler<Calculate
         var maxZ: Float = -9999F
     )
 
-    override fun handle(packet: CalculateSeatPositionsPacket, client: Minecraft) {
+    override fun handle(packet: CalculateSeatPositionsPacket, Minecraft client) {
         val state = FloatingState()
         state.currentAspects = packet.aspects
         val model = VaryingModelRepository.getPoser(packet.speciesIdentifier, state)

@@ -16,19 +16,20 @@ import java.lang.reflect.Type
  *
  * @author Licious
  * @since December 2nd, 2022
- */final class VerboseIntRangeAdapter : JsonDeserializer<IntRange>, JsonSerializer<IntRange> {
+ */
+public final class VerboseIntRangeAdapter : JsonDeserializer<IntRange>, JsonSerializer<IntRange> {
 
     private const val MIN = "min"
     private const val MAX = "max"
 
-    override fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): IntRange {
+    override fun deserialize(jElement: JsonElement, Type type, JsonDeserializationContext context): IntRange {
         val json = jElement.asJsonObject
         val min = json.get(MIN).asInt
         val max = json.get(MAX).asInt
         return IntRange(min, max)
     }
 
-    override fun serialize(range: IntRange, type: Type, context: JsonSerializationContext) = JsonObject().apply {
+    override fun serialize(IntRange range, Type type, context: JsonSerializationContext) = JsonObject().apply {
         addProperty(MIN, range.first)
         addProperty(MAX, range.last)
     }

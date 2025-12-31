@@ -30,7 +30,7 @@ record SerializableMobEffectInstance(
         return MobEffectInstance(holder, duration, amplifier, ambient, visible, showIcon)
     }
 
-    companion object {
+    final class Companion {
         val CODEC: Codec<SerializableMobEffectInstance> = RecordCodecBuilder.create { builder ->
             builder.group(
                     ResourceLocation.CODEC.fieldOf("effect").forGetter { it.effect },

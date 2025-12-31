@@ -28,8 +28,8 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 
-class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
-    companion object {
+public class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
+    final class Companion {
         val KEY = cobblemonResource("composite")
     }
 
@@ -355,7 +355,7 @@ class CompositeBehaviour : RidingBehaviour<CompositeSettings, CompositeState> {
         settings: CompositeSettings,
         state: CompositeState,
         vehicle: PokemonEntity,
-        impactVec: Vec3
+        impactVec3 vec
     ): Boolean {
         return chooseBehaviour(settings, state) { behaviour, behaviourSettings, behaviourState ->
             behaviour.damageOnCollision(behaviourSettings, behaviourState, vehicle, impactVec)
@@ -374,7 +374,7 @@ open class CompositeSettings : RidingBehaviourSettings {
     override val key: ResourceLocation = CompositeBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         buffer.writeResourceLocation(transitionStrategy)
         buffer.writeResourceLocation(defaultBehaviour.key)
@@ -383,7 +383,7 @@ open class CompositeSettings : RidingBehaviourSettings {
         alternateBehaviour.encode(buffer)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         transitionStrategy = buffer.readResourceLocation()
         val defaultBehaviourKey = buffer.readResourceLocation()
@@ -398,7 +398,7 @@ open class CompositeSettings : RidingBehaviourSettings {
     }
 }
 
-class CompositeState(
+public class CompositeState(
     val defaultBehaviour: ResourceLocation,
     val defaultBehaviourState: RidingBehaviourState,
     val alternateBehaviourState: RidingBehaviourState

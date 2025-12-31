@@ -13,10 +13,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.c
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.schedule.Activity
 
-class SetCoreActivities : BehaviourConfig {
+public class SetCoreActivities : BehaviourConfig {
     val activities = mutableListOf<Activity>()
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
-    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+    override fun configure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         behaviourConfigurationContext.coreActivities = activities.toSet()
     }
 }

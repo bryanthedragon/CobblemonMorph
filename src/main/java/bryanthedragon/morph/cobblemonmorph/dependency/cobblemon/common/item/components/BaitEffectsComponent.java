@@ -22,10 +22,10 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since March 18th, 2025
  */
-class BaitEffectsComponent(
+public class BaitEffectsComponent(
     val effects: List<ResourceLocation>
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<BaitEffectsComponent> = ResourceLocation.CODEC.listOf().xmap(::BaitEffectsComponent, BaitEffectsComponent::effects)
         val PACKET_CODEC: StreamCodec<ByteBuf, BaitEffectsComponent> = ByteBufCodecs.fromCodec(CODEC)
     }

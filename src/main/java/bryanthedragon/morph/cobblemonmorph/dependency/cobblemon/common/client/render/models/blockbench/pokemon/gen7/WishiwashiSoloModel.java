@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class WishiwashiSoloModel (root: ModelPart) : PokemonPosableModel(root){
+public class WishiwashiSoloModel (root: ModelPart) : PokemonPosableModel(root){
     override val rootPart = root.registerChildWithAllChildren("wishiwashi_solo")
 
     override var portraitScale = 3.0F

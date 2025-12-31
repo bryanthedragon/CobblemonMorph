@@ -22,8 +22,8 @@ import net.minecraft.world.entity.LivingEntity
  * @author Polymeta
  * @since May 6th, 2025
  */
-interface OwnerQueryRequirement : Requirement {
-    override fun check(pokemon: Pokemon): Boolean {
+public interface OwnerQueryRequirement : Requirement {
+    override fun check(Pokemon pokemon): Boolean {
         val owner = pokemon.getOwnerEntity() ?: return false
         return when (owner) {
             is ServerPlayer -> {
@@ -43,7 +43,7 @@ interface OwnerQueryRequirement : Requirement {
      * @param owner The [ServerPlayer] that owns this [Pokemon].
      * @return If the requirement was satisfied.
      */
-    fun checkPlayer(pokemon: Pokemon, owner: ServerPlayer): Boolean
+    fun checkPlayer(Pokemon pokemon, owner: ServerPlayer): Boolean
 
     /**
      * Checks if the given [Pokemon] & [NPCEntity] satisfies the requirement.
@@ -54,5 +54,5 @@ interface OwnerQueryRequirement : Requirement {
      * @param owner The [NPCEntity] that owns this [Pokemon].
      * @return If the requirement was satisfied.
      */
-    fun checkNPC(pokemon: Pokemon, owner: NPCEntity): Boolean
+    fun checkNPC(Pokemon pokemon, owner: NPCEntity): Boolean
 }

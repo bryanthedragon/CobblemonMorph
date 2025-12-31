@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceLocation
 /**
  * The registry of all [TeraType]s.
  */
-@Suppress("unused")final class TeraTypes : Iterable<TeraType> {
+@Suppress("unused")public final class TeraTypes : Iterable<TeraType> {
     private val types = hashMapOf<ResourceLocation, TeraType>()
 
     @JvmStatic
@@ -100,7 +100,7 @@ import net.minecraft.resources.ResourceLocation
      * @return The found [TeraType] or null.
      */
     @JvmStatic
-    fun get(id: ResourceLocation): TeraType? = this.types[id]
+    fun get(ResourceLocation id): TeraType? = this.types[id]
 
     /**
      * Gets a [TeraType] by its [id].
@@ -115,7 +115,7 @@ import net.minecraft.resources.ResourceLocation
      * Attempts to retrieve the [TeraType] by its english name.
      */
     @JvmStatic
-    fun getByName(name: String) = this.types.values.firstOrNull { it.name.equals(name, true) }
+    fun getByName(String name) = this.types.values.firstOrNull { it.name.equals(name, true) }
 
     /**
      * Gets the corresponding tera type for a [ElementalType].
@@ -126,7 +126,7 @@ import net.minecraft.resources.ResourceLocation
     @JvmStatic
     fun forElementalType(type: ElementalType): TeraType = this.get(cobblemonResource(type.showdownId))!! // it's safe to do
 
-    private fun create(id: ResourceLocation, type: TeraType): TeraType {
+    private fun create(ResourceLocation id, type: TeraType): TeraType {
         this.types[id] = type
         return type
     }

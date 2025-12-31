@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleEndPacket
 import net.minecraft.client.Minecraft
-final class BattleEndHandler : ClientNetworkPacketHandler<BattleEndPacket> {
-    override fun handle(packet: BattleEndPacket, client: Minecraft) {
+public final class BattleEndHandler : ClientNetworkPacketHandler<BattleEndPacket> {
+    override fun handle(packet: BattleEndPacket, Minecraft client) {
         CobblemonClient.endBattle()
     }
 }

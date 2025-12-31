@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stora
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.storage.ClientPC
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-class BoxStorageSlot(
+public class BoxStorageSlot(
     x: Int, y: Int,
     private val parent: StorageWidget,
     private val pc: ClientPC,

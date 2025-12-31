@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.animation.SingleBoneLookAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.models.blockbench.pose.Bone
 
-interface HeadedFrame : ModelFrame {
+public interface HeadedFrame : ModelFrame {
     val head: Bone
 
     fun singleBoneLook(invertX: Boolean = false, invertY: Boolean = false, disableX: Boolean = false, disableY: Boolean = false, pitchMultiplier: Float? = null, yawMultiplier: Float? = null, maxPitch: Float? = null, minPitch: Float? = null, maxYaw: Float? = null, minYaw: Float? = null) = SingleBoneLookAnimation(this, invertX, invertY, disableX, disableY, pitchMultiplier, yawMultiplier, maxPitch, minPitch, maxYaw, minYaw)

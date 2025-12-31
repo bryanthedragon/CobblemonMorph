@@ -9,7 +9,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.properties
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.properties.CustomPokemonPropertyType
-final class NoAIProperty : CustomPokemonPropertyType<BooleanProperty> {
+public final class NoAIProperty : CustomPokemonPropertyType<BooleanProperty> {
     override val keys = setOf("no_ai")
     override val needsKey = true
 

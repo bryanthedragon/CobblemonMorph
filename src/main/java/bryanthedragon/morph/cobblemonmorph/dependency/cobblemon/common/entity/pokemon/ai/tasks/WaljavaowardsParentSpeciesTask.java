@@ -17,7 +17,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 
-// modified mojang task for Pokémon species specific behaviourfinal class WalkTowardsParentSpeciesTask {
+// modified mojang task for Pokémon species specific behaviourpublic final class WalkTowardsParentSpeciesTask {
     fun create(
         executionRange: UniformInt,
         speed: Float

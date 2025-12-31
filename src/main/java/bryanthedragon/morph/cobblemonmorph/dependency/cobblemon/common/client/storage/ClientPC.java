@@ -18,9 +18,9 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import java.util.UUID
 
-class ClientPC(uuid: UUID, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
+public class ClientPC(UUID uuid, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
     val boxes = MutableList(boxCount) { ClientBox() }
-    override fun findByUUID(uuid: UUID): Pokemon? {
+    override fun findByUUID(UUID uuid): Pokemon? {
         boxes.forEach {
             it.forEach {
                 if (it != null && it.uuid == uuid) {
@@ -32,7 +32,7 @@ class ClientPC(uuid: UUID, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
         return null
     }
 
-    override fun set(position: PCPosition, pokemon: Pokemon?) {
+    override fun set(position: PCPosition, Pokemon pokemon?) {
         val box = if (boxes.size > position.box) boxes[position.box] else return
         if (position.slot >= POKEMON_PER_BOX) {
             return
@@ -47,7 +47,7 @@ class ClientPC(uuid: UUID, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
         return boxes[position.box].slots[position.slot]
     }
 
-    override fun getPosition(pokemon: Pokemon): PCPosition? {
+    override fun getPosition(Pokemon pokemon): PCPosition? {
         for (boxNumber in boxes.indices) {
             val box = boxes[boxNumber]
             for (slotNumber in box.slots.indices) {
@@ -59,13 +59,13 @@ class ClientPC(uuid: UUID, boxCount: Int) : ClientStorage<PCPosition>(uuid) {
         return null
     }
 
-    fun renameBox(boxNumber: Int, name: String?) {
+    fun renameBox(Int boxNumber, String name?) {
         if (boxes.size > boxNumber) {
             boxes[boxNumber].name = if (name.isNullOrBlank()) null else Component.literal(name).bold()
         }
     }
 
-    fun changeBoxWallpaper(boxNumber: Int, wallpaper: ResourceLocation) {
+    fun changeBoxWallpaper(Int boxNumber, wallpaper: ResourceLocation) {
         if (boxes.size > boxNumber) {
             boxes[boxNumber].wallpaper = wallpaper
         }

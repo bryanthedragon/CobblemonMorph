@@ -42,10 +42,10 @@ record BedrockAnimationGroup(
 )
 
 abstract class BedrockEffectKeyframe(val seconds: Float) {
-    abstract fun run(entity: Entity?, state: PosableState)
+    abstract fun run(Entity entity?, state: PosableState)
 }
 
-class BedrockParticleKeyframe(
+public class BedrockParticleKeyframe(
     seconds: Float,
     val effect: BedrockParticleOptions,
     val locator: String,
@@ -65,7 +65,7 @@ class BedrockParticleKeyframe(
         }
     }
 
-    override fun run(entity: Entity?, state: PosableState) {
+    override fun run(Entity entity?, state: PosableState) {
         entity ?: return
         val world = entity.level() as? ClientLevel ?: return
 
@@ -101,11 +101,11 @@ class BedrockParticleKeyframe(
     }
 }
 
-class BedrockSoundKeyframe(
+public class BedrockSoundKeyframe(
     seconds: Float,
     val sound: ResourceLocation
 ): BedrockEffectKeyframe(seconds) {
-    override fun run(entity: Entity?, state: PosableState) {
+    override fun run(Entity entity?, state: PosableState) {
         val soundEvent = SoundEvent.createVariableRangeEvent(sound) // Means we don't need to setup a sound registry entry for every single thing
         if (soundEvent != null) {
             if (entity != null) {
@@ -119,11 +119,11 @@ class BedrockSoundKeyframe(
     }
 }
 
-class BedrockInstructionKeyframe(
+public class BedrockInstructionKeyframe(
     seconds: Float,
     val expressions: ExpressionLike
 ): BedrockEffectKeyframe(seconds) {
-    override fun run(entity: Entity?, state: PosableState) {
+    override fun run(Entity entity?, state: PosableState) {
         expressions.resolve(state.runtime) // Risky doing this with a nullable entity
     }
 }
@@ -149,7 +149,7 @@ record BedrockAnimation(
     }
 
     /** Useful to have, gets set after loading the animation. */
-    var name: String = ""
+    var String name = ""
 
 
     fun run(
@@ -218,7 +218,7 @@ record BedrockAnimation(
                             yRot += rotation.y.toFloat().toRadians()
                             zRot += rotation.z.toFloat().toRadians()
                         }
-                    } catch (e: Exception) {
+                    } catch (Exception e) {
                         val exception = IllegalStateException("Bad animation for entity: ${(context?.request(RenderContext.ENTITY))?.effectiveName()?.string ?: "unknown entity (riding animation?)"}", e)
                         val crash = CrashReport("Cobblemon encountered an unexpected crash", exception)
                         val section = crash.addCategory("Animation Details")
@@ -251,7 +251,7 @@ record BedrockAnimation(
         return true
     }
 
-    fun applyEffects(entity: Entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
+    fun applyEffects(Entity entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
         val effectCondition: (effectKeyframe: BedrockEffectKeyframe) -> Boolean =
             if (previousSeconds > newSeconds) {
                 { it.seconds >= previousSeconds || it.seconds <= newSeconds }
@@ -263,12 +263,12 @@ record BedrockAnimation(
     }
 }
 
-interface BedrockBoneValue {
-    fun resolve(time: Double, runtime: MoLangRuntime): Vec3
+public interface BedrockBoneValue {
+    fun resolve(time: Double, MoLangRuntime runtime): Vec3
     fun isEmpty(): Boolean
 }
-final class EmptyBoneValue : BedrockBoneValue {
-    override fun resolve(time: Double, runtime: MoLangRuntime) = Vec3.ZERO
+public final class EmptyBoneValue : BedrockBoneValue {
+    override fun resolve(time: Double, MoLangRuntime runtime) = Vec3.ZERO
     override fun isEmpty() = true
 }
 
@@ -277,7 +277,7 @@ record BedrockBoneTimeline (
     val rotation: BedrockBoneValue,
     val scale: BedrockBoneValue
 )
-class MolangBoneValue(
+public class MolangBoneValue(
     val x: Expression,
     val y: Expression,
     val z: Expression,
@@ -285,7 +285,7 @@ class MolangBoneValue(
 ) : BedrockBoneValue {
     val yMul = if (transformation == Transformation.POSITION) -1 else 1
     override fun isEmpty() = false
-    override fun resolve(time: Double, runtime: MoLangRuntime): Vec3 {
+    override fun resolve(time: Double, MoLangRuntime runtime): Vec3 {
         val environment = runtime.environment
         environment.setSimpleVariable("anim_time", DoubleValue(time))
         environment.setSimpleVariable("camera_rotation_x", DoubleValue(Minecraft.getInstance().gameRenderer.mainCamera.rotation().x.toDouble()))
@@ -298,14 +298,14 @@ class MolangBoneValue(
     }
 
 }
-class BedrockKeyFrameBoneValue : TreeMap<Double, BedrockAnimationKeyFrame>(), BedrockBoneValue {
-    fun SortedMap<Double, BedrockAnimationKeyFrame>.getAtIndex(index: Int?): BedrockAnimationKeyFrame? {
+public class BedrockKeyFrameBoneValue : TreeMap<Double, BedrockAnimationKeyFrame>(), BedrockBoneValue {
+    fun SortedMap<Double, BedrockAnimationKeyFrame>.getAtIndex(Int index?): BedrockAnimationKeyFrame? {
         if (index == null) return null
         val key = this.keys.elementAtOrNull(index)
         return if (key != null) this[key] else null
     }
 
-    override fun resolve(time: Double, runtime: MoLangRuntime): Vec3 {
+    override fun resolve(time: Double, MoLangRuntime runtime): Vec3 {
         var afterIndex : Int? = keys.indexOfFirst { it > time }
         if (afterIndex == -1) afterIndex = null
         val beforeIndex = when (afterIndex) {
@@ -371,7 +371,7 @@ abstract class BedrockAnimationKeyFrame(
     abstract val post: MolangBoneValue
 }
 
-class SimpleBedrockAnimationKeyFrame(
+public class SimpleBedrockAnimationKeyFrame(
     time: Double,
     transformation: Transformation,
     interpolationType: InterpolationType,
@@ -381,7 +381,7 @@ class SimpleBedrockAnimationKeyFrame(
     override val post = data
 }
 
-class JumpBedrockAnimationKeyFrame(
+public class JumpBedrockAnimationKeyFrame(
     time: Double,
     transformation: Transformation,
     interpolationType: InterpolationType,
@@ -389,10 +389,10 @@ class JumpBedrockAnimationKeyFrame(
     override val post: MolangBoneValue
 ): BedrockAnimationKeyFrame(time, transformation, interpolationType)
 
-enum class InterpolationType {
+public enum InterpolationType {
     SMOOTH, LINEAR
 }
 
-enum class Transformation {
+public enum Transformation {
     POSITION, ROTATION, SCALE
 }

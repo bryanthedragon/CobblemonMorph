@@ -20,8 +20,9 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Hiroku
  * @since March 12th, 2023
- */final class AcceptTradeRequestHandler : ServerNetworkPacketHandler<AcceptTradeRequestPacket> {
-    override fun handle(packet: AcceptTradeRequestPacket, server: MinecraftServer, player: ServerPlayer) {
+ */
+public final class AcceptTradeRequestHandler : ServerNetworkPacketHandler<AcceptTradeRequestPacket> {
+    override fun handle(packet: AcceptTradeRequestPacket, server: MinecraftServer, ServerPlayer player) {
         TradeManager.acceptRequest(player, packet.tradeOfferId)
     }
 }

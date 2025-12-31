@@ -21,16 +21,16 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.minecraft.commands.SharedSuggestionProvider
 import java.util.concurrent.CompletableFuture
 
-class PokemonPropertiesArgumentType: ArgumentType<PokemonProperties> {
+public class PokemonPropertiesArgumentType: ArgumentType<PokemonProperties> {
 
-    companion object {
+    final class Companion {
         val EXAMPLES: List<String> = listOf("eevee")
         private val ASSIGNER = "="
 
         fun properties() = PokemonPropertiesArgumentType()
 
-        fun <S> getPokemonProperties(context: CommandContext<S>, name: String): PokemonProperties {
-            return context.getArgument(name, PokemonProperties::class.java)
+        fun <S> getPokemonProperties(context: CommandContext<S>, String name): PokemonProperties {
+            return context.getArgument(name, PokemonProperties.class)
         }
     }
 

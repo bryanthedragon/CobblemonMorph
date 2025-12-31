@@ -35,8 +35,9 @@ import net.minecraft.world.entity.EntityDimensions
  *
  * @author Hiroku
  * @since August 11th, 2024
- */final class NPCClassAdapter : JsonDeserializer<NPCClass> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): NPCClass {
+ */
+public final class NPCClassAdapter : JsonDeserializer<NPCClass> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): NPCClass {
         val obj = json.asJsonObject
         val presets = obj.getAsJsonArray("presets")?.mapNotNull {
             val preset = NPCPresets.getPreset(it.asString.asResource())
@@ -55,28 +56,28 @@ import net.minecraft.world.entity.EntityDimensions
         obj.get("names")?.let { npcClass.names = it.normalizeToArray().map { it.asString.asTranslated() }.toMutableList() }
         obj.get("resourceIdentifier")?.let { npcClass.resourceIdentifier = it.asString.asIdentifierDefaultingNamespace() }
         obj.get("aspects")?.let { npcClass.aspects = it.normalizeToArray().map { it.asString }.toMutableSet() }
-        obj.get("variation")?.let { it.asJsonObject.entrySet().forEach { (key, value) -> npcClass.variations[key] = ctx.deserialize(value, NPCVariationProvider::class.java) } }
-        obj.get("hitbox")?.let { npcClass.hitbox = ctx.deserialize(it, EntityDimensions::class.java) }
-        obj.get("battleConfiguration")?.let { npcClass.battleConfiguration = ctx.deserialize(it, NPCBattleConfiguration::class.java) }
-        obj.get("interaction")?.let { npcClass.interaction = ctx.deserialize(it, NPCInteractConfiguration::class.java) }
+        obj.get("variation")?.let { it.asJsonObject.entrySet().forEach { (key, value) -> npcClass.variations[key] = ctx.deserialize(value, NPCVariationProvider.class) } }
+        obj.get("hitbox")?.let { npcClass.hitbox = ctx.deserialize(it, EntityDimensions.class) }
+        obj.get("battleConfiguration")?.let { npcClass.battleConfiguration = ctx.deserialize(it, NPCBattleConfiguration.class) }
+        obj.get("interaction")?.let { npcClass.interaction = ctx.deserialize(it, NPCInteractConfiguration.class) }
         obj.get("canDespawn")?.let { npcClass.canDespawn = it.asBoolean }
         obj.get("config")?.let {
             val obj = it.asJsonArray
-            obj.forEach { npcClass.config.add(ctx.deserialize(it, MoLangConfigVariable::class.java)) }
+            obj.forEach { npcClass.config.add(ctx.deserialize(it, MoLangConfigVariable.class)) }
         }
         obj.get("variations")?.let {
             val obj = it.asJsonObject
             obj.entrySet().forEach { (key, value) ->
-                val provider = ctx.deserialize<NPCVariationProvider>(value, NPCVariationProvider::class.java)
+                val provider = ctx.deserialize<NPCVariationProvider>(value, NPCVariationProvider.class)
                 npcClass.variations[key] = provider
             }
         }
-        obj.get("party")?.let { npcClass.party = ctx.deserialize(it, NPCPartyProvider::class.java) }
+        obj.get("party")?.let { npcClass.party = ctx.deserialize(it, NPCPartyProvider.class) }
         obj.get("skill")?.let { npcClass.skill = it.asInt }
         obj.get("autoHealParty")?.let { npcClass.autoHealParty = it.asBoolean }
         obj.get("randomizePartyOrder")?.let { npcClass.randomizePartyOrder = it.asBoolean }
         obj.get("battleTheme")?.let { npcClass.battleTheme = it.asString.asIdentifierDefaultingNamespace() }
-        listOf("behaviours", "behaviors", "ai").firstNotNullOfOrNull { obj.get(it) }?.let { npcClass.behaviours.addAll(it.asJsonArray.map<JsonElement, BehaviourConfig> { ctx.deserialize(it, BehaviourConfig::class.java) }.toMutableList()) }
+        listOf("behaviours", "behaviors", "ai").firstNotNullOfOrNull { obj.get(it) }?.let { npcClass.behaviours.addAll(it.asJsonArray.map<JsonElement, BehaviourConfig> { ctx.deserialize(it, BehaviourConfig.class) }.toMutableList()) }
         obj.get("isMovable")?.let { npcClass.isMovable = it.asBoolean }
         obj.get("isInvulnerable")?.let { npcClass.isInvulnerable = it.asBoolean }
         obj.get("isLeashable")?.let { npcClass.isLeashable = it.asBoolean }

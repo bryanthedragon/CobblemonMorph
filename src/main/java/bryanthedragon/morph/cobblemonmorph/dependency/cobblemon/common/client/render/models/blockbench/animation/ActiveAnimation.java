@@ -21,7 +21,7 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since December 5th, 2021
  */
-interface ActiveAnimation {
+public interface ActiveAnimation {
     /** Whether or not this animation is being used as a transition and therefore should prevent other pose transitions from occurring. */
     val isTransition: Boolean
     /** The animation's duration in seconds. */
@@ -45,5 +45,5 @@ interface ActiveAnimation {
     ): Boolean
 
     /** Applies animation effects, such as particle effects. These can occur on tick, therefore not necessarily on screen. */
-    fun applyEffects(entity: Entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {}
+    fun applyEffects(Entity entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {}
 }

@@ -25,14 +25,14 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since January 21st, 2022
  */
-class SpawnSnowstormParticlePacket(
-    val effectId: ResourceLocation,
-    val position: Vec3,
+public class SpawnSnowstormParticlePacket(
+    val effectResourceLocation id,
+    val Vec3 position,
 ) : NetworkPacket<SpawnSnowstormParticlePacket> {
     override val id = ID
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("spawn_snowstorm_particle")
-        fun decode(buffer: RegistryFriendlyByteBuf): SpawnSnowstormParticlePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SpawnSnowstormParticlePacket {
             return SpawnSnowstormParticlePacket(
                 effectId = buffer.readIdentifier(),
                 position = Vec3(
@@ -43,7 +43,7 @@ class SpawnSnowstormParticlePacket(
             )
         }
     }
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(effectId)
         buffer.writeDouble(position.x)
         buffer.writeDouble(position.y)

@@ -32,12 +32,12 @@ import net.minecraft.world.level.gameevent.GameEvent
 import net.minecraft.world.level.storage.loot.LootTable
 
 @Suppress("unused")
-class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>, world: Level) : CobblemonBoatEntity(entityType, world), HasCustomInventoryScreen, ContainerEntity {
+public class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>, Level world) : CobblemonBoatEntity(entityType, world), HasCustomInventoryScreen, ContainerEntity {
 
-    constructor(world: Level) : this(CobblemonEntities.CHEST_BOAT, world)
+    constructor(Level world) : this(CobblemonEntities.CHEST_BOAT, world)
 
     // This exists cause super passes in vanilla boat entity type
-    constructor(world: Level, x: Double, y: Double, z: Double) : this(CobblemonEntities.CHEST_BOAT, world) {
+    constructor(Level world, x: Double, y: Double, z: Double) : this(CobblemonEntities.CHEST_BOAT, world) {
         this.setPos(x, y, z)
         this.xo = x
         this.yo = y
@@ -113,7 +113,7 @@ class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>,
 
     override fun removeItemNoUpdate(slot: Int): ItemStack = this.removeChestVehicleItemNoUpdate(slot)
 
-    override fun setItem(slot: Int, stack: ItemStack) = this.setChestVehicleItem(slot, stack)
+    override fun setItem(slot: Int, ItemStack stack) = this.setChestVehicleItem(slot, stack)
 
     override fun getSlot(slot: Int): SlotAccess? = this.getChestVehicleSlot(slot)
 
@@ -155,7 +155,7 @@ class CobblemonChestBoatEntity(entityType: EntityType<CobblemonChestBoatEntity>,
         this.level().gameEvent(GameEvent.CONTAINER_CLOSE, this.position(), GameEvent.Context.of(player))
     }
 
-    companion object {
+    final class Companion {
 
         private const val INVENTORY_SLOTS = 27
 

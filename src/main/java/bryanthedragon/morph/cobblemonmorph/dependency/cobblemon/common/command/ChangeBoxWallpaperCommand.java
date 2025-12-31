@@ -29,10 +29,10 @@ import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
-final class ChangeBoxWallpaperCommand {
+public final class ChangeBoxWallpaperCommand {
     private val BOX_DOES_NOT_EXIST = { boxNo: Int -> commandLang("pokebox.box_does_not_exist", boxNo) }
     private val WALLPAPER_DOES_NOT_EXIST = { wallpaper: String -> commandLang("changewallpaper.wallpaper_does_not_exist", wallpaper) }
-    private val CANNOT_CHANGE_WALLPAPER = { name: String -> commandLang("changewallpaper.cannot_change_wallpaper", name) }
+    private val CANNOT_CHANGE_WALLPAPER = { String name -> commandLang("changewallpaper.cannot_change_wallpaper", name) }
 
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(Commands.literal("changewallpaper")
@@ -58,7 +58,7 @@ final class ChangeBoxWallpaperCommand {
     }
 
     private fun execute(
-        player: ServerPlayer,
+        ServerPlayer player,
         box: Int,
         wallpaper: ResourceLocation?
     ): Int {

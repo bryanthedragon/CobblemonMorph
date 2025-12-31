@@ -16,9 +16,9 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.StringRepresentable
 
-class Mark(
-    identifier: ResourceLocation,
-    val name: String,
+public class Mark(
+    ResourceLocation identifier,
+    val String name,
     val description: String,
     val title: String?,
     @SerializedName(value = "titleColor", alternate = ["titleColour"])
@@ -30,8 +30,8 @@ class Mark(
     val indexNumber: Int?
 ): StringRepresentable {
 
-    companion object {
-        internal fun decode(buffer: RegistryFriendlyByteBuf): Mark {
+    final class Companion {
+        internal fun decode(RegistryFriendlyByteBuf buffer): Mark {
             return Mark(
                 buffer.readIdentifier(),
                 buffer.readString(),
@@ -48,7 +48,7 @@ class Mark(
     }
 
     @Transient
-    var identifier: ResourceLocation = identifier
+    var ResourceLocation identifier = identifier
         internal set
 
     override fun getSerializedName(): String = identifier.toString()
@@ -62,7 +62,7 @@ class Mark(
             try {
                 return if (titleColour != null) it.asTranslated(name.withColor(-1)).withColor(titleColour.toInt(16))
                 else it.asTranslated(name)
-            } catch (e: Exception) {
+            } catch (Exception e) {
                 Cobblemon.LOGGER.error("Error parsing titleColor hexadecimal color code for {}", identifier, e)
                 return it.asTranslated(name)
             }
@@ -72,7 +72,7 @@ class Mark(
 
     fun getChanceGroup(): Pair<String, Float> = Pair(group ?: chance.toString(), chance)
 
-    internal fun encode(buffer: RegistryFriendlyByteBuf) {
+    internal fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(identifier)
         buffer.writeString(name)
         buffer.writeString(description)

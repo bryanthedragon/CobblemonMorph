@@ -8,7 +8,7 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive
 
-class ObservableSubscription<T>(
+public class ObservableSubscription<T>(
     private val observable: Observable<T>,
     private val handler: (T) -> Unit
 ) {

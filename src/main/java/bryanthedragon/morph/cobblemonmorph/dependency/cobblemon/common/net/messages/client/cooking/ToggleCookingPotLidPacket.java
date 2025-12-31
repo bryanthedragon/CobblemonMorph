@@ -12,16 +12,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.N
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ToggleCookingPotLidPacket(val value: Boolean) : NetworkPacket<ToggleCookingPotLidPacket> {
-    companion object {
+public class ToggleCookingPotLidPacket(val value: Boolean) : NetworkPacket<ToggleCookingPotLidPacket> {
+    final class Companion {
         val ID = cobblemonResource("toggle_cooking_pot_lid")
-        fun decode(buffer: RegistryFriendlyByteBuf): ToggleCookingPotLidPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): ToggleCookingPotLidPacket {
             return ToggleCookingPotLidPacket(buffer.readBoolean())
         }
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(this.value)
     }
 }

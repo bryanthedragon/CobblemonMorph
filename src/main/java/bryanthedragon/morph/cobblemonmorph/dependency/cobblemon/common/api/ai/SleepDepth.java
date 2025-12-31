@@ -21,8 +21,8 @@ import net.minecraft.world.phys.AABB
  * @author Hiroku
  * @since July 17th, 2022
  */
-interface SleepDepth {
-    companion object {
+public interface SleepDepth {
+    final class Companion {
         val comatose = object : SleepDepth {
             override fun canSleep(pokemonEntity: PokemonEntity) = true
             override fun shouldWake(pokemonEntity: PokemonEntity) = true

@@ -27,7 +27,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
  * @author Licious
  * @since January 28th, 2022
  */
-class UseMoveEvolutionProgress : EvolutionProgress<UseMoveEvolutionProgress.Progress> {
+public class UseMoveEvolutionProgress : EvolutionProgress<UseMoveEvolutionProgress.Progress> {
 
     private var progress = Progress(MoveTemplate.dummy(""), 0)
 
@@ -43,16 +43,16 @@ class UseMoveEvolutionProgress : EvolutionProgress<UseMoveEvolutionProgress.Prog
         this.progress = Progress(MoveTemplate.dummy(""), 0)
     }
 
-    override fun shouldKeep(pokemon: Pokemon): Boolean = supports(pokemon, this.progress.move)
+    override fun shouldKeep(Pokemon pokemon): Boolean = supports(pokemon, this.progress.move)
 
     override fun type(): EvolutionProgressType<*> = EvolutionProgressTypes.USE_MOVE
 
     record Progress(
-        val move: MoveTemplate,
+        val MoveTemplate move,
         val amount: Int
     )
 
-    companion object {
+    final class Companion {
 
         val ID = cobblemonResource("use_move")
         private const val MOVE = "move"
@@ -66,7 +66,7 @@ class UseMoveEvolutionProgress : EvolutionProgress<UseMoveEvolutionProgress.Prog
             ).apply(instance) { move, amount -> UseMoveEvolutionProgress().apply { updateProgress(Progress(move, amount)) } }
         }
 
-        fun supports(pokemon: Pokemon, move: MoveTemplate): Boolean {
+        fun supports(Pokemon pokemon, MoveTemplate move): Boolean {
             return pokemon.form.evolutions.any { evolution ->
                 evolution.requirements.any { requirement ->
                     requirement is UseMoveRequirement && requirement.move == move

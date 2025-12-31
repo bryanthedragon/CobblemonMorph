@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
 
 import net.minecraft.client.model.geom.ModelPart
 
-interface QuadrupedFrame : ModelFrame {
+public interface QuadrupedFrame : ModelFrame {
     val foreLeftLeg: ModelPart
     val foreRightLeg: ModelPart
     val hindLeftLeg: ModelPart

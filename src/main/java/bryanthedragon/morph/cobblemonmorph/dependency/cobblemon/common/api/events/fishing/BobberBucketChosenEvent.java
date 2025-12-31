@@ -16,4 +16,4 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @param buckets The list of buckets that the bobber can choose from.
  * @param luckOfTheSeaLevel The level of the Luck of the Sea enchantment on the rod.
  */
-class BobberBucketChosenEvent(var chosenBucket: SpawnBucket, val buckets: MutableList<SpawnBucket>, val luckOfTheSeaLevel: Int)
+public class BobberBucketChosenEvent(var chosenBucket: SpawnBucket, val buckets: MutableList<SpawnBucket>, val luckOfTheSeaLevel: Int)

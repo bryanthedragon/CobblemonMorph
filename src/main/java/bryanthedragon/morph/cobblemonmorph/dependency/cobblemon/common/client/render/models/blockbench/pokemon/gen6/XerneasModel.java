@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class XerneasModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
+public class XerneasModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, QuadrupedFrame {
     override val rootPart = root.registerChildWithAllChildren("xerneas")
     override val head = getPart("head")
 

@@ -29,20 +29,20 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.util.LowerCaseEnumTypeAdapterFactory
-final class PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
+public final class PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
     override val id = cobblemonResource("pokemon_interactions")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<PokemonInteractions>()
-    override val typeToken: TypeToken<PokemonInteractionSet> = TypeToken.get(PokemonInteractionSet::class.java)
+    override val typeToken: TypeToken<PokemonInteractionSet> = TypeToken.get(PokemonInteractionSet.class)
     override val resourcePath = "pokemon_interactions"
-    override val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(PokemonProperties::class.java, pokemonPropertiesShortAdapter)
-        .registerTypeAdapter(ItemPredicate::class.java, LegacyItemConditionWrapperAdapter)
-        .registerTypeAdapter(Requirement::class.java, CobblemonRequirementAdapter)
-        .registerTypeAdapter(InteractionEffect::class.java, InteractionEffectAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-        .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
+    override val Gson gson = GsonBuilder()
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(PokemonProperties.class, pokemonPropertiesShortAdapter)
+        .registerTypeAdapter(ItemPredicate.class, LegacyItemConditionWrapperAdapter)
+        .registerTypeAdapter(Requirement.class, CobblemonRequirementAdapter)
+        .registerTypeAdapter(InteractionEffect.class, InteractionEffectAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+        .registerTypeAdapter(IntRange.class, IntRangeAdapter)
         .registerTypeAdapterFactory(LowerCaseEnumTypeAdapterFactory())
         .setPrettyPrinting()
         .create()
@@ -50,7 +50,7 @@ final class PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
     val speciesInteractions = mutableListOf<PokemonInteractionSet>()
     val generalInteractions = mutableListOf<PokemonInteractionSet>()
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 
     override fun reload(data: Map<ResourceLocation, PokemonInteractionSet>) {
         speciesInteractions.clear()
@@ -61,7 +61,7 @@ final class PokemonInteractions : JsonDataRegistry<PokemonInteractionSet> {
         Cobblemon.LOGGER.info("Loaded {} Pokémon interaction sets", data.size)
     }
 
-    fun findInteraction(pokemon: PokemonEntity): PokemonInteraction? {
+    fun findInteraction(Pokemon pokemonEntity): PokemonInteraction? {
         val setCheck: (PokemonInteractionSet) -> Boolean = { it.requirements.all { req -> req.check(pokemon.pokemon) }}
         val interactionCheck: (PokemonInteraction) -> Boolean = { it.requirements.all { req -> req.check(pokemon.pokemon) } && !pokemon.pokemon.isOnInteractionCooldown(it.grouping)  }
         // species-specific interactions take priority

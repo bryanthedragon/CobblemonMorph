@@ -28,7 +28,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
  * @author Segfault Guy
  * @since July 24th, 2024
  */
-class InitializeInstruction(val instructionSet: InstructionSet, val message: BattleMessage): InterpreterInstruction {
+public class InitializeInstruction(val instructionSet: InstructionSet, val message: BattleMessage): InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
         val incoming = instructionSet.getSubsequentInstructions(this).filterIsInstance<SwitchInstruction>()
         incoming.forEach {

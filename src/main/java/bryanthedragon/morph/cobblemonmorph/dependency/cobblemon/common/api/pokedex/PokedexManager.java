@@ -22,12 +22,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import java.util.UUID
 import net.minecraft.resources.ResourceLocation
 
-class PokedexManager(
-    override val uuid: UUID,
+public class PokedexManager(
+    override val UUID uuid,
     override val speciesRecords: MutableMap<ResourceLocation, SpeciesDexRecord>
 ) : AbstractPokedexManager(), InstancedPlayerData {
 
-    fun encounter(pokemon: Pokemon) {
+    fun encounter(Pokemon pokemon) {
         val speciesId = pokemon.species.resourceIdentifier
         val formName = pokemon.form.name
         getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).encountered(PokedexEntityData(pokemon = pokemon, disguise = null))
@@ -41,11 +41,11 @@ class PokedexManager(
 
     // Java interop isn't great lol
     @Deprecated("Use encounter(PokedexEntityData) instead")
-    fun catch(pokemon: Pokemon) {
+    fun catch(Pokemon pokemon) {
         obtain(pokemon)
     }
 
-    fun obtain(pokemon: Pokemon) {
+    fun obtain(Pokemon pokemon) {
         val speciesId = pokemon.species.resourceIdentifier
         val formName = pokemon.form.name
         getOrCreateSpeciesRecord(speciesId).getOrCreateFormRecord(formName).caught(PokedexEntityData(pokemon = pokemon, disguise = null))
@@ -69,7 +69,7 @@ class PokedexManager(
         )
     }
 
-    companion object {
+    final class Companion {
         val CODEC = RecordCodecBuilder.create<PokedexManager> { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("uuid").forGetter { it.uuid.toString() },

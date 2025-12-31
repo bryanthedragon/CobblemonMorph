@@ -27,8 +27,8 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities
 import net.minecraft.world.entity.ai.sensing.SensorType
 
-class FindHerdLeaderTaskConfig : SingleTaskConfig {
-    companion object {
+public class FindHerdLeaderTaskConfig : SingleTaskConfig {
+    final class Companion {
         /**
          * Logic used to choose the best herd leader from nearby visible entities.
          *
@@ -80,12 +80,12 @@ class FindHerdLeaderTaskConfig : SingleTaskConfig {
     // How frequently to check for whether it should herd. Probably isn't that expensive but might use this for chance.
     val checkTicks: ExpressionOrEntityVariable = Either.left("60".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(checkTicks).asVariables()
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {

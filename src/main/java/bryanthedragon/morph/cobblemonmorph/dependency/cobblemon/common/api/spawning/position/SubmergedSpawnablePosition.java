@@ -23,18 +23,18 @@ import net.minecraft.core.BlockPos
  */
 open class SubmergedSpawnablePosition(
     cause: SpawnCause,
-    world: ServerLevel,
-    position: BlockPos,
+    ServerLevel world,
+    BlockPos position,
     light: Int,
     skyLight: Int,
     canSeeSky: Boolean,
     influences: MutableList<SpawningInfluence>,
-    height: Int,
-    val depth: Int,
+    Int height,
+    val Int depth,
     nearbyBlocks: List<BlockState>,
     zone: SpawningZone
 ) : AreaSpawnablePosition(cause, world, position, light, skyLight, canSeeSky, influences, height, nearbyBlocks, zone) {
     val fluid = zone.getBlockState(position.x, position.y, position.z).fluidState
 
-    override fun isSafeSpace(world: ServerLevel, pos: BlockPos, state: BlockState) = state.fluidState.type == fluid.type
+    override fun isSafeSpace(ServerLevel world, (BlockPos pos, BlockState state) = state.fluidState.type == fluid.type
 }

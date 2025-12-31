@@ -52,8 +52,8 @@ abstract class SurfaceTypeSpawningCondition<T : SurfaceSpawnablePosition> : Area
  * @since December 15th, 2022
  */
 open class SurfaceSpawningCondition : SurfaceTypeSpawningCondition<SurfaceSpawnablePosition>() {
-    override fun spawnablePositionClass() = SurfaceSpawnablePosition::class.java
-    companion object {
+    override fun spawnablePositionClass() = SurfaceSpawnablePosition.class
+    final class Companion {
         const val NAME = "surface"
     }
 }

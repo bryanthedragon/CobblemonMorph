@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.S
  * @author Hiroku
  * @since December 25th, 2023
  */
-class UnknownInstruction(val battleMessage: BattleMessage) : InterpreterInstruction {
+public class UnknownInstruction(val battleMessage: BattleMessage) : InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchGo { battle.broadcastChatMessage(battleMessage.rawMessage.red()) }
     }

@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
 /**
  * Event fired when the spawning system makes a decision on which bucket to spawn from.
  */
-class SpawnBucketChosenEvent(
+public class SpawnBucketChosenEvent(
     /** The spawner this is happening within. */
     val spawner: Spawner,
     /** The cause of the spawn. */

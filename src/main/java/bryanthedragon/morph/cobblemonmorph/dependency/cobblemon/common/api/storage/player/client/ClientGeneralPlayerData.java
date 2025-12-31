@@ -27,17 +27,17 @@ import java.util.UUID
  * @since February 21, 2024
  */
 
-record ClientGeneralPlayerData(
+public record ClientGeneralPlayerData(
     val resetStarters: Boolean? = false,
     var promptStarter: Boolean = true,
     var starterLocked: Boolean = true,
     var starterSelected: Boolean = false,
-    var starterUUID: UUID? = null,
+    var starterUUID uuid? = null,
     var showChallengeLabel: Boolean = true,
     val battleTheme: ResourceLocation? = null
 ) : ClientInstancedPlayerData {
 
-    override fun encode(buf: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buf) {
         buf.writeBoolean(promptStarter)
         buf.writeBoolean(starterLocked)
         buf.writeBoolean(starterSelected)
@@ -47,8 +47,8 @@ record ClientGeneralPlayerData(
         buf.writeNullable(resetStarters) { pb, value -> pb.writeBoolean(value) }
         buf.writeNullable(battleTheme) {pb, value -> pb.writeIdentifier(value)}
     }
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf): SetClientPlayerDataPacket {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer): SetClientPlayerDataPacket {
 
             val promptStarter = buffer.readBoolean()
             val starterLocked = buffer.readBoolean()

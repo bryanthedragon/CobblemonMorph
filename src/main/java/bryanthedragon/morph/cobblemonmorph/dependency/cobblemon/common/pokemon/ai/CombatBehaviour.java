@@ -12,7 +12,7 @@ import com.bedrockk.molang.runtime.value.DoubleValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class CombatBehaviour {
+public class CombatBehaviour {
     var willDefendSelf = false
     var willFlee = true
     var willDefendOwner = false
@@ -26,15 +26,15 @@ class CombatBehaviour {
         it.addFunction("fights_melee") { DoubleValue(fightsMelee) }
     }
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(willDefendSelf)
         buffer.writeBoolean(willFlee)
         buffer.writeBoolean(willDefendOwner)
         buffer.writeBoolean(fightsMelee)
     }
 
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf): CombatBehaviour {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer): CombatBehaviour {
             val decodedCombatBehaviour = CombatBehaviour()
 
             decodedCombatBehaviour.willDefendSelf = buffer.readBoolean()

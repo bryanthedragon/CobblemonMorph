@@ -6,8 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.ItemStack
 import java.util.function.Predicate

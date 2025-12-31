@@ -44,7 +44,7 @@ import org.joml.Vector4f
  * @author Hiroku
  * @since January 2nd, 2022
  */
-class ParticleStorm(
+public class ParticleStorm(
     val effect: BedrockParticleOptions,
     val emitterSpaceMatrix: MatrixWrapper,
     val attachedMatrix: MatrixWrapper, // Can be the same as emitterSpaceMatrix
@@ -55,8 +55,8 @@ class ParticleStorm(
     val targetPos: (() -> Vec3)? = null,
     val onDespawn: () -> Unit = {},
     val getParticleColor: () -> Vector4f? = { null },
-    val runtime: MoLangRuntime = MoLangRuntime(),
-    val entity: Entity? = null,
+    val MoLangRuntime runtime = MoLangRuntime(),
+    val Entity entity? = null,
 ): NoRenderParticle(world, emitterSpaceMatrix.getOrigin().x, emitterSpaceMatrix.getOrigin().y, emitterSpaceMatrix.getOrigin().z) {
     fun spawn() {
         if (entity != null) {
@@ -147,10 +147,10 @@ class ParticleStorm(
 
     var distanceTravelled = 0F
 
-    companion object {
+    final class Companion {
         var contextStorm: ParticleStorm? = null
 
-        fun createAtPosition(world: ClientLevel, effect: BedrockParticleOptions, position: Vec3): ParticleStorm {
+        fun createAtPosition(world: ClientLevel, effect: BedrockParticleOptions, Vec3 position): ParticleStorm {
             val wrapper = MatrixWrapper()
             val matrix = PoseStack()
             matrix.translate(position.x, position.y, position.z)
@@ -161,7 +161,7 @@ class ParticleStorm(
         /**
          * Creates multiple potentially, because in the case of posable entities if multiple locators match, it repeats the effect.
          */
-        fun createAtEntity(world: ClientLevel, effect: BedrockParticleOptions, entity: LivingEntity, locator: Collection<String> = emptySet()): List<ParticleStorm> {
+        fun createAtEntity(world: ClientLevel, effect: BedrockParticleOptions, LivingEntity entity, locator: Collection<String> = emptySet()): List<ParticleStorm> {
             if (entity is PosableEntity) {
                 val state = entity.delegate as PosableState
                 val locators = locator.firstNotNullOfOrNull { state.getMatchingLocators(it).takeIf { it.isNotEmpty() } } ?: return emptyList()
@@ -353,14 +353,14 @@ class ParticleStorm(
     }
 
     // Sometimes we need to transform without scale, IE just rotation and position.
-    fun transformPositionWithoutScale(position: Vec3): Vec3 {
+    fun transformPositionWithoutScale(Vec3 position): Vec3 {
         val matrixWrapper = emitterSpaceMatrix.clone()
         val scale = matrixWrapper.matrix.getScale(Vector3f())
         matrixWrapper.matrix.scale(1 / scale.x, 1 / scale.y, 1 / scale.z)
         return matrixWrapper.transformPosition(position)
     }
 
-    fun transformPosition(position: Vec3): Vec3 = emitterSpaceMatrix.transformPosition(position)
+    fun transformPosition(Vec3 position): Vec3 = emitterSpaceMatrix.transformPosition(position)
 
     fun transformDirection(direction: Vec3): Vec3 = emitterSpaceMatrix.matrix.transformDirection(direction)
 

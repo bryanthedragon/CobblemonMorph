@@ -32,9 +32,9 @@ open class JSONStoreAdapter(
     rootFolder: String,
     useNestedFolders: Boolean,
     folderPerClass: Boolean,
-    private val gson: Gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create(),
+    private val Gson gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create(),
 ) : OneToOneFileStoreAdapter<JsonObject>(rootFolder, useNestedFolders, folderPerClass, "json") {
-    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, registryAccess: RegistryAccess) = store.saveToJSON(JsonObject(), registryAccess)
+    override fun <E : StorePosition, T : PokemonStore<E>> serialize(store: T, RegistryAccess registryAccess) = store.saveToJSON(JsonObject(), registryAccess)
 
     override fun save(file: File, serialized: JsonObject) {
         val pw = PrintWriter(file)
@@ -44,19 +44,19 @@ open class JSONStoreAdapter(
         pw.close()
     }
 
-    override fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, uuid: UUID, registryAccess: RegistryAccess): T? {
+    override fun <E, T : PokemonStore<E>> load(file: File, storeClass: Class<out T>, UUID uuid, RegistryAccess registryAccess): T? {
         return try {
             file.reader().use {
                 val json = gson.fromJson<JsonObject>(it)
                 val store = try {
-                    storeClass.getConstructor(UUID::class.java, UUID::class.java).newInstance(uuid, uuid)
+                    storeClass.getConstructor(UUID.class, UUID.class).newInstance(uuid, uuid)
                 } catch (exception: NoSuchMethodException) {
-                    storeClass.getConstructor(UUID::class.java).newInstance(uuid)
+                    storeClass.getConstructor(UUID.class).newInstance(uuid)
                 }
                 store.loadFromJSON(json, registryAccess)
                 store
             }
-        } catch (e: Exception) {
+        } catch (Exception e) {
             null
         }
     }

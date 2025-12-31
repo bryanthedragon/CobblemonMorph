@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.wheel.createPokemonInteractGui
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.InteractPokemonUIPacket
 import net.minecraft.client.Minecraft
-final class InteractPokemonUIPacketHandler: ClientNetworkPacketHandler<InteractPokemonUIPacket> {
-    override fun handle(packet: InteractPokemonUIPacket, client: Minecraft) {
+public final class InteractPokemonUIPacketHandler: ClientNetworkPacketHandler<InteractPokemonUIPacket> {
+    override fun handle(packet: InteractPokemonUIPacket, Minecraft client) {
         client.setScreen(createPokemonInteractGui(
             packet.pokemonID,
             packet.canMountShoulder,

@@ -28,7 +28,7 @@ import java.io.InputStreamReader
  * @author Hiroku
  * @since July 8th, 2022
  */
-class BestSpawnerConfig {
+public class BestSpawnerConfig {
     val version = 0
     /** Whether an external config will be replaced by an internal one once [version] is higher on the internal. */
     val replaceWithNewVersion = true
@@ -46,10 +46,10 @@ class BestSpawnerConfig {
         SpawnBucket("ultra-rare", 0.2F)
     )
 
-    companion object {
+    final class Companion {
         val GSON = GsonBuilder()
             .setPrettyPrinting()
-            .registerTypeAdapter(SpawnablePositionType::class.java, RegisteredSpawnablePositionAdapter)
+            .registerTypeAdapter(SpawnablePositionType.class, RegisteredSpawnablePositionAdapter)
             .setLenient()
             .disableHtmlEscaping()
             .create()
@@ -79,8 +79,8 @@ class BestSpawnerConfig {
         }
 
         private fun loadInternal(): BestSpawnerConfig {
-            val reader = InputStreamReader(Cobblemon::class.java.getResourceAsStream(INTERNAL_PATH)!!)
-            val config = GSON.fromJson(reader, BestSpawnerConfig::class.java)
+            val reader = InputStreamReader(Cobblemon.class.getResourceAsStream(INTERNAL_PATH)!!)
+            val config = GSON.fromJson(reader, BestSpawnerConfig.class)
             reader.close()
             return config
         }
@@ -91,10 +91,10 @@ class BestSpawnerConfig {
             return if (configFile.exists()) {
                 try {
                     val reader = FileReader(configFile)
-                    val config = GSON.fromJson(reader, BestSpawnerConfig::class.java)
+                    val config = GSON.fromJson(reader, BestSpawnerConfig.class)
                     reader.close()
                     config
-                } catch (e: Exception) {
+                } catch (Exception e) {
                     LOGGER.error("Unable to load external Best Spawner configuration", e)
                     null
                 }
@@ -104,7 +104,7 @@ class BestSpawnerConfig {
         }
 
         fun saveExternal() {
-            val stream = Cobblemon::class.java.getResourceAsStream(INTERNAL_PATH)!!
+            val stream = Cobblemon.class.getResourceAsStream(INTERNAL_PATH)!!
             val bytes = stream.readAllBytes()
             stream.close()
             val configFile = File(EXTERNAL_PATH)

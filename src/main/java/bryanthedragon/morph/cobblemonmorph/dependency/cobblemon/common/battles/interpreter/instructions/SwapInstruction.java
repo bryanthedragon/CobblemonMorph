@@ -26,7 +26,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.swap
  * Indicates that a pokemon has swapped its field position with an ally.
  * @author JazzMcNade
  */
-class SwapInstruction(val message: BattleMessage, val instructionSet: InstructionSet): InterpreterInstruction {
+public class SwapInstruction(val message: BattleMessage, val instructionSet: InstructionSet): InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting {
             val battlePokemonA = message.battlePokemon(0, battle) ?: return@dispatchWaiting

@@ -20,7 +20,8 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author Deltric
  * @since January 13th, 2022
- */final class Natures {
+ */
+public final class Natures {
     private val allNatures = mutableListOf<Nature>()
 
     @JvmField

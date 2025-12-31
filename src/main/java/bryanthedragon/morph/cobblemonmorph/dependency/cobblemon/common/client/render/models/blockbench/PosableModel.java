@@ -184,7 +184,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      * First priority is given to any named animations inside of [Pose], and then to the [animations] mapping, before
      * resorting to legacy, MoLang resolution, and finally the [extractAnimation] hail-Mary.
      */
-    fun getAnimation(state: PosableState, name: String, runtime: MoLangRuntime): ActiveAnimation? {
+    fun getAnimation(state: PosableState, String name, MoLangRuntime runtime): ActiveAnimation? {
         val poseAnimations = state.currentPose?.let(poses::get)?.namedAnimations ?: mapOf()
         val animation = resolveFromAnimationMap(poseAnimations, name, runtime)
             ?: resolveFromAnimationMap(animations, name, runtime)
@@ -205,7 +205,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     /**
      * Animation group : animation name [: primary]
      */
-    fun extractAnimation(string: String): ActiveAnimation? {
+    fun extractAnimation(String string): ActiveAnimation? {
         val group = string.substringBefore(":")
         val animationName = string.substringAfter(":").substringBefore(":")
         val isPrimary = string.endsWith(":primary")
@@ -223,13 +223,13 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
 
     private fun resolveFromAnimationMap(
         map: Map<String, ExpressionLike>,
-        name: String,
-        runtime: MoLangRuntime
+        String name,
+        MoLangRuntime runtime
     ): ActiveAnimation? {
         val animationExpression = map[name] ?: return null
         return try {
             animationExpression.resolveObject(runtime).obj as ActiveAnimation
-        } catch (e: Exception) {
+        } catch (Exception e) {
             Cobblemon.LOGGER.error("Failed to create animation by name $name, most likely something wrong in the MoLang")
             e.printStackTrace()
             null
@@ -371,7 +371,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         )
     }
 
-    fun ModelPart.registerChildWithAllChildren(name: String): ModelPart {
+    fun ModelPart.registerChildWithAllChildren(String name): ModelPart {
         val child = this.getChild(name)!!
         registerRelevantPart(name to child)
         loadAllNamedChildren(child)
@@ -383,13 +383,13 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         locatorAccess = LocatorAccess.resolve(rootPart) ?: LocatorAccess(rootPart)
     }
 
-    fun getPart(name: String) = relevantPartsByName[name]!!
+    fun getPart(String name) = relevantPartsByName[name]!!
 
     fun loadAllNamedChildren(bone: Bone) {
         if (bone is ModelPart) loadAllNamedChildren(bone)
     }
 
-    fun registerPartAndAllNamedChildren(name: String, bone: Bone) {
+    fun registerPartAndAllNamedChildren(String name, bone: Bone) {
         if (bone is ModelPart) registerRelevantPart(name, bone)
         loadAllNamedChildren(bone)
     }
@@ -403,7 +403,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
         }
     }
 
-    fun registerRelevantPart(name: String, part: ModelPart): ModelPart {
+    fun registerRelevantPart(String name, part: ModelPart): ModelPart {
         val default = ModelPartTransformation.derive(part)
         relevantPartsByName[name] = part
         defaultPositions.add(default)
@@ -538,7 +538,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     fun applyPose(state: PosableState, pose: Pose, intensity: Float) = pose.transformedParts.forEach { it.apply(state, intensity) }
     /** Gets the first pose of this model that matches the given [PoseType]. */
     fun getPose(pose: PoseType) = poses.values.firstOrNull { pose in it.poseTypes }
-    fun getPose(name: String) = poses[name]
+    fun getPose(String name) = poses[name]
 
     /** Puts the model back to its original location and rotations. */
     fun setDefault() {
@@ -593,7 +593,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      * of logic here.
      */
     fun applyAnimations(
-        entity: Entity?,
+        Entity entity?,
         state: PosableState,
         limbSwing: Float,
         limbSwingAmount: Float,
@@ -675,7 +675,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
     }
 
     //This is used to set additional entity type specific context
-    open fun setupEntityTypeContext(entity: Entity?) {}
+    open fun setupEntityTypeContext(Entity entity?) {}
 
     /**
      * Attempts to move the given [state] to the [desirablePose], using transitions if possible. The logic for this
@@ -738,7 +738,7 @@ open class PosableModel(@Transient override val rootPart: Bone) : ModelFrame {
      * Figures out where all of this model's locators are in real space, so that they can be
      * found and used from other client-side systems.
      */
-    fun updateLocators(entity: Entity?, state: PosableState) {
+    fun updateLocators(Entity entity?, state: PosableState) {
         val matrixStack = PoseStack()
         var scale = 1F
         var yRot = 0f

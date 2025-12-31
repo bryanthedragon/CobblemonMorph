@@ -13,12 +13,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.syncher.EntityDataSerializer
-final class PlatformTypeDataSerializer : EntityDataSerializer<PlatformType> {
+public final class PlatformTypeDataSerializer : EntityDataSerializer<PlatformType> {
     // TODO: This ID only looks it's used by NeoForge and that hasn't been tested yet
     val ID = cobblemonResource("platform_type")
-    fun read(buf: RegistryFriendlyByteBuf) = PlatformType.entries[buf.readInt()]
+    fun read(RegistryFriendlyByteBuf buf) = PlatformType.entries[buf.readInt()]
     override fun copy(value: PlatformType) = value
-    fun write(buf: RegistryFriendlyByteBuf, value: PlatformType) {
+    fun write(RegistryFriendlyByteBuf buf, value: PlatformType) {
         buf.writeInt(value.ordinal)
     }
 

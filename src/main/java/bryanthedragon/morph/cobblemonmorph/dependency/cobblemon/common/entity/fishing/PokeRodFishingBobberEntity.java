@@ -6,76 +6,67 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.fishing
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.fishing;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonEntities
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.ModAPI
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.CobblemonCriteria
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion.ReelInPokemonContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.fishing.BobberSpawnPokemonEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fishing.SpawnBait
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fishing.SpawnBaitEffects
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scheduling.afterOnServer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.BestSpawner
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.EntitySpawnResult
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnAction
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.fishing.FishingSpawnCause
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.BucketNormalizingInfluence
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.PlayerLevelRangeInfluence
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.PlayerLevelRangeInfluence.Companion.TYPICAL_VARIATION
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.FishingSpawnablePosition
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.sound.EntitySoundTracker
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.interactive.PokerodItem
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormParticlePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.toBlockPos
-import kotlin.math.sqrt
-import net.minecraft.advancements.CriteriaTriggers
-import net.minecraft.client.resources.sounds.EntityBoundSoundInstance
-import net.minecraft.core.BlockPos
-import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
-import net.minecraft.network.syncher.EntityDataAccessor
-import net.minecraft.network.syncher.EntityDataSerializers
-import net.minecraft.network.syncher.SynchedEntityData
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundSource
-import net.minecraft.stats.Stats
-import net.minecraft.tags.FluidTags
-import net.minecraft.tags.ItemTags
-import net.minecraft.util.Mth
-import net.minecraft.util.RandomSource
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.ExperienceOrb
-import net.minecraft.world.entity.MoverType
-import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.entity.player.Player
-import net.minecraft.world.entity.projectile.FishingHook
-import net.minecraft.world.entity.projectile.ProjectileUtil
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.storage.loot.LootParams
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams
-import net.minecraft.world.phys.EntityHitResult
-import net.minecraft.world.phys.Vec3
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonEntities;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonSounds;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.CobblemonCriteria;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.fishing.BobberSpawnPokemonEvent;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fishing.SpawnBait;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fishing.SpawnBaitEffects;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.BestSpawner;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.EntitySpawnResult;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnAction;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.fishing.FishingSpawnCause;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.BucketNormalizingInfluence;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.influence.PlayerLevelRangeInfluence;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.position.FishingSpawnablePosition;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.interactive.PokerodItem;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.SpawnSnowstormParticlePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.LocalizationUtils;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
 
-class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity>, world: Level) : FishingHook(type, world) {
+public class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity>, Level world) : FishingHook(type, world) {
 
     var plannedSpawnAction: SpawnAction<*>? = null
 
@@ -97,7 +88,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     private var typeCaught = TypeCaught.ITEM
     private val pokemonSpawnChance = 85 // chance a Pokemon will be fished up % out of 100
     private val castingSound = CobblemonSounds.FISHING_ROD_CAST
-    var pokeRodId: ResourceLocation? = null
+    var pokeRodResourceLocation id? = null
     var lineColor: String = "000000" // default line color is black
     var usedRod: ResourceLocation? = null
     var bobberBait: ItemStack = ItemStack.EMPTY
@@ -110,9 +101,9 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
 
     constructor(
         thrower: Player,
-        pokeRodId: ResourceLocation,
+        pokeRodResourceLocation id,
         bait: ItemStack,
-        world: Level,
+        Level world,
         luckOfTheSea: Int,
         lure: Int,
         rodItemStack: ItemStack
@@ -201,7 +192,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
         return Pair(min, max)
     }
 
-    fun isOpenOrWaterAround(pos: BlockPos): Boolean {
+    fun isOpenOrWaterAround(BlockPos pos): Boolean {
         var positionType = PositionType.INVALID
         for (i in -1..2) {
             val positionType2 = this.getPositionType(pos.offset(-2, i, -2), pos.offset(2, i, 2))
@@ -230,7 +221,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
             }.orElse(PositionType.INVALID)
     }
 
-    private fun getPositionType(pos: BlockPos): PositionType {
+    private fun getPositionType(BlockPos pos): PositionType {
         val blockState = level().getBlockState(pos)
         return if (!blockState.isAir && !blockState.`is`(Blocks.LILY_PAD)) {
             val fluidState = blockState.fluidState
@@ -264,7 +255,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     }
 
     // todo maybe custom behavior for fishing logic
-    private fun tickFishingLogic(pos: BlockPos) {
+    private fun tickFishingLogic(BlockPos pos) {
         val serverWorld = level() as ServerLevel
         var i = 1
         val blockPos = pos.above()
@@ -493,7 +484,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
 
     private fun checkForCollision() {
         // todo (techdaan): ensure getHitResultOnMoveVector is correct
-        val hitResult = ProjectileUtil.getHitResultOnMoveVector(this) { entity: Entity -> this.canHitEntity(entity) }
+        val hitResult = ProjectileUtil.getHitResultOnMoveVector(this) { Entity entity -> this.canHitEntity(entity) }
         onHit(hitResult)
     }
 
@@ -503,7 +494,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
         }
     }
 
-    private fun updateHookedEntityId(entity: Entity?) {
+    private fun updateHookedEntityId(Entity entity?) {
         this.hookedEntity = entity
         entityData.set(HOOK_ENTITY_ID, if (entity == null) 0 else entity.id + 1)
     }
@@ -729,7 +720,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     }
 
     // calculate the trajectory for the reeled in pokemon
-    fun lobPokemonTowardsTarget(player: Player, entity: Entity) {
+    fun lobPokemonTowardsTarget(player: Player, Entity entity) {
         val rad = Math.toRadians(player.yRot.toDouble())
         val targetDirection = Vec3(-Math.sin(rad), 0.0, Math.cos(rad))
         val targetPos = player.position().add(targetDirection.scale(5.0))
@@ -757,7 +748,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     }
 
     private fun planSpawn(
-        player: ServerPlayer,
+        ServerPlayer player,
         rodItemStack: ItemStack,
         lureLevel: Int
     ) {
@@ -789,11 +780,11 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
         this.plannedSpawnAction = result
     }
 
-    private fun noBite(player: ServerPlayer) {
+    private fun noBite(ServerPlayer player) {
         player.sendSystemMessage(lang("fishing.no_bite").red())
     }
 
-    fun spawnPokemonFromFishing(player: ServerPlayer, rodItemStack: ItemStack, spawnAction: SpawnAction<*>): Boolean {
+    fun spawnPokemonFromFishing(ServerPlayer player, rodItemStack: ItemStack, spawnAction: SpawnAction<*>): Boolean {
         var hookedEntityID: Int? = null
 
         // This has a chance to fail, if the position had no suitability for a fishing position
@@ -807,7 +798,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
             return false
         }
 
-        var spawnedPokemon: PokemonEntity? = null
+        var spawnedPokemon pokemonEntity? = null
         val resultingSpawn = result.get()
 
         if (resultingSpawn is EntitySpawnResult) {
@@ -883,13 +874,13 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     }
 
     // function to return true of false if the given bait affects time to expect a bite
-    fun checkReduceBiteTime(stack: ItemStack): Boolean {
+    fun checkReduceBiteTime(ItemStack stack): Boolean {
         val effects = SpawnBaitEffects.getEffectsFromRodItemStack(stack)
         return effects.any { it.type == SpawnBait.Effects.BITE_TIME }
     }
 
     // check if the bite time is reduced based on the bait bonus
-    fun alterBiteTimeAttempt(waitCountdown: Int, stack: ItemStack): Int {
+    fun alterBiteTimeAttempt(waitCountdown: Int, ItemStack stack): Int {
         val effects = SpawnBaitEffects.getEffectsFromRodItemStack(stack)
         val effect = effects.filter { it.type == SpawnBait.Effects.BITE_TIME }.random()
         if (Math.random() > effect.chance) {
@@ -902,7 +893,7 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     }
 
     // check the chance of a pokemon to spawn and if it is affected by bait
-    fun getPokemonSpawnChance(stack: ItemStack): Int {
+    fun getPokemonSpawnChance(ItemStack stack): Int {
         val effects = SpawnBaitEffects.getEffectsFromRodItemStack(stack)
         val effectList = effects.filter { it.type == SpawnBait.Effects.POKEMON_CHANCE }
         if (effectList.isEmpty()) return this.pokemonSpawnChance
@@ -913,12 +904,12 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
     }
 
     // Particle Stuff
-    private fun particleEntityHandler(entity: Entity, particle: ResourceLocation) {
+    private fun particleEntityHandler(Entity entity, particle: ResourceLocation) {
         val spawnSnowstormParticlePacket = SpawnSnowstormParticlePacket(particle, entity.position())
         spawnSnowstormParticlePacket.sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, entity.level().dimension())
     }
 
-    private fun particleCatchHandler(x: Double, y: Double, z: Double, entity: Entity, particle: ResourceLocation) {
+    private fun particleCatchHandler(x: Double, y: Double, z: Double, Entity entity, particle: ResourceLocation) {
         var particlePosition = Vec3(x, y, z)
         val spawnSnowstormParticlePacket = SpawnSnowstormParticlePacket(particle, particlePosition)
         spawnSnowstormParticlePacket.sendToPlayersAround(entity.x, entity.y, entity.z, 64.0, entity.level().dimension())
@@ -929,15 +920,17 @@ class PokeRodFishingBobberEntity(type: EntityType<out PokeRodFishingBobberEntity
         POKEMON
     }
 
-    companion object {
+    final class Companion {
         val POKEROD_ID =
-            SynchedEntityData.defineId(PokeRodFishingBobberEntity::class.java, EntityDataSerializers.STRING)
+            SynchedEntityData.defineId(PokeRodFishingBobberEntity.class, EntityDataSerializers.STRING)
         val POKEBOBBER_BAIT =
-            SynchedEntityData.defineId(PokeRodFishingBobberEntity::class.java, EntityDataSerializers.ITEM_STACK)
+            SynchedEntityData.defineId(PokeRodFishingBobberEntity.class, EntityDataSerializers.ITEM_STACK)
         val HOOK_ENTITY_ID =
-            SynchedEntityData.defineId(PokeRodFishingBobberEntity::class.java, EntityDataSerializers.INT)
+            SynchedEntityData.defineId(PokeRodFishingBobberEntity.class, EntityDataSerializers.INT)
         private val CAUGHT_FISH =
-            SynchedEntityData.defineId(PokeRodFishingBobberEntity::class.java, EntityDataSerializers.BOOLEAN)
+            SynchedEntityData.defineId(PokeRodFishingBobberEntity.class, EntityDataSerializers.BOOLEAN)
         private val LOOT_TABLE_ID = ResourceKey.create(Registries.LOOT_TABLE, cobblemonResource("fishing/pokerod"))
     }
 }
+
+// Companion.TYPICAL_VARIATION

@@ -53,7 +53,7 @@ abstract class PosableEntityModel<T : Entity>(
         posableModel.setDefault()
     }
 
-    open fun getOverlayTexture(entity: Entity?): Int? {
+    open fun getOverlayTexture(Entity entity?): Int? {
         return if (entity is LivingEntity) {
             OverlayTexture.pack(
                 OverlayTexture.u(0F),
@@ -96,7 +96,7 @@ abstract class PosableEntityModel<T : Entity>(
         headPitch: Float
     ): Float = ageInTicks
 
-    open fun setupEntityTypeContext(entity: Entity?) {
+    open fun setupEntityTypeContext(Entity entity?) {
         entity?.let {
             context.put(RenderContext.ENTITY, entity)
             if (it is PosableEntity) {

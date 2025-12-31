@@ -49,8 +49,8 @@ import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import org.joml.Vector3f
 
-class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
-    companion object {
+public class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
+    final class Companion {
         val KEY = cobblemonResource("air/jet")
     }
 
@@ -440,7 +440,7 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
         settings: JetSettings,
         state: JetState,
         vehicle: PokemonEntity,
-        impactVec: Vec3
+        impactVec3 vec
     ): Boolean {
         val impactSpeed = impactVec.horizontalDistance().toFloat() * 10f
         return vehicle.causeFallDamage(impactSpeed, 1f, vehicle.damageSources().flyIntoWall())
@@ -458,7 +458,7 @@ class JetBehaviour : RidingBehaviour<JetSettings, JetState> {
     }
 }
 
-class JetSettings : RidingBehaviourSettings {
+public class JetSettings : RidingBehaviourSettings {
     override val key = JetBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -501,7 +501,7 @@ class JetSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(gravity)
@@ -517,7 +517,7 @@ class JetSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(maxDownwardForceSeconds)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         gravity = buffer.readNullableExpression()
@@ -534,7 +534,7 @@ class JetSettings : RidingBehaviourSettings {
     }
 }
 
-class JetState : RidingBehaviourState() {
+public class JetState : RidingBehaviourState() {
     var currSpeed = ridingState(0.0, Side.CLIENT)
     var currMouseXForce = ridingState(0.0, Side.CLIENT)
     var currMouseYForce = ridingState(0.0, Side.CLIENT)

@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.entity.ai.memory.WalkTarget
 
-final class MoveToItemTask {
+public final class MoveToItemTask {
     fun create(condition: Expression, maxDistance: Expression, speedMultiplier: Expression): OneShot<PokemonEntity> = BehaviorBuilder.create {
         it.group(
             it.absent(MemoryModuleType.WALK_TARGET),

@@ -123,7 +123,7 @@ map should represent the kind of variation that is being defined, and the values
 
 Variations can be defined in presets and flow through to the NPC class, but they can also be defined
 in the NPC class. If the same name is used in both a preset and an NPC class, that which is on the NPC
-class will override that from the preset. If the variation names are different, they will be merged together.
+public class will override that from the preset. If the variation names are different, they will be merged together.
 
 #### NPC Variation
 An NPC variation is some way in which aspects can be generated for the NPC. The types of variation can

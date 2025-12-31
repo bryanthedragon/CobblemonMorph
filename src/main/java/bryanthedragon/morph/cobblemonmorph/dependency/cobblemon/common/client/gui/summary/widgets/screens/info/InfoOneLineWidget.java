@@ -15,15 +15,15 @@ import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Component
 
-class InfoOneLineWidget(
+public class InfoOneLineWidget(
     pX: Int,
     pY: Int,
-    width: Int,
-    height: Int = ROW_HEIGHT,
+    Int width,
+    Int height = ROW_HEIGHT,
     private val label: MutableComponent,
     private val value: MutableComponent,
 ) : SoundlessWidget(pX, pY, width, height, Component.literal("InfoOneLineWidget")) {
-    companion object {
+    final class Companion {
         private val FONT = CobblemonResources.DEFAULT_LARGE
         private const val ROW_HEIGHT = 15
         private const val WITHIN_ROW_VERTICAL_OFFSET = 6

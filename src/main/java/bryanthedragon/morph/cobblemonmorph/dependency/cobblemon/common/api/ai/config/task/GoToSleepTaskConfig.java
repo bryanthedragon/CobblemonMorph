@@ -23,11 +23,11 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class GoToSleepTaskConfig : SingleTaskConfig {
+public class GoToSleepTaskConfig : SingleTaskConfig {
     var onlyFromStatus: ExpressionOrEntityVariable = Either.left("false".asExpression())
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = emptyList<MoLangConfigVariable>()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {
@@ -39,6 +39,6 @@ class GoToSleepTaskConfig : SingleTaskConfig {
             CobblemonMemories.POKEMON_SLEEPING
         )
         behaviourConfigurationContext.addSensors(CobblemonSensors.POKEMON_DROWSY)
-        return WrapperLivingEntityTask(GoToSleepTask.create(onlyFromStatus.resolveBoolean(behaviourConfigurationContext.runtime)), PokemonEntity::class.java)
+        return WrapperLivingEntityTask(GoToSleepTask.create(onlyFromStatus.resolveBoolean(behaviourConfigurationContext.runtime)), PokemonEntity.class)
     }
 }

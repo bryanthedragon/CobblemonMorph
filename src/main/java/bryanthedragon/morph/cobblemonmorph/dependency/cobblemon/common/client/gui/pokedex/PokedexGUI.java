@@ -68,12 +68,12 @@ import net.minecraft.sounds.SoundEvent
  * @author JPAK
  * @since February 24, 2024
  */
-class PokedexGUI private constructor(
+public class PokedexGUI private constructor(
     val type: PokedexType,
     val initSpecies: ResourceLocation?,
-    val blockPos: BlockPos?
+    val blockBlockPos pos?
 ): Screen(Component.translatable("cobblemon.ui.pokedex.title")), CobblemonRenderable {
-    companion object {
+    final class Companion {
         private val screenBackground = cobblemonResource("textures/gui/pokedex/pokedex_screen.png")
 
         private val globeIcon = cobblemonResource("textures/gui/pokedex/globe_icon.png")
@@ -94,7 +94,7 @@ class PokedexGUI private constructor(
         /**
          * Attempts to open this screen for a client.
          */
-        fun open(pokedex: ClientPokedexManager, type: PokedexType, species: ResourceLocation? = null, blockPos: BlockPos? = null) {
+        fun open(pokedex: ClientPokedexManager, type: PokedexType, species: ResourceLocation? = null, blockBlockPos pos? = null) {
             if(Dexes.dexEntryMap.isEmpty()){
                 Minecraft.getInstance().player?.sendSystemMessage(
                     Component.literal("§cError: No Pokedex regions available.")
@@ -474,7 +474,7 @@ class PokedexGUI private constructor(
         for (tab in tabButtons) addRenderableWidget(tab)
     }
 
-    fun displaytabInfoElement(tabIndex: Int, update: Boolean = true) {
+    fun displaytabInfoElement(tabInt index, update: Boolean = true) {
         val showActiveTab = selectedEntry?.let { selectedForm in CobblemonClient.clientPokedexData.getCaughtForms(it) } == true
         var statSubIndex = 0
 
@@ -600,7 +600,7 @@ class PokedexGUI private constructor(
         displaytabInfoElement(tabInfoIndex)
     }
 
-    fun canSelectTab(tabIndex: Int): Boolean {
+    fun canSelectTab(tabInt index): Boolean {
         val selectedForm = this.selectedForm ?: return false
         val selectedEntry = this.selectedEntry ?: return false
         val encounteredForm = selectedForm in CobblemonClient.clientPokedexData.getEncounteredForms(selectedEntry)
@@ -609,7 +609,7 @@ class PokedexGUI private constructor(
 
     override fun isPauseScreen(): Boolean = false
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         if (isInventoryKeyPressed(minecraft, keyCode, scanCode) && focused !is EditBox) {
             onClose()
             return true
@@ -618,7 +618,7 @@ class PokedexGUI private constructor(
         return super.keyPressed(keyCode, scanCode, modifiers)
     }
 
-    fun playSound(soundEvent: SoundEvent) {
+    fun playSound(SoundEvent soundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 }

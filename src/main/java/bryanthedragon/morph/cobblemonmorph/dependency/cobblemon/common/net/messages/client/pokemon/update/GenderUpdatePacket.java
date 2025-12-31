@@ -15,21 +15,21 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeEnumConstant
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class GenderUpdatePacket(pokemon: () -> Pokemon?, value: Gender): SingleUpdatePacket<Gender, GenderUpdatePacket>(pokemon, value) {
+public class GenderUpdatePacket(pokemon: () -> Pokemon?, value: Gender): SingleUpdatePacket<Gender, GenderUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeEnumConstant(this.value)
     }
 
-    override fun set(pokemon: Pokemon, value: Gender) {
+    override fun set(Pokemon pokemon, value: Gender) {
         pokemon.gender = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("gender_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): GenderUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): GenderUpdatePacket {
             val pokemon = decodePokemon(buffer)
-            val gender = buffer.readEnumConstant(Gender::class.java)
+            val gender = buffer.readEnumConstant(Gender.class)
             return GenderUpdatePacket(pokemon, gender)
         }
     }

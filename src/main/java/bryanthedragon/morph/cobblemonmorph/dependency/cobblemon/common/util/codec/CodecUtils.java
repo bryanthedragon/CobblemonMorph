@@ -15,12 +15,12 @@ import java.util.Optional
 import net.minecraft.resources.ResourceLocation
 
 //Codec.optionalFieldOf uses Java Optionals, which cant be passed into constructors using Kotlin optionals.
-fun <T> Codec<T>.kotlinOptionalFieldOf(name: String): MapCodec<T?> {
+fun <T> Codec<T>.kotlinOptionalFieldOf(String name): MapCodec<T?> {
     return Codec.optionalField<T>(name, this, false).xmap<T?>(
         { it.orElse(null) },
         { Optional.ofNullable(it) as Optional<T> }
     )
-}final class CodecUtils {
+}public final class CodecUtils {
 
     @JvmStatic
     fun <T> createByIdentifierCodec(from: (ResourceLocation) -> T?, to: (T) -> ResourceLocation, errorSupplier: (ResourceLocation) -> String): Codec<T> {

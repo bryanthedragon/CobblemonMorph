@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.po
 /**
  * Event fired when a thrown Pokeball hits a Pokémon. Cancelling this event prevents the capture being started.
  */
-class ThrownPokeballHitEvent(
+public class ThrownPokeballHitEvent(
     val pokeBall : EmptyPokeBallEntity,
     val pokemon : PokemonEntity
 ) : Cancelable() {

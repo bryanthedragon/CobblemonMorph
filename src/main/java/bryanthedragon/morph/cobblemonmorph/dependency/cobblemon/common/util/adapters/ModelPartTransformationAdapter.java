@@ -18,11 +18,11 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.lang.reflect.Type
 import net.minecraft.world.phys.Vec3
-final class ModelPartTransformationAdapter : JsonDeserializer<ModelPartTransformation> {
+public final class ModelPartTransformationAdapter : JsonDeserializer<ModelPartTransformation> {
     override fun deserialize(
-        json: JsonElement,
+        JsonElement json,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        JsonDeserializationContext context
     ): ModelPartTransformation? {
         json as JsonObject
         val model = JsonModelAdapter.model!!

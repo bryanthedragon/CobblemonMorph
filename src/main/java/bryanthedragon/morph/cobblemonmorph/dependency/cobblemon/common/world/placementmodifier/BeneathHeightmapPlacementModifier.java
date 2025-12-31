@@ -26,8 +26,8 @@ import java.util.stream.Stream
  * @author Hiroku
  * @since June 4th, 2023
  */
-class BeneathHeightmapPlacementModifier(val heightmap: Heightmap.Types, val offset: Int, val reach: Int?) : PlacementModifier() {
-    companion object {
+public class BeneathHeightmapPlacementModifier(val heightmap: Heightmap.Types, val offset: Int, val reach: Int?) : PlacementModifier() {
+    final class Companion {
         val MODIFIER_CODEC: MapCodec<BeneathHeightmapPlacementModifier> = RecordCodecBuilder.mapCodec { instance ->
             instance
                 .group(
@@ -47,7 +47,7 @@ class BeneathHeightmapPlacementModifier(val heightmap: Heightmap.Types, val offs
 
     override fun type() = CobblemonPlacementModifierTypes.BENEATH_HEIGHTMAP
 
-    override fun getPositions(context: PlacementContext, random: RandomSource, pos: BlockPos): Stream<BlockPos> {
+    override fun getPositions(context: PlacementContext, random: RandomSource, (BlockPos pos): Stream<BlockPos> {
         var z: Int
         val x = pos.x
         val topY = context.getHeight(heightmap, x, pos.z.also { z = it }) + offset

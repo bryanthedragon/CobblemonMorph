@@ -19,7 +19,7 @@ import net.minecraft.network.chat.MutableComponent
 /**
  * Italicizes the nature text and makes it include the name of the MintItem used to mint the Pokémon's nature
  */
-fun reformatNatureTextIfMinted(pokemon: Pokemon): MutableComponent {
+fun reformatNatureTextIfMinted(Pokemon pokemon): MutableComponent {
     var natureText = pokemon.nature.displayName.asTranslated()
     if (pokemon.mintedNature != null) {
         CobblemonItems.mints[pokemon.mintedNature!!.displayName]?.let { mint ->

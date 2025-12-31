@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.datafixe
 import com.mojang.datafixers.schemas.Schema
 import com.mojang.serialization.Dynamic
 
-class MovesetJsonFix(output: Schema) : PokemonFix(output) {
+public class MovesetJsonFix(output: Schema) : PokemonFix(output) {
     override fun fixPokemonData(dynamic: Dynamic<*>): Dynamic<*> {
         val moveSetJson = dynamic.get("MoveSet").asMapOpt().result()
         //Moveset is probably already a list,

@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.catching.calculators.Gen7CaptureCalculator
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.catching.calculators.Gen8CaptureCalculator
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.catching.calculators.Gen9CaptureCalculator
-final class CaptureCalculators {
+public final class CaptureCalculators {
 
     private val calculators = linkedMapOf<String, CaptureCalculator>()
 

@@ -20,8 +20,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.partymove.PartyMoveSelectCancelledPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.callback.partymove.PartyPokemonMoveSelectedPacket
 import net.minecraft.client.Minecraft
-final class OpenPartyMoveCallbackHandler : ClientNetworkPacketHandler<OpenPartyMoveCallbackPacket> {
-    override fun handle(packet: OpenPartyMoveCallbackPacket, client: Minecraft) {
+public final class OpenPartyMoveCallbackHandler : ClientNetworkPacketHandler<OpenPartyMoveCallbackPacket> {
+    override fun handle(packet: OpenPartyMoveCallbackPacket, Minecraft client) {
         val pokemonToMoves = packet.pokemonList.toMap()
         val cancel: (Any) -> Unit = {
             CobblemonNetwork.sendToServer(PartyMoveSelectCancelledPacket(uuid = packet.uuid))

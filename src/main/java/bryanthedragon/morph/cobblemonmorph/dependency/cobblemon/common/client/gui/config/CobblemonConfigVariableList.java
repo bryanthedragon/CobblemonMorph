@@ -37,7 +37,7 @@ import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.javaField
 
-class CobblemonConfigVariableList(
+public class CobblemonConfigVariableList(
     val parent: CobblemonConfigScreen,
 ) : ContainerObjectSelectionList<CobblemonConfigVariableListEntry>(
     Minecraft.getInstance(),
@@ -60,11 +60,11 @@ class CobblemonConfigVariableList(
     @Suppress("UNCHECKED_CAST")
     private fun addEntries() {
         parent.clonedConfig::class.memberProperties.map { property ->
-            if (!property.javaField!!.isAnnotationPresent(CobblemonConfigField::class.java)) {
+            if (!property.javaField!!.isAnnotationPresent(CobblemonConfigField.class)) {
                 return@map null
             }
 
-            val fieldAnnotation = property.javaField!!.getAnnotation(CobblemonConfigField::class.java)
+            val fieldAnnotation = property.javaField!!.getAnnotation(CobblemonConfigField.class)
             if (parent.hideServerConfigs && fieldAnnotation.side == SERVER) {
                 return@map null
             }
@@ -103,7 +103,7 @@ class CobblemonConfigVariableList(
         entries.forEach { entry -> entry.add() }
     }
 
-    override fun renderWidget(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+    override fun renderWidget(GuiGraphics guiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.renderWidget(guiGraphics, mouseX, mouseY, partialTick)
 
         val hoveredVariableTooltip = this.hovered?.tooltip
@@ -153,16 +153,16 @@ class CobblemonConfigVariableList(
 
     class CobblemonConfigCategory(
         parent: CobblemonConfigVariableList,
-        val category: Category,
+        val Category category,
         val configVariables: List<CobblemonConfigVariable>
     ) : CobblemonConfigVariableListEntry(parent) {
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             top: Int,
             left: Int,
-            width: Int,
-            height: Int,
+            Int width,
+            Int height,
             mouseX: Int,
             mouseY: Int,
             hovering: Boolean,

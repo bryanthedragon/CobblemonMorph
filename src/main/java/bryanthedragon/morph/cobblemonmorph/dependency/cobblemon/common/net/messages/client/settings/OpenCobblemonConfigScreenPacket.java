@@ -12,15 +12,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.N
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class OpenCobblemonConfigScreenPacket: NetworkPacket<OpenCobblemonConfigScreenPacket> {
+public class OpenCobblemonConfigScreenPacket: NetworkPacket<OpenCobblemonConfigScreenPacket> {
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("open_cobblemon_config_screen")
-        fun decode(buffer: RegistryFriendlyByteBuf) = OpenCobblemonConfigScreenPacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = OpenCobblemonConfigScreenPacket()
     }
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
     }
 }

@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 import com.bedrockk.molang.runtime.value.DoubleValue
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
 
-class BlockBehavior {
+public class BlockBehavior {
     private val immuneToSweetBerryBushBlock = false
     private val canStandOnPowderSnow = false
     val canPathThroughSaccLeaves = false

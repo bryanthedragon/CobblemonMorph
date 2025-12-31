@@ -23,7 +23,7 @@ import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.commands.arguments.selector.EntitySelector
 import net.minecraft.server.level.ServerPlayer
-final class ChangePCBoxesCommand {
+public final class ChangePCBoxesCommand {
     private const val NAME = "boxcount"
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(literal(NAME)
@@ -47,7 +47,7 @@ final class ChangePCBoxesCommand {
     }
 
     private fun executeQuery(context: CommandContext<CommandSourceStack>): Int {
-        val player = context.getArgument("player", EntitySelector::class.java).findSinglePlayer(context.source)
+        val player = context.getArgument("player", EntitySelector.class).findSinglePlayer(context.source)
         val playerPc = player.pc()
         context.source.sendSystemMessage(lang("command.boxcount", player.name, playerPc.boxes.size))
 
@@ -55,9 +55,9 @@ final class ChangePCBoxesCommand {
     }
 
     private fun executeAdd(context: CommandContext<CommandSourceStack>): Int {
-        val player = context.getArgument("player", EntitySelector::class.java).findSinglePlayer(context.source)
+        val player = context.getArgument("player", EntitySelector.class).findSinglePlayer(context.source)
         val playerPc = player.pc()
-        val amount = context.getArgument("amount", Int::class.java)
+        val amount = context.getArgument("amount", Int.class)
 
         playerPc.resize(playerPc.boxes.size + amount, true)
         playerPc.sendTo(player)
@@ -67,9 +67,9 @@ final class ChangePCBoxesCommand {
     }
 
     private fun executeRemove(context: CommandContext<CommandSourceStack>): Int {
-        val player = context.getArgument("player", EntitySelector::class.java).findSinglePlayer(context.source)
+        val player = context.getArgument("player", EntitySelector.class).findSinglePlayer(context.source)
         val playerPc = player.pc()
-        val amount = context.getArgument("amount", Int::class.java)
+        val amount = context.getArgument("amount", Int.class)
 
         if (amount < playerPc.boxes.size) {
             val emptyBoxes = playerPc.boxes.filter { it.getNonEmptySlots().isEmpty() }
@@ -92,9 +92,9 @@ final class ChangePCBoxesCommand {
     }
 
     private fun executeSet(context: CommandContext<CommandSourceStack>): Int {
-        val player = context.getArgument("player", EntitySelector::class.java).findSinglePlayer(context.source)
+        val player = context.getArgument("player", EntitySelector.class).findSinglePlayer(context.source)
         val playerPc = player.pc()
-        val amount = context.getArgument("amount", Int::class.java)
+        val amount = context.getArgument("amount", Int.class)
 
         if (amount < playerPc.boxes.size) {
             val emptyBoxes = playerPc.boxes.filter { it.getNonEmptySlots().isEmpty() }
@@ -116,13 +116,13 @@ final class ChangePCBoxesCommand {
         return Command.SINGLE_SUCCESS
     }
 
-    private fun set(context: CommandContext<CommandSourceStack>,player: ServerPlayer, playerPc: PCStore, amount: Int){
+    private fun set(context: CommandContext<CommandSourceStack>,ServerPlayer player, playerPc: PCStore, amount: Int){
         playerPc.resize(amount, true)
         playerPc.sendTo(player)
         context.source.sendSystemMessage(lang("command.changeboxcount", player.name, playerPc.boxes.size).green())
     }
 
-    private fun remove(context: CommandContext<CommandSourceStack>,player: ServerPlayer, playerPc: PCStore, amount: Int,emptyBoxes: List<PCBox>){
+    private fun remove(context: CommandContext<CommandSourceStack>,ServerPlayer player, playerPc: PCStore, amount: Int,emptyBoxes: List<PCBox>){
         if (amount <= emptyBoxes.size) {
             playerPc.removeListOfBoxes(emptyBoxes.takeLast(amount),true)
         }

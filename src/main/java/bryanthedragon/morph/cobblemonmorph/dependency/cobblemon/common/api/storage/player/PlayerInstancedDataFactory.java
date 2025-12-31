@@ -19,7 +19,7 @@ import java.util.UUID
  * @author Apion
  * @since February 21, 2024
  */
-interface PlayerInstancedDataFactory<T : InstancedPlayerData> {
+public interface PlayerInstancedDataFactory<T : InstancedPlayerData> {
     fun setup(server: MinecraftServer)
 
     fun getForPlayer(player: Player): T {
@@ -36,7 +36,7 @@ interface PlayerInstancedDataFactory<T : InstancedPlayerData> {
 
     fun saveSingle(playerId: UUID)
 
-    fun onPlayerDisconnect(player: ServerPlayer)
+    fun onPlayerDisconnect(ServerPlayer player)
 
-    fun sendToPlayer(player: ServerPlayer)
+    fun sendToPlayer(ServerPlayer player)
 }

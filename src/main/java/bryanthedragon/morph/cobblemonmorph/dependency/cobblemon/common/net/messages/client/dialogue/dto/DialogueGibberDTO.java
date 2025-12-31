@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class DialogueGibberDTO(
+public class DialogueGibberDTO(
     val graduallyShowText: Boolean,
     val allowSkip: Boolean,
     val step: Int,
@@ -37,7 +37,7 @@ class DialogueGibberDTO(
         sounds = gibber.sounds
     )
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(graduallyShowText)
         buffer.writeBoolean(allowSkip)
         buffer.writeInt(step)
@@ -49,8 +49,8 @@ class DialogueGibberDTO(
         buffer.writeCollection(sounds) { _, value -> buffer.writeIdentifier(value) }
     }
 
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf): DialogueGibberDTO {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer): DialogueGibberDTO {
             val graduallyShowText = buffer.readBoolean()
             val allowSkip = buffer.readBoolean()
             val step = buffer.readInt()

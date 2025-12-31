@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class VoltorbHisuianModel (root: ModelPart) : PokemonPosableModel(root) {
+public class VoltorbHisuianModel (root: ModelPart) : PokemonPosableModel(root) {
     override val rootPart = root.registerChildWithAllChildren("voltorb_hisuian")
 
     override var portraitScale = 2.0F

@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.SingleActionRequest
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleQueueRequestPacket
 import net.minecraft.client.Minecraft
-final class BattleQueueRequestHandler : ClientNetworkPacketHandler<BattleQueueRequestPacket> {
-    override fun handle(packet: BattleQueueRequestPacket, client: Minecraft) {
+public final class BattleQueueRequestHandler : ClientNetworkPacketHandler<BattleQueueRequestPacket> {
+    override fun handle(packet: BattleQueueRequestPacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val actor = battle.side1.actors.find { it.uuid == Minecraft.getInstance().player?.uuid } ?: return
         CobblemonClient.battle?.pendingActionRequests = SingleActionRequest.composeFrom(actor, packet.request)

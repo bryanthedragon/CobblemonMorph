@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class MarowakModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
+public class MarowakModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("marowak")
     override val head = getPart("head")
 

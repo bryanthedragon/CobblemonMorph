@@ -18,7 +18,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.entity.DecoratedPotPattern
 
-@Suppress("Unused")final class CobblemonSherds {
+@Suppress("Unused")public final class CobblemonSherds {
     val allSherds = mutableListOf<CobblemonSherd>()
     val sherdToPattern = mutableMapOf<Item, ResourceKey<DecoratedPotPattern>>()
 
@@ -40,7 +40,7 @@ import net.minecraft.world.level.block.entity.DecoratedPotPattern
     @JvmField
     val SUSPICIOUS_SHERD = addSherd(cobblemonResource("suspicious_pottery_pattern"), CobblemonItems.SUSPICIOUS_SHERD)
 
-    fun addSherd(patternId: ResourceLocation, item: Item): CobblemonSherd {
+    fun addSherd(patternResourceLocation id, item: Item): CobblemonSherd {
         val sherd = CobblemonSherd(patternId, item)
         val resourceKey = ResourceKey.create(Registries.DECORATED_POT_PATTERN, patternId)
         sherdToPattern[item] = resourceKey

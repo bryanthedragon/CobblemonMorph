@@ -19,14 +19,14 @@ internal class PropertiesCompletionRegistrySyncPacket(suggestions: Collection<Pr
     override val id = ID
 
     override fun encodeEntry(
-        buffer: RegistryFriendlyByteBuf,
+        RegistryFriendlyByteBuf buffer,
         entry: PropertiesCompletionProvider.SuggestionHolder
     ) {
         buffer.writeCollection(entry.keys) { pb, value -> pb.writeString(value) }
         buffer.writeCollection(entry.suggestions) { pb, value -> pb.writeString(value) }
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): PropertiesCompletionProvider.SuggestionHolder? {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): PropertiesCompletionProvider.SuggestionHolder? {
         val keys = buffer.readList { pb -> pb.readString() }
         val suggestions = buffer.readList { pb -> pb.readString() }
         return PropertiesCompletionProvider.SuggestionHolder(keys, suggestions)
@@ -38,9 +38,9 @@ internal class PropertiesCompletionRegistrySyncPacket(suggestions: Collection<Pr
         }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("properties_completion_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf): PropertiesCompletionRegistrySyncPacket = PropertiesCompletionRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer): PropertiesCompletionRegistrySyncPacket = PropertiesCompletionRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 
 }

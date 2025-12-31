@@ -21,7 +21,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.crafting.Ingredient
 
-class BerryRecipeCategory(private val registration: IRecipeCategoryRegistration) : IRecipeCategory<BerryMutationRecipe> {
+public class BerryRecipeCategory(private val registration: IRecipeCategoryRegistration) : IRecipeCategory<BerryMutationRecipe> {
     private var background: IDrawable
     private var icon: IDrawable
     init {
@@ -52,8 +52,8 @@ class BerryRecipeCategory(private val registration: IRecipeCategoryRegistration)
         p0.addSlot(RecipeIngredientRole.OUTPUT, 108, 1).addIngredients(Ingredient.of(p1.berryResult.defaultInstance))
     }
 
-    companion object {
-        val RECIPE_TYPE = RecipeType.create("cobblemon", "berry_recipe", BerryMutationRecipe::class.java)!!
+    final class Companion {
+        val RECIPE_TYPE = RecipeType.create("cobblemon", "berry_recipe", BerryMutationRecipe.class)!!
         val GUI_TEXTURE_ID = cobblemonResource("textures/gui/jei/berry_mutation.png")
         const val WIDTH = 124
         const val HEIGHT = 17

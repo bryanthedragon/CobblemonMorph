@@ -28,13 +28,13 @@ import net.minecraft.world.item.ItemStack
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
+public class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.PROFILE)
         it.put(RenderContext.DO_QUIRKS, false)
     }
 
-    override fun render(stack: ItemStack, mode: ItemDisplayContext, matrices: PoseStack, vertexConsumers: MultiBufferSource, light: Int, overlay: Int) {
+    override fun render(ItemStack stack, mode: ItemDisplayContext, matrices: PoseStack, vertexConsumers: MultiBufferSource, light: Int, overlay: Int) {
         val pokemonItem = stack.item as? PokemonItem ?: return
         val (species, aspects) = pokemonItem.getSpeciesAndAspects(stack) ?: return
         val state = FloatingState()
@@ -104,7 +104,7 @@ class PokemonItemRenderer : CobblemonBuiltinItemRenderer {
         }
     }
 
-    companion object {
+    final class Companion {
         val positions: MutableMap<ItemDisplayContext, Transformations> = mutableMapOf()
 
         init {

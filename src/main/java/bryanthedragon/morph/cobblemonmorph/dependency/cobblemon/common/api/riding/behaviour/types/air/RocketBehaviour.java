@@ -35,8 +35,8 @@ import net.minecraft.world.phys.Vec3
 import org.joml.Matrix3f
 import kotlin.math.*
 
-class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
-    companion object {
+public class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
+    final class Companion {
         val KEY = cobblemonResource("air/rocket")
     }
 
@@ -464,7 +464,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
         settings: RocketSettings,
         state: RocketState,
         vehicle: PokemonEntity,
-        impactVec: Vec3
+        impactVec3 vec
     ): Boolean {
         if (!state.boosting.get()) return false
         val impactSpeed = impactVec.horizontalDistance().toFloat() * 10f
@@ -493,7 +493,7 @@ class RocketBehaviour : RidingBehaviour<RocketSettings, RocketState> {
     }
 }
 
-class RocketSettings : RidingBehaviourSettings {
+public class RocketSettings : RidingBehaviourSettings {
     override val key = RocketBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -531,7 +531,7 @@ class RocketSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(infiniteStamina)
@@ -545,7 +545,7 @@ class RocketSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(handlingExpr)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         infiniteStamina = buffer.readNullableExpression()
@@ -560,7 +560,7 @@ class RocketSettings : RidingBehaviourSettings {
     }
 }
 
-class RocketState : RidingBehaviourState() {
+public class RocketState : RidingBehaviourState() {
     var boosting = ridingState(false, Side.BOTH)
     var boostIsToggleable = ridingState(false, Side.BOTH)
     var canSpeedBurst = ridingState(false, Side.BOTH)

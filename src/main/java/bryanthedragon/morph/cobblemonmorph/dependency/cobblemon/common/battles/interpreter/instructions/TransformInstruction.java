@@ -25,7 +25,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author jeffw773
  * @since November 28th, 2023
  */
-class TransformInstruction(val battle: PokemonBattle, val message: BattleMessage): InterpreterInstruction {
+public class TransformInstruction(val battle: PokemonBattle, val message: BattleMessage): InterpreterInstruction {
 
     val expectedTarget = message.battlePokemon(0, battle)
 

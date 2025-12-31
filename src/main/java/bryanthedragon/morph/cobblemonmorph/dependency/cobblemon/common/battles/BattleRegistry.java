@@ -21,11 +21,11 @@ import com.google.gson.GsonBuilder
 import net.minecraft.server.level.ServerPlayer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-final class BattleRegistry {
+public final class BattleRegistry {
 
     val gson = GsonBuilder()
         .disableHtmlEscaping()
-        .registerTypeAdapter(ShowdownMoveset::class.java, ShowdownMovesetAdapter)
+        .registerTypeAdapter(ShowdownMoveset.class, ShowdownMovesetAdapter)
         .create()
     private val battleMap = ConcurrentHashMap<UUID, PokemonBattle>()
 
@@ -33,7 +33,7 @@ final class BattleRegistry {
         battleMap.clear()
     }
 
-    fun onPlayerDisconnect(player: ServerPlayer) {
+    fun onPlayerDisconnect(ServerPlayer player) {
         // Stop battles
         getBattleByParticipatingPlayer(player)?.stop()
     }

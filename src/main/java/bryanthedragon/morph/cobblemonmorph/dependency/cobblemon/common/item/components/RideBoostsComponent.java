@@ -23,10 +23,10 @@ import net.minecraft.network.codec.StreamCodec
  * @author Hiroku
  * @since November 7th, 2025
  */
-class RideBoostsComponent(
+public class RideBoostsComponent(
     val boosts: Map<RidingStat, Int>
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<RideBoostsComponent> = RecordCodecBuilder.create { builder ->
             builder.group(
                 Codec.unboundedMap(Codec.STRING, Codec.INT).fieldOf("boosts").forGetter { it.boosts.mapKeys { it.key.name } }

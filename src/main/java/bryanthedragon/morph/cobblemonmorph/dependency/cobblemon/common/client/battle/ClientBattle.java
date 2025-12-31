@@ -20,8 +20,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
 import java.util.UUID
 
-class ClientBattle(
-    val battleId: UUID,
+public class ClientBattle(
+    val UUID battleId,
     val battleFormat: BattleFormat
 ) {
     var minimised = true
@@ -89,7 +89,7 @@ class ClientBattle(
         return actor to pokemon
     }
 
-    fun getParticipatingActor(uuid: UUID): ClientBattleActor? {
+    fun getParticipatingActor(UUID uuid): ClientBattleActor? {
         return sides.flatMap { it.actors }.find { it.uuid == uuid }
     }
 

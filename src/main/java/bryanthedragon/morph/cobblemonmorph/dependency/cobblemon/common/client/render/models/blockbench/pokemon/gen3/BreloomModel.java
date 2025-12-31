@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class BreloomModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
+public class BreloomModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("breloom")
     override val head = getPart("head")
 

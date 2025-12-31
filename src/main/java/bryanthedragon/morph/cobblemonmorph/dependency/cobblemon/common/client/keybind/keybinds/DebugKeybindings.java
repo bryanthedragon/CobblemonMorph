@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
-final class DebugKeybindings {
+public final class DebugKeybindings {
     val keybindings = listOf(
         ScaleUpKeybinding(),
         ScaleDownKeybinding(),

@@ -25,7 +25,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
-final class BehaviourEditCommand {
+public final class BehaviourEditCommand {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(
             Commands.literal("behaviouredit")
@@ -33,8 +33,8 @@ final class BehaviourEditCommand {
                 .executes { execute(it, it.source.playerOrException) })
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
-        val targetEntity = player.traceFirstEntityCollision(entityClass = LivingEntity::class.java, ignoreEntity = player)?.takeIf { it is MoLangScriptingEntity }
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player) : Int {
+        val targetEntity = player.traceFirstEntityCollision(entityClass = LivingEntity.class, ignoreEntity = player)?.takeIf { it is MoLangScriptingEntity }
         if (targetEntity == null) {
             player.sendSystemMessage(commandLang("behaviouredit.non_scriptable").red())
             return 0

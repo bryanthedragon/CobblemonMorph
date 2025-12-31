@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.predicate.BlockStatePredicate
  * @author Hiroku
  * @since April 6th, 2024
  */
-class EatGrassTask(
+public class EatGrassTask(
     val eatingChance: Float,
     val cooldownTicks: Long
 ) : Behavior<PokemonEntity>(
@@ -40,7 +40,7 @@ class EatGrassTask(
     val grassPredicate = BlockStatePredicate.forBlock(Blocks.GRASS_BLOCK)
     var timer = -1
 
-    override fun checkExtraStartConditions(world: ServerLevel, entity: PokemonEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel world, entity: PokemonEntity): Boolean {
         if (world.random.nextFloat() > eatingChance) {
             return false
         } else {
@@ -57,14 +57,14 @@ class EatGrassTask(
         }
     }
 
-    override fun start(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun start(ServerLevel world, entity: PokemonEntity, time: Long) {
         timer = 40
         entity.brain.setMemoryWithExpiry(CobblemonMemories.PATH_COOLDOWN, true, 40L)
         entity.playAnimation("eat")
         world.broadcastEntityEvent(entity, 10.toByte())
     }
 
-    override fun canStillUse(world: ServerLevel, entity: PokemonEntity, time: Long): Boolean {
+    override fun canStillUse(ServerLevel world, entity: PokemonEntity, time: Long): Boolean {
         timer--
         if (timer < 0) {
             val blockPos = entity.blockPosition()

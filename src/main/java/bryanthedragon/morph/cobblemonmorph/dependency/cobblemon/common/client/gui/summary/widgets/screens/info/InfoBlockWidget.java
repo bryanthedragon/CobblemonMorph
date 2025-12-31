@@ -16,11 +16,11 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class InfoBlockWidget(
+public class InfoBlockWidget(
     pX: Int,
     pY: Int,
-    blockWidth: Int,
-    blockHeight: Int,
+    blockInt width,
+    blockInt height,
     private val text: MutableComponent,
     private val withinRowVerticalTextOffset: Int,
     private val font: ResourceLocation,

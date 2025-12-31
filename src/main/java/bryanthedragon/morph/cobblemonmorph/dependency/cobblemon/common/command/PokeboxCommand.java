@@ -35,7 +35,8 @@ import net.minecraft.server.level.ServerPlayer
  *
  * `/pokeboxall <player> [box]` Sends all party pokemon to the PC, allowing for a specific box to be selected.
  *  If a box is selected and would not beable to house all of the party Pokemon, no action will take place.
- */final class PokeboxCommand {
+ */
+public final class PokeboxCommand {
     private val BOX_DOES_NOT_EXIST = { boxNo: Int -> commandLang("pokebox.box_does_not_exist", boxNo) }
     private val BOX_IS_FULL_EXCEPTION = { boxNo: Int -> commandLang("pokebox.box_is_full", boxNo) }
     private val STORAGE_IS_FULL_EXCEPTION = commandLang("pokebox.storage_is_full")
@@ -78,7 +79,7 @@ import net.minecraft.server.level.ServerPlayer
 
     private fun execute(
         context: CommandContext<CommandSourceStack>,
-        player: ServerPlayer,
+        ServerPlayer player,
         pokemons: Collection<Pokemon>,
         box: Int? = null,
     ): Int {

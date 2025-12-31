@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.datafixe
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import com.mojang.datafixers.DSL.TypeReference
 import net.minecraft.util.datafix.fixes.References
-final class CobblemonTypeReferences {
+public final class CobblemonTypeReferences {
 
     // If we ever want to use vanilla types we can simply add them here too
     private val types = hashSetOf<TypeReference>(
@@ -23,7 +23,7 @@ final class CobblemonTypeReferences {
 
     fun types(): Set<TypeReference> = this.types
 
-    private fun create(name: String): TypeReference {
+    private fun create(String name): TypeReference {
         val identifier = cobblemonResource(name)
         val reference = References.reference(identifier.toString())
         this.types += reference

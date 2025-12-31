@@ -21,11 +21,11 @@ import net.minecraft.resources.ResourceLocation
  * @author Waterpicker
  * @since 1.4.0
  */
-class RenderContext {
+public class RenderContext {
     // A map to store data values associated with keys
     private val context: MutableMap<Key<*>, Any?> = mutableMapOf()
 
-    var entity: Entity?
+    var Entity entity?
         get() = this.request(ENTITY)
         set(value) {
             if (value == null) {
@@ -114,7 +114,7 @@ class RenderContext {
     }
 
     // Predefined keys for common data types
-    companion object {
+    final class Companion {
         /**
          * Key to access the currently rendered entity.
          */
@@ -164,7 +164,7 @@ class RenderContext {
          *
          * @since 1.4.0
          */
-        fun <T : Any> key(id: ResourceLocation, token: TypeToken<T>): Key<T> = Key(id, token)
+        fun <T : Any> key(ResourceLocation id, token: TypeToken<T>): Key<T> = Key(id, token)
 
         /**
          * Creates a new Key instance with the provided identifier and class type.
@@ -175,7 +175,7 @@ class RenderContext {
          *
          * @since 1.4.0
          */
-        inline fun <reified T : Any> key(id: ResourceLocation): Key<T> = key(id, TypeToken.get(T::class.java))
+        inline fun <reified T : Any> key(ResourceLocation id): Key<T> = key(id, TypeToken.get(T.class))
     }
 }
 

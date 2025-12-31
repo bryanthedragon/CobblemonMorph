@@ -21,7 +21,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.phys.Vec3
 import java.util.concurrent.CompletableFuture
 
-class ReturnToPositionActionEffectKeyframe : ActionEffectKeyframe {
+public class ReturnToPositionActionEffectKeyframe : ActionEffectKeyframe {
     val speed = 1F
     val timeout = "4".asExpressionLike()
     val timeoutActionEffect: ResourceLocation? = null

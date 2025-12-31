@@ -20,14 +20,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @author Hiroku
  * @since July 1st, 2022
  */
-class FlagProperty(val key: String, val remove: Boolean = false) : CustomPokemonProperty {
+public class FlagProperty(val String Key, val remove: Boolean = false) : CustomPokemonProperty {
     override fun asString() = key
-    override fun apply(pokemon: Pokemon) {
+    override fun apply(Pokemon pokemon) {
         if (remove) {
             pokemon.customProperties.removeIf { it is FlagProperty && it.key == key }
         } else {
             pokemon.customProperties.add(this)
         }
     }
-    override fun matches(pokemon: Pokemon) = pokemon.customProperties.any { it is FlagProperty && it.key == key }
+    override fun matches(Pokemon pokemon) = pokemon.customProperties.any { it is FlagProperty && it.key == key }
 }

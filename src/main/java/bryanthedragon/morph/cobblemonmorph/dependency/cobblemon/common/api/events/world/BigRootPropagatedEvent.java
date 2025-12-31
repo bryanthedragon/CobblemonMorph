@@ -6,14 +6,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.world
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.world;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.BigRootBlock
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.EnergyRootBlock
-import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.level.block.state.BlockState
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.BigRootBlock;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.EnergyRootBlock;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Event fired when a [BigRootBlock] attempts to spread. The event includes the original root position
@@ -25,9 +26,4 @@ import net.minecraft.world.level.block.state.BlockState
  * @since June 17th, 2023
  * @author Hiroku
  */
-class BigRootPropagatedEvent(
-    val world: ServerLevel,
-    val pos: BlockPos,
-    var newRootPosition: BlockPos,
-    var resultingSpread: BlockState
-) : Cancelable()
+public record BigRootPropagatedEvent(ServerLevel world, BlockPos pos, BlockPos newRootPosition, BlockState resultingSpread) : Cancelable()

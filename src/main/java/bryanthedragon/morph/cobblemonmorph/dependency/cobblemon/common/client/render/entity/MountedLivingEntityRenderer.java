@@ -19,10 +19,10 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.phys.Vec3
 import org.joml.AxisAngle4f
 import org.joml.Vector3f
-final class MountedLivingEntityRenderer {
+public final class MountedLivingEntityRenderer {
     fun render(
-        entity: LivingEntity,
-        pokemon: PokemonEntity,
+        LivingEntity entity,
+        Pokemon pokemonEntity,
         stack: PoseStack,
         bob: Float,
         yBodyRot: Float,

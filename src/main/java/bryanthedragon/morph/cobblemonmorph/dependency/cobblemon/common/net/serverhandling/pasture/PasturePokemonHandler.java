@@ -18,8 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class PasturePokemonHandler : ServerNetworkPacketHandler<PasturePokemonPacket> {
-    override fun handle(packet: PasturePokemonPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class PasturePokemonHandler : ServerNetworkPacketHandler<PasturePokemonPacket> {
+    override fun handle(packet: PasturePokemonPacket, server: MinecraftServer, ServerPlayer player) {
         val pastureLink = PastureLinkManager.getLinkByPlayer(player) ?: return
         if (pastureLink.linkId != packet.pastureId) {
             return player.sendPacket(ClosePasturePacket())

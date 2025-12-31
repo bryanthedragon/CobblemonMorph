@@ -12,15 +12,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-class StatCompareRequirement : Requirement {
-    companion object {
+public class StatCompareRequirement : Requirement {
+    final class Companion {
         const val ADAPTER_VARIANT = "stat_compare"
     }
 
     val highStat = Stats.ATTACK.name
     val lowStat = Stats.DEFENCE.name
 
-    override fun check(pokemon: Pokemon): Boolean {
+    override fun check(Pokemon pokemon): Boolean {
         return pokemon.getStat(Stats.getStat(highStat)) > pokemon.getStat(Stats.getStat(lowStat))
     }
 }

@@ -17,15 +17,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Prior
  * @author Hiroku
  * @since November 26th, 2021
  */
-open class SimpleObservable<T> : Observable<T> {
+public open class SimpleObservable<T> : Observable<T> {
     protected val subscriptions = PrioritizedList<ObservableSubscription<T>>()
-    override fun subscribe(priority: Priority, handler: (T) -> Unit): ObservableSubscription<T> {
+    override fun subscribe(Priority priority, handler: (T) -> Unit): ObservableSubscription<T> {
         val subscription = ObservableSubscription(this, handler)
         subscriptions.add(priority, subscription)
         return subscription
     }
 
-    override fun unsubscribe(subscription: ObservableSubscription<T>) {
+    override fun unsubscribe(ObservableSubscription<T> subscription) {
         subscriptions.remove(subscription)
     }
 

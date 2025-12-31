@@ -33,13 +33,13 @@ abstract class ArbitrarilyMappedSerializableCompanion<T : CodecMapped, K>(
         subtypes[key] = RegisteredSubtype(clazz, codec)
     }
 
-    fun writeToBuffer(buffer: RegistryFriendlyByteBuf, value: T) {
+    fun writeToBuffer(RegistryFriendlyByteBuf buffer, value: T) {
         val typeString = stringFromKey(keyFromValue(value))
         buffer.writeString(typeString)
         value.writeToBuffer(buffer)
     }
 
-    fun readFromBuffer(buffer: RegistryFriendlyByteBuf): T {
+    fun readFromBuffer(RegistryFriendlyByteBuf buffer): T {
         val typeString = buffer.readString()
         val clazz = subtypes[keyFromString(typeString)]?.clazz ?: throw IllegalArgumentException("Unrecognized subtype: $typeString")
         val value = clazz.getDeclaredConstructor().newInstance()
@@ -48,4 +48,4 @@ abstract class ArbitrarilyMappedSerializableCompanion<T : CodecMapped, K>(
     }
 }
 
-class RegisteredSubtype<T>(val clazz: Class<out T>, val codec: Codec<out T>)
+public class RegisteredSubtype<T>(val clazz: Class<out T>, val codec: Codec<out T>)

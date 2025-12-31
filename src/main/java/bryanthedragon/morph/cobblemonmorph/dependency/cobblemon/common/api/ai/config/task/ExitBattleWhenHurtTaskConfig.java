@@ -24,17 +24,17 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 
-class ExitBattleWhenHurtTaskConfig : SingleTaskConfig {
+public class ExitBattleWhenHurtTaskConfig : SingleTaskConfig {
     var condition = booleanVariable(SharedEntityVariables.BATTLING_CATEGORY, "exit_battle_when_hurt", true).asExpressible()
     var includePassiveDamage = booleanVariable(SharedEntityVariables.BATTLING_CATEGORY, "exit_battle_from_passive_damage", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         includePassiveDamage
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return null

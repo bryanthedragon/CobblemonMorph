@@ -21,7 +21,7 @@ open class AbilityTypeChanger<T : PotentialAbility>(
     private val supportsChangingFrom: (other: PotentialAbilityType<*>?) -> Boolean
 ) : AbilityChanger<T> {
 
-    override fun queryPossible(pokemon: Pokemon): Set<Pair<AbilityTemplate, Priority>> {
+    override fun queryPossible(Pokemon pokemon): Set<Pair<AbilityTemplate, Priority>> {
         val currentType = this.findCurrent(pokemon)
         val targetType = if (currentType == HiddenAbilityType) CommonAbilityType else this.type
 
@@ -31,7 +31,7 @@ open class AbilityTypeChanger<T : PotentialAbility>(
             .toSet()
     }
 
-    override fun performChange(pokemon: Pokemon): Boolean {
+    override fun performChange(Pokemon pokemon): Boolean {
         val currentType = this.findCurrent(pokemon)
         if (!this.canChangeFrom(currentType)) {
             return false
@@ -45,7 +45,7 @@ open class AbilityTypeChanger<T : PotentialAbility>(
 
     override fun canChangeFrom(type: PotentialAbilityType<*>?): Boolean = this.supportsChangingFrom(type)
 
-    private fun findCurrent(pokemon: Pokemon): PotentialAbilityType<*>? {
+    private fun findCurrent(Pokemon pokemon): PotentialAbilityType<*>? {
         if (pokemon.ability.forced) {
             return null
         }

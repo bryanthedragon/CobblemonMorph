@@ -67,7 +67,8 @@ import net.minecraft.world.phys.Vec3
  *
  * @author Hiroku
  * @since February 28th, 2023
- */final class VaryingModelRepository {
+ */
+public final class VaryingModelRepository {
     val posers = mutableMapOf<ResourceLocation, (Bone) -> PosableModel>()
     val variations = mutableMapOf<ResourceLocation, VaryingRenderableResolver>()
     val texturedModels = mutableMapOf<ResourceLocation, Bone>()
@@ -82,13 +83,13 @@ import net.minecraft.world.phys.Vec3
     )
 
     val poserDirectories: List<Pair<String, Class<out PosableModel>>> = listOf(
-        "bedrock/posers" to PosableModel::class.java,
-        "bedrock/pokemon/posers" to PokemonPosableModel::class.java,
-        "bedrock/fossils/posers" to FossilModel::class.java,
-        "bedrock/block_entities/posers" to BlockEntityModel::class.java,
-        "bedrock/npcs/posers" to PosableModel::class.java,
-        "bedrock/poke_balls/posers" to PosableModel::class.java,
-        "bedrock/generic/posers" to PosableModel::class.java,
+        "bedrock/posers" to PosableModel.class,
+        "bedrock/pokemon/posers" to PokemonPosableModel.class,
+        "bedrock/fossils/posers" to FossilModel.class,
+        "bedrock/block_entities/posers" to BlockEntityModel.class,
+        "bedrock/npcs/posers" to PosableModel.class,
+        "bedrock/poke_balls/posers" to PosableModel.class,
+        "bedrock/generic/posers" to PosableModel.class,
     )
 
     val variationDirectories: List<String> = listOf(
@@ -106,19 +107,19 @@ import net.minecraft.world.phys.Vec3
 
     val fallback: ResourceLocation = cobblemonResource("substitute")
 
-    val gson: Gson by lazy {
+    val Gson gson by lazy {
         GsonBuilder()
             .setPrettyPrinting()
             .disableHtmlEscaping()
-            .registerTypeAdapter(Vec3::class.java, Vec3dAdapter)
-            .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-            .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
-            .registerTypeAdapter(PosableModel::class.java, JsonModelAdapter(::PosableModel))
-            .registerTypeAdapter(PokemonPosableModel::class.java, JsonModelAdapter(::PokemonPosableModel))
-            .registerTypeAdapter(FossilModel::class.java, JsonModelAdapter(::FossilModel))
-            .registerTypeAdapter(BlockEntityModel::class.java, JsonModelAdapter(::BlockEntityModel))
-            .registerTypeAdapter(Pose::class.java, PoseAdapter { JsonModelAdapter.model!! })
-            .registerTypeAdapter(ModelPartTransformation::class.java, ModelPartTransformationAdapter)
+            .registerTypeAdapter(Vec3.class, Vec3dAdapter)
+            .registerTypeAdapter(Expression.class, ExpressionAdapter)
+            .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
+            .registerTypeAdapter(PosableModel.class, JsonModelAdapter(::PosableModel))
+            .registerTypeAdapter(PokemonPosableModel.class, JsonModelAdapter(::PokemonPosableModel))
+            .registerTypeAdapter(FossilModel.class, JsonModelAdapter(::FossilModel))
+            .registerTypeAdapter(BlockEntityModel.class, JsonModelAdapter(::BlockEntityModel))
+            .registerTypeAdapter(Pose.class, PoseAdapter { JsonModelAdapter.model!! })
+            .registerTypeAdapter(ModelPartTransformation.class, ModelPartTransformationAdapter)
             .addDeserializationExclusionStrategy(MixinCompatibilityExclusionStrategy)
             .create()
     }
@@ -129,7 +130,7 @@ import net.minecraft.world.phys.Vec3
     object MixinCompatibilityExclusionStrategy : ExclusionStrategy {
         private var known3rdPartyMixins = listOf("embeddium")
 
-        private var knownUnusedClasses = listOf(Optional::class.java)
+        private var knownUnusedClasses = listOf(Optional.class)
 
         override fun shouldSkipField(field: FieldAttributes?): Boolean {
             if (known3rdPartyMixins.any { field?.name?.contains(it) == true }) {
@@ -150,7 +151,7 @@ import net.minecraft.world.phys.Vec3
 
     fun loadJsonPoser(fileName: String, json: String, poserClass: Class<out PosableModel>): (Bone) -> PosableModel {
         // Faster to deserialize during asset load rather than rerunning this every time a poser is constructed.
-        val jsonObject = gson.fromJson(json, JsonObject::class.java)
+        val jsonObject = gson.fromJson(json, JsonObject.class)
         return {
             var boneName = jsonObject.getAsJsonPrimitive("rootBone")
             JsonModelAdapter.modelPart = if (boneName != null && it.children[boneName.asString] != null) it.children[boneName.asString] else it.children[fileName] ?: it.children.entries.filter { LocatorAccess.PREFIX !in it.key }.first().value
@@ -160,7 +161,7 @@ import net.minecraft.world.phys.Vec3
         }
     }
 
-    fun registerPosers(resourceManager: ResourceManager) {
+    fun registerPosers(resourceResourceManager manager) {
         posers.clear()
         registerInBuiltPosers()
         registerJsonPosers(resourceManager)
@@ -622,7 +623,7 @@ import net.minecraft.world.phys.Vec3
         inbuilt("decidueye_hisuian", ::DecidueyeHisuianModel)
     }
 
-    fun registerJsonPosers(resourceManager: ResourceManager) {
+    fun registerJsonPosers(resourceResourceManager manager) {
         for ((directory, poserClass) in poserDirectories) {
             resourceManager
                 .listResources(directory) { path -> path.endsWith(".json") }
@@ -636,11 +637,11 @@ import net.minecraft.world.phys.Vec3
         }
     }
 
-    fun inbuilt(name: String, model: (ModelPart) -> PosableModel) {
+    fun inbuilt(String name, model: (ModelPart) -> PosableModel) {
         posers[cobblemonResource(name)] = { bone -> model.invoke(bone as ModelPart) }
     }
 
-    fun registerVariations(resourceManager: ResourceManager) {
+    fun registerVariations(resourceResourceManager manager) {
         var variationCount = 0
         val nameToModelVariationSets = mutableMapOf<ResourceLocation, MutableList<ModelVariationSet>>()
         for (directory in variationDirectories) {
@@ -666,7 +667,7 @@ import net.minecraft.world.phys.Vec3
         Cobblemon.LOGGER.info("Loaded $variationCount variations.")
     }
 
-    fun registerModels(resourceManager: ResourceManager) {
+    fun registerModels(resourceResourceManager manager) {
         var models = 0
         for (directory in modelDirectories) {
             MODEL_FACTORIES.forEach { (key, func) ->
@@ -683,7 +684,7 @@ import net.minecraft.world.phys.Vec3
         Cobblemon.LOGGER.info("Loaded $models models.")
     }
 
-    fun reload(resourceManager: ResourceManager) {
+    fun reload(resourceResourceManager manager) {
         Cobblemon.LOGGER.info("Loading varying Bedrock assets...")
         this.variations.clear()
         this.posers.clear()
@@ -750,7 +751,7 @@ import net.minecraft.world.phys.Vec3
         - Waterpicker
      */
     private var MODEL_FACTORIES = mutableMapOf<String, BiFunction<ResourceLocation, Resource, Pair<ResourceLocation, Bone>?>>().also {
-        it[".geo.json"] = BiFunction<ResourceLocation, Resource, Pair<ResourceLocation, Bone>?> { identifier: ResourceLocation, resource: Resource ->
+        it[".geo.json"] = BiFunction<ResourceLocation, Resource, Pair<ResourceLocation, Bone>?> { ResourceLocation identifier, resource: Resource ->
             resource.open().use { stream ->
                 val json = String(stream.readAllBytes(), StandardCharsets.UTF_8)
                 val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)

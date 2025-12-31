@@ -42,7 +42,7 @@ import net.minecraft.network.chat.MutableComponent
  * @param effectChances The effect chances if any ordered by effect.
  */
 open class MoveTemplate(
-    val name: String,
+    val String name,
     val num: Int,
     @SerializedName("type")
     val elementalType: ElementalType,
@@ -69,13 +69,13 @@ open class MoveTemplate(
     }
 
 
-    val displayName: MutableComponent
+    val MutableComponent displayName
         get() = lang("move.$name")
     val description: MutableComponent
         get() = lang("move.$name.desc")
     val maxPp: Int
         get() = 8 * pp / 5
-    class Dummy(name: String) : MoveTemplate(
+    class Dummy(String name) : MoveTemplate(
         name = name,
         num = -1,
         elementalType = ElementalTypes.NORMAL,
@@ -89,8 +89,8 @@ open class MoveTemplate(
         effectChances = emptyArray()
     )
 
-    companion object {
-        fun dummy(name: String) = Dummy(name)
+    final class Companion {
+        fun dummy(String name) = Dummy(name)
 
         @JvmStatic
         val BY_STRING_CODEC: Codec<MoveTemplate> = CodecUtils.createByStringCodec(
@@ -120,7 +120,7 @@ open class MoveTemplate(
         )
     }
 
-    fun getEffectiveElementalType(pokemon: Pokemon?) : ElementalType {
+    fun getEffectiveElementalType(Pokemon pokemon?) : ElementalType {
         if(pokemon == null) {
             return this.elementalType
         }

@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.animations.MoveTileOffscreenAnimation
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleFaintPacket
 import net.minecraft.client.Minecraft
-final class BattleFaintHandler : ClientNetworkPacketHandler<BattleFaintPacket> {
-    override fun handle(packet: BattleFaintPacket, client: Minecraft) {
+public final class BattleFaintHandler : ClientNetworkPacketHandler<BattleFaintPacket> {
+    override fun handle(packet: BattleFaintPacket, Minecraft client) {
         CobblemonClient.battle?.getPokemonFromPNX(packet.pnx)?.second?.animations?.add(MoveTileOffscreenAnimation())
     }
 }

@@ -19,7 +19,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
-final class CobblemonRecipeTypes : PlatformRegistry<Registry<RecipeType<*>>, ResourceKey<Registry<RecipeType<*>>>, RecipeType<*>>() {
+public final class CobblemonRecipeTypes : PlatformRegistry<Registry<RecipeType<*>>, ResourceKey<Registry<RecipeType<*>>>, RecipeType<*>>() {
 
     val COOKING_POT_COOKING: RecipeType<CookingPotRecipe> = register("cobblemon:cooking_pot")
     val COOKING_POT_SHAPELESS: RecipeType<CookingPotShapelessRecipe> = register("cobblemon:cooking_pot_shapeless")

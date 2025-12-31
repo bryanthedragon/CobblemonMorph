@@ -26,8 +26,8 @@ import net.minecraft.network.chat.MutableComponent
 abstract class TextWidget(
     pX: Int,
     pY: Int,
-    width: Int = 91,
-    height: Int = 14,
+    Int width = 91,
+    Int height = 14,
     maxLength: Int = 19,
     text: Component = "TextWidget".text(),
     update: () -> (Unit)
@@ -44,7 +44,7 @@ abstract class TextWidget(
         startPosX = x
     }
 
-    fun applyTextCursor(string: String, placeholder: MutableComponent): MutableComponent {
+    fun applyTextCursor(String string, placeholder: MutableComponent): MutableComponent {
         showCursor = isFocused && ((Util.getMillis() - this.focusedTime) / 300L % 2L == 0L)
         return if (isFocused) "${string}${if ((cursorPosition == string.length) && showCursor) "_" else ""}".text()
         else (if(string.isEmpty()) placeholder else string.text())
@@ -92,7 +92,7 @@ abstract class TextWidget(
         return result
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         if (isFocused && (keyCode == InputConstants.KEY_RETURN || keyCode == InputConstants.KEY_NUMPADENTER)) unfocused()
         return super.keyPressed(keyCode, scanCode, modifiers)
     }

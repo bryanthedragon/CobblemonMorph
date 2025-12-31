@@ -13,10 +13,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types.ElementalTypes
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-class MoveTypeRequirement : Requirement {
+public class MoveTypeRequirement : Requirement {
     val type: ElementalType = ElementalTypes.NORMAL
-    override fun check(pokemon: Pokemon) = pokemon.moveSet.getMoves().any { move -> move.type == type }
-    companion object {
+    override fun check(Pokemon pokemon) = pokemon.moveSet.getMoves().any { move -> move.type == type }
+    final class Companion {
         const val ADAPTER_VARIANT = "has_move_type"
     }
 }

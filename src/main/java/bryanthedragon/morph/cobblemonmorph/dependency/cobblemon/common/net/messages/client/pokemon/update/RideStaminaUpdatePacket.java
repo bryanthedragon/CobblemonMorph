@@ -17,23 +17,23 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * actively controlling riding but rather the tracking property which is put into the riding
  * state when the Pokémon is mounted.
  */
-class RideStaminaUpdatePacket(pokemon: () -> Pokemon?, value: Float) : SingleUpdatePacket<Float, RideStaminaUpdatePacket>(pokemon, value) {
-    companion object {
+public class RideStaminaUpdatePacket(pokemon: () -> Pokemon?, value: Float) : SingleUpdatePacket<Float, RideStaminaUpdatePacket>(pokemon, value) {
+    final class Companion {
         val ID = bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource("ride_stamina_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): RideStaminaUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): RideStaminaUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val value = buffer.readFloat()
             return RideStaminaUpdatePacket(pokemon, value)
         }
     }
 
-    override fun set(pokemon: Pokemon, value: Float) {
+    override fun set(Pokemon pokemon, value: Float) {
         Cobblemon.LOGGER.info("Updating client with $value")
         pokemon.rideStamina = value
     }
 
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeFloat(this.value)
     }
 }

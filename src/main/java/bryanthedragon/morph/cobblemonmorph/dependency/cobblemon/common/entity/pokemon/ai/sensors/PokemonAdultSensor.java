@@ -22,10 +22,10 @@ import net.minecraft.world.entity.ai.sensing.Sensor
  * @author broccoli
  * @since May 15th, 2024
  */
-class PokemonAdultSensor : Sensor<PokemonEntity>(100) {
+public class PokemonAdultSensor : Sensor<PokemonEntity>(100) {
     override fun requires() = setOf(MemoryModuleType.NEAREST_VISIBLE_ADULT, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES)
 
-    override fun doTick(world: ServerLevel, entity: PokemonEntity) {
+    override fun doTick(ServerLevel world, entity: PokemonEntity) {
         entity.brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).ifPresent { visibleMobs ->
             setNearestPokemonAdult(entity, visibleMobs)
         }
@@ -39,7 +39,7 @@ class PokemonAdultSensor : Sensor<PokemonEntity>(100) {
         entity.brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_ADULT, nearestAdult)
     }
 
-    private fun targetIsValidForChild(child: PokemonEntity, entity: LivingEntity): Boolean {
+    private fun targetIsValidForChild(child: PokemonEntity, LivingEntity entity): Boolean {
         val potentialParent = entity as? PokemonEntity ?: return false
         val childSpecies = child.pokemon.species.resourceIdentifier
 

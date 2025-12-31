@@ -42,14 +42,14 @@ record PokemonInteraction(
     val cooldown: ExpressionLike = "0".asExpressionLike()
 )
 
-interface InteractionEffect {
-    fun applyEffect(pokemon: PokemonEntity, player: ServerPlayer)
+public interface InteractionEffect {
+    fun applyEffect(Pokemon pokemonEntity, ServerPlayer player)
 }
 
-class DropItemEffect(val item: ResourceLocation, val amount: IntRange?): InteractionEffect {
+public class DropItemEffect(val item: ResourceLocation, val amount: IntRange?): InteractionEffect {
     override fun applyEffect(
-        pokemon: PokemonEntity,
-        player: ServerPlayer
+        Pokemon pokemonEntity,
+        ServerPlayer player
     ) {
         val item = player.registryAccess().registryOrThrow(Registries.ITEM).get(item) ?: throw IllegalArgumentException("Cannot load item with id: $item")
         val stack = ItemStack(item)
@@ -63,15 +63,15 @@ class DropItemEffect(val item: ResourceLocation, val amount: IntRange?): Interac
         pokemon.level().addFreshEntity(itemEntity)
     }
 
-    companion object {
+    final class Companion {
         val ID = "drop_item"
     }
 }
 
-class GiveItemEffect(val item: ResourceLocation, val amount: IntRange?): InteractionEffect {
+public class GiveItemEffect(val item: ResourceLocation, val amount: IntRange?): InteractionEffect {
     override fun applyEffect(
-        pokemon: PokemonEntity,
-        player: ServerPlayer
+        Pokemon pokemonEntity,
+        ServerPlayer player
     ) {
         val item = player.registryAccess().registryOrThrow(Registries.ITEM).get(item) ?: throw IllegalArgumentException("Cannot load item with id: $item")
         val stack = ItemStack(item)
@@ -81,15 +81,15 @@ class GiveItemEffect(val item: ResourceLocation, val amount: IntRange?): Interac
         player.giveOrDropItemStack(stack)
     }
 
-    companion object {
+    final class Companion {
         val ID = "give_item"
     }
 }
 
-class PlaySoundEffect(val sound: ResourceLocation, val soundSource: SoundSource?, val playAround: Boolean = true, val distance: Double = 64.0, val volume: Float = 1.0F, val pitch: Float = 1.0F): InteractionEffect {
+public class PlaySoundEffect(val sound: ResourceLocation, val soundSource: SoundSource?, val playAround: Boolean = true, val distance: Double = 64.0, val Float volume = 1.0F, val Float pitch = 1.0F): InteractionEffect {
     override fun applyEffect(
-        pokemon: PokemonEntity,
-        player: ServerPlayer
+        Pokemon pokemonEntity,
+        ServerPlayer player
     ) {
         val packet = UnvalidatedPlaySoundS2CPacket(sound, soundSource ?: SoundSource.NEUTRAL, pokemon.x, pokemon.y, pokemon.z, volume, pitch)
         if (playAround) {
@@ -99,15 +99,15 @@ class PlaySoundEffect(val sound: ResourceLocation, val soundSource: SoundSource?
         }
     }
 
-    companion object {
+    final class Companion {
         val ID = "play_sound"
     }
 }
 
-class ShrinkItemEffect(val amount: Int = 1): InteractionEffect {
+public class ShrinkItemEffect(val amount: Int = 1): InteractionEffect {
     override fun applyEffect(
-        pokemon: PokemonEntity,
-        player: ServerPlayer
+        Pokemon pokemonEntity,
+        ServerPlayer player
     ) {
         if (player.getItemInHand(InteractionHand.MAIN_HAND).isDamageableItem)
             player.getItemInHand(InteractionHand.MAIN_HAND).hurtAndBreak(amount, player, EquipmentSlot.MAINHAND)
@@ -115,15 +115,15 @@ class ShrinkItemEffect(val amount: Int = 1): InteractionEffect {
             player.getItemInHand(InteractionHand.MAIN_HAND).consume(amount, player)
     }
 
-    companion object {
+    final class Companion {
         val ID = "shrink_item"
     }
 }
 
-class ScriptEffect(val script: ExpressionLike): InteractionEffect {
+public class ScriptEffect(val script: ExpressionLike): InteractionEffect {
     override fun applyEffect(
-        pokemon: PokemonEntity,
-        player: ServerPlayer
+        Pokemon pokemonEntity,
+        ServerPlayer player
     ) {
         val runtime = MoLangRuntime().setup()
         runtime.withPlayerValue("player", player)
@@ -131,7 +131,7 @@ class ScriptEffect(val script: ExpressionLike): InteractionEffect {
         script.resolveDouble(runtime)
     }
 
-    companion object {
+    final class Companion {
         val ID = "script"
     }
 }

@@ -7,7 +7,7 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles
-final class BattleRules {
+public final class BattleRules {
     const val OBTAINABLE = "Obtainable"
     const val PAST = "+Past"
     const val UNOBTAINABLE = "+Unobtainable"

@@ -6,26 +6,35 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon;
 
-import com.bedrockk.molang.runtime.value.DoubleValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeSizedInt
-import com.google.gson.JsonObject
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.network.RegistryFriendlyByteBuf
-import net.minecraft.resources.ResourceLocation
+
+
+import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo.Map;
+
+import com.bedrockk.molang.runtime.value.DoubleValue;
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ObjectValue;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stats;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.IntSize;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeSizedInt;
+
+import kotlin.ranges.IntRange;
+
+import com.google.gson.JsonObject;
+
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Holds a mapping from a Stat to value that should be reducible to a short for NBT and net.
  */
-abstract class PokemonStats : Iterable<Map.Entry<Stat, Int>> {
-    abstract val acceptableRange: IntRange
-    abstract val defaultValue: Int
+public abstract class PokemonStats extends Iterable<Map.Entry<Stat, Int>> {
+    abstract val IntRange acceptableRange;
+    abstract val Int defaultValue;
     override fun iterator() = stats.entries.iterator()
 
     val struct = ObjectValue(this).also {
@@ -58,16 +67,16 @@ abstract class PokemonStats : Iterable<Map.Entry<Stat, Int>> {
     }
 
     operator fun get(key: Stat) = stats[key]
-    open operator fun set(key: Stat, value: Int) {
+    open operator fun set(key: Stat, Int value) {
         if (this.canSet(key, value)) {
             stats[key] = value
             update()
         }
     }
 
-    protected open fun canSet(stat: Stat, value: Int) = value in acceptableRange
+    protected open fun canSet(Stat stat , Int value) = value in acceptableRange
 
-    fun getOrDefault(stat: Stat) = this[stat] ?: this.defaultValue
+    fun getOrDefault(Stat stat ) = this[stat] ?: this.defaultValue
 
     fun total(): Int = stats.values.sum()
 }

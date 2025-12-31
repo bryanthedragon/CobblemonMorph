@@ -6,16 +6,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.endsWith
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.BufferedReader
-import java.io.File
-import java.util.concurrent.ExecutionException
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.packs.resources.ResourceManager
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.endsWith;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.io.BufferedReader;
+import java.io.File;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 
 /**
  * A [DataRegistry] that consumes JSON files.
@@ -27,46 +28,45 @@ import net.minecraft.server.packs.resources.ResourceManager
  * @author Licious
  * @since August 5th, 2022
  */
-interface JsonDataRegistry<T> : DataRegistry {
+public interface JsonDataRegistry<T> extends DataRegistry {
 
     /**
      * The [Gson] used to deserialize the data this registry will consume.
      */
-    val gson: Gson
+    val Gson gson;
 
     /**
      * The [TypeToken] of type [T].
      */
-    val typeToken: TypeToken<T>
+    val TypeToken<T> typeToken;
 
     /**
      * The folder location for the data this registry will consume.
      */
-    val resourcePath: String
+    val String resourcePath;
 
-    override fun reload(manager: ResourceManager) {
-        val data = hashMapOf<ResourceLocation, T>()
+    override fun reload(ResourceManager manager) {
+        val data = hashMapOf<ResourceLocation, T>();
         manager.listResources(resourcePath) { path -> path.endsWith(JSON_EXTENSION) }.forEach { (identifier, resource) ->
             if (identifier.namespace == "pixelmon") {
-                return@forEach
+                return@forEach;
             }
 
             resource.open().use { stream ->
-                stream.bufferedReader().use { reader ->
-                    val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension)
-                    data[resolvedIdentifier] = parse(reader, resolvedIdentifier)
+                stream.bufferedReader().use { reader -> val resolvedIdentifier = ResourceLocation.fromNamespaceAndPath(identifier.namespace, File(identifier.path).nameWithoutExtension);
+                    data[resolvedIdentifier] = parse(reader, resolvedIdentifier);
                 }
             }
         }
-
-        reload(data)
+        reload(data);
     }
 
-    fun parse(reader: BufferedReader, identifier: ResourceLocation): T {
+    T parse(BufferedReader reader, ResourceLocation identifier) {
         return try {
-            gson.fromJson(reader, typeToken.type)
-        } catch (exception: Exception) {
-            throw ExecutionException("Error loading JSON for data: $identifier", exception)
+            gson.fromJson(reader, typeToken.type);
+        } 
+        catch (Exception exception) {
+            throw ExecutionException("Error loading JSON for data: $identifier", exception);
         }
     }
 
@@ -75,9 +75,9 @@ interface JsonDataRegistry<T> : DataRegistry {
      *
      * @param data A map of the data associating an instance to the respective identifier from the [ResourceManager].
      */
-    fun reload(data: Map<ResourceLocation, T>)
+    fun reload(Map<ResourceLocation, T> data>)
 
-    companion object {
-        const val JSON_EXTENSION = ".json"
+    final class Companion {
+        const val JSON_EXTENSION = ".json";
     }
 }

@@ -8,9 +8,9 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatureProvider
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatures
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.species.provider.SpeciesFeatureProvider;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.species.provider.SynchronizedSpeciesFeatureProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.readString
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
@@ -29,7 +29,7 @@ abstract class SpeciesFeatureSyncPacket<T : SpeciesFeatureSyncPacket<T>>(
         .filterIsInstance<Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>>()
 ) {
     override fun encodeEntry(
-        buffer: RegistryFriendlyByteBuf,
+        RegistryFriendlyByteBuf buffer,
         entry: Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>
     ) {
 
@@ -46,7 +46,7 @@ abstract class SpeciesFeatureSyncPacket<T : SpeciesFeatureSyncPacket<T>>(
         value.saveToBuffer(buffer, toClient = true)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>? {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>>? {
         if (!buffer.readBoolean()) {
             return null
         }
@@ -68,7 +68,7 @@ abstract class SpeciesFeatureSyncPacket<T : SpeciesFeatureSyncPacket<T>>(
         }
 
         return object : Map.Entry<String, SynchronizedSpeciesFeatureProvider<*>> {
-            override val key: String = name
+            override val String Key = name
             override val value: SynchronizedSpeciesFeatureProvider<*> = instance
         }
     }

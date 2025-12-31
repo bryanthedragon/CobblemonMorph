@@ -10,9 +10,9 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.perm
 
 import net.minecraft.resources.ResourceLocation
 
-interface Permission {
+public interface Permission {
 
-    val identifier: ResourceLocation
+    val ResourceLocation identifier
 
     val literal: String
 

@@ -21,8 +21,8 @@ import net.minecraft.world.level.block.Block
  * @since February 7th, 2022
  */
 abstract class AreaTypeSpawningCondition<T : AreaSpawnablePosition> : SpawningCondition<T>() {
-    var minHeight: Int? = null
-    var maxHeight: Int? = null
+    var minInt height? = null
+    var maxInt height? = null
     var neededNearbyBlocks: MutableList<RegistryLikeCondition<Block>>? = null
 
     override fun fits(spawnablePosition: T): Boolean {
@@ -60,9 +60,9 @@ abstract class AreaTypeSpawningCondition<T : AreaSpawnablePosition> : SpawningCo
  * @author Hiroku
  * @since February 7th, 2022
  */
-class AreaSpawningCondition : AreaTypeSpawningCondition<AreaSpawnablePosition>() {
-    override fun spawnablePositionClass(): Class<out AreaSpawnablePosition> = AreaSpawnablePosition::class.java
-    companion object {
+public class AreaSpawningCondition : AreaTypeSpawningCondition<AreaSpawnablePosition>() {
+    override fun spawnablePositionClass(): Class<out AreaSpawnablePosition> = AreaSpawnablePosition.class
+    final class Companion {
         const val NAME = "area"
     }
 }

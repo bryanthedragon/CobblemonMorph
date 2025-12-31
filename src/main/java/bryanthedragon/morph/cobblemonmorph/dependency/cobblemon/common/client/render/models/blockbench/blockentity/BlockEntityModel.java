@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import com.google.gson.annotations.SerializedName
 import net.minecraft.client.model.geom.ModelPart
 
-class BlockEntityModel(root: Bone) : PosableModel(root) {
+public class BlockEntityModel(root: Bone) : PosableModel(root) {
     @Transient
     @SerializedName("Don't bloody deserialize this, Gson! I mean it!")
     override val rootPart = (root as ModelPart).children.entries.first().let { root.registerChildWithAllChildren(it.key) }

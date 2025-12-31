@@ -29,9 +29,9 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), CobblemonRenderable {
+public class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         // Limiting
         private const val MAX_BUTTONS_PER_ROW = 3
         private const val MAX_BUTTONS_PER_COLUMN = 2
@@ -83,7 +83,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
      * Changed by Licious April 29th 2022
      * Cleaned up the original code see [moveSelected] for how the selection moves around.
      */
-    override fun keyPressed(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+    override fun keyPressed(pInt keyCode, pInt scanCode, pModifiers: Int): Boolean {
         if (isInventoryKeyPressed(minecraft, pKeyCode, pScanCode)) {
             Minecraft.getInstance().setScreen(null)
             return true
@@ -110,7 +110,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
         return super.keyPressed(pKeyCode, pScanCode, pModifiers)
     }
 
-    override fun keyReleased(pKeyCode: Int, pScanCode: Int, pModifiers: Int): Boolean {
+    override fun keyReleased(pInt keyCode, pInt scanCode, pModifiers: Int): Boolean {
         if ((pKeyCode == PokeNavigatorBinding.boundKey().value || pKeyCode == InputConstants.KEY_LSHIFT || pKeyCode == InputConstants.KEY_RSHIFT) && aboutToClose) {
             Minecraft.getInstance().setScreen(null) // So we only close if the Key was released
         }
@@ -293,7 +293,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
      * @param canClick Used to check if the button can be clicked. Will affect asset rendering to visually symbolize if false.
      */
     private fun insertButton(
-        identifier: ResourceLocation,
+        ResourceLocation identifier,
         onPress: Button.OnPress,
         text: MutableComponent,
         canClick: () -> Boolean = { true }
@@ -337,7 +337,7 @@ class PokeNav : Screen(Component.translatable("cobblemon.ui.pokenav.title")), Co
     private fun onPressPokemon(button: Button) {
         try {
             Summary.open(CobblemonClient.storage.party.slots, true, CobblemonClient.storage.selectedSlot)
-        } catch (e: Exception) {
+        } catch (Exception e) {
             Minecraft.getInstance().setScreen(null)
             Cobblemon.LOGGER.debug("Failed to open the summary from the PokeNav screen", e)
         }

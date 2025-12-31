@@ -21,7 +21,7 @@ abstract class JsonBackedPlayerDataStoreBackend<T : InstancedPlayerData>(
     subfolder: String,
     type: PlayerInstancedDataStoreType
 ) : FileBasedPlayerDataStoreBackend<T>(subfolder, type, "json") {
-    abstract val gson: Gson
+    abstract val Gson gson
     //The class GSON needs to deserialize to
     abstract val classToken: TypeToken<T>
 
@@ -35,7 +35,7 @@ abstract class JsonBackedPlayerDataStoreBackend<T : InstancedPlayerData>(
         }
     }
 
-    override fun load(uuid: UUID): T {
+    override fun load(UUID uuid): T {
         return loadWithFallback(uuid) {
             it.reader().use { reader ->
                 gson.fromJson(reader, classToken).also {

@@ -12,15 +12,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.N
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RequestMoveSwapPacket(val move1: Int, val move2: Int, val slot: Int): NetworkPacket<RequestMoveSwapPacket> {
+public class RequestMoveSwapPacket(val move1: Int, val move2: Int, val slot: Int): NetworkPacket<RequestMoveSwapPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(move1)
         buffer.writeInt(move2)
         buffer.writeInt(slot)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("request_move_swap")
-        fun decode(buffer: RegistryFriendlyByteBuf) = RequestMoveSwapPacket(buffer.readInt(), buffer.readInt(), buffer.readInt())
+        fun decode(RegistryFriendlyByteBuf buffer) = RequestMoveSwapPacket(buffer.readInt(), buffer.readInt(), buffer.readInt())
     }
 }

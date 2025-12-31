@@ -14,9 +14,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Entity
 
-class IncenseSweetInfluence(val pos: BlockPos? = null) : SpawningInfluence {
+public class IncenseSweetInfluence(val (BlockPos pos? = null) : SpawningInfluence {
 
-    override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
+    override fun affectSpawn(action: SpawnAction<*>, Entity entity) {
     }
 
     override fun affectWeight(detail: SpawnDetail, spawnablePosition: SpawnablePosition, weight: Float): Float {

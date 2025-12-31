@@ -6,15 +6,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.platform;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BagItems
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.battle.BagItemLike
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceKey
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BagItems;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.battle.BagItemLike;
+
+import net.minecraft.core.Registry;
+
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * A registry meant to hold values that will be later resolved on each platform implementation.
@@ -26,19 +27,20 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since February 11th, 2023
  */
-abstract class PlatformRegistry<R : Registry<T>, K : ResourceKey<R>, T> {
+public abstract class PlatformRegistry<R extends Registry<T>, K extends ResourceKey<R>, T>
+ {
 
     /**
      * The vanilla [Registry].
      */
-    abstract val registry: R
+    static final Registry R;
 
     /**
      * The vanilla [ResourceKey].
      */
-    abstract val resourceKey: K
+    static final ResourceKey K;
 
-    protected val queue = hashMapOf<ResourceLocation, T>()
+    protected static final queue = hashMapOf<ResourceLocation, T>()
 
     /**
      * Creates a new entry in this registry.
@@ -48,8 +50,8 @@ abstract class PlatformRegistry<R : Registry<T>, K : ResourceKey<R>, T> {
      * @param entry The entry being added.
      * @return The entry created.
      */
-    open fun <E : T> create(name: String, entry: E): E {
-        val resourceLocation = cobblemonResource(name)
+    open fun <E : T> create(String name, entry: E): E {
+        static final resourceLocation = cobblemonResource(name)
         return this.create(resourceLocation, entry)
     }
 

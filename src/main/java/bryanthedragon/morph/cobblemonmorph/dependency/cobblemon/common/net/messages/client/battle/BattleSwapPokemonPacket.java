@@ -23,16 +23,16 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author JazzMcNade
  * @since  March 5th, 2024
  */
-class BattleSwapPokemonPacket(val pnx: String) : NetworkPacket<BattleSwapPokemonPacket> {
+public class BattleSwapPokemonPacket(val pnx: String) : NetworkPacket<BattleSwapPokemonPacket> {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(pnx)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_swap_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleSwapPokemonPacket(buffer.readString())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleSwapPokemonPacket(buffer.readString())
     }
 }

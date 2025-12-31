@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.events
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
 import net.minecraft.server.MinecraftServer
-final class ServerTickHandler {
+public final class ServerTickHandler {
     private var secondsTick = 0
 
     fun onTick(server: MinecraftServer) {

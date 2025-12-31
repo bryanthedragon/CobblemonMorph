@@ -15,16 +15,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.syncher.EntityDataSerializer
-final class RideBoostsDataSerializer : EntityDataSerializer<Map<RidingStat, Float>> {
+public final class RideBoostsDataSerializer : EntityDataSerializer<Map<RidingStat, Float>> {
     val ID = cobblemonResource("ride_boosts")
-    fun read(buf: RegistryFriendlyByteBuf): Map<RidingStat, Float> {
+    fun read(RegistryFriendlyByteBuf buf): Map<RidingStat, Float> {
         return buf.readMap(
             { RidingStat.valueOf(it.readString()) },
             { it.readFloat() }
         )
     }
     override fun copy(value: Map<RidingStat, Float>) = value.toMap()
-    fun write(buf: RegistryFriendlyByteBuf, value: Map<RidingStat, Float>) {
+    fun write(RegistryFriendlyByteBuf buf, value: Map<RidingStat, Float>) {
         buf.writeMap(
             value,
             { _, it -> buf.writeString(it.name) },

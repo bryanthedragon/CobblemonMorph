@@ -15,7 +15,8 @@ import net.minecraft.world.item.Item
  *
  * @author Nick, Licious
  * @since December 28th, 2022
- */final class CobblemonBuiltinItemRendererRegistry {
+ */
+public final class CobblemonBuiltinItemRendererRegistry {
 
     private val renderers = hashMapOf<Item, CobblemonBuiltinItemRenderer>()
 

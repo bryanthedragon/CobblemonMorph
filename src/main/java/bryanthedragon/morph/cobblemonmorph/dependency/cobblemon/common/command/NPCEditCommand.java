@@ -20,7 +20,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerPlayer
-final class NPCEditCommand {
+public final class NPCEditCommand {
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(
             Commands.literal("npcedit")
@@ -28,8 +28,8 @@ final class NPCEditCommand {
             .executes { execute(it, it.source.playerOrException) })
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
-        val targetEntity = player.traceFirstEntityCollision(entityClass = NPCEntity::class.java)
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player) : Int {
+        val targetEntity = player.traceFirstEntityCollision(entityClass = NPCEntity.class)
         if (targetEntity == null) {
             player.sendSystemMessage(commandLang("npcedit.non_npc").red())
             return 0

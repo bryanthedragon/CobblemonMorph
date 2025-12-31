@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.weig
  * @author Hiroku
  * @since August 11th, 2024
  */
-class WeightedAspect(val aspects: Set<String>, val weight: Double)
+public class WeightedAspect(val aspects: Set<String>, val Double weight)
 
 /**
  * A variation provider that provides a set of aspects with a weight. When providing for an entity,
@@ -26,7 +26,7 @@ class WeightedAspect(val aspects: Set<String>, val weight: Double)
  * @author Hiroku
  * @since August 11th, 2024
  */
-class WeightedNPCVariationProvider : NPCVariationProvider {
+public class WeightedNPCVariationProvider : NPCVariationProvider {
     var options: List<WeightedAspect> = emptyList()
 
     override val aspects: Set<String>

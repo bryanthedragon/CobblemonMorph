@@ -15,9 +15,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.part
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.pc
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class SetMarkingsHandler : ServerNetworkPacketHandler<SetMarkingsPacket> {
+public final class SetMarkingsHandler : ServerNetworkPacketHandler<SetMarkingsPacket> {
 
-    override fun handle(packet: SetMarkingsPacket, server: MinecraftServer, player: ServerPlayer) {
+    override fun handle(packet: SetMarkingsPacket, server: MinecraftServer, ServerPlayer player) {
         val pokemonStore: PokemonStore<*> = if (packet.isParty) player.party() else player.pc()
         val pokemon = pokemonStore[packet.uuid] ?: return
 

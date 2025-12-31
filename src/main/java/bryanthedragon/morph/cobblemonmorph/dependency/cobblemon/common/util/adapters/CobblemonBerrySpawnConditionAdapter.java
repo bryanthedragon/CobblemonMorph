@@ -26,7 +26,8 @@ import kotlin.reflect.KClass
  *
  * @author Licious
  * @since December 2nd, 2022
- */final class CobblemonBerrySpawnConditionAdapter : SpawnConditionAdapter{
+ */
+public final class CobblemonBerrySpawnConditionAdapter : SpawnConditionAdapter{
     private const val VARIANT = "variant"
     private val types = hashMapOf<String, KClass<out BerrySpawnCondition>>()
 
@@ -35,21 +36,21 @@ import kotlin.reflect.KClass
         this.register(AllBiomeCondition::class, AllBiomeCondition.ID)
         this.register(SpecificBiomeCondition::class, SpecificBiomeCondition.ID)
     }
-    override fun register(type: KClass<out BerrySpawnCondition>, identifier: ResourceLocation) {
+    override fun register(type: KClass<out BerrySpawnCondition>, ResourceLocation identifier) {
         val existing = this.types.put(identifier.toString(), type)
         if (existing != null) {
             Cobblemon.LOGGER.debug("Replaced {} under ID {} with {} in the {}", existing::class.qualifiedName, identifier.toString(), type.qualifiedName, this::class.qualifiedName)
         }
     }
 
-    override fun deserialize(jElement: JsonElement, type: Type, context: JsonDeserializationContext): BerrySpawnCondition {
+    override fun deserialize(jElement: JsonElement, Type type, JsonDeserializationContext context): BerrySpawnCondition {
         val json = jElement.asJsonObject
         val variant = json.get(VARIANT).asString.lowercase()
         val registeredType = this.types[variant] ?: throw IllegalArgumentException("Cannot resolve type for variant $variant")
         return context.deserialize(json, registeredType.java)
     }
 
-    override fun serialize(spawnCondition: BerrySpawnCondition, type: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(spawnCondition: BerrySpawnCondition, Type type, context: JsonSerializationContext): JsonElement {
         val json = context.serialize(spawnCondition).asJsonObject
         val variant = this.types.entries.find { it.value == spawnCondition::class }?.key ?: throw IllegalArgumentException("Cannot resolve variant for type ${spawnCondition::class.qualifiedName}")
         json.addProperty(VARIANT, variant)

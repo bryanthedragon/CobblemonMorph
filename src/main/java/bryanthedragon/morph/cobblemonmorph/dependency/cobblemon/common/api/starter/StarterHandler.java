@@ -11,9 +11,9 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.star
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.starter.StarterCategory
 import net.minecraft.server.level.ServerPlayer
 
-interface StarterHandler {
-    fun getStarterList(player: ServerPlayer): List<StarterCategory>
-    fun handleJoin(player: ServerPlayer)
-    fun requestStarterChoice(player: ServerPlayer)
-    fun chooseStarter(player: ServerPlayer, categoryName: String, index: Int)
+public interface StarterHandler {
+    fun getStarterList(ServerPlayer player): List<StarterCategory>
+    fun handleJoin(ServerPlayer player)
+    fun requestStarterChoice(ServerPlayer player)
+    fun chooseStarter(ServerPlayer player, categoryName: String, Int index)
 }

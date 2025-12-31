@@ -6,28 +6,24 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.controller
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.controller;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.EvolutionController
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.PreProcessor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgress
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgressTypes
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon.evolution.EvolutionAcceptedEvent;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.Evolution;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.EvolutionController;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.PreProcessor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgress;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress.EvolutionProgressTypes;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.AddEvolutionPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.ClearEvolutionsPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pokemon.update.evolution.RemoveEvolutionPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.server;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-class ServerEvolutionController(
-    private val pokemon: Pokemon,
-    evolutionIds: Set<String>,
-    progress: Set<EvolutionProgress<*>>,
-) : EvolutionController<Evolution, ServerEvolutionController.Intermediate> {
+public class ServerEvolutionController(private Pokemon pokemon, Set<String> evolutionIds, Set<EvolutionProgress<*>> progress,) extends EvolutionController<Evolution, ServerEvolutionController.Intermediate> {
 
     private val evolutions = hashSetOf<Evolution>()
     private val progress = progress.toMutableSet()
@@ -164,17 +160,17 @@ class ServerEvolutionController(
     private fun findEvolutionFromId(id: String) = this.pokemon.evolutions.firstOrNull { evolution -> evolution.id.equals(id, true) }
 
     record Intermediate(
-        val evolutionIds: Set<String>,
-        val progress: Set<EvolutionProgress<*>>,
+        val Set<String> evolutionIds,
+        val Set<EvolutionProgress<*>> progress,
     ): PreProcessor {
-        override fun create(pokemon: Pokemon): ServerEvolutionController = ServerEvolutionController(
+        override fun create(Pokemon pokemon): ServerEvolutionController = ServerEvolutionController(
             pokemon,
             this.evolutionIds,
             this.progress
         )
     }
 
-    companion object {
+    final class Companion {
         private const val PENDING = "pending"
         private const val PROGRESS = "progress"
         internal const val ID_KEY = "id"

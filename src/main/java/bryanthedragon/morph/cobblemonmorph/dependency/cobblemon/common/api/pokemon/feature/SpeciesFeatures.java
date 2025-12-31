@@ -40,7 +40,8 @@ import net.minecraft.world.phys.Vec3
  *
  * @author Hiroku
  * @since November 30th, 2022
- */final class SpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
+ */
+public final class SpeciesFeatures : JsonDataRegistry<SpeciesFeatureProvider<*>> {
     override val id = cobblemonResource("species_features")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<SpeciesFeatures>()
@@ -49,16 +50,16 @@ import net.minecraft.world.phys.Vec3
 
     private val codeFeatures = mutableMapOf<String, SpeciesFeatureProvider<*>>()
     private val resourceFeatures = mutableMapOf<String, SpeciesFeatureProvider<*>>()
-    override val gson: Gson = GsonBuilder()
+    override val Gson gson = GsonBuilder()
         .setPrettyPrinting()
-        .registerTypeAdapter(SpeciesFeatureProvider::class.java, SpeciesFeatureProviderAdapter)
-        .registerTypeAdapter(Vec3::class.java, Vec3dAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(SpeciesFeatureProvider.class, SpeciesFeatureProviderAdapter)
+        .registerTypeAdapter(Vec3.class, Vec3dAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .create()
-    override val typeToken: TypeToken<SpeciesFeatureProvider<*>> = TypeToken.get(SpeciesFeatureProvider::class.java)
-    override val resourcePath: String = "species_features"
+    override val typeToken: TypeToken<SpeciesFeatureProvider<*>> = TypeToken.get(SpeciesFeatureProvider.class)
+    override val String resourcePath = "species_features"
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         player.sendPacket(StandardSpeciesFeatureSyncPacket(codeFeatures + resourceFeatures))
     }
 
@@ -68,11 +69,11 @@ import net.minecraft.world.phys.Vec3
     }
 
     @JvmStatic
-    fun getCodeFeature(name: String) = codeFeatures[name]
+    fun getCodeFeature(String name) = codeFeatures[name]
     @JvmStatic
-    fun getResourceFeature(name: String) = resourceFeatures[name]
+    fun getResourceFeature(String name) = resourceFeatures[name]
     @JvmStatic
-    fun getFeature(name: String) = getCodeFeature(name) ?: getResourceFeature(name) ?: GlobalSpeciesFeatures.getFeature(name)
+    fun getFeature(String name) = getCodeFeature(name) ?: getResourceFeature(name) ?: GlobalSpeciesFeatures.getFeature(name)
     fun loadOnClient(entries: Collection<Map.Entry<String, SpeciesFeatureProvider<*>>>) {
         codeFeatures.putAll(entries.map { it.toPair() })
     }
@@ -88,7 +89,7 @@ import net.minecraft.world.phys.Vec3
         return (mentionedFeatures + globalFeatures + assignedFeatures).distinct()
     }
 
-    private fun register(name: String, provider: SpeciesFeatureProvider<*>, isCoded: Boolean) {
+    private fun register(String name, provider: SpeciesFeatureProvider<*>, isCoded: Boolean) {
         val mapping = if (isCoded) codeFeatures else resourceFeatures
         if (provider is AspectProvider) {
             AspectProvider.register(provider)
@@ -100,11 +101,11 @@ import net.minecraft.world.phys.Vec3
     }
 
     @JvmStatic
-    fun register(name: String, provider: SpeciesFeatureProvider<*>) = register(name, provider, isCoded = true)
-    private fun registerFromAssets(identifier: ResourceLocation, provider: SpeciesFeatureProvider<*>) = register(identifier.path, provider, isCoded = false)
+    fun register(String name, provider: SpeciesFeatureProvider<*>) = register(name, provider, isCoded = true)
+    private fun registerFromAssets(ResourceLocation identifier, provider: SpeciesFeatureProvider<*>) = register(identifier.path, provider, isCoded = false)
 
     @JvmStatic
-    fun unregister(name: String) {
+    fun unregister(String name) {
         var coded = true
         val value = getResourceFeature(name)?.also { coded = false } ?: getCodeFeature(name) ?: return
         if (value is AspectProvider) {

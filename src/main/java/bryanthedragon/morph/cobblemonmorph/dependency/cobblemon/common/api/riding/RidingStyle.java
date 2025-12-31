@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.riding;
 
 /**
  * A general medium for riding. Mainly used for categorizing which stats to pull from and for
@@ -15,7 +15,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ridi
  * @author Hiroku
  * @since February 17th, 2025
  */
-enum class RidingStyle {
+public enum RidingStyle {
     LAND,
     LIQUID,
     AIR

@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture
  * @since August 25th, 2023
  *
  */
-interface PokemonSender {
-    fun sendingOut(pokemon: Pokemon): CompletableFuture<Unit>
+public interface PokemonSender {
+    fun sendingOut(Pokemon pokemon): CompletableFuture<Unit>
     fun recalling(pokemonEntity: PokemonEntity): CompletableFuture<Unit>
 }

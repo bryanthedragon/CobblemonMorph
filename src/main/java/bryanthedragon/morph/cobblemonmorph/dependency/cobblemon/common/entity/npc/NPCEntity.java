@@ -96,7 +96,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.material.FluidState
 
-class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), PosableEntity, PokemonSender, Schedulable, MoLangScriptingEntity, OmniPathingEntity {
+public class NPCEntity(Level world) : AgeableMob(CobblemonEntities.NPC, world), PosableEntity, PokemonSender, Schedulable, MoLangScriptingEntity, OmniPathingEntity {
     override val schedulingTracker = SchedulingTracker()
 
     override val struct = this.asMoLangValue()
@@ -183,13 +183,13 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
             entityData.set(HITBOX_EYES_HEIGHT, comparison.eyeHeight)
         }
 
-    var resourceIdentifier: ResourceLocation
+    var resourceResourceLocation identifier
         get() = entityData.get(RESOURCE_IDENTIFIER)
         private set(value) {
             entityData.set(RESOURCE_IDENTIFIER, value)
         }
 
-    var forcedResourceIdentifier: ResourceLocation? = null
+    var forcedResourceResourceLocation identifier? = null
         set(value) {
             field = value
             if (value != null) {
@@ -283,24 +283,24 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     }
 
     // This has to be below constructor and entity tracker fields otherwise initialization order is weird and breaks them syncing
-    companion object {
+    final class Companion {
         fun createAttributes(): AttributeSupplier.Builder = createMobAttributes()
             .add(Attributes.ATTACK_DAMAGE, 1.0)
             .add(Attributes.ATTACK_KNOCKBACK)
 
-        val NPC_CLASS = SynchedEntityData.defineId(NPCEntity::class.java, IdentifierDataSerializer)
-        val RESOURCE_IDENTIFIER = SynchedEntityData.defineId(NPCEntity::class.java, IdentifierDataSerializer)
-        val ASPECTS = SynchedEntityData.defineId(NPCEntity::class.java, StringSetDataSerializer)
-        val POSE_TYPE = SynchedEntityData.defineId(NPCEntity::class.java, PoseTypeDataSerializer)
-        val BATTLE_IDS = SynchedEntityData.defineId(NPCEntity::class.java, UUIDSetDataSerializer)
-        val NPC_PLAYER_TEXTURE = SynchedEntityData.defineId(NPCEntity::class.java, NPCPlayerTextureSerializer)
-        val LEVEL = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.INT)
-        val HIDE_NAME_TAG = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.BOOLEAN)
-        val RENDER_SCALE = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
-        val HITBOX_SCALE = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
-        val HITBOX_WIDTH = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
-        val HITBOX_HEIGHT = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
-        val HITBOX_EYES_HEIGHT = SynchedEntityData.defineId(NPCEntity::class.java, EntityDataSerializers.FLOAT)
+        val NPC_CLASS = SynchedEntityData.defineId(NPCEntity.class, IdentifierDataSerializer)
+        val RESOURCE_IDENTIFIER = SynchedEntityData.defineId(NPCEntity.class, IdentifierDataSerializer)
+        val ASPECTS = SynchedEntityData.defineId(NPCEntity.class, StringSetDataSerializer)
+        val POSE_TYPE = SynchedEntityData.defineId(NPCEntity.class, PoseTypeDataSerializer)
+        val BATTLE_IDS = SynchedEntityData.defineId(NPCEntity.class, UUIDSetDataSerializer)
+        val NPC_PLAYER_TEXTURE = SynchedEntityData.defineId(NPCEntity.class, NPCPlayerTextureSerializer)
+        val LEVEL = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.INT)
+        val HIDE_NAME_TAG = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.BOOLEAN)
+        val RENDER_SCALE = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.FLOAT)
+        val HITBOX_SCALE = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.FLOAT)
+        val HITBOX_WIDTH = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.FLOAT)
+        val HITBOX_HEIGHT = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.FLOAT)
+        val HITBOX_EYES_HEIGHT = SynchedEntityData.defineId(NPCEntity.class, EntityDataSerializers.FLOAT)
 
 //        val BATTLING = Activity.register("npc_battling")
 
@@ -311,7 +311,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     }
 
     override fun brainProvider() = Brain.provider<NPCEntity>(emptySet(), emptySet())
-    override fun getBreedOffspring(world: ServerLevel, entity: AgeableMob) = null // No lovemaking! Unless...
+    override fun getBreedOffspring(ServerLevel world, entity: AgeableMob) = null // No lovemaking! Unless...
     override fun getCurrentPoseType() = this.entityData.get(POSE_TYPE)
 
     override fun defineSynchedData(builder: SynchedEntityData.Builder) {
@@ -405,14 +405,14 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         DebugPackets.sendPathFindingPacket(level(), this, this.navigation.path, this.navigation.path?.distToTarget ?: 0F)
     }
 
-    override fun broadcastToPlayer(player: ServerPlayer): Boolean {
+    override fun broadcastToPlayer(ServerPlayer player): Boolean {
         if (shouldHideFrom(player)) {
             return false
         }
         return super.broadcastToPlayer(player)
     }
 
-    fun shouldHideFrom(player: ServerPlayer): Boolean {
+    fun shouldHideFrom(ServerPlayer player): Boolean {
         if (Cobblemon.permissionValidator.hasPermission(player, permission = SEE_HIDDEN_NPCS)) {
             return false
         }
@@ -424,7 +424,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         return false
     }
 
-    override fun saveWithoutId(nbt: CompoundTag): CompoundTag {
+    override fun saveWithoutId(CompoundTag nbt): CompoundTag {
         super.saveWithoutId(nbt)
         saveScriptingToNBT(nbt)
         nbt.put(DataKeys.NPC_LEVEL, IntTag.valueOf(level))
@@ -492,7 +492,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         return nbt
     }
 
-    override fun load(nbt: CompoundTag) {
+    override fun load(CompoundTag nbt) {
         npc = NPCClasses.getByIdentifier(ResourceLocation.parse(nbt.getString(DataKeys.NPC_CLASS))) ?: NPCClasses.classes.first()
         forcedResourceIdentifier = if (nbt.contains(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER)) {
             ResourceLocation.parse(nbt.getString(DataKeys.NPC_FORCED_RESOURCE_IDENTIFIER))
@@ -557,7 +557,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         remakeBrain()
     }
 
-    fun loadTextureFromGameProfileName(username: String) {
+    fun loadTextureFromGameProfileName(userString name) {
         val server = server ?: return
         server.profileRepository.findProfilesByNames(arrayOf(username), object : ProfileLookupCallback {
             override fun onProfileLookupSucceeded(profile: GameProfile) {
@@ -570,7 +570,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
                 data.setDirectly("player_texture_username", StringValue(username))
             }
 
-            override fun onProfileLookupFailed(profileName: String, exception: Exception) {
+            override fun onProfileLookupFailed(profileName: String, Exception exception) {
                 Cobblemon.LOGGER.error("Unable to load texture for game profile name: $username")
             }
         })
@@ -652,12 +652,12 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         return delayedFuture(seconds = 1.6F)
     }
 
-    override fun sendingOut(pokemon: Pokemon): CompletableFuture<Unit> {
+    override fun sendingOut(Pokemon pokemon): CompletableFuture<Unit> {
         playAnimation(SEND_OUT_ANIMATION, pokemonExpressions(pokemon))
         return delayedFuture(seconds = 1.6F)
     }
 
-    private fun pokemonExpressions(pokemon: Pokemon): List<String> {
+    private fun pokemonExpressions(Pokemon pokemon): List<String> {
         return listOf(
             "v.actioning_pokemon_name=\'${pokemon.species.name}\';",
             "v.actioning_pokemon_level=${pokemon.level};",
@@ -673,7 +673,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
         }
     }
 
-    fun edit(player: ServerPlayer) {
+    fun edit(ServerPlayer player) {
         val lastEditing = BehaviourEditingTracker.getPlayerIdEditing(this)?.getPlayer()
         if (lastEditing != null) {
             BehaviourEditingTracker.stopEditing(lastEditing.uuid)
@@ -684,7 +684,7 @@ class NPCEntity(world: Level) : AgeableMob(CobblemonEntities.NPC, world), Posabl
     }
 
     override fun getNavigation() = navigation as OmniPathNavigation
-    override fun createNavigation(level: Level) = OmniPathNavigation(level, this)
+    override fun createNavigation(Level level) = OmniPathNavigation(level, this)
 
     // At some point these need to be changeable from MoLang or something.
     override fun canWalk(): Boolean {

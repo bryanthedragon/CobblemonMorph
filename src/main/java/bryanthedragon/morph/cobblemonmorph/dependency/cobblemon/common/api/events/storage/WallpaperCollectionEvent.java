@@ -21,6 +21,6 @@ import net.minecraft.server.level.ServerPlayer
  * @since February 14th, 2025
  */
 record WallpaperCollectionEvent(
-    val player: ServerPlayer,
+    val ServerPlayer player,
     val wallpapers: MutableSet<ResourceLocation>
 )

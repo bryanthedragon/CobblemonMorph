@@ -6,15 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Environment
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Observable
-import java.util.concurrent.CompletableFuture
-import net.minecraft.server.MinecraftServer
-import net.minecraft.world.level.Level
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Environment;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Observable;
+import java.util.concurrent.CompletableFuture;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.Level;
 
 /** Runs the given [Runnable] if the caller is on the CLIENT side. */
 fun ifClient(runnable: Runnable) {
@@ -50,7 +49,7 @@ fun <T> runOnServer(block: () -> T): CompletableFuture<T> {
     }
     return future
 }
-fun <T> Observable<T>.subscribeOnServer(priority: Priority = Priority.NORMAL, block: () -> Unit) = subscribe(priority) { runOnServer(block) }
+fun <T> Observable<T>.subscribeOnServer(Priority priority = Priority.NORMAL, block: () -> Unit) = subscribe(priority) { runOnServer(block) }
 
 fun server(): MinecraftServer? = Cobblemon.implementation.server()
 

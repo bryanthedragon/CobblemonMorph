@@ -17,19 +17,19 @@ import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.schedule.Activity
 
-class AddTasksToActivity : BehaviourConfig {
+public class AddTasksToActivity : BehaviourConfig {
     val activity: Activity? = null
     // Can be useful to add to multiple activities at once
     val activities = mutableListOf<Activity>()
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val tasksByPriority = mutableMapOf<Int, List<TaskConfig>>()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = tasksByPriority.values
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = tasksByPriority.values
         .flatten()
         .flatMap {
             it.getVariables(entity, behaviourConfigurationContext)
         } + listOf(condition).asVariables()
-    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    override fun configure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (!checkCondition(behaviourConfigurationContext, condition)) return
 
         val activities = if (activity != null) (activities + activity) else activities

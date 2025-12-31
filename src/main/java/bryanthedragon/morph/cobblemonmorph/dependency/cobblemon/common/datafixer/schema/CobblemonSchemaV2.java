@@ -16,7 +16,7 @@ import net.minecraft.util.datafix.DataFixers
 import net.minecraft.util.datafix.fixes.References
 import java.util.function.Supplier
 
-class CobblemonSchemaV2(versionKey: Int, parent: Schema?) : Schema(versionKey, parent) {
+public class CobblemonSchemaV2(versionKey: Int, parent: Schema?) : Schema(versionKey, parent) {
 
     override fun registerTypes(
         schema: Schema,

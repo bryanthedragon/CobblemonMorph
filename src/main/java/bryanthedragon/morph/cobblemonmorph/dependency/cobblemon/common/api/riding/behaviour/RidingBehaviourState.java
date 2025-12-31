@@ -57,7 +57,7 @@ open class RidingBehaviourState {
 
 fun <T> ridingState(value: T, side: Side) = SidedRidingState(value, side)
 
-class SidedRidingState<T>(private var value: T, val side: Side) {
+public class SidedRidingState<T>(private var value: T, val side: Side) {
     fun get() = value
 
     fun set(value: T, forced: Boolean = false) {
@@ -85,10 +85,10 @@ class SidedRidingState<T>(private var value: T, val side: Side) {
     }
 }
 
-enum class Side {
+public enum Side {
     SERVER, CLIENT, BOTH
 }
 
-enum class DriverSide {
+public enum DriverSide {
     LOCAL, REMOTE, BOTH
 }

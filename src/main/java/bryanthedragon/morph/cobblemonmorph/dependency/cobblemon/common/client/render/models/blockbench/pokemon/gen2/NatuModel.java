@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class NatuModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, HeadedFrame {
+public class NatuModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("natu")
     override val head = getPart("torso")
 

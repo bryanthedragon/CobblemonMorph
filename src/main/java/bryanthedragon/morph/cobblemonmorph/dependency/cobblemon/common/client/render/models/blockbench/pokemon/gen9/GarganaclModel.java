@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class GarganaclModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
+public class GarganaclModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("garganacl")
     override val head = getPart("waist")
     override val leftLeg = getPart("leg_left")

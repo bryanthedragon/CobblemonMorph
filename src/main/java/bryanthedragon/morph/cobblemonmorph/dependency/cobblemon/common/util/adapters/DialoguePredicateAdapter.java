@@ -17,8 +17,8 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import java.lang.reflect.Type
-final class DialoguePredicateAdapter : JsonDeserializer<DialoguePredicate> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DialoguePredicate {
+public final class DialoguePredicateAdapter : JsonDeserializer<DialoguePredicate> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): DialoguePredicate {
         return when (json) {
             is JsonObject -> {
                 val typeId = json.get("type").asString

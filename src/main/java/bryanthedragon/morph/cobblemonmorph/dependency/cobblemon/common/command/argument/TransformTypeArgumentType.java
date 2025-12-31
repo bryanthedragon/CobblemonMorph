@@ -16,7 +16,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.SharedSuggestionProvider
 
-class TransformTypeArgumentType: ArgumentType<TransformTypeArgumentType.Companion.TransformType>
+public class TransformTypeArgumentType: ArgumentType<TransformTypeArgumentType.Companion.TransformType>
 {
     override fun parse(reader: StringReader): TransformType {
         try {
@@ -30,7 +30,7 @@ class TransformTypeArgumentType: ArgumentType<TransformTypeArgumentType.Companio
 
     override fun <S : Any> listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder) = SharedSuggestionProvider.suggest(EXAMPLES, builder)
 
-    companion object {
+    final class Companion {
         enum class TransformType {
             POSITION,
             ROTATION,
@@ -39,8 +39,8 @@ class TransformTypeArgumentType: ArgumentType<TransformTypeArgumentType.Companio
 
         fun transformType() = TransformTypeArgumentType()
 
-        fun getTransform(context: CommandContext<CommandSourceStack>, name: String): TransformType {
-            return context.getArgument(name, TransformType::class.java )
+        fun getTransform(context: CommandContext<CommandSourceStack>, String name): TransformType {
+            return context.getArgument(name, TransformType.class )
         }
 
         private val EXAMPLES = TransformType.entries.map { it.name.lowercase() }

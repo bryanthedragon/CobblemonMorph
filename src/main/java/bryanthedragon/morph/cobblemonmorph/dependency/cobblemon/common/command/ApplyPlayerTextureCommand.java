@@ -20,7 +20,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
-final class ApplyPlayerTextureCommand {
+public final class ApplyPlayerTextureCommand {
     private const val NAME = "applyplayertexture"
     private const val PLAYER = "player"
 
@@ -34,7 +34,7 @@ final class ApplyPlayerTextureCommand {
     private fun execute(context: CommandContext<CommandSourceStack>) : Int {
         val player = context.source.playerOrException
         val target = StringArgumentType.getString(context, "player")
-        val targetEntity = player.traceFirstEntityCollision(entityClass = NPCEntity::class.java)
+        val targetEntity = player.traceFirstEntityCollision(entityClass = NPCEntity.class)
         if (targetEntity == null) {
             player.sendSystemMessage(commandLang("npcedit.non_npc").red())
             return 0

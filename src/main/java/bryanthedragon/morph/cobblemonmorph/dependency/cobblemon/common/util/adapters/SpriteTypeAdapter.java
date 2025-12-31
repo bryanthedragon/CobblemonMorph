@@ -12,15 +12,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokem
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.SpriteType
 import com.google.gson.*
 import java.lang.reflect.Type
-final class SpriteTypeAdapter : JsonDeserializer<SpriteType>, JsonSerializer<SpriteType> {
+public final class SpriteTypeAdapter : JsonDeserializer<SpriteType>, JsonSerializer<SpriteType> {
 
     // Safe to just cache
     private val spriteTypes = SpriteType.values()
-    override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext?): SpriteType {
+    override fun deserialize(JsonElement json, typeOfT: Type?, JsonDeserializationContext context?): SpriteType {
         val rawID = json.asString
         return this.spriteTypes.firstOrNull { spriteType -> spriteType.name.equals(rawID, true) }
             ?: throw IllegalStateException("Failed to resolve sprite type from: $rawID")
     }
 
-    override fun serialize(src: SpriteType, typeOfSrc: Type, context: JsonSerializationContext): JsonElement = JsonPrimitive(src.name.lowercase())
+    override fun serialize(src: SpriteType, typeOfT srcype, context: JsonSerializationContext): JsonElement = JsonPrimitive(src.name.lowercase())
 }

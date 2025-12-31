@@ -31,13 +31,14 @@ import java.io.PrintWriter
  *
  * @author Hiroku
  * @since April 1st, 2022.
- */final class JsonManifestWalker {
+ */
+public final class JsonManifestWalker {
     /**
      * Builds a manifest at [manifestPath] using the files inside the same folder.
      *
      * This is for internal use though we could make this more normalized later.
      */
-    internal fun build(manifestPath: String) {
+    internal fun build(manifestString path) {
         val file = File(manifestPath)
         file.createNewFile()
         val folder = file.parentFile
@@ -56,9 +57,9 @@ import java.io.PrintWriter
     /**
      * Loads the given manifest and all the files it references.
      */
-    fun <T> load(clazz: Class<T>, folder: String, gson: Gson): List<T> {
+    fun <T> load(clazz: Class<T>, folder: String, Gson gson): List<T> {
         val manifestPath = "/assets/${Cobblemon.MODID}/$folder/_MANIFEST.json"
-        val manifest = Cobblemon::class.java.getResourceAsStream(manifestPath)!!
+        val manifest = Cobblemon.class.getResourceAsStream(manifestPath)!!
         val folderPath = manifestPath.substringBeforeLast("/")
         val list = mutableListOf<T>()
         val array = gson.fromJson<JsonArray>(InputStreamReader(manifest))
@@ -70,7 +71,7 @@ import java.io.PrintWriter
             }
             try {
                 list.add(gson.fromJson(InputStreamReader(stream), clazz))
-            } catch (exception: Exception) {
+            } catch (Exception exception) {
                 LOGGER.error("Issue loading manifest component: $path")
                 exception.printStackTrace()
             }

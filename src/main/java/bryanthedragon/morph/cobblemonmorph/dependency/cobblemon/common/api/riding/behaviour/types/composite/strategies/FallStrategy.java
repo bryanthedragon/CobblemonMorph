@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
-final class FallStrategy : CompositeRidingStrategy<FallCompositeSettings> {
+public final class FallStrategy : CompositeRidingStrategy<FallCompositeSettings> {
 
     override val key = cobblemonResource("strategy/fall")
 
@@ -73,7 +73,7 @@ final class FallStrategy : CompositeRidingStrategy<FallCompositeSettings> {
 
 }
 
-class FallCompositeSettings : CompositeSettings() {
+public class FallCompositeSettings : CompositeSettings() {
     override val key = FallStrategy.key
 
     var minimumForwardSpeed: Expression = "0.0".asExpression()
@@ -82,13 +82,13 @@ class FallCompositeSettings : CompositeSettings() {
     var minimumFallSpeed: Expression = "0.5".asExpression()
         private set
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         super.encode(buffer)
         buffer.writeExpression(minimumForwardSpeed)
         buffer.writeExpression(minimumFallSpeed)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         super.decode(buffer)
         minimumForwardSpeed = buffer.readExpression()
         minimumFallSpeed = buffer.readExpression()

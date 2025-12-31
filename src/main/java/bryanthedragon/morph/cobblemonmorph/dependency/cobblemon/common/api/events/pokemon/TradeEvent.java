@@ -6,16 +6,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokemon;
 
-import com.bedrockk.molang.runtime.value.DoubleValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.moLangFunctionMap
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.TradeParticipant
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
+import com.bedrockk.molang.runtime.value.DoubleValue;
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.moLangFunctionMap;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade.TradeParticipant;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer;
 
 /**
  * Event fired when a trade is initiated or completed.
@@ -23,27 +24,27 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getP
  * @author MeAlam
  * @since August 23th, 2025
  */
-interface TradeEvent {
+public interface TradeEvent {
 
     /**
      * The first [TradeParticipant].
      */
-    val tradeParticipant1: TradeParticipant
+    public final TradeParticipant tradeParticipant1;
 
     /**
      * The [Pokemon] being traded by the first participant.
      */
-    val tradeParticipant1Pokemon: Pokemon
+    public final Pokemon tradeParticipant1Pokemon;
 
     /**
      * The second [TradeParticipant].
      */
-    val tradeParticipant2: TradeParticipant
+    public final TradeParticipant tradeParticipant2;
 
     /**
      * The [Pokemon] being traded by the second participant.
      */
-    val tradeParticipant2Pokemon: Pokemon
+    public final Pokemon tradeParticipant2Pokemon;
 
     /**
      * Event fired when a trade is about to happen. Cancelling this event prevents the trade from occurring.
@@ -51,21 +52,11 @@ interface TradeEvent {
      * @author MeAlam
      * @since August 23th, 2025
      */
-    record Pre(
-        override val tradeParticipant1: TradeParticipant,
-        override val tradeParticipant1Pokemon: Pokemon,
-        override val tradeParticipant2: TradeParticipant,
-        override val tradeParticipant2Pokemon: Pokemon
-    ) : TradeEvent, Cancelable() {
-        val context = mutableMapOf(
-            "trade_participant_1" to (tradeParticipant1.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
-            "trade_participant_2" to (tradeParticipant2.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
-            "trade_participant_1_pokemon" to tradeParticipant1Pokemon.struct,
-            "trade_participant_2_pokemon" to tradeParticipant2Pokemon.struct
-        )
+    public record Pre(public final TradeParticipant tradeParticipant1, public final  Pokemon tradeParticipant1Pokemon, public final TradeParticipant tradeParticipant2, public final Pokemon tradeParticipant2Pokemon) : TradeEvent, Cancelable() {
+        public final context = mutableMapOf("trade_participant_1" to (tradeParticipant1.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO), "trade_participant_2" to (tradeParticipant2.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO), "trade_participant_1_pokemon" to tradeParticipant1Pokemon.struct, "trade_participant_2_pokemon" to tradeParticipant2Pokemon.struct)
 
-        val functions = moLangFunctionMap(
-            cancelFunc
+        public final functions = moLangFunctionMap(
+            cancelFunc;
         )
     }
 
@@ -75,17 +66,7 @@ interface TradeEvent {
      * @author MeAlam
      * @since August 23th, 2025
      */
-    record Post(
-        override val tradeParticipant1: TradeParticipant,
-        override val tradeParticipant1Pokemon: Pokemon,
-        override val tradeParticipant2: TradeParticipant,
-        override val tradeParticipant2Pokemon: Pokemon
-    ) : TradeEvent {
-        val context = mutableMapOf(
-            "trade_participant_1" to (tradeParticipant1.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
-            "trade_participant_2" to (tradeParticipant2.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO),
-            "trade_participant_1_pokemon" to tradeParticipant1Pokemon.struct,
-            "trade_participant_2_pokemon" to tradeParticipant2Pokemon.struct
-        )
+    record Post(public final TradeParticipant tradeParticipant1, public final  Pokemon tradeParticipant1Pokemon, public final TradeParticipant tradeParticipant2, public final Pokemon tradeParticipant2Pokemon) : TradeEvent {
+        public final context = mutableMapOf("trade_participant_1" to (tradeParticipant1.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO), "trade_participant_2" to (tradeParticipant2.uuid.getPlayer()?.asMoLangValue() ?: DoubleValue.ZERO), "trade_participant_1_pokemon" to tradeParticipant1Pokemon.struct, "trade_participant_2_pokemon" to tradeParticipant2Pokemon.struct);
     }
 }

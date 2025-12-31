@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.duck.Ride
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.orientation.ClientboundUpdateOrientationPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.util.Mth
-final class ClientboundUpdateOrientationHandler : ClientNetworkPacketHandler<ClientboundUpdateOrientationPacket> {
-    override fun handle(packet: ClientboundUpdateOrientationPacket, client: Minecraft) {
+public final class ClientboundUpdateOrientationHandler : ClientNetworkPacketHandler<ClientboundUpdateOrientationPacket> {
+    override fun handle(packet: ClientboundUpdateOrientationPacket, Minecraft client) {
         client.executeIfPossible {
             val level = client.level ?: return@executeIfPossible
             val player = client.player ?: return@executeIfPossible

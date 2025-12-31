@@ -22,21 +22,21 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 1st, 2022
  */
-class AbilityUpdatePacket(pokemon: () -> Pokemon?, ability: AbilityTemplate) : SingleUpdatePacket<AbilityTemplate, AbilityUpdatePacket>(pokemon, ability) {
+public class AbilityUpdatePacket(pokemon: () -> Pokemon?, ability: AbilityTemplate) : SingleUpdatePacket<AbilityTemplate, AbilityUpdatePacket>(pokemon, ability) {
 
     override val id = ID
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(this.value.name)
     }
 
-    override fun set(pokemon: Pokemon, value: AbilityTemplate) {
+    override fun set(Pokemon pokemon, value: AbilityTemplate) {
         pokemon.ability = value.create()
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("ability_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): AbilityUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): AbilityUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val ability = Abilities.get(buffer.readString())!!
             return AbilityUpdatePacket(pokemon, ability)

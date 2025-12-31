@@ -19,19 +19,19 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import java.lang.reflect.Type
-final class DialogueInputAdapter : JsonDeserializer<DialogueInput> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DialogueInput {
+public final class DialogueInputAdapter : JsonDeserializer<DialogueInput> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): DialogueInput {
         if (json.isJsonPrimitive || json.isJsonArray) {
-            return DialogueNoInput(action = context.deserialize(json, DialogueAction::class.java))
+            return DialogueNoInput(action = context.deserialize(json, DialogueAction.class))
         }
 
         val obj = json.asJsonObject
         val typeId = obj.get("type").asString
         return when (typeId) {
-            "text" -> context.deserialize(obj, DialogueTextInput::class.java)
-            "auto-continue" -> context.deserialize(obj, DialogueAutoContinueInput::class.java)
-            "option" -> context.deserialize(obj, DialogueOptionSetInput::class.java)
-            "none" -> context.deserialize(obj, DialogueNoInput::class.java)
+            "text" -> context.deserialize(obj, DialogueTextInput.class)
+            "auto-continue" -> context.deserialize(obj, DialogueAutoContinueInput.class)
+            "option" -> context.deserialize(obj, DialogueOptionSetInput.class)
+            "none" -> context.deserialize(obj, DialogueNoInput.class)
             else -> throw JsonParseException("Unknown dialogue input type $typeId")
         }
     }

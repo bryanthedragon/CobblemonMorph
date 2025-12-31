@@ -29,17 +29,17 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.sounds.SoundEvent
 import java.util.*
 
-class PartySelectConfiguration(
+public class PartySelectConfiguration(
     val title: MutableComponent,
     val pokemon: List<PartySelectPokemonDTO>,
     val onCancel: (PartySelectGUI) -> Unit,
     val onBack: (PartySelectGUI) -> Unit,
     val onSelect: (PartySelectGUI, PartySelectPokemonDTO) -> Unit,
 )
-class PartySelectGUI(
+public class PartySelectGUI(
     val config: PartySelectConfiguration
 ) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")), CobblemonRenderable {
-    companion object {
+    final class Companion {
         const val WIDTH = 163
         const val HEIGHT = 132
         const val SCALE = 0.5F
@@ -53,7 +53,7 @@ class PartySelectGUI(
     constructor(
         title: MutableComponent,
         pokemon: List<PartySelectPokemonDTO>,
-        uuid: UUID
+        UUID uuid
     ): this(
         PartySelectConfiguration(
             title = title,
@@ -180,7 +180,7 @@ class PartySelectGUI(
 
     override fun renderMenuBackground(context: GuiGraphics) {}
 
-    fun playSound(soundEvent: SoundEvent) {
+    fun playSound(SoundEvent soundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 }

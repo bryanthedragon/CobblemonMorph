@@ -20,12 +20,12 @@ import com.mojang.datafixers.util.Either
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.LivingEntity
 
-class ApplyBehaviours : BehaviourConfig {
+public class ApplyBehaviours : BehaviourConfig {
     var condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     @SerializedName("behaviours", alternate = ["behaviors"])
     val behaviours = mutableListOf<ResourceLocation>()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return if (checkCondition(behaviourConfigurationContext, condition)) {
             behaviours.flatMap {
                 CobblemonBehaviours.behaviours[it]?.configurations?.flatMap { it.getVariables(entity, behaviourConfigurationContext) } ?: emptyList()
@@ -35,7 +35,7 @@ class ApplyBehaviours : BehaviourConfig {
         }
     }
 
-    override fun preconfigure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    override fun preconfigure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (!checkCondition(behaviourConfigurationContext, condition)) return
 
         val configurations = behaviours.map { CobblemonBehaviours.behaviours[it]?.takeIf { it.canBeApplied(entity) } ?: return }
@@ -44,7 +44,7 @@ class ApplyBehaviours : BehaviourConfig {
         }
     }
 
-    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {
+    override fun configure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {
         if (!checkCondition(behaviourConfigurationContext, condition)) return
 
         val applicableBehaviours = behaviours.mapNotNull {

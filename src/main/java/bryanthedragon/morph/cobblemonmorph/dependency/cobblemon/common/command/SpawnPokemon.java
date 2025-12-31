@@ -28,7 +28,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.MobSpawnType
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.level.Level
-final class SpawnPokemon {
+public final class SpawnPokemon {
 
     private const val NAME = "spawnpokemon"
     private const val PROPERTIES = "properties"
@@ -60,7 +60,7 @@ final class SpawnPokemon {
         dispatcher.register(argumentPositionCommand.alias(AT_ALIAS))
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, pos: Vec3): Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, Vec3 pos): Int {
         val world = context.source.level
         val blockPos = pos.toBlockPos()
         if (!Level.isInSpawnableBounds(blockPos)) {
@@ -79,7 +79,7 @@ final class SpawnPokemon {
                 return Command.SINGLE_SUCCESS
             }
             throw FAILED_SPAWN_EXCEPTION.create()
-        } catch (e: Exception) {
+        } catch (Exception e) {
             e.printStackTrace()
             throw FAILED_SPAWN_EXCEPTION.create()
         }

@@ -44,7 +44,7 @@ import net.minecraft.world.entity.LivingEntity
  * @author Deltric
  * @since January 22nd, 2022
  */
-class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: BattleActor, val publicMessage: BattleMessage, val privateMessage: BattleMessage): InterpreterInstruction {
+public class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: BattleActor, val publicMessage: BattleMessage, val privateMessage: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
 
@@ -151,11 +151,11 @@ class SwitchInstruction(val instructionSet: InstructionSet, val battleActor: Bat
         }
     }
 
-    companion object{
+    final class Companion{
         fun createEntitySwitch(
             battle: PokemonBattle,
             actor: BattleActor,
-            entity: LivingEntity,
+            LivingEntity entity,
             pnx: String,
             activePokemon: ActiveBattlePokemon,
             newPokemon: BattlePokemon,

@@ -44,7 +44,7 @@ import kotlin.math.acos
  * @author Hiroku
  * @since April 18th, 2025
  */
-class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigation(entity, world) {
+public class OmniPathNavigation(val Level world, val entity: Mob) : GroundPathNavigation(entity, world) {
     val pather = entity as OmniPathingEntity
 
     var cachedCurrentNode: Node? = null
@@ -62,7 +62,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 
     var navigationContext = NavigationContext()
 
-    companion object {
+    final class Companion {
         val verticallyPreciseNodeTypes = setOf(PathType.WATER, PathType.OPEN, PathType.LAVA)
     }
 
@@ -162,7 +162,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         doStuckDetection(vec3d)
     }
 
-    fun isAirborne(world: Level, pos: BlockPos) =
+    fun isAirborne(Level world, (BlockPos pos) =
         world.getBlockState(pos).isPathfindable(PathComputationType.AIR)
                 && world.getBlockState(pos.below(1)).isPathfindable(PathComputationType.AIR)
                 && world.getBlockState(pos.below(2)).isPathfindable(PathComputationType.AIR)
@@ -172,7 +172,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
     override fun createPath(target: BlockPos, distance: Int): Path? {
         var target = target
 
-        var blockPos: BlockPos
+        var blockBlockPos pos
         if (this.world.getBlockState(target).isAir && !pather.canFly()) {
             blockPos = target.below()
             while (blockPos.y > this.world.minBuildHeight && this.world.getBlockState(blockPos).isAir) {
@@ -213,7 +213,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
 //                    entity.level().setBlockState(node.blockPos, blockState)
 //                    i++
 //                }
-//            } catch(e: Exception) {
+//            } catch(Exception e) {
 //            }
 //            entity.remove(Entity.RemovalReason.DISCARDED)
 //        }
@@ -221,12 +221,12 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         return path
     }
 
-    fun moveTo(x: Double, y: Double, z: Double, speed: Double = 1.0, navigationContext: NavigationContext) {
+    fun moveTo(x: Double, y: Double, z: Double, Double speed = 1.0, navigationContext: NavigationContext) {
         this.navigationContext = navigationContext
         this.moveTo(x, y, z, speed)
     }
 
-    override fun isStableDestination(pos: BlockPos): Boolean {
+    override fun isStableDestination(BlockPos pos): Boolean {
         if (pather.canSwimInWater() && mob.isInWater) {
             val blockGetter: BlockGetter = level
             if (blockGetter.getFluidState(pos).`is`(FluidTags.WATER)) {
@@ -262,7 +262,7 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         return super.isStableDestination(pos)
     }
 
-    override fun getGroundY(vec: Vec3): Double {
+    override fun getGroundY(Vec3 vec): Double {
         val blockGetter: BlockGetter = level
         val blockPos = BlockPos.containing(vec)
         if (pather.isFlying() && world.getBlockState(blockPos).isPathfindable(PathComputationType.AIR)) {
@@ -275,11 +275,11 @@ class OmniPathNavigation(val world: Level, val entity: Mob) : GroundPathNavigati
         return if ((canFloat()) && blockGetter.getFluidState(blockPos).`is`(FluidTags.WATER)) vec.y + 0.5 else super.getGroundY(vec)
     }
 
-    override fun createPath(entity: Entity, distance: Int): Path? {
+    override fun createPath(Entity entity, distance: Int): Path? {
         return this.createPath(entity.blockPosition(), distance)
     }
 
-    override fun moveTo(path: Path?, speed: Double): Boolean {
+    override fun moveTo(path: Path?, Double speed): Boolean {
         if (path != null && path.nodeCount > 0) {
             val node = path.getNode(0)!!
 //            pokemonEntity.discard()

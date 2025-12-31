@@ -21,8 +21,8 @@ import com.google.gson.JsonParseException
 import com.mojang.serialization.JsonOps
 import java.lang.reflect.Type
 import net.minecraft.network.chat.ComponentSerialization
-final class DialogueTextAdapter : JsonDeserializer<DialogueText> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): DialogueText {
+public final class DialogueTextAdapter : JsonDeserializer<DialogueText> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext context): DialogueText {
         return if (json.isJsonPrimitive) {
             WrappedDialogueText(json.asString.asTranslated())
         } else if (json.isJsonArray) {

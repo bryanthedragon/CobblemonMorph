@@ -22,7 +22,7 @@ import java.util.UUID
 /**
  * A type of data store that keeps a cache, entries are evicted when the cached player disconnects from the server
  */
-class CachedPlayerDataStoreFactory<T : InstancedPlayerData>(val backend: PlayerDataStoreBackend<T>) : PlayerInstancedDataFactory<T> {
+public class CachedPlayerDataStoreFactory<T : InstancedPlayerData>(val backend: PlayerDataStoreBackend<T>) : PlayerInstancedDataFactory<T> {
 
     private val cache = mutableMapOf<UUID, T>()
 
@@ -51,12 +51,12 @@ class CachedPlayerDataStoreFactory<T : InstancedPlayerData>(val backend: PlayerD
         backend.save(getForPlayer(playerId))
     }
 
-    override fun onPlayerDisconnect(player: ServerPlayer) {
+    override fun onPlayerDisconnect(ServerPlayer player) {
         saveSingle(player.uuid)
         cache.remove(player.uuid)
     }
 
-    override fun sendToPlayer(player: ServerPlayer) {
+    override fun sendToPlayer(ServerPlayer player) {
         player.sendPacket(SetClientPlayerDataPacket(backend.dataType, getForPlayer(player).toClientData()))
     }
 

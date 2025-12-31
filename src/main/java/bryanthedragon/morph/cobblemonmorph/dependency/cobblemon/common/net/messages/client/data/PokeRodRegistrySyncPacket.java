@@ -13,19 +13,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fishi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class PokeRodRegistrySyncPacket(rods: Collection<PokeRod>) : DataRegistrySyncPacket<PokeRod, PokeRodRegistrySyncPacket>(rods) {
-    companion object {
+public class PokeRodRegistrySyncPacket(rods: Collection<PokeRod>) : DataRegistrySyncPacket<PokeRod, PokeRodRegistrySyncPacket>(rods) {
+    final class Companion {
         val ID = cobblemonResource("pokerod_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf) = PokeRodRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = PokeRodRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: PokeRod) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: PokeRod) {
         entry.encode(buffer)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf) = PokeRod.decode(buffer)
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer) = PokeRod.decode(buffer)
 
     override fun synchronizeDecoded(entries: Collection<PokeRod>) {
         PokeRods.reload(entries.associateBy { it.name!! })

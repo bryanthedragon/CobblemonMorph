@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture
  * @author Hiroku
  * @since October 29th, 2023
  */
-class SequenceActionEffectKeyframe(val keyframes: List<ActionEffectKeyframe> = listOf()) : ConditionalActionEffectKeyframe() {
+public class SequenceActionEffectKeyframe(val keyframes: List<ActionEffectKeyframe> = listOf()) : ConditionalActionEffectKeyframe() {
     override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
         val future = CompletableFuture<Unit>()
         context.actionEffect.chainKeyframes(context, keyframes.toList().iterator(), future)

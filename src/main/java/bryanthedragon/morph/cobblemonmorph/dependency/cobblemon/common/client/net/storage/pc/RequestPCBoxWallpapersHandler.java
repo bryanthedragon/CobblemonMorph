@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.PCBoxWallpapersPacket
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.wallpaper.RequestPCBoxWallpapersPacket
 import net.minecraft.client.Minecraft
-final class RequestPCBoxWallpapersHandler : ClientNetworkPacketHandler<RequestPCBoxWallpapersPacket> {
-    override fun handle(packet: RequestPCBoxWallpapersPacket, client: Minecraft) {
+public final class RequestPCBoxWallpapersHandler : ClientNetworkPacketHandler<RequestPCBoxWallpapersPacket> {
+    override fun handle(packet: RequestPCBoxWallpapersPacket, Minecraft client) {
         PCBoxWallpaperRepository.findWallpapers(client.resourceManager)
         PCBoxWallpapersPacket(PCBoxWallpaperRepository.availableWallpapers).sendToServer()
     }

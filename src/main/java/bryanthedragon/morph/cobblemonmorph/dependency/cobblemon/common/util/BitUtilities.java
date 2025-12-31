@@ -6,22 +6,25 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.pow
-import kotlin.experimental.and
-import kotlin.experimental.or
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math.pow;
 
-fun setBitForByte(byte: Byte, bit: Int, on: Boolean): Byte {
-    val bitAsByte = 2 pow (bit - 1)
-    return if (on) {
-        byte or bitAsByte.toByte()
-    } else {
-        byte and (-bitAsByte - 1).toByte()
+import kotlin.experimental.and;
+import kotlin.experimental.or;
+public class BitUtilities {
+    public Byte setBitForByte(Byte byte, Int bit, Boolean on) {
+        val bitAsByte = 2 pow (bit - 1);
+        return if (on) {
+            byte or bitAsByte.toByte();
+        } 
+        else {
+            byte and (-bitAsByte - 1).toByte();
+        }
     }
-}
 
-fun getBitForByte(byte: Byte, bit: Int): Boolean {
-    val bitAsByte = 2 pow (bit - 1)
-    return (byte and bitAsByte.toByte()) != 0.toByte()
+    public Boolean getBitForByte(Byte byte, Int bit) {
+        val bitAsByte = 2 pow (bit - 1);
+        return (byte and bitAsByte.toByte()) != 0.toByte();
+    }
 }

@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 
 record ItemTooltipEvent(
-    val stack: ItemStack,
+    val ItemStack stack,
     val context: Item.TooltipContext,
     val type: TooltipFlag,
     val lines: MutableList<Component>

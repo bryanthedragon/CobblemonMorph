@@ -6,8 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 fun <A, B> MutableMap<A, B>.removeIf(predicate: (Map.Entry<A, B>) -> Boolean) {
     val toRemove = mutableListOf<A>()
     for (entry in this) {

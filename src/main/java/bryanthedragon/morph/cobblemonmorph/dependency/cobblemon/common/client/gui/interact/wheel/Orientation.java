@@ -8,6 +8,6 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.wheel
 
-enum class Orientation {
+public enum Orientation {
     NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST
 }

@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.p
 /**
  * A Cobblemon extension to make it possible to add water drag values to our Pokeballs without relying on the PersistentProjectileEntity implementation.
  */
-interface WaterDragModifier {
+public interface WaterDragModifier {
 
     /**
      * Calculates and returns the value of the water drag.

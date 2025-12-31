@@ -10,4 +10,4 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.MintBlock
 
-class MintLeafItem(val mintType: MintBlock.MintType) : CobblemonItem(Properties())
+public class MintLeafItem(val mintType: MintBlock.MintType) : CobblemonItem(Properties())

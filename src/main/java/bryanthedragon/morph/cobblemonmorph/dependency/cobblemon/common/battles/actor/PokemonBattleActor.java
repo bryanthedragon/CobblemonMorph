@@ -24,8 +24,8 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.Vec3
 
-class PokemonBattleActor(
-    uuid: UUID,
+public class PokemonBattleActor(
+    UUID uuid,
     val pokemon: BattlePokemon,
     override val fleeDistance: Float,
     artificialDecider: BattleAI = RandomBattleAI()
@@ -36,7 +36,7 @@ class PokemonBattleActor(
         initialPos = entity?.position()
     }
     override fun getName() = pokemon.effectedPokemon.species.translatedName
-    override fun nameOwned(name: String): MutableComponent = Component.literal(name)
+    override fun nameOwned(String name): MutableComponent = Component.literal(name)
     override fun getWorldAndPosition(): Pair<ServerLevel, Vec3>? {
         // This isn't a great solution, but basically capturing a Pokémon
         // removes the entity from the world, which sure does look similar
@@ -51,7 +51,7 @@ class PokemonBattleActor(
         return world to entity.position()
     }
 
-    override fun sendUpdate(packet: NetworkPacket<*>) {
+    override fun sendUpdate( NetworkPacket<*> packet) {
         super.sendUpdate(packet)
         if (packet is BattleEndPacket) {
             // Do some shit

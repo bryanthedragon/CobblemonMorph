@@ -27,21 +27,21 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.packs.PackType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-final class SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
+public final class SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
     override val id = cobblemonResource("spawn_bait_effects")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<SpawnBaitEffects>()
-    override val typeToken: TypeToken<SpawnBait> = TypeToken.get(SpawnBait::class.java)
+    override val typeToken: TypeToken<SpawnBait> = TypeToken.get(SpawnBait.class)
     override val resourcePath = "spawn_bait_effects"
-    override val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition::class.java, Item::class.java).type, ItemLikeConditionAdapter)
+    override val Gson gson = GsonBuilder()
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(RegistryLikeCondition.class, Item.class).type, ItemLikeConditionAdapter)
         .setPrettyPrinting()
         .create()
 
     private val effectsMap = mutableMapOf<ResourceLocation, SpawnBait>()
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         SpawnBaitRegistrySyncPacket(this.effectsMap.toMap()).sendToPlayer(player)
     }
 
@@ -53,12 +53,12 @@ final class SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
     }
 
     @JvmStatic
-    fun getEffectsFromRodItemStack(stack: ItemStack): List<SpawnBait.Effect> {
+    fun getEffectsFromRodItemStack(ItemStack stack): List<SpawnBait.Effect> {
         return getEffectsFromItemStack(stack.components.get(CobblemonItemComponents.BAIT)?.stack ?: ItemStack.EMPTY)
     }
 
     @JvmStatic
-    fun getEffectsFromItemStack(stack: ItemStack): List<SpawnBait.Effect> {
+    fun getEffectsFromItemStack(ItemStack stack): List<SpawnBait.Effect> {
         val componentEffects = stack.get(CobblemonItemComponents.BAIT_EFFECTS)?.effects ?: emptyList()
         return componentEffects.mapNotNull(::getFromIdentifier).flatMap { it.effects } +
                 getEffectsFromItem(stack.itemHolder)
@@ -79,7 +79,7 @@ final class SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
     }
 
     @JvmStatic
-    fun getFromIdentifier(identifier: ResourceLocation): SpawnBait? {
+    fun getFromIdentifier(ResourceLocation identifier): SpawnBait? {
         // Check normal spawn bait registry
         effectsMap[identifier]?.let { return it }
 
@@ -103,7 +103,7 @@ final class SpawnBaitEffects : JsonDataRegistry<SpawnBait> {
 
     // if it has bait effects and is not listed as a seasoning then it is a bait
     @JvmStatic
-    fun isFishingBait(stack: ItemStack): Boolean {
+    fun isFishingBait(ItemStack stack): Boolean {
         val holder = stack.itemHolder
         return effectsMap.values.any { it.item.fits(holder) }
     }

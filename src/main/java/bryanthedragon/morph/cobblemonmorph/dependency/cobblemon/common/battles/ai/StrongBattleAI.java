@@ -37,7 +37,7 @@ import kotlin.math.absoluteValue
  *
  * @since December 15th 2023
  */
-class StrongBattleAI(skill: Int) : BattleAI {
+public class StrongBattleAI(skill: Int) : BattleAI {
 
     private val skill = skill.coerceIn(0, 5)
     private val speedTierCoefficient = 4.0 //todo set back to 6 to how it was
@@ -566,7 +566,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
                 activeTrackerPokemon.currentHpPercent > hpSwitchOutThreshold
     }
 
-    fun statEstimationActive(mon: TrackerPokemon, stat: Stat): Double {
+    fun statEstimationActive(mon: TrackerPokemon, Stat stat ): Double {
         val boost = mon.boosts[stat] ?: 0
 
         val actualBoost = if (boost > 1) {
@@ -581,7 +581,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
 
     // move: the move used
     // defender: the activeTracker Pokemon that the move is being used on
-    fun moveDamageMultiplier(attacker: TrackerPokemon, move: MoveTemplate, defender: TrackerPokemon): Double {
+    fun moveDamageMultiplier(attacker: TrackerPokemon, MoveTemplate move, defender: TrackerPokemon): Double {
         val defenderTypes = defender.pokemon?.types ?: defender.form?.types ?: defender.species?.types ?: emptyList()
         var multiplier = 1.0
 
@@ -630,7 +630,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
     }
 
     // returns an approximate number of hits for a given move for estimation purposes
-    fun expectedHits(move: MoveTemplate): Int {
+    fun expectedHits(MoveTemplate move): Int {
         val minMaxHits = AIUtility.multiHitMoves[move.name]
         if (move.name == "triplekick" || move.name == "tripleaxel") {
             //Triple Kick and Triple Axel have an accuracy check for each hit, and also
@@ -652,7 +652,7 @@ class StrongBattleAI(skill: Int) : BattleAI {
         }
     }
 
-    private fun getNonZeroStats(name: String): Map<Stat, Int> {
+    private fun getNonZeroStats(String name): Map<Stat, Int> {
         return AIUtility.boostFromMoves[name] ?: emptyMap()
     }
 

@@ -9,7 +9,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.item
 
 import net.minecraft.resources.ResourceLocation
-class Berry(
+public class Berry(
     val name: ResourceLocation,
     val spicy: Int,
     val dry: Int,

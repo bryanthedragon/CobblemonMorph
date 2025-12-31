@@ -37,7 +37,7 @@ internal record ClientPokemonP3(
     val interactionCooldowns: Map<ResourceLocation, Int>,
 ) : Partial<Pokemon> {
 
-    override fun into(other: Pokemon): Pokemon {
+    override fun into(Pokemon other): Pokemon {
         other.originalTrainerType = this.originalTrainerType
         this.originalTrainer.ifPresent { other.originalTrainer = it }
         this.originalTrainerName.ifPresent { other.originalTrainerName = it }
@@ -56,7 +56,7 @@ internal record ClientPokemonP3(
         return other
     }
 
-    companion object {
+    final class Companion {
         /**
          * do not use cobblemon.config in here, as this is used by the client whose config is different to server, always use [ServerSettings]
          */
@@ -78,7 +78,7 @@ internal record ClientPokemonP3(
                 ).apply(instance, ::ClientPokemonP3)
         }
 
-        internal fun from(pokemon: Pokemon): ClientPokemonP3 = ClientPokemonP3(
+        internal fun from(Pokemon pokemon): ClientPokemonP3 = ClientPokemonP3(
             pokemon.originalTrainerType,
             Optional.ofNullable(pokemon.originalTrainer),
             Optional.ofNullable(pokemon.originalTrainerName),

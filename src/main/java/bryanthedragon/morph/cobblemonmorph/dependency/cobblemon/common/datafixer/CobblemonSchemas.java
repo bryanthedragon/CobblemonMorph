@@ -25,7 +25,7 @@ import com.mojang.serialization.DynamicOps
 import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix
 import java.util.concurrent.Executors
 
-@Suppress("MemberVisibilityCanBePrivate", "unused")final class CobblemonSchemas {
+@Suppress("MemberVisibilityCanBePrivate", "unused")public final class CobblemonSchemas {
     private val SAME: (Int, Schema) -> Schema = ::Schema
     private val RESULT: DataFixerBuilder.Result = this.create()
 
@@ -88,12 +88,12 @@ import java.util.concurrent.Executors
 
     private class CobblemonDataFixerCodec<R>(private val baseCodec: Codec<R>, private val typeReference: TypeReference) : Codec<R> {
 
-        override fun <T> encode(input: R, ops: DynamicOps<T>, prefix: T): DataResult<T> {
+        override fun <T> encode(input: R, DynamicOps<T> ops, prefix: T): DataResult<T> {
             return this.baseCodec.encode(input, ops, prefix)
                 .flatMap { encoded -> ops.mergeToMap(encoded, ops.createString(VERSION_KEY), ops.createInt(DATA_VERSION)) }
         }
 
-        override fun <T> decode(ops: DynamicOps<T>, input: T): DataResult<Pair<R, T>> {
+        override fun <T> decode(DynamicOps<T> ops, input: T): DataResult<Pair<R, T>> {
             val inputVersion = ops.get(input, VERSION_KEY)
                 .flatMap(ops::getNumberValue)
                 .map(Number::toInt)

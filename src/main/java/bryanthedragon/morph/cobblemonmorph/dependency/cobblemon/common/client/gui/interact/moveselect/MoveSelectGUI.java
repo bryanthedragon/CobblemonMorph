@@ -26,7 +26,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.sounds.SoundEvent
 import java.util.*
 
-class MoveSelectConfiguration(
+public class MoveSelectConfiguration(
     val title: MutableComponent,
     val moves: List<MoveSelectDTO>,
     val onCancel: (MoveSelectGUI) -> Unit,
@@ -34,10 +34,10 @@ class MoveSelectConfiguration(
     val onSelect: (MoveSelectGUI, MoveSelectDTO) -> Unit,
 )
 
-class MoveSelectGUI(
+public class MoveSelectGUI(
     val config: MoveSelectConfiguration
 ) : Screen(Component.translatable("cobblemon.ui.interact.moveselect")), CobblemonRenderable {
-    companion object {
+    final class Companion {
         const val WIDTH = 122
         const val HEIGHT = 133
 
@@ -49,7 +49,7 @@ class MoveSelectGUI(
     constructor(
         title: MutableComponent,
         moves: List<MoveSelectDTO>,
-        uuid: UUID
+        UUID uuid
     ): this(
         MoveSelectConfiguration(
             title = title,
@@ -139,7 +139,7 @@ class MoveSelectGUI(
 
     override fun renderMenuBackground(context: GuiGraphics) {}
 
-    fun playSound(soundEvent: SoundEvent) {
+    fun playSound(SoundEvent soundEvent) {
         Minecraft.getInstance().soundManager.play(SimpleSoundInstance.forUI(soundEvent, 1.0F))
     }
 }

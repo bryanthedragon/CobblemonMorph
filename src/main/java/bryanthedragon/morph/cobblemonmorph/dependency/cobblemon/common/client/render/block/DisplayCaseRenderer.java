@@ -27,7 +27,7 @@ import net.minecraft.world.item.*
 import net.minecraft.world.item.component.CustomModelData
 import net.minecraft.world.level.Level
 
-class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<DisplayCaseBlockEntity> {
+public class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntityRenderer<DisplayCaseBlockEntity> {
     val context = RenderContext().also {
         it.put(RenderContext.RENDER_STATE, RenderContext.RenderState.WORLD)
     }
@@ -42,7 +42,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         light: Int,
         overlay: Int
     ) {
-        val stack: ItemStack = if (entity.getStack().`is`(CobblemonItems.RELIC_COIN_POUCH)) {
+        val ItemStack stack = if (entity.getStack().`is`(CobblemonItems.RELIC_COIN_POUCH)) {
             coinPouchStack
         } else {
             entity.getStack()
@@ -96,7 +96,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
         matrices: PoseStack,
         vertexConsumers: MultiBufferSource,
         light: Int,
-        stack: ItemStack,
+        ItemStack stack,
         yRot: Float
     ) {
         val item = stack.item as? PokemonItem ?: return
@@ -144,7 +144,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
 
      */
 
-    companion object {
+    final class Companion {
         private val mobHeads = listOf<Item>(
             Items.SKELETON_SKULL,
             Items.WITHER_SKELETON_SKULL,
@@ -155,7 +155,7 @@ class DisplayCaseRenderer(ctx: BlockEntityRendererProvider.Context) : BlockEntit
             Items.CREEPER_HEAD
         )
 
-        private fun getPositioningType(stack: ItemStack, world: Level) = when {
+        private fun getPositioningType(ItemStack stack, Level world) = when {
             mobHeads.contains(stack.item) -> PositioningType.MOB_HEAD
             stack.item is BedItem -> PositioningType.BED
             stack.item is BannerItem -> PositioningType.BANNER

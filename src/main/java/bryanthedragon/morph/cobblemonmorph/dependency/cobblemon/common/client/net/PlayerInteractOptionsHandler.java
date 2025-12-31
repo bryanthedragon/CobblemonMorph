@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.wheel.createPlayerInteractGui
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.PlayerInteractOptionsPacket
 import net.minecraft.client.Minecraft
-final class PlayerInteractOptionsHandler : ClientNetworkPacketHandler<PlayerInteractOptionsPacket> {
-    override fun handle(packet: PlayerInteractOptionsPacket, client: Minecraft) {
+public final class PlayerInteractOptionsHandler : ClientNetworkPacketHandler<PlayerInteractOptionsPacket> {
+    override fun handle(packet: PlayerInteractOptionsPacket, Minecraft client) {
         Minecraft.getInstance().setScreen(createPlayerInteractGui(packet))
     }
 

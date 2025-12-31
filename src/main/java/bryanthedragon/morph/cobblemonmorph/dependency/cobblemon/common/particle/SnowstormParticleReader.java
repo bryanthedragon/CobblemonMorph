@@ -23,8 +23,8 @@ import net.minecraft.resources.ResourceLocation
 import org.joml.Vector4f
 import java.util.Locale
 import java.util.Locale.getDefault
-final class SnowstormParticleReader {
-    fun loadEffect(json: JsonObject): BedrockParticleOptions {
+public final class SnowstormParticleReader {
+    fun loadEffect(JsonObject json): BedrockParticleOptions {
         val effectJson = json.get("particle_effect").asJsonObject
         val descJson = effectJson.get("description").asJsonObject
         val basicRenderParametersJson = descJson.get("basic_render_parameters").asJsonObject
@@ -165,7 +165,7 @@ final class SnowstormParticleReader {
             TODO("Missing or unspecified emitter lifetime")
         }
 
-        fun resolveDirection(json: JsonObject) {
+        fun resolveDirection(JsonObject json) {
             val directionProperty = json.get("direction") ?: let {
                 direction = OutwardsMotionDirection()
                 return
@@ -471,7 +471,7 @@ final class SnowstormParticleReader {
     }
 
     // https://stackoverflow.com/questions/35666815/enum-valueof-in-kotlin
-    inline fun <reified T : Enum<T>> safeValueOf(string: String): T? {
+    inline fun <reified T : Enum<T>> safeValueOf(String string): T? {
         return try {
             enumValueOf<T>(string)
         } catch (e: IllegalArgumentException) {

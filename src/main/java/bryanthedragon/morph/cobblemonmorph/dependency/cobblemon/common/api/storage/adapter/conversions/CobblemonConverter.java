@@ -17,7 +17,7 @@ import java.util.UUID
 import kotlin.io.path.exists
 import net.minecraft.nbt.CompoundTag
 
-interface CobblemonConverter<S> : CobblemonAdapter<S> {
+public interface CobblemonConverter<S> : CobblemonAdapter<S> {
 
     fun root(): Path
 
@@ -25,10 +25,10 @@ interface CobblemonConverter<S> : CobblemonAdapter<S> {
         return target.exists()
     }
 
-    fun party(user: UUID, nbt: CompoundTag): PlayerPartyStore
+    fun party(user: UUID, CompoundTag nbt): PlayerPartyStore
 
-    fun pc(user: UUID, nbt: CompoundTag): PCStore
+    fun pc(user: UUID, CompoundTag nbt): PCStore
 
-    fun translate(nbt: CompoundTag): Pokemon
+    fun translate(CompoundTag nbt): Pokemon
 
 }

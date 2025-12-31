@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.PartyOverlayDataControl
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.ExpGainedDataPacket
 import net.minecraft.client.Minecraft
-final class ExpGainedDataPacketHandler: ClientNetworkPacketHandler<ExpGainedDataPacket> {
-    override fun handle(packet: ExpGainedDataPacket, client: Minecraft) {
+public final class ExpGainedDataPacketHandler: ClientNetworkPacketHandler<ExpGainedDataPacket> {
+    override fun handle(packet: ExpGainedDataPacket, Minecraft client) {
         PartyOverlayDataControl.pokemonGainedExp(
             packet.pokemonUUID,
             packet.oldLevel,

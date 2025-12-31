@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class OmastarModel(root: ModelPart) : PokemonPosableModel(root) {
+public class OmastarModel(root: ModelPart) : PokemonPosableModel(root) {
     override val rootPart = root.registerChildWithAllChildren("omastar")
 
     override var portraitTranslation = Vec3(0.02, -2.20, 0.0)

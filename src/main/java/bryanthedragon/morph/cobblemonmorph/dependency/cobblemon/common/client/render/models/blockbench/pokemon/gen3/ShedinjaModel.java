@@ -16,7 +16,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class ShedinjaModel(root: ModelPart) : PokemonPosableModel(root) {
+public class ShedinjaModel(root: ModelPart) : PokemonPosableModel(root) {
     override val rootPart = root.registerChildWithAllChildren("shedinja")
 
     override var portraitScale = 1.8F

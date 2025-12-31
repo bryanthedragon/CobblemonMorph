@@ -22,16 +22,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.np
  * @author Hiroku
  * @since August 10th, 2024
  */
-interface NPCVariationProvider {
+public interface NPCVariationProvider {
     /** All of the possible aspects that could be provided. */
     val aspects: Set<String>
     /** Provides some number of aspects for the given entity. */
     fun provideAspects(npcEntity: NPCEntity): Set<String>
 
-    companion object {
+    final class Companion {
         val types = mutableMapOf(
-            "weighted" to WeightedNPCVariationProvider::class.java,
-            "random" to RandomNPCVariationProvider::class.java
+            "weighted" to WeightedNPCVariationProvider.class,
+            "random" to RandomNPCVariationProvider.class
         )
 
         fun register(type: String, clazz: Class<out NPCVariationProvider>) {

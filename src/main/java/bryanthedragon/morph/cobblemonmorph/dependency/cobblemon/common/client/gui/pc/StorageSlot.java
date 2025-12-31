@@ -37,7 +37,7 @@ open class StorageSlot(
 ) : Button(x, y, SIZE, SIZE, Component.literal("StorageSlot"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
     val state = FloatingState()
 
-    companion object {
+    final class Companion {
         const val SIZE = 25
 
         private val genderIconMale = cobblemonResource("textures/gui/pc/gender_icon_male.png")

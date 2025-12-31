@@ -20,19 +20,19 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since November 23rd, 2022
  */
-class EVsUpdatePacket(pokemon: () -> Pokemon?, eVs: EVs) : SingleUpdatePacket<EVs, EVsUpdatePacket>(pokemon, eVs) {
+public class EVsUpdatePacket(pokemon: () -> Pokemon?, eVs: EVs) : SingleUpdatePacket<EVs, EVsUpdatePacket>(pokemon, eVs) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         EVs.STREAM_CODEC.encode(buffer, this.value)
     }
-    override fun set(pokemon: Pokemon, value: EVs) {
+    override fun set(Pokemon pokemon, value: EVs) {
         value.forEach { (stat, value) ->
             pokemon.evs[stat] = value
         }
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("ev_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = EVsUpdatePacket(decodePokemon(buffer), EVs.STREAM_CODEC.decode(buffer))
+        fun decode(RegistryFriendlyByteBuf buffer) = EVsUpdatePacket(decodePokemon(buffer), EVs.STREAM_CODEC.decode(buffer))
     }
 }
 
@@ -42,12 +42,12 @@ class EVsUpdatePacket(pokemon: () -> Pokemon?, eVs: EVs) : SingleUpdatePacket<EV
  * @author Hiroku
  * @since November 23rd, 2022
  */
-class IVsUpdatePacket(pokemon: () -> Pokemon?, iVs: IVs) : SingleUpdatePacket<IVs, IVsUpdatePacket>(pokemon, iVs) {
+public class IVsUpdatePacket(pokemon: () -> Pokemon?, iVs: IVs) : SingleUpdatePacket<IVs, IVsUpdatePacket>(pokemon, iVs) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         IVs.STREAM_CODEC.encode(buffer, this.value)
     }
-    override fun set(pokemon: Pokemon, value: IVs) {
+    override fun set(Pokemon pokemon, value: IVs) {
         value.forEach { (stat, value) ->
             pokemon.ivs[stat] = value
         }
@@ -56,8 +56,8 @@ class IVsUpdatePacket(pokemon: () -> Pokemon?, iVs: IVs) : SingleUpdatePacket<IV
             pokemon.ivs.setHyperTrainedIV(stat, value)
         }
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("iv_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = IVsUpdatePacket(decodePokemon(buffer), IVs.STREAM_CODEC.decode(buffer))
+        fun decode(RegistryFriendlyByteBuf buffer) = IVsUpdatePacket(decodePokemon(buffer), IVs.STREAM_CODEC.decode(buffer))
     }
 }

@@ -60,8 +60,8 @@ abstract class SeafloorTypeSpawningCondition<T : SeafloorSpawnablePosition> : Ar
  * @since May 22nd, 2024
  */
 open class SeafloorSpawningCondition : SeafloorTypeSpawningCondition<SeafloorSpawnablePosition>() {
-    override fun spawnablePositionClass() = SeafloorSpawnablePosition::class.java
-    companion object {
+    override fun spawnablePositionClass() = SeafloorSpawnablePosition.class
+    final class Companion {
         const val NAME = "seafloor"
     }
 }

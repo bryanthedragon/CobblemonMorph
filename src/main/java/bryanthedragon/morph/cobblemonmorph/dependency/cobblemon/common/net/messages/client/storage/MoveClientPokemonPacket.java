@@ -21,14 +21,14 @@ import java.util.UUID
  * @since June 18th, 2022
  */
 abstract class MoveClientPokemonPacket<T : StorePosition, N : NetworkPacket<N>>(
-    val storeID: UUID,
-    val pokemonID: UUID,
+    val UUID storeID,
+    val UUID pokemonId,
     val newPosition: T
 ) : NetworkPacket<N> {
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(this.storeID)
         buffer.writeUUID(this.pokemonID)
         encodePosition(buffer, this.newPosition)
     }
-    abstract fun encodePosition(buffer: RegistryFriendlyByteBuf, position: T)
+    abstract fun encodePosition(RegistryFriendlyByteBuf buffer, position: T)
 }

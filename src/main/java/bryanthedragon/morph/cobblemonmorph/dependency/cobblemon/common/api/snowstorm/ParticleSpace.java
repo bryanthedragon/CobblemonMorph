@@ -19,12 +19,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since February 13th, 2023
  */
-class ParticleSpace(
+public class ParticleSpace(
     var localPosition: Boolean = false,
     var localRotation: Boolean = false,
     var localVelocity: Boolean = false
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<ParticleSpace> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.BOOL.fieldOf("localPosition").forGetter { it.localPosition },
@@ -37,13 +37,13 @@ class ParticleSpace(
     val isLocalSpace: Boolean
         get() = localPosition || localRotation
 
-    fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         localPosition = buffer.readBoolean()
         localRotation = buffer.readBoolean()
         localVelocity = buffer.readBoolean()
     }
 
-    fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(localPosition)
         buffer.writeBoolean(localRotation)
         buffer.writeBoolean(localVelocity)

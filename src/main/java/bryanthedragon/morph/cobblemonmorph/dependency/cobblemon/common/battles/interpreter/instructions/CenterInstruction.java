@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  *
  *
  */
-class CenterInstruction(val message: BattleMessage) : InterpreterInstruction {
+public class CenterInstruction(val message: BattleMessage) : InterpreterInstruction {
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting(1.5F) {
 

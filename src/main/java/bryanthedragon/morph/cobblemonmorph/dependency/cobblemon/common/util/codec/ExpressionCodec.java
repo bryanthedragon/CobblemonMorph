@@ -20,11 +20,11 @@ import com.mojang.serialization.codecs.PrimitiveCodec
 import java.util.Optional
 
 val EXPRESSION_CODEC = object : PrimitiveCodec<Expression> {
-    override fun <T> read(ops: DynamicOps<T>, input: T): DataResult<Expression> {
+    override fun <T> read(DynamicOps<T> ops, input: T): DataResult<Expression> {
         return ops.getStringValue(input).map { MoLang.createParser(it).parseExpression() }
     }
 
-    override fun <T> write(ops: DynamicOps<T>, value: Expression): T {
+    override fun <T> write(DynamicOps<T> ops, value: Expression): T {
         return ops.createString(value.getString())
     }
 }
@@ -32,7 +32,7 @@ val EXPRESSION_CODEC = object : PrimitiveCodec<Expression> {
 // special codec that always writes default value
 // vanilla changed the behaviour of Codec#optionalFieldOf(String, A) so that it OMITS default values when encoding
 // later on decoding it assumes no value -> default, but we want some default being encoded anyways so it can be targeted by commands
-fun <A: Any> Codec<A>.optionalFieldOfWithDefault(name: String, defaultValue: A, lenient: Boolean = false): MapCodec<A> {
+fun <A: Any> Codec<A>.optionalFieldOfWithDefault(String name, defaultValue: A, lenient: Boolean = false): MapCodec<A> {
     return optionalField(name, this, lenient).xmap(
         {o -> o.orElse(defaultValue)},
         {a -> Optional.of<A>(a)}

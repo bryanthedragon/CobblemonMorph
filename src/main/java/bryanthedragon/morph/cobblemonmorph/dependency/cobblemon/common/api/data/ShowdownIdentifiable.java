@@ -14,7 +14,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data
  * @author Licious
  * @since January 28th, 2022
  */
-interface ShowdownIdentifiable {
+public interface ShowdownIdentifiable {
 
     /**
      * Converts the implementation to literal Showdown ID.
@@ -23,7 +23,7 @@ interface ShowdownIdentifiable {
      */
     fun showdownId(): String
 
-    companion object {
+    final class Companion {
 
         internal val REGEX = Regex("[^a-z0-9]+")
 

@@ -16,13 +16,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Licious
  * @since October 14th, 2022
  */
-interface Encodable {
+public interface Encodable {
 
     /**
      * Writes this instance to the given buffer.
      *
      * @param buffer The [RegistryFriendlyByteBuf] being written to.
      */
-    fun encode(buffer: RegistryFriendlyByteBuf)
+    fun encode(RegistryFriendlyByteBuf buffer)
 
 }

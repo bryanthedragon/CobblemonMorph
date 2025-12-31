@@ -24,7 +24,8 @@ import kotlin.collections.set
 
 /**
  * Registry for all known Abilities
- */final class Abilities : DataRegistry {
+ */
+public final class Abilities : DataRegistry {
 
     override val id = cobblemonResource("abilities")
     override val type = PackType.SERVER_DATA
@@ -35,7 +36,7 @@ import kotlin.collections.set
     private val abilityMap = mutableMapOf<String, AbilityTemplate>()
     internal val abilityScripts = mutableMapOf<String, String>() // abilityId to JavaScript
 
-    override fun reload(manager: ResourceManager) {
+    override fun reload(ResourceManager manager) {
         PotentialAbility.types.clear()
         PotentialAbility.types.add(CommonAbilityType)
         PotentialAbility.types.add(HiddenAbilityType)
@@ -65,7 +66,7 @@ import kotlin.collections.set
         this.observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         AbilityRegistrySyncPacket(all()).sendToPlayer(player)
     }
 
@@ -80,11 +81,11 @@ import kotlin.collections.set
     @JvmStatic
     fun first() = this.abilityMap.values.first()
     @JvmStatic
-    fun get(name: String) = abilityMap[name.lowercase()]
+    fun get(String name) = abilityMap[name.lowercase()]
     @JvmStatic
-    fun getOrDummy(name: String) = get(name) ?: DUMMY
+    fun getOrDummy(String name) = get(name) ?: DUMMY
     @JvmStatic
-    fun getOrException(name: String) = get(name) ?: throw IllegalArgumentException("Unable to find ability of name: $name")
+    fun getOrException(String name) = get(name) ?: throw IllegalArgumentException("Unable to find ability of name: $name")
     @JvmStatic
     fun count() = this.abilityMap.size
 

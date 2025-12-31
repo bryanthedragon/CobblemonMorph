@@ -25,9 +25,9 @@ import net.minecraft.resources.ResourceLocation
 open class PokeNavImageButton(
     val posX: Int, val posY: Int,
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     pXTexStart: Int, pYTexStart: Int, pYDiffText: Int,
-    private val resourceLocation: ResourceLocation, pTextureWidth: Int, pTextureHeight: Int,
+    private val resourceLocation: ResourceLocation, pTextureInt width, pTextureInt height,
     onPress: OnPress,
     private val text: MutableComponent,
     private val canClick: () -> Boolean = { true }

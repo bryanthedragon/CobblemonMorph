@@ -6,12 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class MutableLazy<T>(private var initializer: (() -> T)?) : ReadWriteProperty<Any?, T> {
+public class MutableLazy<T>(private var initializer: (() -> T)?) : ReadWriteProperty<Any?, T> {
     private var value: T? = null
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {

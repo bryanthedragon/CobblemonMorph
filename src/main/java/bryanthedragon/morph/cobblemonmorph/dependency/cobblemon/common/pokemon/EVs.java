@@ -20,11 +20,11 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import kotlin.math.min
 
-class EVs : PokemonStats() {
+public class EVs : PokemonStats() {
     override val acceptableRange = 0..MAX_STAT_VALUE
     override val defaultValue = 0
 
-    override fun canSet(stat: Stat, value: Int): Boolean {
+    override fun canSet(Stat stat , Int value): Boolean {
         if (!super.canSet(stat, value)) {
             return false
         }
@@ -46,7 +46,7 @@ class EVs : PokemonStats() {
         replaceWith = ReplaceWith("add(key, value, source)", "bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.Stat", "bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.EvSource"),
         level = DeprecationLevel.ERROR
     )
-    fun add(key: Stat, value: Int): Int {
+    fun add(key: Stat, Int value): Int {
         return this.performAdd(key, value)
     }
 
@@ -58,7 +58,7 @@ class EVs : PokemonStats() {
      * @param source The [EvSource] of this addition.
      * @return The amount added or 0 if the addition was impossible.
      */
-    fun add(key: Stat, value: Int, source: EvSource): Int {
+    fun add(key: Stat, Int value, source: EvSource): Int {
         CobblemonEvents.EV_GAINED_EVENT_PRE.postThen(
             event = EvGainedEvent.Pre(key, value, source),
             ifCanceled = { return 0 },
@@ -72,7 +72,7 @@ class EVs : PokemonStats() {
         return 0
     }
 
-    private fun performAdd(stat: Stat, value: Int): Int {
+    private fun performAdd(Stat stat , Int value): Int {
         val currentTotal = this.sumOf { it.value }
         if (currentTotal == MAX_TOTAL_VALUE && value > 0) {
             return 0
@@ -90,7 +90,7 @@ class EVs : PokemonStats() {
         return 0
     }
 
-    companion object {
+    final class Companion {
         const val MAX_STAT_VALUE = 252
         const val MAX_TOTAL_VALUE = 510
 

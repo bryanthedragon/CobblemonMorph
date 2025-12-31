@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonBehaviourFlag
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.UpdatePastureConflictFlagPacket
 import net.minecraft.client.Minecraft
-final class UpdatePastureConflictFlagHandler : ClientNetworkPacketHandler<UpdatePastureConflictFlagPacket> {
-    override fun handle(packet: UpdatePastureConflictFlagPacket, client: Minecraft) {
+public final class UpdatePastureConflictFlagHandler : ClientNetworkPacketHandler<UpdatePastureConflictFlagPacket> {
+    override fun handle(packet: UpdatePastureConflictFlagPacket, Minecraft client) {
         val screen = client.screen as? PCGUI ?: return
         val pastureWidget = screen.storage.pastureWidget ?: return
         for (slot in pastureWidget.pastureScrollList.children()) {

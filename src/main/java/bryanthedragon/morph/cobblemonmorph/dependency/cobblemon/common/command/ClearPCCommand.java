@@ -19,7 +19,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
-final class ClearPCCommand {
+public final class ClearPCCommand {
 
     private const val NAME = "clearpc"
     private const val PLAYER = "player"

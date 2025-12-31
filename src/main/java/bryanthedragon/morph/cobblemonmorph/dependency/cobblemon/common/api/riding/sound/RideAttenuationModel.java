@@ -16,7 +16,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ridi
  * @since May 11th, 2025
  */
 
-enum class RideAttenuationModel {
+public enum RideAttenuationModel {
     NONE,
     LINEAR,
     EXPONENTIAL

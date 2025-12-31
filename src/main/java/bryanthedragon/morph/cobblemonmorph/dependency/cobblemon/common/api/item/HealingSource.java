@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.inte
 /**
  * Interface that represents a source of healing.
  */
-interface HealingSource {
+public interface HealingSource {
     /**
      * A source of healing that is forced, i.e it has no specific source.
      */

@@ -30,14 +30,15 @@ import net.minecraft.world.entity.LivingEntity
  *
  * @author Licious
  * @since January 29th, 2022
- */final class Gen1CaptureCalculator : CaptureCalculator {
+ */
+public final class Gen1CaptureCalculator : CaptureCalculator {
 
     private const val FRZ_SLEEP_THRESHOLD = 25
     private const val PARA_BRN_PSN_THRESHOLD = 12
 
     override fun id(): String = "generation_1"
 
-    override fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity): CaptureContext {
+    override fun processCapture(LivingEntity thrower, EmptyPokeBallEntity pokeBallEntity, PokemonEntity target): CaptureContext {
         val pokeBall = pokeBallEntity.pokeBall
         val pokemon = target.pokemon
         if (pokeBall.catchRateModifier.isGuaranteed()) {
@@ -77,7 +78,7 @@ import net.minecraft.world.entity.LivingEntity
         return CaptureContext(numberOfShakes = this.calculateShakes(pokemon, getCatchRate(thrower, pokeBallEntity, target, pokemon.form.catchRate.toFloat()), nBound, f), isSuccessfulCapture = false, isCriticalCapture = false)
     }
 
-    private fun calculateShakes(pokemon: Pokemon, catchRate: Float, ballValue: Int, f: Int): Int {
+    private fun calculateShakes(Pokemon pokemon, Float catchRate, ballValue: Int, f: Int): Int {
         val d = (catchRate * 100F) / ballValue
         if (d >= 256) {
             return 3

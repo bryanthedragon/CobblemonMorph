@@ -19,17 +19,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @since September 15th, 2024
  */
 open class FloatProperty(
-    val key: String,
+    val String Key,
     val value: Float,
-    private val pokemonApplicator: (pokemon: Pokemon, value: Float) -> Unit,
+    private val pokemonApplicator: (Pokemon pokemon, value: Float) -> Unit,
     private val entityApplicator: (pokemonEntity: PokemonEntity, value: Float) -> Unit,
-    private val pokemonMatcher: (pokemon: Pokemon, value: Float) -> Boolean,
+    private val pokemonMatcher: (Pokemon pokemon, value: Float) -> Boolean,
     private val entityMatcher: (pokemonEntity: PokemonEntity, value: Float) -> Boolean
 ) : CustomPokemonProperty {
 
     override fun asString() = "${this.key}=${this.value}"
 
-    override fun apply(pokemon: Pokemon) {
+    override fun apply(Pokemon pokemon) {
         this.pokemonApplicator.invoke(pokemon, this.value)
     }
 
@@ -37,6 +37,6 @@ open class FloatProperty(
         this.entityApplicator.invoke(pokemonEntity, this.value)
     }
 
-    override fun matches(pokemon: Pokemon) = this.pokemonMatcher.invoke(pokemon, this.value)
+    override fun matches(Pokemon pokemon) = this.pokemonMatcher.invoke(pokemon, this.value)
     override fun matches(pokemonEntity: PokemonEntity) = this.entityMatcher.invoke(pokemonEntity, this.value)
 }

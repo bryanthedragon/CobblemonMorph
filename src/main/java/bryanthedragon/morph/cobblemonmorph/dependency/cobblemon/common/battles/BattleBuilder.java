@@ -48,7 +48,7 @@ import kotlin.collections.plus
 import kotlin.collections.plusAssign
 import kotlin.collections.set
 import kotlin.collections.sortedBy
-final class BattleBuilder {
+public final class BattleBuilder {
     @JvmOverloads
     fun pvp1v1(
         player1: ServerPlayer,
@@ -238,7 +238,7 @@ final class BattleBuilder {
      */
     @JvmOverloads
     fun pve(
-        player: ServerPlayer,
+        ServerPlayer player,
         pokemonEntity: PokemonEntity,
         leadingPokemon: UUID? = null,
         battleFormat: BattleFormat = BattleFormat.GEN_9_SINGLES,
@@ -309,7 +309,7 @@ final class BattleBuilder {
      */
     @JvmOverloads
     fun pvn(
-        player: ServerPlayer,
+        ServerPlayer player,
         npcEntity: NPCEntity,
         leadingPokemon: UUID? = null,
         battleFormat: BattleFormat = BattleFormat.GEN_9_SINGLES,
@@ -402,7 +402,7 @@ abstract class BattleStartResult {
         return this
     }
 }
-class SuccessfulBattleStart(
+public class SuccessfulBattleStart(
     val battle: PokemonBattle
 ) : BattleStartResult() {
     override fun ifSuccessful(action: (PokemonBattle) -> Unit): BattleStartResult {
@@ -411,12 +411,12 @@ class SuccessfulBattleStart(
     }
 }
 
-interface BattleStartError {
+public interface BattleStartError {
 
-    fun getMessageFor(entity: Entity): MutableComponent
+    fun getMessageFor(Entity entity): MutableComponent
 
-    companion object {
-        fun alreadyInBattle(player: ServerPlayer) = AlreadyInBattleError(player.uuid, player.effectiveName())
+    final class Companion {
+        fun alreadyInBattle(ServerPlayer player) = AlreadyInBattleError(player.uuid, player.effectiveName())
         fun alreadyInBattle(pokemonEntity: PokemonEntity) = AlreadyInBattleError(pokemonEntity.uuid, pokemonEntity.effectiveName())
         fun alreadyInBattle(actor: BattleActor) = AlreadyInBattleError(actor.uuid, actor.getName())
         fun noParty(npcEntity: NPCEntity) = NoPartyError(npcEntity)
@@ -434,22 +434,22 @@ interface BattleStartError {
     }
 }
 
-enum class CommonBattleStartError : BattleStartError {
+public enum CommonBattleStartError : BattleStartError {
 
 }
 
-class CanceledError(
+public class CanceledError(
     val reason: MutableComponent?
 ): BattleStartError {
-    override fun getMessageFor(entity: Entity) = reason ?: battleLang("error.canceled")
+    override fun getMessageFor(Entity entity) = reason ?: battleLang("error.canceled")
 }
 
-class InsufficientPokemonError(
+public class InsufficientPokemonError(
     val actorEntity: Entity,
     val requiredCount: Int,
     val hadCount: Int
 ) : BattleStartError {
-    override fun getMessageFor(entity: Entity): MutableComponent {
+    override fun getMessageFor(Entity entity): MutableComponent {
         return if (actorEntity == entity) {
             val key = if (hadCount == 0) "no_pokemon" else "insufficient_pokemon.personal"
             battleLang(
@@ -468,11 +468,11 @@ class InsufficientPokemonError(
     }
 }
 
-class IncorrectActorCountError(
+public class IncorrectActorCountError(
         val requiredCount: Int,
         val hadCount: Int
 ) : BattleStartError {
-    override fun getMessageFor(entity: Entity): MutableComponent {
+    override fun getMessageFor(Entity entity): MutableComponent {
         return battleLang(
             "error.incorrect_actor_count",
             requiredCount,
@@ -481,17 +481,17 @@ class IncorrectActorCountError(
     }
 }
 
-class NoPartyError(
+public class NoPartyError(
     val npc: NPCEntity
 ) : BattleStartError {
-    override fun getMessageFor(entity: Entity) = battleLang("error.no_party", npc.effectiveName())
+    override fun getMessageFor(Entity entity) = battleLang("error.no_party", npc.effectiveName())
 }
 
-class AlreadyInBattleError(
-    val actorUUID: UUID,
+public class AlreadyInBattleError(
+    val actorUUID uuid,
     val name: Component
 ): BattleStartError {
-    override fun getMessageFor(entity: Entity): MutableComponent {
+    override fun getMessageFor(Entity entity): MutableComponent {
         return if (actorUUID == entity.uuid) {
             battleLang("error.in_battle.personal")
         } else {
@@ -499,10 +499,10 @@ class AlreadyInBattleError(
         }
     }
 }
-class BusyError(
+public class BusyError(
     val targetName: Component
 ): BattleStartError {
-    override fun getMessageFor(entity: Entity) = battleLang("errors.busy", targetName)
+    override fun getMessageFor(Entity entity) = battleLang("errors.busy", targetName)
 }
 
 open class BattleActorErrors : HashMap<BattleActor, MutableSet<BattleStartError>>() {
@@ -529,7 +529,7 @@ open class ErroredBattleStart(
         entities.forEach { this.sendTo(it, transformer) }
     }
 
-    fun sendTo(entity: Entity, transformer: (MutableComponent) -> (MutableComponent) = { it }) {
+    fun sendTo(Entity entity, transformer: (MutableComponent) -> (MutableComponent) = { it }) {
         errors.forEach { entity.sendSystemMessage(transformer(it.getMessageFor(entity))) }
     }
 
@@ -543,7 +543,7 @@ open class ErroredBattleStart(
     val isEmpty: Boolean
         get() = generalErrors.isEmpty() && participantErrors.values.all { it.isEmpty() }
 
-    fun isPlayerToBlame(player: ServerPlayer) = generalErrors.isEmpty()
+    fun isPlayerToBlame(ServerPlayer player) = generalErrors.isEmpty()
         && participantErrors.size == 1
         && participantErrors.entries.first().let { it.key.uuid == player.uuid }
 

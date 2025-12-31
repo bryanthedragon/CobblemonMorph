@@ -21,7 +21,7 @@ import kotlin.reflect.KClass
  * @author Licious
  * @since March 20th, 2022
  */
-interface EvolutionAdapter : JsonDeserializer<Evolution>, JsonSerializer<Evolution> {
+public interface EvolutionAdapter : JsonDeserializer<Evolution>, JsonSerializer<Evolution> {
 
     /**
      * Registers the given type of [Evolution] to it's associated ID for deserialization.

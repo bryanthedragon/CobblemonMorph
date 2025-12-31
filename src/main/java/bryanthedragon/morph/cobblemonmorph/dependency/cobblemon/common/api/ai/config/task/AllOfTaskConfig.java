@@ -15,13 +15,13 @@ import com.mojang.datafixers.util.Either
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 
-class AllOfTaskConfig : TaskConfig {
+public class AllOfTaskConfig : TaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val tasks: List<TaskConfig> = emptyList()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = tasks.flatMap { it.getVariables(entity, behaviourConfigurationContext) }
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = tasks.flatMap { it.getVariables(entity, behaviourConfigurationContext) }
     override fun createTasks(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): List<BehaviorControl<in LivingEntity>> {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return emptyList()

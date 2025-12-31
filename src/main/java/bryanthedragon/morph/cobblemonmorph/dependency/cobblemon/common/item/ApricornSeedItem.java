@@ -14,10 +14,10 @@ import net.minecraft.world.item.ItemNameBlockItem
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.block.state.BlockState
 
-class ApricornSeedItem(block: ApricornSaplingBlock, val apricornBlock: ApricornBlock) : ItemNameBlockItem(block, Properties()) {
+public class ApricornSeedItem(block: ApricornSaplingBlock, val apricornBlock: ApricornBlock) : ItemNameBlockItem(block, Properties()) {
 
     // TODO (techdaan): ensure this is ported properly
-    override fun getPlacementState(context: BlockPlaceContext): BlockState? {
+    override fun getPlacementState(BlockPlaceContext context): BlockState? {
         // Verify the feature is enabled similar to what's done at the top of place
         if (this.apricornBlock.isEnabled(context.level.enabledFeatures())) {
             // Get a contextualized apricorn block state

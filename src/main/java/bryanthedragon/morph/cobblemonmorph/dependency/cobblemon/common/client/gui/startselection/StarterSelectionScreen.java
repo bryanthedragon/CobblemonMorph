@@ -48,9 +48,9 @@ import net.minecraft.network.chat.Component
  * @author Qu
  * @since 2022-06-18
  */
-class StarterSelectionScreen(private val categories: List<RenderableStarterCategory>): Screen("cobblemon.ui.starter.title".asTranslated()), CobblemonRenderable {
+public class StarterSelectionScreen(private val categories: List<RenderableStarterCategory>): Screen("cobblemon.ui.starter.title".asTranslated()), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         // Size of UI at scale 1
         private const val BASE_WIDTH = 200
         private const val BASE_HEIGHT = 175
@@ -330,7 +330,7 @@ class StarterSelectionScreen(private val categories: List<RenderableStarterCateg
         )
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         if (minecraft?.options?.keyInventory?.matches(keyCode, scanCode) == true) {
             Minecraft.getInstance().setScreen(null)
             return true

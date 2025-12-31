@@ -32,7 +32,7 @@ record WallpaperUnlockedEvent(
     var shouldNotify: Boolean
 ): Cancelable() {
     /** For shared PCs with multiple players online, and for offline PC access, the player will be null. */
-    val player: ServerPlayer?
+    val ServerPlayer player?
         get() = pc.getObservingPlayers().takeIf { it.size == 1 }?.first()
 
     /** All online, observing players for the PC. This would typically have a single player in it. */

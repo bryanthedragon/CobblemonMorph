@@ -21,22 +21,22 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @see [Pre]
  * @see [Post]
  */
-interface HyperTrainedIvEvent {
+public interface HyperTrainedIvEvent {
 
     /**
      * The [Stat] having whose IV is being hyper-trained.
      */
-    val stat: Stat
+    val Stat stat 
 
     /**
      * The [Pokemon] being hyper-trained.
      */
-    val pokemon: Pokemon
+    val Pokemon pokemon
 
     /**
      * Fired before Hyper Training occurs, cancelling will cause the mutation to be flagged as not successful.
      */
-    class Pre(override val pokemon: Pokemon,  override val stat: Stat, var value: Int) : HyperTrainedIvEvent, Cancelable() {
+    class Pre(override val Pokemon pokemon,  override val Stat stat , var Int value) : HyperTrainedIvEvent, Cancelable() {
         val context = mutableMapOf(
             "pokemon" to pokemon.struct,
             "stat" to StringValue(stat.toString()),
@@ -48,7 +48,7 @@ interface HyperTrainedIvEvent {
     /**
      * Fired after Hyper Training occurs, this is purely for notification purposes.
      */
-    class Post(override val pokemon: Pokemon, override val stat: Stat, val value: Int) : HyperTrainedIvEvent {
+    class Post(override val Pokemon pokemon, override val Stat stat , val Int value) : HyperTrainedIvEvent {
         val context = mutableMapOf(
             "pokemon" to pokemon.struct,
             "stat" to StringValue(stat.toString()),

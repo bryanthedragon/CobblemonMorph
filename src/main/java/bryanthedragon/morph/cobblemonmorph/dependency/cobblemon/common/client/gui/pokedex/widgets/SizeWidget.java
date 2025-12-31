@@ -29,14 +29,14 @@ import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
+public class SizeWidget(val pX: Int, val pY: Int) : SoundlessWidget(
     pX,
     pY,
     HALF_OVERLAY_WIDTH,
     POKEMON_DESCRIPTION_HEIGHT,
     lang("ui.pokedex.pokemon_info")
 ) {
-    companion object {
+    final class Companion {
         private val scrollBorder = cobblemonResource("textures/gui/pokedex/info_scroll_border.png")
         private val heightGrid = cobblemonResource("textures/gui/pokedex/height_grid.png")
         private val gridPlayer = cobblemonResource("textures/gui/pokedex/height_grid_player.png")

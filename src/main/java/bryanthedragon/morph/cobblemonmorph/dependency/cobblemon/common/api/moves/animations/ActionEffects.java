@@ -33,8 +33,9 @@ import java.awt.Color
  *
  * @author Hiroku
  * @since October 21st, 2023
- */final class ActionEffects : JsonDataRegistry<ActionEffectTimeline> {
-    override val id: ResourceLocation = cobblemonResource("action_effects")
+ */
+public final class ActionEffects : JsonDataRegistry<ActionEffectTimeline> {
+    override val ResourceLocation id = cobblemonResource("action_effects")
     override val type: PackType = PackType.SERVER_DATA
     override val observable = SimpleObservable<ActionEffects>()
 
@@ -61,27 +62,27 @@ import java.awt.Color
     override val gson = GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
-        .registerTypeAdapter(ActionEffectKeyframe::class.java, ActionEffectKeyframeAdapter)
-        .registerTypeAdapter(MinMaxBounds.Doubles::class.java, FloatNumberRangeAdapter)
-        .registerTypeAdapter(TypeToken.getParameterized(Collection::class.java, AABB::class.java).type, BoxCollectionAdapter)
-        .registerTypeAdapter(AABB::class.java, BoxAdapter)
-        .registerTypeAdapter(Vec3::class.java, VerboseVec3dAdapter)
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-        .registerTypeAdapter(IntRange::class.java, VerboseIntRangeAdapter)
-        .registerTypeAdapter(Color::class.java, LiteralHexColorAdapter)
-        .registerTypeAdapter(Stat::class.java, CobblemonStatTypeAdapter)
-        .registerTypeAdapter(Expression::class.java, ExpressionAdapter)
-        .registerTypeAdapter(ExpressionLike::class.java, ExpressionLikeAdapter)
+        .registerTypeAdapter(ActionEffectKeyframe.class, ActionEffectKeyframeAdapter)
+        .registerTypeAdapter(MinMaxBounds.Doubles.class, FloatNumberRangeAdapter)
+        .registerTypeAdapter(TypeToken.getParameterized(Collection.class, AABB.class).type, BoxCollectionAdapter)
+        .registerTypeAdapter(AABB.class, BoxAdapter)
+        .registerTypeAdapter(Vec3.class, VerboseVec3dAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
+        .registerTypeAdapter(IntRange.class, VerboseIntRangeAdapter)
+        .registerTypeAdapter(Color.class, LiteralHexColorAdapter)
+        .registerTypeAdapter(Stat.class, CobblemonStatTypeAdapter)
+        .registerTypeAdapter(Expression.class, ExpressionAdapter)
+        .registerTypeAdapter(ExpressionLike.class, ExpressionLikeAdapter)
         .registerTypeAdapter(
             TypeToken.getParameterized(
-                TypeToken.get(List::class.java).type,
-                TypeToken.get(ActionEffectKeyframe::class.java).type
+                TypeToken.get(List.class).type,
+                TypeToken.get(ActionEffectKeyframe.class).type
             ).type,
-            SingleToPluralAdapter(ActionEffectKeyframe::class.java) { it }
+            SingleToPluralAdapter(ActionEffectKeyframe.class) { it }
         )
         .create()
 
-    override val typeToken: TypeToken<ActionEffectTimeline> = TypeToken.get(ActionEffectTimeline::class.java)
+    override val typeToken: TypeToken<ActionEffectTimeline> = TypeToken.get(ActionEffectTimeline.class)
     override val resourcePath = "action_effects"
 
     val actionEffects = mutableMapOf<ResourceLocation, ActionEffectTimeline>()
@@ -91,11 +92,11 @@ import java.awt.Color
         observable.emit(this)
     }
 
-    fun getEffectWithBattleContext(id: ResourceLocation, pokemon: BattlePokemon): ActionEffectTimeline? {
+    fun getEffectWithBattleContext(ResourceLocation id, pokemon: BattlePokemon): ActionEffectTimeline? {
         val species = pokemon.entity?.exposedSpecies ?: pokemon.effectedPokemon.species
         val contextedEffect = actionEffects[ResourceLocation.fromNamespaceAndPath(id.namespace, id.path + "_" + species)]
         return contextedEffect ?: actionEffects[id]
     }
 
-    override fun sync(player: ServerPlayer) {}
+    override fun sync(ServerPlayer player) {}
 }

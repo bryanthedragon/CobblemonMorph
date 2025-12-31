@@ -9,7 +9,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokedex.scanner
 
 import java.util.UUID
-final class PlayerScanningDetails {
+public final class PlayerScanningDetails {
     //Maybe make some of this stuff fixed size caches
     //Maps a player UUID to the UUID of the entity being scanned
     val playerToEntityMap: MutableMap<UUID, UUID> = mutableMapOf()

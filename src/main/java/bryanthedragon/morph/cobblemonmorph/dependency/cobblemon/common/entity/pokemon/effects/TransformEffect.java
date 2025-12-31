@@ -27,14 +27,14 @@ import java.util.concurrent.CompletableFuture
  * @author Segfault Guy
  * @since March 5th, 2024
  */
-class TransformEffect(
+public class TransformEffect(
     // This really should include aspects separately
     override var mock: PokemonProperties = PokemonProperties(),
     override var scale: Float = 1.0F,
-    val doCry: Boolean = true
+    val Boolean doCry = true
 ) : BattleEffect(), MocKEffect {
 
-    constructor(mimic: Pokemon, doCry: Boolean = true) : this(
+    constructor(mimic: Pokemon, Boolean doCry = true) : this(
         mock = mimic.createPokemonProperties(PokemonPropertyExtractor.TRANSFORM),
         scale = mimic.form.baseScale * mimic.scaleModifier,
         doCry = doCry
@@ -65,12 +65,12 @@ class TransformEffect(
         return nbt
     }
 
-    override fun loadFromNBT(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+    override fun loadFromNBT(CompoundTag nbt, registryLookup: HolderLookup.Provider) {
         if (nbt.contains(DataKeys.POKEMON_ENTITY_MOCK)) this.mock = PokemonProperties().loadFromNBT(nbt.getCompound(DataKeys.POKEMON_ENTITY_MOCK), registryLookup)
         if (nbt.contains(DataKeys.POKEMON_ENTITY_SCALE)) this.scale = nbt.getFloat(DataKeys.POKEMON_ENTITY_SCALE)
     }
 
-    companion object {
+    final class Companion {
         val ID = "TRANSFORM"
     }
 }

@@ -35,7 +35,7 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since June 30th, 2023
  */
-class EtherItem(
+public class EtherItem(
     val max: Boolean
 ) : CobblemonItem(Properties().apply {
     if (max) rarity(Rarity.UNCOMMON)
@@ -43,13 +43,13 @@ class EtherItem(
     override val bagItem = object : BagItem {
         override val itemName = "item.cobblemon.${ if (max) "max_ether" else "ether" }"
         override val returnItem = Items.GLASS_BOTTLE
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "ether $data${ if (max) "" else " 10" }"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "ether $data${ if (max) "" else " 10" }"
     }
 
-    override fun canUseOnMove(stack: ItemStack, move: Move) = move.currentPp < move.maxPp
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { canUseOnMove(stack, it) }
-    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon, move: Move) {
+    override fun canUseOnMove(ItemStack stack, move: Move) = move.currentPp < move.maxPp
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = pokemon.moveSet.any { canUseOnMove(stack, it) }
+    override fun applyToPokemon(ServerPlayer player, ItemStack stack, Pokemon pokemon, move: Move) {
         val moveToRecover = pokemon.moveSet.find { it.template == move.template }
         if (moveToRecover != null && moveToRecover.currentPp < moveToRecover.maxPp) {
             moveToRecover.currentPp = if (max) moveToRecover.maxPp else min(moveToRecover.maxPp, moveToRecover.currentPp + 10)
@@ -61,12 +61,12 @@ class EtherItem(
         }
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon, move: Move) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon, move: Move) {
         super.applyToBattlePokemon(player, stack, battlePokemon, move)
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_LIQUID_USE, 1F, 1F)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (world is ServerLevel && user is ServerPlayer) {
             return use(user, user.getItemInHand(hand)) ?: InteractionResultHolder.pass(user.getItemInHand(hand))
         }

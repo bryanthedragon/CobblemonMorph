@@ -29,12 +29,12 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since November 29th, 2021
  */
-interface PokemonStoreFactory {
-    fun getPlayerParty(playerID: UUID, registryAccess: RegistryAccess): PlayerPartyStore?
-    fun getPC(playerID: UUID, registryAccess: RegistryAccess): PCStore?
-    fun getPCForPlayer(player: ServerPlayer, pcBlockEntity: PCBlockEntity): PCStore? = getPC(player.uuid, player.registryAccess())
+public interface PokemonStoreFactory {
+    fun getPlayerParty(playerID: UUID, RegistryAccess registryAccess): PlayerPartyStore?
+    fun getPC(playerID: UUID, RegistryAccess registryAccess): PCStore?
+    fun getPCForPlayer(ServerPlayer player, pcBlockEntity: PCBlockEntity): PCStore? = getPC(player.uuid, player.registryAccess())
 
-    fun <E : StorePosition, T : PokemonStore<E>> getCustomStore(storeClass: Class<T>, uuid: UUID, registryAccess: RegistryAccess): T?
-    fun shutdown(registryAccess: RegistryAccess)
-    fun onPlayerDisconnect(player: ServerPlayer)
+    fun <E : StorePosition, T : PokemonStore<E>> getCustomStore(storeClass: Class<T>, UUID uuid, RegistryAccess registryAccess): T?
+    fun shutdown(RegistryAccess registryAccess)
+    fun onPlayerDisconnect(ServerPlayer player)
 }

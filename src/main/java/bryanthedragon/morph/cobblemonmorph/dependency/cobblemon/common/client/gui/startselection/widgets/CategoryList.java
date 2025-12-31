@@ -21,12 +21,12 @@ import net.minecraft.client.gui.components.ObjectSelectionList
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.Component
 
-class CategoryList(
-    private val paneWidth: Int,
-    private val paneHeight: Int,
+public class CategoryList(
+    private val paneInt width,
+    private val paneInt height,
     topOffset: Int,
-    private val entryWidth: Int,
-    entryHeight: Int,
+    private val entryInt width,
+    entryInt height,
     private val categories: List<RenderableStarterCategory>,
     val listX: Int,
     val listY: Int,
@@ -40,7 +40,7 @@ class CategoryList(
     entryHeight
 ), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val CATEGORY_BUTTON_WIDTH = 51.5f
         private const val CATEGORY_BUTTON_HEIGHT = 16f
         private const val ENTRY_X_OFFSET = 10f
@@ -81,11 +81,11 @@ class CategoryList(
 
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             y: Int,
             x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
+            entryInt width,
+            entryInt height,
             mouseX: Int,
             mouseY: Int,
             hovered: Boolean,

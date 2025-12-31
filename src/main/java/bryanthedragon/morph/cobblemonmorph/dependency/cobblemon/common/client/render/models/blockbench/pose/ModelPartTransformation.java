@@ -25,8 +25,8 @@ import net.minecraft.client.model.geom.ModelPart
  * @author Hiroku
  * @since December 5th, 2021
  */
-class ModelPartTransformation(val modelPart: ModelPart) {
-    companion object {
+public class ModelPartTransformation(val modelPart: ModelPart) {
+    final class Companion {
         const val X_AXIS = 0
         const val Y_AXIS = 1
         const val Z_AXIS = 2
@@ -102,7 +102,7 @@ class ModelPartTransformation(val modelPart: ModelPart) {
         set(value) {
             position[2] = value
         }
-    var pitch: Float
+    var Float pitch
         get() = rotation[0]
         set(value) {
             rotation[0] = value

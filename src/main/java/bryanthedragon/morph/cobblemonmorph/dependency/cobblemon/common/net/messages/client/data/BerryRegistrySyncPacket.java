@@ -13,18 +13,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.berry
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class BerryRegistrySyncPacket(berries: Collection<Berry>) : DataRegistrySyncPacket<Berry, BerryRegistrySyncPacket>(berries) {
-    companion object {
+public class BerryRegistrySyncPacket(berries: Collection<Berry>) : DataRegistrySyncPacket<Berry, BerryRegistrySyncPacket>(berries) {
+    final class Companion {
         val ID = cobblemonResource("berry_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BerryRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = BerryRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 
     override val id = ID
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Berry) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Berry) {
         entry.encode(buffer)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Berry? = Berry.decode(buffer)
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Berry? = Berry.decode(buffer)
 
     override fun synchronizeDecoded(entries: Collection<Berry>) {
         Berries.reload(entries.associateBy { it.identifier })

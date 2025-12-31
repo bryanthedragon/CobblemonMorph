@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.ServerLevel
 
 // Need to use this in the interact with pasture block then use links when handling server-side packets
-// to authenticate that they were able to interact.final class PastureLinkManager {
+// to authenticate that they were able to interact.public final class PastureLinkManager {
     // Maps player UUID
     val links = mutableMapOf<UUID, PastureLink>()
 
@@ -30,7 +30,7 @@ import net.minecraft.server.level.ServerLevel
     }
 
     @JvmStatic
-    fun getLinkByPlayer(player: ServerPlayer): PastureLink? {
+    fun getLinkByPlayer(ServerPlayer player): PastureLink? {
         val link = getLinkByPlayerId(player.uuid)
         if (link != null) {
             if (!player.level().dimensionTypeRegistration().`is`(link.dimension) || !link.pos.closerToCenterThan(player.position(), 10.0)) {
@@ -43,7 +43,7 @@ import net.minecraft.server.level.ServerLevel
     }
 
     @JvmStatic
-    fun removeAt(world: ServerLevel, pos: BlockPos) {
+    fun removeAt(ServerLevel world, (BlockPos pos) {
         links.removeIf { (uuid, pastureLink) ->
             val shouldRemove = world.dimensionTypeRegistration().`is`(pastureLink.dimension) && pastureLink.pos == pos
             uuid.getPlayer()?.sendPacket(ClosePasturePacket())

@@ -34,8 +34,8 @@ import net.minecraft.world.level.pathfinder.PathType
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
-class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
-    companion object {
+public class PokemonMoveControl(val pokemonEntity: PokemonEntity) : MoveControl(pokemonEntity) {
+    final class Companion {
         const val VERY_CLOSE = 2.500000277905201E-3
     }
 

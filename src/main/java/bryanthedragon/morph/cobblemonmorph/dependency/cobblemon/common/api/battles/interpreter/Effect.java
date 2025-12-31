@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.i
  * @author Licious
  * @since December 31st, 2022
  */
-interface Effect {
+public interface Effect {
 
     /**
      * The literal ID of this [Effect].
@@ -29,7 +29,7 @@ interface Effect {
     /**
      * The [Effect.Type] of this [Effect].
      */
-    val type: Type
+    val Type type
 
     /**
      * The raw literal data received when parsing this [Effect].
@@ -57,7 +57,7 @@ interface Effect {
 
     }
 
-    companion object {
+    final class Companion {
 
         /**
          * Creates an [Effect].
@@ -67,7 +67,7 @@ interface Effect {
          * @param rawData The received string in the battle message.
          * @return An [Effect] containing the given data of the given [type].
          */
-        private fun of(id: String, type: Type, rawData: String): Effect = CobblemonEffect(id, type, rawData)
+        private fun of(id: String, Type type, rawData: String): Effect = CobblemonEffect(id, type, rawData)
 
         /**
          * Creates an [Effect] with type [Effect.Type.ABILITY].

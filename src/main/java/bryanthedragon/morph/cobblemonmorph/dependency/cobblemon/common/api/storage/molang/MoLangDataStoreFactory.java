@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stor
 import com.bedrockk.molang.runtime.struct.VariableStruct
 import java.util.UUID
 
-interface MoLangDataStoreFactory {
-    fun markDirty(uuid: UUID)
-    fun load(uuid: UUID, filePath: String? = null) : VariableStruct
+public interface MoLangDataStoreFactory {
+    fun markDirty(UUID uuid)
+    fun load(UUID uuid, fileString path? = null) : VariableStruct
 }

@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialo
  * @author Hiroku
  * @since December 27th, 2023
  */
-class DialogueOption(
+public class DialogueOption(
     var text: DialogueText = WrappedDialogueText(),
     /** The value is a unique identifier so the client can tell the server what they selected. Don't forget this. */
     var value: String = "",

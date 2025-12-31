@@ -19,18 +19,18 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.world.phys.Vec3
 
 abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(var vanillaSpawnPacket: ClientboundAddEntityPacket) : NetworkPacket<T> {
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         this.encodeEntityData(buffer)
         this.vanillaSpawnPacket.write(buffer)
     }
 
-    abstract fun encodeEntityData(buffer: RegistryFriendlyByteBuf)
+    abstract fun encodeEntityData(RegistryFriendlyByteBuf buffer)
 
     abstract fun applyData(entity: E, level: ClientLevel)
 
-    abstract fun checkType(entity: Entity): Boolean
+    abstract fun checkType(Entity entity): Boolean
 
-    fun spawnAndApply(client: Minecraft) {
+    fun spawnAndApply(Minecraft client) {
         client.execute {
             val player = client.player ?: return@execute
             val world = player.level() as? ClientLevel ?: return@execute
@@ -56,7 +56,7 @@ abstract class SpawnExtraDataEntityPacket<T: NetworkPacket<T>, E : Entity>(var v
         }
     }
 
-    companion object {
-        fun decodeVanillaPacket(buffer: RegistryFriendlyByteBuf) = ClientboundAddEntityPacket(buffer)
+    final class Companion {
+        fun decodeVanillaPacket(RegistryFriendlyByteBuf buffer) = ClientboundAddEntityPacket(buffer)
     }
 }

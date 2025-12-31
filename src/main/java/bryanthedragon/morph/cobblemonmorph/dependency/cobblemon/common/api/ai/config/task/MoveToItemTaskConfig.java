@@ -22,19 +22,19 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class MoveToItemTaskConfig : SingleTaskConfig {
+public class MoveToItemTaskConfig : SingleTaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     var speedMultiplier: ExpressionOrEntityVariable = Either.left("0.6".asExpression())
     var maxDistance: ExpressionOrEntityVariable = Either.left("7.0".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         speedMultiplier,
         maxDistance
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         behaviourConfigurationContext.addMemories(
@@ -52,7 +52,7 @@ class MoveToItemTaskConfig : SingleTaskConfig {
                 speedMultiplier = speedMultiplier.asExpression(),
                 maxDistance = maxDistance.asExpression()
             ),
-            PokemonEntity::class.java
+            PokemonEntity.class
         )
     }
 }

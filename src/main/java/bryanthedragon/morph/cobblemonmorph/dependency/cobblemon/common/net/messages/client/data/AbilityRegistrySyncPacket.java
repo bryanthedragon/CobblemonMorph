@@ -15,17 +15,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class AbilityRegistrySyncPacket(abilities: Collection<AbilityTemplate>) : DataRegistrySyncPacket<AbilityTemplate, AbilityRegistrySyncPacket>(abilities) {
+public class AbilityRegistrySyncPacket(abilities: Collection<AbilityTemplate>) : DataRegistrySyncPacket<AbilityTemplate, AbilityRegistrySyncPacket>(abilities) {
 
     override val id = ID
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: AbilityTemplate) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: AbilityTemplate) {
         buffer.writeString(entry.name)
         buffer.writeString(entry.displayName)
         buffer.writeString(entry.description)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): AbilityTemplate {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): AbilityTemplate {
         return AbilityTemplate(
             name = buffer.readString(),
             displayName = buffer.readString(),
@@ -37,8 +37,8 @@ class AbilityRegistrySyncPacket(abilities: Collection<AbilityTemplate>) : DataRe
         Abilities.receiveSyncPacket(entries)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("ability_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf): AbilityRegistrySyncPacket = AbilityRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer): AbilityRegistrySyncPacket = AbilityRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 }

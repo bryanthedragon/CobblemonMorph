@@ -21,8 +21,9 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since August 11th, 2024
- */final class WeightedAspectAdapter : JsonDeserializer<WeightedAspect> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext): WeightedAspect {
+ */
+public final class WeightedAspectAdapter : JsonDeserializer<WeightedAspect> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx): WeightedAspect {
         if (json.isJsonPrimitive) {
             return WeightedAspect(setOf(json.asString), 1.0)
         } else {

@@ -25,19 +25,19 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.phys.Vec3
 
-class SnowstormParticleType : ParticleType<SnowstormParticleOptions>(true) {
-    companion object {
+public class SnowstormParticleType : ParticleType<SnowstormParticleOptions>(true) {
+    final class Companion {
         val CODEC: MapCodec<SnowstormParticleOptions> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 BedrockParticleOptions.CODEC.fieldOf("effect").forGetter { it.effect }
             ).apply(instance, ::SnowstormParticleOptions)
         }
 
-        val encoder = { effect: SnowstormParticleOptions, buf: RegistryFriendlyByteBuf ->
+        val encoder = { effect: SnowstormParticleOptions, RegistryFriendlyByteBuf buf ->
             effect.effect.writeToBuffer(buf)
         }
 
-        val decoder = { buf: RegistryFriendlyByteBuf ->
+        val decoder = { RegistryFriendlyByteBuf buf ->
             SnowstormParticleOptions(BedrockParticleOptions().also { it.readFromBuffer(buf) })
         }
 

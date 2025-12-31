@@ -32,8 +32,8 @@ import net.minecraft.resources.ResourceLocation
  * @since August 24, 2024
  * @author Apion
  */
-class SimplePokedexDef(
-    override val id: ResourceLocation
+public class SimplePokedexDef(
+    override val ResourceLocation id
 ) : PokedexDef() {
     override val typeId = ID
 
@@ -47,7 +47,7 @@ class SimplePokedexDef(
 
     override fun shouldSynchronize(other: PokedexDef) = true
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         sortOrder = buffer.readSizedInt(IntSize.U_BYTE)
         val size = buffer.readInt()
         for (i in 0 until size) {
@@ -55,7 +55,7 @@ class SimplePokedexDef(
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeSizedInt(IntSize.U_BYTE, sortOrder)
         buffer.writeInt(entries.size)
         entries.forEach {
@@ -63,7 +63,7 @@ class SimplePokedexDef(
         }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("simple_pokedex_def")
         val CODEC: MapCodec<SimplePokedexDef> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(

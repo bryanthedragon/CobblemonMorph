@@ -30,10 +30,10 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 
-class SpawnNPCPacket(
+public class SpawnNPCPacket(
     var npcClass: ResourceLocation,
-    var resourceIdentifier: ResourceLocation,
-    var aspects: Set<String>,
+    var resourceResourceLocation identifier,
+    Set<String> aspects,
     var level: Int,
     var battleIds: Set<UUID>,
     var name: Component,
@@ -48,7 +48,7 @@ class SpawnNPCPacket(
     vanillaSpawnPacket: ClientboundAddEntityPacket
 ) : SpawnExtraDataEntityPacket<SpawnNPCPacket, NPCEntity>(vanillaSpawnPacket) {
 
-    override val id: ResourceLocation = ID
+    override val ResourceLocation id = ID
 
     constructor(entity: NPCEntity, vanillaSpawnPacket: ClientboundAddEntityPacket) : this(
         entity.npc.id,
@@ -68,7 +68,7 @@ class SpawnNPCPacket(
         vanillaSpawnPacket
     )
 
-    override fun encodeEntityData(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeEntityData(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(this.npcClass)
         buffer.writeIdentifier(this.resourceIdentifier)
         buffer.writeCollection(this.aspects) { pb, value -> pb.writeString(value) }
@@ -107,19 +107,19 @@ class SpawnNPCPacket(
         entity.renderScale = this.renderScale
     }
 
-    override fun checkType(entity: Entity): Boolean = entity is NPCEntity
+    override fun checkType(Entity entity): Boolean = entity is NPCEntity
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("spawn_npc_entity")
-        fun decode(buffer: RegistryFriendlyByteBuf): SpawnNPCPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SpawnNPCPacket {
             val npc = buffer.readIdentifier()
             val resourceIdentifier = buffer.readIdentifier()
             val aspects = buffer.readList { buffer.readString() }.toSet()
             val level = buffer.readInt()
             val battleIds = buffer.readList { buffer.readUUID() }.toSet()
             val name = buffer.readText()
-            val poseType = buffer.readEnumConstant(PoseType::class.java)
-            val model = buffer.readEnumConstant(NPCPlayerModelType::class.java)
+            val poseType = buffer.readEnumConstant(PoseType.class)
+            val model = buffer.readEnumConstant(NPCPlayerModelType.class)
             val texture = if (model != NPCPlayerModelType.NONE) {
                 NPCPlayerTexture(buffer.readByteArray(), model)
             } else {

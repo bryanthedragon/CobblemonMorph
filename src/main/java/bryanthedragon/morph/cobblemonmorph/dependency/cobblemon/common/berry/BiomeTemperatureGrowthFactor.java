@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState
  * @author Licious
  * @since December 2nd, 2022
  */
-class BiomeTemperatureGrowthFactor(
+public class BiomeTemperatureGrowthFactor(
     val range: MinMaxBounds.Doubles,
     val bonusYield: IntRange
 ) : GrowthFactor {
@@ -35,7 +35,7 @@ class BiomeTemperatureGrowthFactor(
         }
     }
 
-    override fun isValid(world: LevelReader, state: BlockState, pos: BlockPos): Boolean {
+    override fun isValid(Level worldReader, BlockState state, (BlockPos pos): Boolean {
         val biome = world.getBiome(pos).value()
         return this.range.matches(biome.baseTemperature.toDouble())
     }
@@ -46,7 +46,7 @@ class BiomeTemperatureGrowthFactor(
 
     override fun maxYield() = this.bonusYield.last
 
-    companion object {
+    final class Companion {
 
         val ID = cobblemonResource("biome_temperature")
 

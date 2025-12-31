@@ -54,7 +54,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType
 import net.minecraft.world.entity.schedule.Activity
 
 // brain sensors / memory definitions split from PokemonEntity
-// to better represent vanillas layout.final class PokemonBrain {
+// to better represent vanillas layout.public final class PokemonBrain {
 
     private val ADULT_FOLLOW_RANGE = UniformInt.of(5, 16)
     private val AVOID_MEMORY_DURATION = TimeUtil.rangeOfSeconds(5, 20)
@@ -82,7 +82,7 @@ import net.minecraft.world.entity.schedule.Activity
 //            CobblemonSensors.NPC_BATTLING
     )
 
-    fun applyBrain(entity: PokemonEntity, pokemon: Pokemon, dynamic: Dynamic<*>) {
+    fun applyBrain(entity: PokemonEntity, Pokemon pokemon, dynamic: Dynamic<*>) {
         /*
          * Something to note here is that if we changed the autoPokemonPresets to be a set of presets rather than
          * the configurations inside the presets, the logic in ApplyPresets would actually result in the top
@@ -203,7 +203,7 @@ import net.minecraft.world.entity.schedule.Activity
         CobblemonMemories.NEARBY_SWEET_BERRY_BUSH
     )
 
-    private fun coreTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
+    private fun coreTasks(Pokemon pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
         if (!pokemon.form.behaviour.moving.swim.canBreatheUnderwater) {
             add(0 toDF StayAfloatTask(0.8F))
         }
@@ -221,20 +221,20 @@ import net.minecraft.world.entity.schedule.Activity
         add(0 toDF SwapActivityTask.possessing(CobblemonMemories.POKEMON_BATTLE, CobblemonActivities.BATTLING))
     }
 
-    private fun fightTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
+    private fun fightTasks(Pokemon pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
         add(0 toDF MoveToAttackTargetTask.create())
         add(0 toDF PokemonMeleeTask.create(20))
         add(0 toDF SwapActivityTask.lacking(MemoryModuleType.ATTACK_TARGET, Activity.IDLE))
     }
 
-    private fun avoidTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
+    private fun avoidTasks(Pokemon pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
         add(0 toDF SetWalkTargetAwayFrom.entity(MemoryModuleType.AVOID_TARGET, 0.55F, 15, false))
         add(0 toDF makeRandomWalkTask())
         add(0 toDF SetEntityLookTargetSometimes.create(8.0f, UniformInt.of(30, 60)))
         add(0 toDF SwapActivityTask.lacking(MemoryModuleType.AVOID_TARGET, Activity.IDLE))
     }
 
-    private fun idleTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
+    private fun idleTasks(Pokemon pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
         add(0 toDF WakeUpTask.create() )
         if (pokemon.form.behaviour.moving.canLook) {
             add(0 toDF LookAroundTaskWrapper(45, 90))
@@ -287,7 +287,7 @@ import net.minecraft.world.entity.schedule.Activity
         add(1 toDF WakeUpTask.create())
     }
 
-    private fun growingPlantTasks(pokemon: Pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
+    private fun growingPlantTasks(Pokemon pokemon) = buildList<Pair<Int, BehaviorControl<in PokemonEntity>>> {
         if (pokemon.species.primaryType.name.equals("grass", true)){
             add(1 toDF FertilizerTask())
         }

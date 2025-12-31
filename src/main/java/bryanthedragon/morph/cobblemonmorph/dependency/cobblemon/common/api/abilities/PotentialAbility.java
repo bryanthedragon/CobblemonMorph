@@ -11,8 +11,8 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.abil
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.Priority
 import com.google.gson.JsonElement
 
-interface PotentialAbilityType<T : PotentialAbility> {
-    fun parseFromJSON(element: JsonElement): T?
+public interface PotentialAbilityType<T : PotentialAbility> {
+    fun parseFromJSON(JsonElement jElement): T?
 }
 
 /**
@@ -23,17 +23,17 @@ interface PotentialAbilityType<T : PotentialAbility> {
  * @author Hiroku
  * @since July 27th, 2022
  */
-interface PotentialAbility {
+public interface PotentialAbility {
     val template: AbilityTemplate
-    val priority: Priority
+    val Priority priority
     val type: PotentialAbilityType<*>
     fun isSatisfiedBy(aspects: Set<String>): Boolean
-    companion object {
+    final class Companion {
         val types = mutableListOf<PotentialAbilityType<*>>()
     }
 }
-final class CommonAbilityType : PotentialAbilityType<CommonAbility> {
-    override fun parseFromJSON(element: JsonElement): CommonAbility? {
+public final class CommonAbilityType : PotentialAbilityType<CommonAbility> {
+    override fun parseFromJSON(JsonElement jElement): CommonAbility? {
         val str = if (element.isJsonPrimitive) element.asString else null
         return str?.let {
             val ability = Abilities.get(it)

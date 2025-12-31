@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Renaissance
  * @since March 24th, 2023
  */
-class SwapBoostInstruction(val message: BattleMessage): InterpreterInstruction {
+public class SwapBoostInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting(2F) {

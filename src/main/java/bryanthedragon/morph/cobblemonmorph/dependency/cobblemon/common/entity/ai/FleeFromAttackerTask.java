@@ -18,7 +18,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-final class FleeFromAttackerTask {
+public final class FleeFromAttackerTask {
     fun create(avoidDurationTicks: Expression): OneShot<LivingEntity> {
         return BehaviorBuilder.create {
             it.group(

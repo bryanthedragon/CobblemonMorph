@@ -24,7 +24,7 @@ import net.minecraft.commands.Commands.argument
 import net.minecraft.commands.Commands.literal
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class GivePokemon {
+public final class GivePokemon {
 
     private const val NAME = "givepokemon"
     private const val ALIAS = "pokegive"
@@ -48,7 +48,7 @@ final class GivePokemon {
         dispatcher.register(otherCommand.alias(ALIAS_OTHER))
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer): Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player): Int {
         try {
             val pokemonProperties = PokemonPropertiesArgumentType.getPokemonProperties(context, PROPERTIES)
             if (pokemonProperties.species == null) {
@@ -59,7 +59,7 @@ final class GivePokemon {
             val party = Cobblemon.storage.getParty(player)
             party.add(pokemon)
             context.source.sendSuccess({ commandLang("${NAME}.give", pokemon.species.translatedName, player.name) }, true)
-        } catch (e: Exception) {
+        } catch (Exception e) {
             e.printStackTrace()
         }
         return Command.SINGLE_SUCCESS

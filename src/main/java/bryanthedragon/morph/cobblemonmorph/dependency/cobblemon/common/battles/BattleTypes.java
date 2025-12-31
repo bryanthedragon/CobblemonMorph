@@ -15,7 +15,7 @@ import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.network.chat.MutableComponent
 
 // note: showdown calls it gameType, but in MC GameType would collide with plugins and shit a lot.
-final class BattleTypes {
+public final class BattleTypes {
     val SINGLES = makeBattleType("singles", actorsPerSide = 1, slotsPerActor = 1)
     val DOUBLES = makeBattleType("doubles", actorsPerSide = 1, slotsPerActor = 2)
     val TRIPLES = makeBattleType("triples", actorsPerSide = 1, slotsPerActor = 3)
@@ -24,8 +24,8 @@ final class BattleTypes {
     // maybe one day we can add MULTI-3 for triple battles with 6 fuckers in it, that'd be sick. We could game it with partial actors though
 
     fun makeBattleType(
-        name: String,
-        displayName: MutableComponent = lang("battle.types.$name"),
+        String name,
+        MutableComponent displayName = lang("battle.types.$name"),
         actorsPerSide: Int,
         slotsPerActor: Int
     ) = object : BattleType {
@@ -36,17 +36,17 @@ final class BattleTypes {
     }
 }
 
-interface BattleType {
-    val name: String
-    val displayName: MutableComponent
+public interface BattleType {
+    val String name
+    val MutableComponent displayName
     val actorsPerSide: Int
     val slotsPerActor: Int
 
     val pokemonPerSide: Int
         get() = actorsPerSide * slotsPerActor
 
-    companion object {
-        fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): BattleType {
+    final class Companion {
+        fun loadFromBuffer(RegistryFriendlyByteBuf buffer): BattleType {
             val name = buffer.readString()
             val displayName = ComponentSerialization.STREAM_CODEC.decode(buffer)
             val actorsPerSide = buffer.readSizedInt(IntSize.U_BYTE)
@@ -59,7 +59,7 @@ interface BattleType {
             )
         }
     }
-    fun saveToBuffer(buffer: RegistryFriendlyByteBuf): RegistryFriendlyByteBuf {
+    fun saveToBuffer(RegistryFriendlyByteBuf buffer): RegistryFriendlyByteBuf {
         buffer.writeString(name)
         ComponentSerialization.STREAM_CODEC.encode(buffer, displayName)
         buffer.writeSizedInt(IntSize.U_BYTE, actorsPerSide)

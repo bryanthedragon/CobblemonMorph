@@ -18,7 +18,7 @@ import net.minecraft.world.level.material.FluidState
  * @author Hiroku
  * @since April 18th, 2025
  */
-interface OmniPathingEntity {
+public interface OmniPathingEntity {
     fun canWalk(): Boolean
     fun canSwimInWater(): Boolean
     fun canWalkOnWater(): Boolean

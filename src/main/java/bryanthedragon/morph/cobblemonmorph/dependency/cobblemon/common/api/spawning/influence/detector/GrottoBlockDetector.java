@@ -52,5 +52,5 @@
 //        }
 //    }
 //
-//    override fun detectFromBlock(world: ServerLevel, pos: BlockPos, blockState: BlockState) = emptyList<ZoneSpawningInfluence>()
+//    override fun detectFromBlock(ServerLevel world, (BlockPos pos, blockBlockState state) = emptyList<ZoneSpawningInfluence>()
 //}

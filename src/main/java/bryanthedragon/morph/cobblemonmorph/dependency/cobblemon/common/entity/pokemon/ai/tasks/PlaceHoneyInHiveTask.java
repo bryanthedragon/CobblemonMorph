@@ -20,7 +20,7 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.level.block.BeehiveBlock
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity
 import net.minecraft.world.phys.Vec3
-final class PlaceHoneyInHiveTask {
+public final class PlaceHoneyInHiveTask {
 
     fun create(): OneShot<PokemonEntity> {
         return BehaviorBuilder.create {

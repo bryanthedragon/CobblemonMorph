@@ -19,13 +19,13 @@ import net.minecraft.util.StringRepresentable
  * @author JPAK, Apion
  * @since February 21, 2024
  */
-enum class PokedexEntryProgress : StringRepresentable, Comparable<PokedexEntryProgress> {
+public enum PokedexEntryProgress : StringRepresentable, Comparable<PokedexEntryProgress> {
     NONE,
     ENCOUNTERED,
     CAUGHT;
 
     override fun getSerializedName() = this.name
-    companion object {
+    final class Companion {
         val CODEC: Codec<PokedexEntryProgress> = RecordCodecBuilder.create { instance ->
             instance.map ({
                 PokedexEntryProgress.valueOf(it)

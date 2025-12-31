@@ -12,9 +12,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.types
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 
-class DualTypeWidget(
+public class DualTypeWidget(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     pMessage: Component,
     private val mainType: ElementalType, private val secondaryType: ElementalType
 ) : TypeWidget(pX, pY, pWidth, pHeight, pMessage) {

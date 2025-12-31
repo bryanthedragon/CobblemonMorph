@@ -19,8 +19,8 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
-final class StashHandler {
-    fun interactMob(player: Player, pokemon: Pokemon, itemStack: ItemStack?): Boolean {
+public final class StashHandler {
+    fun interactMob(player: Player, Pokemon pokemon, itemStack: ItemStack?): Boolean {
         if (itemStack == null || player !is ServerPlayer|| pokemon.getOwnerPlayer() !== player) return false
         val success = handleItem(pokemon, itemStack.item)
         if (success) {
@@ -38,8 +38,8 @@ final class StashHandler {
         }
     }
 
-    fun handleItem(pokemon: Pokemon, item: Item): Boolean {
-        val itemIdentifier: ResourceLocation = item.builtInRegistryHolder().key().location()
+    fun handleItem(Pokemon pokemon, item: Item): Boolean {
+        val itemResourceLocation identifier = item.builtInRegistryHolder().key().location()
         val speciesFeatureProviders = SpeciesFeatures.getFeaturesFor(pokemon.species)
         val relevantSpeciesFeatureProviders: List<IntSpeciesFeatureProvider> = speciesFeatureProviders.filter {
             it is IntSpeciesFeatureProvider && it.itemPoints.keys.contains(itemIdentifier)

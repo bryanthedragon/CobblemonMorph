@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.fishi
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.components.BaitEffectsComponent
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-final class BaitSeasoningProcessor : SeasoningProcessor {
+public final class BaitSeasoningProcessor : SeasoningProcessor {
     override val type = "spawn_bait"
     override fun apply(result: ItemStack, seasoning: List<ItemStack>) {
         val baitIdentifiers = mutableListOf<ResourceLocation>()

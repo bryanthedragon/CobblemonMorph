@@ -17,7 +17,7 @@ import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import java.util.concurrent.CompletableFuture
 
-class DexArgumentType : ArgumentType<PokedexDef> {
+public class DexArgumentType : ArgumentType<PokedexDef> {
     override fun parse(reader: StringReader): PokedexDef {
         val dexToken = reader.readString()
         //Using first here (when we only check path) is mildly concerning, but hopefully there wont be name collisions
@@ -39,7 +39,7 @@ class DexArgumentType : ArgumentType<PokedexDef> {
         }
     }
 
-    companion object {
+    final class Companion {
         fun dex() = DexArgumentType()
     }
 

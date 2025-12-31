@@ -6,59 +6,47 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.advancement.criterion;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.advancements.critereon.ContextAwarePredicate
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.resources.ResourceLocation
-import java.util.Optional
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asIdentifierDefaultingNamespace;
 
-class EvolvePokemonContext(val species : ResourceLocation, val evolution : ResourceLocation, times: Int) : CountableContext(times)
+import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-class EvolvePokemonCriterion(
-    playerCtx: Optional<ContextAwarePredicate>,
-    val species: String,
-    val evolution: String,
-    count: Int
-): CountableCriterion<EvolvePokemonContext>(playerCtx, count) {
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.server.level.ServerPlayer;
+import org.checkerframework.checker.signature.qual.Identifier;
 
-    companion object {
-        val CODEC: Codec<EvolvePokemonCriterion> = RecordCodecBuilder.create { it.group(
-            ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(EvolvePokemonCriterion::playerCtx),
-            Codec.STRING.optionalFieldOf("species", "any").forGetter(EvolvePokemonCriterion::species),
-            Codec.STRING.optionalFieldOf("evolution", "any").forGetter(EvolvePokemonCriterion::evolution),
-            Codec.INT.optionalFieldOf("count", 0).forGetter(EvolvePokemonCriterion::count)
-        ).apply(it, ::EvolvePokemonCriterion) }
+import java.util.Optional;
+
+public class EvolvePokemonCriterion(Optional<ContextAwarePredicate> playerCtx, String species, String evolution, int count): CountableCriterion<EvolvePokemonContext>(playerCtx, count) {
+
+    final class Companion {
+        public final Codec<EvolvePokemonCriterion> CODEC  = RecordCodecBuilder.create { it.group(ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(EvolvePokemonCriterion::playerCtx), Codec.STRING.optionalFieldOf("species", "any").forGetter(EvolvePokemonCriterion::species), Codec.STRING.optionalFieldOf("evolution", "any").forGetter(EvolvePokemonCriterion::evolution), Codec.INT.optionalFieldOf("count", 0).forGetter(EvolvePokemonCriterion::count)).apply(it, ::EvolvePokemonCriterion) }
     }
 
-    override fun matches(player: ServerPlayer, context: EvolvePokemonContext): Boolean {
-        return context.times >= count && (context.species == species.asIdentifierDefaultingNamespace() || species == "any") &&
-                (context.evolution == evolution.asIdentifierDefaultingNamespace() || evolution == "any")
+    public boolean matches(ServerPlayer player, EvolvePokemonContext context) {
+        return context.times >= count && (context.species == species.asIdentifierDefaultingNamespace() || species == "any") && (context.evolution == evolution.asIdentifierDefaultingNamespace() || evolution == "any");
     }
 }
 
-//class EvolvePokemonCriterion(id: Identifier, entity: LootContextPredicate) : CountableCriterion<EvolvePokemonContext>(id, entity) {
-//    var species = "any"
-//    var evolution = "any"
-//    override fun toJson(json: JsonObject) {
-//        super.toJson(json)
-//        json.addProperty("species", species)
-//        json.addProperty("evolution", evolution)
-//    }
-//
-//    override fun fromJson(json: JsonObject) {
-//        super.fromJson(json)
-//        species = json.get("species")?.asString ?: "any"
-//        evolution = json.get("evolution")?.asString ?: "any"
-//    }
-//
-//    override fun matches(player: ServerPlayer, context: EvolvePokemonContext): Boolean {
-//        return context.times >= count && (context.species == species.asIdentifierDefaultingNamespace() || species == "any") &&
-//                (context.evolution == evolution.asIdentifierDefaultingNamespace() || evolution == "any")
-//    }
-//}
-//
-//open class EvolvePokemonContext(val species : Identifier, val evolution : Identifier, times: Int) : CountableContext(times)
+public class EvolvePokemonCriterionIDer(Identifier id,LootContextPredicate entity) : CountableCriterion<EvolvePokemonContext>(id, entity) {
+   var species = "any";
+   var evolution = "any";
+   fun toJson(JsonObject json) {
+       super.toJson(json);
+       json.addProperty("species", species);
+       json.addProperty("evolution", evolution);
+   }
+
+   fun fromJson(JsonObject json) {
+       super.fromJson(json);
+       species = json.get("species")?.asString ?: "any";
+       evolution = json.get("evolution")?.asString ?: "any";
+   }
+
+    boolean matches(ServerPlayer player, EvolvePokemonContext context) {
+       return context.times >= count && (context.species == species.asIdentifierDefaultingNamespace() || species == "any") && (context.evolution == evolution.asIdentifierDefaultingNamespace() || evolution == "any");
+   }
+}

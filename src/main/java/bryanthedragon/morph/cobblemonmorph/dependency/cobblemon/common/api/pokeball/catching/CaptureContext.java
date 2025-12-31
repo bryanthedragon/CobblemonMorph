@@ -6,16 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching;
 
-record CaptureContext(
-    val numberOfShakes: Int,
-    val isSuccessfulCapture: Boolean,
-    val isCriticalCapture: Boolean
-) {
+public record CaptureContext(int numberOfShakes, Boolean isSuccessfulCapture, Boolean isCriticalCapture) {
 
-    companion object {
-
+    final class Companion {
         /**
          * Creates a successful capture.
          * The amount of [CaptureContext.numberOfShakes] will be 4 if [critical] is false otherwise 1.
@@ -23,11 +18,11 @@ record CaptureContext(
          * @param critical If the capture is a critical capture, defaults to false.
          * @return The generated [CaptureContext].
          */
-        fun successful(critical: Boolean = false): CaptureContext {
+        CaptureContext successful(Boolean critical) {
             if (critical) {
-                return CaptureContext(numberOfShakes = 1, isSuccessfulCapture = true, isCriticalCapture = true)
+                return CaptureContext(numberOfShakes = 1, isSuccessfulCapture = true, isCriticalCapture = true);
             }
-            return CaptureContext(numberOfShakes = 4, isSuccessfulCapture = true, isCriticalCapture = false)
+            return CaptureContext(numberOfShakes = 4, isSuccessfulCapture = true, isCriticalCapture = false);
         }
 
     }

@@ -21,7 +21,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayer
 import java.util.UUID
 
-class MongoPlayerDataStoreFactory(mongoClient: MongoClient, databaseName: String) : PlayerInstancedDataFactory<GeneralPlayerData> {
+public class MongoPlayerDataStoreFactory(mongoClient: MongoClient, databaseName: String) : PlayerInstancedDataFactory<GeneralPlayerData> {
 
     private val cache = mutableMapOf<UUID, GeneralPlayerData>()
     private val adapter = MongoPlayerDataBackend(mongoClient, databaseName)
@@ -43,11 +43,11 @@ class MongoPlayerDataStoreFactory(mongoClient: MongoClient, databaseName: String
         adapter.save(getForPlayer(playerId))
     }
 
-    override fun onPlayerDisconnect(player: ServerPlayer) {
+    override fun onPlayerDisconnect(ServerPlayer player) {
         cache.remove(player.uuid)
     }
 
-    override fun sendToPlayer(player: ServerPlayer) {
+    override fun sendToPlayer(ServerPlayer player) {
         player.sendPacket(SetClientPlayerDataPacket(getForPlayer(player)))
     }
 

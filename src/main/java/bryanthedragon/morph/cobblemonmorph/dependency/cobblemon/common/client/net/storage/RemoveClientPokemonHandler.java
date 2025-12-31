@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.RemoveClientPokemonPacket
 import net.minecraft.client.Minecraft
-final class RemoveClientPokemonHandler : ClientNetworkPacketHandler<RemoveClientPokemonPacket> {
-    override fun handle(packet: RemoveClientPokemonPacket, client: Minecraft) {
+public final class RemoveClientPokemonHandler : ClientNetworkPacketHandler<RemoveClientPokemonPacket> {
+    override fun handle(packet: RemoveClientPokemonPacket, Minecraft client) {
         if (packet.storeIsParty) {
             CobblemonClient.storage.removeFromParty(packet.storeID, packet.pokemonID)
         } else {

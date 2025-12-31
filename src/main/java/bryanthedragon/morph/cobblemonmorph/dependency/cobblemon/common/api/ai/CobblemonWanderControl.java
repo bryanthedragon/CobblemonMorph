@@ -23,7 +23,7 @@ import net.minecraft.world.entity.PathfinderMob
  * @author Hiroku
  * @since July 18, 2025
  */
-class CobblemonWanderControl(
+public class CobblemonWanderControl(
     var center: WanderCenter? = null,
     var maxAttempts: Int = 4, // How many times to try to find a suitable point before giving up on that tick.
     var allowLand: Boolean = true,
@@ -72,7 +72,7 @@ class CobblemonWanderControl(
         .addFunction("set_wander_speed") { params -> wanderSpeed = params.getDoubleOrNull(0)?.toFloat() ?: 0.35F }
         .addFunction("reset") { reset() }
 
-    fun isSuitable(position: BlockPos): Boolean {
+    fun isSuitable(BlockPos position): Boolean {
         val center = center ?: return true
         val centerPos = BlockPos(center.x.toInt(), center.y.toInt(), center.z.toInt())
         val distance = sqrt(centerPos.distSqr(position))

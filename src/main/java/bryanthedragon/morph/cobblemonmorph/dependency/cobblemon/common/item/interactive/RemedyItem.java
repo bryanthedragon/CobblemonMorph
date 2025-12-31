@@ -29,8 +29,8 @@ import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 
-class RemedyItem(val remedyStrength: String) : CobblemonItem(Properties()), PokemonSelectingItem, HealingSource {
-    companion object {
+public class RemedyItem(val remedyStrength: String) : CobblemonItem(Properties()), PokemonSelectingItem, HealingSource {
+    final class Companion {
         const val NORMAL = "normal"
         const val FINE = "fine"
         const val SUPERB = "superb"
@@ -40,18 +40,18 @@ class RemedyItem(val remedyStrength: String) : CobblemonItem(Properties()), Poke
     override val bagItem = object : BagItem {
         override val itemName = if (remedyStrength.equals(NORMAL)) "item.cobblemon.remedy" else "item.cobblemon.${remedyStrength}_remedy"  // remedy, fine_remedy, superb_remedy
         override val returnItem = Items.AIR
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.health < target.maxHealth
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?): String {
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.health < target.maxHealth
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?): String {
             battlePokemon.effectedPokemon.decrementFriendship(CobblemonMechanics.remedies.getFriendshipDrop(remedyStrength, runtime))
             return "potion ${CobblemonMechanics.remedies.getHealingAmount(remedyStrength, runtime, 20)}"
         }
     }
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = !pokemon.isFullHealth() && pokemon.currentHealth > 0
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack> {
         return if (!pokemon.isFullHealth() && pokemon.currentHealth > 0) {
             var amount = CobblemonMechanics.remedies.getHealingAmount(remedyStrength, runtime, 20)
@@ -68,12 +68,12 @@ class RemedyItem(val remedyStrength: String) : CobblemonItem(Properties()), Poke
         }
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_HERB_USE, 1F, 1F)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

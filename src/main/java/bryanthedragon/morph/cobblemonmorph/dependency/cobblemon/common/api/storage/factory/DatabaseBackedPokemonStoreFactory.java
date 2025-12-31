@@ -7,4 +7,4 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.factory
-class DatabaseBackedPokemonStoreFactory
+public class DatabaseBackedPokemonStoreFactory

@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class YamaskModel (root: ModelPart) : PokemonPosableModel(root), BimanualFrame {
+public class YamaskModel (root: ModelPart) : PokemonPosableModel(root), BimanualFrame {
     override val rootPart = root.registerChildWithAllChildren("yamask")
 
     override val leftArm = getPart("arm_left")

@@ -31,7 +31,7 @@ import net.minecraft.world.entity.player.Player
  * @since February 21, 2024
  */
 
-open class PlayerInstancedDataStoreManager {
+public open class PlayerInstancedDataStoreManager {
     val saveExecutor = Executors.newSingleThreadExecutor(
         ThreadFactoryBuilder()
             .setNameFormat("$MODID Player Data Save Executor")
@@ -93,13 +93,13 @@ open class PlayerInstancedDataStoreManager {
         return factories[dataType]!!.saveSingle(playerData.uuid)
     }
 
-    open fun onPlayerDisconnect(player: ServerPlayer) {
+    open fun onPlayerDisconnect(ServerPlayer player) {
         factories.values.forEach {
             it.onPlayerDisconnect(player)
         }
     }
 
-    open fun syncAllToPlayer(player: ServerPlayer) {
+    open fun syncAllToPlayer(ServerPlayer player) {
         factories.values.forEach {
             it.sendToPlayer(player)
         }
@@ -111,7 +111,7 @@ open class PlayerInstancedDataStoreManager {
         }
     }
 
-    open fun getGenericData(player: ServerPlayer): GeneralPlayerData {
+    open fun getGenericData(ServerPlayer player): GeneralPlayerData {
         return getGenericData(player.uuid)
     }
 
@@ -119,7 +119,7 @@ open class PlayerInstancedDataStoreManager {
         return get(playerId, PlayerInstancedDataStoreTypes.GENERAL) as GeneralPlayerData
     }
 
-    open fun getPokedexData(player: ServerPlayer): PokedexManager {
+    open fun getPokedexData(ServerPlayer player): PokedexManager {
         return getPokedexData(player.uuid)
     }
 

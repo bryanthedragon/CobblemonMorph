@@ -36,12 +36,12 @@ import org.joml.Vector3f
 sealed interface RenderableFace {
     val isLeftSide: Boolean
     val struct: QueryStruct
-    fun render(GuiGraphics: GuiGraphics, partialTicks: Float)
+    fun render(GuiGraphics guiGraphics, partialTicks: Float)
 }
 
-class PlayerRenderableFace(val playerId: UUID, override val isLeftSide: Boolean) : RenderableFace {
+public class PlayerRenderableFace(val playerId: UUID, override val isLeftSide: Boolean) : RenderableFace {
     override val struct: QueryStruct = QueryStruct(hashMapOf())
-    override fun render(GuiGraphics: GuiGraphics, partialTicks: Float) {
+    override fun render(GuiGraphics guiGraphics, partialTicks: Float) {
         val entity = Minecraft.getInstance().level?.getPlayerByUUID(playerId) ?: return
         // All of the maths below is shamelessly stolen from InventoryScreen.drawEntity.
         // the -20 and 5 divided by 40 are for configuring the yaw and pitch tilt of the body and head respectively.
@@ -75,11 +75,11 @@ class PlayerRenderableFace(val playerId: UUID, override val isLeftSide: Boolean)
     }
 }
 
-class ReferenceRenderableFace(val entity: PosableEntity, override val isLeftSide: Boolean): RenderableFace {
+public class ReferenceRenderableFace(val entity: PosableEntity, override val isLeftSide: Boolean): RenderableFace {
     val state = entity.delegate as PosableState
     override val struct: QueryStruct
         get() = state.runtime.environment.query
-    override fun render(GuiGraphics: GuiGraphics, partialTicks: Float) {
+    override fun render(GuiGraphics guiGraphics, partialTicks: Float) {
         val state = this.state
         if (state is PokemonClientDelegate) {
             state.currentAspects = state.currentEntity.pokemon.aspects
@@ -110,9 +110,9 @@ class ReferenceRenderableFace(val entity: PosableEntity, override val isLeftSide
     }
 }
 
-class ArtificialRenderableFace(
+public class ArtificialRenderableFace(
     val modelType: String,
-    val identifier: ResourceLocation,
+    val ResourceLocation identifier,
     val aspects: Set<String>,
     override val isLeftSide: Boolean
 ): RenderableFace {
@@ -120,7 +120,7 @@ class ArtificialRenderableFace(
     override val struct: QueryStruct
         get() = state.runtime.environment.query
 
-    override fun render(GuiGraphics: GuiGraphics, partialTicks: Float) {
+    override fun render(GuiGraphics guiGraphics, partialTicks: Float) {
         val state = this.state
         state.currentAspects = aspects
         if (modelType == "pokemon") {

@@ -27,7 +27,7 @@ import java.util.UUID
 sealed interface PokedexDataChangedEvent {
     val dataSource: PokedexEntityData
     val knowledge: PokedexEntryProgress
-    val playerUUID: UUID
+    val UUID playerUUID
     val record: FormDexRecord
 
     val pokedexManager: AbstractPokedexManager
@@ -46,7 +46,7 @@ sealed interface PokedexDataChangedEvent {
     class Pre(
         override val dataSource: PokedexEntityData,
         override val knowledge: PokedexEntryProgress,
-        override val playerUUID: UUID,
+        override val UUID playerUUID,
         override val record: FormDexRecord
     ) : PokedexDataChangedEvent, Cancelable() {
         val functions = moLangFunctionMap(cancelFunc)
@@ -55,7 +55,7 @@ sealed interface PokedexDataChangedEvent {
     class Post(
         override val dataSource: PokedexEntityData,
         override val knowledge: PokedexEntryProgress,
-        override val playerUUID: UUID,
+        override val UUID playerUUID,
         override val record: FormDexRecord
     ) : PokedexDataChangedEvent
 }

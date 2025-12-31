@@ -25,7 +25,7 @@ import net.minecraft.util.Mth
  * @author Hiroku
  * @since December 4th, 2021
  */
-class QuadrupedWalkAnimation(
+public class QuadrupedWalkAnimation(
     val legFrontLeft: Bone?,
     val legFrontRight: Bone?,
     val legBackLeft: Bone?,

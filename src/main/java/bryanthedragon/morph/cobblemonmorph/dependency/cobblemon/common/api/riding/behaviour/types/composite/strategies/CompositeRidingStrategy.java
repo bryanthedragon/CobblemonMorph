@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec3
 
-interface CompositeRidingStrategy<T : CompositeSettings> {
+public interface CompositeRidingStrategy<T : CompositeSettings> {
     val key: ResourceLocation
 
     fun tick(

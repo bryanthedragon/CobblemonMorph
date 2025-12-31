@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.re
  * animation generation/referencing.
  */
 @Deprecated("Use MoLang expressions in JSON posers instead")
-interface AnimationReferenceFactory {
-    fun pose(model: PosableModel, animString: String): PoseAnimation
-    fun active(model: PosableModel, animString: String): ActiveAnimation
+public interface AnimationReferenceFactory {
+    fun pose(model: PosableModel, animString string): PoseAnimation
+    fun active(model: PosableModel, animString string): ActiveAnimation
 }

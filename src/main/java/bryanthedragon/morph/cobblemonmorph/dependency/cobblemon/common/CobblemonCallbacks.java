@@ -6,28 +6,31 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common;
 
-import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.MoParams
-import com.bedrockk.molang.runtime.value.MoValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork.sendPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.DataRegistry
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.setup
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scripting.CobblemonScripts
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.CallbackRegistrySyncPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.endsWith
-import java.util.concurrent.ExecutionException
-import java.util.function.Predicate
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.packs.PackType
-import net.minecraft.server.packs.resources.ResourceManager
+import com.bedrockk.molang.runtime.MoLangRuntime;
+import com.bedrockk.molang.runtime.MoParams;
+import com.bedrockk.molang.runtime.value.MoValue;
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork.sendPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.DataRegistry;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.Cancelable;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.ExpressionLike;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.setup;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.SimpleObservable;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.scripting.CobblemonScripts;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.data.CallbackRegistrySyncPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asExpressionLike;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.endsWith;
+
+import java.util.concurrent.ExecutionException;
+import java.util.function.Predicate;
+
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 
 /**
  * Holds all the callbacks that are loaded from the server's data packs. A callback is foldered under the event identifier,
@@ -36,11 +39,12 @@ import net.minecraft.server.packs.resources.ResourceManager
  *
  * @author Hiroku
  * @since February 24th, 2024
- */final class CobblemonCallbacks : DataRegistry {
+ */
+public final class CobblemonCallbacks : DataRegistry {
     override val id = cobblemonResource("callbacks")
     override val observable = SimpleObservable<CobblemonCallbacks>()
     override val type = PackType.SERVER_DATA
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         player.sendPacket(CallbackRegistrySyncPacket(clientCallbacks.entries))
     }
 
@@ -50,7 +54,7 @@ import net.minecraft.server.packs.resources.ResourceManager
     val callbacks = hashMapOf<ResourceLocation, MutableList<ExpressionLike>>()
 
 
-    override fun reload(manager: ResourceManager) {
+    override fun reload(ResourceManager manager) {
         clientCallbacks.clear()
         callbacks.clear()
 
@@ -72,7 +76,7 @@ import net.minecraft.server.packs.resources.ResourceManager
                             val callbackKey = ResourceLocation.fromNamespaceAndPath(identifier.namespace, event)
                             unsortedCallbacks.putIfAbsent(callbackKey, mutableListOf())
                             unsortedCallbacks[callbackKey]!!.add(identifier.path to expression)
-                        } catch (exception: Exception) {
+                        } catch (Exception exception) {
                             throw ExecutionException("Error loading MoLang script for callback: $identifier", exception)
                         }
                     }
@@ -94,7 +98,7 @@ import net.minecraft.server.packs.resources.ResourceManager
 
     fun run(
         eventResourceLocation: ResourceLocation,
-        context: Map<String, MoValue>,
+        Map<String, MoValue> context,
         functions: Map<String, (MoParams) -> Any> = emptyMap(),
         cancelable: Cancelable? = null
     ) {

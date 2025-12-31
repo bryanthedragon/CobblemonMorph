@@ -27,7 +27,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since January 27th, 2022
  */
-class RecoilEvolutionProgress : EvolutionProgress<RecoilEvolutionProgress.Progress> {
+public class RecoilEvolutionProgress : EvolutionProgress<RecoilEvolutionProgress.Progress> {
 
     private var progress = Progress(0)
 
@@ -43,13 +43,13 @@ class RecoilEvolutionProgress : EvolutionProgress<RecoilEvolutionProgress.Progre
         this.updateProgress(Progress(0))
     }
 
-    override fun shouldKeep(pokemon: Pokemon): Boolean = supports(pokemon)
+    override fun shouldKeep(Pokemon pokemon): Boolean = supports(pokemon)
 
     override fun type(): EvolutionProgressType<*> = EvolutionProgressTypes.RECOIL
 
     record Progress(val recoil: Int)
 
-    companion object {
+    final class Companion {
 
         val ID = cobblemonResource(RecoilRequirement.ADAPTER_VARIANT)
         private const val RECOIL = "recoil"
@@ -61,7 +61,7 @@ class RecoilEvolutionProgress : EvolutionProgress<RecoilEvolutionProgress.Progre
             ).apply(instance) { amount -> RecoilEvolutionProgress().apply { updateProgress(Progress(amount)) } }
         }
 
-        fun supports(pokemon: Pokemon): Boolean {
+        fun supports(Pokemon pokemon): Boolean {
             return pokemon.form.evolutions.any { evolution ->
                 evolution.requirements.any { requirement ->
                     requirement is RecoilRequirement

@@ -12,11 +12,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ShinyUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : BooleanUpdatePacket<ShinyUpdatePacket>(pokemon, value) {
+public class ShinyUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : BooleanUpdatePacket<ShinyUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun set(pokemon: Pokemon, value: Boolean) { pokemon.shiny = value }
-    companion object {
+    override fun set(Pokemon pokemon, value: Boolean) { pokemon.shiny = value }
+    final class Companion {
         val ID = cobblemonResource("shiny_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = ShinyUpdatePacket(decodePokemon(buffer), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = ShinyUpdatePacket(decodePokemon(buffer), buffer.readBoolean())
     }
 }

@@ -23,19 +23,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
  * @author Licious
  * @since January 25th, 2023
  */
-class UseMoveRequirement(move: MoveTemplate, amount: Int) : Requirement {
+public class UseMoveRequirement(MoveTemplate move, amount: Int) : Requirement {
 
     constructor() : this(Moves.getByNameOrDummy(""), 1)
 
-    val move: MoveTemplate = move
+    val MoveTemplate move = move
     val amount: Int = amount
 
-    override fun check(pokemon: Pokemon): Boolean = pokemon.evolutionProxy.current()
+    override fun check(Pokemon pokemon): Boolean = pokemon.evolutionProxy.current()
         .progress()
         .filterIsInstance<UseMoveEvolutionProgress>()
         .any { progress -> progress.currentProgress().move == this.move && progress.currentProgress().amount >= this.amount }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "use_move"
     }
 

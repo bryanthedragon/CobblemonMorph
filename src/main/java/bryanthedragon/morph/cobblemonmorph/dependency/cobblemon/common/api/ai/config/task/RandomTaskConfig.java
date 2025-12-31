@@ -33,7 +33,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
  * @author Hiroku
  * @since October 19th, 2024
  */
-class RandomTaskConfig : TaskConfig {
+public class RandomTaskConfig : TaskConfig {
     class RandomTaskChoice {
         val weight = 1.0
         val task: TaskConfig = SingleTaskConfig.nothing()
@@ -42,9 +42,9 @@ class RandomTaskConfig : TaskConfig {
     val condition: ExpressionOrEntityVariable = Either.left("true".asExpression())
     val choices = mutableListOf<RandomTaskChoice>()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = choices.flatMap { it.task.getVariables(entity, behaviourConfigurationContext) } + listOf(condition).asVariables()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = choices.flatMap { it.task.getVariables(entity, behaviourConfigurationContext) } + listOf(condition).asVariables()
     override fun createTasks(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): List<BehaviorControl<in LivingEntity>> {
         if (!condition.resolveBoolean(behaviourConfigurationContext.runtime)) return emptyList()

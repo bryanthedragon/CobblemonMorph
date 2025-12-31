@@ -26,19 +26,19 @@ import net.minecraft.resources.ResourceLocation
  * @property lineColor list of [RGB] values that apply to the fishing line of the Pokérod
  */
 record PokeRod(
-    val pokeBallId: ResourceLocation,
+    val pokeBallResourceLocation id,
     //Hex string of color
     val lineColor: String,
     var name: ResourceLocation
 ) {
-    internal fun encode(buffer: RegistryFriendlyByteBuf) {
+    internal fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(name)
         buffer.writeIdentifier(pokeBallId)
         buffer.writeString(lineColor)
     }
 
-    companion object {
-        internal fun decode(buffer: RegistryFriendlyByteBuf): PokeRod {
+    final class Companion {
+        internal fun decode(RegistryFriendlyByteBuf buffer): PokeRod {
             val name = buffer.readIdentifier()
             val pokeBallId = buffer.readIdentifier()
             val lineColor = buffer.readString()

@@ -20,17 +20,17 @@ import net.minecraft.resources.ResourceLocation
  * @see [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Terastal_phenomenon)
  *
  */
-interface TeraType : ShowdownIdentifiable {
+public interface TeraType : ShowdownIdentifiable {
 
     /**
      * The [ResourceLocation] associated to this type.
      */
-    val id: ResourceLocation
+    val ResourceLocation id
 
     /**
      * The english readable name of the type, used when packing Pokemon for showdown
      */
-    val name: String
+    val String name
 
     /**
      * If this tera type can be selected naturally.
@@ -40,9 +40,9 @@ interface TeraType : ShowdownIdentifiable {
     /**
      * The display name of this type.
      */
-    val displayName: Component
+    val Component displayName
 
-    companion object {
+    final class Companion {
         @JvmStatic
         val BY_IDENTIFIER_CODEC: Codec<TeraType> = CodecUtils.createByIdentifierCodec(
             TeraTypes::get,

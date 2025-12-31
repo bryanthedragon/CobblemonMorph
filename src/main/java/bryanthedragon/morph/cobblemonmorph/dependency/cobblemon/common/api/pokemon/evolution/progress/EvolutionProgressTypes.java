@@ -18,7 +18,7 @@ import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import kotlin.jvm.Throws
-final class EvolutionProgressTypes {
+public final class EvolutionProgressTypes {
 
     private val REGISTRY: Registry<EvolutionProgressType<*>> = MappedRegistry(
         ResourceKey.createRegistryKey(cobblemonResource("evolution_progress")), Lifecycle.stable()
@@ -47,7 +47,7 @@ final class EvolutionProgressTypes {
      */
     @Throws(IllegalStateException::class)
     @JvmStatic
-    fun <T : EvolutionProgress<*>> registerType(id: ResourceLocation, type: EvolutionProgressType<T>): EvolutionProgressType<T> {
+    fun <T : EvolutionProgress<*>> registerType(ResourceLocation id, type: EvolutionProgressType<T>): EvolutionProgressType<T> {
         return Registry.register(REGISTRY, id, type)
     }
 

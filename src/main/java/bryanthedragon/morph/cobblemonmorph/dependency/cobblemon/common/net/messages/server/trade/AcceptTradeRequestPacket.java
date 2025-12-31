@@ -27,14 +27,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since March 12th, 2023
  */
-class AcceptTradeRequestPacket(val tradeOfferId: UUID) : NetworkPacket<AcceptTradeRequestPacket> {
-    companion object {
+public class AcceptTradeRequestPacket(val tradeOfferId: UUID) : NetworkPacket<AcceptTradeRequestPacket> {
+    final class Companion {
         val ID = cobblemonResource("accept_trade_request")
-        fun decode(buffer: RegistryFriendlyByteBuf) = AcceptTradeRequestPacket(buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = AcceptTradeRequestPacket(buffer.readUUID())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(tradeOfferId)
     }
 }

@@ -19,16 +19,16 @@ import java.util.UUID
 /**
  * Handled by [SetActiveMarkHandler].
  */
-class SetActiveMarkPacket(val uuid: UUID, val mark: Mark?) : NetworkPacket<SetActiveMarkPacket> {
+public class SetActiveMarkPacket(val UUID uuid, val Mark mark?) : NetworkPacket<SetActiveMarkPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(uuid)
         buffer.writeNullable(mark) { _, v -> buffer.writeIdentifier(v.identifier) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("set_active_mark")
-        fun decode(buffer: RegistryFriendlyByteBuf): SetActiveMarkPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SetActiveMarkPacket {
             val uuid = buffer.readUUID()
             val markIdentifier = buffer.readNullable { buffer.readIdentifier() }
             val mark = if (markIdentifier !== null) Marks.getByIdentifier(markIdentifier) else null

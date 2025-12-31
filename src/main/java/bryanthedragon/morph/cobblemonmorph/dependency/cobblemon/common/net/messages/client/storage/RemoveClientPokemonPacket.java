@@ -23,20 +23,20 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since June 18th, 2022
  */
-class RemoveClientPokemonPacket internal constructor(val storeIsParty: Boolean, val storeID: UUID, val pokemonID: UUID) : NetworkPacket<RemoveClientPokemonPacket> {
+public class RemoveClientPokemonPacket internal constructor(val storeIsParty: Boolean, val UUID storeID, val UUID pokemonId) : NetworkPacket<RemoveClientPokemonPacket> {
 
     override val id = ID
 
-    constructor(store: PokemonStore<*>, pokemonID: UUID): this(store is PartyStore, store.uuid, pokemonID)
+    constructor(store: PokemonStore<*>, UUID pokemonId): this(store is PartyStore, store.uuid, pokemonID)
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(storeIsParty)
         buffer.writeUUID(storeID)
         buffer.writeUUID(pokemonID)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("remove_client_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf) = RemoveClientPokemonPacket(buffer.readBoolean(), buffer.readUUID(), buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = RemoveClientPokemonPacket(buffer.readBoolean(), buffer.readUUID(), buffer.readUUID())
     }
 }

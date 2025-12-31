@@ -27,14 +27,14 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since July 24th, 2022
  */
-class CommandDropEntry : DropEntry {
+public class CommandDropEntry : DropEntry {
     val requiresPlayer = true
     val command = ""
     override val percentage = 100F
     override val quantity = 1
     override val maxSelectableTimes = 1
 
-    override fun drop(entity: LivingEntity?, world: ServerLevel, pos: Vec3, player: ServerPlayer?) {
+    override fun drop(LivingEntity entity?, ServerLevel world, Vec3 pos, ServerPlayer player?) {
         if (requiresPlayer && player == null) {
             return
         }

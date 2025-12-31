@@ -32,15 +32,15 @@ import net.minecraft.network.chat.MutableComponent
  * @property status
  * @property statChanges
  */
-class ClientBattlePokemon(
-    val uuid: UUID,
-    var displayName: MutableComponent,
+public class ClientBattlePokemon(
+    val UUID uuid,
+    var MutableComponent displayName,
     var properties: PokemonProperties,
-    private var aspects: Set<String>,
+    private Set<String> aspects,
     var hpValue: Float,
     var maxHp: Float,
     var isHpFlat: Boolean,
-    var status: PersistentStatus?,
+    var PersistentStatus status?,
     var statChanges: MutableMap<Stat, Int>
 ) {
     lateinit var actor: ClientBattleActor

@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asEx
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.createDuplicateRuntime
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveFloat
 
-class FlyBehaviour {
+public class FlyBehaviour {
     val canFly = false
     val flySpeedHorizontal = "0.3".asExpression()
 

@@ -22,8 +22,9 @@ import java.lang.reflect.Type
  *
  * @author Hiroku
  * @since July 8th, 2022
- */final class SpawnDetailPresetAdapter : JsonDeserializer<SpawnDetailPreset> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): SpawnDetailPreset {
+ */
+public final class SpawnDetailPresetAdapter : JsonDeserializer<SpawnDetailPreset> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): SpawnDetailPreset {
         json as JsonObject
         val type = json.get("type")?.asString ?: BasicSpawnDetailPreset.NAME
         val clazz = SpawnDetailPresets.presetTypes[type] ?: throw IllegalStateException("Unrecognized preset type: $type")

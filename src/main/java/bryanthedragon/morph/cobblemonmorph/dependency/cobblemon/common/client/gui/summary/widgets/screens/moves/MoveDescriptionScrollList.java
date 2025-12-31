@@ -15,10 +15,10 @@ import net.minecraft.client.gui.components.ObjectSelectionList
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 
-class MoveDescriptionScrollList(
+public class MoveDescriptionScrollList(
     private val listX: Int,
     private val listY: Int,
-    slotHeight: Int
+    slotInt height
 ) : ObjectSelectionList<MoveDescriptionEntry>(
     Minecraft.getInstance(),
     60, // width
@@ -70,7 +70,7 @@ class MoveDescriptionScrollList(
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY)
     }
 
-    override fun renderListBackground(guiGraphics: GuiGraphics) {}
+    override fun renderListBackground(GuiGraphics guiGraphics) {}
 
     private fun updateScrollingState(mouseX: Double, mouseY: Double) {
         scrolling = mouseX >= getScrollbarPosition().toDouble()

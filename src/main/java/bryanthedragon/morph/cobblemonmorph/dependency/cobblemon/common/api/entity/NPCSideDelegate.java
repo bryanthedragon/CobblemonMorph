@@ -16,4 +16,4 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.np
  * @author Hiroku
  * @since August 25th, 2023
  */
-interface NPCSideDelegate : EntitySideDelegate<NPCEntity>
+public interface NPCSideDelegate : EntitySideDelegate<NPCEntity>

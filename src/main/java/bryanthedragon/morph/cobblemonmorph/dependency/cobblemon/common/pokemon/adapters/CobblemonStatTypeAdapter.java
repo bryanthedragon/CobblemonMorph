@@ -18,13 +18,13 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import java.lang.reflect.Type
 
-/** Handles JSON adapting between a Stat and its serialized form; its id.*/final class CobblemonStatTypeAdapter : StatTypeAdapter {
-    override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): Stat {
+/** Handles JSON adapting between a Stat and its serialized form; its id.*/public final class CobblemonStatTypeAdapter : StatTypeAdapter {
+    override fun deserialize(JsonElement jElement, Type type, JsonDeserializationContext context): Stat {
         val identifier = element.asString.asIdentifierDefaultingNamespace()
         return Cobblemon.statProvider.fromIdentifierOrThrow(identifier)
     }
 
-    override fun serialize(stat: Stat, type: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(Stat stat , Type type, context: JsonSerializationContext): JsonElement {
         return JsonPrimitive(stat.identifier.toString())
     }
 }

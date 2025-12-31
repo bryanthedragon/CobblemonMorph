@@ -43,11 +43,11 @@ import net.minecraft.world.level.material.Fluid
  * @since January 24th, 2022
  */
 abstract class SpawnablePosition {
-    companion object {
+    final class Companion {
         val spawnablePositionTypes = mutableListOf<SpawnablePositionType<*>>()
-        fun getByName(name: String) = spawnablePositionTypes.find { it.name == name }
-        fun getByClass(spawnablePosition: SpawnablePosition) = spawnablePositionTypes.find { it.clazz == spawnablePosition::class.java }
-        fun <T : SpawnablePosition> register(name: String, clazz: Class<T>, defaultCondition: String = BasicSpawningCondition.NAME) {
+        fun getByName(String name) = spawnablePositionTypes.find { it.name == name }
+        fun getByClass(spawnablePosition: SpawnablePosition) = spawnablePositionTypes.find { it.clazz == spawnablePosition.class }
+        fun <T : SpawnablePosition> register(String name, clazz: Class<T>, defaultCondition: String = BasicSpawningCondition.NAME) {
             spawnablePositionTypes.add(
                 SpawnablePositionType(
                     name = name,
@@ -67,9 +67,9 @@ abstract class SpawnablePosition {
     val spawner: Spawner
         get() = cause.spawner
     /** The [ServerLevel] the spawnable position exists in. */
-    abstract val world: ServerLevel
+    abstract val ServerLevel world
     /** The location of the spawning attempt. */
-    abstract val position: BlockPos
+    abstract val BlockPos position
     /** The light level at this location. */
     abstract val light: Int
     /** The sky light level at this location. (15 - The distance to the nearest block that would be illuminated by the sun */
@@ -79,7 +79,7 @@ abstract class SpawnablePosition {
     /** A list of [SpawningInfluence]s that apply due to this specific position. This generally shouldn't be consumed; use [getAllInfluences].*/
     abstract val influences: MutableList<SpawningInfluence>
     /** Gets a cache of structures by block coordinates, grouped by chunk. */
-    abstract fun getStructureCache(pos: BlockPos): StructureChunkCache
+    abstract fun getStructureCache(BlockPos pos): StructureChunkCache
 
     /** The current phase of the moon at this location. */
     val moonPhase: Int by lazy { world.moonPhase }
@@ -111,7 +111,7 @@ abstract class SpawnablePosition {
         var loadedStructures = false
         val structures = mutableSetOf<Holder<Structure>>()
 
-        fun loadStructures(structureAccess: StructureManager, pos: BlockPos) {
+        fun loadStructures(structureAccess: StructureManager, (BlockPos pos) {
             val registry = structureAccess.registryAccess().registryOrThrow(Registries.STRUCTURE)
             structureAccess.startsForStructure(ChunkPos(pos)) { structure ->
                 val entry = registry.wrapAsHolder(structure)
@@ -122,7 +122,7 @@ abstract class SpawnablePosition {
             loadedStructures = true
         }
 
-        fun check(structureAccess: StructureManager, pos: BlockPos, tagKey: TagKey<Structure>): Boolean {
+        fun check(structureAccess: StructureManager, (BlockPos pos, tagKey: TagKey<Structure>): Boolean {
 
             if (!loadedStructures) {
                 loadStructures(structureAccess, pos)
@@ -146,7 +146,7 @@ abstract class SpawnablePosition {
             return false
         }
 
-        fun check(structureAccess: StructureManager, pos: BlockPos, id: ResourceLocation): Boolean {
+        fun check(structureAccess: StructureManager, (BlockPos pos, ResourceLocation id): Boolean {
             if (!loadedStructures) {
                 loadStructures(structureAccess, pos)
             }
@@ -170,7 +170,7 @@ abstract class SpawnablePosition {
      */
     open fun postFilter(detail: SpawnDetail): Boolean = true
 
-    open fun afterSpawn(action: SpawnAction<*>, entity: Entity) {
+    open fun afterSpawn(action: SpawnAction<*>, Entity entity) {
         applyInfluences { it.affectSpawn(action, entity) }
     }
 

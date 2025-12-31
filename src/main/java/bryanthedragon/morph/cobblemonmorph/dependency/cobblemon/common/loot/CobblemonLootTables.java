@@ -9,7 +9,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.loot
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-final class CobblemonLootTables {
+public final class CobblemonLootTables {
 
     val FISHING_GAMEPLAY = cobblemonResource("fishing/pokerod")
 

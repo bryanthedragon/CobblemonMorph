@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.PersistentStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-class BurnStatus : PersistentStatus(
+public class BurnStatus : PersistentStatus(
     name = cobblemonResource("burn"),
     showdownName = "brn",
     applyMessage = "cobblemon.status.burn.apply",

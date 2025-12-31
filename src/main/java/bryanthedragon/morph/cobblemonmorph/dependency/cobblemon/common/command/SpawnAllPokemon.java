@@ -22,7 +22,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.MobSpawnType
-final class SpawnAllPokemon {
+public final class SpawnAllPokemon {
     fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(
             Commands.literal("spawnallpokemon")
@@ -41,7 +41,7 @@ final class SpawnAllPokemon {
         )
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, range: IntRange) : Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, IntRange range) : Int {
         val player = context.source.playerOrException
         val world = context.source.level
         for (species in PokemonSpecies.implemented) {

@@ -6,38 +6,32 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.ItemDropMethod
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.calculators.CaptureCalculator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Statuses
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.PokemonGUIAnimationStyle
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.CobblemonConfigField.CobblemonConfigSide.CLIENT
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.CobblemonConfigField.CobblemonConfigSide.SERVER
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.constraint.IntConstraint
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.catching.calculators.CobblemonCaptureCalculator
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.CaptureCalculatorAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IdentifierAdapter
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IntRangeAdapter
-import com.google.gson.GsonBuilder
-import com.google.gson.annotations.SerializedName
-import net.minecraft.resources.ResourceLocation
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop.ItemDropMethod;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.calculators.CaptureCalculator;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.status.Statuses;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.PokemonGUIAnimationStyle;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config.CobblemonConfigSide;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.constraint.ints.IntConstraint;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.catching.calculators.CobblemonCaptureCalculator;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.ranges.ints.IntRange;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.CaptureCalculatorAdapter;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IdentifierAdapter;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.adapters.IntRangeAdapter;
 
-class CobblemonConfig {
-    companion object {
-        val GSON = GsonBuilder()
-            .disableHtmlEscaping()
-            .setPrettyPrinting()
-            .registerTypeAdapter(IntRange::class.java, IntRangeAdapter)
-            .registerTypeAdapter(ItemDropMethod::class.java, ItemDropMethod.adapter)
-            .registerTypeAdapter(CaptureCalculator::class.java, CaptureCalculatorAdapter)
-            .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
-            .create()
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
+
+import net.minecraft.resources.ResourceLocation;
+
+public class CobblemonConfig {
+    final class Companion {
+        public static Gson GSON = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().registerTypeAdapter(IntRange.class, IntRangeAdapter).registerTypeAdapter(ItemDropMethod.class, ItemDropMethod.adapter).registerTypeAdapter(CaptureCalculator.class, CaptureCalculatorAdapter).registerTypeAdapter(ResourceLocation.class, IdentifierAdapter).create()
     }
 
-    var lastSavedVersion: String = "0.0.1"
+    var String lastSavedVersion = "0.0.1"
 
     @CobblemonConfigField(Category.Pokemon, lang = "max_pokemon_level", SERVER)
     @IntConstraint(min = 1, max = 1000)

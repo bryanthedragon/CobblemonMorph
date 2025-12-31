@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.move
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.ActionEffectContext
 import java.util.concurrent.CompletableFuture
 
-class ParallelActionEffectKeyframe : ConditionalActionEffectKeyframe() {
+public class ParallelActionEffectKeyframe : ConditionalActionEffectKeyframe() {
     var keyframes: MutableList<ActionEffectKeyframe> = mutableListOf()
 
     override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {

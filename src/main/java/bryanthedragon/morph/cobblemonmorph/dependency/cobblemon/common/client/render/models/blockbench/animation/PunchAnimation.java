@@ -21,7 +21,7 @@ import net.minecraft.util.Mth
  * @author Hiroku
  * @since August 5th, 2024
  */
-class PunchAnimation(
+public class PunchAnimation(
     val head: ModelPart,
     val body: ModelPart,
     val leftArm: ModelPart,

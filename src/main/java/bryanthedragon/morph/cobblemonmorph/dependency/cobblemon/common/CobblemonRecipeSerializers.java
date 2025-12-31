@@ -19,7 +19,7 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeSerializer
-final class CobblemonRecipeSerializers : PlatformRegistry<Registry<RecipeSerializer<*>>, ResourceKey<Registry<RecipeSerializer<*>>>, RecipeSerializer<*>>() {
+public final class CobblemonRecipeSerializers : PlatformRegistry<Registry<RecipeSerializer<*>>, ResourceKey<Registry<RecipeSerializer<*>>>, RecipeSerializer<*>>() {
 
     val COOKING_POT_COOKING: RecipeSerializer<*> = register("cobblemon:cooking_pot", CookingPotRecipe.Serializer())
     val COOKING_POT_SHAPELESS: RecipeSerializer<*> = register("cobblemon:cooking_pot_shapeless", CookingPotShapelessRecipe.Serializer())
@@ -31,7 +31,7 @@ final class CobblemonRecipeSerializers : PlatformRegistry<Registry<RecipeSeriali
     override val resourceKey: ResourceKey<Registry<RecipeSerializer<*>>>
         get() = Registries.RECIPE_SERIALIZER
 
-    fun <S : RecipeSerializer<T>, T : Recipe<*>> register(key: String, recipeSerializer: S): S {
+    fun <S : RecipeSerializer<T>, T : Recipe<*>> register(String Key, recipeSerializer: S): S {
         return Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, key, recipeSerializer) as S
     }
 }

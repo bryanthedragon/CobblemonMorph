@@ -16,7 +16,7 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.DirectionalBlock
 
-class TumblestoneItem(settings: Properties, val block: Block) : Item(settings) {
+public class TumblestoneItem(settings: Properties, val Block block) : Item(settings) {
 
     override fun useOn(context: UseOnContext): InteractionResult {
         if (context.player == null) return InteractionResult.FAIL

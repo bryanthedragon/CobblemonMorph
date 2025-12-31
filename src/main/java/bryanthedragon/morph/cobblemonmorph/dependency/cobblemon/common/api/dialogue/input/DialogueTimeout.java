@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialo
  * @author Hiroku
  * @since December 27th, 2023
  */
-class DialogueTimeout(
+public class DialogueTimeout(
     var duration: Float = 10F,
     var showTimer: Boolean = true,
     var action: DialogueAction = FunctionDialogueAction { dialogue, _ -> dialogue.close() }

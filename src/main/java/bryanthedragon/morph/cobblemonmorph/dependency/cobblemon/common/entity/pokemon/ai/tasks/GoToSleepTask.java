@@ -18,7 +18,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
-final class GoToSleepTask {
+public final class GoToSleepTask {
     fun create(
         onlyFromStatus: Boolean
     ): OneShot<PokemonEntity> {

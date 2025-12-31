@@ -35,9 +35,9 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.Mth
 import kotlin.math.max
 
-class RideControlsOverlay : Gui(Minecraft.getInstance()) {
+public class RideControlsOverlay : Gui(Minecraft.getInstance()) {
 
-    companion object {
+    final class Companion {
         private const val CONTROLS_FADE_FRAMES = 20F
         private const val BASELINE_FPS = 60F
 
@@ -61,7 +61,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
         private val keyJumpWideResource = cobblemonResource("textures/gui/riding/key_jump_wide.png")
     }
 
-    private val screenExemptions: List<Class<out Screen>> = listOf(ChatScreen::class.java)
+    private val screenExemptions: List<Class<out Screen>> = listOf(ChatScreen.class)
 
     private var controlsMaxDurationFrames = Cobblemon.config.displayControlSeconds * BASELINE_FPS
     private var controlsDurationFrames = controlsMaxDurationFrames
@@ -338,7 +338,7 @@ class RideControlsOverlay : Gui(Minecraft.getInstance()) {
         }
     }
 
-    private fun renderKeyControls(context: GuiGraphics, centered: Boolean, showMovement: Boolean, disableHorizontal: Boolean, showJump: Boolean, showSneak: Boolean, input: Input?, posX: Int, posY: Int, opacity: Float) {
+    private fun renderKeyControls(context: GuiGraphics, centered: Boolean, showMovement: Boolean, disableHorizontal: Boolean, showJump: Boolean, showSneak: Boolean, I inputnput?, posX: Int, posY: Int, opacity: Float) {
         val offsetX = if (centered) 43.5 else 0.0
 
         if (showMovement) {

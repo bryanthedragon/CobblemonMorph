@@ -27,7 +27,7 @@ import com.google.gson.annotations.SerializedName
  * @author Hiroku
  * @since October 1st, 2023
  */
-class WeightTweakRuleComponent : SpawnRuleComponent {
+public class WeightTweakRuleComponent : SpawnRuleComponent {
     @SerializedName("spawnDetailSelector", alternate = ["spawnSelector"])
     val spawnDetailSelector: SpawnDetailSelector = AllSpawnDetailSelector
     @SerializedName("spawnablePositionSelector", alternate = ["contextSelector"])

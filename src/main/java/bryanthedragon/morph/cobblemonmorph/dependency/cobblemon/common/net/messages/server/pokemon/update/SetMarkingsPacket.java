@@ -18,17 +18,17 @@ import java.util.UUID
 /**
  * Handled by [SetMarkingsHandler].
  */
-class SetMarkingsPacket(val uuid: UUID, val markings: List<Int>, val isParty: Boolean = true) : NetworkPacket<SetMarkingsPacket> {
+public class SetMarkingsPacket(val UUID uuid, val markings: List<Int>, val isParty: Boolean = true) : NetworkPacket<SetMarkingsPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(uuid)
         buffer.writeCollection(markings) { pb, value -> pb.writeInt(value) }
         buffer.writeBoolean(isParty)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("set_markings")
-        fun decode(buffer: RegistryFriendlyByteBuf): SetMarkingsPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SetMarkingsPacket {
             val uuid = buffer.readUUID()
             val markings = buffer.readList(ByteBuf::readInt).toList()
             val isParty = buffer.readBoolean()

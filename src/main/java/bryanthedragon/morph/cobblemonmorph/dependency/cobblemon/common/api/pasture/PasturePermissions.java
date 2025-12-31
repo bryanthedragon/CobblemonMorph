@@ -23,20 +23,20 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since July 2nd, 2023
  */
-class PasturePermissions(
+public class PasturePermissions(
     val canUnpastureOthers: Boolean,
     val canPasture: Boolean,
     val maxPokemon: Int
 ) {
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf) = PasturePermissions(
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer) = PasturePermissions(
             canUnpastureOthers = buffer.readBoolean(),
             canPasture = buffer.readBoolean(),
             maxPokemon = buffer.readSizedInt(IntSize.SHORT)
         )
     }
 
-    fun encode(buffer: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(canUnpastureOthers)
         buffer.writeBoolean(canPasture)
         buffer.writeSizedInt(IntSize.SHORT, maxPokemon)

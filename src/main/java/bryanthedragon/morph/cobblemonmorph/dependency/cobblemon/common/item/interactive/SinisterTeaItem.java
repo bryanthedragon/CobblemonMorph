@@ -21,7 +21,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.UseAnim
 import net.minecraft.world.level.Level
 
-class SinisterTeaItem : Item(
+public class SinisterTeaItem : Item(
         Properties().stacksTo(16)
                 .food(FoodProperties.Builder()
                         .alwaysEdible()
@@ -30,7 +30,7 @@ class SinisterTeaItem : Item(
                         .usingConvertsTo(Items.BOWL)
                         .build())
 ) {
-    override fun finishUsingItem(stack: ItemStack, world: Level, user: LivingEntity): ItemStack {
+    override fun finishUsingItem(ItemStack stack, Level world, user: LivingEntity): ItemStack {
         if (!world.isClientSide) {
             val effectsComponent = stack.get(CobblemonItemComponents.MOB_EFFECTS)
 
@@ -45,7 +45,7 @@ class SinisterTeaItem : Item(
         return super.finishUsingItem(stack, world, user)
     }
 
-    override fun getUseAnimation(stack: ItemStack) = UseAnim.DRINK
+    override fun getUseAnimation(ItemStack stack) = UseAnim.DRINK
 
     // todo not sure which one is needed at the moment, but I assume just the eating sound?
     override fun getDrinkingSound(): SoundEvent {

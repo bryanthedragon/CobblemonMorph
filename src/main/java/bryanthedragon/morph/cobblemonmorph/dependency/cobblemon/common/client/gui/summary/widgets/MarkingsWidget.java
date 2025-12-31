@@ -15,13 +15,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 
-class MarkingsWidget(
+public class MarkingsWidget(
     val pX: Number,
     val pY: Number,
-    var pokemon: Pokemon?,
+    var Pokemon pokemon?,
     var canEdit: Boolean = true,
 ): SoundlessWidget(pX.toInt(), pY.toInt(), WIDTH, HEIGHT, Component.literal("MarkingsWidget")) {
-    companion object {
+    final class Companion {
         private const val WIDTH = 82
         private const val HEIGHT = 12
     }
@@ -33,7 +33,7 @@ class MarkingsWidget(
 
     fun incrementState(state: Int) : Int = (state + 1) % 3
 
-    fun setActivePokemon(newPokemon: Pokemon?) {
+    fun setActivePokemon(newPokemon pokemon?) {
         pokemon = newPokemon
 
         children.clear()

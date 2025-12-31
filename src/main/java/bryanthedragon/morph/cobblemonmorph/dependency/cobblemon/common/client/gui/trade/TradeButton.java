@@ -21,13 +21,13 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 
-class TradeButton(
+public class TradeButton(
     x: Int, y: Int,
     val parent: TradeGUI,
     onPress: OnPress
 ) : Button(x, y, WIDTH, HEIGHT, Component.literal("Trade"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private const val WIDTH = 53
         private const val HEIGHT = 14
 

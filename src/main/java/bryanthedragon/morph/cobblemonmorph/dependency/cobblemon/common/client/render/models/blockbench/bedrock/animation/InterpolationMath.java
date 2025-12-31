@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3
  * Interpolates a vector based on a Catmull-Rom spline.
  * Frame A to D should be in order based on time. Frame A should be the keyframe before frame B, which should be the keyframe before C, and so on.
  */
-fun catmullromLerp(frameA: BedrockAnimationKeyFrame?, frameB: BedrockAnimationKeyFrame, frameC: BedrockAnimationKeyFrame, frameD: BedrockAnimationKeyFrame?, time: Double, runtime: MoLangRuntime): Vec3 {
+fun catmullromLerp(frameA: BedrockAnimationKeyFrame?, frameB: BedrockAnimationKeyFrame, frameC: BedrockAnimationKeyFrame, frameD: BedrockAnimationKeyFrame?, time: Double, MoLangRuntime runtime): Vec3 {
     return Vec3(
         catmullromLerp(frameA, frameB, frameC, frameD, X_AXIS, time, runtime),
         catmullromLerp(frameA, frameB, frameC, frameD, Y_AXIS, time, runtime),
@@ -40,7 +40,7 @@ fun linearLerpAlpha(before: Double, after: Double, value: Double): Double {
  * Interpolates a value based on a Catmull-Rom spline on a given axis.
  * Frame A to D should be in order based on time. Frame A should be the keyframe before frame B, which should be the keyframe before C, and so on.
  */
-fun catmullromLerp(frameA: BedrockAnimationKeyFrame?, frameB: BedrockAnimationKeyFrame, frameC: BedrockAnimationKeyFrame, frameD: BedrockAnimationKeyFrame?, axis: Int, time: Double, runtime: MoLangRuntime) : Double {
+fun catmullromLerp(frameA: BedrockAnimationKeyFrame?, frameB: BedrockAnimationKeyFrame, frameC: BedrockAnimationKeyFrame, frameD: BedrockAnimationKeyFrame?, axis: Int, time: Double, MoLangRuntime runtime) : Double {
     val vectors = mutableListOf<Vector2d>()
     val frameAData = frameA?.post?.resolve(time, runtime)
     val frameBData = frameB.post.resolve(time, runtime)

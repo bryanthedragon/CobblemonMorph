@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokedex.s
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.LivingEntity
 
-record PokemonScannedEvent(val player: ServerPlayer, val scannedPokemonEntityData: PokedexEntityData, val scannedEntity: ScannableEntity) {
+record PokemonScannedEvent(val ServerPlayer player, val scannedPokemonEntityData: PokedexEntityData, val scannedEntity: ScannableEntity) {
     val isOwned: Boolean
         get() = scannedPokemonEntityData.pokemon.getOwnerUUID() == player.uuid
 

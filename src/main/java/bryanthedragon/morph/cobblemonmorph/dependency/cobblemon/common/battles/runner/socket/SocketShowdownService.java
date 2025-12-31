@@ -39,11 +39,11 @@ import kotlin.text.replace
  * @since February 27, 2023
  * @author landonjw
  */
-class SocketShowdownService(val host: String = "localhost", val port: Int = 18468, val localPort: Int = 0) : ShowdownService {
+public class SocketShowdownService(val host: String = "localhost", val port: Int = 18468, val localPort: Int = 0) : ShowdownService {
 
     private lateinit var socket: Socket
     private lateinit var writer: OutputStreamWriter
-    private lateinit var reader: BufferedReader
+    private lateinit var BufferedReader reader
     val gson = Gson()
 
     override fun openConnection() {
@@ -62,7 +62,7 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         send(battle.battleId, messages)
     }
 
-    override fun send(battleId: UUID, messages: Array<String>) {
+    override fun send(UUID battleId, messages: Array<String>) {
         for (message in messages) {
             writer.write("$battleId~$message\n")
             writer.flush()
@@ -70,7 +70,7 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         }
     }
 
-    private fun read(reader: BufferedReader, size: Int): String {
+    private fun read(BufferedReader reader, size: Int): String {
         val buffer = CharArray(size)
         while (true) {
             if(reader.read(buffer) == 0) continue
@@ -95,7 +95,7 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         return lines
     }
 
-    private fun interpretMessage(battleId: UUID, message: String) {
+    private fun interpretMessage(UUID battleId, message: String) {
         ShowdownInterpreter.interpretMessage(battleId, message)
     }
 
@@ -116,7 +116,7 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         acknowledge { Cobblemon.LOGGER.error("Failed to send $type data to Showdown: $data") }*/
     }
 
-    fun sendRegistryEntry(key: String, data: String, type: String) {
+    fun sendRegistryEntry(String Key, data: String, type: String) {
         val payload = data.replace(Regex("[\r\n]+"), " ")
         writer.write(">receiveEntry $type $key $payload")
         acknowledge { Cobblemon.LOGGER.error("Failed to send $type data to Showdown: $payload") }
@@ -132,7 +132,7 @@ class SocketShowdownService(val host: String = "localhost", val port: Int = 1846
         writer.write(">getData $type")
         writer.flush()
         val response = readMessage()
-        return gson.fromJson(response, JsonArray::class.java)
+        return gson.fromJson(response, JsonArray.class)
     }
 
     override fun resetRegistryData(type: String) {

@@ -14,12 +14,12 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 /**
  * The root of the various evolution related events.
  */
-interface EvolutionEvent {
+public interface EvolutionEvent {
 
     /**
      * The Pokémon impacted in this event.
      */
-    val pokemon: Pokemon
+    val Pokemon pokemon
 
     /**
      * The evolution triggering this event.

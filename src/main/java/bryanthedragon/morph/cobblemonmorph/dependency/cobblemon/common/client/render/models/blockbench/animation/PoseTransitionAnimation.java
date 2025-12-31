@@ -23,7 +23,7 @@ import java.lang.Float.min
  * @author Hiroku
  * @since December 5th, 2021
  */
-class PoseTransitionAnimation(
+public class PoseTransitionAnimation(
     val beforePose: Pose,
     val afterPose: Pose,
     val durationTicks: Int = 20,

@@ -13,10 +13,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.debug.OpenRidingStatsDebugGUIPacket
 import net.minecraft.client.Minecraft
-final class OpenRidingStatsDebugGUIHandler : ClientNetworkPacketHandler<OpenRidingStatsDebugGUIPacket> {
+public final class OpenRidingStatsDebugGUIHandler : ClientNetworkPacketHandler<OpenRidingStatsDebugGUIPacket> {
     override fun handle(
         packet: OpenRidingStatsDebugGUIPacket,
-        client: Minecraft
+        Minecraft client
     ) {
         val vehicle = Minecraft.getInstance().player?.vehicle as? PokemonEntity ?: return
         client.setScreen(RidingStatsDebugGUI(vehicle))

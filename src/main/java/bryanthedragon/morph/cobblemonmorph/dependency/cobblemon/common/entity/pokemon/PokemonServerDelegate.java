@@ -48,7 +48,7 @@ import java.util.*
 import kotlin.math.*
 
 /** Handles purely server logic for a Pokémon */
-class PokemonServerDelegate : PokemonSideDelegate {
+public class PokemonServerDelegate : PokemonSideDelegate {
     lateinit var entity: PokemonEntity
     var acknowledgedHPValue = -1
 
@@ -56,7 +56,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
     private val mock: PokemonProperties?
         get() = entity.effects.mockEffect?.mock
 
-    override fun changePokemon(pokemon: Pokemon) {
+    override fun changePokemon(Pokemon pokemon) {
         updatePathfindingPenalties(pokemon)
 //        entity.registerGoals()
         updateAttributes(pokemon)
@@ -65,7 +65,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.struct.addPokemonEntityFunctions(entity)
     }
 
-    fun updatePathfindingPenalties(pokemon: Pokemon) {
+    fun updatePathfindingPenalties(Pokemon pokemon) {
         val moving = pokemon.form.behaviour.moving
         entity.setPathfindingMalus(PathType.LAVA, if (moving.swim.canSwimInLava) 12F else -1F)
         entity.setPathfindingMalus(PathType.WATER, if (moving.swim.canSwimInWater) 12F else -1F)
@@ -89,7 +89,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
         entity.navigation.setCanPathThroughFire(entity.fireImmune())
     }
 
-    fun updateAttributes(pokemon: Pokemon) {
+    fun updateAttributes(Pokemon pokemon) {
         entity.removeAllEffects()
 
         if (pokemon.ability.name == "levitate") {
@@ -171,7 +171,7 @@ class PokemonServerDelegate : PokemonSideDelegate {
     /**
      * Update Minecraft-side Health (i.e. hearts) based on the Pokémon's current HP value
      */
-    fun updateHealth(pokemon: Pokemon) {
+    fun updateHealth(Pokemon pokemon) {
         if (acknowledgedHPValue != pokemon.currentHealth) {
             acknowledgedHPValue = pokemon.currentHealth
 

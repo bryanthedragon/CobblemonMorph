@@ -32,7 +32,7 @@ import net.minecraft.world.level.dimension.DimensionType
  * @author Hiroku
  * @since October 2nd, 2023
  */
-class LocationRuleCalculator : SpawnRuleComponent {
+public class LocationRuleCalculator : SpawnRuleComponent {
     @Transient
     val runtime = MoLangRuntime().setup()
     @Transient
@@ -51,8 +51,8 @@ class LocationRuleCalculator : SpawnRuleComponent {
     val allow = "true".asExpressionLike()
 
     override fun isAllowedPosition(
-        world: ServerLevel,
-        pos: BlockPos,
+        ServerLevel world,
+        (BlockPos pos,
         spawnablePositionCalculator: SpawnablePositionCalculator<*, *>
     ): Boolean {
         reusableX.value = pos.x.toDouble()

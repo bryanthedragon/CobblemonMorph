@@ -32,7 +32,7 @@ import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.commands.arguments.selector.EntitySelector
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-final class PokedexCommand {
+public final class PokedexCommand {
 
     private const val NAME = "pokedex"
     private const val GRANT_NAME = "grant"
@@ -77,9 +77,9 @@ final class PokedexCommand {
     }
 
     private fun executeGrantOnly(context: CommandContext<CommandSourceStack>): Int {
-        val players = context.getArgument("player", EntitySelector::class.java).findPlayers(context.source)
-        val species = context.getArgument("species", Species::class.java)
-        val form = context.getArgument("form", FormData::class.java)
+        val players = context.getArgument("player", EntitySelector.class).findPlayers(context.source)
+        val species = context.getArgument("species", Species.class)
+        val form = context.getArgument("form", FormData.class)
         val nationalDexEntries = Dexes.dexEntryMap[cobblemonResource("national")]?.getEntries()
             ?: Dexes.dexEntryMap.values.filter { it is SimplePokedexDef }.flatMap { it.getEntries() }
                 .groupBy { it.speciesId }
@@ -109,9 +109,9 @@ final class PokedexCommand {
     }
 
     private fun executeRemoveOnly(context: CommandContext<CommandSourceStack>): Int {
-        val players = context.getArgument("player", EntitySelector::class.java).findPlayers(context.source)
-        val species = context.getArgument("species", Species::class.java)
-        val form = context.getArgument("form", FormData::class.java)
+        val players = context.getArgument("player", EntitySelector.class).findPlayers(context.source)
+        val species = context.getArgument("species", Species.class)
+        val form = context.getArgument("form", FormData.class)
         players.forEach {
             val dex = Cobblemon.playerDataManager.getPokedexData(it)
             dex.deleteFormRecord(species.resourceIdentifier, form.name.lowercase())
@@ -127,8 +127,8 @@ final class PokedexCommand {
     }
 
     private fun executeGrantAll(context: CommandContext<CommandSourceStack>): Int {
-        val players = context.getArgument("player", EntitySelector::class.java).findPlayers(context.source)
-        val dexDef = context.getArgument("dex", PokedexDef::class.java)
+        val players = context.getArgument("player", EntitySelector.class).findPlayers(context.source)
+        val dexDef = context.getArgument("dex", PokedexDef.class)
         players.forEach { player ->
             val dex = Cobblemon.playerDataManager.getPokedexData(player)
             dexDef.getEntries().forEach { dexEntry ->
@@ -151,8 +151,8 @@ final class PokedexCommand {
     }
 
     private fun executeRemoveAll(context: CommandContext<CommandSourceStack>): Int {
-        val players = context.getArgument("player", EntitySelector::class.java).findPlayers(context.source)
-        val dexDef = context.getArgument("dex", PokedexDef::class.java)
+        val players = context.getArgument("player", EntitySelector.class).findPlayers(context.source)
+        val dexDef = context.getArgument("dex", PokedexDef.class)
         players.forEach {
             val dex = Cobblemon.playerDataManager.getPokedexData(it)
             dexDef.getEntries().forEach {
@@ -170,7 +170,7 @@ final class PokedexCommand {
     }
 
     private fun printValuesGlobal(context: CommandContext<CommandSourceStack>): Int {
-        val player = context.getArgument("player", EntitySelector::class.java).findSinglePlayer(context.source)
+        val player = context.getArgument("player", EntitySelector.class).findSinglePlayer(context.source)
         val dex = Cobblemon.playerDataManager.getPokedexData(player)
         var calculators = listOf(SeenCount, CaughtCount, SeenPercent, CaughtPercent)
         calculators.forEach {
@@ -194,9 +194,9 @@ final class PokedexCommand {
     }
 
     private fun printValues(context: CommandContext<CommandSourceStack>): Int {
-        val player = context.getArgument("player", EntitySelector::class.java).findSinglePlayer(context.source)
+        val player = context.getArgument("player", EntitySelector.class).findSinglePlayer(context.source)
         val dex = Cobblemon.playerDataManager.getPokedexData(player)
-        val dexDef = context.getArgument("dex", PokedexDef::class.java)
+        val dexDef = context.getArgument("dex", PokedexDef.class)
         var calculators = listOf(SeenCount, CaughtCount, SeenPercent, CaughtPercent)
         calculators.forEach {
             var value = dex.getDexCalculatedValue(dexDef.id, it)
@@ -209,7 +209,7 @@ final class PokedexCommand {
     }
 
     private fun printNationalDexValues (context: CommandContext<CommandSourceStack>) : Int {
-        val player = context.getArgument("player", EntitySelector::class.java).findSinglePlayer(context.source)
+        val player = context.getArgument("player", EntitySelector.class).findSinglePlayer(context.source)
         val dex = Cobblemon.playerDataManager.getPokedexData(player)
         val dexDef = Dexes.dexEntryMap[ResourceLocation("cobblemon", "national")] ?: throw IllegalStateException("No National Dex")
         var calculators = listOf(SeenCount, CaughtCount, SeenPercent, CaughtPercent)

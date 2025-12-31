@@ -22,14 +22,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since July 3rd, 2022
  */
-class BattleCaptureShakePacket(val targetPNX: String, val direction: Boolean) : NetworkPacket<BattleCaptureShakePacket> {
+public class BattleCaptureShakePacket(val targetPNX: String, val direction: Boolean) : NetworkPacket<BattleCaptureShakePacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(targetPNX)
         buffer.writeBoolean(direction)
     }
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_capture_shake")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleCaptureShakePacket(buffer.readString(), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleCaptureShakePacket(buffer.readString(), buffer.readBoolean())
     }
 }

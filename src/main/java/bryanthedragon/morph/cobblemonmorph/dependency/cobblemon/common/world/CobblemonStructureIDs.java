@@ -9,7 +9,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.world
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
-final class CobblemonStructureIDs {
+public final class CobblemonStructureIDs {
     @JvmField
     val VILLAGE_PLAINS_POKECENTER = cobblemonResource("village_plains/village_plains_pokecenter")
     @JvmField

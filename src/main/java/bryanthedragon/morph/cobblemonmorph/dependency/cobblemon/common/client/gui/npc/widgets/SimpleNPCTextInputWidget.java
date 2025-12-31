@@ -22,14 +22,14 @@ import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceLocation
 import kotlin.math.floor
 
-class SimpleNPCTextInputWidget(
+public class SimpleNPCTextInputWidget(
     getter: () -> String,
     val texture: ResourceLocation? = null,
     private val setter: (String) -> Unit,
     posX: Int,
     posY: Int,
-    width: Int,
-    height: Int,
+    Int width,
+    Int height,
     maxLength: Int = 100,
     val shadow: Boolean = true,
     val wrap: Boolean = false
@@ -41,7 +41,7 @@ class SimpleNPCTextInputWidget(
     height,
     "input".text()
 ), CobblemonRenderable {
-    companion object {
+    final class Companion {
         const val TEXT_PADDING = 4
     }
 

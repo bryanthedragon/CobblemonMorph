@@ -33,7 +33,8 @@ import net.minecraft.commands.Commands.literal
  *
  * This command can fail if the randomly selected spawn region has no possible [AreaSpawnablePosition]. For example if
  *   you are flying in the air
- */final class SpawnPokemonFromPool {
+ */
+public final class SpawnPokemonFromPool {
     const val NAME = "spawnpokemonfrompool"
     const val ALIAS = "forcespawn"
 

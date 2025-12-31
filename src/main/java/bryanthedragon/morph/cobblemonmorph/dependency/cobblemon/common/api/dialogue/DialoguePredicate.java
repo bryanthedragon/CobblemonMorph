@@ -18,18 +18,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.reso
  * @author Hiroku
  * @since December 29th, 2023
  */
-interface DialoguePredicate {
-    companion object {
+public interface DialoguePredicate {
+    final class Companion {
         val types = mutableMapOf<String, Class<out DialoguePredicate>>()
     }
 
     operator fun invoke(dialogue: ActiveDialogue): Boolean
 }
 
-class ExpressionLikeDialoguePredicate(val expression: ExpressionLike = "true".asExpressionLike()) : DialoguePredicate {
+public class ExpressionLikeDialoguePredicate(val expression: ExpressionLike = "true".asExpressionLike()) : DialoguePredicate {
     override fun invoke(dialogue: ActiveDialogue) = dialogue.runtime.resolveBoolean(expression)
 }
 
-class FunctionDialoguePredicate(val predicate: (ActiveDialogue) -> Boolean = { true }) : DialoguePredicate {
+public class FunctionDialoguePredicate(val predicate: (ActiveDialogue) -> Boolean = { true }) : DialoguePredicate {
     override fun invoke(dialogue: ActiveDialogue) = predicate(dialogue)
 }

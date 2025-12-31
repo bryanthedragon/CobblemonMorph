@@ -27,27 +27,27 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since July 5th, 2024
  */
-class CustomScriptNPCInteractionConfiguration : NPCInteractConfiguration {
+public class CustomScriptNPCInteractionConfiguration : NPCInteractConfiguration {
     override val type: String = "custom_script"
     var script: ExpressionLike = "1".asExpressionLike()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(script.getString())
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         script = buffer.readString().asExpressionLike()
     }
 
-    override fun writeToNBT(compoundTag: CompoundTag) {
+    override fun writeToNBT(compoundCompoundTag tag) {
         compoundTag.putString(DataKeys.NPC_INTERACT_CUSTOM_SCRIPT, script.getString())
     }
 
-    override fun readFromNBT(compoundTag: CompoundTag) {
+    override fun readFromNBT(compoundCompoundTag tag) {
         script = compoundTag.getString(DataKeys.NPC_INTERACT_CUSTOM_SCRIPT).asExpressionLike()
     }
 
-    override fun interact(npc: NPCEntity, player: ServerPlayer): Boolean {
+    override fun interact(npc: NPCEntity, ServerPlayer player): Boolean {
         val context = mapOf(
             "npc" to npc.struct,
             "player" to player.asMoLangValue()

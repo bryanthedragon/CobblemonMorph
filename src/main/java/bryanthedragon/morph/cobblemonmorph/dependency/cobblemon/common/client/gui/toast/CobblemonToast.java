@@ -22,14 +22,14 @@ import java.util.*
 import kotlin.math.min
 
 @Environment(EnvType.CLIENT)
-class CobblemonToast(
+public class CobblemonToast(
     val id: UUID,
-    var icon: ItemStack,
-    var title: Component,
-    var description: Component,
-    var frameTexture: ResourceLocation,
-    var progress: Float,
-    var progressColor: Int
+    var ItemStack icon,
+    var Component title,
+    var Component description,
+    var ResourceLocation frameTexture,
+    var Float progress,
+    var Int progressColor
 ) : Toast {
 
     constructor(packet: ToastPacket) : this(packet.uuid, packet.icon, packet.title, packet.description, packet.frameTexture, packet.progress, packet.progressColor)

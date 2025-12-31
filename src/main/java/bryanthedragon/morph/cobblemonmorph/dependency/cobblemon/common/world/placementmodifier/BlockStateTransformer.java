@@ -20,29 +20,29 @@ import kotlin.random.Random
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-enum class BlockStateTransformerType {
+public enum BlockStateTransformerType {
     NONE,
     BERRY_TRANSFORM
 }
 
-interface BlockStateTransformer : CodecMapped {
+public interface BlockStateTransformer : CodecMapped {
     val type: BlockStateTransformerType
-    fun transform(blockState: BlockState): BlockState
+    fun transform(blockBlockState state): BlockState
 
-    companion object : ArbitrarilyMappedSerializableCompanion<BlockStateTransformer, BlockStateTransformerType>(
+    final class Companion : ArbitrarilyMappedSerializableCompanion<BlockStateTransformer, BlockStateTransformerType>(
         keyFromString = { BlockStateTransformerType.valueOf(it.uppercase()) },
         stringFromKey = BlockStateTransformerType::name,
         keyFromValue = BlockStateTransformer::type
     ) {
         init {
-            registerSubtype(BlockStateTransformerType.NONE, NoneBlockStateTransformer::class.java, NoneBlockStateTransformer.CODEC)
-            registerSubtype(BlockStateTransformerType.BERRY_TRANSFORM, BerryTransformBlockStateTransformer::class.java, BerryTransformBlockStateTransformer.CODEC)
+            registerSubtype(BlockStateTransformerType.NONE, NoneBlockStateTransformer.class, NoneBlockStateTransformer.CODEC)
+            registerSubtype(BlockStateTransformerType.BERRY_TRANSFORM, BerryTransformBlockStateTransformer.class, BerryTransformBlockStateTransformer.CODEC)
         }
     }
 }
 
-class NoneBlockStateTransformer : BlockStateTransformer {
-    companion object {
+public class NoneBlockStateTransformer : BlockStateTransformer {
+    final class Companion {
         val CODEC: Codec<NoneBlockStateTransformer> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name }
@@ -51,16 +51,16 @@ class NoneBlockStateTransformer : BlockStateTransformer {
     }
 
     override val type = BlockStateTransformerType.NONE
-    override fun transform(blockState: BlockState) = blockState
+    override fun transform(blockBlockState state) = blockState
 
-    override fun <T> encode(ops: DynamicOps<T>): DataResult<T> = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) = throw NotImplementedError("Not supposed to use this for block state transformers")
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) = throw NotImplementedError("Not supposed to use this for block state transformers")
+    override fun <T> encode(DynamicOps<T> ops): DataResult<T> = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) = throw NotImplementedError("Not supposed to use this for block state transformers")
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) = throw NotImplementedError("Not supposed to use this for block state transformers")
 }
 
 // We could totally add mulch to this
-class BerryTransformBlockStateTransformer(val minAge: Int, val maxAge: Int, val wild: Boolean) : BlockStateTransformer {
-    companion object {
+public class BerryTransformBlockStateTransformer(val minAge: Int, val maxAge: Int, val wild: Boolean) : BlockStateTransformer {
+    final class Companion {
         val CODEC: Codec<BerryTransformBlockStateTransformer> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -72,11 +72,11 @@ class BerryTransformBlockStateTransformer(val minAge: Int, val maxAge: Int, val 
     }
 
     override val type = BlockStateTransformerType.NONE
-    override fun transform(blockState: BlockState) = blockState
+    override fun transform(blockBlockState state) = blockState
         .setValue(BerryBlock.AGE, Random.Default.nextInt(minAge, maxAge + 1))
         .setValue(BerryBlock.WAS_GENERATED, wild)
 
-    override fun <T> encode(ops: DynamicOps<T>): DataResult<T> = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) = throw NotImplementedError("Not supposed to use this for block state transformers")
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) = throw NotImplementedError("Not supposed to use this for block state transformers")
+    override fun <T> encode(DynamicOps<T> ops): DataResult<T> = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) = throw NotImplementedError("Not supposed to use this for block state transformers")
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) = throw NotImplementedError("Not supposed to use this for block state transformers")
 }

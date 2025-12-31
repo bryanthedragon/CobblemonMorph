@@ -17,7 +17,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spaw
  * @author Hiroku
  * @since February 7th, 2022
  */
-enum class ListCheckMode {
+public enum ListCheckMode {
     /** Represents the need for every element of the list to be present. */
     ALL,
     /** Represents the need for only a single elemt of the list to be present. */

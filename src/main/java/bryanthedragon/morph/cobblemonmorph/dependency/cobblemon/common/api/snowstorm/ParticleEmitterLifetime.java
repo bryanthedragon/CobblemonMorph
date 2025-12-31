@@ -22,25 +22,25 @@ import com.mojang.serialization.codecs.PrimitiveCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-interface ParticleEmitterLifetime : CodecMapped {
-    companion object : ArbitrarilyMappedSerializableCompanion<ParticleEmitterLifetime, ParticleEmitterLifetimeType>(
+public interface ParticleEmitterLifetime : CodecMapped {
+    final class Companion : ArbitrarilyMappedSerializableCompanion<ParticleEmitterLifetime, ParticleEmitterLifetimeType>(
         keyFromValue = { it.type },
         keyFromString = ParticleEmitterLifetimeType::valueOf,
         stringFromKey = { it.name }
     ) {
         init {
-            registerSubtype(ParticleEmitterLifetimeType.ONCE, OnceEmitterLifetime::class.java, OnceEmitterLifetime.CODEC)
-            registerSubtype(ParticleEmitterLifetimeType.EXPRESSION, ExpressionEmitterLifetime::class.java, ExpressionEmitterLifetime.CODEC)
-            registerSubtype(ParticleEmitterLifetimeType.LOOPING, LoopingEmitterLifetime::class.java, LoopingEmitterLifetime.CODEC)
+            registerSubtype(ParticleEmitterLifetimeType.ONCE, OnceEmitterLifetime.class, OnceEmitterLifetime.CODEC)
+            registerSubtype(ParticleEmitterLifetimeType.EXPRESSION, ExpressionEmitterLifetime.class, ExpressionEmitterLifetime.CODEC)
+            registerSubtype(ParticleEmitterLifetimeType.LOOPING, LoopingEmitterLifetime.class, LoopingEmitterLifetime.CODEC)
         }
     }
 
     val type: ParticleEmitterLifetimeType
-    fun getAction(runtime: MoLangRuntime, started: Boolean, emitterAge: Double): ParticleEmitterAction
+    fun getAction(MoLangRuntime runtime, started: Boolean, emitterAge: Double): ParticleEmitterAction
 }
 
-class OnceEmitterLifetime(var activeTime: Expression = 1.0.asExpression()) : ParticleEmitterLifetime {
-    companion object {
+public class OnceEmitterLifetime(var activeTime: Expression = 1.0.asExpression()) : ParticleEmitterLifetime {
+    final class Companion {
         val CODEC: Codec<OnceEmitterLifetime> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -51,7 +51,7 @@ class OnceEmitterLifetime(var activeTime: Expression = 1.0.asExpression()) : Par
 
     override val type = ParticleEmitterLifetimeType.ONCE
 
-    override fun getAction(runtime: MoLangRuntime, started: Boolean, emitterAge: Double): ParticleEmitterAction {
+    override fun getAction(MoLangRuntime runtime, started: Boolean, emitterAge: Double): ParticleEmitterAction {
         val activeTime = runtime.resolve(activeTime)
         runtime.environment.setSimpleVariable("emitter_lifetime", activeTime)
         return if (emitterAge > activeTime.asDouble()) {
@@ -61,18 +61,18 @@ class OnceEmitterLifetime(var activeTime: Expression = 1.0.asExpression()) : Par
         }
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         activeTime = MoLang.createParser(buffer.readString()).parseExpression()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(activeTime.getString())
     }
 }
 
-class ExpressionEmitterLifetime(var activation: Expression = NumberExpression(0.0), var expiration: Expression = NumberExpression(0.0)) : ParticleEmitterLifetime {
-    companion object {
+public class ExpressionEmitterLifetime(var activation: Expression = NumberExpression(0.0), var expiration: Expression = NumberExpression(0.0)) : ParticleEmitterLifetime {
+    final class Companion {
         val CODEC: Codec<ExpressionEmitterLifetime> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -84,7 +84,7 @@ class ExpressionEmitterLifetime(var activation: Expression = NumberExpression(0.
 
     override val type = ParticleEmitterLifetimeType.EXPRESSION
 
-    override fun getAction(runtime: MoLangRuntime, started: Boolean, emitterAge: Double): ParticleEmitterAction {
+    override fun getAction(MoLangRuntime runtime, started: Boolean, emitterAge: Double): ParticleEmitterAction {
         if (started) {
             if (runtime.resolveBoolean(expiration)) {
                 return ParticleEmitterAction.STOP
@@ -100,20 +100,20 @@ class ExpressionEmitterLifetime(var activation: Expression = NumberExpression(0.
         }
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         activation = MoLang.createParser(buffer.readString()).parseExpression()
         expiration = MoLang.createParser(buffer.readString()).parseExpression()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(activation.getString())
         buffer.writeString(expiration.getString())
     }
 }
 
-class LoopingEmitterLifetime(var activeTime: Expression = 1.0.asExpression(), var sleepTime: Expression = 1.0.asExpression()) : ParticleEmitterLifetime {
-    companion object {
+public class LoopingEmitterLifetime(var activeTime: Expression = 1.0.asExpression(), var sleepTime: Expression = 1.0.asExpression()) : ParticleEmitterLifetime {
+    final class Companion {
         val CODEC: Codec<LoopingEmitterLifetime> = RecordCodecBuilder.create { instance ->
             instance.group(
                 PrimitiveCodec.STRING.fieldOf("type").forGetter { it.type.name },
@@ -125,7 +125,7 @@ class LoopingEmitterLifetime(var activeTime: Expression = 1.0.asExpression(), va
 
     override val type = ParticleEmitterLifetimeType.LOOPING
 
-    override fun getAction(runtime: MoLangRuntime, started: Boolean, emitterAge: Double): ParticleEmitterAction {
+    override fun getAction(MoLangRuntime runtime, started: Boolean, emitterAge: Double): ParticleEmitterAction {
         val activeTime = runtime.resolve(activeTime)
         val activeTimeValue = activeTime.asDouble()
         val sleepTime = runtime.resolveDouble(sleepTime)
@@ -144,25 +144,25 @@ class LoopingEmitterLifetime(var activeTime: Expression = 1.0.asExpression(), va
         }
     }
 
-    override fun <T> encode(ops: DynamicOps<T>) = CODEC.encodeStart(ops, this)
-    override fun readFromBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun <T> encode(DynamicOps<T> ops) = CODEC.encodeStart(ops, this)
+    override fun readFromBuffer(RegistryFriendlyByteBuf buffer) {
         activeTime = MoLang.createParser(buffer.readString()).parseExpression()
         sleepTime = MoLang.createParser(buffer.readString()).parseExpression()
     }
 
-    override fun writeToBuffer(buffer: RegistryFriendlyByteBuf) {
+    override fun writeToBuffer(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(activeTime.getString())
         buffer.writeString(sleepTime.getString())
     }
 }
 
-enum class ParticleEmitterLifetimeType {
+public enum ParticleEmitterLifetimeType {
     LOOPING,
     ONCE,
     EXPRESSION
 }
 
-enum class ParticleEmitterAction {
+public enum ParticleEmitterAction {
     NOTHING,
     GO,
     STOP,

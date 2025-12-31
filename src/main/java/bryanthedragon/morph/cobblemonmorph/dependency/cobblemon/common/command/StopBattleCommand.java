@@ -19,7 +19,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class StopBattleCommand {
+public final class StopBattleCommand {
 
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         dispatcher.register(Commands.literal("stopbattle")

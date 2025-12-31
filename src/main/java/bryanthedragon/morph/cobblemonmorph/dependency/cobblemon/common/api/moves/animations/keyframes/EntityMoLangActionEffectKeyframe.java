@@ -28,7 +28,7 @@ import net.minecraft.server.level.ServerLevel
  * @author Hiroku
  * @since October 30th, 2023
  */
-class EntityMoLangActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityConditionalActionEffectKeyframe {
+public class EntityMoLangActionEffectKeyframe : ConditionalActionEffectKeyframe(), EntityConditionalActionEffectKeyframe {
     var delay = "0".asExpressionLike()
     val expressions = mutableSetOf<String>()
     val visibilityRange = 200

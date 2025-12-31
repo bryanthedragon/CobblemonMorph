@@ -20,18 +20,18 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.sensing.SensorType
 
-class FleeAttackerTaskConfig : SingleTaskConfig {
+public class FleeAttackerTaskConfig : SingleTaskConfig {
     val avoidDurationTicks: ExpressionOrEntityVariable = Either.left("600".asExpression())
 
     override fun getVariables(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): List<MoLangConfigVariable> {
         return listOf(avoidDurationTicks).asVariables()
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity> {
         behaviourConfigurationContext.addMemories(

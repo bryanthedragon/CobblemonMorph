@@ -29,14 +29,14 @@ import net.minecraft.network.chat.MutableComponent
  * @author Hiroku
  * @since July 29th, 2023
  */
-class OpenPartyMoveCallbackPacket(
-    val uuid: UUID,
+public class OpenPartyMoveCallbackPacket(
+    val UUID uuid,
     val partyTitle: MutableComponent,
     val pokemonList: List<Pair<PartySelectPokemonDTO, List<MoveSelectDTO>>>
 ) : NetworkPacket<OpenPartyMoveCallbackPacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("open_party_move_callback")
-        fun decode(buffer: RegistryFriendlyByteBuf): OpenPartyMoveCallbackPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): OpenPartyMoveCallbackPacket {
             val uuid = buffer.readUUID()
             val partyTitle = buffer.readText().copy()
             val pokemonList = mutableListOf<Pair<PartySelectPokemonDTO, List<MoveSelectDTO>>>()
@@ -58,7 +58,7 @@ class OpenPartyMoveCallbackPacket(
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(uuid)
         buffer.writeText(partyTitle)
         buffer.writeSizedInt(IntSize.U_BYTE, pokemonList.size)

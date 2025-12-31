@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class BarboachModel (root: ModelPart) : PokemonPosableModel(root) {
+public class BarboachModel (root: ModelPart) : PokemonPosableModel(root) {
     override val rootPart = root.registerChildWithAllChildren("barboach")
 
     override var portraitScale = 2.0F

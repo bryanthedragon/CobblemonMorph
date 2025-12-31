@@ -18,14 +18,14 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since December 27th, 2023
  */
-class Dialogue(
+public class Dialogue(
     val pages: List<DialoguePage> = mutableListOf(),
     val background: ResourceLocation = DEFAULT_BACKGROUND,
     val escapeAction: DialogueAction = FunctionDialogueAction { dialogue, _ -> dialogue.close() },
     val speakers: Map<String, DialogueSpeaker> = emptyMap(),
     val initializationAction: DialogueAction = FunctionDialogueAction { _, _ -> }
 ) {
-    companion object {
+    final class Companion {
         val DEFAULT_BACKGROUND = cobblemonResource("textures/gui/dialogue/dialogue_box.png")
 
         @JvmOverloads

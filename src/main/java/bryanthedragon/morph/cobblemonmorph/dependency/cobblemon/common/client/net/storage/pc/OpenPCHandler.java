@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pc.PCGUIConfiguration
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.OpenPCPacket
 import net.minecraft.client.Minecraft
-final class OpenPCHandler : ClientNetworkPacketHandler<OpenPCPacket> {
-    override fun handle(packet: OpenPCPacket, client: Minecraft) {
+public final class OpenPCHandler : ClientNetworkPacketHandler<OpenPCPacket> {
+    override fun handle(packet: OpenPCPacket, Minecraft client) {
         val pc = CobblemonClient.storage.pcStores[packet.storeID] ?: return
         Minecraft.getInstance().setScreen(
             PCGUI(

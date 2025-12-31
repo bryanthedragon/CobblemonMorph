@@ -16,12 +16,12 @@ import net.minecraft.client.gui.components.Button
 import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 
-class PastureSlotIconConflictButton(
+public class PastureSlotIconConflictButton(
     var xPos: Int, var yPos: Int,
     onPress: OnPress
 ) : Button(xPos, yPos, WIDTH, HEIGHT, Component.literal("Pasture Defend"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val WIDTH = 15
         const val HEIGHT = 11
         const val ICON_SIZE = 11
@@ -31,9 +31,9 @@ class PastureSlotIconConflictButton(
         private val baseActiveResource = cobblemonResource("textures/gui/pasture/pasture_slot_button_active.png")
         private val iconResource = cobblemonResource("textures/gui/pasture/pasture_slot_icon_defend.png")
     }
-    private var enabled: Boolean = false
+    private var Boolean enabled = false
 
-    fun setEnabled(enabled: Boolean) {
+    fun setEnabled(Boolean enabled) {
         this.enabled = enabled
     }
 

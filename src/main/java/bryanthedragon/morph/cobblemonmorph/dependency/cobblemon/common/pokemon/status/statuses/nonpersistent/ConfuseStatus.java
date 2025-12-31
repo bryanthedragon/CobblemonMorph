@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.status.VolatileStatus
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 
-class ConfuseStatus : VolatileStatus(
+public class ConfuseStatus : VolatileStatus(
     cobblemonResource("confused"),
     "confusion",
     "cobblemon.battle.confusion_start",

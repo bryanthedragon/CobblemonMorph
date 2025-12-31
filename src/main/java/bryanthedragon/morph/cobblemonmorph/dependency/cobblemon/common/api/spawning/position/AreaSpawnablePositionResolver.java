@@ -29,7 +29,7 @@ import net.minecraft.core.BlockPos
  * @author Hiroku
  * @since January 31st, 2022
  */
-interface AreaSpawnablePositionResolver {
+public interface AreaSpawnablePositionResolver {
     fun resolve(
         spawner: Spawner,
         spawnablePositionCalculators: List<AreaSpawnablePositionCalculator<*>>,

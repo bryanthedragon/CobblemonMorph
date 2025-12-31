@@ -42,11 +42,11 @@ import net.minecraft.network.chat.MutableComponent
  * @author Hiroku
  * @since May 10th, 2022
  */
-class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
+public class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
 
     override val id = ID
 
-    lateinit var battleId: UUID
+    lateinit var UUID battleId
     lateinit var battleFormat: BattleFormat
 
     lateinit var side1: BattleSideDTO
@@ -78,7 +78,7 @@ class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
         side2 = sides[1]
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(battleId)
         battleFormat.saveToBuffer(buffer)
         for (side in arrayOf(side1, side2)) {
@@ -97,7 +97,7 @@ class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
         }
     }
 
-    private fun decode(buffer: RegistryFriendlyByteBuf) {
+    private fun decode(RegistryFriendlyByteBuf buffer) {
         battleId = buffer.readUUID()
         battleFormat = BattleFormat.loadFromBuffer(buffer)
         val sides = mutableListOf<BattleSideDTO>()
@@ -132,34 +132,34 @@ class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
         side2 = sides[1]
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_initialize")
-        fun decode(buffer: RegistryFriendlyByteBuf) = BattleInitializePacket().apply { decode(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = BattleInitializePacket().apply { decode(buffer) }
     }
 
     record BattleSideDTO(val actors: List<BattleActorDTO>)
 
     record BattleActorDTO(
-        val uuid: UUID,
-        val displayName: MutableComponent,
-        val showdownId: String,
+        val UUID uuid,
+        val MutableComponent displayName,
+        val String showdownId,
         val activePokemon: List<ActiveBattlePokemonDTO?>,
         val type: ActorType,
     )
 
     record ActiveBattlePokemonDTO(
-        val uuid: UUID,
-        val displayName: MutableComponent,
+        val UUID uuid,
+        val MutableComponent displayName,
         val properties: PokemonProperties,
         val aspects: Set<String>,
-        val status: PersistentStatus?,
+        val PersistentStatus status?,
         val hpValue: Float,
         val maxHp: Float,
         val isFlatHp: Boolean,
         val statChanges: MutableMap<Stat, Int>
     ) {
-        companion object {
-            fun fromPokemon(battlePokemon: BattlePokemon, isAlly: Boolean, illusion: BattlePokemon? = null): ActiveBattlePokemonDTO {
+        final class Companion {
+            fun fromPokemon(BattlePokemon battlePokemon, isAlly: Boolean, illusion: BattlePokemon? = null): ActiveBattlePokemonDTO {
                 val pokemon = battlePokemon.effectedPokemon
                 val exposed = if (isAlly) pokemon else illusion?.effectedPokemon ?: pokemon
                 val hpValue = if (isAlly) pokemon.currentHealth.toFloat() else pokemon.currentHealth.toFloat() / pokemon.maxHealth
@@ -181,7 +181,7 @@ class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
                 )
             }
 
-            fun fromMock(battlePokemon: BattlePokemon, isAlly: Boolean, mock: PokemonProperties): ActiveBattlePokemonDTO {
+            fun fromMock(BattlePokemon battlePokemon, isAlly: Boolean, mock: PokemonProperties): ActiveBattlePokemonDTO {
                 val pokemon = battlePokemon.effectedPokemon
                 val hpValue = if (isAlly) pokemon.currentHealth.toFloat() else pokemon.currentHealth.toFloat() / pokemon.maxHealth
                 return ActiveBattlePokemonDTO(
@@ -197,7 +197,7 @@ class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
                 )
             }
 
-            fun loadFromBuffer(buffer: RegistryFriendlyByteBuf): ActiveBattlePokemonDTO {
+            fun loadFromBuffer(RegistryFriendlyByteBuf buffer): ActiveBattlePokemonDTO {
                 val uuid = buffer.readUUID()
                 val pokemonDisplayName = ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC.decode(buffer).copy()
                 val properties = PokemonProperties.parse(buffer.readString(), delimiter = " ")
@@ -230,7 +230,7 @@ class BattleInitializePacket() : NetworkPacket<BattleInitializePacket> {
             }
         }
 
-        fun saveToBuffer(buffer: RegistryFriendlyByteBuf): ActiveBattlePokemonDTO {
+        fun saveToBuffer(RegistryFriendlyByteBuf buffer): ActiveBattlePokemonDTO {
             buffer.writeUUID(uuid)
             ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC.encode(buffer, displayName)
             buffer.writeString(properties.asString())

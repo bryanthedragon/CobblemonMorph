@@ -15,5 +15,5 @@ record NaturalMaterial(
     val content: Int = 0,
     val item: ResourceLocation?,
     val tag: ItemTagCondition? = null,
-    val returnItem: ResourceLocation? = null
+    val ResourceLocation returnItem? = null
 )

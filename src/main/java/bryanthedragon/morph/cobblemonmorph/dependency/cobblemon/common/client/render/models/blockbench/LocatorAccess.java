@@ -22,12 +22,12 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since February 10th, 2023
  */
-class LocatorAccess(
+public class LocatorAccess(
     val joint: Bone,
     val locators: Map<String, Bone> = mapOf(),
     val children: List<LocatorAccess> = listOf()
 ) {
-    companion object {
+    final class Companion {
         const val PREFIX = "internal_locator__"
 
         fun resolve(part: Bone): LocatorAccess? {
@@ -70,7 +70,7 @@ class LocatorAccess(
      * Updates all of the locator states with the position at this current frame.
      * This is the same logic as ModelPart uses, that's why we reuse ModelPart#rotate.
      */
-    fun update(matrixStack: PoseStack, entity: Entity?, scale: Float, state: MutableMap<String, MatrixWrapper>, isRoot: Boolean = false) {
+    fun update(matrixStack: PoseStack, Entity entity?, scale: Float, state: MutableMap<String, MatrixWrapper>, isRoot: Boolean = false) {
         matrixStack.pushPose()
         joint.transform(matrixStack)
 

@@ -15,9 +15,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class PokedexEntry(
-    val id: ResourceLocation,
-    val speciesId: ResourceLocation,
+public class PokedexEntry(
+    val ResourceLocation id,
+    val speciesResourceLocation id,
     val displayAspects: MutableSet<String> = mutableSetOf(),
     val conditionAspects: MutableSet<String> = mutableSetOf(),
     val forms: MutableList<PokedexForm> = mutableListOf(),
@@ -65,7 +65,7 @@ class PokedexEntry(
         }
     }
 
-    fun encode(buf: RegistryFriendlyByteBuf) {
+    fun encode(RegistryFriendlyByteBuf buf) {
         buf.writeIdentifier(id)
         buf.writeIdentifier(speciesId)
         buf.writeCollection(displayAspects) { _, aspect -> buf.writeString(aspect) }
@@ -76,8 +76,8 @@ class PokedexEntry(
         }
         buf.writeCollection(variations) { _, variation -> variation.encode(buf) }
     }
-    companion object {
-        fun decode(buffer: RegistryFriendlyByteBuf): PokedexEntry {
+    final class Companion {
+        fun decode(RegistryFriendlyByteBuf buffer): PokedexEntry {
             val id = buffer.readIdentifier()
             val entryId = buffer.readIdentifier()
             val displayAspects = buffer.readList { buffer.readString() }.toMutableSet()
@@ -94,7 +94,7 @@ class PokedexEntry(
     }
 }
 
-class PokedexForm {
+public class PokedexForm {
     var displayForm: String = "Normal"
     var unlockForms: MutableSet<String> = mutableSetOf()
 

@@ -22,7 +22,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class LevelUp {
+public final class LevelUp {
 
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
         val command = Commands.literal("levelup")
@@ -44,7 +44,7 @@ final class LevelUp {
         dispatcher.register(command)
     }
 
-    private fun execute(context: CommandContext<CommandSourceStack>, player: ServerPlayer) : Int {
+    private fun execute(context: CommandContext<CommandSourceStack>, ServerPlayer player) : Int {
         val slot = IntegerArgumentType.getInteger(context, "slot")
         val party = player.party()
         if (slot > party.size()) {

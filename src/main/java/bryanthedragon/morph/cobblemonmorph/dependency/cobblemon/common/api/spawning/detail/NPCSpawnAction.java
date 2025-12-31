@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.reso
  * @author Hiroku
  * @since October 8th, 2023
  */
-class NPCSpawnAction(spawnablePosition: SpawnablePosition, bucket: SpawnBucket, override val detail: NPCSpawnDetail) : SingleEntitySpawnAction<NPCEntity>(spawnablePosition, bucket, detail) {
+public class NPCSpawnAction(spawnablePosition: SpawnablePosition, bucket: SpawnBucket, override val detail: NPCSpawnDetail) : SingleEntitySpawnAction<NPCEntity>(spawnablePosition, bucket, detail) {
     override fun createEntity(): NPCEntity {
         val npc = NPCEntity(spawnablePosition.world)
         npc.npc = detail.npcClass

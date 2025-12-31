@@ -13,14 +13,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.*
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.syncher.EntityDataSerializer
-final class StringSetDataSerializer : EntityDataSerializer<Set<String>> {
+public final class StringSetDataSerializer : EntityDataSerializer<Set<String>> {
     val ID = cobblemonResource("string_set")
-    fun write(buffer: RegistryFriendlyByteBuf, set: Set<String>) {
+    fun write(RegistryFriendlyByteBuf buffer, set: Set<String>) {
         buffer.writeSizedInt(IntSize.U_BYTE, set.size)
         set.forEach(buffer::writeString)
     }
 
-    fun read(buffer: RegistryFriendlyByteBuf): Set<String> {
+    fun read(RegistryFriendlyByteBuf buffer): Set<String> {
         val set = mutableSetOf<String>()
         repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {
             set.add(buffer.readString())

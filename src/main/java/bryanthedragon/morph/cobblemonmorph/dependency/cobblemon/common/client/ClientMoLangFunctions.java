@@ -39,7 +39,7 @@ import java.util.function.Function
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.sounds.SoundEvent
-final class ClientMoLangFunctions {
+public final class ClientMoLangFunctions {
     val clientFunctions = hashMapOf<String, Function<MoParams, Any>>(
         "sound" to java.util.function.Function { params ->
             if (params.get<MoValue>(0) !is StringValue) {

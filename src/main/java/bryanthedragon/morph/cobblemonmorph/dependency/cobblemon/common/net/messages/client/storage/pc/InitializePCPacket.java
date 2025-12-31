@@ -27,20 +27,20 @@ import java.util.UUID
  * @author Hiroku
  * @since June 18th, 2022
  */
-class InitializePCPacket internal constructor(val storeID: UUID, val boxCount: Int, val hasOverflowed: Boolean) : NetworkPacket<InitializePCPacket> {
+public class InitializePCPacket internal constructor(val UUID storeID, val boxCount: Int, val hasOverflowed: Boolean) : NetworkPacket<InitializePCPacket> {
 
     override val id = ID
 
     constructor(pc: PCStore): this(pc.uuid, pc.boxes.size, pc.backupStore.any())
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(storeID)
         buffer.writeSizedInt(IntSize.U_SHORT, boxCount)
         buffer.writeBoolean(hasOverflowed)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("initialize_pc")
-        fun decode(buffer: RegistryFriendlyByteBuf) = InitializePCPacket(buffer.readUUID(), buffer.readSizedInt(IntSize.U_SHORT), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = InitializePCPacket(buffer.readUUID(), buffer.readSizedInt(IntSize.U_SHORT), buffer.readBoolean())
     }
 }

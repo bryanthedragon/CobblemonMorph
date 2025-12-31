@@ -10,6 +10,6 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
 
-interface InterpreterInstruction {
+public interface InterpreterInstruction {
     operator fun invoke(battle: PokemonBattle)
 }

@@ -18,8 +18,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 
-class AbilitiesWidget(x: Int, y: Int): InfoTextScrollWidget(pX = x, pY = y) {
-    companion object {
+public class AbilitiesWidget(x: Int, y: Int): InfoTextScrollWidget(pX = x, pY = y) {
+    final class Companion {
         private val arrowLeft = cobblemonResource("textures/gui/pokedex/info_arrow_left.png")
         private val arrowRight = cobblemonResource("textures/gui/pokedex/info_arrow_right.png")
     }
@@ -43,7 +43,7 @@ class AbilitiesWidget(x: Int, y: Int): InfoTextScrollWidget(pX = x, pY = y) {
     )
 
     var abilitiesList: List<AbilityTemplate> = mutableListOf()
-    var selectedAbilitiesIndex: Int = 0
+    var selectedAbilitiesInt index = 0
 
     init { setAbility() }
 

@@ -9,7 +9,7 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stats
 
 import net.minecraft.resources.ResourceLocation
-final class CobblemonStats {
+public final class CobblemonStats {
     val stats = mutableMapOf<String,  ResourceLocation>()
 
     var CAPTURED: ResourceLocation = ResourceLocation.fromNamespaceAndPath("cobblemon", "captured") //makeCustomStat("captured", StatFormatter.DEFAULT)

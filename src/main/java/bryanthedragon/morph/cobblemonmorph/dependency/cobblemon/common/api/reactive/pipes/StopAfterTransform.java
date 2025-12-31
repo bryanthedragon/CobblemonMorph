@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.pipes
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.pipes;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Transform
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.reactive.Transform;
 
 /**
  * A transform that will emit values until a condition is met, except that when the
@@ -17,15 +17,16 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.react
  * @author Hiroku
  * @since May 1st, 2022
  */
-class StopAfterTransform<I>(val predicate: (I) -> Boolean) : Transform<I, I> {
-    var finished = false
-    override fun invoke(input: I): I {
+public class StopAfterTransform<I> implements Transform<I, I> {
+    private final Predicate<I> predicate;
+    private boolean finished = false;
+    I invoke(I input) {
         if (finished) {
-            noTransform(true)
+            noTransform(true);
         }
         if (predicate(input)) {
-            finished = true
+            finished = true;
         }
-        return input
+        return input;
     }
 }

@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.startselection.StarterSelectionScreen
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.starter.OpenStarterUIPacket
 import net.minecraft.client.Minecraft
-final class StarterUIPacketHandler : ClientNetworkPacketHandler<OpenStarterUIPacket> {
-    override fun handle(packet: OpenStarterUIPacket, client: Minecraft) {
+public final class StarterUIPacketHandler : ClientNetworkPacketHandler<OpenStarterUIPacket> {
+    override fun handle(packet: OpenStarterUIPacket, Minecraft client) {
         CobblemonClient.checkedStarterScreen = true
         client.setScreen(StarterSelectionScreen(categories = packet.categories))
     }

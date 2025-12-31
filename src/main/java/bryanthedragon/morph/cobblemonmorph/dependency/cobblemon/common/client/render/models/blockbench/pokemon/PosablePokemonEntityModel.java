@@ -19,8 +19,8 @@ import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
 
-class PosablePokemonEntityModel : PosableEntityModel<PokemonEntity>() {
-    override fun setupEntityTypeContext(entity: Entity?) {
+public class PosablePokemonEntityModel : PosableEntityModel<PokemonEntity>() {
+    override fun setupEntityTypeContext(Entity entity?) {
         super.setupEntityTypeContext(entity)
         (entity as? PokemonEntity)?.let {
             context.put(RenderContext.SCALE, it.pokemon.form.baseScale)

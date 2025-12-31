@@ -22,7 +22,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.network.chat.Component
 
-class PastureWidget(
+public class PastureWidget(
     val storageWidget: StorageWidget,
     val pasturePCGUIConfiguration: PasturePCGUIConfiguration,
     x: Int,
@@ -30,7 +30,7 @@ class PastureWidget(
 ): SoundlessWidget(
     x, y, PCGUI.RIGHT_PANEL_WIDTH, PCGUI.RIGHT_PANEL_HEIGHT, Component.literal("PastureWidget")) {
 
-    companion object {
+    final class Companion {
         private val baseResource = cobblemonResource("textures/gui/pasture/pasture_panel.png")
     }
 

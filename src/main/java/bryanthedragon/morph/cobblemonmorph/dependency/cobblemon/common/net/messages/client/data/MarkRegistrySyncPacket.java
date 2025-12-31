@@ -13,19 +13,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.mark.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class MarkRegistrySyncPacket(marks: List<Mark>) : DataRegistrySyncPacket<Mark, MarkRegistrySyncPacket>(marks) {
-    companion object {
+public class MarkRegistrySyncPacket(marks: List<Mark>) : DataRegistrySyncPacket<Mark, MarkRegistrySyncPacket>(marks) {
+    final class Companion {
         val ID = cobblemonResource("marks")
-        fun decode(buffer: RegistryFriendlyByteBuf) = MarkRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = MarkRegistrySyncPacket(emptyList()).apply { decodeBuffer(buffer) }
     }
 
 
     override val id = ID
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Mark) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Mark) {
         entry.encode(buffer)
     }
 
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Mark = Mark.decode(buffer)
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Mark = Mark.decode(buffer)
 
     override fun synchronizeDecoded(entries: Collection<Mark>) {
         Marks.reload(entries.associateBy { it.identifier })

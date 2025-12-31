@@ -34,18 +34,19 @@ import kotlin.math.roundToInt
 /**
  * The data registry for [PokeBall]s.
  * All the pokeball fields are guaranteed to exist
- */final class PokeBalls : JsonDataRegistry<PokeBall> {
+ */
+public final class PokeBalls : JsonDataRegistry<PokeBall> {
 
     override val id = cobblemonResource("pokeballs")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<PokeBalls>()
 
     // ToDo once datapack pokeball is implemented add required adapters here
-    override val gson: Gson = GsonBuilder()
+    override val Gson gson = GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
         .create()
-    override val typeToken: TypeToken<PokeBall> = TypeToken.get(PokeBall::class.java)
+    override val typeToken: TypeToken<PokeBall> = TypeToken.get(PokeBall.class)
     override val resourcePath = "pokeballs"
 
     private val defaults = hashMapOf<ResourceLocation, PokeBall>()
@@ -312,7 +313,7 @@ import kotlin.math.roundToInt
         // ToDo once datapack pokeball is implemented load them here, we will want datapacks to be able to override our default pokeballs too, however they will never be able to disable them
     }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         // ToDo once datapack pokeball is implemented sync them here
     }
 
@@ -327,7 +328,7 @@ import kotlin.math.roundToInt
     fun all() = this.defaults.filterKeys { !this.custom.containsKey(it) }.values + this.custom.values
 
     private fun createDefault(
-        name: String,
+        String name,
         modifier: CatchRateModifier = MultiplierModifier(1F) { _, _ -> true },
         effects: List<CaptureEffect> = emptyList(),
         waterDragValue: Float = 0.8F,
@@ -343,7 +344,7 @@ import kotlin.math.roundToInt
         return pokeball
     }
 
-    private fun byName(name: String): PokeBall {
+    private fun byName(String name): PokeBall {
         val identifier = cobblemonResource(name)
         return this.custom[identifier] ?: this.defaults[identifier]!!
     }

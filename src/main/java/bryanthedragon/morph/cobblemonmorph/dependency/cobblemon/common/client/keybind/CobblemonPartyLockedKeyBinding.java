@@ -21,7 +21,7 @@ import net.minecraft.client.Minecraft
  * Util class for preventing clicks until the player has a party member, this will automatically handle starter selection
  */
 abstract class CobblemonPartyLockedKeyBinding(
-    name: String,
+    String name,
     type: InputConstants.Type,
     key: Int,
     category: String

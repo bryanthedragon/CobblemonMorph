@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.registry.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.registry.BlockTagCondition
 import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.block.Block
-final class BlockLikeConditionAdapter : RegistryLikeAdapter<Block> {
+public final class BlockLikeConditionAdapter : RegistryLikeAdapter<Block> {
     override val registryLikeConditions = mutableListOf(
         RegistryLikeTagCondition.resolver(Registries.BLOCK, ::BlockTagCondition),
         RegistryLikeIdentifierCondition.resolver(::BlockIdentifierCondition)

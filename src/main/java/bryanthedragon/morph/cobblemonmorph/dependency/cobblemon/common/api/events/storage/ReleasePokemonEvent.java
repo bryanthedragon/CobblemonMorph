@@ -27,17 +27,17 @@ import java.util.UUID
  * @author Polymeta
  * @since March 22nd, 2023
  */
-interface ReleasePokemonEvent {
+public interface ReleasePokemonEvent {
 
     /**
      * The [ServerPlayer] that is releasing the Pokémon.
      */
-    val player: ServerPlayer
+    val ServerPlayer player
 
     /**
      * The [Pokemon] being released.
      */
-    val pokemon: Pokemon
+    val Pokemon pokemon
 
     /**
      * The [PokemonStore] from which the Pokémon is being released from.
@@ -62,8 +62,8 @@ interface ReleasePokemonEvent {
      * For the event that is fired after all the calculations took place see [ReleasePokemonEvent.Post].
      */
     class Pre(
-        override val player: ServerPlayer,
-        override val pokemon: Pokemon,
+        override val ServerPlayer player,
+        override val Pokemon pokemon,
         override val storage: PokemonStore<*>
     ) : ReleasePokemonEvent, Cancelable() {
         val functions = moLangFunctionMap(cancelFunc)
@@ -73,8 +73,8 @@ interface ReleasePokemonEvent {
      * Fired after a player released a Pokémon from their pc or party.
      */
     class Post(
-        override val player: ServerPlayer,
-        override val pokemon: Pokemon,
+        override val ServerPlayer player,
+        override val Pokemon pokemon,
         override val storage: PokemonStore<*>
     ) : ReleasePokemonEvent
 }

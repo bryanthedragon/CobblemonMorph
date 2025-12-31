@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.interact.partyselect.PartySelectGUI
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.callback.OpenPartyCallbackPacket
 import net.minecraft.client.Minecraft
-final class OpenPartyCallbackHandler : ClientNetworkPacketHandler<OpenPartyCallbackPacket> {
-    override fun handle(packet: OpenPartyCallbackPacket, client: Minecraft) {
+public final class OpenPartyCallbackHandler : ClientNetworkPacketHandler<OpenPartyCallbackPacket> {
+    override fun handle(packet: OpenPartyCallbackPacket, Minecraft client) {
         client.setScreen(
             PartySelectGUI(
                 title = packet.title,

@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isIn
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class TirtougaModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
+public class TirtougaModel (root: ModelPart) : PokemonPosableModel(root), HeadedFrame {
     override val rootPart = root.registerChildWithAllChildren("tirtouga")
     override val head = getPart("head")
 

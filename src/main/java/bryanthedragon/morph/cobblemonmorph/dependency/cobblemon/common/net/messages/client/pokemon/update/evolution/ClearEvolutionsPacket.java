@@ -13,19 +13,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ClearEvolutionsPacket(pokemon: () -> Pokemon?) : PokemonUpdatePacket<ClearEvolutionsPacket>(pokemon) {
+public class ClearEvolutionsPacket(pokemon: () -> Pokemon?) : PokemonUpdatePacket<ClearEvolutionsPacket>(pokemon) {
 
     override val id = ID
 
-    override fun encodeDetails(buffer: RegistryFriendlyByteBuf) {}
+    override fun encodeDetails(RegistryFriendlyByteBuf buffer) {}
 
     override fun applyToPokemon() {
         this.pokemon()?.evolutionProxy?.client()?.clear()
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("clear_evolutions")
-        fun decode(buffer: RegistryFriendlyByteBuf) = ClearEvolutionsPacket(decodePokemon(buffer))
+        fun decode(RegistryFriendlyByteBuf buffer) = ClearEvolutionsPacket(decodePokemon(buffer))
     }
 
 }

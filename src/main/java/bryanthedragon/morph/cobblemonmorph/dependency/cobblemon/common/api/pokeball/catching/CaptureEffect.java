@@ -6,11 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching;
 
-
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import net.minecraft.world.entity.LivingEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import net.minecraft.world.entity.LivingEntity;
 
 /**
  * Represents an effect triggered by a Pokeball after a successful capture.
@@ -19,7 +18,7 @@ import net.minecraft.world.entity.LivingEntity
  * @author Licious
  * @since May 7th, 2022
  */
-fun interface CaptureEffect {
+public interface CaptureEffect {
 
     /**
      * Apply this capture effect.
@@ -27,6 +26,6 @@ fun interface CaptureEffect {
      * @param thrower The [LivingEntity] that threw the Pokéball.
      * @param pokemon The [Pokemon] being affected.
      */
-    fun apply(thrower: LivingEntity, pokemon: Pokemon)
+    fun apply(LivingEntity thrower, Pokemon pokemon){}
 
 }

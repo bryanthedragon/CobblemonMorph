@@ -13,7 +13,7 @@ import net.minecraft.core.Holder
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.biome.Biome
 
-interface BerrySpawnCondition {
+public interface BerrySpawnCondition {
     fun getGroveSize(random: RandomSource): Int
 
     fun canSpawn(berry: Berry, biome: Holder<Biome>): Boolean

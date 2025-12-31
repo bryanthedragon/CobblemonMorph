@@ -21,10 +21,10 @@ import net.minecraft.world.item.DyeColor
  * @author Hiroku
  * @since March 20th, 2025
  */
-class FoodColourComponent(
+public class FoodColourComponent(
     val colours: List<DyeColor>
 ) {
-    companion object {
+    final class Companion {
         val CODEC: Codec<FoodColourComponent> = DyeColor.CODEC.listOf().xmap(::FoodColourComponent, FoodColourComponent::colours)
         val PACKET_CODEC: StreamCodec<ByteBuf, FoodColourComponent> = ByteBufCodecs.fromCodec(CODEC)
 

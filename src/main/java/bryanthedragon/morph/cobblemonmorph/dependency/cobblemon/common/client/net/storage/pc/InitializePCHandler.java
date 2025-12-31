@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.storage.ClientPC
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.InitializePCPacket
 import net.minecraft.client.Minecraft
-final class InitializePCHandler : ClientNetworkPacketHandler<InitializePCPacket> {
-    override fun handle(packet: InitializePCPacket, client: Minecraft) {
+public final class InitializePCHandler : ClientNetworkPacketHandler<InitializePCPacket> {
+    override fun handle(packet: InitializePCPacket, Minecraft client) {
         CobblemonClient.storage.pcStores[packet.storeID] = ClientPC(packet.storeID, packet.boxCount)
     }
 }

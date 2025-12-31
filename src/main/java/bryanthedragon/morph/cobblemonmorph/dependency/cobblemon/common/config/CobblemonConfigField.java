@@ -6,17 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.config;
 
-@Target(AnnotationTarget.FIELD)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class CobblemonConfigField(
-    val category: Category,
-    val lang: String,
-    val side: CobblemonConfigSide,
-) {
-    enum class CobblemonConfigSide {
-        CLIENT,
-        SERVER,
-    }
+public record CobblemonConfigField(Category category, String lang, CobblemonConfigSide side) {
 }

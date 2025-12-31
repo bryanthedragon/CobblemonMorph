@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.ke
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.keybind.KeybindCategories
 import com.mojang.blaze3d.platform.InputConstants
 
-// ToDo PartyOverlay#render needs to be replaced back to this keybindfinal class PokeNavigatorBinding : CobblemonPartyLockedKeyBinding(
+// ToDo PartyOverlay#render needs to be replaced back to this keybindpublic final class PokeNavigatorBinding : CobblemonPartyLockedKeyBinding(
     "key.cobblemon.pokenavigator",
     InputConstants.Type.KEYSYM,
     InputConstants.KEY_N,
@@ -25,7 +25,7 @@ import com.mojang.blaze3d.platform.InputConstants
         // Minecraft.getInstance().setScreen(PokeNav())
         try {
             Summary.open(CobblemonClient.storage.party.slots, true, CobblemonClient.storage.selectedSlot)
-        } catch (e: Exception) {
+        } catch (Exception e) {
             Cobblemon.LOGGER.debug("Failed to open the summary from the PokeNav keybind", e)
         }
     }

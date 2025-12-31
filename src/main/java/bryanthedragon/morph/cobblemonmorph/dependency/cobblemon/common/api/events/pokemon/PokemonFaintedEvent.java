@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * Event that is fired when a Pokémon has fainted
  */
 record PokemonFaintedEvent(
-    val pokemon: Pokemon,
+    val Pokemon pokemon,
     var faintedTimer: Int
 ) {
     val context = mutableMapOf(

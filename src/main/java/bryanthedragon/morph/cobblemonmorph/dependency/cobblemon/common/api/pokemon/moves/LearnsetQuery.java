@@ -19,9 +19,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
  */
 fun interface LearnsetQuery {
 
-    fun canLearn(move: MoveTemplate, learnset: Learnset): Boolean
+    fun canLearn(MoveTemplate move, learnset: Learnset): Boolean
 
-    companion object {
+    final class Companion {
 
         val ANY = LearnsetQuery { move, learnset ->
             learnset.levelUpMoves.values.any { it.contains(move) }

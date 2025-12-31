@@ -19,11 +19,11 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeNullable
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class NatureUpdatePacket(pokemon: () -> Pokemon?, val nature: Nature?, val minted: Boolean) : PokemonUpdatePacket<NatureUpdatePacket>(pokemon) {
+public class NatureUpdatePacket(pokemon: () -> Pokemon?, val nature: Nature?, val minted: Boolean) : PokemonUpdatePacket<NatureUpdatePacket>(pokemon) {
 
     override val id = ID
 
-    override fun encodeDetails(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeDetails(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(nature) { _, v -> buffer.writeIdentifier(v.name) }
         buffer.writeBoolean(this.minted)
     }
@@ -49,9 +49,9 @@ class NatureUpdatePacket(pokemon: () -> Pokemon?, val nature: Nature?, val minte
         }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("nature_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = NatureUpdatePacket(decodePokemon(buffer), buffer.readNullable { Natures.getNature(buffer.readIdentifier()) }, buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = NatureUpdatePacket(decodePokemon(buffer), buffer.readNullable { Natures.getNature(buffer.readIdentifier()) }, buffer.readBoolean())
     }
 
 }

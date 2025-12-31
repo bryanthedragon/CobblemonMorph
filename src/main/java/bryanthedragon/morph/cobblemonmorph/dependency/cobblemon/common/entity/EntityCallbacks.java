@@ -34,8 +34,8 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since July 26th, 2025
  */
-class EntityCallbacks(val entity: Entity) : HashMap<ResourceLocation, MutableList<ResourceLocation>>() {
-    companion object {
+public class EntityCallbacks(val Entity entity) : HashMap<ResourceLocation, MutableList<ResourceLocation>>() {
+    final class Companion {
         val HIT_BY_POKEBALL = cobblemonResource("hit_by_pokeball")
         val SAW_ENTITY = cobblemonResource("saw_entity")
         val HURT = cobblemonResource("hurt")

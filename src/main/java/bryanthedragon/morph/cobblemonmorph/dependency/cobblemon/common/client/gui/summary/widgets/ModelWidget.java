@@ -22,9 +22,9 @@ import net.minecraft.network.chat.Component
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class ModelWidget(
+public class ModelWidget(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     pokemon: RenderablePokemon,
     val baseScale: Float = 2.7F,
     var rotationY: Float = 35F,
@@ -33,7 +33,7 @@ class ModelWidget(
     val shouldFollowCursor: Boolean = false,
 ): SoundlessWidget(pX, pY, pWidth, pHeight, Component.literal("Summary - ModelWidget")) {
 
-    companion object {
+    final class Companion {
         var render = true
         const val MAX_SECONDS_LOOKING = 6L
     }

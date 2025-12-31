@@ -21,17 +21,17 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import kotlin.time.measureTime
 
-class SacLeavesSensor : Sensor<PokemonEntity>(120) {
+public class SacLeavesSensor : Sensor<PokemonEntity>(120) {
 
     override fun requires() = setOf(CobblemonMemories.NEARBY_SACC_LEAVES)
 
-    override fun doTick(world: ServerLevel, entity: PokemonEntity) {
+    override fun doTick(ServerLevel world, entity: PokemonEntity) {
         val brain = entity.brain
 
         val searchRadius = 7
         val tooFarDistance = 30
         val wayTooFarDistance = 64
-        val currPos: BlockPos? = brain.getMemorySafely(CobblemonMemories.NEARBY_SACC_LEAVES).orElse(null)
+        val curr(BlockPos pos? = brain.getMemorySafely(CobblemonMemories.NEARBY_SACC_LEAVES).orElse(null)
 
         if (currPos != null && isValidLeafBlock(entity.level().getBlockState(currPos))) {
             val distance = entity.distanceTo(currPos)
@@ -43,7 +43,7 @@ class SacLeavesSensor : Sensor<PokemonEntity>(120) {
         }
 
         val centerPos = entity.blockPosition()
-        var leavesPos: BlockPos? = null
+        var leaves(BlockPos pos? = null
         var shortestDist = Double.MAX_VALUE
         BlockPos.betweenClosedStream(
             centerPos.offset(-searchRadius, -2, -searchRadius),
@@ -66,7 +66,7 @@ class SacLeavesSensor : Sensor<PokemonEntity>(120) {
         }
     }
 
-    private fun isValidLeafBlock(state: BlockState): Boolean {
+    private fun isValidLeafBlock(BlockState state): Boolean {
         if (state.block !is SaccharineLeafBlock) return false
         if (state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(
                 BlockStateProperties.WATERLOGGED

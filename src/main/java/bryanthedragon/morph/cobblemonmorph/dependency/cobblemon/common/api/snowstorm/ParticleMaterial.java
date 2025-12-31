@@ -8,7 +8,7 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.snowstorm
 
-enum class ParticleMaterial {
+public enum ParticleMaterial {
     ALPHA,
     OPAQUE,
     BLEND,

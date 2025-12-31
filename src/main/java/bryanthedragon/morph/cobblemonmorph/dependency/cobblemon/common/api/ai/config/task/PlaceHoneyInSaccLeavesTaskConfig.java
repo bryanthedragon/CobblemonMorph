@@ -25,8 +25,8 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.phys.Vec3
 
-class PlaceHoneyInSaccLeavesTaskConfig : SingleTaskConfig {
-    companion object {
+public class PlaceHoneyInSaccLeavesTaskConfig : SingleTaskConfig {
+    final class Companion {
         const val POLLINATE = "pollinate"
         const val MIN_DURATION : Int = 300
         const val MAX_DURATION : Int = 400
@@ -35,12 +35,12 @@ class PlaceHoneyInSaccLeavesTaskConfig : SingleTaskConfig {
 
     val condition = booleanVariable(POLLINATE, "can_pollinate", true).asExpressible()
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {
@@ -63,24 +63,24 @@ class PlaceHoneyInSaccLeavesTaskConfig : SingleTaskConfig {
             var lastSoundPlayedTick = 0
             var hoverPos: Vec3? = null
 
-            override fun checkExtraStartConditions(level: ServerLevel, owner: LivingEntity): Boolean {
+            override fun checkExtraStartConditions(ServerLevel level, owner: LivingEntity): Boolean {
                 if (level.isNight || level.isRaining || !(entity.brain.getMemorySafely(CobblemonMemories.HAS_NECTAR).orElse(false))) return false
                 val optionalBlockPos = entity.brain.getMemorySafely(CobblemonMemories.NEARBY_SACC_LEAVES)
                 if (!optionalBlockPos.isPresent || level.getBlockState(optionalBlockPos.get()).block != CobblemonBlocks.SACCHARINE_LEAVES) return false
                 return Vec3.atCenterOf(optionalBlockPos.get()).distanceTo(entity.position()) <= 0.6
             }
 
-            override fun canStillUse(level: ServerLevel, entity: LivingEntity, gameTime: Long): Boolean {
+            override fun canStillUse(ServerLevel level, LivingEntity entity, gameTime: Long): Boolean {
                 return checkExtraStartConditions(level, entity) && entity.brain.activeActivities.indexOf(
                     CobblemonActivities.POKEMON_POLLINATION) != -1
             }
 
-            override fun start(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
+            override fun start(ServerLevel level, LivingEntity entity, gameTime: Long) {
                 super.start(level, entity, gameTime)
                 hoverPos = null
             }
 
-            override fun tick(level: ServerLevel, owner: LivingEntity, gameTime: Long) {
+            override fun tick(ServerLevel level, owner: LivingEntity, gameTime: Long) {
                 ++successfulPollinationTicks
                 if (entity.random.nextFloat() < 0.05f && successfulPollinationTicks > this.lastSoundPlayedTick + 60) {
                     this.lastSoundPlayedTick = successfulPollinationTicks
@@ -107,7 +107,7 @@ class PlaceHoneyInSaccLeavesTaskConfig : SingleTaskConfig {
                 }
             }
 
-            override fun stop(level: ServerLevel, entity: LivingEntity, gameTime: Long) {
+            override fun stop(ServerLevel level, LivingEntity entity, gameTime: Long) {
                 if (successfulPollinationTicks > REQUIRED_SUCCESSFUL_POLLINATION_TICKS) {
                     val blockPos = entity.brain.getMemorySafely(CobblemonMemories.NEARBY_SACC_LEAVES).orElse(null)
                     blockPos?.let {

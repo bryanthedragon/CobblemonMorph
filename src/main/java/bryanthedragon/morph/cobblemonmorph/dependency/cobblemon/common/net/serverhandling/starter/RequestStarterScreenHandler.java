@@ -15,8 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class RequestStarterScreenHandler : ServerNetworkPacketHandler<RequestStarterScreenPacket> {
-    override fun handle(packet: RequestStarterScreenPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class RequestStarterScreenHandler : ServerNetworkPacketHandler<RequestStarterScreenPacket> {
+    override fun handle(packet: RequestStarterScreenPacket, server: MinecraftServer, ServerPlayer player) {
         val playerData = Cobblemon.playerDataManager.getGenericData(player)
         if (playerData.starterSelected) {
             return player.sendSystemMessage(lang("ui.starter.alreadyselected").red())

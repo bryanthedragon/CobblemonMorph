@@ -21,4 +21,4 @@ import net.minecraft.world.entity.Entity
  * @author Hiroku
  * @since April 22nd, 2023
  */
-class SpawnEvent<T : Entity>(val entity: T, val spawnablePosition: SpawnablePosition) : Cancelable()
+public class SpawnEvent<T : Entity>(val entity: T, val spawnablePosition: SpawnablePosition) : Cancelable()

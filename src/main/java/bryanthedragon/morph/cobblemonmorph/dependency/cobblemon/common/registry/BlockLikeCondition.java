@@ -20,11 +20,11 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since July 15th, 2022
  */
-class BlockTagCondition(tag: TagKey<Block>) : RegistryLikeTagCondition<Block>(tag)
+public class BlockTagCondition(tag: TagKey<Block>) : RegistryLikeTagCondition<Block>(tag)
 /**
  * An identifier condition for blocks. Built off of [RegistryLikeIdentifierCondition].
  *
  * @author Hiroku
  * @since July 15th, 2022
  */
-class BlockIdentifierCondition(identifier: ResourceLocation) : RegistryLikeIdentifierCondition<Block>(identifier)
+public class BlockIdentifierCondition(ResourceLocation identifier) : RegistryLikeIdentifierCondition<Block>(identifier)

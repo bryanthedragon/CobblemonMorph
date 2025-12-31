@@ -17,13 +17,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class StatusUpdatePacket(pokemon: () -> Pokemon?, value: PersistentStatus?): SingleUpdatePacket<PersistentStatus?, StatusUpdatePacket>(pokemon, value) {
+public class StatusUpdatePacket(pokemon: () -> Pokemon?, value: PersistentStatus?): SingleUpdatePacket<PersistentStatus?, StatusUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(this.value) { pb, value -> pb.writeIdentifier(value.name) }
     }
 
-    override fun set(pokemon: Pokemon, value: PersistentStatus?) {
+    override fun set(Pokemon pokemon, value: PersistentStatus?) {
         if (value == null) {
             pokemon.status = null
             return
@@ -31,9 +31,9 @@ class StatusUpdatePacket(pokemon: () -> Pokemon?, value: PersistentStatus?): Sin
         pokemon.applyStatus(value)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("status_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): StatusUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): StatusUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val identifier = buffer.readNullable(ByteBuf::readIdentifier) ?: return StatusUpdatePacket(pokemon, null)
             val status = Statuses.getStatus(identifier) as? PersistentStatus

@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Move
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.Move;
 
 /**
  * Wrapper for [Move] containing battle only variables
@@ -16,6 +16,6 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
  * @since January 16th, 2022
  * @author Deltric
  */
-class BattleMove(val move : Move) {
+public class BattleMove(val move : Move) {
     var disabled : Boolean = false
 }

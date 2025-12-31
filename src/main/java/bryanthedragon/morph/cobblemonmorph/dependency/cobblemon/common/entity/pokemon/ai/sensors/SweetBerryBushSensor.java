@@ -20,9 +20,9 @@ import net.minecraft.world.level.block.SweetBerryBushBlock
 import net.minecraft.world.level.block.state.BlockState
 import java.util.*
 
-class SweetBerryBushSensor : Sensor<LivingEntity>(SCAN_INTERVAL) {
+public class SweetBerryBushSensor : Sensor<LivingEntity>(SCAN_INTERVAL) {
 
-    override fun doTick(level: ServerLevel, entity: LivingEntity) {
+    override fun doTick(ServerLevel level, LivingEntity entity) {
         val pos = entity.blockPosition()
         val isDisabled = entity.brain.getMemory(CobblemonMemories.DISABLE_WALK_TO_BERRY_BUSH).orElse(false)
         if (isDisabled) return
@@ -39,13 +39,13 @@ class SweetBerryBushSensor : Sensor<LivingEntity>(SCAN_INTERVAL) {
         return setOf(CobblemonMemories.NEARBY_SWEET_BERRY_BUSH)
     }
 
-    private fun findNearestBush(level: ServerLevel, origin: BlockPos): Optional<BlockPos> {
+    private fun findNearestBush(ServerLevel level, origin: BlockPos): Optional<BlockPos> {
         var closest: BlockPos? = null
         var closestDistSq = Double.MAX_VALUE
 
         for (pos in BlockPos.betweenClosed(origin.offset(-SCAN_RADIUS_HORIZONTAL, 1 - SCAN_RADIUS_VERTICAL, -SCAN_RADIUS_HORIZONTAL),
                 origin.offset(SCAN_RADIUS_HORIZONTAL, SCAN_RADIUS_VERTICAL - 1, SCAN_RADIUS_HORIZONTAL))) {
-            val state: BlockState = level.getBlockState(pos)
+            val BlockState state = level.getBlockState(pos)
             if ((state.`is`(Blocks.SWEET_BERRY_BUSH) && state.getValue(SweetBerryBushBlock.AGE) >= 2)
                     || (CaveVines.hasGlowBerries(state))) {
                 val distSq = pos.distSqr(origin)
@@ -59,7 +59,7 @@ class SweetBerryBushSensor : Sensor<LivingEntity>(SCAN_INTERVAL) {
         return Optional.ofNullable(closest)
     }
 
-    companion object {
+    final class Companion {
         const val SCAN_RADIUS_HORIZONTAL = 10
         const val SCAN_RADIUS_VERTICAL = 1
         const val SCAN_INTERVAL = 40

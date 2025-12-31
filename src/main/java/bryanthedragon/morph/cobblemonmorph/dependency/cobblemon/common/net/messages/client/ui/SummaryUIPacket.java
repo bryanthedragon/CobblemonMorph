@@ -14,17 +14,17 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class SummaryUIPacket internal constructor(val pokemon: List<Pokemon>, val editable: Boolean): NetworkPacket<SummaryUIPacket>, UnsplittablePacket {
+public class SummaryUIPacket internal constructor(val pokemon: List<Pokemon>, val editable: Boolean): NetworkPacket<SummaryUIPacket>, UnsplittablePacket {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(editable)
         buffer.writeCollection(this.pokemon) { _, pokemon -> Pokemon.S2C_CODEC.encode(buffer, pokemon) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("summary_ui")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SummaryUIPacket(buffer.readList { _ -> Pokemon.S2C_CODEC.decode(buffer) }, buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = SummaryUIPacket(buffer.readList { _ -> Pokemon.S2C_CODEC.decode(buffer) }, buffer.readBoolean())
     }
 }

@@ -35,33 +35,34 @@ import java.lang.reflect.Type
  * Adapter for deserializing [RidingBehaviourSettings] types.
  *
  * @author landonjw
- */final class RidingBehaviourSettingsAdapter : JsonDeserializer<RidingBehaviourSettings?> {
+ */
+public final class RidingBehaviourSettingsAdapter : JsonDeserializer<RidingBehaviourSettings?> {
     val types: MutableMap<ResourceLocation, Class<out RidingBehaviourSettings>> = mutableMapOf(
-        BirdBehaviour.KEY to BirdSettings::class.java,
-        DolphinBehaviour.KEY to DolphinSettings::class.java,
-        HorseBehaviour.KEY to HorseSettings::class.java,
-        BoatBehaviour.KEY to BoatSettings::class.java,
-        GliderBehaviour.KEY to GliderSettings::class.java,
-        HelicopterBehaviour.KEY to HelicopterSettings::class.java,
-        JetBehaviour.KEY to JetSettings::class.java,
-        BurstBehaviour.KEY to BurstSettings::class.java,
-        VehicleBehaviour.KEY to VehicleSettings::class.java,
-        MinekartBehaviour.KEY to MinekartSettings::class.java,
-        HoverBehaviour.KEY to HoverSettings::class.java,
-        RocketBehaviour.KEY to RocketSettings::class.java,
-        SubmarineBehaviour.KEY to SubmarineSettings::class.java,
-        CompositeBehaviour.KEY to CompositeSettings::class.java,
+        BirdBehaviour.KEY to BirdSettings.class,
+        DolphinBehaviour.KEY to DolphinSettings.class,
+        HorseBehaviour.KEY to HorseSettings.class,
+        BoatBehaviour.KEY to BoatSettings.class,
+        GliderBehaviour.KEY to GliderSettings.class,
+        HelicopterBehaviour.KEY to HelicopterSettings.class,
+        JetBehaviour.KEY to JetSettings.class,
+        BurstBehaviour.KEY to BurstSettings.class,
+        VehicleBehaviour.KEY to VehicleSettings.class,
+        MinekartBehaviour.KEY to MinekartSettings.class,
+        HoverBehaviour.KEY to HoverSettings.class,
+        RocketBehaviour.KEY to RocketSettings.class,
+        SubmarineBehaviour.KEY to SubmarineSettings.class,
+        CompositeBehaviour.KEY to CompositeSettings.class,
 
         /*
          Strategy registration. if you do not register a strategy here, it will not be deserialized.
          Register to CompositeSettings if you do not need to define a subclass.
          */
-        FallStrategy.key to FallCompositeSettings::class.java,
-        JumpStrategy.key to CompositeSettings::class.java,
-        RunStrategy.key to CompositeSettings::class.java,
+        FallStrategy.key to FallCompositeSettings.class,
+        JumpStrategy.key to CompositeSettings.class,
+        RunStrategy.key to CompositeSettings.class,
     )
 
-    override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): RidingBehaviourSettings? {
+    override fun deserialize(JsonElement jElement, Type type, JsonDeserializationContext context): RidingBehaviourSettings? {
         val root = element.asJsonObject
         val key = root.get("key").asString
         val keyIdentifier = key.asIdentifierDefaultingNamespace()

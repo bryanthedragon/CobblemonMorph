@@ -18,18 +18,18 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since October 7th, 2023
  */
-class TradeableUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : SingleUpdatePacket<Boolean, TradeableUpdatePacket>(pokemon, value) {
+public class TradeableUpdatePacket(pokemon: () -> Pokemon?, value: Boolean) : SingleUpdatePacket<Boolean, TradeableUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeBoolean(value)
     }
 
-    override fun set(pokemon: Pokemon, value: Boolean) {
+    override fun set(Pokemon pokemon, value: Boolean) {
         pokemon.tradeable = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("tradeable_update")
-        fun decode(buffer: RegistryFriendlyByteBuf) = TradeableUpdatePacket(decodePokemon(buffer), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = TradeableUpdatePacket(decodePokemon(buffer), buffer.readBoolean())
     }
 }

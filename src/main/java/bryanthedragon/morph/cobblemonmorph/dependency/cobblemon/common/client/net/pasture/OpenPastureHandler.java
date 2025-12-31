@@ -15,8 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gu
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.pc.PCGUI
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.pasture.OpenPasturePacket
 import net.minecraft.client.Minecraft
-final class OpenPastureHandler : ClientNetworkPacketHandler<OpenPasturePacket> {
-    override fun handle(packet: OpenPasturePacket, client: Minecraft) {
+public final class OpenPastureHandler : ClientNetworkPacketHandler<OpenPasturePacket> {
+    override fun handle(packet: OpenPasturePacket, Minecraft client) {
 
         val pcConfiguration = PasturePCGUIConfiguration(
             pastureId = packet.pastureId,

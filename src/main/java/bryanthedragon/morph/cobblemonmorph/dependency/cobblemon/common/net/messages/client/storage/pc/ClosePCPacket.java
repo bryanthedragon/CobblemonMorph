@@ -26,16 +26,16 @@ import java.util.UUID
  * @author Hiroku
  * @since June 20th, 2022
  */
-class ClosePCPacket(val storeID: UUID?) : NetworkPacket<ClosePCPacket> {
+public class ClosePCPacket(val UUID storeID?) : NetworkPacket<ClosePCPacket> {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(this.storeID) { pb, value -> pb.writeUUID(value) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("close_pc")
-        fun decode(buffer: RegistryFriendlyByteBuf): ClosePCPacket = ClosePCPacket(buffer.readNullable { it.readUUID() })
+        fun decode(RegistryFriendlyByteBuf buffer): ClosePCPacket = ClosePCPacket(buffer.readNullable { it.readUUID() })
     }
 }

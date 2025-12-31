@@ -21,7 +21,7 @@ import mezz.jei.api.runtime.IJeiRuntime
 import net.minecraft.resources.ResourceLocation
 
 @JeiPlugin
-class CobblemonJeiPlugin : IModPlugin {
+public class CobblemonJeiPlugin : IModPlugin {
     private val jeiProviders: Set<CobblemonJeiProvider> = setOf(
         BerryMutationProvider(),
         CampfirePotJeiProvider(),
@@ -54,7 +54,7 @@ class CobblemonJeiPlugin : IModPlugin {
         CobblemonJeiPlugin.jeiRuntime = jeiRuntime
     }
 
-    companion object {
+    final class Companion {
         var jeiRuntime: IJeiRuntime? = null
         val ID = cobblemonResource("jei_plugin")
     }

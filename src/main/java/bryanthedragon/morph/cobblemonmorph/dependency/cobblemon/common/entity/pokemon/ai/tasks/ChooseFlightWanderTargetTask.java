@@ -16,7 +16,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.entity.ai.util.HoverRandomPos
-final class ChooseFlightWanderTargetTask {
+public final class ChooseFlightWanderTargetTask {
     fun create(chance: Int, horizontalRange: Int, verticalRange: Int, flySpeed: Float, completionRange: Int): OneShot<PathfinderMob> {
         return BehaviorBuilder.create {
             it.group(

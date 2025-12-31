@@ -22,23 +22,23 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since October 21st, 2023
  */
-class PlayPosableAnimationPacket(
+public class PlayPosableAnimationPacket(
     val entityId: Int,
     val animation: Set<String>,
     val expressions: List<String>
 ) : NetworkPacket<PlayPosableAnimationPacket> {
-    override val id: ResourceLocation = ID
+    override val ResourceLocation id = ID
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("play_posable_animation")
-        fun decode(buffer: RegistryFriendlyByteBuf) = PlayPosableAnimationPacket(
+        fun decode(RegistryFriendlyByteBuf buffer) = PlayPosableAnimationPacket(
             buffer.readInt(),
             buffer.readList { buffer.readString() }.toSet(),
             buffer.readList { buffer.readString() }
         )
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(entityId)
         buffer.writeCollection(animation) { pb, value -> pb.writeString(value) }
         buffer.writeCollection(expressions) { pb, value -> pb.writeString(value) }

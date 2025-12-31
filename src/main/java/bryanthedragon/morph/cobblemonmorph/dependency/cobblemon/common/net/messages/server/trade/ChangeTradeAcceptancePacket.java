@@ -15,14 +15,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
 
-class ChangeTradeAcceptancePacket(val pokemonOfferId: UUID, val newAcceptance: Boolean) : NetworkPacket<ChangeTradeAcceptancePacket> {
-    companion object {
+public class ChangeTradeAcceptancePacket(val pokemonOfferId: UUID, val newAcceptance: Boolean) : NetworkPacket<ChangeTradeAcceptancePacket> {
+    final class Companion {
         val ID = cobblemonResource("accept_trade")
-        fun decode(buffer: RegistryFriendlyByteBuf) = ChangeTradeAcceptancePacket(buffer.readUUID(), buffer.readBoolean())
+        fun decode(RegistryFriendlyByteBuf buffer) = ChangeTradeAcceptancePacket(buffer.readUUID(), buffer.readBoolean())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(pokemonOfferId)
         buffer.writeBoolean(newAcceptance)
     }

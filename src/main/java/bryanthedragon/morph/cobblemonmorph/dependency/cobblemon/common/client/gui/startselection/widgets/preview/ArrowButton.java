@@ -17,15 +17,15 @@ import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class ArrowButton(
+public class ArrowButton(
     pX: Int, pY: Int,
-    pWidth: Int, pHeight: Int,
+    pInt width, pInt height,
     right: Boolean,
     private val texture: ResourceLocation = if (right) RIGHT_ARROW_BUTTON_RESOURCE else LEFT_ARROW_BUTTON_RESOURCE,
     onPress: OnPress
 ) : Button(pX, pY, pWidth, pHeight, Component.empty(), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         private val RIGHT_ARROW_BUTTON_RESOURCE = cobblemonResource("textures/gui/starterselection/starterselection_arrow_right.png")
         private val LEFT_ARROW_BUTTON_RESOURCE = cobblemonResource("textures/gui/starterselection/starterselection_arrow_left.png")
 

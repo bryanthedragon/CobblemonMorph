@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.properties.WoodType
  * Represents the various wooden boats in Cobblemon.
  *
  */
-enum class CobblemonBoatType(val mountedOffset: Float) : StringRepresentable {
+public enum CobblemonBoatType(val mountedOffset: Float) : StringRepresentable {
 
     APRICORN(-0.1f),
     SACCHARINE(-.01f);
@@ -44,7 +44,7 @@ enum class CobblemonBoatType(val mountedOffset: Float) : StringRepresentable {
     /**
      * The base [Block] form of this [CobblemonBoatType].
      */
-    val baseBlock: Block get() = when (this) {
+    val baseBlock block get() = when (this) {
         APRICORN -> CobblemonBlocks.APRICORN_PLANKS
         SACCHARINE -> CobblemonBlocks.SACCHARINE_PLANKS
     }
@@ -60,7 +60,7 @@ enum class CobblemonBoatType(val mountedOffset: Float) : StringRepresentable {
 
     override fun getSerializedName(): String = this.name.lowercase()
 
-    companion object {
+    final class Companion {
 
         internal fun ofOrdinal(ordinal: Int) = entries[ordinal]
 

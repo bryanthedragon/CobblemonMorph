@@ -7,7 +7,7 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.permission
-final class CobblemonPermissions {
+public final class CobblemonPermissions {
 
     private const val COMMAND_PREFIX = "command."
     private val permissions = arrayListOf<Permission>()

@@ -24,7 +24,7 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since August 1st, 2022
  */
-record StarterChosenEvent(val player: ServerPlayer, val properties: PokemonProperties, var pokemon: Pokemon) : Cancelable() {
+record StarterChosenEvent(val ServerPlayer player, val properties: PokemonProperties, var Pokemon pokemon) : Cancelable() {
     /**
      * Returns a context map for use in MoLang functions.
      */

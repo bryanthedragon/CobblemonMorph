@@ -16,7 +16,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.inventory.MenuType
-final class CobblemonMenuType : PlatformRegistry<Registry<MenuType<*>>, ResourceKey<Registry<MenuType<*>>>, MenuType<*>>() {
+public final class CobblemonMenuType : PlatformRegistry<Registry<MenuType<*>>, ResourceKey<Registry<MenuType<*>>>, MenuType<*>>() {
 
     val COOKING_POT = MenuType.register("cooking_pot", ::CookingPotMenu)
 

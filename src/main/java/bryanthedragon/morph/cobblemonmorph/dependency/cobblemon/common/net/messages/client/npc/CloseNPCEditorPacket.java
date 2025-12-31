@@ -18,11 +18,11 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since February 4th, 2024
  */
-class CloseNPCEditorPacket : NetworkPacket<CloseNPCEditorPacket> {
-    companion object {
+public class CloseNPCEditorPacket : NetworkPacket<CloseNPCEditorPacket> {
+    final class Companion {
         val ID = cobblemonResource("close_npc_editor")
-        fun decode(buffer: RegistryFriendlyByteBuf) = CloseNPCEditorPacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = CloseNPCEditorPacket()
     }
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
 }

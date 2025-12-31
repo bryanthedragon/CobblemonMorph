@@ -25,7 +25,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import java.util.UUID
 import net.minecraft.resources.ResourceLocation
 
-class DialogueDTO : Encodable, Decodable {
+public class DialogueDTO : Encodable, Decodable {
     lateinit var dialogueId: UUID
     lateinit var background: ResourceLocation
     var speakers: Map<String, DialogueSpeakerDTO>? = null
@@ -33,7 +33,7 @@ class DialogueDTO : Encodable, Decodable {
     lateinit var dialogueInput: DialogueInputDTO
 
     constructor()
-    constructor(activeDialogue: ActiveDialogue, includeFaces: Boolean) {
+    constructor(ActiveDialogue activeDialogue, includeFaces: Boolean) {
         this.dialogueId = activeDialogue.dialogueId
         this.speakers = if (includeFaces) activeDialogue.dialogueReference.speakers.mapNotNull { (key, value) ->
             val name = value.name?.invoke(activeDialogue)
@@ -65,7 +65,7 @@ class DialogueDTO : Encodable, Decodable {
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(dialogueId)
         currentPageDTO.encode(buffer)
         dialogueInput.encode(buffer)
@@ -102,7 +102,7 @@ class DialogueDTO : Encodable, Decodable {
         }
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         dialogueId = buffer.readUUID()
         currentPageDTO = DialoguePageDTO()
         currentPageDTO.decode(buffer)

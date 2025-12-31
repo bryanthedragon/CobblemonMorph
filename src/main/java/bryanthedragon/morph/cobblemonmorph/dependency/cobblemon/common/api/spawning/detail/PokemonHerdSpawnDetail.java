@@ -29,8 +29,8 @@ import com.google.gson.annotations.SerializedName
  * @author Hiroku
  * @since April 22nd, 2025
  */
-class PokemonHerdSpawnDetail : SpawnDetail() {
-    companion object {
+public class PokemonHerdSpawnDetail : SpawnDetail() {
+    final class Companion {
         val TYPE = "pokemon-herd"
         const val HERD_LEADER = "leader"
     }
@@ -38,16 +38,16 @@ class PokemonHerdSpawnDetail : SpawnDetail() {
     override val type: String = TYPE
     var herdablePokemon = mutableListOf<Herdable>()
     @SerializedName("level", alternate = ["levelRange"])
-    var levelRange: IntRange = 1..100
+    var levelIntRange range = 1..100
     var maxHerdSize = 10
     var minDistanceBetweenSpawns = 1F
 
-    val herdLevelKey: String
+    val herdLevelString Key
         get() = "${id}__LEVEL"
 
     class Herdable {
-        var pokemon: PokemonProperties = PokemonProperties()
-        val levelRange: IntRange? = null
+        var Pokemon pokemonProperties = PokemonProperties()
+        val levelIntRange range? = null
         var levelRangeOffset: IntRange? = null
         var dropTable: DropTable? = null
         var isLeader: Boolean? = null

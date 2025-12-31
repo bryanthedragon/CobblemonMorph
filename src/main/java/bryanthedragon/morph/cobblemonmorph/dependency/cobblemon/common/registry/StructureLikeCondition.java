@@ -20,11 +20,11 @@ import net.minecraft.world.level.levelgen.structure.Structure
  *
  * @property tag The tag to check for the structure to match.
  */
-class StructureTagCondition(tag: TagKey<Structure>) : RegistryLikeTagCondition<Structure>(tag)
+public class StructureTagCondition(tag: TagKey<Structure>) : RegistryLikeTagCondition<Structure>(tag)
 
 /**
  * A [RegistryLikeCondition] that expects an [ResourceLocation] to match.
  *
  * @property identifier The identifier for the structure being referenced.
  */
-class StructureIdentifierCondition(identifier: ResourceLocation) : RegistryLikeIdentifierCondition<Structure>(identifier)
+public class StructureIdentifierCondition(ResourceLocation identifier) : RegistryLikeIdentifierCondition<Structure>(identifier)

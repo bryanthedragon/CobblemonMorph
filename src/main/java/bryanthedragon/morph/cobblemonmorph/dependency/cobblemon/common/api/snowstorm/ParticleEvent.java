@@ -35,12 +35,12 @@ import org.joml.Matrix4f
  * @author Hiroku
  * @since March 2nd, 2024
  */
-class ParticleEvent(
+public class ParticleEvent(
     var particleEffect: EventParticleOptions? = null,
     var soundEffect: EventSoundEffect? = null,
     var expression: ExpressionLike? = null
 ): Encodable, Decodable {
-    companion object {
+    final class Companion {
         val CODEC: Codec<ParticleEvent> = RecordCodecBuilder.create { instance ->
             instance.group(
                 EventParticleOptions.CODEC.optionalFieldOf("particle_effect", null).forGetter { it.particleEffect },
@@ -56,7 +56,7 @@ class ParticleEvent(
         }
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(particleEffect) { pb, effect ->
             pb.writeIdentifier(effect.effect)
             pb.writeEnumConstant(effect.type)
@@ -65,10 +65,10 @@ class ParticleEvent(
         buffer.writeNullable(soundEffect) { pb, effect -> pb.writeIdentifier(effect.sound) }
         buffer.writeNullable(expression) { pb, expr -> pb.writeString(expr.toString()) }
     }
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         particleEffect = buffer.readNullable { pb -> EventParticleOptions(
             pb.readIdentifier(),
-            pb.readEnumConstant(EventParticleOptions.EventParticleType::class.java),
+            pb.readEnumConstant(EventParticleOptions.EventParticleType.class),
             pb.readNullable { pb.readString().asExpressionLike() }
         ) }
         soundEffect = buffer.readNullable { pb -> EventSoundEffect(pb.readIdentifier()) }
@@ -165,12 +165,12 @@ class ParticleEvent(
  * @author Hiroku
  * @since March 2nd, 2024
  */
-class EventParticleOptions(
+public class EventParticleOptions(
     val effect: ResourceLocation,
     val type: EventParticleType,
     val expression: ExpressionLike? = null
 ) {
-    companion object {
+    final class Companion {
         val CODEC = RecordCodecBuilder.create<EventParticleOptions> { instance ->
             instance.group(
                 ResourceLocation.CODEC.fieldOf("effect").forGetter { it.effect },
@@ -201,10 +201,10 @@ class EventParticleOptions(
  * @author Hiroku
  * @since March 2nd, 2024
  */
-class EventSoundEffect(
+public class EventSoundEffect(
     val sound: ResourceLocation,
 ) {
-    companion object {
+    final class Companion {
         val CODEC = RecordCodecBuilder.create<EventSoundEffect> { instance ->
             instance.group(
                 ResourceLocation.CODEC.fieldOf("sound").forGetter { it.sound }

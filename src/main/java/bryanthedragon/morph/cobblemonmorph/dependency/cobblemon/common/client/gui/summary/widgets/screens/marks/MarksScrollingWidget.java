@@ -20,14 +20,14 @@ import net.minecraft.network.chat.Component
 import net.minecraft.util.FastColor
 import net.minecraft.util.Mth
 
-class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> (Unit), val setHoveredMark: (Mark?) -> (Unit)): ScrollingWidget<ScrollSlotRow>(
+public class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> (Unit), val setHoveredMark: (Mark?) -> (Unit)): ScrollingWidget<ScrollSlotRow>(
     width = WIDTH,
     height = HEIGHT,
     left = pX,
     top = pY - HEIGHT,
     slotHeight = SLOT_SIZE + SLOT_SPACING
 ) {
-    companion object {
+    final class Companion {
         const val WIDTH = 119
         const val HEIGHT = 98
         const val SLOT_SIZE = 16
@@ -64,14 +64,14 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
         }
     }
 
-    fun renderEntry(context: GuiGraphics, mouseX: Int, mouseY: Int, index: Int, x: Int, y: Int): Boolean {
+    fun renderEntry(context: GuiGraphics, mouseX: Int, mouseY: Int, Int index, x: Int, y: Int): Boolean {
         val entry =  this.getEntry(index)
         entry.x = x
         entry.y = y
         return entry.renderRow( context, y, x, mouseX, mouseY)
     }
 
-    override fun getEntry(index: Int): ScrollSlotRow = children()[index] as ScrollSlotRow
+    override fun getEntry(Int index): ScrollSlotRow = children()[index] as ScrollSlotRow
 
     override fun renderListItems(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {
         val rowX = rowLeft
@@ -103,7 +103,7 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
         val setSelectedMark : () -> Unit,
         val setHoveredMark: (Mark?) -> Unit
     ): Slot<ScrollSlotRow>() {
-        companion object {
+        final class Companion {
             private val slotResource = cobblemonResource("textures/gui/summary/summary_mark_slot.png")
         }
 
@@ -144,11 +144,11 @@ class MarksScrollingWidget(val pX: Int, val pY: Int, val setSelectedMark: () -> 
 
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             y: Int,
             x: Int,
-            entryWidth: Int,
-            entryHeight: Int,
+            entryInt width,
+            entryInt height,
             mouseX: Int,
             mouseY: Int,
             hovered: Boolean,

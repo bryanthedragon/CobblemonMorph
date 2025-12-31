@@ -18,13 +18,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * @author Hiroku
  * @since July 8th, 2022
  */
-class PokemonSpawnDetailPreset : SpawnDetailPreset() {
-    companion object {
+public class PokemonSpawnDetailPreset : SpawnDetailPreset() {
+    final class Companion {
         const val NAME = "pokemon"
     }
 
-    var pokemon: PokemonProperties? = null
-    var levelRange: IntRange? = null
+    var Pokemon pokemonProperties? = null
+    var levelIntRange range? = null
 
     override fun apply(spawnDetail: SpawnDetail) {
         super.apply(spawnDetail)

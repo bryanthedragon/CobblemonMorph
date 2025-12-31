@@ -6,8 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
-
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.exceptions.CommandSyntaxException
@@ -20,7 +19,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
 fun ResourceLocation.extractTo(directory : File) {
-    val stream = Cobblemon::class.java.getResourceAsStream(String.format("/assets/%s/%s", namespace, path))
+    val stream = Cobblemon.class.getResourceAsStream(String.format("/assets/%s/%s", namespace, path))
         ?: throw Exception("Could not read $this")
     Files.copy(stream, directory.toPath(), StandardCopyOption.REPLACE_EXISTING)
     stream.close()

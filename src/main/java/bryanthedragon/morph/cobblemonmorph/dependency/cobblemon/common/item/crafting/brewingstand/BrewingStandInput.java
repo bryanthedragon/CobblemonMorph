@@ -12,12 +12,12 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.RecipeInput
 
-class BrewingStandInput(
+public class BrewingStandInput(
     private val ingredient: ItemStack,
     private val bottles: List<ItemStack>
 ) : RecipeInput {
 
-    override fun getItem(index: Int): ItemStack? {
+    override fun getItem(Int index): ItemStack? {
         return when (index) {
             0 -> ingredient
             in 1..3 -> bottles.getOrNull(index - 1)

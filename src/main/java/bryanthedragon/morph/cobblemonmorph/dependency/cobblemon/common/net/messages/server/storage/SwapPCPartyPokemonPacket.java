@@ -31,17 +31,17 @@ import java.util.UUID
  * @author Hiroku
  * @since June 20th, 2022
  */
-class SwapPCPartyPokemonPacket(val partyPokemonID: UUID, val partyPosition: PartyPosition, val pcPokemonID: UUID, val pcPosition: PCPosition) : NetworkPacket<SwapPCPartyPokemonPacket> {
+public class SwapPCPartyPokemonPacket(val partyUUID pokemonId, val partyPosition: PartyPosition, val pcUUID pokemonId, val pcPosition: PCPosition) : NetworkPacket<SwapPCPartyPokemonPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(partyPokemonID)
         buffer.writePartyPosition(partyPosition)
         buffer.writeUUID(pcPokemonID)
         buffer.writePCPosition(pcPosition)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("swap_pc_party_pokemon")
-        fun decode(buffer: RegistryFriendlyByteBuf): SwapPCPartyPokemonPacket = SwapPCPartyPokemonPacket(buffer.readUUID(), buffer.readPartyPosition(), buffer.readUUID(), buffer.readPCPosition())
+        fun decode(RegistryFriendlyByteBuf buffer): SwapPCPartyPokemonPacket = SwapPCPartyPokemonPacket(buffer.readUUID(), buffer.readPartyPosition(), buffer.readUUID(), buffer.readPCPosition())
     }
 }

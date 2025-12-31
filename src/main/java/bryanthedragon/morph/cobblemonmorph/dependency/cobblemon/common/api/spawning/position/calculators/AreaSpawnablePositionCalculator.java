@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState
  * @author Hiroku
  * @since January 31st, 2022
  */
-interface AreaSpawnablePositionCalculator<O : AreaSpawnablePosition> : SpawnablePositionCalculator<AreaSpawningInput, O> {
+public interface AreaSpawnablePositionCalculator<O : AreaSpawnablePosition> : SpawnablePositionCalculator<AreaSpawningInput, O> {
     /**
      * Whether this spawnable position calculator is likely to provide a value for this location.
      *
@@ -57,4 +57,4 @@ interface AreaSpawnablePositionCalculator<O : AreaSpawnablePosition> : Spawnable
 
 }
 
-open class AreaSpawningInput(val spawner: Spawner, var position: BlockPos, val zone: SpawningZone) : SpawnablePositionInput(zone.cause, zone.world)
+open class AreaSpawningInput(val spawner: Spawner, var BlockPos position, val zone: SpawningZone) : SpawnablePositionInput(zone.cause, zone.world)

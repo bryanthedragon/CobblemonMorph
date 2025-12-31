@@ -23,7 +23,7 @@ import net.minecraft.network.chat.MutableComponent
  * @author Segfault Guy/MeAlam
  * @since March 26th 2023
  */
-interface BattleStartedEvent : BattleEvent {
+public interface BattleStartedEvent : BattleEvent {
     /**
      * The battle that is starting.
      */

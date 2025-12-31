@@ -24,14 +24,14 @@ import java.util.UUID
  * @author Hiroku
  * @since March 12th, 2023
  */
-class OfferTradePacket(val offeredPlayerId: UUID) : NetworkPacket<OfferTradePacket> {
-    companion object {
+public class OfferTradePacket(val offeredPlayerId: UUID) : NetworkPacket<OfferTradePacket> {
+    final class Companion {
         val ID = cobblemonResource("offer_trade")
-        fun decode(buffer: RegistryFriendlyByteBuf) = OfferTradePacket(buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = OfferTradePacket(buffer.readUUID())
     }
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(offeredPlayerId)
     }
 }

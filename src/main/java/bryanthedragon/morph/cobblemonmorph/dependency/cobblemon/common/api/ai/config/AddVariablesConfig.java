@@ -12,9 +12,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ai.Be
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.npc.configuration.MoLangConfigVariable
 import net.minecraft.world.entity.LivingEntity
 
-class AddVariablesConfig(val variables: List<MoLangConfigVariable> = emptyList()) : BehaviourConfig {
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = variables
+public class AddVariablesConfig(val variables: List<MoLangConfigVariable> = emptyList()) : BehaviourConfig {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = variables
 
     // Configuration happens naturally through the override on variables
-    override fun configure(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) {}
+    override fun configure(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) {}
 }

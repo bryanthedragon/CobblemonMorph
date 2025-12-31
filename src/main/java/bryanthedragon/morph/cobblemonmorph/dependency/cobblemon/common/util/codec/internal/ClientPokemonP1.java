@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.MoveSet
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SpeciesFeatures
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeature
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeatureProvider
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.species.provider.SynchronizedSpeciesFeatureProvider;
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.settings.ServerSettings
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.*
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.DataKeys
@@ -31,7 +31,7 @@ import net.minecraft.network.chat.ComponentSerialization
 import java.util.*
 
 internal class ClientPokemonP1(
-    val uuid: UUID,
+    val UUID uuid,
     val species: Species,
     val form: FormData,
     val nickname: Optional<Component>,
@@ -49,7 +49,7 @@ internal class ClientPokemonP1(
     val ability: Ability
 ) : Partial<Pokemon> {
 
-    override fun into(other: Pokemon): Pokemon {
+    override fun into(Pokemon other): Pokemon {
         other.uuid = this.uuid
         // This is done beforehand so the ability is legalized by species/form change
         other.ability = this.ability
@@ -98,7 +98,7 @@ internal class ClientPokemonP1(
         return other
     }
 
-    companion object {
+    final class Companion {
 
         const val FEATURES = "Features"
         const val FEATURE_ID = "${Cobblemon.MODID}:feature_id"
@@ -130,7 +130,7 @@ internal class ClientPokemonP1(
             }
         }
 
-        internal fun from(pokemon: Pokemon): ClientPokemonP1 = ClientPokemonP1(
+        internal fun from(Pokemon pokemon): ClientPokemonP1 = ClientPokemonP1(
             pokemon.uuid,
             pokemon.species,
             pokemon.form,
@@ -149,7 +149,7 @@ internal class ClientPokemonP1(
             pokemon.ability,
         )
 
-        fun collectVisibleFeatures(pokemon: Pokemon) = pokemon.features
+        fun collectVisibleFeatures(Pokemon pokemon) = pokemon.features
             .filterIsInstance<SynchronizedSpeciesFeature>()
             .filter { (SpeciesFeatures.getFeature(it.name) as? SynchronizedSpeciesFeatureProvider<*>)?.visible == true }
             .map { feature ->

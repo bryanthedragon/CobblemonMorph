@@ -20,7 +20,8 @@ import net.minecraft.sounds.SoundEvents
  *
  * @author Segfault Guy
  * @since October 31st, 2023
- */final class BattleMusicController {
+ */
+public final class BattleMusicController {
 
     /** The last [BattleMusicInstance] played. */
     var music = BattleMusicInstance(SoundEvents.EMPTY, 0.0F, 0.0F)

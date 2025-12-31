@@ -18,7 +18,7 @@ import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.chat.TextColor
-final class CobblemonInfoCommand {
+public final class CobblemonInfoCommand {
 
     private val RED: TextColor = TextColor.fromRgb(0xC74242)
     private val YELLOW: TextColor = TextColor.fromRgb(0xDEDE00)

@@ -34,13 +34,13 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus
  * @author Hiroku
  * @since July 6th, 2025
  */
-class MemoryAspectTaskConfig : SingleTaskConfig {
+public class MemoryAspectTaskConfig : SingleTaskConfig {
     var memory: MemoryModuleType<*> = MemoryModuleType.DUMMY
     var aspect: ExpressionOrEntityVariable = Either.left(StringExpression(StringValue("")))
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(aspect).asVariables()
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(aspect).asVariables()
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity && entity !is NPCEntity) {
@@ -60,9 +60,9 @@ class MemoryAspectTaskConfig : SingleTaskConfig {
             Int.MAX_VALUE,
             Int.MAX_VALUE
         ) {
-            override fun canStillUse(level: ServerLevel, entity: LivingEntity, gameTime: Long) = true
+            override fun canStillUse(ServerLevel level, LivingEntity entity, gameTime: Long) = true
 
-            override fun tick(level: ServerLevel, owner: LivingEntity, gameTime: Long) {
+            override fun tick(ServerLevel level, owner: LivingEntity, gameTime: Long) {
                 val hasMemory = owner.brain.hasMemoryValue(memory)
                 if (owner is PokemonEntity) {
                     if (!hasMemory && aspect in owner.pokemon.forcedAspects) {

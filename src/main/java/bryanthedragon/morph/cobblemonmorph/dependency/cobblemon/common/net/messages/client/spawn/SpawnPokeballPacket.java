@@ -18,15 +18,15 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 
-class SpawnPokeballPacket(
+public class SpawnPokeballPacket(
     val pokeBall: PokeBall,
     val aspects: Set<String>,
     vanillaSpawnPacket: ClientboundAddEntityPacket
 ) : SpawnExtraDataEntityPacket<SpawnPokeballPacket, EmptyPokeBallEntity>(vanillaSpawnPacket) {
 
-    override val id: ResourceLocation = ID
+    override val ResourceLocation id = ID
 
-    override fun encodeEntityData(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeEntityData(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(this.pokeBall.name)
         buffer.writeCollection(aspects) { _, aspect -> buffer.writeString(aspect)}
     }
@@ -36,11 +36,11 @@ class SpawnPokeballPacket(
         entity.aspects = this.aspects
     }
 
-    override fun checkType(entity: Entity): Boolean = entity is EmptyPokeBallEntity
+    override fun checkType(Entity entity): Boolean = entity is EmptyPokeBallEntity
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("spawn_empty_pokeball_entity")
-        fun decode(buffer: RegistryFriendlyByteBuf): SpawnPokeballPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): SpawnPokeballPacket {
             val pokeBall = PokeBalls.getPokeBall(buffer.readIdentifier())!!
             val aspects = buffer.readList { it.readString() }.toSet()
             val vanillaPacket = decodeVanillaPacket(buffer)

@@ -29,11 +29,12 @@ import kotlin.math.max
  *
  * @author Hiroku
  * @since March 21st, 2022
- */final class ExperienceGroups : Iterable<ExperienceGroup> {
+ */
+public final class ExperienceGroups : Iterable<ExperienceGroup> {
     private val groups = mutableListOf<ExperienceGroup>()
     override fun iterator() = groups.iterator()
 
-    fun findByName(name: String) = find { it.name.equals(name, ignoreCase = true) }
+    fun findByName(String name) = find { it.name.equals(name, ignoreCase = true) }
     fun register(experienceGroup: ExperienceGroup): ExperienceGroup = experienceGroup.also { groups.add(it) }
     fun unregister(experienceGroup: ExperienceGroup) = groups.remove(experienceGroup)
 
@@ -46,9 +47,9 @@ import kotlin.math.max
         register(Fluctuating)
     }
 }
-final class ExperienceGroupAdapter : JsonSerializer<ExperienceGroup>, JsonDeserializer<ExperienceGroup> {
-    override fun serialize(experienceGroup: ExperienceGroup, type: Type, ctx: JsonSerializationContext) = JsonPrimitive(experienceGroup.name)
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): ExperienceGroup {
+public final class ExperienceGroupAdapter : JsonSerializer<ExperienceGroup>, JsonDeserializer<ExperienceGroup> {
+    override fun serialize(experienceGroup: ExperienceGroup, Type type, JsonSerializationContext ctx) = JsonPrimitive(experienceGroup.name)
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): ExperienceGroup {
         return ExperienceGroups.findByName(json.asString) ?: ExperienceGroup.dummy(json.asString)
     }
 }
@@ -61,13 +62,13 @@ final class ExperienceGroupAdapter : JsonSerializer<ExperienceGroup>, JsonDeseri
  * @author Hiroku
  * @since March 21st, 2022
  */
-interface ExperienceGroup : LevelCurve {
-    val name: String
+public interface ExperienceGroup : LevelCurve {
+    val String name
     val translatedName: MutableComponent
         get() = lang("experience_group.${name.lowercase()}")
 
-    companion object {
-        fun dummy(name: String) = object : ExperienceGroup {
+    final class Companion {
+        fun dummy(String name) = object : ExperienceGroup {
             override val name = name
             override fun getExperience(level: Int) = 0
             override fun getLevel(experience: Int) = 1
@@ -89,7 +90,7 @@ abstract class CachedExperienceGroup : ExperienceGroup {
     private val thresholds = CachedLevelThresholds(experienceToLevel = ::getExperience)
     override fun getLevel(experience: Int) = thresholds.getLevel(experience)
 }
-final class Erratic : CachedExperienceGroup() {
+public final class Erratic : CachedExperienceGroup() {
     override val name = "erratic"
     override fun getExperience(level: Int): Int {
         return when {
@@ -101,23 +102,23 @@ final class Erratic : CachedExperienceGroup() {
         }
     }
 }
-final class Fast : CachedExperienceGroup() {
+public final class Fast : CachedExperienceGroup() {
     override val name = "fast"
     override fun getExperience(level: Int) = if (level == 1) 0 else 4 * level.pow(3) / 5
 }
-final class MediumFast : CachedExperienceGroup() {
+public final class MediumFast : CachedExperienceGroup() {
     override val name = "medium_fast"
     override fun getExperience(level: Int) = if (level == 1) 0 else level.pow(3)
 }
-final class MediumSlow : CachedExperienceGroup() {
+public final class MediumSlow : CachedExperienceGroup() {
     override val name = "medium_slow"
     override fun getExperience(level: Int) = max(0, level.pow(3) * 6 / 5 - 15 * level.pow(2) + 100 * level - 140)
 }
-final class Slow : CachedExperienceGroup() {
+public final class Slow : CachedExperienceGroup() {
     override val name = "slow"
     override fun getExperience(level: Int) = if (level == 1) 0 else 5 * level.pow(3) / 4
 }
-final class Fluctuating : CachedExperienceGroup() {
+public final class Fluctuating : CachedExperienceGroup() {
     override val name = "fluctuating"
     override fun getExperience(level: Int): Int {
         return when {

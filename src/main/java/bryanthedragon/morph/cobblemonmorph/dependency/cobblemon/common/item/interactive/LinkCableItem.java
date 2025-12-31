@@ -15,9 +15,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.e
 import net.minecraft.world.item.ItemStack
 import net.minecraft.server.level.ServerPlayer
 
-class LinkCableItem : CobblemonItem(Properties()), PokemonEntityInteraction {
+public class LinkCableItem : CobblemonItem(Properties()), PokemonEntityInteraction {
     override val accepted = setOf(PokemonEntityInteraction.Ownership.OWNER)
-    override fun processInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean {
+    override fun processInteraction(ServerPlayer player, entity: PokemonEntity, ItemStack stack): Boolean {
         val pokemon = entity.pokemon
         pokemon.lockedEvolutions.filterIsInstance<TradeEvolution>().forEach { evolution ->
             // Prevent Pokémon that require a specific trading partner for evolution (e.g., Shelmet and Karrablast)

@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-interface CobblemonClientImplementation {
+public interface CobblemonClientImplementation {
     fun registerLayer(modelLayer: ModelLayerLocation, supplier: Supplier<LayerDefinition>)
     fun <T : ParticleOptions> registerParticleFactory(
         type: ParticleType<T>,

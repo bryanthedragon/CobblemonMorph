@@ -6,11 +6,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.featurerenderers
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.featurerenderers;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeature
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import net.minecraft.client.gui.GuiGraphics
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.feature.SynchronizedSpeciesFeature;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+
+import net.minecraft.client.gui.GuiGraphics;
 
 /**
  * A renderer for some kind of [SynchronizedSpeciesFeature] so that it will display
@@ -19,14 +20,14 @@ import net.minecraft.client.gui.GuiGraphics
  * @author Hiroku
  * @since November 13th, 2023
  */
-interface SummarySpeciesFeatureRenderer<T : SynchronizedSpeciesFeature> {
+public interface SummarySpeciesFeatureRenderer<T extends SynchronizedSpeciesFeature> {
     /** The name of the feature (so we know where to look to find it in the [Pokemon]) */
-    val name: String
+    val String name;
     /** Draws it at a particular position. */
-    fun render(guiGraphics: GuiGraphics, x: Float, y: Float, pokemon: Pokemon, feature: T)
-    fun render(guiGraphics: GuiGraphics, x: Float, y: Float, pokemon: Pokemon): Boolean {
-        val feature = pokemon.getFeature<T>(name) ?: return false
-        render(guiGraphics, x, y, pokemon, feature)
-        return true
+    fun renderFeture(GuiGraphics guiGraphics,Float x, Float y, Pokemon pokemon, T feature)
+    Boolean renderPokemon(GuiGraphics guiGraphics,Float x, Float y, Pokemon pokemon) {
+        val feature = pokemon.getFeature<T>(name) ?: return false;
+        render(guiGraphics, x, y, pokemon, feature);
+        return true;
     }
 }

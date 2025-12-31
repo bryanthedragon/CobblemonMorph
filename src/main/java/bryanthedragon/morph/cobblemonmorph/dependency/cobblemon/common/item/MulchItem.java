@@ -19,7 +19,7 @@ import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.LevelEvent
 
-class MulchItem(val variant: MulchVariant) : CobblemonItem(Properties()) {
+public class MulchItem(val variant: MulchVariant) : CobblemonItem(Properties()) {
 
     override fun useOn(context: UseOnContext): InteractionResult {
         val world = context.level
@@ -34,7 +34,7 @@ class MulchItem(val variant: MulchVariant) : CobblemonItem(Properties()) {
         return InteractionResult.PASS
     }
 
-    private fun useOnMulchAble(player: Player?, stack: ItemStack, world: Level, pos: BlockPos): Boolean {
+    private fun useOnMulchAble(player: Player?, ItemStack stack, Level world, (BlockPos pos): Boolean {
         val state = world.getBlockState(pos)
         if (state.block is Mulchable) {
             val mulchAble = state.block as? Mulchable ?: return false

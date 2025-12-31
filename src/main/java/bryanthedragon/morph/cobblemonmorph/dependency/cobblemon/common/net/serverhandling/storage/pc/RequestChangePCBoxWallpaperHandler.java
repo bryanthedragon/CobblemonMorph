@@ -19,8 +19,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class RequestChangePCBoxWallpaperHandler : ServerNetworkPacketHandler<RequestChangePCBoxWallpaperPacket> {
-    override fun handle(packet: RequestChangePCBoxWallpaperPacket, server: MinecraftServer, player: ServerPlayer) {
+public final class RequestChangePCBoxWallpaperHandler : ServerNetworkPacketHandler<RequestChangePCBoxWallpaperPacket> {
+    override fun handle(packet: RequestChangePCBoxWallpaperPacket, server: MinecraftServer, ServerPlayer player) {
         val pc = PCLinkManager.getPC(player) ?: return run { ClosePCPacket(null).sendToPlayer(player) }
         if (pc.boxes.size <= packet.boxNumber || Cobblemon.wallpapers[player.uuid]?.contains(packet.wallpaper) == false) {
             return

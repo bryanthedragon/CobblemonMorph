@@ -18,19 +18,19 @@ import kotlin.math.max
  *
  * @author landonjw, Hiroku
  */
-class ScheduledTask(
+public class ScheduledTask(
     /** The action to run. */
     val action: (ScheduledTask) -> Unit,
     /** The identifier, optional. */
     val identifier: String? = null,
     /** How long until the task should execute. */
-    delaySeconds: Float,
+    Float delaySeconds,
     /** The seconds between each execution, if this is repeated. */
     val intervalSeconds: Float = -1F,
     /** The number of times this task should iterate. */
     val iterations: Int = 1
 ) {
-    companion object {
+    final class Companion {
         val BLANK = ScheduledTask({}, delaySeconds = 0F)
     }
     val future = CompletableFuture<Unit>()
@@ -81,7 +81,7 @@ class ScheduledTask(
         private var action: ((ScheduledTask) -> Unit)? = null
 
         /** The number of seconds before the task will first be executed. */
-        private var delaySeconds: Float = 0F
+        private var Float delaySeconds = 0F
 
         /** The number of seconds before the task will be executed after it's already executed. */
         private var interval: Float = -1F
@@ -111,7 +111,7 @@ class ScheduledTask(
          * @return builder with delay set
          * @throws IllegalArgumentException if delay is below 0
          */
-        fun delay(delaySeconds: Float): Builder {
+        fun delay(Float delaySeconds): Builder {
             require(delaySeconds >= 0) { "Delay must not be below 0" }
             this.delaySeconds = delaySeconds
             return this

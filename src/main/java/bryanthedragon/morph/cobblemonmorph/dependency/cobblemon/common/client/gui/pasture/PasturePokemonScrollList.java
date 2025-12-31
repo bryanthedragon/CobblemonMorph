@@ -36,7 +36,7 @@ import net.minecraft.client.gui.components.ObjectSelectionList
 import org.joml.Quaternionf
 import org.joml.Vector3f
 
-class PasturePokemonScrollList(
+public class PasturePokemonScrollList(
     val listX: Int,
     val listY: Int,
     val parent: PastureWidget
@@ -47,7 +47,7 @@ class PasturePokemonScrollList(
     0, // top
     SLOT_HEIGHT + SLOT_SPACING
 ), CobblemonRenderable {
-    companion object {
+    final class Companion {
         const val WIDTH = 70
         const val HEIGHT = 120
         const val SLOT_WIDTH = 62
@@ -83,7 +83,7 @@ class PasturePokemonScrollList(
 
     public override fun addEntry(entry: PastureSlot) = super.addEntry(entry)
     public override fun removeEntry(entry: PastureSlot) = super.removeEntry(entry)
-    override fun renderSelection(context: GuiGraphics, y: Int, entryWidth: Int, entryHeight: Int, borderColor: Int, fillColor: Int) {}
+    override fun renderSelection(context: GuiGraphics, y: Int, entryInt width, entryInt height, borderColor: Int, fillColor: Int) {}
 
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, partialTicks: Float) {
         correctSize()
@@ -163,7 +163,7 @@ class PasturePokemonScrollList(
     fun isHovered(mouseX: Double, mouseY: Double) = mouseX.toFloat() in (x.toFloat()..(x.toFloat() + WIDTH)) && mouseY.toFloat() in (y.toFloat()..(y.toFloat() + HEIGHT))
 
     class PastureSlot(val pokemon: OpenPasturePacket.PasturePokemonDataDTO, private val parent: PastureWidget) : Entry<PastureSlot>() {
-        val client: Minecraft = Minecraft.getInstance()
+        val Minecraft client = Minecraft.getInstance()
         val state = FloatingState()
 
         fun isOwned() = client.player?.uuid == pokemon.playerId
@@ -198,11 +198,11 @@ class PasturePokemonScrollList(
 
         override fun render(
             context: GuiGraphics,
-            index: Int,
+            Int index,
             rowTop: Int,
             rowLeft: Int,
-            rowWidth: Int,
-            rowHeight: Int,
+            rowInt width,
+            rowInt height,
             mouseX: Int,
             mouseY: Int,
             isHovered: Boolean,

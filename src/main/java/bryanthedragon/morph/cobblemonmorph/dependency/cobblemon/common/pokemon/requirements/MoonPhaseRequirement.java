@@ -22,13 +22,13 @@ import net.minecraft.world.entity.LivingEntity
  * @author Licious
  * @since January 25th, 2023
  */
-class MoonPhaseRequirement(moonPhase: MoonPhase) : EntityQueryRequirement {
+public class MoonPhaseRequirement(moonPhase: MoonPhase) : EntityQueryRequirement {
 
     constructor() : this(MoonPhase.FULL_MOON)
 
     val moonPhase: MoonPhase = moonPhase
 
-    override fun check(pokemon: Pokemon, queriedEntity: LivingEntity): Boolean {
+    override fun check(Pokemon pokemon, LivingEntity queriedEntity): Boolean {
         return try {
             val moonPhase = MoonPhase.ofWorld(queriedEntity.level())
             this.moonPhase == moonPhase
@@ -37,7 +37,7 @@ class MoonPhaseRequirement(moonPhase: MoonPhase) : EntityQueryRequirement {
         }
     }
 
-    companion object {
+    final class Companion {
         const val ADAPTER_VARIANT = "moon_phase"
     }
 

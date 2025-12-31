@@ -14,15 +14,15 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeString
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class SelectStarterPacket(val categoryName: String, val selected: Int) : NetworkPacket<SelectStarterPacket> {
+public class SelectStarterPacket(val categoryName: String, val selected: Int) : NetworkPacket<SelectStarterPacket> {
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(this.categoryName)
         buffer.writeInt(this.selected)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("select_starter")
-        fun decode(buffer: RegistryFriendlyByteBuf): SelectStarterPacket = SelectStarterPacket(buffer.readString(), buffer.readInt())
+        fun decode(RegistryFriendlyByteBuf buffer): SelectStarterPacket = SelectStarterPacket(buffer.readString(), buffer.readInt())
     }
 }

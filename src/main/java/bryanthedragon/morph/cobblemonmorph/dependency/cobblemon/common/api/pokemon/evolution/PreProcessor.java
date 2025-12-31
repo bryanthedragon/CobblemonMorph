@@ -14,5 +14,5 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * TODO
  */
 fun interface PreProcessor {
-    fun create(pokemon: Pokemon): EvolutionController<*, *>
+    fun create(Pokemon pokemon): EvolutionController<*, *>
 }

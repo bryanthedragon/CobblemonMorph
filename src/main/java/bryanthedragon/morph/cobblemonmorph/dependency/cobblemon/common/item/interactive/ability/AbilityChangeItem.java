@@ -30,7 +30,7 @@ open class AbilityChangeItem<T : PotentialAbility>(
 
     override val accepted: Set<PokemonEntityInteraction.Ownership> = setOf(PokemonEntityInteraction.Ownership.OWNER)
 
-    override fun processInteraction(player: ServerPlayer, entity: PokemonEntity, stack: ItemStack): Boolean {
+    override fun processInteraction(ServerPlayer player, entity: PokemonEntity, ItemStack stack): Boolean {
         if (this.changer.performChange(entity.pokemon)) {
             stack.consume(1, player)
             val feedback = lang(

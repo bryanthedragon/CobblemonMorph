@@ -16,14 +16,14 @@ import net.minecraft.world.entity.EntityType
 
 open class SpawnCause(
     val spawner: Spawner,
-    entity: Entity? = null
+    Entity entity? = null
 ) : SpawningInfluence {
     val entityWorldId = entity?.level()?.dimension()
     val entityId = entity?.id
     val entityUUID = entity?.uuid
     val entityType = entity?.type
 
-    val entity: Entity?
+    val Entity entity?
         get() =
             if (entityType == EntityType.PLAYER) {
                 entityUUID?.let {

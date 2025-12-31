@@ -21,20 +21,20 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.MemoryStatus
 import net.minecraft.world.level.material.FluidState
 
-class JumpOutOfWaterTask : Behavior<PokemonEntity>(
+public class JumpOutOfWaterTask : Behavior<PokemonEntity>(
     ImmutableMap.of(
         MemoryModuleType.IS_IN_WATER, MemoryStatus.VALUE_PRESENT,
         MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT
     )
 ){
     var inWater = false
-    companion object {
+    final class Companion {
         private const val MAX_DURATION = 80
         private const val CHANCE = 10
         private val OFFSET_MULTIPLIERS = intArrayOf(0, 1, 4, 5, 6, 7)
     }
 
-    override fun checkExtraStartConditions(world: ServerLevel, entity: PokemonEntity): Boolean {
+    override fun checkExtraStartConditions(ServerLevel world, entity: PokemonEntity): Boolean {
         if(entity.random.nextInt(CHANCE) != 0) {
             return false
         } else {
@@ -52,19 +52,19 @@ class JumpOutOfWaterTask : Behavior<PokemonEntity>(
         }
     }
 
-    override fun canStillUse(world: ServerLevel, entity: PokemonEntity, time: Long): Boolean {
+    override fun canStillUse(ServerLevel world, entity: PokemonEntity, time: Long): Boolean {
         val d: Double = entity.deltaMovement.y
         return (!(d * d < 0.029999999329447746) || entity.xRot == 0.0f || !(Math.abs(entity.xRot) < 10.0f) || !entity.isInWater) && !entity.onGround()
     }
 
-    override fun start(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun start(ServerLevel world, entity: PokemonEntity, time: Long) {
         val direction = entity.motionDirection
         val newVelocity = entity.deltaMovement.add(direction.stepX.toDouble() * 0.6, 0.7, direction.stepZ.toDouble() * 0.6)
         entity.deltaMovement = newVelocity
         entity.getNavigation().stop()
     }
 
-    override fun tick(world: ServerLevel, entity: PokemonEntity, time: Long) {
+    override fun tick(ServerLevel world, entity: PokemonEntity, time: Long) {
         val bl: Boolean = this.inWater
         if (!bl) {
             val fluidState: FluidState = entity.level().getFluidState(entity.blockPosition())
@@ -87,12 +87,12 @@ class JumpOutOfWaterTask : Behavior<PokemonEntity>(
 
     
     
-    private fun isWater(entity: PokemonEntity, pos: BlockPos, offsetX: Int, offsetZ: Int, multiplier: Int): Boolean {
+    private fun isWater(entity: PokemonEntity, (BlockPos pos, offsetX: Int, offsetZ: Int, multiplier: Int): Boolean {
         val blockPos = pos.offset(offsetX * multiplier, 0, offsetZ * multiplier)
         return entity.level().getFluidState(blockPos).`is`(FluidTags.WATER) && !entity.level().getBlockState(blockPos).blocksMotion()
     }
 
-    private fun isAirAbove(entity: PokemonEntity, pos: BlockPos, offsetX: Int, offsetZ: Int, multiplier: Int): Boolean {
+    private fun isAirAbove(entity: PokemonEntity, (BlockPos pos, offsetX: Int, offsetZ: Int, multiplier: Int): Boolean {
         return entity.level().getBlockState(pos.offset(offsetX * multiplier, 1, offsetZ * multiplier))
             .isAir && entity.level().getBlockState(pos.offset(offsetX * multiplier, 2, offsetZ * multiplier))
             .isAir

@@ -25,7 +25,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class FlyInCirclesTaskConfig : SingleTaskConfig {
+public class FlyInCirclesTaskConfig : SingleTaskConfig {
     val poseTypes: Set<PoseType> = setOf(
         PoseType.FLY,
         PoseType.HOVER
@@ -38,7 +38,7 @@ class FlyInCirclesTaskConfig : SingleTaskConfig {
     val minDurationTicks: ExpressionOrEntityVariable = Either.left("60".asExpression())
     val maxDurationTicks: ExpressionOrEntityVariable = Either.left("180".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext): List<MoLangConfigVariable> {
         return listOf(
             minAngularVelocityDegrees,
             maxAngularVelocityDegrees,
@@ -50,7 +50,7 @@ class FlyInCirclesTaskConfig : SingleTaskConfig {
     }
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (entity !is PokemonEntity) {

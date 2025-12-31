@@ -26,7 +26,7 @@ import kotlin.collections.groupingBy
 import kotlin.collections.lastOrNull
 import kotlin.collections.map
 
-class ActiveTracker {
+public class ActiveTracker {
     var currentRoom: String? = null
     var currentTerrain: String? = null
     var currentWeather: String? = null
@@ -48,7 +48,7 @@ class ActiveTracker {
     }
 }
 
-class TrackerSide {
+public class TrackerSide {
     var screenCondition: String? = null
     var tailwindCondition: String? = null
     var sideHazards: List<String> = emptyList()
@@ -122,7 +122,7 @@ class TrackerSide {
 }
 
 // Tracker Actor with a Party of Tracker Pokemon in a Party
-class TrackerActor(val uuid: UUID) {
+public class TrackerActor(val UUID uuid) {
     val party: MutableList<TrackerPokemon> = mutableListOf()
     val activePokemon: MutableList<TrackerPokemon> = mutableListOf()
     val remainingMons: Int
@@ -154,7 +154,7 @@ class TrackerActor(val uuid: UUID) {
         }
     }
 
-    companion object {
+    final class Companion {
         fun initializeAlly(actor: BattleActor) : TrackerActor {
             val trackerActor = TrackerActor(actor.uuid)
             trackerActor.party.clear()
@@ -186,8 +186,8 @@ class TrackerActor(val uuid: UUID) {
 // Tracker Pokemon within the Party
 record TrackerPokemon(
     var id: UUID? = null,
-    var pokemon: Pokemon? = null,
-    var species: Species? = null,
+    var Pokemon pokemon? = null,
+    Species species? = null,
     var form: FormData? = null,
     var currentHp: Int? = null,
     var currentHpPercent: Double = 0.0,

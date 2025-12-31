@@ -19,11 +19,11 @@ import net.minecraft.resources.ResourceLocation
  * @author Hiroku
  * @since November 13th, 2023
  */
-class SpeciesFeatureAssignmentSyncPacket(
+public class SpeciesFeatureAssignmentSyncPacket(
     data: Map<ResourceLocation, MutableSet<String>>
 ) : DataRegistrySyncPacket<Map.Entry<ResourceLocation, MutableSet<String>>, SpeciesFeatureAssignmentSyncPacket>(data.entries) {
     override val id = ID
-    override fun decodeEntry(buffer: RegistryFriendlyByteBuf): Map.Entry<ResourceLocation, MutableSet<String>> {
+    override fun decodeEntry(RegistryFriendlyByteBuf buffer): Map.Entry<ResourceLocation, MutableSet<String>> {
         val key = buffer.readIdentifier()
         val assignments = buffer.readList { buffer.readString() }.toMutableSet()
         return object : Map.Entry<ResourceLocation, MutableSet<String>> {
@@ -32,7 +32,7 @@ class SpeciesFeatureAssignmentSyncPacket(
         }
     }
 
-    override fun encodeEntry(buffer: RegistryFriendlyByteBuf, entry: Map.Entry<ResourceLocation, MutableSet<String>>) {
+    override fun encodeEntry(RegistryFriendlyByteBuf buffer, entry: Map.Entry<ResourceLocation, MutableSet<String>>) {
         buffer.writeIdentifier(entry.key)
         buffer.writeCollection(entry.value) { _, value -> buffer.writeString(value) }
     }
@@ -41,8 +41,8 @@ class SpeciesFeatureAssignmentSyncPacket(
         SpeciesFeatureAssignments.loadOnClient(entries.associate { it.toPair() })
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("species_feature_assignment_sync")
-        fun decode(buffer: RegistryFriendlyByteBuf) = SpeciesFeatureAssignmentSyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
+        fun decode(RegistryFriendlyByteBuf buffer) = SpeciesFeatureAssignmentSyncPacket(emptyMap()).apply { decodeBuffer(buffer) }
     }
 }

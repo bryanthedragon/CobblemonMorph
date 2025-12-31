@@ -6,26 +6,27 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.pot
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.pot;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.green
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.yellow
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang
-import net.minecraft.network.chat.Component
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.green;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.yellow;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.lang;
+
+import net.minecraft.network.chat.Component;
 
 /**
  * Used for aprijuice quality.
  */
-enum class CookingQuality {
+public enum CookingQuality {
     LOW {
-        override fun getLang(): Component = lang("cooking.cooking_quality.low").red()
+        @Override fun getLang(): Component = lang("cooking.cooking_quality.low").red();
     },
     MEDIUM {
-        override fun getLang(): Component = lang("cooking.cooking_quality.medium").yellow()
+        @Override fun getLang(): Component = lang("cooking.cooking_quality.medium").yellow();
     },
     HIGH {
-        override fun getLang(): Component = lang("cooking.cooking_quality.high").green()
+        @Override fun getLang(): Component = lang("cooking.cooking_quality.high").green();
     };
 
     abstract fun getLang(): Component

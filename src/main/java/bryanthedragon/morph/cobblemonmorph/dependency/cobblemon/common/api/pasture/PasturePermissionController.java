@@ -19,5 +19,5 @@ import net.minecraft.server.level.ServerPlayer
  * @since July 2nd, 2023
  */
 fun interface PasturePermissionController {
-    fun permit(player: ServerPlayer, pastureBlockEntity: PokemonPastureBlockEntity): PasturePermissions?
+    fun permit(ServerPlayer player, pastureBlockEntity: PokemonPastureBlockEntity): PasturePermissions?
 }

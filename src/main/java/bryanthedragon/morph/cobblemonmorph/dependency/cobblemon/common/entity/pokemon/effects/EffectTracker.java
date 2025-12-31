@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture
  * @author Segfault Guy
  * @since March 10th, 2024
  */
-class EffectTracker(val entity: PokemonEntity) {
+public class EffectTracker(val entity: PokemonEntity) {
 
     /** The progression of the latest [EntityEffect] applied to an entity. */
     var progress: CompletableFuture<PokemonEntity>? = null
@@ -46,7 +46,7 @@ class EffectTracker(val entity: PokemonEntity) {
         return nbt
     }
 
-    fun loadFromNBT(nbt: CompoundTag, registryLookup: HolderLookup.Provider) {
+    fun loadFromNBT(CompoundTag nbt, registryLookup: HolderLookup.Provider) {
         if (nbt.contains(DataKeys.ENTITY_EFFECT_MOCK)) {
             val mockTag = nbt.getCompound(DataKeys.ENTITY_EFFECT_MOCK)
             this.mockEffect = EntityEffect.loadFromNbt(mockTag, registryLookup)?.takeIf { it is MocKEffect }?.let { it as MocKEffect }

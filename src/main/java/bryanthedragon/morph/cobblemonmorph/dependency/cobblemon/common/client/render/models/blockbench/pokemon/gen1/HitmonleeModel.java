@@ -21,7 +21,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class HitmonleeModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame {
+public class HitmonleeModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame {
     override val rootPart = root.registerChildWithAllChildren("hitmonlee")
 
     override val leftArm = getPart("arm_left")

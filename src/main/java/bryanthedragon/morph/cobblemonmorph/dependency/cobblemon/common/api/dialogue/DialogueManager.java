@@ -24,7 +24,8 @@ import net.minecraft.server.level.ServerPlayer
  *
  * @author Hiroku
  * @since December 27th, 2023
- */final class DialogueManager {
+ */
+public final class DialogueManager {
     val activeDialogues = mutableMapOf<UUID, ActiveDialogue>()
 
     @JvmStatic
@@ -44,7 +45,7 @@ import net.minecraft.server.level.ServerPlayer
     }
 
     @JvmStatic
-    fun startDialogue(activeDialogue: ActiveDialogue) {
+    fun startDialogue(ActiveDialogue activeDialogue) {
         activeDialogue.initialize()
         if (!activeDialogue.completion.isDone) {
             activeDialogues[activeDialogue.playerEntity.uuid] = activeDialogue

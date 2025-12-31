@@ -23,7 +23,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
 import net.minecraft.server.level.ServerPlayer
-final class PcTakeCommand {
+public final class PcTakeCommand {
     private val IN_BATTLE_EXCEPTION = SimpleCommandExceptionType(lang("pc.inbattle").red())
     
     fun register(dispatcher : CommandDispatcher<CommandSourceStack>) {
@@ -89,7 +89,7 @@ final class PcTakeCommand {
             
             context.source.sendSuccess({ commandLang("pctake.removed", pokemon.species.name, box, slot) }, true)
             return Command.SINGLE_SUCCESS
-        } catch (e: Exception) {
+        } catch (Exception e) {
             e.printStackTrace()
         }
         return Command.SINGLE_SUCCESS

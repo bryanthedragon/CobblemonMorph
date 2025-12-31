@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.stora
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.player.client.ClientPokedexManager
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.resources.ResourceLocation
-final class PlayerInstancedDataStoreTypes {
+public final class PlayerInstancedDataStoreTypes {
     val types = mutableMapOf<ResourceLocation, PlayerInstancedDataStoreType>()
 
     val GENERAL = register(PlayerInstancedDataStoreType(
@@ -32,5 +32,5 @@ final class PlayerInstancedDataStoreTypes {
         return type
     }
 
-    fun getTypeById(id: ResourceLocation) = types[id]
+    fun getTypeById(ResourceLocation id) = types[id]
 }

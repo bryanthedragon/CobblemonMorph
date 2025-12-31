@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.ClientPlayerIcon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.trade.TradeOfferExpiredPacket
 import net.minecraft.client.Minecraft
-final class TradeOfferExpiredHandler : ClientNetworkPacketHandler<TradeOfferExpiredPacket> {
-    override fun handle(packet: TradeOfferExpiredPacket, client: Minecraft) {
+public final class TradeOfferExpiredHandler : ClientNetworkPacketHandler<TradeOfferExpiredPacket> {
+    override fun handle(packet: TradeOfferExpiredPacket, Minecraft client) {
         CobblemonClient.requests.tradeOffers.remove(packet.senderID)
         ClientPlayerIcon.update(packet.senderID)
     }

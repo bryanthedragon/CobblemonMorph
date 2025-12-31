@@ -17,7 +17,8 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author Deltric
  * @since January 13th, 2022
- */final class Berries {
+ */
+public final class Berries {
     private val allBerries = mutableListOf<Berry>()
 
     val CHERI = registerBerry(Berry(cobblemonResource("cheri"), 10, 0, 0, 0, 0))

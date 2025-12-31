@@ -28,8 +28,8 @@ import net.minecraft.world.level.block.state.BlockState
  * @author Hiroku
  * @since January 31st, 2022
  */
-interface SpawnablePositionCalculator<I : SpawnablePositionInput, O : SpawnablePosition> {
-    companion object {
+public interface SpawnablePositionCalculator<I : SpawnablePositionInput, O : SpawnablePosition> {
+    final class Companion {
         val isAirCondition: (BlockState) -> Boolean = { it.isAir || (!it.isSolid && !it.fluidState.`is`(FluidTags.WATER) && !it.`is`(BlockTags.RAILS)) }
         val isSolidCondition: (BlockState) -> Boolean = { it.isSolid }
         val isWaterCondition: (BlockState) -> Boolean = { it.fluidState.`is`(FluidTags.WATER) && it.fluidState.isSource  }
@@ -40,7 +40,7 @@ interface SpawnablePositionCalculator<I : SpawnablePositionInput, O : SpawnableP
         val prioritizedAreaCalculators: List<AreaSpawnablePositionCalculator<*>>
             get() = calculators.filterIsInstance<AreaSpawnablePositionCalculator<*>>()
 
-        fun register(calculator: SpawnablePositionCalculator<*, *>, priority: Priority = Priority.NORMAL) {
+        fun register(calculator: SpawnablePositionCalculator<*, *>, Priority priority = Priority.NORMAL) {
             calculators.add(priority, calculator)
         }
 
@@ -49,10 +49,10 @@ interface SpawnablePositionCalculator<I : SpawnablePositionInput, O : SpawnableP
         }
     }
 
-    val name: String
+    val String name
 
     /** Tries creating a [SpawnablePosition] from the given input. Returning null should be a last resort. */
-    fun calculate(input: I): O?
+    fun calculate(I input): O?
 }
 
 /**
@@ -65,5 +65,5 @@ open class SpawnablePositionInput(
     /** What caused the spawn spawnable position, as a [SpawnCause]. */
     val cause: SpawnCause,
     /** The [ServerLevel] the spawnable position exists in. */
-    val world: ServerLevel
+    val ServerLevel world
 )

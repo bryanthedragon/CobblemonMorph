@@ -9,6 +9,6 @@
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.rules.selector
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
-final class AllSpawnDetailSelector : SpawnDetailSelector {
+public final class AllSpawnDetailSelector : SpawnDetailSelector {
     override fun selects(spawnDetail: SpawnDetail) = true
 }

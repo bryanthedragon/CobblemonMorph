@@ -24,7 +24,7 @@ import net.minecraft.world.entity.Entity
  * @author landonjw
  * @since January 5th, 2022
  */
-class BedrockPoseAnimation(val animation: BedrockAnimation) : PoseAnimation() {
+public class BedrockPoseAnimation(val animation: BedrockAnimation) : PoseAnimation() {
     val particleKeyFrames = animation.effects.filterIsInstance<BedrockParticleKeyframe>()
 
     init {
@@ -37,7 +37,7 @@ class BedrockPoseAnimation(val animation: BedrockAnimation) : PoseAnimation() {
         animation.run(model, state, state.animationSeconds, limbSwing, limbSwingAmount, ageInTicks, intensity)
     }
 
-    override fun applyEffects(entity: Entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
+    override fun applyEffects(Entity entity?, state: PosableState, previousSeconds: Float, newSeconds: Float) {
         val effectiveAnimationLength = animation.animationLength.takeUnless { it <= 0 }?.toFloat() ?: animation.effects.maxOfOrNull { it.seconds }?.takeIf { it != 0F }
         val (loopedPreviousSeconds, loopedNewSeconds) = if (effectiveAnimationLength != null) {
             (previousSeconds % effectiveAnimationLength) to (newSeconds % effectiveAnimationLength)

@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation
 
-class BattleShiftButton(val x: Float, val y: Float) {
-    companion object {
+public class BattleShiftButton(val x: Float, val y: Float) {
+    final class Companion {
         const val WIDTH = 72
         const val HEIGHT = 34
         const val SCALE = 0.5F

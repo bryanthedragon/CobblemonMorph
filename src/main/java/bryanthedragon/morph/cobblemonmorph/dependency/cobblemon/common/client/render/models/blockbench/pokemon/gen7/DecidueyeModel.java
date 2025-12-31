@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class DecidueyeModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BiWingedFrame {
+public class DecidueyeModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BiWingedFrame {
     override val rootPart = root.registerChildWithAllChildren("decidueye")
     override val head = getPart("head")
 

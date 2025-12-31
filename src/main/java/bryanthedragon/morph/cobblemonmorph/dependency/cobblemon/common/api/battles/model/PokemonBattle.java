@@ -6,64 +6,65 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model;
 
-import com.bedrockk.molang.runtime.MoLangRuntime
-import com.bedrockk.molang.runtime.struct.QueryStruct
-import com.bedrockk.molang.runtime.value.DoubleValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBuildDetails
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.ActorType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.EntityBackedBattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.FleeableBattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.BattleFledEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.BattleEvSource
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PlayerPartyStore
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonItemTags
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.yellow
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ActiveBattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleCaptureAction
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleFormat
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleSide
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ForfeitActionResponse
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PlayerBattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.BattleDispatch
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.DispatchResult
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.GO
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.WaitDispatch
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.ContextManager
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.ShowdownService
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PlatformType
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCBattleActor
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleEndPacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMessagePacket
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.progress.DefeatEvolutionProgress
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.progress.LastBattleCriticalHitsEvolutionProgress
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.requirements.DefeatRequirement
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.giveOrDropItemStack
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.itemRegistry
-import java.io.File
-import java.util.UUID
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.ConcurrentLinkedDeque
-import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.item.ItemStack
+import com.bedrockk.molang.runtime.MoLangRuntime;
+import com.bedrockk.molang.runtime.struct.QueryStruct;
+import com.bedrockk.molang.runtime.value.DoubleValue;
+
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon.LOGGER;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonBuildDetails;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.CobblemonNetwork;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.interpreter.BattleMessage;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.ActorType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.BattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.EntityBackedBattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.actor.FleeableBattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.battles.BattleFledEvent;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molang.MoLangFunctions.asMoLangValue;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.NetworkPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.stats.BattleEvSource;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.storage.party.PlayerPartyStore;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.tags.CobblemonItemTags;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.red;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.text.yellow;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ActiveBattlePokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleCaptureAction;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleFormat;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleRegistry;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.BattleSide;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.ForfeitActionResponse;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.actor.PlayerBattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.BattleDispatch;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.DispatchResult;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.GO;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.dispatch.WaitDispatch;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.interpreter.ContextManager;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.pokemon.BattlePokemon;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.runner.ShowdownService;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.PlatformType;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCBattleActor;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.npc.NPCEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleEndPacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleMessagePacket;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.progress.DefeatEvolutionProgress;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.evolution.progress.LastBattleCriticalHitsEvolutionProgress;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.requirements.DefeatRequirement;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.battleLang;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.giveOrDropItemStack;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.itemRegistry;
+import java.io.File;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Individual battle instance
@@ -71,30 +72,23 @@ import net.minecraft.world.item.ItemStack
  * @since January 16th, 2022
  * @author Deltric, Hiroku
  */
-@Suppress("unused", "MemberVisibilityCanBePrivate")
-open class PokemonBattle(
-    val format: BattleFormat,
-    val side1: BattleSide,
-    val side2: BattleSide
-) {
+public class PokemonBattle(BattleFormat format, BattleSide side1, BattleSide side2) {
     /** Whether logging will be silenced for this battle. */
-    var mute = !CobblemonBuildDetails.SNAPSHOT
-    val struct = this.asMoLangValue()
-    val runtime = MoLangRuntime().also { it.environment.query = struct }
+    var mute = !CobblemonBuildDetails.SNAPSHOT;
+    val struct = this.asMoLangValue();;
+    val runtime = MoLangRuntime().also { it.environment.query = struct };
 
-    val onEndHandlers: MutableList<(PokemonBattle) -> Unit> = mutableListOf()
+    val onEndHandlers: MutableList<(PokemonBattle) -> Unit> = mutableListOf();;
 
-    val battlePartyStores = mutableListOf<PlayerPartyStore>()
+    val battlePartyStores = mutableListOf<PlayerPartyStore>();;
 
     init {
-        side1.battle = this
-        side2.battle = this
+        side1.battle = this;
+        side2.battle = this;
         this.actors.forEach { actor ->
-            actor.battle = this
+            actor.battle = this;
             actor.pokemonList.forEach { battlePokemon ->
-                battlePokemon.effectedPokemon.evolutionProxy.current().progress()
-                    .filterIsInstance<LastBattleCriticalHitsEvolutionProgress>()
-                    .forEach { it.reset() }
+                battlePokemon.effectedPokemon.evolutionProxy.current().progress().filterIsInstance<LastBattleCriticalHitsEvolutionProgress>().forEach { it.reset() };
             }
         }
     }
@@ -108,16 +102,16 @@ open class PokemonBattle(
     val playerUUIDs: Iterable<UUID>
         get() = actors.flatMap { it.getPlayerUUIDs() }
     val players = playerUUIDs.mapNotNull { it.getPlayer() }
-    val spectators = mutableSetOf<UUID>()
+    val spectators = mutableSetOf<UUID>();
 
-    val battleId = UUID.randomUUID()
+    val battleId = UUID.randomUUID();
 
-    val showdownMessages = mutableListOf<String>()
-    val battleLog = mutableListOf<String>()
-    val chatLog = mutableListOf<Component>()
+    val showdownMessages = mutableListOf<String>();
+    val battleLog = mutableListOf<String>();
+    val chatLog = mutableListOf<Component>();
     var started = false
-    var winners = listOf<BattleActor>()
-    var losers = listOf<BattleActor>()
+    var winners = listOf<BattleActor>();
+    var losers = listOf<BattleActor>();
     var ended = false
     // TEMP battle showcase stuff
     var announcingRules = false
@@ -131,17 +125,17 @@ open class PokemonBattle(
     val time: Int get() = ticks % 20
 
     var dispatchResult = GO
-    val dispatches = ConcurrentLinkedDeque<BattleDispatch>()
-    val afterDispatches = mutableListOf<() -> Unit>()
+    val dispatches = ConcurrentLinkedDeque<BattleDispatch>();
+    val afterDispatches = mutableListOf<(); -> Unit>();
 
-    val captureActions = mutableListOf<BattleCaptureAction>()
+    val captureActions = mutableListOf<BattleCaptureAction>();
 
-    val majorBattleActions = hashMapOf<UUID, BattleMessage>()
-    val minorBattleActions = hashMapOf<UUID, BattleMessage>()
-    val contextManager = ContextManager()
+    val majorBattleActions = hashMapOf<UUID, BattleMessage>();
+    val minorBattleActions = hashMapOf<UUID, BattleMessage>();
+    val contextManager = ContextManager();
 
     /** Whether or not there is one side with at least one player, and the other only has wild Pokémon. */
-    val isPvW: Boolean
+    Boolean isPvW
         get() {
             val playerSide = sides.find { it.actors.any { it.type == ActorType.PLAYER } } ?: return false
             if (playerSide.actors.any { it.type != ActorType.PLAYER }) {
@@ -170,7 +164,7 @@ open class PokemonBattle(
      * Gets an actor by their showdown id
      * @return the actor if found otherwise null
      */
-    fun getActor(showdownId: String) : BattleActor? {
+    fun getActor(String showdownId) : BattleActor? {
         return actors.find { actor -> actor.showdownId == showdownId }
     }
 
@@ -185,7 +179,7 @@ open class PokemonBattle(
     /**
      * Gets the first battle actor whom the given player controls, or null if there is no such actor.
      */
-    fun getActor(player: ServerPlayer) = actors.firstOrNull { it.isForPlayer(player) }
+    fun getActor(ServerPlayer player) = actors.firstOrNull { it.isForPlayer(player) }
 
     /**
      * Gets the first battle actor whom the given NPC controls, or null if there is no such actor.
@@ -201,7 +195,7 @@ open class PokemonBattle(
         val actor = actors.find { it.showdownId == pnx.substring(0, 2) }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown actor")
         val letter = pnx[2]
-        val pokemon = actor.getSide().activePokemon.find { it.getLetter() == letter }
+        val pokemon = actor.getSide().activePokemon.find { it.getLetter(); == letter }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown pokemon")
         return actor to pokemon
     }
@@ -214,50 +208,47 @@ open class PokemonBattle(
     fun getBattlePokemon(pnx: String, pokemonID: String): BattlePokemon {
         val actor = actors.find { it.showdownId == pnx.substring(0, 2) }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown actor")
-        return actor.pokemonList.find { it.uuid.toString() == pokemonID }
+        return actor.pokemonList.find { it.uuid.toString(); == pokemonID }
             ?: throw IllegalStateException("Invalid pnx: $pnx - unknown pokemon")
     }
 
-    fun broadcastChatMessage(component: Component) {
+    fun broadcastChatMessage(Component component) {
         chatLog.add(component)
         sendSpectatorUpdate(BattleMessagePacket(component))
         return actors.forEach { it.sendMessage(component) }
     }
 
-    fun writeShowdownAction(vararg messages: String) {
+    fun writeShowdownAction(String messages) {
         log(messages.joinToString("\n"))
         ShowdownService.service.send(battleId, messages.toList().toTypedArray())
     }
 
-    fun turn(newTurnNumber: Int) {
-        actors.forEach { it.turn() }
+    fun turn(Int newTurnNumber) {
+        actors.forEach { it.turn() };
         // TODO: If a pokemon switches in the same turn another pokemon is KO'd it will not receive exp for the KO
         for (side in sides) {
-            val opposite = side.getOppositeSide()
+            val opposite = side.getOppositeSide();
             side.activePokemon.filter { it.isAlive() }.forEach { activePokemon ->
-                val battlePokemon = activePokemon.battlePokemon ?: return@forEach
-                battlePokemon.facedOpponents.addAll(opposite.activePokemon.filter { opposingActivePokemon -> opposingActivePokemon.isAlive() }.mapNotNull { it.battlePokemon })
+                val battlePokemon = activePokemon.battlePokemon ?: return@forEach;
+                battlePokemon.facedOpponents.addAll(opposite.activePokemon.filter { opposingActivePokemon -> opposingActivePokemon.isAlive() }.mapNotNull { it.battlePokemon });
             }
         }
-        this.turn = newTurnNumber
+        this.turn = newTurnNumber;
     }
 
     fun end() {
         ended = true
-        this.actors.forEach { actor ->
-            val faintedPokemons = actor.pokemonList.filter { it.health <= 0 }
-            actor.getSide().getOppositeSide().actors.forEach { opponent ->
-                val opponentNonFaintedPokemons = opponent.pokemonList.filter { it.health > 0 }
+        this.actors.forEach { actor -> val faintedPokemons = actor.pokemonList.filter { it.health <= 0 }
+            actor.getSide().getOppositeSide().actors.forEach { opponent -> val opponentNonFaintedPokemons = opponent.pokemonList.filter { it.health > 0 }
                 faintedPokemons.forEach { faintedPokemon ->
                     for (opponentPokemon in opponentNonFaintedPokemons) {
-                        val facedFainted = opponentPokemon.facedOpponents.contains(faintedPokemon)
-                        val pokemon = opponentPokemon.effectedPokemon
+                        val facedFainted = opponentPokemon.facedOpponents.contains(faintedPokemon);
+                        val pokemon = opponentPokemon.effectedPokemon;
                         if (facedFainted) {
-                            pokemon.lockedEvolutions.forEach { evolution ->
-                                evolution.requirements.filterIsInstance<DefeatRequirement>().forEach { defeatRequirement ->
+                            pokemon.lockedEvolutions.forEach { evolution -> evolution.requirements.filterIsInstance<DefeatRequirement>().forEach { defeatRequirement ->
                                     if (defeatRequirement.target.matches(faintedPokemon.effectedPokemon)) {
-                                        val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is DefeatEvolutionProgress && it.currentProgress().target == defeatRequirement.target }) { DefeatEvolutionProgress() }
-                                        progress.updateProgress(DefeatEvolutionProgress.Progress(defeatRequirement.target, progress.currentProgress().amount + 1))
+                                        val progress = pokemon.evolutionProxy.current().progressFirstOrCreate({ it is DefeatEvolutionProgress && it.currentProgress().target == defeatRequirement.target }) { DefeatEvolutionProgress() };
+                                        progress.updateProgress(DefeatEvolutionProgress.Progress(defeatRequirement.target, progress.currentProgress().amount + 1));
                                     }
                                 }
                             }
@@ -276,78 +267,63 @@ open class PokemonBattle(
                         Cobblemon.evYieldCalculator.calculate(opponentPokemon, faintedPokemon).forEach { (stat, amount) ->
                             pokemon.evs.add(stat, amount, BattleEvSource(this, opponentPokemon.facedOpponents.toList(), pokemon))
                         }
-
                     }
                 }
             }
             if (actor.itemsUsed.isNotEmpty() && actor.getPlayerUUIDs().count() > 0) {
-                val player = actor.getPlayerUUIDs().first().getPlayer()
-                player?.level()?.itemRegistry.let { registry ->
-                    actor.itemsUsed.mapNotNull { registry?.get(ResourceLocation.tryBySeparator(it.itemName.substringAfter('.'), '.')) }
-                            .forEach { player?.giveOrDropItemStack(ItemStack(it))}
+                val player = actor.getPlayerUUIDs().first().getPlayer();
+                player?.level();?.itemRegistry.let { registry ->
+                    actor.itemsUsed.mapNotNull { registry?.get(ResourceLocation.tryBySeparator(it.itemName.substringAfter('.'), '.')) }.forEach { player?.giveOrDropItemStack(ItemStack(it))};
                 }
             }
 
             // Heal NPC's team if enabled
             if (actor is NPCBattleActor) {
                 if (actor.npc.npc.autoHealParty) {
-                    actor.npc.party?.heal()
+                    actor.npc.party?.heal();
                 }
             }
 
         }
         // Heal Mon if wild
-        actors.filter { it.type == ActorType.WILD }
-            .filterIsInstance<EntityBackedBattleActor<*>>()
-            .mapNotNull { it.entity }
-            .filterIsInstance<PokemonEntity>()
-            .forEach{it.pokemon.heal()}
-        actors.forEach { actor ->
-            actor.pokemonList.forEach { battlePokemon ->
-                battlePokemon.entity?.let { entity -> battlePokemon.postBattleEntityOperation(entity) }
-                if (battlePokemon.effectedPokemon.entity != null
-                        && battlePokemon.effectedPokemon.entity?.beamMode == 0
-                        && battlePokemon.effectedPokemon.entity?.platform != PlatformType.NONE) {
-                    battlePokemon.effectedPokemon.tryRecallWithAnimation()
+        actors.filter { it.type == ActorType.WILD }.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }.filterIsInstance<PokemonEntity>().forEach{it.pokemon.heal()}
+        actors.forEach { actor -> actor.pokemonList.forEach { battlePokemon -> battlePokemon.entity?.let { entity -> battlePokemon.postBattleEntityOperation(entity) }
+                if (battlePokemon.effectedPokemon.entity != null && battlePokemon.effectedPokemon.entity?.beamMode == 0 && battlePokemon.effectedPokemon.entity?.platform != PlatformType.NONE) {
+                    battlePokemon.effectedPokemon.tryRecallWithAnimation();
                 }
             }
         }
-        sendUpdate(BattleEndPacket())
-        BattleRegistry.closeBattle(this)
+        sendUpdate(BattleEndPacket());
+        BattleRegistry.closeBattle(this);
     }
 
-    fun finishCaptureAction(captureAction: BattleCaptureAction) {
-        captureActions.remove(captureAction)
-        checkForInputDispatch()
+    fun finishCaptureAction(BattleCaptureAction captureAction) {
+        captureActions.remove(captureAction);
+        checkForInputDispatch();
     }
 
-    fun log(message: String = "") {
+    fun log(String message) {
         if (!mute) {
-            LOGGER.info(message)
+            LOGGER.info(message);
         }
-        battleLog.add(message)
+        battleLog.add(message);
     }
 
     fun saveBattleLog() {
-        val battleLogsDir = File("./battle_logs/")
+        val battleLogsDir = File("./battle_logs/");
         if (!battleLogsDir.exists()) {
-            battleLogsDir.mkdirs()
+            battleLogsDir.mkdirs();
         }
 
-        val logFile = File(battleLogsDir, "$battleId.txt")
-        logFile.bufferedWriter().use { out ->
-            battleLog.forEach {
-                out.write(it)
-                out.newLine()
-            }
-        }
+        val logFile = File(battleLogsDir, "$battleId.txt");
+        logFile.bufferedWriter().use { out -> battleLog.forEach { out.write(it); out.newLine() }}
 
-        LOGGER.info("Saved battle log as $battleId.txt")
+        LOGGER.info("Saved battle log as $battleId.txt");
     }
 
-    fun sendUpdate(packet: NetworkPacket<*>) {
-        actors.forEach { it.sendUpdate(packet) }
-        sendSpectatorUpdate(packet)
+    fun sendUpdate( NetworkPacket<*> packet) {
+        actors.forEach { it.sendUpdate(packet) };
+        sendSpectatorUpdate(packet);
     }
 
     /**
@@ -358,69 +334,69 @@ open class PokemonBattle(
      * @param opponentPacket The packet sent to the opposing actors.
      * @param spectatorsAsAlly If the spectators receive the [allyPacket] or the [opponentPacket], default is false.
      */
-    fun sendSidedUpdate(source: BattleActor, allyPacket: NetworkPacket<*>, opponentPacket: NetworkPacket<*>, spectatorsAsAlly: Boolean = false) {
-        source.getSide().actors.forEach { it.sendUpdate(allyPacket) }
-        source.getSide().getOppositeSide().actors.forEach { it.sendUpdate(opponentPacket) }
-        sendSpectatorUpdate(if (spectatorsAsAlly) allyPacket else opponentPacket)
+    fun sendSidedUpdate(source: BattleActor, ally NetworkPacket<*> packet, NetworkPacket<*> opponentPacket, Boolean spectatorsAsAlly = false) {
+        source.getSide().actors.forEach { it.sendUpdate(allyPacket) };
+        source.getSide().getOppositeSide().actors.forEach { it.sendUpdate(opponentPacket) };
+        sendSpectatorUpdate(if (spectatorsAsAlly) allyPacket else opponentPacket);
     }
 
-    fun sendToActors(packet: NetworkPacket<*>) {
+    fun sendToActors( NetworkPacket<*> packet) {
         CobblemonNetwork.sendPacketToPlayers(actors.flatMap { it.getPlayerUUIDs().mapNotNull { it.getPlayer() } }, packet)
     }
 
-    fun sendSplitUpdate(privateActor: BattleActor, publicPacket: NetworkPacket<*>, privatePacket: NetworkPacket<*>) {
+    fun sendSplitUpdate(privateActor: BattleActor, public NetworkPacket<*> packet, private NetworkPacket<*> packet) {
         actors.forEach {  it.sendUpdate(if (it == privateActor) privatePacket else publicPacket) }
         sendSpectatorUpdate(publicPacket)
     }
 
-    fun sendSpectatorUpdate(packet: NetworkPacket<*>) {
+    fun sendSpectatorUpdate( NetworkPacket<*> packet) {
         CobblemonNetwork.sendPacketToPlayers(spectators.mapNotNull { it.getPlayer() }, packet)
     }
 
-    fun dispatch(dispatcher: () -> DispatchResult) {
+    fun dispatch(dispatcher: (); -> DispatchResult) {
         dispatches.add(BattleDispatch { dispatcher() })
 
     }
 
-    fun dispatchToFront(dispatcher: () -> DispatchResult) {
+    fun dispatchToFront(dispatcher: (); -> DispatchResult) {
         dispatches.addFirst(BattleDispatch { dispatcher() })
 
     }
 
-    fun dispatchWaitingToFront(delaySeconds: Float = 1F, dispatcher: () -> Unit) {
+    fun dispatchWaitingToFront(Float delaySeconds = 1F, dispatcher: (); -> Unit) {
         dispatches.addFirst(BattleDispatch {
-            dispatcher()
-            WaitDispatch(delaySeconds)
+            dispatcher();
+            WaitDispatch(delaySeconds);
         })
     }
 
-    fun dispatchGo(dispatcher: () -> Unit) {
+    fun dispatchGo(dispatcher: (); -> Unit) {
         dispatch {
-            dispatcher()
+            dispatcher();
             GO
         }
     }
 
-    fun dispatchWaiting(delaySeconds: Float = 1F, dispatcher: () -> Unit) {
+    fun dispatchWaiting(Float delaySeconds = 1F, dispatcher: (); -> Unit) {
         dispatch {
-            dispatcher()
+            dispatcher();
             WaitDispatch(delaySeconds)
         }
     }
 
-    fun dispatchFuture(future: () -> CompletableFuture<*>) {
+    fun dispatchFuture(future: (); -> CompletableFuture<*>) {
         val dispatch = BattleDispatch {
-            val generatedFuture = future()
+            val generatedFuture = future();
             return@BattleDispatch DispatchResult { generatedFuture.isDone }
         }
         dispatches.add(dispatch)
     }
 
-    fun dispatchInsert(dispatcher: () -> Iterable<BattleDispatch>) {
+    fun dispatchInsert(dispatcher: (); -> Iterable<BattleDispatch>) {
         dispatch {
-            val newDispatches = dispatcher()
-            val previousDispatches = dispatches.toList()
-            dispatches.clear()
+            val newDispatches = dispatcher();
+            val previousDispatches = dispatches.toList();
+            dispatches.clear();
             dispatches.addAll(newDispatches)
             dispatches.addAll(previousDispatches)
             GO
@@ -435,50 +411,50 @@ open class PokemonBattle(
         dispatches.addFirst(dispatcher)
     }
 
-    fun doWhenClear(action: () -> Unit) {
+    fun doWhenClear(action: (); -> Unit) {
         afterDispatches.add(action)
     }
 
     fun tick() {
         try {
             while (dispatchResult.canProceed()) {
-                val dispatch = dispatches.poll() ?: break
+                val dispatch = dispatches.poll(); ?: break
                 dispatchResult = dispatch(this)
             }
 
             if (dispatches.isEmpty()) {
                 afterDispatches.toList().forEach { it() }
-                afterDispatches.clear()
+                afterDispatches.clear();
             }
-        } catch (e: Exception) {
+        } catch (Exception e) {
             LOGGER.error("Exception while ticking a battle. Saving battle log.", e)
-            val message = battleLang("crash").red()
+            val message = battleLang("crash").red();
             this.actors.filterIsInstance<PlayerBattleActor>().forEach { it.entity?.sendSystemMessage(message) }
-            this.saveBattleLog()
-            this.stop()
+            this.saveBattleLog();
+            this.stop();
             return
         }
 
         if (started) {
             ticks++
-            if (isPvW && !ended && dispatches.isEmpty()) checkFlee()
+            if (isPvW && !ended && dispatches.isEmpty()) checkFlee();
         }
     }
 
     open fun checkFlee() {
         // Do we check the player's pokemon being nearby or the player themselves? Player themselves because pokemon could be stuck together in a pit
         val wildPokemonOutOfRange = actors
-            .filterIsInstance<FleeableBattleActor>()
-            .filter { it.getWorldAndPosition() != null }
+            .filterIsInstance<FleeableBattleActor>();
+            .filter { it.getWorldAndPosition(); != null }
             .none { pokemonActor ->
                 if (pokemonActor.fleeDistance == -1F) true
                 else {
-                    val (world, pos) = pokemonActor.getWorldAndPosition()!!
-                    val nearestPlayerActorDistance = actors.asSequence()
+                    val (world, pos) = pokemonActor.getWorldAndPosition();!!
+                    val nearestPlayerActorDistance = actors.asSequence();
                         .filter { it.type == ActorType.PLAYER }
-                        .filterIsInstance<EntityBackedBattleActor<*>>()
+                        .filterIsInstance<EntityBackedBattleActor<*>>();
                         .mapNotNull { it.entity }
-                        .filter { it.level() == world }
+                        .filter { it.level(); == world }
                         .minOfOrNull { pos.distanceTo(it.position()) }
 
                     nearestPlayerActorDistance != null && nearestPlayerActorDistance < pokemonActor.fleeDistance
@@ -487,18 +463,18 @@ open class PokemonBattle(
         if (wildPokemonOutOfRange) {
             // Heal Wild Pokemon
             actors.filter { it.type == ActorType.WILD }
-                .filterIsInstance<EntityBackedBattleActor<*>>()
+                .filterIsInstance<EntityBackedBattleActor<*>>();
                 .mapNotNull { it.entity }
-                .filterIsInstance<PokemonEntity>()
+                .filterIsInstance<PokemonEntity>();
                 .forEach{it.pokemon.heal()}
             CobblemonEvents.BATTLE_FLED.post(BattleFledEvent(this, actors.asSequence().filterIsInstance<PlayerBattleActor>().iterator().next()))
             actors.filterIsInstance<EntityBackedBattleActor<*>>().mapNotNull { it.entity }.forEach { it.sendSystemMessage(battleLang("flee").yellow()) }
-            stop()
+            stop();
         }
     }
 
     fun stop() {
-        end()
+        end();
         writeShowdownAction(">forcetie") // This will terminate the Showdown connection
     }
 
@@ -507,12 +483,12 @@ open class PokemonBattle(
         val readyToInput = (actors.any { !it.mustChoose && it.responses.isNotEmpty() } && actors.none { it.mustChoose })
         if (readyToInput && captureActions.isEmpty()) {
             actors.filter { it.responses.isNotEmpty() }.forEach { it.writeShowdownResponse() }
-            actors.forEach { it.responses.clear() ; it.request = null }
+            actors.forEach { it.responses.clear(); ; it.request = null }
         }
     }
 
     /** Forces Showdown to end the battle when a [BattleActor] chooses to forfeit. */
-    private fun checkForfeit(): Boolean {
+    private fun checkForfeit();: Boolean {
         val forfeit = actors.find { it.responses.any { it is ForfeitActionResponse } }
         return forfeit?.let {
             this.dispatchWaiting { this.broadcastChatMessage(battleLang("forfeit", it.getName()).red()) }
@@ -531,7 +507,7 @@ open class PokemonBattle(
      */
     internal fun createUnimplemented(message: BattleMessage): Component {
         LOGGER.error("Missing interpretation on '{}' action {}", message.id, message.rawMessage)
-        return Component.literal("Missing interpretation on '${message.id}' action ${message.rawMessage}").red()
+        return Component.literal("Missing interpretation on '${message.id}' action ${message.rawMessage}").red();
     }
 
     /**
@@ -549,7 +525,7 @@ open class PokemonBattle(
             throw IllegalArgumentException("Messages do not match")
         }
         LOGGER.error("Missing interpretation on '{}' action: \nPublic » {}\nPrivate » {}", publicMessage.id, publicMessage.rawMessage, privateMessage.rawMessage)
-        return Component.literal("Missing interpretation on '${publicMessage.id}' action please report to the developers").red()
+        return Component.literal("Missing interpretation on '${publicMessage.id}' action please report to the developers").red();
     }
 
     fun addQueryFunctions(queryStruct: QueryStruct): QueryStruct {

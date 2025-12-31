@@ -15,9 +15,9 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
 
-class PotComponent(val potItem: ItemStack) { // No nullable ItemStack
+public class PotComponent(val potItem: ItemStack) { // No nullable ItemStack
 
-    companion object {
+    final class Companion {
         // Codec for saving/loading
         val CODEC: Codec<PotComponent> = ItemStack.CODEC.xmap(::PotComponent, PotComponent::potItem)
 
@@ -25,7 +25,7 @@ class PotComponent(val potItem: ItemStack) { // No nullable ItemStack
         val PACKET_CODEC: StreamCodec<ByteBuf, PotComponent> = ByteBufCodecs.fromCodec(CODEC)
 
         // Fetch component from stack
-        fun getFrom(stack: ItemStack): PotComponent? {
+        fun getFrom(ItemStack stack): PotComponent? {
             return stack.components.get(CobblemonItemComponents.POT_DATA)
         }
     }

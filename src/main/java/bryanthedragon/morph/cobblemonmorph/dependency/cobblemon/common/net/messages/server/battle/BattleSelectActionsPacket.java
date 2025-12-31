@@ -17,19 +17,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import java.util.UUID
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class BattleSelectActionsPacket(val battleId: UUID, val showdownActionResponses: List<ShowdownActionResponse>) : NetworkPacket<BattleSelectActionsPacket> {
+public class BattleSelectActionsPacket(val UUID battleId, val showdownActionResponses: List<ShowdownActionResponse>) : NetworkPacket<BattleSelectActionsPacket> {
 
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(battleId)
         buffer.writeSizedInt(IntSize.U_BYTE, showdownActionResponses.size)
         showdownActionResponses.forEach { it.saveToBuffer(buffer) }
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("battle_select_actions")
-        fun decode(buffer: RegistryFriendlyByteBuf): BattleSelectActionsPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): BattleSelectActionsPacket {
             val battleId = buffer.readUUID()
             val responses = mutableListOf<ShowdownActionResponse>()
             repeat(times = buffer.readSizedInt(IntSize.U_BYTE)) {

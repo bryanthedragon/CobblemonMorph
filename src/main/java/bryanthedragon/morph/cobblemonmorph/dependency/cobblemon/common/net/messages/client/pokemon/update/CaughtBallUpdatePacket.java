@@ -16,19 +16,19 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeIdentifier
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class CaughtBallUpdatePacket(pokemon: () -> Pokemon?, value: PokeBall): SingleUpdatePacket<PokeBall, CaughtBallUpdatePacket>(pokemon, value) {
+public class CaughtBallUpdatePacket(pokemon: () -> Pokemon?, value: PokeBall): SingleUpdatePacket<PokeBall, CaughtBallUpdatePacket>(pokemon, value) {
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeIdentifier(this.value.name)
     }
 
-    override fun set(pokemon: Pokemon, value: PokeBall) {
+    override fun set(Pokemon pokemon, value: PokeBall) {
         pokemon.caughtBall = value
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("caught_ball_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): CaughtBallUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): CaughtBallUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val pokeBall = PokeBalls.getPokeBall(buffer.readIdentifier()) ?: PokeBalls.POKE_BALL
             return CaughtBallUpdatePacket(pokemon, pokeBall)

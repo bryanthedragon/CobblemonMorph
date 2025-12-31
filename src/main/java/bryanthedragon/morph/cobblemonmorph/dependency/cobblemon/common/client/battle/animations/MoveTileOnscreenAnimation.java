@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.b
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ActiveClientBattlePokemon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBattlePokemon
-class MoveTileOnscreenAnimation(val swappedPokemon: ClientBattlePokemon?, val duration: Float = 0.75F) : TileAnimation {
+public class MoveTileOnscreenAnimation(val swappedPokemon: ClientBattlePokemon?, val duration: Float = 0.75F) : TileAnimation {
     var passedSeconds = 0F
 
     override fun shouldHoldUntilNextAnimation() = false

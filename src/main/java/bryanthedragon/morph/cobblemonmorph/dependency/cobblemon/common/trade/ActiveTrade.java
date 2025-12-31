@@ -11,15 +11,15 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.trade
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 import java.util.UUID
 
-class ActiveTrade(val player1: TradeParticipant, val player2: TradeParticipant) {
+public class ActiveTrade(val player1: TradeParticipant, val player2: TradeParticipant) {
     val player1Offer = TradeOffer()
     val player2Offer = TradeOffer()
 
-    fun getTradeParticipant(uuid: UUID) = if (player1.uuid == uuid) player1 else player2
+    fun getTradeParticipant(UUID uuid) = if (player1.uuid == uuid) player1 else player2
     fun getOffer(tradeParticipant: TradeParticipant) = if (tradeParticipant == player1) player1Offer else player2Offer
     fun getOpposingOffer(tradeParticipant: TradeParticipant) = if (tradeParticipant == player1) player2Offer else player1Offer
 
-    fun updateOffer(tradeParticipant: TradeParticipant, pokemon: Pokemon?) {
+    fun updateOffer(tradeParticipant: TradeParticipant, Pokemon pokemon?) {
         getOffer(tradeParticipant).updateOffer(pokemon)
         getOffer(getOppositePlayer(tradeParticipant)).accepted = false
         player1.updateOffer(this, tradeParticipant, pokemon)

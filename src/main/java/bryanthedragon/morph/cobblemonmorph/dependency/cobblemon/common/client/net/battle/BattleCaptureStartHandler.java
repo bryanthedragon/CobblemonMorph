@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.battle.ClientBallDisplay
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.BattleCaptureStartPacket
 import net.minecraft.client.Minecraft
-final class BattleCaptureStartHandler : ClientNetworkPacketHandler<BattleCaptureStartPacket> {
-    override fun handle(packet: BattleCaptureStartPacket, client: Minecraft) {
+public final class BattleCaptureStartHandler : ClientNetworkPacketHandler<BattleCaptureStartPacket> {
+    override fun handle(packet: BattleCaptureStartPacket, Minecraft client) {
         val battle = CobblemonClient.battle ?: return
         val targetPokemon = battle.getPokemonFromPNX(packet.targetPNX)
         val tile = targetPokemon.second

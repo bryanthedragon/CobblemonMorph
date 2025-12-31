@@ -23,19 +23,20 @@ import net.minecraft.server.packs.PackType
 /**
  * The data registry for [PokeRod]s.
  * All the pokerod fields are guaranteed to exist
- */final class PokeRods : JsonDataRegistry<PokeRod> {
+ */
+public final class PokeRods : JsonDataRegistry<PokeRod> {
 
     override val id = cobblemonResource("pokerods")
     override val type = PackType.SERVER_DATA
     override val observable = SimpleObservable<PokeRods>()
 
     // ToDo once datapack pokerod is implemented add required adapters here
-    override val gson: Gson = GsonBuilder()
+    override val Gson gson = GsonBuilder()
         .disableHtmlEscaping()
-        .registerTypeAdapter(ResourceLocation::class.java, IdentifierAdapter)
+        .registerTypeAdapter(ResourceLocation.class, IdentifierAdapter)
         .setPrettyPrinting()
         .create()
-    override val typeToken: TypeToken<PokeRod> = TypeToken.get(PokeRod::class.java)
+    override val typeToken: TypeToken<PokeRod> = TypeToken.get(PokeRod.class)
     override val resourcePath = "pokerods"
 
     private val rods = mutableMapOf<ResourceLocation, PokeRod>()
@@ -48,7 +49,7 @@ import net.minecraft.server.packs.PackType
         this.observable.emit(this)
     }
 
-    override fun sync(player: ServerPlayer) {
+    override fun sync(ServerPlayer player) {
         PokeRodRegistrySyncPacket(rods.values).sendToPlayer(player)
     }
 

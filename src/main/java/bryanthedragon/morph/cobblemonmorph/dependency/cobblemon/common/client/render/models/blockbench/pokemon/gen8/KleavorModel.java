@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class KleavorModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
+public class KleavorModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("kleavor")
     override val head = getPart("head")
 

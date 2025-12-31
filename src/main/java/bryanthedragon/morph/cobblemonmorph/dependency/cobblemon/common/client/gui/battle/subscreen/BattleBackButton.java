@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.gui.GuiGraphics
 
-class BattleBackButton(val x: Float, val y: Float) : CobblemonRenderable {
-    companion object {
+public class BattleBackButton(val x: Float, val y: Float) : CobblemonRenderable {
+    final class Companion {
         const val WIDTH = 58
         const val HEIGHT = 34
         const val SCALE = 0.5F

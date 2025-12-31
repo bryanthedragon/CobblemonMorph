@@ -20,15 +20,15 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.ResourceLocation
 
-class DialogueOptionWidget(
+public class DialogueOptionWidget(
     val dialogueScreen: DialogueScreen,
     val text: MutableComponent,
     val value: String,
     val selectable: Boolean,
     x: Int,
     y: Int,
-    width: Int,
-    height: Int,
+    Int width,
+    Int height,
     val texture: ResourceLocation
 ) : ParentWidget(x, y, width, height, text) {
     override fun renderWidget(context: GuiGraphics, mouseX: Int, mouseY: Int, delta: Float) {

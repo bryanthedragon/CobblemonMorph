@@ -25,7 +25,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 import net.minecraft.world.entity.ai.memory.WalkTarget
 import net.minecraft.world.phys.AABB
-final class GoToHealingMachineTask {
+public final class GoToHealingMachineTask {
     fun create(
         horizontalSearchRange: Expression,
         verticalSearchRange: Expression,

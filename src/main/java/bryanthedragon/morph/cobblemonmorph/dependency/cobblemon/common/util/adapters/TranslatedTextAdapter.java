@@ -22,8 +22,9 @@ import net.minecraft.network.chat.ComponentSerialization
  *
  * @author Hiroku
  * @since November 26th, 2024
- */final class TranslatedTextAdapter : JsonDeserializer<Component> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, ctx: JsonDeserializationContext) : Component {
+ */
+public final class TranslatedTextAdapter : JsonDeserializer<Component> {
+    override fun deserialize(JsonElement json, typeOfT: Type, JsonDeserializationContext ctx) : Component {
         return if (json.isJsonObject) {
             ComponentSerialization.CODEC.decode(JsonOps.INSTANCE, json).result().get().first
         } else {

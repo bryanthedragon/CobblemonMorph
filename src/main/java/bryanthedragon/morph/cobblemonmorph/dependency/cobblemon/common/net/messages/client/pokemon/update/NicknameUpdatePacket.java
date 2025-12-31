@@ -15,18 +15,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.MutableComponent
 
-class NicknameUpdatePacket(pokemon: () -> Pokemon?, value: MutableComponent?): SingleUpdatePacket<MutableComponent?, NicknameUpdatePacket>(pokemon, value) {
+public class NicknameUpdatePacket(pokemon: () -> Pokemon?, value: MutableComponent?): SingleUpdatePacket<MutableComponent?, NicknameUpdatePacket>(pokemon, value) {
     override val id = ID
 
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeNullable(value) { _, v -> buffer.writeText(v) }
     }
 
-    override fun set(pokemon: Pokemon, value: MutableComponent?) { pokemon.nickname = value }
+    override fun set(Pokemon pokemon, value: MutableComponent?) { pokemon.nickname = value }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("nickname_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): NicknameUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): NicknameUpdatePacket {
             val pokemon = decodePokemon(buffer)
             val nickname = buffer.readNullable { buffer.readText().copy() }
             return NicknameUpdatePacket(pokemon, nickname)

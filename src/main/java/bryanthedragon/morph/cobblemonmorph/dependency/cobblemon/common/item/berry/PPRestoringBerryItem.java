@@ -35,19 +35,19 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since August 5th, 2023
  */
-class PPRestoringBerryItem(block: BerryBlock, val amount: () -> ExpressionLike): BerryItem(block), PokemonAndMoveSelectingItem {
+public class PPRestoringBerryItem(block: BerryBlock, val amount: () -> ExpressionLike): BerryItem(block), PokemonAndMoveSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName: String get() = "item.cobblemon.${berry()!!.identifier.path}"
         override val returnItem = Items.AIR
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "ether $data ${ genericRuntime.resolveInt(amount(), battlePokemon) }"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) = target.health > 0 && target.moveSet.any { it.currentPp < it.maxPp }
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "ether $data ${ genericRuntime.resolveInt(amount(), battlePokemon) }"
     }
 
-    override fun canUseOnMove(stack: ItemStack, move: Move) = move.currentPp < move.maxPp
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.moveSet.any { canUseOnMove(stack, it) }
+    override fun canUseOnMove(ItemStack stack, move: Move) = move.currentPp < move.maxPp
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = pokemon.moveSet.any { canUseOnMove(stack, it) }
             && super.canUseOnPokemon(stack, pokemon)
 
-    override fun applyToPokemon(player: ServerPlayer, stack: ItemStack, pokemon: Pokemon, move: Move) {
+    override fun applyToPokemon(ServerPlayer player, ItemStack stack, Pokemon pokemon, move: Move) {
         if (canUseOnPokemon(stack, pokemon) && canUseOnMove(stack, move)) {
             pokemon.feedPokemon(1)
             val moveToRecover = pokemon.moveSet.find { it.template == move.template }
@@ -60,12 +60,12 @@ class PPRestoringBerryItem(block: BerryBlock, val amount: () -> ExpressionLike):
         }
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon, move: Move) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon, move: Move) {
         super.applyToBattlePokemon(player, stack, battlePokemon, move)
         battlePokemon.originalPokemon.feedPokemon(1)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (world is ServerLevel && user is ServerPlayer) {
             return use(user, user.getItemInHand(hand)) ?: InteractionResultHolder.pass(user.getItemInHand(hand))
         }

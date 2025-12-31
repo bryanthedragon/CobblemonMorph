@@ -11,7 +11,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.battles.
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.battles.model.PokemonBattle
 import org.objectweb.asm.tree.analysis.Interpreter
 
-class InstructionSet {
+public class InstructionSet {
     val instructions: MutableList<InterpreterInstruction> = mutableListOf()
 
     fun getSubsequentInstructions(instruction: InterpreterInstruction): List<InterpreterInstruction> {

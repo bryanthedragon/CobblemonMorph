@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
  * @since May 12th, 2022
  */
 fun interface PokemonPropertyExtractor {
-    companion object {
+    final class Companion {
         @JvmField
         val ALL = mutableListOf<PokemonPropertyExtractor>()
 
@@ -63,5 +63,5 @@ fun interface PokemonPropertyExtractor {
         }
     }
 
-    operator fun invoke(pokemon: Pokemon, properties: PokemonProperties)
+    operator fun invoke(Pokemon pokemon, properties: PokemonProperties)
 }

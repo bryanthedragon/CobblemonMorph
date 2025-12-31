@@ -11,8 +11,8 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.drop
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.requirement.Requirement
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
 
-class EvolutionItemDropEntry : ItemDropEntry() {
+public class EvolutionItemDropEntry : ItemDropEntry() {
     val requirements: MutableSet<Requirement> = mutableSetOf()
 
-    override fun canDrop(pokemon: Pokemon?): Boolean = pokemon != null && requirements.all { it.check(pokemon) }
+    override fun canDrop(Pokemon pokemon?): Boolean = pokemon != null && requirements.all { it.check(pokemon) }
 }

@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.isBa
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class DiglettAlolanModel(root: ModelPart) : PokemonPosableModel(root) {
+public class DiglettAlolanModel(root: ModelPart) : PokemonPosableModel(root) {
     override val rootPart = root.registerChildWithAllChildren("diglett_alolan")
 
     override var portraitScale = 1.8F

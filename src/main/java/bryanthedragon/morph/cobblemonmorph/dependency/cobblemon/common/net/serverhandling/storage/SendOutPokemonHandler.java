@@ -19,14 +19,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.rayc
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.ClipContext
-final class SendOutPokemonHandler : ServerNetworkPacketHandler<SendOutPokemonPacket> {
+public final class SendOutPokemonHandler : ServerNetworkPacketHandler<SendOutPokemonPacket> {
 
     const val THROW_DURATION = 0.5F
     const val SEND_OUT_DURATION = 1.5F
     const val SEND_OUT_STAGGER_BASE_DURATION = 0.35F
     const val SEND_OUT_STAGGER_RANDOM_MAX_DURATION = 0.15F
 
-    override fun handle(packet: SendOutPokemonPacket, server: MinecraftServer, player: ServerPlayer) {
+    override fun handle(packet: SendOutPokemonPacket, server: MinecraftServer, ServerPlayer player) {
         val slot = packet.slot.takeIf { it >= 0 } ?: return
         val party = Cobblemon.storage.getParty(player)
         val pokemon = party.get(slot) ?: return
@@ -49,7 +49,7 @@ final class SendOutPokemonHandler : ServerNetworkPacketHandler<SendOutPokemonPac
         }
     }
 
-    private fun recallWithAnimation(pokemon: PokemonEntity) {
+    private fun recallWithAnimation(Pokemon pokemonEntity) {
         // Calculate time until ball throw animation would be finished nicely
         val buffer = THROW_DURATION + 0.5F - pokemon.ticksLived.toFloat() / 20F
         if (buffer > 0.75F) {

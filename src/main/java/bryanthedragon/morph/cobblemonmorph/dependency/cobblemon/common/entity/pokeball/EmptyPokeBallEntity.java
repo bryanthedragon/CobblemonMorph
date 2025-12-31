@@ -76,7 +76,7 @@ import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import java.util.concurrent.CompletableFuture
 
-class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragModifier, Schedulable {
+public class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragModifier, Schedulable {
     enum class CaptureState {
         NOT,
         HIT,
@@ -87,12 +87,12 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         BROKEN_FREE
     }
 
-    companion object {
-        val CAPTURE_STATE = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.BYTE)
-        val HIT_TARGET_POSITION = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, Vec3DataSerializer)
-        val HIT_VELOCITY = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, Vec3DataSerializer)
-        val SHAKE = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, EntityDataSerializers.BOOLEAN)
-        val ASPECTS = SynchedEntityData.defineId(EmptyPokeBallEntity::class.java, StringSetDataSerializer)
+    final class Companion {
+        val CAPTURE_STATE = SynchedEntityData.defineId(EmptyPokeBallEntity.class, EntityDataSerializers.BYTE)
+        val HIT_TARGET_POSITION = SynchedEntityData.defineId(EmptyPokeBallEntity.class, Vec3DataSerializer)
+        val HIT_VELOCITY = SynchedEntityData.defineId(EmptyPokeBallEntity.class, Vec3DataSerializer)
+        val SHAKE = SynchedEntityData.defineId(EmptyPokeBallEntity.class, EntityDataSerializers.BOOLEAN)
+        val ASPECTS = SynchedEntityData.defineId(EmptyPokeBallEntity.class, StringSetDataSerializer)
 
         const val SECONDS_BETWEEN_SHAKES = 1.25F
         const val SECONDS_BEFORE_SHAKE = 1F
@@ -103,12 +103,12 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
     val dataTrackerEmitter = SimpleObservable<EntityDataAccessor<*>>()
 
     override val schedulingTracker = SchedulingTracker()
-    var capturingPokemon: PokemonEntity? = null
+    var capturingPokemon pokemonEntity? = null
     val captureFuture = CompletableFuture<Boolean>()
     var captureState: CaptureState
         get() = CaptureState.entries[entityData.get(CAPTURE_STATE).toInt()]
         set(value) { entityData.set(CAPTURE_STATE, value.ordinal.toByte()) }
-    var aspects: Set<String>
+    Set<String> aspects
         get() = entityData.get(ASPECTS)
         set(value) { entityData.set(ASPECTS, value) }
 
@@ -158,10 +158,10 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
         addPosableFunctions(struct)
     }
 
-    constructor(world: Level) : this(pokeBall = PokeBalls.POKE_BALL, world = world)
+    constructor(Level world) : this(pokeBall = PokeBalls.POKE_BALL, world = world)
     constructor(
         pokeBall: PokeBall,
-        world: Level,
+        Level world,
         entityType: EntityType<out EmptyPokeBallEntity> = EMPTY_POKEBALL
     ): super(entityType, world) {
         this.pokeBall = pokeBall
@@ -169,7 +169,7 @@ class EmptyPokeBallEntity : ThrowableItemProjectile, PosableEntity, WaterDragMod
 
     constructor(
         pokeBall: PokeBall,
-        world: Level,
+        Level world,
         ownerEntity: LivingEntity,
         entityType: EntityType<out EmptyPokeBallEntity> = EMPTY_POKEBALL
     ): super(entityType, ownerEntity, world) {

@@ -7,7 +7,7 @@
  */
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ai.config.task
-final class SharedEntityVariables {
+public final class SharedEntityVariables {
     const val MOVEMENT_CATEGORY = "movement"
     const val FEAR_CATEGORY = "fear"
     const val ATTACKING_CATEGORY = "attacking"

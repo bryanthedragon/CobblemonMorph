@@ -32,19 +32,19 @@ import net.minecraft.world.level.Level
  * @author Hiroku
  * @since June 30th, 2023
  */
-class StatusCureItem(val itemName: String, vararg val status: Status) : CobblemonItem(Properties()), PokemonSelectingItem {
+public class StatusCureItem(val itemName: String, vararg val status: Status) : CobblemonItem(Properties()), PokemonSelectingItem {
     override val bagItem = object : BagItem {
         override val itemName = this@StatusCureItem.itemName
         override val returnItem = Items.AIR
-        override fun canUse(stack: ItemStack, battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(stack, target.effectedPokemon)
-        override fun getShowdownInput(actor: BattleActor, battlePokemon: BattlePokemon, data: String?) = "cure_status${status.takeIf { it.isNotEmpty() }?.let { " ${it.joinToString(separator = " ") { it.showdownName } }" } ?: "" }"
+        override fun canUse(ItemStack stack, battle: PokemonBattle, target: BattlePokemon) = canUseOnPokemon(stack, target.effectedPokemon)
+        override fun getShowdownInput(actor: BattleActor, BattlePokemon battlePokemon, data: String?) = "cure_status${status.takeIf { it.isNotEmpty() }?.let { " ${it.joinToString(separator = " ") { it.showdownName } }" } ?: "" }"
     }
 
-    override fun canUseOnPokemon(stack: ItemStack, pokemon: Pokemon) = pokemon.status?.let { it.status in status || status.isEmpty() } == true && pokemon.currentHealth > 0
+    override fun canUseOnPokemon(ItemStack stack, Pokemon pokemon) = pokemon.status?.let { it.status in status || status.isEmpty() } == true && pokemon.currentHealth > 0
     override fun applyToPokemon(
-        player: ServerPlayer,
-        stack: ItemStack,
-        pokemon: Pokemon
+        ServerPlayer player,
+        ItemStack stack,
+        Pokemon pokemon
     ): InteractionResultHolder<ItemStack>? {
         val currentStatus = pokemon.status?.status
         return if (currentStatus != null && (status.isEmpty() || currentStatus in status)) {
@@ -60,12 +60,12 @@ class StatusCureItem(val itemName: String, vararg val status: Status) : Cobblemo
         }
     }
 
-    override fun applyToBattlePokemon(player: ServerPlayer, stack: ItemStack, battlePokemon: BattlePokemon) {
+    override fun applyToBattlePokemon(ServerPlayer player, ItemStack stack, BattlePokemon battlePokemon) {
         super.applyToBattlePokemon(player, stack, battlePokemon)
         battlePokemon.entity?.playSound(CobblemonSounds.MEDICINE_SPRAY_USE, 1F, 1F)
     }
 
-    override fun use(world: Level, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
+    override fun use(Level world, user: Player, hand: InteractionHand): InteractionResultHolder<ItemStack> {
         if (user is ServerPlayer) {
             return use(user, user.getItemInHand(hand))
         }

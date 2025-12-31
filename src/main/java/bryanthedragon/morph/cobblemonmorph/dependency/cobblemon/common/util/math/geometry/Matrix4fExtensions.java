@@ -16,7 +16,7 @@ fun Matrix4f.getOrigin(): Vec3 {
     return transformPosition(Vec3.ZERO)
 }
 
-fun Matrix4f.transformPosition(pos: Vec3): Vec3 {
+fun Matrix4f.transformPosition(Vec3 pos): Vec3 {
     val vector = Vector4f(pos.x.toFloat(), pos.y.toFloat(), pos.z.toFloat(), 1F)
     transform(vector)
     vector.mul(1 / vector.w)

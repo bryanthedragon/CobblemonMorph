@@ -6,25 +6,26 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon
-import java.io.FileInputStream
-import java.io.IOException
-import java.io.InputStream
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardCopyOption
-import java.util.zip.ZipEntry
-import java.util.zip.ZipInputStream
-final class FileUtils {
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.Cobblemon;
 
-    private fun getResourceStream(internal: String): InputStream {
-        return Cobblemon::class.java.getResourceAsStream(internal)
-            ?: throw Exception("Could not read $internal")
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+public final class FileUtils {
+
+    private InputStream getResourceStream(String internal) {
+        return Cobblemon.class.getResourceAsStream(internal)?: throw Exception("Could not read $internal")
     }
 
-    fun copyInternalToExternal(internal: String, external: Path) {
+    fun copyInternalToExternal(String internal, Path external) {
         getResourceStream(internal).use { stream ->
             Files.copy(stream, external, StandardCopyOption.REPLACE_EXISTING)
         }

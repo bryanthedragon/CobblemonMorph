@@ -15,8 +15,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import net.minecraft.server.level.ServerPlayer
 
 record FossilRevivedEvent (
-    val pokemon: Pokemon,
-    val player: ServerPlayer?
+    val Pokemon pokemon,
+    val ServerPlayer player?
 ) {
     val context = mutableMapOf<String, MoValue>(
         "pokemon" to pokemon.struct,

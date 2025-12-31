@@ -19,13 +19,13 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType
 import java.util.stream.Stream
 
-class LocatePredicatePlacementModifier(
+public class LocatePredicatePlacementModifier(
     val predicate: BlockPredicate,
     val maxTries: Int,
     val xzRange: Int,
     val yRange: Int
 ) : PlacementModifier() {
-    companion object {
+    final class Companion {
         val MODIFIER_CODEC: MapCodec<LocatePredicatePlacementModifier> = RecordCodecBuilder.mapCodec { instance ->
             instance.group(
                 BlockPredicate.CODEC.fieldOf("predicate").forGetter {it.predicate},
@@ -41,7 +41,7 @@ class LocatePredicatePlacementModifier(
     override fun getPositions(
         context: PlacementContext,
         random: RandomSource,
-        pos: BlockPos
+        (BlockPos pos
     ): Stream<BlockPos> {
         for (i in 0..maxTries) {
             val newPos = pos.offset(random.nextIntBetweenInclusive(0, xzRange), random.nextIntBetweenInclusive(-yRange, yRange), random.nextIntBetweenInclusive(0, xzRange))

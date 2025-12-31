@@ -20,7 +20,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class ElekidModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame {
+public class ElekidModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame, BimanualFrame {
     override val rootPart = root.registerChildWithAllChildren("elekid")
     override val leftLeg = getPart("leg_left")
     override val rightLeg = getPart("leg_right")

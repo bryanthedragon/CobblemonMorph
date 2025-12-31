@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class TangelaModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame {
+public class TangelaModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("tangela")
 
     override val leftLeg = getPart("leftfoot")

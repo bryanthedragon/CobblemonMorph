@@ -15,7 +15,7 @@ import mezz.jei.api.registration.IRecipeRegistration
 /**
  *
  */
-interface CobblemonJeiProvider {
+public interface CobblemonJeiProvider {
     fun registerCategory(registration: IRecipeCategoryRegistration)
     fun registerRecipes(registration: IRecipeRegistration)
     fun registerRecipeCatalsysts(registration: IRecipeCatalystRegistration)

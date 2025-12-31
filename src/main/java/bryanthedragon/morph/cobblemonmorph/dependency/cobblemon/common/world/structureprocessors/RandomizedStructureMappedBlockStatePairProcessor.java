@@ -35,15 +35,15 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  * @param rules The list of rules to check for each block
  * @param probability The probability for this processor to run
  */
-class RandomizedStructureMappedBlockStatePairProcessor(
+public class RandomizedStructureMappedBlockStatePairProcessor(
     val targetBlockPairs: List<Pair<Block, Block>>,
     val transformer: BlockStateTransformer,
     val rules: List<RuleTest>,
     val probability: Float = 1.0f
 ) : StructureProcessor() {
     override fun processBlock(
-        world: LevelReader,
-        pos: BlockPos,
+        Level worldReader,
+        (BlockPos pos,
         pivot: BlockPos,
         originalBlockInfo: StructureTemplate.StructureBlockInfo,
         currentBlockInfo: StructureTemplate.StructureBlockInfo,
@@ -71,7 +71,7 @@ class RandomizedStructureMappedBlockStatePairProcessor(
 
     override fun getType() = CobblemonProcessorTypes.RANDOM_POOLED_STATES
 
-    companion object {
+    final class Companion {
         val CODEC: MapCodec<RandomizedStructureMappedBlockStatePairProcessor> = RecordCodecBuilder.mapCodec { instance ->
             instance
                 .group(

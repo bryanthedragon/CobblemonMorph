@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.asEx
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.createDuplicateRuntime
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.resolveFloat
 
-class WalkBehaviour {
+public class WalkBehaviour {
     val canWalk = true
     val avoidsLand = false
     var walkSpeed: Expression = "0.35".asExpression()

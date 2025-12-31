@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.P
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.getPlayer
 import net.minecraft.server.level.ServerPlayer
 
-class CollectEggEvent (
+public class CollectEggEvent (
     val egg : PokemonProperties,
     val maleParent : Pokemon,
     val femaleParent : Pokemon,

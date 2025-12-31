@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity
 import net.minecraft.client.model.geom.ModelPart
 
-class BeastBallModel(root: ModelPart) : PokeBallModel(root), PokeBallFrame {
+public class BeastBallModel(root: ModelPart) : PokeBallModel(root), PokeBallFrame {
 
     override fun registerPoses() {
         midair = registerPose(

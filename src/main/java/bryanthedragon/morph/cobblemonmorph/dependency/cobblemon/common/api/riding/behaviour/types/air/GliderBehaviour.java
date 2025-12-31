@@ -29,8 +29,8 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 
-class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
-    companion object {
+public class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
+    final class Companion {
         val KEY = cobblemonResource("air/glider")
     }
 
@@ -184,7 +184,7 @@ class GliderBehaviour : RidingBehaviour<GliderSettings, RidingBehaviourState> {
     override fun createDefaultState(settings: GliderSettings) = RidingBehaviourState()
 }
 
-class GliderSettings : RidingBehaviourSettings {
+public class GliderSettings : RidingBehaviourSettings {
     override val key = GliderBehaviour.KEY
     override val stats = mutableMapOf<RidingStat, IntRange>()
 
@@ -199,7 +199,7 @@ class GliderSettings : RidingBehaviourSettings {
 
     var rideSounds: RideSoundSettingsList = RideSoundSettingsList()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeRidingStats(stats)
         rideSounds.encode(buffer)
         buffer.writeNullableExpression(glideSpeed)
@@ -207,7 +207,7 @@ class GliderSettings : RidingBehaviourSettings {
         buffer.writeNullableExpression(canStrafe)
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         stats.putAll(buffer.readRidingStats())
         rideSounds = RideSoundSettingsList.decode(buffer)
         glideSpeed = buffer.readNullableExpression()

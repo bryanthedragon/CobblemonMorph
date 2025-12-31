@@ -16,10 +16,10 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.syncher.EntityDataSerializer
-final class NPCPlayerTextureSerializer : EntityDataSerializer<NPCPlayerTexture> {
+public final class NPCPlayerTextureSerializer : EntityDataSerializer<NPCPlayerTexture> {
     val ID = cobblemonResource("npcplayertexture")
 
-    fun write(buffer: RegistryFriendlyByteBuf, texture: NPCPlayerTexture) {
+    fun write(RegistryFriendlyByteBuf buffer, texture: NPCPlayerTexture) {
         buffer.writeEnumConstant(texture.model)
         if (texture.model == NPCPlayerModelType.NONE) {
             return
@@ -27,8 +27,8 @@ final class NPCPlayerTextureSerializer : EntityDataSerializer<NPCPlayerTexture> 
         buffer.writeByteArray(texture.texture)
     }
 
-    fun read(buffer: RegistryFriendlyByteBuf): NPCPlayerTexture {
-        val model = buffer.readEnumConstant(NPCPlayerModelType::class.java)
+    fun read(RegistryFriendlyByteBuf buffer): NPCPlayerTexture {
+        val model = buffer.readEnumConstant(NPCPlayerModelType.class)
         val texture = if (model == NPCPlayerModelType.NONE) ByteArray(1) else buffer.readByteArray()
         return NPCPlayerTexture(texture, model)
     }

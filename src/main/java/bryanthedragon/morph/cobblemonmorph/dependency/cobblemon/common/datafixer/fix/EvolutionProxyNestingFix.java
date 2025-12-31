@@ -12,7 +12,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.Data
 import com.mojang.datafixers.schemas.Schema
 import com.mojang.serialization.Dynamic
 
-class EvolutionProxyNestingFix(outputSchema: Schema) : PokemonFix(outputSchema) {
+public class EvolutionProxyNestingFix(outputSchema: Schema) : PokemonFix(outputSchema) {
 
     override fun fixPokemonData(dynamic: Dynamic<*>): Dynamic<*> {
         if (dynamic.get(DataKeys.POKEMON_EVOLUTIONS).result().isPresent) {
@@ -30,7 +30,7 @@ class EvolutionProxyNestingFix(outputSchema: Schema) : PokemonFix(outputSchema) 
         return dynamic
     }
 
-    companion object {
+    final class Companion {
         private const val POKEMON_PENDING_EVOLUTIONS = "Pending"
     }
 

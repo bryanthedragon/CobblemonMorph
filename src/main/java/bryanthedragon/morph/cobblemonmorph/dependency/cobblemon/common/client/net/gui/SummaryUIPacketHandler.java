@@ -13,14 +13,14 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.gui.summary.Summary
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.ui.SummaryUIPacket
 import net.minecraft.client.Minecraft
-final class SummaryUIPacketHandler: ClientNetworkPacketHandler<SummaryUIPacket> {
-    override fun handle(packet: SummaryUIPacket, client: Minecraft) {
+public final class SummaryUIPacketHandler: ClientNetworkPacketHandler<SummaryUIPacket> {
+    override fun handle(packet: SummaryUIPacket, Minecraft client) {
         try {
             Summary.open(
                 party = packet.pokemon,
                 editable = packet.editable
             )
-        } catch (e: Exception) {
+        } catch (Exception e) {
             Cobblemon.LOGGER.debug("Failed to open the summary from the SummaryUI packet handler", e)
         }
     }

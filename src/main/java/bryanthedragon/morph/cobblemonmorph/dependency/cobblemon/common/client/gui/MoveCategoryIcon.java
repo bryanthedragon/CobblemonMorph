@@ -13,13 +13,13 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.client.gui.GuiGraphics
 
-class MoveCategoryIcon(
+public class MoveCategoryIcon(
     val x: Number,
     val y: Number,
     val category: DamageCategory,
     val opacity: Float = 1F
 ) {
-    companion object {
+    final class Companion {
         private const val WIDTH = 24
         private const val HEIGHT = 16
         private const val SCALE = 0.5F

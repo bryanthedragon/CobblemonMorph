@@ -18,11 +18,12 @@ import java.lang.reflect.Type
  *
  * @author Licious
  * @since November 28th, 2022
- */final class FloatNumberRangeAdapter : JsonDeserializer<MinMaxBounds.Doubles>, JsonSerializer<MinMaxBounds.Doubles> {
-    override fun deserialize(element: JsonElement, type: Type, context: JsonDeserializationContext): MinMaxBounds.Doubles {
+ */
+public final class FloatNumberRangeAdapter : JsonDeserializer<MinMaxBounds.Doubles>, JsonSerializer<MinMaxBounds.Doubles> {
+    override fun deserialize(JsonElement jElement, Type type, JsonDeserializationContext context): MinMaxBounds.Doubles {
         return MinMaxBounds.Doubles.CODEC.decode(JsonOps.INSTANCE, element).result().get().first
     }
-    override fun serialize(range: MinMaxBounds.Doubles, type: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(range: MinMaxBounds.Doubles, Type type, context: JsonSerializationContext): JsonElement {
         return MinMaxBounds.Doubles.CODEC.encode(range, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result().get()
     }
 }

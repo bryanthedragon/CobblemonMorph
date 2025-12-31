@@ -23,12 +23,12 @@ import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.Screen
 import org.lwjgl.glfw.GLFW
 
-class DialogueTextInputWidget(
+public class DialogueTextInputWidget(
     val dialogueScreen: DialogueScreen,
     x: Int,
     y: Int,
-    width: Int,
-    height: Int,
+    Int width,
+    Int height,
     maxLength: Int = 30
 ) : EditBox(
     Minecraft.getInstance().font,
@@ -89,7 +89,7 @@ class DialogueTextInputWidget(
         )
     }
 
-    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+    override fun keyPressed(Int keyCode, Int scanCode, modifiers: Int): Boolean {
         if (keyCode == InputConstants.KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
             this.dialogueScreen.sendToServer(InputToDialoguePacket(dialogueScreen.dialogueDTO.dialogueInput.inputId, value.trim()))
         }

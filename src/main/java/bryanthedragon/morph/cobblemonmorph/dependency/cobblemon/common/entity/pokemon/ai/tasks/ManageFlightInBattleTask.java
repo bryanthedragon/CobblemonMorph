@@ -17,7 +17,7 @@ import net.minecraft.world.entity.ai.behavior.OneShot
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
-final class ManageFlightInBattleTask {
+public final class ManageFlightInBattleTask {
     fun create(): OneShot<LivingEntity> = BehaviorBuilder.create { context ->
         context.group(
             context.present(CobblemonMemories.POKEMON_BATTLE)

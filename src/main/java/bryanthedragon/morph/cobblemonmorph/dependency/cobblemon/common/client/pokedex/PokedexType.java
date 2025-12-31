@@ -10,7 +10,7 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.p
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 
-enum class PokedexType {
+public enum PokedexType {
     RED,
     YELLOW,
     GREEN,

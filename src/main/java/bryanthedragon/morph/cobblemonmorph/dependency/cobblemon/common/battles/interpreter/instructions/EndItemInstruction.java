@@ -27,7 +27,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.batt
  * @author Licious
  * @since December 30th, 2022
  */
-class EndItemInstruction(val message: BattleMessage): InterpreterInstruction {
+public class EndItemInstruction(val message: BattleMessage): InterpreterInstruction {
 
     override fun invoke(battle: PokemonBattle) {
         battle.dispatchWaiting(1.5F) {

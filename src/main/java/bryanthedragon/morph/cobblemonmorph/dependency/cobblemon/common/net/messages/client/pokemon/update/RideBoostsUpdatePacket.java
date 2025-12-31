@@ -15,18 +15,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.read
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writeEnumConstant
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class RideBoostsUpdatePacket(pokemon: () -> Pokemon?, rideBoosts: Map<RidingStat, Float>) : SingleUpdatePacket<Map<RidingStat, Float>, RideBoostsUpdatePacket>(pokemon, rideBoosts) {
-    companion object {
+public class RideBoostsUpdatePacket(pokemon: () -> Pokemon?, rideBoosts: Map<RidingStat, Float>) : SingleUpdatePacket<Map<RidingStat, Float>, RideBoostsUpdatePacket>(pokemon, rideBoosts) {
+    final class Companion {
         val ID = cobblemonResource("ride_boosts_update")
-        fun decode(buffer: RegistryFriendlyByteBuf): RideBoostsUpdatePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): RideBoostsUpdatePacket {
             val pokemon = decodePokemon(buffer)
-            val rideBoosts = buffer.readMap({ buffer.readEnumConstant(RidingStat::class.java) }, { buffer.readFloat() })
+            val rideBoosts = buffer.readMap({ buffer.readEnumConstant(RidingStat.class) }, { buffer.readFloat() })
             return RideBoostsUpdatePacket(pokemon, rideBoosts)
         }
     }
 
     override val id = ID
-    override fun encodeValue(buffer: RegistryFriendlyByteBuf) {
+    override fun encodeValue(RegistryFriendlyByteBuf buffer) {
         buffer.writeMap(
             value,
             { _, it -> buffer.writeEnumConstant(it) },
@@ -34,7 +34,7 @@ class RideBoostsUpdatePacket(pokemon: () -> Pokemon?, rideBoosts: Map<RidingStat
         )
     }
 
-    override fun set(pokemon: Pokemon, value: Map<RidingStat, Float>) {
+    override fun set(Pokemon pokemon, value: Map<RidingStat, Float>) {
         pokemon.setRideBoosts(value)
     }
 }

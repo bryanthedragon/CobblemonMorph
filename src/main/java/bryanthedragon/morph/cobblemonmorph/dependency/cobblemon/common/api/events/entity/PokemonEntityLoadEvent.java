@@ -26,4 +26,4 @@ import net.minecraft.nbt.CompoundTag
  * @author Hiroku
  * @since January 7th, 2022
  */
-record PokemonEntityLoadEvent(val pokemonEntity: PokemonEntity, val nbt: CompoundTag) : Cancelable()
+record PokemonEntityLoadEvent(val pokemonEntity: PokemonEntity, val CompoundTag nbt) : Cancelable()

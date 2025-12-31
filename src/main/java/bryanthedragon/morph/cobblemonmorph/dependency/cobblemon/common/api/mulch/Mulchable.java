@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState
  * Represents something that can have mulch applied to it.
  * Typically, this will be a block implementation.
  */
-interface Mulchable {
+public interface Mulchable {
 
     /**
      * Checks if mulch can be applied to a specific spot in the world.
@@ -28,7 +28,7 @@ interface Mulchable {
      * @param variant The [MulchVariant] being applied.
      * @return If the application is possible.
      */
-    fun canHaveMulchApplied(world: ServerLevel, pos: BlockPos, state: BlockState, variant: MulchVariant): Boolean
+    fun canHaveMulchApplied(ServerLevel world, (BlockPos pos, BlockState state, variant: MulchVariant): Boolean
 
     /**
      * Applies the mulch to the specified spot.
@@ -40,6 +40,6 @@ interface Mulchable {
      * @param state The [BlockState] of the block at the [pos] in the [world].
      * @param variant The [MulchVariant] being applied.
      */
-    fun applyMulch(world: ServerLevel, random: RandomSource, pos: BlockPos, state: BlockState, variant: MulchVariant)
+    fun applyMulch(ServerLevel world, random: RandomSource, (BlockPos pos, BlockState state, variant: MulchVariant)
 
 }

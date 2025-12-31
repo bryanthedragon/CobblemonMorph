@@ -8,5 +8,5 @@
 
 package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net
 
-interface PacketHandler<T : NetworkPacket<T>> {
+public interface PacketHandler<T : NetworkPacket<T>> {
 }

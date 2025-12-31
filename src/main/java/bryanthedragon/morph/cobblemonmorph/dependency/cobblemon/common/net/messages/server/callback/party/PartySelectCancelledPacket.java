@@ -19,14 +19,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since July 7th, 2023
  */
-class PartySelectCancelledPacket(val uuid: UUID) : NetworkPacket<PartySelectCancelledPacket> {
-    companion object {
+public class PartySelectCancelledPacket(val UUID uuid) : NetworkPacket<PartySelectCancelledPacket> {
+    final class Companion {
         val ID = cobblemonResource("party_select_cancelled")
-        fun decode(buffer: RegistryFriendlyByteBuf) = PartySelectCancelledPacket(buffer.readUUID())
+        fun decode(RegistryFriendlyByteBuf buffer) = PartySelectCancelledPacket(buffer.readUUID())
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeUUID(uuid)
     }
 }

@@ -14,6 +14,6 @@ import net.minecraft.world.phys.shapes.VoxelShape
 /**
  *
  */
-interface MultiblockCondition {
-    fun test(world: ServerLevel, box: VoxelShape): Boolean
+public interface MultiblockCondition {
+    fun test(ServerLevel world, box: VoxelShape): Boolean
 }

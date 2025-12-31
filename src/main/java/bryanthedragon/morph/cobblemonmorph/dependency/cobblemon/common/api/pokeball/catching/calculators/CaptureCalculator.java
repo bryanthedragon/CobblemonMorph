@@ -6,15 +6,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.calculators
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.calculators;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokeball.PokemonCatchRateEvent
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CaptureContext
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall
-import net.minecraft.world.entity.LivingEntity
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.CobblemonEvents;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.events.pokeball.PokemonCatchRateEvent;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokeball.catching.CaptureContext;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokeball.EmptyPokeBallEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.pokemon.PokemonEntity;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokeball.PokeBall;
+import net.minecraft.world.entity.LivingEntity;
 
 /**
  * Used to process Pokémon captures.
@@ -26,14 +26,14 @@ import net.minecraft.world.entity.LivingEntity
  * @author landonjw
  * @since November 30, 2021
  */
-interface CaptureCalculator {
+public interface CaptureCalculator {
     /**
      * The literal ID of this calculator.
      * Used when registering the calculator to the registry in order to be used by the game rule.
      *
      * @return The literal ID of this calculator.
      */
-    fun id(): String
+    String id();
 
     /**
      * Processes a capture attempt with the given params.
@@ -43,18 +43,12 @@ interface CaptureCalculator {
      * @param target The target [PokemonEntity] attempting to be captured.
      * @return a [CaptureContext] that is the result of the capture attempt.
      */
-    fun processCapture(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity) : CaptureContext
+    CaptureContext processCapture(LivingEntity thrower, EmptyPokeBallEntity pokeBallEntity, PokemonEntity target) {}
 
-    fun getCatchRate(thrower: LivingEntity, pokeBallEntity: EmptyPokeBallEntity, target: PokemonEntity, catchRate: Float): Float {
-        val event = PokemonCatchRateEvent(
-            thrower = thrower,
-            pokemonEntity = target,
-            pokeBallEntity = pokeBallEntity,
-            catchRate = catchRate
-        )
-
-        CobblemonEvents.POKEMON_CATCH_RATE.post(event)
-
-        return event.catchRate
+    Float getCatchRate(LivingEntity thrower, EmptyPokeBallEntity pokeBallEntity, PokemonEntity target, Float catchRate) {
+            val event = PokemonCatchRateEvent(thrower = thrower, pokemonEntity = target, pokeBallEntity = pokeBallEntity, catchRate = catchRate
+        );
+        CobblemonEvents.POKEMON_CATCH_RATE.post(event);
+        return event.catchRate;
     }
 }

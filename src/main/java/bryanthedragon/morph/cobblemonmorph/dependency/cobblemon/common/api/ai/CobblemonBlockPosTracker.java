@@ -17,11 +17,11 @@ import net.minecraft.world.phys.Vec3
  * @author Hiroku
  * @since August 4th, 2025
  */
-class CobblemonBlockPosTracker(
-    pos: Vec3,
+public class CobblemonBlockPosTracker(
+    Vec3 pos,
     val flags: Set<String> = emptySet(),
 ) : BlockPosTracker(pos) {
-    companion object {
+    final class Companion {
         const val BATTLE_LOOK_BYPASS_FLAG = "battle_look_bypass"
     }
 

@@ -14,9 +14,9 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messa
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.party
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
-final class SetItemHiddenHandler : ServerNetworkPacketHandler<SetItemHiddenPacket> {
+public final class SetItemHiddenHandler : ServerNetworkPacketHandler<SetItemHiddenPacket> {
 
-    override fun handle(packet: SetItemHiddenPacket, server: MinecraftServer, player: ServerPlayer) {
+    override fun handle(packet: SetItemHiddenPacket, server: MinecraftServer, ServerPlayer player) {
 
         val pokemonStore: PokemonStore<*> = player.party()
         val pokemon = pokemonStore[packet.pokemonUUID] ?: return

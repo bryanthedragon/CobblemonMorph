@@ -13,8 +13,8 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
 import net.minecraft.world.phys.Vec3
-final class Vec3dAdapter : JsonDeserializer<Vec3> {
-    override fun deserialize(json: JsonElement, type: Type, ctx: JsonDeserializationContext): Vec3 {
+public final class Vec3dAdapter : JsonDeserializer<Vec3> {
+    override fun deserialize(JsonElement json, Type type, JsonDeserializationContext ctx): Vec3 {
         val array = json.asJsonArray
         return Vec3(array[0].asDouble, array[1].asDouble, array[2].asDouble)
     }

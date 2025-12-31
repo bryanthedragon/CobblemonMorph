@@ -14,7 +14,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawn
  * A [SpawningInfluence] that multiplies bucket weights by the provided values
  * and then normalizes the resulting weights so that their total adds up to 100.
  */
-class BucketMultiplyingInfluence(
+public class BucketMultiplyingInfluence(
     val multipliers: Map<String, Float>,
 ) : SpawningInfluence {
     override fun affectBucketWeights(bucketWeights: MutableMap<SpawnBucket, Float>) {

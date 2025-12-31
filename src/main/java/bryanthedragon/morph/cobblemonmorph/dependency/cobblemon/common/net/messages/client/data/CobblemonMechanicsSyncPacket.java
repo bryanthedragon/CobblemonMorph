@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.mechanics
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class CobblemonMechanicsSyncPacket(
+public class CobblemonMechanicsSyncPacket(
     val remedies: RemediesMechanic,
     val berries: BerriesMechanic,
     val potions: PotionsMechanic,
@@ -26,7 +26,7 @@ class CobblemonMechanicsSyncPacket(
 ) : NetworkPacket<CobblemonMechanicsSyncPacket> {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         remedies.encode(buffer)
         berries.encode(buffer)
         potions.encode(buffer)
@@ -34,10 +34,10 @@ class CobblemonMechanicsSyncPacket(
         slowpokeTails.encode(buffer)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("cobblemon_mechanics_sync")
 
-        fun decode(buffer: RegistryFriendlyByteBuf): CobblemonMechanicsSyncPacket {
+        fun decode(RegistryFriendlyByteBuf buffer): CobblemonMechanicsSyncPacket {
             return CobblemonMechanicsSyncPacket(
                 RemediesMechanic.decode(buffer),
                 BerriesMechanic.decode(buffer),

@@ -57,11 +57,11 @@ abstract class CobblemonConfigEditBoxVariable(
 
     override fun render(
         context: GuiGraphics,
-        index: Int,
+        Int index,
         top: Int,
         left: Int,
-        width: Int,
-        height: Int,
+        Int width,
+        Int height,
         mouseX: Int,
         mouseY: Int,
         hovering: Boolean,
@@ -75,7 +75,7 @@ abstract class CobblemonConfigEditBoxVariable(
     }
 }
 
-class CobblemonConfigStringVariable(
+public class CobblemonConfigStringVariable(
     parent: CobblemonConfigVariableList,
     config: KMutableProperty1<out CobblemonConfig, String>,
 ) : CobblemonConfigEditBoxVariable(parent, config) {
@@ -88,7 +88,7 @@ class CobblemonConfigStringVariable(
     }
 }
 
-class CobblemonConfigIntVariable(
+public class CobblemonConfigIntVariable(
     parent: CobblemonConfigVariableList,
     config: KMutableProperty1<out CobblemonConfig, Int>,
 ) : CobblemonConfigEditBoxVariable(parent, config) {
@@ -122,7 +122,7 @@ class CobblemonConfigIntVariable(
     }
 }
 
-class CobblemonConfigFloatVariable(
+public class CobblemonConfigFloatVariable(
     parent: CobblemonConfigVariableList,
     config: KMutableProperty1<out CobblemonConfig, Float>,
 ) : CobblemonConfigEditBoxVariable(parent, config) {
@@ -138,7 +138,7 @@ class CobblemonConfigFloatVariable(
     }
 }
 
-class CobblemonConfigDoubleVariable(
+public class CobblemonConfigDoubleVariable(
     parent: CobblemonConfigVariableList,
     config: KMutableProperty1<out CobblemonConfig, Double>,
 ) : CobblemonConfigEditBoxVariable(parent, config) {

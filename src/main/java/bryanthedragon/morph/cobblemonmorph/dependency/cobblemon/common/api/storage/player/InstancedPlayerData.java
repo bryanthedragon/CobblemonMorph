@@ -17,9 +17,9 @@ import java.util.UUID
  * @since February 21, 2024
  * @author Apion
  */
-interface InstancedPlayerData {
+public interface InstancedPlayerData {
     //Player uuid
-    val uuid: UUID
+    val UUID uuid
 
     fun initialize() {}
     //Converts this to the client version of this data

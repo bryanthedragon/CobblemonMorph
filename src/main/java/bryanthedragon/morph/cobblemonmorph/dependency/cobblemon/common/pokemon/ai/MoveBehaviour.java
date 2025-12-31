@@ -17,7 +17,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.molan
  * @author Hiroku
  * @since July 30th, 2022
  */
-class MoveBehaviour {
+public class MoveBehaviour {
     val walk = WalkBehaviour()
     val swim = SwimBehaviour()
     val fly = FlyBehaviour()

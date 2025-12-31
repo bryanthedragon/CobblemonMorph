@@ -27,8 +27,8 @@ import net.minecraft.server.level.ServerPlayer
  * @author Hiroku
  * @since August 19th, 2023
  */
-class SimplePartyProvider : NPCPartyProvider {
-    companion object {
+public class SimplePartyProvider : NPCPartyProvider {
+    final class Companion {
         const val TYPE = "simple"
     }
 
@@ -64,7 +64,7 @@ class SimplePartyProvider : NPCPartyProvider {
         }
     }
 
-    override fun loadFromJSON(json: JsonElement) {
+    override fun loadFromJSON(JsonElement json) {
         val isStatic = json.asJsonObject.get("isStatic")?.asBoolean
         if (isStatic != null) {
             this.isStatic = isStatic

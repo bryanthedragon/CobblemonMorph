@@ -25,7 +25,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.math
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class PidgeottoModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BiWingedFrame {
+public class PidgeottoModel(root: ModelPart) : PokemonPosableModel(root), HeadedFrame, BipedFrame, BiWingedFrame {
     override val rootPart = root.registerChildWithAllChildren("pidgeotto")
     override val head = getPart("neck")
 

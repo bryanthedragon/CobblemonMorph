@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.Co
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.render.ClientPlayerIcon
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.battle.TeamRequestExpiredPacket
 import net.minecraft.client.Minecraft
-final class TeamRequestExpiredHandler : ClientNetworkPacketHandler<TeamRequestExpiredPacket> {
-    override fun handle(packet: TeamRequestExpiredPacket, client: Minecraft) {
+public final class TeamRequestExpiredHandler : ClientNetworkPacketHandler<TeamRequestExpiredPacket> {
+    override fun handle(packet: TeamRequestExpiredPacket, Minecraft client) {
         CobblemonClient.requests.multiBattleTeamRequests.remove(packet.senderID)
         ClientPlayerIcon.update(packet.senderID)
     }

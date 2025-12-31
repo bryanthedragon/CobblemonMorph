@@ -13,7 +13,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder
 import net.minecraft.world.entity.ai.behavior.declarative.Trigger
-final class StopTryingToReachSweetBerryBushTask {
+public final class StopTryingToReachSweetBerryBushTask {
     fun create(maxTimeToReachItem: Int, disableDuration: Int): BehaviorControl<LivingEntity?> {
         return BehaviorBuilder.create {
             it.group(

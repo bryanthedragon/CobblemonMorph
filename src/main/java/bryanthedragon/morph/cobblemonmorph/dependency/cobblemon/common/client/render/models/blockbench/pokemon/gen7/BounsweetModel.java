@@ -18,7 +18,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.entity.Po
 import net.minecraft.client.model.geom.ModelPart
 import net.minecraft.world.phys.Vec3
 
-class BounsweetModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame {
+public class BounsweetModel(root: ModelPart) : PokemonPosableModel(root), BipedFrame {
     override val rootPart = root.registerChildWithAllChildren("bounsweet")
 
     override val leftLeg = getPart("left_foot")

@@ -44,8 +44,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.world.entity.EntityDimensions
 import net.minecraft.resources.ResourceLocation
 
-class FormData(
-    name: String = "Normal",
+public class FormData(
+    String name = "Normal",
     // Internal for the sake of the base stat provider
     @SerializedName("baseStats")
     internal var _baseStats: MutableMap<Stat, Int>? = null,
@@ -112,14 +112,14 @@ class FormData(
      * The [MoveTemplate] of the signature attack of the G-Max form.
      * This is always null on any form aside G-Max.
      */
-    val gigantamaxMove: MoveTemplate? = null,
+    val gigantamaxMoveTemplate move? = null,
     @SerializedName("battleTheme")
     private var _battleTheme: ResourceLocation? = null,
     @SerializedName("lightingData")
     private var _lightingData: LightingData? = null
 ) : Decodable, Encodable, ShowdownIdentifiable {
     @SerializedName("name")
-    var name: String = name
+    var String name = name
         private set
 
     val baseStats: Map<Stat, Int>
@@ -247,7 +247,7 @@ class FormData(
     }
 
     @Transient
-    lateinit var species: Species
+    lateinit Species species
 
     fun initialize(species: Species): FormData {
         this.species = species
@@ -275,7 +275,7 @@ class FormData(
 
     override fun hashCode(): Int = this.showdownId().hashCode()
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeString(this.name)
         buffer.writeCollection(this.aspects) { pb, aspect -> pb.writeString(aspect) }
         buffer.writeNullable(this._baseStats) { statsBuffer, map ->
@@ -312,7 +312,7 @@ class FormData(
         buffer.writeNullable(_riding) { pb, riding -> riding.encode(buffer) }
     }
 
-    override fun decode(buffer: RegistryFriendlyByteBuf) {
+    override fun decode(RegistryFriendlyByteBuf buffer) {
         this.name = buffer.readString()
         this.aspects = buffer.readList { buffer.readString() }.toMutableList()
         buffer.readNullable { mapBuffer ->
@@ -331,7 +331,7 @@ class FormData(
         this._hitbox = buffer.readNullable { pb -> pb.readEntityDimensions() }
         this._moves = buffer.readNullable { _ -> Learnset().apply { decode(buffer) }}
         this._pokedex = buffer.readNullable { pb -> pb.readList { it.readString() } }?.toMutableList()
-        this._lightingData = buffer.readNullable { pb -> LightingData(pb.readInt(), pb.readEnumConstant(LightingData.LiquidGlowMode::class.java)) }
+        this._lightingData = buffer.readNullable { pb -> LightingData(pb.readInt(), pb.readEnumConstant(LightingData.LiquidGlowMode.class)) }
         this._drops = buffer.readNullable { _ -> DropTable().apply { decode(buffer) }}
         this._abilities = buffer.readNullable { pb ->
             AbilityPool().apply {

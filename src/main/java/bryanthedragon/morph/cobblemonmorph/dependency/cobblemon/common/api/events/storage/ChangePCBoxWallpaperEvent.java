@@ -23,12 +23,12 @@ import net.minecraft.server.level.ServerPlayer
  * @author JustAHuman-xD
  * @since February 14th, 2025
  */
-interface ChangePCBoxWallpaperEvent {
+public interface ChangePCBoxWallpaperEvent {
 
     /**
      * The [ServerPlayer] who is changing their wallpaper
      */
-    val player: ServerPlayer
+    val ServerPlayer player
 
     /**
      * The [PCBox] whose wallpaper is being changed
@@ -48,7 +48,7 @@ interface ChangePCBoxWallpaperEvent {
     val altWallpaper: ResourceLocation?
 
     class Pre(
-        override val player: ServerPlayer,
+        override val ServerPlayer player,
         override val box: PCBox,
         override var wallpaper: ResourceLocation,
         override var altWallpaper: ResourceLocation?
@@ -66,7 +66,7 @@ interface ChangePCBoxWallpaperEvent {
     }
 
     class Post(
-        override val player: ServerPlayer,
+        override val ServerPlayer player,
         override val box: PCBox,
         override val wallpaper: ResourceLocation,
         override val altWallpaper: ResourceLocation?

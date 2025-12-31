@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.moves.animations.UsersProvider
 import java.util.concurrent.CompletableFuture
 
-class SavePositionActionEffectKeyframe: ConditionalActionEffectKeyframe() {
+public class SavePositionActionEffectKeyframe: ConditionalActionEffectKeyframe() {
     override fun playWhenTrue(context: ActionEffectContext): CompletableFuture<Unit> {
         val user = context.findOneProvider<UsersProvider>()?.entities?.firstOrNull() ?: return skip()
         context.runtime.environment.setSimpleVariable("${user.stringUUID}-pos", ObjectValue(user.position()))

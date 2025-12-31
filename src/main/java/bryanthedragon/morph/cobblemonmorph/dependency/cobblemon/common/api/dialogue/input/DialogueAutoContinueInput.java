@@ -19,7 +19,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.dialo
  * @author Hiroku
  * @since December 27th, 2023
  */
-class DialogueAutoContinueInput : DialogueInput {
+public class DialogueAutoContinueInput : DialogueInput {
     val delay = 5F
     /** Whether the player can click to move on in a hurry or if they must wait. */
     var allowSkip = true

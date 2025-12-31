@@ -38,7 +38,7 @@ open class SpawnBaitInfluence(val effects: List<SpawnBait.Effect>, val onUsed: (
         onUsed(usedTimes, entity)
     }
 
-    override fun affectSpawn(action: SpawnAction<*>, entity: Entity) {
+    override fun affectSpawn(action: SpawnAction<*>, Entity entity) {
         if (entity is PokemonEntity) {
             val merged = SpawnBaitUtils.mergeEffects(effects)
             merged.forEach { effect ->

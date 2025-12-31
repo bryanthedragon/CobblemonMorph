@@ -31,7 +31,8 @@ import net.minecraft.resources.ResourceLocation
  *
  * @author Licious
  * @since November 6th, 2022
- */final class CobblemonStatProvider : StatProvider {
+ */
+public final class CobblemonStatProvider : StatProvider {
 
     override val typeAdapter: StatTypeAdapter = CobblemonStatTypeAdapter
     private val stats = Stats.entries.associateBy { it.identifier }
@@ -84,7 +85,7 @@ import net.minecraft.resources.ResourceLocation
         return ivs
     }
 
-    override fun getStatForPokemon(pokemon: Pokemon, stat: Stat): Int {
+    override fun getStatForPokemon(Pokemon pokemon, Stat stat ): Int {
         val iv = pokemon.ivs.getEffectiveBattleIV(stat)
         val base = pokemon.form.baseStats[stat]!!
         val ev = pokemon.evs.getOrDefault(stat)
@@ -102,16 +103,16 @@ import net.minecraft.resources.ResourceLocation
         }
     }
 
-    override fun fromIdentifier(identifier: ResourceLocation): Stat? = this.stats[identifier]
+    override fun fromIdentifier(ResourceLocation identifier): Stat? = this.stats[identifier]
 
-    override fun fromIdentifierOrThrow(identifier: ResourceLocation): Stat = this.fromIdentifier(identifier) ?: throw IllegalArgumentException("No stat was found with the identifier $identifier")
+    override fun fromIdentifierOrThrow(ResourceLocation identifier): Stat = this.fromIdentifier(identifier) ?: throw IllegalArgumentException("No stat was found with the identifier $identifier")
 
-    override fun decode(buffer: RegistryFriendlyByteBuf): Stat {
+    override fun decode(RegistryFriendlyByteBuf buffer): Stat {
         val ordinal = buffer.readSizedInt(IntSize.U_BYTE)
         return this.ordinalLookup(ordinal)
     }
 
-    override fun encode(buffer: RegistryFriendlyByteBuf, stat: Stat) {
+    override fun encode(RegistryFriendlyByteBuf buffer, Stat stat ) {
         val ordinal = this.identifierLookup(stat.identifier)
         buffer.writeSizedInt(IntSize.U_BYTE, ordinal)
     }
@@ -127,7 +128,7 @@ import net.minecraft.resources.ResourceLocation
             ?: throw IllegalArgumentException("Cannot find the stat with the ordinal $ordinal, this should only happen if there is a custom Stat implementation but no StatProvider to go alongside it")
     }
 
-    private fun identifierLookup(identifier: ResourceLocation): Int {
+    private fun identifierLookup(ResourceLocation identifier): Int {
         return this.identifierToOrdinal[identifier]
             ?: throw IllegalArgumentException("Cannot find the stat to encode, this should only happen if there is a custom Stat implementation but no StatProvider to go alongside it on the server side")
     }

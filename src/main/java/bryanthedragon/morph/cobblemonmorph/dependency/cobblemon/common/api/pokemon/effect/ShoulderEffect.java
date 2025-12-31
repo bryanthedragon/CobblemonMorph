@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerPlayer
  * @author Qu
  * @since 2022-01-26
  */
-interface ShoulderEffect {
-    fun applyEffect(pokemon: Pokemon, player: ServerPlayer, isLeft: Boolean)
-    fun removeEffect(pokemon: Pokemon, player: ServerPlayer, isLeft: Boolean)
+public interface ShoulderEffect {
+    fun applyEffect(Pokemon pokemon, ServerPlayer player, isLeft: Boolean)
+    fun removeEffect(Pokemon pokemon, ServerPlayer player, isLeft: Boolean)
 }

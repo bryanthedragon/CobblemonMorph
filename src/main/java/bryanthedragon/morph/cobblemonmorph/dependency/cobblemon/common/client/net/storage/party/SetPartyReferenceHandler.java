@@ -12,8 +12,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.net.C
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.CobblemonClient
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.party.SetPartyReferencePacket
 import net.minecraft.client.Minecraft
-final class SetPartyReferenceHandler : ClientNetworkPacketHandler<SetPartyReferencePacket> {
-    override fun handle(packet: SetPartyReferencePacket, client: Minecraft) {
+public final class SetPartyReferenceHandler : ClientNetworkPacketHandler<SetPartyReferencePacket> {
+    override fun handle(packet: SetPartyReferencePacket, Minecraft client) {
         CobblemonClient.storage.setPartyStore(packet.storeID)
     }
 }

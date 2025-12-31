@@ -14,18 +14,18 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobb
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class StellarTeraType : TeraType {
-    override val id: ResourceLocation = ID
+public class StellarTeraType : TeraType {
+    override val ResourceLocation id = ID
 
-    override val name: String = "Stellar"
+    override val String name = "Stellar"
 
     override val legalAsStatic: Boolean = false
 
-    override val displayName: Component = LANG
+    override val Component displayName = LANG
 
     override fun showdownId(): String = ID.path
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("stellar")
         private val LANG = Component.translatable("${Cobblemon.MODID}.terra_type.stellar")
     }

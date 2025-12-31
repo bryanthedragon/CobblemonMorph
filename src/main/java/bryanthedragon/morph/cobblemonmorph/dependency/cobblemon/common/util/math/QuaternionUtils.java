@@ -18,7 +18,7 @@ fun Quaternionf.fromEulerXYZDegrees(vector: Vector3f): Quaternionf {
     return fromEulerXYZ(Math.toRadians(vector.x.toDouble()).toFloat(), Math.toRadians(vector.y.toDouble()).toFloat(), Math.toRadians(vector.z.toDouble()).toFloat())
 }
 
-fun Quaternionf.fromEulerXYZ(x: Float, y: Float, z: Float): Quaternionf {
+fun Quaternionf.fromEulerXYZ(Float x, Float y, z: Float): Quaternionf {
     this.hamiltonProduct(Quaternionf(sin(x / 2F), 0F, 0F, cos(x / 2F)))
     this.hamiltonProduct(Quaternionf(0F, sin(y / 2F), 0F, cos(y / 2F)))
     this.hamiltonProduct(Quaternionf(0F, 0F, sin(z / 2F), cos(z / 2F)))

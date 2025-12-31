@@ -19,16 +19,16 @@ import net.minecraft.client.sounds.SoundManager
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-class BattleRequestNavigationButton(
+public class BattleRequestNavigationButton(
     pX: Number, pY: Number,
-    private val clickHeight: Int = HEIGHT,
+    private val clickInt height = HEIGHT,
     private val forward: Boolean,
     private val forwardIcon: ResourceLocation = forwardButtonResource,
     private val backwardIcon: ResourceLocation = backwardsButtonResource,
     onPress: OnPress
 ): Button(pX.toInt(), pY.toInt(), (WIDTH * SCALE).toInt(), (clickHeight * SCALE).toInt(), Component.literal("Navigation"), onPress, DEFAULT_NARRATION), CobblemonRenderable {
 
-    companion object {
+    final class Companion {
         const val HEIGHT = 16
         const val WIDTH = 9
         const val SCALE = 0.5F

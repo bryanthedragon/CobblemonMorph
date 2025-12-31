@@ -23,12 +23,12 @@ import kotlin.reflect.KClass
  * @author Apion
  * @since August 14, 2023
  */
-interface SpawnConditionAdapter : JsonDeserializer<BerrySpawnCondition>, JsonSerializer<BerrySpawnCondition> {
+public interface SpawnConditionAdapter : JsonDeserializer<BerrySpawnCondition>, JsonSerializer<BerrySpawnCondition> {
     /**
      * Register a [BerrySpawnCondition] to be used by this adapter.
      *
      * @param type The [KClass] of the [BerrySpawnCondition].
      * @param identifier The expected [ResourceLocation] in the parsed JSON.
      */
-    fun register(type: KClass<out BerrySpawnCondition>, identifier: ResourceLocation)
+    fun register(type: KClass<out BerrySpawnCondition>, ResourceLocation identifier)
 }

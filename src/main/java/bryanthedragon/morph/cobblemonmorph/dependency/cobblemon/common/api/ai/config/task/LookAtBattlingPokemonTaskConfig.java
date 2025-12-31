@@ -21,8 +21,8 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.behavior.BehaviorControl
 import net.minecraft.world.entity.ai.memory.MemoryModuleType
 
-class LookAtBattlingPokemonTaskConfig : SingleTaskConfig {
-    companion object {
+public class LookAtBattlingPokemonTaskConfig : SingleTaskConfig {
+    final class Companion {
         const val LOOK_AT_BATTLING_POKEMON = "look_at_battling_pokemon"
     }
 
@@ -30,14 +30,14 @@ class LookAtBattlingPokemonTaskConfig : SingleTaskConfig {
     val minDurationTicks: ExpressionOrEntityVariable = Either.left("40".asExpression())
     val maxDurationTicks: ExpressionOrEntityVariable = Either.left("80".asExpression())
 
-    override fun getVariables(entity: LivingEntity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
+    override fun getVariables(LivingEntity entity, behaviourConfigurationContext: BehaviourConfigurationContext) = listOf(
         condition,
         minDurationTicks,
         maxDurationTicks
     ).asVariables()
 
     override fun createTask(
-        entity: LivingEntity,
+        LivingEntity entity,
         behaviourConfigurationContext: BehaviourConfigurationContext
     ): BehaviorControl<in LivingEntity>? {
         if (!resolveBooleanVariable(LOOK_AT_BATTLING_POKEMON, behaviourConfigurationContext.runtime)) return null

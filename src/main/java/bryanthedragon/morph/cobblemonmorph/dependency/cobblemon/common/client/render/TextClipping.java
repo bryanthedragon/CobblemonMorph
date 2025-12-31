@@ -18,7 +18,8 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.r
  *
  * @author Hiroku
  * @since April 19th, 2025
- */final class TextClipping {
+ */
+public final class TextClipping {
     private var acceptableRenderCount = -1
     private var renderedCount = 0
 

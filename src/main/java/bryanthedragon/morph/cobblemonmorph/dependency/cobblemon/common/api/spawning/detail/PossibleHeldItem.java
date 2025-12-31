@@ -18,7 +18,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 
-class PossibleHeldItem(
+public class PossibleHeldItem(
     val item: String,
     val componentMap: DataComponentMap? = null,
     val percentage: Double = 100.0

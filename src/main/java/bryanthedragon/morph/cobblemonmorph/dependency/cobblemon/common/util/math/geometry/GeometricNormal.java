@@ -25,7 +25,7 @@ record GeometricNormal(val x: Float, val y: Float, val z: Float) {
 
     constructor() : this(0f, 0f, 0f)
 
-    companion object {
+    final class Companion {
 
         /**
          * Creates a new geometric normal representing two normals added together.

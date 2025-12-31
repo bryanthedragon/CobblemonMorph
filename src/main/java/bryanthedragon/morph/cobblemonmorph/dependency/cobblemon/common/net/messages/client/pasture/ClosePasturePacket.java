@@ -18,12 +18,12 @@ import net.minecraft.network.RegistryFriendlyByteBuf
  * @author Hiroku
  * @since April 17th, 2023
  */
-class ClosePasturePacket : NetworkPacket<ClosePasturePacket> {
-    companion object {
+public class ClosePasturePacket : NetworkPacket<ClosePasturePacket> {
+    final class Companion {
         val ID = cobblemonResource("close_pasture")
-        fun decode(buffer: RegistryFriendlyByteBuf) = ClosePasturePacket()
+        fun decode(RegistryFriendlyByteBuf buffer) = ClosePasturePacket()
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {}
+    override fun encode(RegistryFriendlyByteBuf buffer) {}
 }

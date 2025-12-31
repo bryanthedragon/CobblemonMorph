@@ -48,7 +48,7 @@ internal record ClientPokemonP2(
     val evolutionController: Optional<ClientEvolutionController.Intermediate>
 ) : Partial<Pokemon> {
 
-    override fun into(other: Pokemon): Pokemon {
+    override fun into(Pokemon other): Pokemon {
         this.state.ifPresent { other.state = it }
         this.status.ifPresent { other.status = it }
         other.caughtBall = this.caughtBall
@@ -70,7 +70,7 @@ internal record ClientPokemonP2(
         return other
     }
 
-    companion object {
+    final class Companion {
         /**
          * do not use cobblemon.config in here, as this is used by the client whose config is different to server, always use [ServerSettings]
          */
@@ -95,7 +95,7 @@ internal record ClientPokemonP2(
             ).apply(instance, ::ClientPokemonP2)
         }
 
-        internal fun from(pokemon: Pokemon): ClientPokemonP2 = ClientPokemonP2(
+        internal fun from(Pokemon pokemon): ClientPokemonP2 = ClientPokemonP2(
             Optional.ofNullable(pokemon.state as? ShoulderedState),
             Optional.ofNullable(pokemon.status),
             pokemon.caughtBall,

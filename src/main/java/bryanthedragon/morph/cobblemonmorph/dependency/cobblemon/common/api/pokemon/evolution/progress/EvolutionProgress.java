@@ -6,14 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress
+package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.progress;
 
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.Identifiable
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.EvolutionController
-import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon
-import com.google.gson.JsonObject
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.resources.ResourceLocation
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.data.Identifiable;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.pokemon.evolution.EvolutionController;
+import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.pokemon.Pokemon;
+import com.google.gson.JsonObject;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Represents a container of progression towards the completion of an evolution requirement.
@@ -24,7 +24,7 @@ import net.minecraft.resources.ResourceLocation
  * @author Licious
  * @since January 27th, 2023
  */
-interface EvolutionProgress<T> : Identifiable {
+public interface EvolutionProgress<T> : Identifiable {
 
     /**
      * Gets the current progress of type [T].
@@ -52,7 +52,7 @@ interface EvolutionProgress<T> : Identifiable {
      * @param pokemon The [Pokemon] being queried.
      * @return True if the progress is still required otherwise false.
      */
-    fun shouldKeep(pokemon: Pokemon): Boolean
+    fun shouldKeep(Pokemon pokemon): Boolean
 
     /**
      * The [EvolutionProgressType] of this.
@@ -61,7 +61,7 @@ interface EvolutionProgress<T> : Identifiable {
      */
     fun type(): EvolutionProgressType<*>
 
-    companion object {
+    final class Companion {
 
         @JvmStatic
         fun codec() = EvolutionProgressTypes.codec()

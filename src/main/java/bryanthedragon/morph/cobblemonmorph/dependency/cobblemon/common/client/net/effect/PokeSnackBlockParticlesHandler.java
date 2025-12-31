@@ -13,8 +13,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.block.Pok
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.effect.PokeSnackBlockParticlesPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.core.particles.ParticleTypes
-final class PokeSnackBlockParticlesHandler : ClientNetworkPacketHandler<PokeSnackBlockParticlesPacket> {
-    override fun handle(packet: PokeSnackBlockParticlesPacket, client: Minecraft) {
+public final class PokeSnackBlockParticlesHandler : ClientNetworkPacketHandler<PokeSnackBlockParticlesPacket> {
+    override fun handle(packet: PokeSnackBlockParticlesPacket, Minecraft client) {
         val level = Minecraft.getInstance().level ?: return
 
         val blockState = level.getBlockState(packet.blockPos)

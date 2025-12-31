@@ -15,7 +15,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.item.comp
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.effect.MobEffectInstance
-final class FoodSeasoningProcessor : SeasoningProcessor {
+public final class FoodSeasoningProcessor : SeasoningProcessor {
     override val type = "food"
 
     override fun apply(result: ItemStack, seasoning: List<ItemStack>) {

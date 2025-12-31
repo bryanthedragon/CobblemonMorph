@@ -13,7 +13,7 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.ridin
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.cobblemonResource
 import net.minecraft.network.RegistryFriendlyByteBuf
 
-class ServerboundUpdateRidingStatRangePacket(
+public class ServerboundUpdateRidingStatRangePacket(
     val entity: Int,
     val ridingStyle: RidingStyle,
     val minSpeed: Int,
@@ -29,7 +29,7 @@ class ServerboundUpdateRidingStatRangePacket(
 ) : NetworkPacket<ServerboundUpdateRidingStatRangePacket> {
     override val id = ID
 
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(entity)
         buffer.writeEnum(ridingStyle)
         buffer.writeInt(minSpeed)
@@ -44,12 +44,12 @@ class ServerboundUpdateRidingStatRangePacket(
         buffer.writeInt(maxStamina)
     }
 
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("c2s_update_ride_stat_range")
-        fun decode(buffer: RegistryFriendlyByteBuf): ServerboundUpdateRidingStatRangePacket {
+        fun decode(RegistryFriendlyByteBuf buffer): ServerboundUpdateRidingStatRangePacket {
             return ServerboundUpdateRidingStatRangePacket(
                 entity = buffer.readInt(),
-                ridingStyle = buffer.readEnum(RidingStyle::class.java),
+                ridingStyle = buffer.readEnum(RidingStyle.class),
                 minSpeed = buffer.readInt(),
                 maxSpeed = buffer.readInt(),
                 minAcceleration = buffer.readInt(),

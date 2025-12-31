@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack
  * Event that is fired when a bait is consumed.
  * @param rod The ItemStack of the rod that consumed the bait.
  */
-class BaitConsumedEvent(val rod: ItemStack) : Cancelable() {
+public class BaitConsumedEvent(val rod: ItemStack) : Cancelable() {
     val context = mutableMapOf(
         "rod" to rod.asMoLangValue(server()!!.registryAccess())
     )

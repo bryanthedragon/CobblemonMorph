@@ -14,8 +14,8 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.client.st
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.net.messages.client.storage.pc.SetPCBoxPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
-final class SetPCBoxHandler : ClientNetworkPacketHandler<SetPCBoxPacket> {
-    override fun handle(packet: SetPCBoxPacket, client: Minecraft) {
+public final class SetPCBoxHandler : ClientNetworkPacketHandler<SetPCBoxPacket> {
+    override fun handle(packet: SetPCBoxPacket, Minecraft client) {
         CobblemonClient.storage.pcStores[packet.storeID]?.let { pc ->
             val boxNumber = packet.boxNumber
             while (pc.boxes.size <= boxNumber) { pc.boxes.add(ClientBox()) }

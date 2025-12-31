@@ -15,20 +15,20 @@ import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.util.writ
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 
-class SetEntityBehaviourPacket(
+public class SetEntityBehaviourPacket(
     val entityId: Int,
     val behaviours: Set<ResourceLocation>
 ): NetworkPacket<SetEntityBehaviourPacket> {
-    companion object {
+    final class Companion {
         val ID = cobblemonResource("set_entity_behaviour")
-        fun decode(buffer: RegistryFriendlyByteBuf): SetEntityBehaviourPacket = SetEntityBehaviourPacket(
+        fun decode(RegistryFriendlyByteBuf buffer): SetEntityBehaviourPacket = SetEntityBehaviourPacket(
             entityId = buffer.readInt(),
             behaviours = buffer.readList { buffer.readIdentifier() }.toSet()
         )
     }
 
     override val id = ID
-    override fun encode(buffer: RegistryFriendlyByteBuf) {
+    override fun encode(RegistryFriendlyByteBuf buffer) {
         buffer.writeInt(entityId)
         buffer.writeCollection(behaviours) { _, it -> buffer.writeIdentifier(it) }
     }

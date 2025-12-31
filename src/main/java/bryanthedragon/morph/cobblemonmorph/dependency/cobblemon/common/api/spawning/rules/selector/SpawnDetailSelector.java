@@ -10,12 +10,12 @@ package bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spaw
 
 import bryanthedragon.morph.cobblemonmorph.dependency.cobblemon.common.api.spawning.detail.SpawnDetail
 
-interface SpawnDetailSelector {
-    companion object {
+public interface SpawnDetailSelector {
+    final class Companion {
         val types = mutableMapOf<String, Class<out SpawnDetailSelector>>()
 
         inline fun <reified T : SpawnDetailSelector> register(type: String) {
-            types[type] = T::class.java
+            types[type] = T.class
         }
     }
     fun selects(spawnDetail: SpawnDetail): Boolean

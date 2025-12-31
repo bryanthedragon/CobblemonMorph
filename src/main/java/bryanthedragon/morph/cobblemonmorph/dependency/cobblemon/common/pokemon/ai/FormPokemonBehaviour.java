@@ -19,7 +19,7 @@ import com.google.gson.annotations.SerializedName
  * @author Hiroku
  * @since July 15th, 2022
  */
-class FormPokemonBehaviour {
+public class FormPokemonBehaviour {
     @Transient
     lateinit var parent: PokemonBehaviour
 
