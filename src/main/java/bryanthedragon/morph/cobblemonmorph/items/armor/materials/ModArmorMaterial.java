@@ -37,7 +37,6 @@ public class ModArmorMaterial
         return BASE_DURABILITY[pType.getSlot().getIndex()] * this.durabilityMultiplier;
     }
 
-
     public int getDefenseForType(Type pType) 
     {
         return this.protectionAmounts[pType.getSlot().getIndex()];

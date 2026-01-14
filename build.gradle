@@ -164,6 +164,11 @@ repositories
     {
         url "https://repo.spongepowered.org/maven"
     }
+    maven 
+    {
+        name = "tocraftMavenPublic"
+        url = "https://maven.tocraft.dev/public"
+    }
     flatDir
     {
         dirs 'libs'
@@ -278,39 +283,14 @@ sourceSets.each
     it.java.destinationDirectory = dir
 }
 
-dependencies
+
+
+dependencies 
 {
-    // Specify the version of Minecraft to use.
-    // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
-    // The "userdev" classifier will be requested and setup by ForgeGradle.
-    // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
-    // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    // ReMorphed Forge build
-    // implementation files("libs/remorphed-1.20.1-forge-4.2.jar")
 
-    // // Remorphed dependencies:
-    // compileOnly files("libs/walkers-5.7.jar")
-    // runtimeOnly files("libs/walkers-5.7.jar")
-
-    // compileOnly files("libs/craftedcore-5.8.jar")
-    // runtimeOnly files("libs/craftedcore-5.8.jar")
-
-    // Cobblemon
-    compileOnly files("libs/cobblemon-forge-1.5.2-1.20.1.jar")
-    runtimeOnly files("libs/cobblemon-forge-1.5.2-1.20.1.jar")
-
-    // Cobblemon dependencies
-    compileOnly files("libs/kotlinforforge-4.11.0-all.jar")
-    runtimeOnly files("libs/kotlinforforge-4.11.0-all.jar")
-
-    // Kotlin dependencies for Cobblemon and KotlinforForge
-    runtimeOnly "org.jetbrains.kotlin:kotlin-stdlib:1.9.25"
-    runtimeOnly "org.jetbrains.kotlin:kotlin-reflect:1.9.25"
-
-    // due to mixin mixing in craftedcore interfering with above code causing errors when building only use below code if absolutely necessary
-    // runtimeOnly 'org.spongepowered:mixin:0.8.6'
-    // compileOnly 'org.spongepowered:mixin:0.8.6'
+    implementation fg.deobf("dev.tocraft:craftedcore-forge:1.20.1-5.8.1")
+    implementation("io.github.llamalad7:mixinextras-forge:0.5.1")
 
 }
 
@@ -322,6 +302,106 @@ configurations.all
     }
 }
 
+// dependencies {
+//     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+//     implementation fg.deobf("blank:walkers-5.7")
+//     implementation fg.deobf("blank:craftedcore-5.8")
+//     implementation fg.deobf("blank:remorphed-4.2")
+
+//     implementation fg.deobf("blank:cobblemon-forge-1.5.2-1.20.1")
+//     implementation fg.deobf("blank:kotlinforforge-4.11.0-all")
+
+//     runtimeOnly "org.jetbrains.kotlin:kotlin-stdlib:1.9.25"
+//     runtimeOnly "org.jetbrains.kotlin:kotlin-reflect:1.9.25"
+// }
+
+// gives not deofused
+// dependencies {
+//     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+//     // Bedrockk mods (THIS is what provides com.bedrockk)
+//     implementation fg.deobf(files("libs/walkers-5.7.jar"))
+//     implementation fg.deobf(files("libs/craftedcore-5.8.jar"))
+//     implementation fg.deobf(files("libs/remorphed-4.2.jar"))
+
+//     // Cobblemon
+//     implementation fg.deobf(files("libs/cobblemon-forge-1.5.2-1.20.1.jar"))
+
+//     // KotlinForForge
+//     implementation fg.deobf(files("libs/kotlinforforge-4.11.0-all.jar"))
+
+//     runtimeOnly "org.jetbrains.kotlin:kotlin-stdlib:1.9.25"
+//     runtimeOnly "org.jetbrains.kotlin:kotlin-reflect:1.9.25"
+// }
+
+
+// // Force it into the runClient pipeline
+// tasks.named("runClient")
+// {
+//     dependsOn("copyLocalMods")
+//     mustRunAfter("prepareRuns") // manual override to order it after FG prep
+// }
+
+// jar
+// {
+//     // ensure mods.toml lists your mod’s dependencies:
+//     // something like in src/main/resources/META-INF/mods.toml
+//     // dependencies = "required-after:craftedcore@[5.8,); required-after:walkers@[5.7,); required-after:remorphed@[4.2,); required-after:cobblemon@[1.5.2,); required-after:forge@[47.4.9,); required-after:minecraft@[1.20.1,); required-after:kotlinforforge@[4.11.0,);"
+// }
+
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:
+// tasks.named('publish').configure
+// {
+//     dependsOn 'reobfJar'
+// }
+
+// Helper task to resolve the Java 21 toolchain and print its resolved launcher info.
+// Running `./gradlew resolveJava21` will trigger toolchain resolution and auto-download if enabled.
+// tasks.register('resolveJava21') {
+//     doLast {
+//         def launcherProvider = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
+//         def launcher = launcherProvider.get()
+//         println "Resolved Java 21 executable: ${launcher.executablePath}"
+//         println "Resolved Java 21 metadata: ${launcher.metadata}"
+//     }
+// }
+
+// dependencies
+// {
+//     // Specify the version of Minecraft to use.
+//     // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
+//     // The "userdev" classifier will be requested and setup by ForgeGradle.
+//     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
+//     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
+//     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+//     // ReMorphed Forge build
+//     // implementation files("libs/remorphed-1.20.1-forge-4.2.jar")
+
+//     // // Remorphed dependencies:
+//     // compileOnly files("libs/walkers-5.7.jar")
+//     // runtimeOnly files("libs/walkers-5.7.jar")
+
+//     // compileOnly files("libs/craftedcore-5.8.jar")
+//     // runtimeOnly files("libs/craftedcore-5.8.jar")
+
+//     // Cobblemon
+//     compileOnly files("libs/cobblemon-forge-1.5.2-1.20.1.jar")
+//     runtimeOnly files("libs/cobblemon-forge-1.5.2-1.20.1.jar")
+
+//     // Cobblemon dependencies
+//     compileOnly files("libs/kotlinforforge-4.11.0-all.jar")
+//     runtimeOnly files("libs/kotlinforforge-4.11.0-all.jar")
+
+//     // Kotlin dependencies for Cobblemon and KotlinforForge
+//     runtimeOnly "org.jetbrains.kotlin:kotlin-stdlib:1.9.25"
+//     runtimeOnly "org.jetbrains.kotlin:kotlin-reflect:1.9.25"
+
+//     // due to mixin mixing in craftedcore interfering with above code causing errors when building only use below code if absolutely necessary
+//     // runtimeOnly 'org.spongepowered:mixin:0.8.6'
+//     // compileOnly 'org.spongepowered:mixin:0.8.6'
+
+// }
 
 //     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
 //     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
@@ -346,13 +426,6 @@ configurations.all
 //     implementation fg.deobf(files("libs/remorphed-${remorphed}.jar"))
 // }
 
-// // Force it into the runClient pipeline
-// tasks.named("runClient")
-// {
-//     dependsOn("copyLocalMods")
-//     mustRunAfter("prepareRuns") // manual override to order it after FG prep
-// }
-
 // dependencies
 // {
 //     minecraft 'net.minecraftforge:forge:1.20.1-47.4.9'
@@ -366,19 +439,6 @@ configurations.all
 
     // plus your mod’s code:
     // implementation project(':cobblemonMorph')  // or your mod source
-// }
-
-// jar
-// {
-//     // ensure mods.toml lists your mod’s dependencies:
-//     // something like in src/main/resources/META-INF/mods.toml
-//     // dependencies = "required-after:craftedcore@[5.8,); required-after:walkers@[5.7,); required-after:remorphed@[4.2,); required-after:cobblemon@[1.5.2,); required-after:forge@[47.4.9,); required-after:minecraft@[1.20.1,); required-after:kotlinforforge@[4.11.0,);"
-// }
-
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:
-// tasks.named('publish').configure
-// {
-//     dependsOn 'reobfJar'
 // }
 
 // dependencies
@@ -423,15 +483,4 @@ configurations.all
     // implementation fg.deobf(name: "kotlinforforge-4.11.0-all", ext: "jar")
     // implementation fg.deobf(name: "remorphed-4.2", ext: "jar")
     // implementation fg.deobf(name: "walkers-5.7", ext: "jar")
-// }
-
-// Helper task to resolve the Java 21 toolchain and print its resolved launcher info.
-// Running `./gradlew resolveJava21` will trigger toolchain resolution and auto-download if enabled.
-// tasks.register('resolveJava21') {
-//     doLast {
-//         def launcherProvider = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }
-//         def launcher = launcherProvider.get()
-//         println "Resolved Java 21 executable: ${launcher.executablePath}"
-//         println "Resolved Java 21 metadata: ${launcher.metadata}"
-//     }
 // }

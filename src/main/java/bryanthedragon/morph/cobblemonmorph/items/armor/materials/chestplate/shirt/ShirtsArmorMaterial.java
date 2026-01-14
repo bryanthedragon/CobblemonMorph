@@ -1,6 +1,5 @@
 package bryanthedragon.morph.cobblemonmorph.items.armor.materials.chestplate.shirt;
 
-
 import java.util.function.Supplier;
 
 import bryanthedragon.morph.cobblemonmorph.items.armor.materials.chestplate.ModChestplateArmorMaterial;

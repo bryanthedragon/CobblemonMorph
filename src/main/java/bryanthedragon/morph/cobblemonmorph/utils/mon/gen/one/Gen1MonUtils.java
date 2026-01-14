@@ -1,12 +1,11 @@
 package bryanthedragon.morph.cobblemonmorph.utils.mon.gen.one;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import bryanthedragon.morph.cobblemonmorph.utils.mon.MonUtils;
 
-public class Gen1MonUtils extends MonUtils
+public class Gen1MonUtils<T extends MonUtils>
 {
     private static List<String> validMonNames = new ArrayList<>();
 
