@@ -21,7 +21,6 @@ public class CobblemonMorphItemHelper extends CobblemonMorph
         return ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName));
     }
 
-
     public static boolean isItemRegistered(String itemName)
     {
         return ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));

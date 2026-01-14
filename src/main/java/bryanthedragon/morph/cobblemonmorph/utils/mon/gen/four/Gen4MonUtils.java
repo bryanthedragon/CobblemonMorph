@@ -5,7 +5,7 @@ import java.util.List;
 
 import bryanthedragon.morph.cobblemonmorph.utils.mon.MonUtils;
 
-public class Gen4MonUtils extends MonUtils
+public class Gen4MonUtils<T extends MonUtils>
 {
     private static List<String> validMonNames = new ArrayList<>();
 

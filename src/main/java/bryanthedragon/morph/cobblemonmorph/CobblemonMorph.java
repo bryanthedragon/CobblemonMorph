@@ -15,9 +15,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
-
-@SuppressWarnings("removal")
 @Mod(CobblemonMorph.MODID)
 public class CobblemonMorph
 {
@@ -27,6 +24,7 @@ public class CobblemonMorph
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    @SuppressWarnings("removal")
     public CobblemonMorph(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
