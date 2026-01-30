@@ -1208,11 +1208,27 @@
         }
     ],
 
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-17",
+            "path": "/usr/lib/jvm/java-17-openjdk-amd64",
+            "default": true
+        }
+    ],
+
+
     "java.configuration.maven.userSettings": "",
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "java.jdt.ls.java.home": "c:\\Program Files\\Java\\jdk-17",
     "java.autobuild.enabled": true,
-    "java.jdt.ls.java.home.eclipse.org": "C:\\Users\\gumbr\\AppData\\Local\\Programs\\Eclipse Adoptium\\jdk-17.0.17.10-hotspot",
     "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx16G -Xms100m -Xlog:disable",
+
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "host-spawn",
+            "args": ["bash"]
+        }
+    }
+
 }
