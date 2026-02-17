@@ -16,6 +16,17 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
+          <root url="jar://C:/Users/gumbr/.gradle/caches/forge_gradle/deobf_dependencies/dev/tocraft/craftedcore-forge/1.20.1-5.8.1_mapped_parchment_2023.09.03-1.20.1/craftedcore-forge-1.20.1-5.8.1_mapped_parchment_2023.09.03-1.20.1.jar!/"/>
+        </CLASSES>
+        <JAVADOC/>
+        <SOURCES>
+          <root url="jar://C:/Users/gumbr/.gradle/caches/forge_gradle/deobf_dependencies/dev/tocraft/craftedcore-forge/1.20.1-5.8.1_mapped_parchment_2023.09.03-1.20.1/craftedcore-forge-1.20.1-5.8.1_mapped_parchment_2023.09.03-1.20.1-sources.jar!/"/>
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
           <root url="jar://C:/Users/gumbr/.gradle/caches/modules-2/files-2.1/io.github.llamalad7/mixinextras-forge/0.5.1/fd1b224d27b756de3578949a45ed254b402057aa/mixinextras-forge-0.5.1.jar!/"/>
         </CLASSES>
         <JAVADOC>
@@ -1431,15 +1442,6 @@
         <SOURCES>
           <root url="jar://C:/Users/gumbr/.gradle/caches/modules-2/files-2.1/org.glassfish/javax.json/1.0.4/ef782abad0d3f1d30644c4023a6bbc6fe371e23a/javax.json-1.0.4-sources.jar!/"/>
         </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/unresolved dependency - dev.tocraft craftedcore-forge 1.20.1-5.8.1_mapped_parchment_2023.09.03-1.20.1"/>
-        </CLASSES>
-        <JAVADOC/>
-        <SOURCES/>
       </library>
     </orderEntry>
     <orderEntry type="module-library" scope="RUNTIME">
