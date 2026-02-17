@@ -162,12 +162,18 @@ repositories
     mavenCentral() // keep default repos
     maven
     {
+        name = "SpongePowered"
         url "https://repo.spongepowered.org/maven"
     }
     maven 
     {
-        name = "tocraftMavenPublic"
+        name = "ToCraftMavenPublic"
         url = "https://maven.tocraft.dev/public"
+    }
+    maven 
+    { 
+        name = "TerraformersMaven"
+        url = "https://maven.terraformersmc.com/" 
     }
     flatDir
     {
