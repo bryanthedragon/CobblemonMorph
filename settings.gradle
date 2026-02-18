@@ -17,7 +17,5 @@ pluginManagement
     }
 }
 
-plugins 
-{
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
-}
+// Intentionally avoid the Foojay resolver plugin here so the build does not depend
+// on plugin-portal/network access just to configure toolchains.
