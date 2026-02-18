@@ -15,6 +15,17 @@ pluginManagement
         }
         mavenCentral()
     }
+
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "net.minecraftforge.gradle") {
+                useModule("net.minecraftforge.gradle:ForgeGradle:${requested.version}")
+            }
+            if (requested.id.id == "org.parchmentmc.librarian.forgegradle") {
+                useModule("org.parchmentmc:librarian:${requested.version}")
+            }
+        }
+    }
 }
 
 // Intentionally avoid the Foojay resolver plugin here so the build does not depend
