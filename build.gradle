@@ -175,6 +175,11 @@ repositories
         name = "TerraformersMaven"
         url = "https://maven.terraformersmc.com/" 
     }
+    maven
+    {
+        name = "ShedanielMaven"
+        url = "https://maven.shedaniel.me/"
+    }
     flatDir
     {
         dirs 'libs'
