@@ -1,0 +1,27 @@
+pluginManagement 
+{
+    repositories 
+    {
+        gradlePluginPortal()
+
+        maven 
+        {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+
+        maven 
+        {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org' 
+        }
+
+        maven
+        {
+            name = 'TerraformersMC'
+            url = 'https://maven.terraformersmc.com/'
+        }
+
+        mavenCentral()
+    }
+}

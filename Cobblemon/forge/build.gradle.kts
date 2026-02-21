@@ -10,7 +10,6 @@
 
 plugins {
     id("dev.architectury.loom")
-    id("architectury-plugin")
 }
 
 architectury {
@@ -56,10 +55,7 @@ dependencies {
     }
     testImplementation(project(":common", configuration = "namedElements"))
 
-    listOf(
-        libs.graal,
-        libs.molang
-    ).forEach {
+    listOf(libs.graal, libs.molang).forEach {
         forgeRuntimeLibrary(it)
         bundle(it)
     }

@@ -1,0 +1,459 @@
+BUILD FAILED in 12s
+PS C:\GIT\Cobble\Cobblemon> gradle --stop
+gradle: The term 'gradle' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+PS C:\GIT\Cobble\Cobblemon> Remove-Item -Path "$env:USERPROFILE\.gradle\caches" -Recurse -Force
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\generated-gradle-jars\gradle-api-8.14.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\generated-gradle-jars'.                
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1372e1315f52a15a9137e559ea058dee\transformed\instrumented\instrumented-unsafe-0.2.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1372e1315f52a15a9137e559ea058dee\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1372e1315f52a15a9137e559ea058dee\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1372e1315f52a15a9137e559ea058dee'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1451d672910709f801f845dde62ad0ef\transformed\instrumented\instrumented-srgutils-0.5.10.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1451d672910709f801f845dde62ad0ef\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1451d672910709f801f845dde62ad0ef\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1451d672910709f801f845dde62ad0ef'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\17978ce7291ae3fcf669ea0aa0c43392\transformed\instrumented\instrumented-feather-0.6.5.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\17978ce7291ae3fcf669ea0aa0c43392\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\17978ce7291ae3fcf669ea0aa0c43392\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\17978ce7291ae3fcf669ea0aa0c43392'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1ce6e1488d1ededd955fff4ab7066069\transformed\instrumented\instrumented-librarian-1.2.0.7-dev-SNAPSHOT.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1ce6e1488d1ededd955fff4ab7066069\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1ce6e1488d1ededd955fff4ab7066069\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\1ce6e1488d1ededd955fff4ab7066069'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\24d1d79d6497f3f2fe760f67bcc4523d\transformed\instrumented\instrumented-guava-30.1.1-jre.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\24d1d79d6497f3f2fe760f67bcc4523d\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\24d1d79d6497f3f2fe760f67bcc4523d\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\24d1d79d6497f3f2fe760f67bcc4523d'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\39207b416a38676e6c8e81a28df4ed24\transformed\instrumented\instrumented-commons-lang3-3.9.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\39207b416a38676e6c8e81a28df4ed24\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\39207b416a38676e6c8e81a28df4ed24\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\39207b416a38676e6c8e81a28df4ed24'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\3bfb4876fafec545ecd3bbc0eb8e6292\transformed\instrumented\instrumented-gson-2.10.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\3bfb4876fafec545ecd3bbc0eb8e6292\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\3bfb4876fafec545ecd3bbc0eb8e6292\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\3bfb4876fafec545ecd3bbc0eb8e6292'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\3cbd822f03d4af193c887114f8620d42\transformed\instrumented\instrumented-architectury-plugin.gradle.plugin-3.4-SNAPSHOT.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\3cbd822f03d4af193c887114f8620d42\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\3cbd822f03d4af193c887114f8620d42\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\3cbd822f03d4af193c887114f8620d42'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\464eec2b77735226823b905878d878c6\transformed\instrumented\instrumented-maven-artifact-3.9.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\464eec2b77735226823b905878d878c6\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\464eec2b77735226823b905878d878c6\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\464eec2b77735226823b905878d878c6'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\4d29e7cb5ef3213f854fb1d5079ca7a4\transformed\instrumented\instrumented-artifactural-3.0.21.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\4d29e7cb5ef3213f854fb1d5079ca7a4\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\4d29e7cb5ef3213f854fb1d5079ca7a4\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\4d29e7cb5ef3213f854fb1d5079ca7a4'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\4f2f3090dc2fe65d71ad17b166567eb9\transformed\instrumented\instrumented-commons-io-2.11.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\4f2f3090dc2fe65d71ad17b166567eb9\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\4f2f3090dc2fe65d71ad17b166567eb9\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\4f2f3090dc2fe65d71ad17b166567eb9'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\56cccaa4393e4428c89f40d9b00f8231\transformed\instrumented\instrumented-httpclient-4.5.14.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\56cccaa4393e4428c89f40d9b00f8231\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\56cccaa4393e4428c89f40d9b00f8231\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\56cccaa4393e4428c89f40d9b00f8231'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\68c101b03abf57b7e15d31e243586c20\transformed\instrumented\instrumented-blossom-1.3.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\68c101b03abf57b7e15d31e243586c20\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\68c101b03abf57b7e15d31e243586c20\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\68c101b03abf57b7e15d31e243586c20'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\7562153315777bd33a5b4ae1fb6c19d6\transformed\instrumented\instrumented-guava-31.1-jre.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\7562153315777bd33a5b4ae1fb6c19d6\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\7562153315777bd33a5b4ae1fb6c19d6\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\7562153315777bd33a5b4ae1fb6c19d6'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\880fd874f2543f5287db7d2f589515cb\transformed\instrumented\instrumented-architectury-transformer-5.2.87.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\880fd874f2543f5287db7d2f589515cb\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\880fd874f2543f5287db7d2f589515cb\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\880fd874f2543f5287db7d2f589515cb'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\a1c202f5de6e76ef7e98a49a21ab9bde\transformed\instrumented\instrumented-gradle-idea-ext-1.1.7.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\a1c202f5de6e76ef7e98a49a21ab9bde\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\a1c202f5de6e76ef7e98a49a21ab9bde\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\a1c202f5de6e76ef7e98a49a21ab9bde'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\bbd753bbccd760f6adb49e1e9537a48f\transformed\instrumented\instrumented-mammoth-1.0.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\bbd753bbccd760f6adb49e1e9537a48f\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\bbd753bbccd760f6adb49e1e9537a48f\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\bbd753bbccd760f6adb49e1e9537a48f'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\d4f0f9ca236b5595dd9af2e8e712280e\transformed\instrumented\instrumented-JarJarMetadata-0.3.19.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\d4f0f9ca236b5595dd9af2e8e712280e\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\d4f0f9ca236b5595dd9af2e8e712280e\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\d4f0f9ca236b5595dd9af2e8e712280e'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\e874709a913b920836eb2536e9eb25fa\transformed\instrumented\instrumented-httpcore-4.4.16.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\e874709a913b920836eb2536e9eb25fa\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\e874709a913b920836eb2536e9eb25fa\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\e874709a913b920836eb2536e9eb25fa'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\ed142a8c0b349b13f7968b43213e312e\transformed\instrumented\instrumented-io-gson-0.6.5.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\ed142a8c0b349b13f7968b43213e312e\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\ed142a8c0b349b13f7968b43213e312e\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\ed142a8c0b349b13f7968b43213e312e'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\f0f597a9a63841a03c3ee50324b3a187\transformed\instrumented\instrumented-ForgeGradle-6.0.47.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\f0f597a9a63841a03c3ee50324b3a187\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\f0f597a9a63841a03c3ee50324b3a187\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\f0f597a9a63841a03c3ee50324b3a187'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\f6d6f83e30dfd5e9f7e720380dc9eef4\transformed\instrumented\instrumented-DiffPatch-2.0.12-all.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\f6d6f83e30dfd5e9f7e720380dc9eef4\transformed\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\f6d6f83e30dfd5e9f7e720380dc9eef4\transformed'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms\f6d6f83e30dfd5e9f7e720380dc9eef4'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1\transforms'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.14.1'.                                      
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\fileContent\fileContent.lock' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\fileContent'.                             
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\fileHashes\fileHashes.bin' because it is being used by another process.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\fileHashes\fileHashes.lock' because it is being used by another process.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\fileHashes\resourceHashesCache.bin' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\fileHashes'.                              
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\generated-gradle-jars\generated-gradle-jars.lock' because it is being used by another process.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\generated-gradle-jars\gradle-api-8.7.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\generated-gradle-jars'.                   
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\1c7b317285155051dc09a8626976c2d0\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\1c7b317285155051dc09a8626976c2d0\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\1c7b317285155051dc09a8626976c2d0'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\1f3d5890340931d78d3c2e3c9f082029\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\1f3d5890340931d78d3c2e3c9f082029\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\1f3d5890340931d78d3c2e3c9f082029'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\22e9681da77171e3e107ee9284ac3343\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\22e9681da77171e3e107ee9284ac3343\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\22e9681da77171e3e107ee9284ac3343'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\25c6001d0ff541185889045b3844d378\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\25c6001d0ff541185889045b3844d378\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\25c6001d0ff541185889045b3844d378'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\3b10d973aad8856e70d738ba9ffee29b\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\3b10d973aad8856e70d738ba9ffee29b\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\3b10d973aad8856e70d738ba9ffee29b'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\45a73571ba0c8a8b6d7cefa40db86876\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\45a73571ba0c8a8b6d7cefa40db86876\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\45a73571ba0c8a8b6d7cefa40db86876'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\4695a4da2fa21f4235ce194b689ba09c\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\4695a4da2fa21f4235ce194b689ba09c\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\4695a4da2fa21f4235ce194b689ba09c'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\505d96406ad423f69897c725d91d06e4\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\505d96406ad423f69897c725d91d06e4\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\505d96406ad423f69897c725d91d06e4'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\530b90859494531962518ecdc2fd1bb2\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\530b90859494531962518ecdc2fd1bb2\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\530b90859494531962518ecdc2fd1bb2'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\5486375a7b50603886071079eeb8f678\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\5486375a7b50603886071079eeb8f678\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\5486375a7b50603886071079eeb8f678'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\6c0fa0e15faedc7d91dfe68e50c0caa8\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\6c0fa0e15faedc7d91dfe68e50c0caa8\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\6c0fa0e15faedc7d91dfe68e50c0caa8'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\70f1e1249f4bf3c341276187bb98d9bf\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\70f1e1249f4bf3c341276187bb98d9bf\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\70f1e1249f4bf3c341276187bb98d9bf'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\840e206f5601495839e1308ec3eebaad\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\840e206f5601495839e1308ec3eebaad\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\840e206f5601495839e1308ec3eebaad'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\8a01e6e3ec52e5924fccf9b10416f5c3\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\8a01e6e3ec52e5924fccf9b10416f5c3\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\8a01e6e3ec52e5924fccf9b10416f5c3'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\8bbfb93be4fd1e95821d63c8faa3a78a\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\8bbfb93be4fd1e95821d63c8faa3a78a\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\8bbfb93be4fd1e95821d63c8faa3a78a'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9310b57a40e0823beb5cc33ab42118b8\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9310b57a40e0823beb5cc33ab42118b8\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9310b57a40e0823beb5cc33ab42118b8'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9771e74a1d33f6f0951426f382787a73\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9771e74a1d33f6f0951426f382787a73\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9771e74a1d33f6f0951426f382787a73'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9884075099f2f99ba6972eaa156a280d\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9884075099f2f99ba6972eaa156a280d\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9884075099f2f99ba6972eaa156a280d'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9a1fd1189cf2b1df4747f68c4f63efb6\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9a1fd1189cf2b1df4747f68c4f63efb6\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\9a1fd1189cf2b1df4747f68c4f63efb6'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\b92667aa8147550a27c05c9302d7d940\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\b92667aa8147550a27c05c9302d7d940\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\b92667aa8147550a27c05c9302d7d940'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\f4a521815374e9ae778346033ab793f1\instrumented\classes.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\f4a521815374e9ae778346033ab793f1\instrumented'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts\f4a521815374e9ae778346033ab793f1'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl\scripts'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7\kotlin-dsl'.                              
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\8.7'.                                         
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\jars-9\0dac05b82a779e46302e7fa4f3aa83c4\init.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\jars-9\0dac05b82a779e46302e7fa4f3aa83c4'.     
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\jars-9\73437bcf66f1cf04f9ff1d8048cfb0c3\cp_init.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\jars-9\73437bcf66f1cf04f9ff1d8048cfb0c3'.     
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\jars-9\8b75c8221761791dfadbff523c8ec492\init.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\jars-9\8b75c8221761791dfadbff523c8ec492'.     
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\jars-9\d82c14e1e32cad48d137f55876bf81a5\init.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\jars-9\d82c14e1e32cad48d137f55876bf81a5'.     
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\jars-9\o_64303f9b6460fa4e02c31e5747b93b8b\org.eclipse.buildship.compat_3.1.10.v20250827-0209-s.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\jars-9\o_64303f9b6460fa4e02c31e5747b93b8b'.   
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\jars-9\o_a434acb3c83933c4d7153a1a591d5ed0\slf4j.api_2.0.17.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\jars-9\o_a434acb3c83933c4d7153a1a591d5ed0'.   
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\jars-9\o_f4bbd15f6bad40e34b1645be309e1680\org.gradle.toolingapi_8.9.0.v20250827-0209-s.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\jars-9\o_f4bbd15f6bad40e34b1645be309e1680'.   
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\jars-9\jars-9.lock' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\jars-9'.                                      
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\architectury-plugin\architectury-plugin.gradle.plugin\3.4-SNAPSHOT\b12b5ed1d0fa2121b1c53f0111ad9ed6af693b78\architectury-plugin.gradle.plugin-3.4-SNAPSHOT.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\architectury-plugin\architectury-plugin.gradle.plugin\3.4-SNAPSHOT\b12b5ed1d0fa2121b1c53f0111ad9ed6af693b78'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\architectury-plugin\architectury-plugin.gradle.plugin\3.4-SNAPSHOT'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\architectury-plugin\architectury-plugin.gradle.plugin'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\architectury-plugin'.     
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\3.0.2\25ea2e8b0c338a877313bd4672d3fe056ea78f0d\jsr305-3.0.2.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\3.0.2\25ea2e8b0c338a877313bd4672d3fe056ea78f0d'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\3.0.2'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.10.1\b3add478d4382b78ea20b1671390a858002feb6c\gson-2.10.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.10.1\b3add478d4382b78ea20b1671390a858002feb6c'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.10.1'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.6\9180733b7df8542621dc12e21e87557e8c99b8cb\gson-2.8.6.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.6\9180733b7df8542621dc12e21e87557e8c99b8cb'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.6'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.code.gson'.    
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.errorprone\error_prone_annotations\2.11.0\c5a0ace696d3f8b1c1d8cc036d8c03cc0cbe6b69\error_prone_annotations-2.11.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.errorprone\error_prone_annotations\2.11.0\c5a0ace696d3f8b1c1d8cc036d8c03cc0cbe6b69'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.errorprone\error_prone_annotations\2.11.0'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.errorprone\error_prone_annotations\2.5.1\562d366678b89ce5d6b6b82c1a073880341e3fba\error_prone_annotations-2.5.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.errorprone\error_prone_annotations\2.5.1\562d366678b89ce5d6b6b82c1a073880341e3fba'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.errorprone\error_prone_annotations\2.5.1'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.errorprone\error_prone_annotations'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.errorprone'.   
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\failureaccess\1.0.1\1dcf1de382a0bf95a3d8b0849546c88bac1292c9\failureaccess-1.0.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\failureaccess\1.0.1\1dcf1de382a0bf95a3d8b0849546c88bac1292c9'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\failureaccess\1.0.1'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\failureaccess'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\guava\30.1.1-jre\87e0fd1df874ea3cbe577702fe6f17068b790fd8\guava-30.1.1-jre.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\guava\30.1.1-jre\87e0fd1df874ea3cbe577702fe6f17068b790fd8'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\guava\30.1.1-jre'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\guava\31.1-jre\60458f877d055d0c9114d9e1a2efb737b4bc282c\guava-31.1-jre.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\guava\31.1-jre\60458f877d055d0c9114d9e1a2efb737b4bc282c'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\guava\31.1-jre'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\guava'.  
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava\b421526c5f297295adef1c886e5246c39d4ac629\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava\b421526c5f297295adef1c886e5246c39d4ac629'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava\listenablefuture'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.guava'.        
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.j2objc\j2objc-annotations\1.3\ba035118bc8bac37d7eff77700720999acd9986d\j2objc-annotations-1.3.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.j2objc\j2objc-annotations\1.3\ba035118bc8bac37d7eff77700720999acd9986d'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.j2objc\j2objc-annotations\1.3'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.j2objc\j2objc-annotations'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.google.j2objc'.       
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.machinezoo.noexception\noexception\1.7.1\b65330c98e38a1f915fa54a6e5eca496505e3f0a\noexception-1.7.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.machinezoo.noexception\noexception\1.7.1\b65330c98e38a1f915fa54a6e5eca496505e3f0a'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.machinezoo.noexception\noexception\1.7.1'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.machinezoo.noexception\noexception'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\com.machinezoo.noexception'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-codec\commons-codec\1.11\3acb4705652e16236558f0f4f2192cc33c3bd189\commons-codec-1.11.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-codec\commons-codec\1.11\3acb4705652e16236558f0f4f2192cc33c3bd189'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-codec\commons-codec\1.11'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-codec\commons-codec'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-codec'.           
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-io\commons-io\2.11.0\a2503f302b11ebde7ebc3df41daebe0e4eea3689\commons-io-2.11.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-io\commons-io\2.11.0\a2503f302b11ebde7ebc3df41daebe0e4eea3689'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-io\commons-io\2.11.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-io\commons-io'.   
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-io'.              
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-logging\commons-logging\1.2\4bfc12adfe4842bf07b657f0369c4cb522955686\commons-logging-1.2.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-logging\commons-logging\1.2\4bfc12adfe4842bf07b657f0369c4cb522955686'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-logging\commons-logging\1.2'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-logging\commons-logging'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\commons-logging'.         
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\de.siegmar\fastcsv\2.2.1\eb4810305e70a7b2452ff469c630299acc2b1880\fastcsv-2.2.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\de.siegmar\fastcsv\2.2.1\eb4810305e70a7b2452ff469c630299acc2b1880'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\de.siegmar\fastcsv\2.2.1'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\de.siegmar\fastcsv'.      
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\de.siegmar'.              
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\dev.architectury\architectury-transformer\5.2.87\8d2eb33c2156902b02ea20e6303aa95f49b7fb14\architectury-transformer-5.2.87.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\dev.architectury\architectury-transformer\5.2.87\8d2eb33c2156902b02ea20e6303aa95f49b7fb14'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\dev.architectury\architectury-transformer\5.2.87'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\dev.architectury\architectury-transformer'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\dev.architectury\tiny-remapper\1.1.0\7bedaaec192b3fdcdbe30901f4ed5e11464e98f4\tiny-remapper-1.1.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\dev.architectury\tiny-remapper\1.1.0\7bedaaec192b3fdcdbe30901f4ed5e11464e98f4'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\dev.architectury\tiny-remapper\1.1.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\dev.architectury\tiny-remapper'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\dev.architectury'.        
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\gradle.plugin.org.jetbrains.gradle.plugin.idea-ext\gradle-idea-ext\1.1.7\fbe1fd0b10a40d1d182ca3488c96c231e7a64199\gradle-idea-ext-1.1.7.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\gradle.plugin.org.jetbrains.gradle.plugin.idea-ext\gradle-idea-ext\1.1.7\fbe1fd0b10a40d1d182ca3488c96c231e7a64199'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\gradle.plugin.org.jetbrains.gradle.plugin.idea-ext\gradle-idea-ext\1.1.7'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\gradle.plugin.org.jetbrains.gradle.plugin.idea-ext\gradle-idea-ext'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\gradle.plugin.org.jetbrains.gradle.plugin.idea-ext'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\it.unimi.dsi\fastutil\8.3.1\ff33b340d60b81f4c1015fa8008bb30ff0a0d53b\fastutil-8.3.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\it.unimi.dsi\fastutil\8.3.1\ff33b340d60b81f4c1015fa8008bb30ff0a0d53b'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\it.unimi.dsi\fastutil\8.3.1'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\it.unimi.dsi\fastutil'.   
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\it.unimi.dsi'.            
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.kyori\blossom\1.3.1\d4b1ea5de14d2173398ad859050ac811024c339a\blossom-1.3.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.kyori\blossom\1.3.1\d4b1ea5de14d2173398ad859050ac811024c339a'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.kyori\blossom\1.3.1'. 
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.kyori\blossom'.       
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.kyori\mammoth\1.0.0\589e8dadfddccaca50ffe22015667f292e95df7\mammoth-1.0.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.kyori\mammoth\1.0.0\589e8dadfddccaca50ffe22015667f292e95df7'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.kyori\mammoth\1.0.0'. 
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.kyori\mammoth'.       
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.kyori'.               
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\artifactural\3.0.21\399dd7a3aa46a985aedfa6d62b8954c4a57a9bd6\artifactural-3.0.21.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\artifactural\3.0.21\399dd7a3aa46a985aedfa6d62b8954c4a57a9bd6'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\artifactural\3.0.21'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\artifactural'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\DiffPatch\2.0.12\7182b5f298c31f28aa50e97016f154b0ad746ad6\DiffPatch-2.0.12-all.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\DiffPatch\2.0.12\7182b5f298c31f28aa50e97016f154b0ad746ad6'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\DiffPatch\2.0.12'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\DiffPatch'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\JarJarMetadata\0.3.19\83feaa9b770e6ac0e96ee4fc23fa89325c5fe2\JarJarMetadata-0.3.19.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\JarJarMetadata\0.3.19\83feaa9b770e6ac0e96ee4fc23fa89325c5fe2'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\JarJarMetadata\0.3.19'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\JarJarMetadata'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\JarJarSelector\0.3.19\376cc9c8ea60720cf027c01fc033de915699801c\JarJarSelector-0.3.19.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\JarJarSelector\0.3.19\376cc9c8ea60720cf027c01fc033de915699801c'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\JarJarSelector\0.3.19'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\JarJarSelector'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\srgutils\0.5.10\e17c35076be020c539ea4c83735f2b40f46a7848\srgutils-0.5.10.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\srgutils\0.5.10\e17c35076be020c539ea4c83735f2b40f46a7848'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\srgutils\0.5.10'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\srgutils'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\unsafe\0.2.0\54d7a0a5e8fdb71b973025caa46f341ae5904f39\unsafe-0.2.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\unsafe\0.2.0\54d7a0a5e8fdb71b973025caa46f341ae5904f39'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\unsafe\0.2.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge\unsafe'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge'.      
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge.gradle\ForgeGradle\6.0.47\fd6397755fe54d888fe4312998b30f4ba27f924f\ForgeGradle-6.0.47.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge.gradle\ForgeGradle\6.0.47\fd6397755fe54d888fe4312998b30f4ba27f924f'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge.gradle\ForgeGradle\6.0.47'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge.gradle\ForgeGradle'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.minecraftforge.gradle'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.sf.jopt-simple\jopt-simple\5.0.4\4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c\jopt-simple-5.0.4.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.sf.jopt-simple\jopt-simple\5.0.4\4fdac2fbe92dfad86aa6e9301736f6b4342a3f5c'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.sf.jopt-simple\jopt-simple\5.0.4'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.sf.jopt-simple\jopt-simple'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\net.sf.jopt-simple'.      
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-compress\1.18\1191f9f2bc0c47a8cce69193feb1ff0a8bcb37d5\commons-compress-1.18.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-compress\1.18\1191f9f2bc0c47a8cce69193feb1ff0a8bcb37d5'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-compress\1.18'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-compress'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-lang3\3.9\122c7cee69b53ed4a7681c03d4ee4c0e2765da5\commons-lang3-3.9.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-lang3\3.9\122c7cee69b53ed4a7681c03d4ee4c0e2765da5'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-lang3\3.9'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-lang3'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.commons'.      
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpclient\4.5.14\1194890e6f56ec29177673f2f12d0b8e627dec98\httpclient-4.5.14.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpclient\4.5.14\1194890e6f56ec29177673f2f12d0b8e627dec98'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpclient\4.5.14'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpclient'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpcore\4.4.16\51cf043c87253c9f58b539c9f7e44c8894223850\httpcore-4.4.16.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpcore\4.4.16\51cf043c87253c9f58b539c9f7e44c8894223850'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpcore\4.4.16'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents\httpcore'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.httpcomponents'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.maven\maven-artifact\3.9.1\9f8307f12f2e65066dcc4122d92126f46a6ea40\maven-artifact-3.9.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.maven\maven-artifact\3.9.1\9f8307f12f2e65066dcc4122d92126f46a6ea40'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.maven\maven-artifact\3.9.1'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.maven\maven-artifact'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.apache.maven'.        
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.checkerframework\checker-qual\3.13.0\e29afc6adb63a39286d38dc0e00d164117c02f0d\checker-qual-3.13.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.checkerframework\checker-qual\3.13.0\e29afc6adb63a39286d38dc0e00d164117c02f0d'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.checkerframework\checker-qual\3.13.0'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.checkerframework\checker-qual\3.8.0\6b83e4a33220272c3a08991498ba9dc09519f190\checker-qual-3.8.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.checkerframework\checker-qual\3.8.0\6b83e4a33220272c3a08991498ba9dc09519f190'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.checkerframework\checker-qual\3.8.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.checkerframework\checker-qual'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.checkerframework'.    
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.codehaus.plexus\plexus-utils\3.5.1\c6bfb17c97ecc8863e88778ea301be742c62b06d\plexus-utils-3.5.1.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.codehaus.plexus\plexus-utils\3.5.1\c6bfb17c97ecc8863e88778ea301be742c62b06d'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.codehaus.plexus\plexus-utils\3.5.1'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.codehaus.plexus\plexus-utils'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.codehaus.plexus'.     
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains\annotations\13.0\919f0dfe192fb4e063e7dacadee7f8bb9a2672a9\annotations-13.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains\annotations\13.0\919f0dfe192fb4e063e7dacadee7f8bb9a2672a9'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains\annotations\13.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains\annotations'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-gradle-plugin-api\1.7.0\361e20f57ad4f772a9500bd795d2ab0956a91b75\kotlin-gradle-plugin-api-1.7.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-gradle-plugin-api\1.7.0\361e20f57ad4f772a9500bd795d2ab0956a91b75'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-gradle-plugin-api\1.7.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-gradle-plugin-api'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-native-utils\1.7.0\d3e9a6f19ffad631d686523709939a20632ba295\kotlin-native-utils-1.7.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-native-utils\1.7.0\d3e9a6f19ffad631d686523709939a20632ba295'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-native-utils\1.7.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-native-utils'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-project-model\1.7.0\e048320d1bc516909c5c5034adf33928c4987dee\kotlin-project-model-1.7.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-project-model\1.7.0\e048320d1bc516909c5c5034adf33928c4987dee'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-project-model\1.7.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-project-model'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-reflect\2.0.21\669e1d35e4ca1797f9ddb2830dd6c36c0ca531e4\kotlin-reflect-2.0.21.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-reflect\2.0.21\669e1d35e4ca1797f9ddb2830dd6c36c0ca531e4'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-reflect\2.0.21'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-reflect'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib\2.0.21\618b539767b4899b4660a83006e052b63f1db551\kotlin-stdlib-2.0.21.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib\2.0.21\618b539767b4899b4660a83006e052b63f1db551'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib\2.0.21'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.8.0\3c91271347f678c239607abb676d4032a7898427\kotlin-stdlib-jdk7-1.8.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.8.0\3c91271347f678c239607abb676d4032a7898427'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7\1.8.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk7'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8\1.8.0\ed04f49e186a116753ad70d34f0ac2925d1d8020\kotlin-stdlib-jdk8-1.8.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8\1.8.0\ed04f49e186a116753ad70d34f0ac2925d1d8020'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8\1.8.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-stdlib-jdk8'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-tooling-core\1.7.0\8fc54e880cf9ea73396f2844a2d3aa76bdcbcfbb\kotlin-tooling-core-1.7.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-tooling-core\1.7.0\8fc54e880cf9ea73396f2844a2d3aa76bdcbcfbb'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-tooling-core\1.7.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-tooling-core'.
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-util-io\1.7.0\d56995b7c3a460e15892b8bb992a23e8f2288b6f\kotlin-util-io-1.7.0.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-util-io\1.7.0\d56995b7c3a460e15892b8bb992a23e8f2288b6f'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-util-io\1.7.0'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin\kotlin-util-io'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin'.    
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc\feather\0.6.5\38852a16b4adf974081beea0af1e2d2e81b337ab\feather-0.6.5.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc\feather\0.6.5\38852a16b4adf974081beea0af1e2d2e81b337ab'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc\feather\0.6.5'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc\feather'. 
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc\librarian\1.2.0.7-dev-SNAPSHOT\b0fd8076cb1216bd1efdbc7b4dd04569f845aa26\librarian-1.2.0.7-dev-SNAPSHOT.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc\librarian\1.2.0.7-dev-SNAPSHOT\b0fd8076cb1216bd1efdbc7b4dd04569f845aa26'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc\librarian\1.2.0.7-dev-SNAPSHOT'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc\librarian'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc'.         
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc.feather\io-gson\0.6.5\55a10836f46a73c896d59fc9f3a4f8d33b610815\io-gson-0.6.5.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc.feather\io-gson\0.6.5\55a10836f46a73c896d59fc9f3a4f8d33b610815'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc.feather\io-gson\0.6.5'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc.feather\io-gson'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.parchmentmc.feather'. 
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-api\1.7.30\b5a4b6d16ab13e34a88fae84c35cd5d68cac922c\slf4j-api-1.7.30.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-api\1.7.30\b5a4b6d16ab13e34a88fae84c35cd5d68cac922c'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-api\1.7.30'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-api'.     
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-simple\1.7.30\e606eac955f55ecf1d8edcccba04eb8ac98088dd\slf4j-simple-1.7.30.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-simple\1.7.30\e606eac955f55ecf1d8edcccba04eb8ac98088dd'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-simple\1.7.30'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-simple'.  
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.slf4j'.               
+Remove-Item: The process cannot access the file 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.tukaani\xz\1.8\c4f7d054303948eb6a4066194253886c8af07128\xz-1.8.jar' because it is being used by another process.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.tukaani\xz\1.8\c4f7d054303948eb6a4066194253886c8af07128'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.tukaani\xz\1.8'.      
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.tukaani\xz'.          
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1\org.tukaani'.             
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2\files-2.1'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches\modules-2'.
+Remove-Item: The directory is not empty. : 'C:\Users\gumbr\.gradle\caches'.
+PS C:\GIT\Cobble\Cobblemon> ./gradlew clean build
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Type-safe project accessors is an incubating feature.
+
+FAILURE: Build failed with an exception.
+
+* Where:
+Build file 'C:\GIT\Cobble\Cobblemon\common\build.gradle.kts' line: 12
+
+* What went wrong:
+Plugin [id: 'dev.architectury.loom', version: '1.4.11'] was not found in any of the following sources:
+
+- Gradle Core Plugins (plugin is not in 'org.gradle' namespace)
+- Included Builds (No included builds contain this plugin)
+- Plugin Repositories (could not resolve plugin artifact 'dev.architectury.loom:dev.architectury.loom.gradle.plugin:1.4.11')
+  Searched in the following repositories:
+    maven(https://maven.architectury.dev/)
+    Gradle Central Plugin Repository
+    MavenRepo
+    maven2(https://maven.minecraftforge.net/)
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.

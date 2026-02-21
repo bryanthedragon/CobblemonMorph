@@ -1,5 +1,8 @@
+=\=\=\=\=\=\=
+<<<<<<<=HEAD
+>>>>>>>=c39843fe6663e9b71d27e64a601d49d197463fc3
 arguments=--init-script /home/gumbreon12/.config/Code/User/globalStorage/redhat.java/1.52.0/config_linux/org.eclipse.osgi/58/0/.cp/gradle/init/init.gradle --init-script /home/gumbreon12/.config/Code/User/globalStorage/redhat.java/1.52.0/config_linux/org.eclipse.osgi/58/0/.cp/gradle/protobuf/init.gradle
-auto.sync=false
+auto.sync=true
 build.scans.enabled=false
 connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)
 connection.project.dir=
