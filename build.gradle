@@ -90,7 +90,6 @@ minecraft
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', mod_id
 
-            jvmArgs "-Dmixin.env.disableRefMap=true"
             jvmArgs "-Dmixin.debug.verbose=true"
             jvmArgs "-Dmixin.hotSwap=true"
             jvmArgs "-Dcraftedcore.disableMixins=true"
