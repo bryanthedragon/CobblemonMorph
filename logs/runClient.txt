@@ -1,20 +1,68 @@
-Downloading https://services.gradle.org/distributions/gradle-8.14.1-bin.zip
-
-Exception in thread "main" java.io.IOException: Unable to tunnel through proxy. Proxy returns "HTTP/1.1 403 Forbidden"
-	at java.base/sun.net.www.protocol.http.HttpURLConnection.doTunneling0(HttpURLConnection.java:2271)
-	at java.base/sun.net.www.protocol.http.HttpURLConnection.doTunneling(HttpURLConnection.java:2143)
-	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:185)
-	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1675)
-	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1599)
-	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:223)
-	at org.gradle.wrapper.Download.downloadInternal(Download.java:129)
-	at org.gradle.wrapper.Download.download(Download.java:109)
-	at org.gradle.wrapper.Install.forceFetch(Install.java:171)
-	at org.gradle.wrapper.Install.fetchDistribution(Install.java:104)
-	at org.gradle.wrapper.Install.access$400(Install.java:46)
-	at org.gradle.wrapper.Install$1.call(Install.java:81)
-	at org.gradle.wrapper.Install$1.call(Install.java:68)
-	at org.gradle.wrapper.ExclusiveFileAccessManager.access(ExclusiveFileAccessManager.java:69)
-	at org.gradle.wrapper.Install.createDist(Install.java:68)
-	at org.gradle.wrapper.WrapperExecutor.execute(WrapperExecutor.java:102)
-	at org.gradle.wrapper.GradleWrapperMain.main(GradleWrapperMain.java:66)
+> Task :compileJava UP-TO-DATE\n> Task :processResources\n> Task :classes\n> Task :copyLocalMods\n> Task :downloadMcpConfig\n> Task :extractSrg UP-TO-DATE\n> Task :createSrgToMcp UP-TO-DATE\n> Task :downloadMCMeta UP-TO-DATE\n> Task :downloadAssets UP-TO-DATE\n> Task :extractNatives UP-TO-DATE\n> Task :makeSrcDirs\n> Task :prepareRuns\n> Task :prepareRunClient\n> Task :prepareRunClientCompile\n\n> Task :runClient
+2026-02-21 01:30:12,648 main WARN Advanced terminal features are not available in this environment
+[01:30:13] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientuserdev, --version, MOD_DEV, --assetIndex, 5, --assetsDir, C:\Users\gumbr\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.9, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[01:30:13] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.16 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[01:30:13] [main/DEBUG] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Found launch services [fmlclientdev,forgeclient,minecraft,forgegametestserverdev,fmlserveruserdev,fmlclient,fmldatauserdev,forgeserverdev,forgeserveruserdev,forgeclientdev,forgeclientuserdev,forgeserver,forgedatadev,fmlserver,fmlclientuserdev,fmlserverdev,forgedatauserdev,testharness,forgegametestserveruserdev]
+[01:30:13] [main/DEBUG] [cp.mo.mo.NameMappingServiceHandler/MODLAUNCHER]: Found naming services : [srgtomcp]
+[01:30:13] [main/DEBUG] [cp.mo.mo.LaunchPluginHandler/MODLAUNCHER]: Found launch plugins: [mixin,eventbus,slf4jfixer,object_holder_definalize,runtime_enum_extender,capability_token_subclass,accesstransformer,runtimedistcleaner]
+[01:30:13] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Discovering transformation services
+[01:30:13] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path GAMEDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run
+[01:30:13] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path MODSDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\mods
+[01:30:13] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path CONFIGDIR is C:\Users\gumbr\source\repos\CobblemonMorph\run\config
+[01:30:13] [main/DEBUG] [ne.mi.fm.lo.FMLPaths/CORE]: Path FMLCONFIG is C:\Users\gumbr\source\repos\CobblemonMorph\run\config\fml.toml
+[01:30:15] [main/DEBUG] [cp.mo.mo.TransformationServicesHandler/MODLAUNCHER]: Found additional transformation services from discovery services:
+[01:30:15] [main/INFO] [ne.mi.fm.lo.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[01:30:15] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[01:30:15] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.6 got version 4.6
+[...snip...]
+[01:30:31] [main/FATAL] [mixin/]: Mixin apply failed mixins.cobblemon-common.json:CrashReportMixin -> net.minecraft.CrashReport: org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException Critical injection failure: @Inject annotation on cobblemon$printCobblemonDetails could not find any targets matching 'addStackTrace' in net/minecraft/CrashReport. No refMap loaded. [PREINJECT Applicator Phase -> mixins.cobblemon-common.json:CrashReportMixin -> Prepare Injections -> handler$cobblemon$zdg000$cobblemon$printCobblemonDetails(Ljava/lang/StringBuilder;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V -> Parse ->  -> Validate Targets]
+org.spongepowered.asm.mixin.injection.throwables.InvalidInjectionException: Critical injection failure: @Inject annotation on cobblemon$printCobblemonDetails could not find any targets matching 'addStackTrace' in net/minecraft/CrashReport. No refMap loaded. [PREINJECT Applicator Phase -> mixins.cobblemon-common.json:CrashReportMixin -> Prepare Injections -> handler$cobblemon$zdg000$cobblemon$printCobblemonDetails(Ljava/lang/StringBuilder;Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V -> Parse ->  -> Validate Targets]
+	at org.spongepowered.asm.mixin.injection.selectors.TargetSelectors.validate(TargetSelectors.java:346) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.readAnnotation(InjectionInfo.java:315) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:288) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.<init>(InjectionInfo.java:279) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.injection.struct.CallbackInjectionInfo.<init>(CallbackInjectionInfo.java:46) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?] {}
+	at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[?:?] {}
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[?:?] {}
+	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo$InjectorEntry.create(InjectionInfo.java:145) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.injection.struct.InjectionInfo.parse(InjectionInfo.java:592) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.transformer.MixinTargetContext.prepareInjections(MixinTargetContext.java:1377) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.prepareInjections(MixinApplicatorStandard.java:693) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.applyMixin(MixinApplicatorStandard.java:286) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.transformer.MixinApplicatorStandard.apply(MixinApplicatorStandard.java:218) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.transformer.TargetClassContext.apply(TargetClassContext.java:398) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.transformer.TargetClassContext.applyMixins(TargetClassContext.java:380) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.transformer.MixinProcessor.applyMixins(MixinProcessor.java:363) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.mixin.transformer.MixinTransformer.transformClass(MixinTransformer.java:250) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.service.modlauncher.MixinTransformationHandler.processClass(MixinTransformationHandler.java:131) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at org.spongepowered.asm.launch.MixinLaunchPluginLegacy.processClass(MixinLaunchPluginLegacy.java:131) ~[mixin-0.8.6.jar:0.8.6+Jenkins-b315.git-2c9a96700c879eb33dba214e945d84ba2488b0ad] {}
+	at cpw.mods.modlauncher.serviceapi.ILaunchPluginService.processClassWithFlags(ILaunchPluginService.java:156) ~[modlauncher-10.0.9.jar:10.0.9+10.0.9+main.dcd20f30] {}
+	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?] {}
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?] {}
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?] {}
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?] {}
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?] {}
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?] {}
+	at net.minecraft.client.main.Main.main(Main.java:149) ~[forge-1.20.1-47.4.9_mapped_parchment_2023.09.03-1.20.1-recomp.jar:?] {re:classloading,pl:runtimedistcleaner:A}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?] {}
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?] {}
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?] {}
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.9.jar:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:99) ~[fmlloader-1.20.1-47.4.9.jar:?] {}
+	at net.minecraftforge.fml.loading.targets.ForgeClientUserdevLaunchHandler.devService(ForgeClientUserdevLaunchHandler.java:19) ~[fmlloader-1.20.1-47.4.9.jar:?] {}
+	at net.minecraftforge.fml.loading.targets.CommonDevLaunchHandler.lambda$makeService$7(CommonDevLaunchHandler.java:135) ~[fmlloader-1.20.1-47.4.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar:?] {}
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?] {}
