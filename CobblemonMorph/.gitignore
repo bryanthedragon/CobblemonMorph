@@ -1,41 +1,41 @@
-# # eclipse
-# bin
-# *.launch
-# .settings
-# .metadata
-# .classpath
-# .project
-
-# # idea
-# out
-# *.ipr
-# *.iws
-# *.iml
-# .idea
-
-# # gradle
-# build
-# .gradle
-
-# # other
 # eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-# # run
-# /run/logs
-# /run/crash-reports
-# /run/saves
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
 
-# # run-data
-# /run-data/logs
-# /run-data/crash-reports
-# /run-data/saves
-# /run-data/mods
-# /run-data/resourcepacks
-# /run-data/config
+# gradle
+build
+.gradle
 
-# # Files from Forge MDK
-# forge*changelog.txt
+# other
+eclipse
 
-# # backups
-# *.bak
-# *.gz
+# run
+/run/logs
+/run/crash-reports
+/run/saves
+
+# run-data
+/run-data/logs
+/run-data/crash-reports
+/run-data/saves
+/run-data/mods
+/run-data/resourcepacks
+/run-data/config
+
+# Files from Forge MDK
+forge*changelog.txt
+
+# backups
+*.bak
+*.gz

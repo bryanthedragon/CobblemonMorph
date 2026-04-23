@@ -107,7 +107,7 @@
     [[dependencies.${mod_id}]]
         modId="walkers"
         mandatory=false
-        versionRange="[5.2,)"
+        versionRange="[5.8.11,)"
         ordering="AFTER"
         side="BOTH"
 
@@ -115,7 +115,7 @@
     [[dependencies.${mod_id}]]
         modId="craftedcore"
         mandatory=false
-        versionRange="[5.5,)"
+        versionRange="[5.8.2,)"
         ordering="AFTER"
         side="BOTH"
 
@@ -124,6 +124,14 @@
         modId="remorphed"
         mandatory=false
         versionRange="[4.2,)"
+        ordering="AFTER"
+        side="BOTH"
+
+    # cobblemon
+    [[dependencies.${mod_id}]]
+        modId="cobblemon"
+        mandatory=false
+        versionRange="[1.5.2,)"
         ordering="AFTER"
         side="BOTH"
 

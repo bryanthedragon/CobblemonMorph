@@ -178,6 +178,7 @@
         "cobblemon",
         "cobblemonmorph",
         "cobblemonmorphclienthelper",
+        "cobblemonmorphcobblemonregistry",
         "cobblemonmorphdependencyhelper",
         "cobblemonmorphitemhelper",
         "cobblemonmorphlogger",
@@ -308,6 +309,7 @@
         "emolga",
         "empoleon",
         "enamorus",
+        "enchantability",
         "enderdragon",
         "entei",
         "escavalier",
@@ -702,6 +704,7 @@
         "mixinextras",
         "modders",
         "modid",
+        "modimplementation",
         "modlauncher",
         "modloading",
         "modname",
@@ -866,6 +869,7 @@
         "regigigas",
         "regirock",
         "registeel",
+        "REGISTRYDUMP",
         "relicanth",
         "rellor",
         "remoraid",
@@ -1132,6 +1136,7 @@
         "usercache",
         "userdev",
         "usernamecache",
+        "USERPROFILE",
         "uxie",
         "valent",
         "valueproviders",
@@ -1220,20 +1225,23 @@
         "zygarde"
     ],
 
-    "java.configuration.runtimes": 
-    [
-        {
-        "name": "JavaSE-17",
-        "path": "C:\\Program Files\\Java\\jdk-17",
-        "default": true
-        }
-    ],
+    // "java.configuration.runtimes": 
+    // [
+    //     {
+    //     "name": "JavaSE-17",
+    //     "path": "C:\\Program Files\\Java\\jdk-17",
+    //     "default": true
+    //     }
+    // ],
 
     "java.configuration.maven.userSettings": "",
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "java.jdt.ls.java.home": "c:\\Program Files\\Java\\jdk-17",
+    // "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-17.0.19",
     "java.autobuild.enabled": true,
-    "java.jdt.ls.java.home.eclipse.org": "C:\\Users\\gumbr\\AppData\\Local\\Programs\\Eclipse Adoptium\\jdk-17.0.17.10-hotspot",
-    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx16G -Xms100m -Xlog:disable",
+    // "java.jdt.ls.java.home.eclipse.org": "C:\\Users\\gumbr\\AppData\\Local\\Programs\\Eclipse Adoptium\\jdk-17.0.17.10-hotspot",
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx1G -Xms100m -Xlog:disable",
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "java.import.maven.offline.enabled": true,
+    "java.maven.downloadSources": true,
 }
