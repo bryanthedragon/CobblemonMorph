@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.chestplate.blazer;
+package bryanthedragon.cobblemon.morph.items.armor.chestplate.blazer;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.chestplate.ChestplateArmorItems;
+import bryanthedragon.cobblemon.morph.items.armor.chestplate.ChestplateArmorItems;
 
 public class Blazers extends ChestplateArmorItems
 {

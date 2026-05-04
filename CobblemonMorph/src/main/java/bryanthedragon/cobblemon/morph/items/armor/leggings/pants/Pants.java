@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.leggings.pants;
+package bryanthedragon.cobblemon.morph.items.armor.leggings.pants;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.leggings.LeggingsArmorItems;
+import bryanthedragon.cobblemon.morph.items.armor.leggings.LeggingsArmorItems;
 
 public class Pants extends LeggingsArmorItems
 {

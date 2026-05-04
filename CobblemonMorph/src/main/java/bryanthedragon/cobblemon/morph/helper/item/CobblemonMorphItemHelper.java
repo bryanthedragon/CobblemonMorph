@@ -1,13 +1,13 @@
-package bryanthedragon.morph.cobblemonmorph.helper.item;
+package bryanthedragon.cobblemon.morph.helper.item;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
-@SuppressWarnings({ "removal", "null" })
+@SuppressWarnings({ "null" })
 public class CobblemonMorphItemHelper extends CobblemonMorph
 {
     public CobblemonMorphItemHelper()    

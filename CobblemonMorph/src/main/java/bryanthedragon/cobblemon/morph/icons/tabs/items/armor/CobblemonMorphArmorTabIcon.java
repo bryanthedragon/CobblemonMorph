@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.icons.tabs.items.armor;
+package bryanthedragon.cobblemon.morph.icons.tabs.items.armor;
 
-import bryanthedragon.morph.cobblemonmorph.icons.tabs.items.CobblemonMorphItemsTabIcon;
+import bryanthedragon.cobblemon.morph.icons.tabs.items.CobblemonMorphItemsTabIcon;
 
 import net.minecraft.world.item.Item;
 

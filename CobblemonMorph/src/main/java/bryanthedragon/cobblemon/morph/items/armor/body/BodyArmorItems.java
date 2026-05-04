@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.body;
+package bryanthedragon.cobblemon.morph.items.armor.body;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.ModArmorItems;
+import bryanthedragon.cobblemon.morph.items.armor.ModArmorItems;
 import net.minecraft.sounds.SoundEvent;
 
 public class BodyArmorItems extends ModArmorItems

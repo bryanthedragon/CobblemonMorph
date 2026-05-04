@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.body.bikini.top;
+package bryanthedragon.cobblemon.morph.items.armor.body.bikini.top;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.body.bikini.BikiniArmorItem;
+import bryanthedragon.cobblemon.morph.items.armor.body.bikini.BikiniArmorItem;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
 

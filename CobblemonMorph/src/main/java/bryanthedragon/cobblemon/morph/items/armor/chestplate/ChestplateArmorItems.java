@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.chestplate;
+package bryanthedragon.cobblemon.morph.items.armor.chestplate;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.ModArmorItems;
+import bryanthedragon.cobblemon.morph.items.armor.ModArmorItems;
 
 public class ChestplateArmorItems extends ModArmorItems
 {

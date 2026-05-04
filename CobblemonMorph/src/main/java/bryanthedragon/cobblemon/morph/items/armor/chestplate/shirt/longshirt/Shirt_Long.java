@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.chestplate.shirt.longshirt;
+package bryanthedragon.cobblemon.morph.items.armor.chestplate.shirt.longshirt;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.chestplate.shirt.Shirts;
+import bryanthedragon.cobblemon.morph.items.armor.chestplate.shirt.Shirts;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 

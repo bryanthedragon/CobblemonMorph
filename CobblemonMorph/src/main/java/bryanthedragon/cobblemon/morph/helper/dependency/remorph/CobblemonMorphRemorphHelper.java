@@ -1,4 +1,4 @@
-package bryanthedragon.morph.cobblemonmorph.helper.dependency.remorph;
+package bryanthedragon.cobblemon.morph.helper.dependency.remorph;
 
 import net.minecraftforge.fml.ModList;
 

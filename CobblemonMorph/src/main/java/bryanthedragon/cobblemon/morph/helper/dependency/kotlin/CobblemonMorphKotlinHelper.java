@@ -1,4 +1,4 @@
-package bryanthedragon.morph.cobblemonmorph.helper.dependency.kotlin;
+package bryanthedragon.cobblemon.morph.helper.dependency.kotlin;
 
 import net.minecraftforge.fml.ModList;
 

@@ -4,7 +4,7 @@ C:.
 +---.eclipse
 ¦   +---configurations
 +---.gradle
-¦   +---8.14.1
+¦   +---8.14.3
 ¦   ¦   +---checksums
 ¦   ¦   +---executionHistory
 ¦   ¦   +---expanded
@@ -12,44 +12,192 @@ C:.
 ¦   ¦   +---fileHashes
 ¦   ¦   +---vcsMetadata
 ¦   +---buildOutputCleanup
+¦   +---loom-cache
+¦   ¦   +---natives
+¦   ¦   ¦   +---1.20.1
+¦   ¦   +---remapped_mods
+¦   ¦       +---remapped
+¦   ¦           +---unspecified
+¦   ¦               +---cobblemon-forge-1.5.2-1.20.1-07a4b8a5
+¦   ¦               ¦   +---f1ea45404e
+¦   ¦               +---craftedcore-5.8.2-07a4b8a5
+¦   ¦               ¦   +---42d1062707
+¦   ¦               +---remorphed-4.2-07a4b8a5
+¦   ¦               ¦   +---7a50024306
+¦   ¦               +---walkers-5.8.11-07a4b8a5
+¦   ¦                   +---c8ea59abd3
 ¦   +---vcs-1
 +---.idea
-¦   +---dictionaries
-¦   +---modules
 ¦   +---runConfigurations
-+---.settings
 +---.vscode
 +---bin
 ¦   +---main
+¦   ¦   +---assets
+¦   ¦   ¦   +---cobblemonmorph
+¦   ¦   ¦       +---cobblemon
+¦   ¦   ¦       ¦   +---icons
+¦   ¦   ¦       ¦       +---items
+¦   ¦   ¦       ¦           +---spawn
+¦   ¦   ¦       ¦               +---eggs
+¦   ¦   ¦       ¦                   +---species
+¦   ¦   ¦       ¦                   ¦   +---gen
+¦   ¦   ¦       ¦                   ¦       +---eight
+¦   ¦   ¦       ¦                   ¦       +---five
+¦   ¦   ¦       ¦                   ¦       +---four
+¦   ¦   ¦       ¦                   ¦       +---nine
+¦   ¦   ¦       ¦                   ¦       +---one
+¦   ¦   ¦       ¦                   ¦       +---seven
+¦   ¦   ¦       ¦                   ¦       +---six
+¦   ¦   ¦       ¦                   ¦       +---three
+¦   ¦   ¦       ¦                   ¦       +---two
+¦   ¦   ¦       ¦                   +---type
+¦   ¦   ¦       ¦                       +---bug
+¦   ¦   ¦       ¦                       +---fairy
+¦   ¦   ¦       ¦                       +---fighting
+¦   ¦   ¦       ¦                       +---fire
+¦   ¦   ¦       ¦                       +---flying
+¦   ¦   ¦       ¦                       +---ghost
+¦   ¦   ¦       ¦                       +---grass
+¦   ¦   ¦       ¦                       +---ground
+¦   ¦   ¦       ¦                       +---ice
+¦   ¦   ¦       ¦                       +---poison
+¦   ¦   ¦       ¦                       +---psychic
+¦   ¦   ¦       ¦                       +---rock
+¦   ¦   ¦       ¦                       +---steel
+¦   ¦   ¦       ¦                       +---water
+¦   ¦   ¦       +---morph
+¦   ¦   ¦       ¦   +---gen
+¦   ¦   ¦       ¦       +---eight
+¦   ¦   ¦       ¦       +---five
+¦   ¦   ¦       ¦       +---four
+¦   ¦   ¦       ¦       +---nine
+¦   ¦   ¦       ¦       +---one
+¦   ¦   ¦       ¦       +---seven
+¦   ¦   ¦       ¦       +---six
+¦   ¦   ¦       ¦       +---three
+¦   ¦   ¦       ¦       +---two
+¦   ¦   ¦       +---tabs
+¦   ¦   ¦           +---items
+¦   ¦   ¦           +---misc
+¦   ¦   ¦           +---nature
+¦   ¦   +---bryanthedragon
+¦   ¦   ¦   +---cobblemon
+¦   ¦   ¦       +---morph
+¦   ¦   ¦           +---config
+¦   ¦   ¦           +---failsafe
+¦   ¦   ¦           ¦   +---mixin
+¦   ¦   ¦           ¦       +---patch
+¦   ¦   ¦           +---handler
+¦   ¦   ¦           ¦   +---client
+¦   ¦   ¦           ¦       +---shutdown
+¦   ¦   ¦           +---helper
+¦   ¦   ¦           ¦   +---client
+¦   ¦   ¦           ¦   +---dependency
+¦   ¦   ¦           ¦   ¦   +---cobblemon
+¦   ¦   ¦           ¦   ¦   +---craftedcore
+¦   ¦   ¦           ¦   ¦   +---kotlin
+¦   ¦   ¦           ¦   ¦   +---minecraft
+¦   ¦   ¦           ¦   ¦   +---remorph
+¦   ¦   ¦           ¦   ¦   +---walkers
+¦   ¦   ¦           ¦   +---item
+¦   ¦   ¦           ¦   +---logger
+¦   ¦   ¦           ¦   +---mixins
+¦   ¦   ¦           ¦   +---mod
+¦   ¦   ¦           ¦   +---registries
+¦   ¦   ¦           ¦   ¦   +---mod
+¦   ¦   ¦           ¦   ¦   +---tabs
+¦   ¦   ¦           ¦   ¦       +---items
+¦   ¦   ¦           ¦   ¦       ¦   +---armor
+¦   ¦   ¦           ¦   ¦       +---main
+¦   ¦   ¦           ¦   ¦       +---misc
+¦   ¦   ¦           ¦   +---tabs
+¦   ¦   ¦           +---icons
+¦   ¦   ¦           ¦   +---tabs
+¦   ¦   ¦           ¦       +---items
+¦   ¦   ¦           ¦       ¦   +---armor
+¦   ¦   ¦           ¦       +---main
+¦   ¦   ¦           ¦       +---misc
+¦   ¦   ¦           +---items
+¦   ¦   ¦           ¦   +---armor
+¦   ¦   ¦           ¦   ¦   +---body
+¦   ¦   ¦           ¦   ¦   ¦   +---bikini
+¦   ¦   ¦           ¦   ¦   ¦       +---bottom
+¦   ¦   ¦           ¦   ¦   ¦       +---top
+¦   ¦   ¦           ¦   ¦   +---chestplate
+¦   ¦   ¦           ¦   ¦   ¦   +---blazer
+¦   ¦   ¦           ¦   ¦   ¦   +---cardigan
+¦   ¦   ¦           ¦   ¦   ¦   +---coat
+¦   ¦   ¦           ¦   ¦   ¦   +---jacket
+¦   ¦   ¦           ¦   ¦   ¦   +---robe
+¦   ¦   ¦           ¦   ¦   ¦   +---scarf
+¦   ¦   ¦           ¦   ¦   ¦   ¦   +---silk
+¦   ¦   ¦           ¦   ¦   ¦   ¦   +---wool
+¦   ¦   ¦           ¦   ¦   ¦   +---shirt
+¦   ¦   ¦           ¦   ¦   ¦   ¦   +---longshirt
+¦   ¦   ¦           ¦   ¦   ¦   ¦   +---shortshirt
+¦   ¦   ¦           ¦   ¦   ¦   +---tunic
+¦   ¦   ¦           ¦   ¦   ¦   +---vest
+¦   ¦   ¦           ¦   ¦   +---helmet
+¦   ¦   ¦           ¦   ¦   ¦   +---hat
+¦   ¦   ¦           ¦   ¦   ¦       +---cowboy
+¦   ¦   ¦           ¦   ¦   +---leggings
+¦   ¦   ¦           ¦   ¦       +---pants
+¦   ¦   ¦           ¦   ¦       ¦   +---longpants
+¦   ¦   ¦           ¦   ¦       +---shorts
+¦   ¦   ¦           ¦   ¦       +---skirt
+¦   ¦   ¦           ¦   ¦           +---longskirt
+¦   ¦   ¦           ¦   ¦           +---mediumskirt
+¦   ¦   ¦           ¦   ¦           +---shortskirt
+¦   ¦   ¦           ¦   +---materials
+¦   ¦   ¦           ¦   ¦   +---chestplate
+¦   ¦   ¦           ¦   ¦       +---blazer
+¦   ¦   ¦           ¦   ¦       +---cardigan
+¦   ¦   ¦           ¦   ¦       +---coat
+¦   ¦   ¦           ¦   ¦       +---jacket
+¦   ¦   ¦           ¦   ¦       +---robe
+¦   ¦   ¦           ¦   ¦       +---scarf
+¦   ¦   ¦           ¦   ¦       ¦   +---silk
+¦   ¦   ¦           ¦   ¦       ¦   +---wool
+¦   ¦   ¦           ¦   ¦       +---shirt
+¦   ¦   ¦           ¦   ¦       ¦   +---longshirt
+¦   ¦   ¦           ¦   ¦       ¦   +---shortshirt
+¦   ¦   ¦           ¦   ¦       +---tunic
+¦   ¦   ¦           ¦   ¦       +---vest
+¦   ¦   ¦           ¦   +---properties
+¦   ¦   ¦           ¦       +---armor
+¦   ¦   ¦           +---mixins
+¦   ¦   ¦           +---utils
+¦   ¦   ¦               +---mon
+¦   ¦   ¦                   +---gen
+¦   ¦   +---META-INF
 ¦   +---test
 +---build
-¦   +---downloadMCMeta
-¦   +---reports
-¦       +---problems
+¦   +---loom-cache
+¦       +---remapped_working
 +---gradle
 ¦   +---wrapper
 +---libs
 +---logs
 +---run
-¦   +---config
-¦   +---defaultconfigs
-¦   +---mods
-¦   +---resourcepacks
-¦   +---saves
-+---run-data
+¦   +---.architectury-transformer
 ¦   +---config
 ¦   +---defaultconfigs
 ¦   +---logs
 ¦   +---mods
+¦   +---resources
 +---src
-    +---generated
-    ¦   +---resources
     +---main
     ¦   +---java
     ¦   ¦   +---bryanthedragon
-    ¦   ¦       +---morph
-    ¦   ¦           +---cobblemonmorph
+    ¦   ¦       +---cobblemon
+    ¦   ¦           +---morph
     ¦   ¦               +---config
+    ¦   ¦               +---failsafe
+    ¦   ¦               ¦   +---mixin
+    ¦   ¦               ¦       +---patch
+    ¦   ¦               +---handler
+    ¦   ¦               ¦   +---client
+    ¦   ¦               ¦       +---shutdown
     ¦   ¦               +---helper
     ¦   ¦               ¦   +---client
     ¦   ¦               ¦   +---dependency
@@ -64,12 +212,18 @@ C:.
     ¦   ¦               ¦   +---mixins
     ¦   ¦               ¦   +---mod
     ¦   ¦               ¦   +---registries
+    ¦   ¦               ¦   ¦   +---mod
     ¦   ¦               ¦   ¦   +---tabs
+    ¦   ¦               ¦   ¦       +---items
+    ¦   ¦               ¦   ¦       ¦   +---armor
+    ¦   ¦               ¦   ¦       +---main
+    ¦   ¦               ¦   ¦       +---misc
     ¦   ¦               ¦   +---tabs
     ¦   ¦               +---icons
     ¦   ¦               ¦   +---tabs
     ¦   ¦               ¦       +---items
     ¦   ¦               ¦       ¦   +---armor
+    ¦   ¦               ¦       +---main
     ¦   ¦               ¦       +---misc
     ¦   ¦               +---items
     ¦   ¦               ¦   +---armor
@@ -95,70 +249,83 @@ C:.
     ¦   ¦               ¦   ¦   ¦   +---hat
     ¦   ¦               ¦   ¦   ¦       +---cowboy
     ¦   ¦               ¦   ¦   +---leggings
-    ¦   ¦               ¦   ¦   ¦   +---pants
-    ¦   ¦               ¦   ¦   ¦   ¦   +---longpants
-    ¦   ¦               ¦   ¦   ¦   +---shorts
-    ¦   ¦               ¦   ¦   ¦   +---skirt
-    ¦   ¦               ¦   ¦   ¦       +---longskirt
-    ¦   ¦               ¦   ¦   ¦       +---mediumskirt
-    ¦   ¦               ¦   ¦   ¦       +---shortskirt
-    ¦   ¦               ¦   ¦   +---materials
-    ¦   ¦               ¦   ¦       +---chestplate
-    ¦   ¦               ¦   ¦           +---blazer
-    ¦   ¦               ¦   ¦           +---cardigan
-    ¦   ¦               ¦   ¦           +---coat
-    ¦   ¦               ¦   ¦           +---jacket
-    ¦   ¦               ¦   ¦           +---robe
-    ¦   ¦               ¦   ¦           +---scarf
-    ¦   ¦               ¦   ¦           ¦   +---silk
-    ¦   ¦               ¦   ¦           ¦   +---wool
-    ¦   ¦               ¦   ¦           +---shirt
-    ¦   ¦               ¦   ¦           ¦   +---longshirt
-    ¦   ¦               ¦   ¦           ¦   +---shortshirt
-    ¦   ¦               ¦   ¦           +---tunic
-    ¦   ¦               ¦   ¦           +---vest
+    ¦   ¦               ¦   ¦       +---pants
+    ¦   ¦               ¦   ¦       ¦   +---longpants
+    ¦   ¦               ¦   ¦       +---shorts
+    ¦   ¦               ¦   ¦       +---skirt
+    ¦   ¦               ¦   ¦           +---longskirt
+    ¦   ¦               ¦   ¦           +---mediumskirt
+    ¦   ¦               ¦   ¦           +---shortskirt
+    ¦   ¦               ¦   +---materials
+    ¦   ¦               ¦   ¦   +---chestplate
+    ¦   ¦               ¦   ¦       +---blazer
+    ¦   ¦               ¦   ¦       +---cardigan
+    ¦   ¦               ¦   ¦       +---coat
+    ¦   ¦               ¦   ¦       +---jacket
+    ¦   ¦               ¦   ¦       +---robe
+    ¦   ¦               ¦   ¦       +---scarf
+    ¦   ¦               ¦   ¦       ¦   +---silk
+    ¦   ¦               ¦   ¦       ¦   +---wool
+    ¦   ¦               ¦   ¦       +---shirt
+    ¦   ¦               ¦   ¦       ¦   +---longshirt
+    ¦   ¦               ¦   ¦       ¦   +---shortshirt
+    ¦   ¦               ¦   ¦       +---tunic
+    ¦   ¦               ¦   ¦       +---vest
     ¦   ¦               ¦   +---properties
     ¦   ¦               ¦       +---armor
     ¦   ¦               +---mixins
     ¦   ¦               +---utils
     ¦   ¦                   +---mon
-    ¦   ¦                       +---base
     ¦   ¦                       +---gen
-    ¦   ¦                           +---eight
-    ¦   ¦                           +---five
-    ¦   ¦                           +---four
-    ¦   ¦                           +---nine
-    ¦   ¦                           +---one
-    ¦   ¦                           +---seven
-    ¦   ¦                           +---six
-    ¦   ¦                           +---three
-    ¦   ¦                           +---two
     ¦   +---resources
     ¦       +---assets
     ¦       ¦   +---cobblemonmorph
     ¦       ¦       +---cobblemon
-    ¦       ¦       ¦   +---species
-    ¦       ¦       ¦       +---gen
-    ¦       ¦       ¦           +---eight
-    ¦       ¦       ¦           +---five
-    ¦       ¦       ¦           +---four
-    ¦       ¦       ¦           +---nine
-    ¦       ¦       ¦           +---one
-    ¦       ¦       ¦           +---seven
-    ¦       ¦       ¦           +---six
-    ¦       ¦       ¦           +---three
-    ¦       ¦       ¦           +---two
+    ¦       ¦       ¦   +---icons
+    ¦       ¦       ¦       +---items
+    ¦       ¦       ¦           +---spawn
+    ¦       ¦       ¦               +---eggs
+    ¦       ¦       ¦                   +---species
+    ¦       ¦       ¦                   ¦   +---gen
+    ¦       ¦       ¦                   ¦       +---eight
+    ¦       ¦       ¦                   ¦       +---five
+    ¦       ¦       ¦                   ¦       +---four
+    ¦       ¦       ¦                   ¦       +---nine
+    ¦       ¦       ¦                   ¦       +---one
+    ¦       ¦       ¦                   ¦       +---seven
+    ¦       ¦       ¦                   ¦       +---six
+    ¦       ¦       ¦                   ¦       +---three
+    ¦       ¦       ¦                   ¦       +---two
+    ¦       ¦       ¦                   +---type
+    ¦       ¦       ¦                       +---bug
+    ¦       ¦       ¦                       +---fairy
+    ¦       ¦       ¦                       +---fighting
+    ¦       ¦       ¦                       +---fire
+    ¦       ¦       ¦                       +---flying
+    ¦       ¦       ¦                       +---ghost
+    ¦       ¦       ¦                       +---grass
+    ¦       ¦       ¦                       +---ground
+    ¦       ¦       ¦                       +---ice
+    ¦       ¦       ¦                       +---poison
+    ¦       ¦       ¦                       +---psychic
+    ¦       ¦       ¦                       +---rock
+    ¦       ¦       ¦                       +---steel
+    ¦       ¦       ¦                       +---water
     ¦       ¦       +---morph
-    ¦       ¦           +---gen
-    ¦       ¦               +---eight
-    ¦       ¦               +---five
-    ¦       ¦               +---four
-    ¦       ¦               +---nine
-    ¦       ¦               +---one
-    ¦       ¦               +---seven
-    ¦       ¦               +---six
-    ¦       ¦               +---three
-    ¦       ¦               +---two
+    ¦       ¦       ¦   +---gen
+    ¦       ¦       ¦       +---eight
+    ¦       ¦       ¦       +---five
+    ¦       ¦       ¦       +---four
+    ¦       ¦       ¦       +---nine
+    ¦       ¦       ¦       +---one
+    ¦       ¦       ¦       +---seven
+    ¦       ¦       ¦       +---six
+    ¦       ¦       ¦       +---three
+    ¦       ¦       ¦       +---two
+    ¦       ¦       +---tabs
+    ¦       ¦           +---items
+    ¦       ¦           +---misc
+    ¦       ¦           +---nature
     ¦       +---META-INF
     +---test
         +---java

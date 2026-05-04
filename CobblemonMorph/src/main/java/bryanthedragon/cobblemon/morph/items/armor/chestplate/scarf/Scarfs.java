@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.chestplate.scarf;
+package bryanthedragon.cobblemon.morph.items.armor.chestplate.scarf;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.chestplate.ChestplateArmorItems;
+import bryanthedragon.cobblemon.morph.items.armor.chestplate.ChestplateArmorItems;
 
 import net.minecraftforge.eventbus.api.IEventBus;
 

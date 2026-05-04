@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.mixins;
+package bryanthedragon.cobblemon.morph.mixins;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
 
 public class CobblemonMorphMixins extends CobblemonMorph
 {

@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.materials.chestplate;
+package bryanthedragon.cobblemon.morph.items.materials.chestplate;
 
-import bryanthedragon.morph.cobblemonmorph.items.materials.ModArmorMaterial;
+import bryanthedragon.cobblemon.morph.items.materials.ModArmorMaterial;
 
 import net.minecraft.resources.ResourceLocation;
 

@@ -1,9 +1,9 @@
-package bryanthedragon.morph.cobblemonmorph.icons.tabs;
+package bryanthedragon.cobblemon.morph.icons.tabs;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
-import bryanthedragon.morph.cobblemonmorph.icons.tabs.items.CobblemonMorphItemsTabIcon;
-import bryanthedragon.morph.cobblemonmorph.icons.tabs.main.CobblemonMorphMainTabIcon;
-import bryanthedragon.morph.cobblemonmorph.icons.tabs.misc.CobblemonMorphMiscTabIcon;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.icons.tabs.items.CobblemonMorphItemsTabIcon;
+import bryanthedragon.cobblemon.morph.icons.tabs.main.CobblemonMorphMainTabIcon;
+import bryanthedragon.cobblemon.morph.icons.tabs.misc.CobblemonMorphMiscTabIcon;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;

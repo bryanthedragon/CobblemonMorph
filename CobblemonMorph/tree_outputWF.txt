@@ -37,11 +37,7 @@ C:.
 ¦           CobblemonMorph - runServerSlim.launch
 ¦           
 +---.gradle
-¦   ¦   file-system.probe
-¦   ¦   workspace-id.txt
-¦   ¦   workspace-id.txt.lock
-¦   ¦   
-¦   +---8.14.1
+¦   +---8.14.3
 ¦   ¦   ¦   gc.properties
 ¦   ¦   ¦   
 ¦   ¦   +---checksums
@@ -50,70 +46,464 @@ C:.
 ¦   ¦   ¦       sha1-checksums.bin
 ¦   ¦   ¦       
 ¦   ¦   +---executionHistory
-¦   ¦   ¦       executionHistory.bin
 ¦   ¦   ¦       executionHistory.lock
 ¦   ¦   ¦       
 ¦   ¦   +---expanded
-¦   ¦   ¦       expanded.lock
-¦   ¦   ¦       
 ¦   ¦   +---fileChanges
 ¦   ¦   ¦       last-build.bin
 ¦   ¦   ¦       
 ¦   ¦   +---fileHashes
 ¦   ¦   ¦       fileHashes.bin
 ¦   ¦   ¦       fileHashes.lock
-¦   ¦   ¦       resourceHashesCache.bin
 ¦   ¦   ¦       
 ¦   ¦   +---vcsMetadata
 ¦   +---buildOutputCleanup
 ¦   ¦       buildOutputCleanup.lock
 ¦   ¦       cache.properties
-¦   ¦       outputFiles.bin
 ¦   ¦       
+¦   +---loom-cache
+¦   ¦   +---natives
+¦   ¦   ¦   +---1.20.1
+¦   ¦   +---remapped_mods
+¦   ¦       +---remapped
+¦   ¦           +---unspecified
+¦   ¦               +---cobblemon-forge-1.5.2-1.20.1-07a4b8a5
+¦   ¦               ¦   +---f1ea45404e
+¦   ¦               ¦           cobblemon-forge-1.5.2-1.20.1-07a4b8a5-f1ea45404e.jar
+¦   ¦               ¦           cobblemon-forge-1.5.2-1.20.1-07a4b8a5-f1ea45404e.pom
+¦   ¦               ¦           
+¦   ¦               +---craftedcore-5.8.2-07a4b8a5
+¦   ¦               ¦   +---42d1062707
+¦   ¦               ¦           craftedcore-5.8.2-07a4b8a5-42d1062707.jar
+¦   ¦               ¦           craftedcore-5.8.2-07a4b8a5-42d1062707.pom
+¦   ¦               ¦           
+¦   ¦               +---remorphed-4.2-07a4b8a5
+¦   ¦               ¦   +---7a50024306
+¦   ¦               ¦           remorphed-4.2-07a4b8a5-7a50024306.jar
+¦   ¦               ¦           remorphed-4.2-07a4b8a5-7a50024306.pom
+¦   ¦               ¦           
+¦   ¦               +---walkers-5.8.11-07a4b8a5
+¦   ¦                   +---c8ea59abd3
+¦   ¦                           walkers-5.8.11-07a4b8a5-c8ea59abd3.jar
+¦   ¦                           walkers-5.8.11-07a4b8a5-c8ea59abd3.pom
+¦   ¦                           
 ¦   +---vcs-1
 ¦           gc.properties
 ¦           
 +---.idea
-¦   ¦   .gitignore
-¦   ¦   compiler.xml
-¦   ¦   gradle.xml
-¦   ¦   jarRepositories.xml
-¦   ¦   misc.xml
-¦   ¦   modules.xml
-¦   ¦   vcs.xml
-¦   ¦   workspace.xml
-¦   ¦   
-¦   +---dictionaries
-¦   ¦       project.xml
-¦   ¦       
-¦   +---modules
-¦   ¦       CobblemonMorph.main.iml
-¦   ¦       CobblemonMorph.test.iml
-¦   ¦       
 ¦   +---runConfigurations
 ¦           runClient.xml
-¦           runData.xml
-¦           runGameTestServer.xml
 ¦           runServer.xml
 ¦           
-+---.settings
-¦       org.eclipse.jdt.core.prefs
-¦       
 +---.vscode
+¦       java-formatter.xml
 ¦       launch.json
 ¦       settings.json
 ¦       tasks.json
 ¦       
 +---bin
 ¦   +---main
+¦   ¦   ¦   cobblemonmorph.mixins.json
+¦   ¦   ¦   pack.mcmeta
+¦   ¦   ¦   
+¦   ¦   +---assets
+¦   ¦   ¦   +---cobblemonmorph
+¦   ¦   ¦       +---cobblemon
+¦   ¦   ¦       ¦   +---icons
+¦   ¦   ¦       ¦       +---items
+¦   ¦   ¦       ¦           +---spawn
+¦   ¦   ¦       ¦               +---eggs
+¦   ¦   ¦       ¦                   +---species
+¦   ¦   ¦       ¦                   ¦   +---gen
+¦   ¦   ¦       ¦                   ¦       +---eight
+¦   ¦   ¦       ¦                   ¦       ¦       gen8
+¦   ¦   ¦       ¦                   ¦       ¦       
+¦   ¦   ¦       ¦                   ¦       +---five
+¦   ¦   ¦       ¦                   ¦       ¦       gen5
+¦   ¦   ¦       ¦                   ¦       ¦       
+¦   ¦   ¦       ¦                   ¦       +---four
+¦   ¦   ¦       ¦                   ¦       ¦       gen4
+¦   ¦   ¦       ¦                   ¦       ¦       
+¦   ¦   ¦       ¦                   ¦       +---nine
+¦   ¦   ¦       ¦                   ¦       ¦       gen9
+¦   ¦   ¦       ¦                   ¦       ¦       
+¦   ¦   ¦       ¦                   ¦       +---one
+¦   ¦   ¦       ¦                   ¦       ¦       gen1
+¦   ¦   ¦       ¦                   ¦       ¦       
+¦   ¦   ¦       ¦                   ¦       +---seven
+¦   ¦   ¦       ¦                   ¦       ¦       gen7
+¦   ¦   ¦       ¦                   ¦       ¦       
+¦   ¦   ¦       ¦                   ¦       +---six
+¦   ¦   ¦       ¦                   ¦       ¦       gen6
+¦   ¦   ¦       ¦                   ¦       ¦       
+¦   ¦   ¦       ¦                   ¦       +---three
+¦   ¦   ¦       ¦                   ¦       ¦       gen3
+¦   ¦   ¦       ¦                   ¦       ¦       
+¦   ¦   ¦       ¦                   ¦       +---two
+¦   ¦   ¦       ¦                   ¦               gen2
+¦   ¦   ¦       ¦                   ¦               
+¦   ¦   ¦       ¦                   +---type
+¦   ¦   ¦       ¦                       +---bug
+¦   ¦   ¦       ¦                       ¦       bug.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---fairy
+¦   ¦   ¦       ¦                       ¦       fairy.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---fighting
+¦   ¦   ¦       ¦                       ¦       fighting.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---fire
+¦   ¦   ¦       ¦                       ¦       fire.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---flying
+¦   ¦   ¦       ¦                       ¦       flying.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---ghost
+¦   ¦   ¦       ¦                       ¦       ghost.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---grass
+¦   ¦   ¦       ¦                       ¦       grass.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---ground
+¦   ¦   ¦       ¦                       ¦       ground.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---ice
+¦   ¦   ¦       ¦                       ¦       ice.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---poison
+¦   ¦   ¦       ¦                       ¦       poison.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---psychic
+¦   ¦   ¦       ¦                       ¦       psychic.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---rock
+¦   ¦   ¦       ¦                       ¦       rock.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---steel
+¦   ¦   ¦       ¦                       ¦       steel.txt
+¦   ¦   ¦       ¦                       ¦       
+¦   ¦   ¦       ¦                       +---water
+¦   ¦   ¦       ¦                               water.txt
+¦   ¦   ¦       ¦                               
+¦   ¦   ¦       +---morph
+¦   ¦   ¦       ¦   ¦   MonMorph.json
+¦   ¦   ¦       ¦   ¦   
+¦   ¦   ¦       ¦   +---gen
+¦   ¦   ¦       ¦       +---eight
+¦   ¦   ¦       ¦       ¦       Gen8MonMorph.json
+¦   ¦   ¦       ¦       ¦       
+¦   ¦   ¦       ¦       +---five
+¦   ¦   ¦       ¦       ¦       Gen5MonMorph.json
+¦   ¦   ¦       ¦       ¦       
+¦   ¦   ¦       ¦       +---four
+¦   ¦   ¦       ¦       ¦       Gen4MonMorph.json
+¦   ¦   ¦       ¦       ¦       
+¦   ¦   ¦       ¦       +---nine
+¦   ¦   ¦       ¦       ¦       Gen9MonMorph.json
+¦   ¦   ¦       ¦       ¦       
+¦   ¦   ¦       ¦       +---one
+¦   ¦   ¦       ¦       ¦       Gen1MonMorph.json
+¦   ¦   ¦       ¦       ¦       
+¦   ¦   ¦       ¦       +---seven
+¦   ¦   ¦       ¦       ¦       Gen7MonMorph.json
+¦   ¦   ¦       ¦       ¦       
+¦   ¦   ¦       ¦       +---six
+¦   ¦   ¦       ¦       ¦       Gen6MonMorph.json
+¦   ¦   ¦       ¦       ¦       
+¦   ¦   ¦       ¦       +---three
+¦   ¦   ¦       ¦       ¦       Gen3MonMorph.json
+¦   ¦   ¦       ¦       ¦       
+¦   ¦   ¦       ¦       +---two
+¦   ¦   ¦       ¦               Gen2MonMorph.json
+¦   ¦   ¦       ¦               
+¦   ¦   ¦       +---tabs
+¦   ¦   ¦           +---items
+¦   ¦   ¦           ¦       items.txt
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---misc
+¦   ¦   ¦           ¦       misc.txt
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---nature
+¦   ¦   ¦                   nature.txt
+¦   ¦   ¦                   
+¦   ¦   +---bryanthedragon
+¦   ¦   ¦   +---cobblemon
+¦   ¦   ¦       +---morph
+¦   ¦   ¦           ¦   CobblemonMorph.class
+¦   ¦   ¦           ¦   
+¦   ¦   ¦           +---config
+¦   ¦   ¦           ¦       CobblemonMorphConfig.class
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---failsafe
+¦   ¦   ¦           ¦   ¦   FailSafe.class
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---mixin
+¦   ¦   ¦           ¦       ¦   MixinFailSafe.class
+¦   ¦   ¦           ¦       ¦   
+¦   ¦   ¦           ¦       +---patch
+¦   ¦   ¦           ¦               MixinSafePatch.class
+¦   ¦   ¦           ¦               
+¦   ¦   ¦           +---handler
+¦   ¦   ¦           ¦   ¦   Handlers.class
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---client
+¦   ¦   ¦           ¦       ¦   ClientHandler.class
+¦   ¦   ¦           ¦       ¦   
+¦   ¦   ¦           ¦       +---shutdown
+¦   ¦   ¦           ¦               ClientShutdownHandler.class
+¦   ¦   ¦           ¦               
+¦   ¦   ¦           +---helper
+¦   ¦   ¦           ¦   ¦   CobblemonMorphHelper.class
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---client
+¦   ¦   ¦           ¦   ¦       CobblemonMorphClientHelper.class
+¦   ¦   ¦           ¦   ¦       
+¦   ¦   ¦           ¦   +---dependency
+¦   ¦   ¦           ¦   ¦   ¦   CobblemonMorphDependencyHelper.class
+¦   ¦   ¦           ¦   ¦   ¦   
+¦   ¦   ¦           ¦   ¦   +---cobblemon
+¦   ¦   ¦           ¦   ¦   ¦       CobblemonMorphCobblemonHelper.class
+¦   ¦   ¦           ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   +---craftedcore
+¦   ¦   ¦           ¦   ¦   ¦       CobblemonMorphCraftedcoreHelper.class
+¦   ¦   ¦           ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   +---kotlin
+¦   ¦   ¦           ¦   ¦   ¦       CobblemonMorphKotlinHelper.class
+¦   ¦   ¦           ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   +---minecraft
+¦   ¦   ¦           ¦   ¦   ¦       CobblemonMorphMinecraftHelper.class
+¦   ¦   ¦           ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   +---remorph
+¦   ¦   ¦           ¦   ¦   ¦       CobblemonMorphRemorphHelper.class
+¦   ¦   ¦           ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   +---walkers
+¦   ¦   ¦           ¦   ¦           CobblemonMorphWalkersHelper.class
+¦   ¦   ¦           ¦   ¦           
+¦   ¦   ¦           ¦   +---item
+¦   ¦   ¦           ¦   ¦       CobblemonMorphItemHelper.class
+¦   ¦   ¦           ¦   ¦       
+¦   ¦   ¦           ¦   +---logger
+¦   ¦   ¦           ¦   ¦       CobblemonMorphLoggerHelper.class
+¦   ¦   ¦           ¦   ¦       
+¦   ¦   ¦           ¦   +---mixins
+¦   ¦   ¦           ¦   ¦       CobblemonMorphMixinsHelper.class
+¦   ¦   ¦           ¦   ¦       
+¦   ¦   ¦           ¦   +---mod
+¦   ¦   ¦           ¦   ¦       CobblemonMorphModHelper.class
+¦   ¦   ¦           ¦   ¦       
+¦   ¦   ¦           ¦   +---registries
+¦   ¦   ¦           ¦   ¦   ¦   CobblemonMorphModRegistry.class
+¦   ¦   ¦           ¦   ¦   ¦   CobblemonMorphRegistry.class
+¦   ¦   ¦           ¦   ¦   ¦   
+¦   ¦   ¦           ¦   ¦   +---mod
+¦   ¦   ¦           ¦   ¦   ¦       CobblemonMorphCobblemonRegistry.class
+¦   ¦   ¦           ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   +---tabs
+¦   ¦   ¦           ¦   ¦       ¦   CobblemonMorphTabRegistry.class
+¦   ¦   ¦           ¦   ¦       ¦   
+¦   ¦   ¦           ¦   ¦       +---items
+¦   ¦   ¦           ¦   ¦       ¦   ¦   CobblemonMorphItemsTabRegistry.class
+¦   ¦   ¦           ¦   ¦       ¦   ¦   
+¦   ¦   ¦           ¦   ¦       ¦   +---armor
+¦   ¦   ¦           ¦   ¦       ¦           CobblemonMorphArmorTabRegistry.class
+¦   ¦   ¦           ¦   ¦       ¦           
+¦   ¦   ¦           ¦   ¦       +---main
+¦   ¦   ¦           ¦   ¦       ¦       CobblemonMorphMainTabRegistry.class
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---misc
+¦   ¦   ¦           ¦   ¦               CobblemonMorphMiscTabRegistry.class
+¦   ¦   ¦           ¦   ¦               
+¦   ¦   ¦           ¦   +---tabs
+¦   ¦   ¦           ¦           CobblemonMorphModTabHelper.class
+¦   ¦   ¦           ¦           
+¦   ¦   ¦           +---icons
+¦   ¦   ¦           ¦   ¦   CobblemonMorphIcons.class
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---tabs
+¦   ¦   ¦           ¦       ¦   CobblemonMorphTabsIcons.class
+¦   ¦   ¦           ¦       ¦   
+¦   ¦   ¦           ¦       +---items
+¦   ¦   ¦           ¦       ¦   ¦   CobblemonMorphItemsTabIcon.class
+¦   ¦   ¦           ¦       ¦   ¦   
+¦   ¦   ¦           ¦       ¦   +---armor
+¦   ¦   ¦           ¦       ¦           CobblemonMorphArmorTabIcon.class
+¦   ¦   ¦           ¦       ¦           
+¦   ¦   ¦           ¦       +---main
+¦   ¦   ¦           ¦       ¦       CobblemonMorphMainTabIcon.class
+¦   ¦   ¦           ¦       ¦       
+¦   ¦   ¦           ¦       +---misc
+¦   ¦   ¦           ¦               CobblemonMorphMiscTabIcon.class
+¦   ¦   ¦           ¦               
+¦   ¦   ¦           +---items
+¦   ¦   ¦           ¦   ¦   ModItems.class
+¦   ¦   ¦           ¦   ¦   
+¦   ¦   ¦           ¦   +---armor
+¦   ¦   ¦           ¦   ¦   ¦   ModArmorItems$ArmorType.class
+¦   ¦   ¦           ¦   ¦   ¦   ModArmorItems.class
+¦   ¦   ¦           ¦   ¦   ¦   
+¦   ¦   ¦           ¦   ¦   +---body
+¦   ¦   ¦           ¦   ¦   ¦   ¦   BodyArmorItems.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦   
+¦   ¦   ¦           ¦   ¦   ¦   +---bikini
+¦   ¦   ¦           ¦   ¦   ¦       ¦   BikiniArmorItem.class
+¦   ¦   ¦           ¦   ¦   ¦       ¦   
+¦   ¦   ¦           ¦   ¦   ¦       +---bottom
+¦   ¦   ¦           ¦   ¦   ¦       ¦       Bikini_Bottom.class
+¦   ¦   ¦           ¦   ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦   ¦       +---top
+¦   ¦   ¦           ¦   ¦   ¦               Bikini_Top.class
+¦   ¦   ¦           ¦   ¦   ¦               
+¦   ¦   ¦           ¦   ¦   +---chestplate
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ChestplateArmorItems$ChestplateArmorType.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ChestplateArmorItems.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦   
+¦   ¦   ¦           ¦   ¦   ¦   +---blazer
+¦   ¦   ¦           ¦   ¦   ¦   ¦       Blazers.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   ¦   +---cardigan
+¦   ¦   ¦           ¦   ¦   ¦   ¦       Cardigans.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   ¦   +---coat
+¦   ¦   ¦           ¦   ¦   ¦   ¦       Coats.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   ¦   +---jacket
+¦   ¦   ¦           ¦   ¦   ¦   ¦       Jackets.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   ¦   +---robe
+¦   ¦   ¦           ¦   ¦   ¦   ¦       Robes.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   ¦   +---scarf
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ¦   Scarfs.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ¦   
+¦   ¦   ¦           ¦   ¦   ¦   ¦   +---silk
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ¦       Scarf_Silk.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   ¦   ¦   +---wool
+¦   ¦   ¦           ¦   ¦   ¦   ¦           Scarf_Wool.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦           
+¦   ¦   ¦           ¦   ¦   ¦   +---shirt
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ¦   Shirts.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ¦   
+¦   ¦   ¦           ¦   ¦   ¦   ¦   +---longshirt
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ¦       Shirt_Long.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   ¦   ¦   +---shortshirt
+¦   ¦   ¦           ¦   ¦   ¦   ¦           Shirt_Short.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦           
+¦   ¦   ¦           ¦   ¦   ¦   +---tunic
+¦   ¦   ¦           ¦   ¦   ¦   ¦       Tunics.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦       
+¦   ¦   ¦           ¦   ¦   ¦   +---vest
+¦   ¦   ¦           ¦   ¦   ¦           Vests.class
+¦   ¦   ¦           ¦   ¦   ¦           
+¦   ¦   ¦           ¦   ¦   +---helmet
+¦   ¦   ¦           ¦   ¦   ¦   ¦   HelmetArmorItems$HelmetArmorType.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦   HelmetArmorItems.class
+¦   ¦   ¦           ¦   ¦   ¦   ¦   
+¦   ¦   ¦           ¦   ¦   ¦   +---hat
+¦   ¦   ¦           ¦   ¦   ¦       ¦   Hats.class
+¦   ¦   ¦           ¦   ¦   ¦       ¦   
+¦   ¦   ¦           ¦   ¦   ¦       +---cowboy
+¦   ¦   ¦           ¦   ¦   ¦               CowboyHat.class
+¦   ¦   ¦           ¦   ¦   ¦               
+¦   ¦   ¦           ¦   ¦   +---leggings
+¦   ¦   ¦           ¦   ¦       ¦   LeggingsArmorItems$LeggingsArmorType.class
+¦   ¦   ¦           ¦   ¦       ¦   LeggingsArmorItems.class
+¦   ¦   ¦           ¦   ¦       ¦   
+¦   ¦   ¦           ¦   ¦       +---pants
+¦   ¦   ¦           ¦   ¦       ¦   ¦   Pants.class
+¦   ¦   ¦           ¦   ¦       ¦   ¦   
+¦   ¦   ¦           ¦   ¦       ¦   +---longpants
+¦   ¦   ¦           ¦   ¦       ¦           Pants_Long.class
+¦   ¦   ¦           ¦   ¦       ¦           
+¦   ¦   ¦           ¦   ¦       +---shorts
+¦   ¦   ¦           ¦   ¦       ¦       Shorts.class
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---skirt
+¦   ¦   ¦           ¦   ¦           ¦   Skirts.class
+¦   ¦   ¦           ¦   ¦           ¦   
+¦   ¦   ¦           ¦   ¦           +---longskirt
+¦   ¦   ¦           ¦   ¦           ¦       Skirt_Long.class
+¦   ¦   ¦           ¦   ¦           ¦       
+¦   ¦   ¦           ¦   ¦           +---mediumskirt
+¦   ¦   ¦           ¦   ¦           ¦       Skirt_Medium.class
+¦   ¦   ¦           ¦   ¦           ¦       
+¦   ¦   ¦           ¦   ¦           +---shortskirt
+¦   ¦   ¦           ¦   ¦                   Skirt_Short.class
+¦   ¦   ¦           ¦   ¦                   
+¦   ¦   ¦           ¦   +---materials
+¦   ¦   ¦           ¦   ¦   ¦   ModArmorMaterial.class
+¦   ¦   ¦           ¦   ¦   ¦   
+¦   ¦   ¦           ¦   ¦   +---chestplate
+¦   ¦   ¦           ¦   ¦       ¦   ModChestplateArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦   
+¦   ¦   ¦           ¦   ¦       +---blazer
+¦   ¦   ¦           ¦   ¦       ¦       BlazersArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---cardigan
+¦   ¦   ¦           ¦   ¦       ¦       CardigansArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---coat
+¦   ¦   ¦           ¦   ¦       ¦       CoatsArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---jacket
+¦   ¦   ¦           ¦   ¦       ¦       JacketsArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---robe
+¦   ¦   ¦           ¦   ¦       ¦       RobesArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---scarf
+¦   ¦   ¦           ¦   ¦       ¦   ¦   ScarfsArmorMaterial$ScarfsArmorMaterialType.class
+¦   ¦   ¦           ¦   ¦       ¦   ¦   ScarfsArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦   ¦   
+¦   ¦   ¦           ¦   ¦       ¦   +---silk
+¦   ¦   ¦           ¦   ¦       ¦   ¦       Scarf_SilkArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦   ¦       
+¦   ¦   ¦           ¦   ¦       ¦   +---wool
+¦   ¦   ¦           ¦   ¦       ¦           Scarf_WoolArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦           
+¦   ¦   ¦           ¦   ¦       +---shirt
+¦   ¦   ¦           ¦   ¦       ¦   ¦   ShirtsArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦   ¦   
+¦   ¦   ¦           ¦   ¦       ¦   +---longshirt
+¦   ¦   ¦           ¦   ¦       ¦   ¦       Shirt_LongArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦   ¦       
+¦   ¦   ¦           ¦   ¦       ¦   +---shortshirt
+¦   ¦   ¦           ¦   ¦       ¦           Shirt_ShortArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦           
+¦   ¦   ¦           ¦   ¦       +---tunic
+¦   ¦   ¦           ¦   ¦       ¦       TunicsArmorMaterial.class
+¦   ¦   ¦           ¦   ¦       ¦       
+¦   ¦   ¦           ¦   ¦       +---vest
+¦   ¦   ¦           ¦   ¦               VestsArmorMaterial.class
+¦   ¦   ¦           ¦   ¦               
+¦   ¦   ¦           ¦   +---properties
+¦   ¦   ¦           ¦       ¦   ModItemsProperties.class
+¦   ¦   ¦           ¦       ¦   
+¦   ¦   ¦           ¦       +---armor
+¦   ¦   ¦           ¦               AmorItemsProperties.class
+¦   ¦   ¦           ¦               
+¦   ¦   ¦           +---mixins
+¦   ¦   ¦           ¦       CobblemonMorphMixins.class
+¦   ¦   ¦           ¦       
+¦   ¦   ¦           +---utils
+¦   ¦   ¦               +---mon
+¦   ¦   ¦                   ¦   MonUtils.class
+¦   ¦   ¦                   ¦   
+¦   ¦   ¦                   +---gen
+¦   ¦   ¦                           GenIndex.class
+¦   ¦   ¦                           
+¦   ¦   +---META-INF
+¦   ¦           mods.toml
+¦   ¦           
 ¦   +---test
 +---build
-¦   +---downloadMCMeta
-¦   ¦       version.json
-¦   ¦       
-¦   +---reports
-¦       +---problems
-¦               problems-report.html
+¦   +---loom-cache
+¦       +---remapped_working
+¦               remapped.unspecified-cobblemon-forge-1.5.2-1.20.1-07a4b8a5-f1ea45404e.jar
+¦               remapped.unspecified-craftedcore-5.8.2-07a4b8a5-42d1062707.jar
+¦               remapped.unspecified-remorphed-4.2-07a4b8a5-7a50024306.jar
+¦               remapped.unspecified-walkers-5.8.11-07a4b8a5-c8ea59abd3.jar
 ¦               
 +---gradle
 ¦   ¦   gradle-daemon-jvm.properties
@@ -124,60 +514,77 @@ C:.
 ¦           
 +---libs
 ¦       cobblemon-forge-1.5.2-1.20.1.jar
-¦       craftedcore-5.5.jar
-¦       kotlinforforge-4.11.0-all.jar
+¦       craftedcore-5.8.2.jar
+¦       kotlinforforge-4.12.0-all.jar
 ¦       remorphed-4.2.jar
-¦       walkers-5.2.jar
+¦       walkers-5.8.11.jar
 ¦       
 +---logs
 ¦       coremods.txt
+¦       genrunvscode.txt
 ¦       runclient.txt
 ¦       
 +---run
-¦   ¦   imgui.ini
-¦   ¦   
-¦   +---config
-¦   ¦       fml.toml
+¦   +---.architectury-transformer
+¦   ¦       debug.log
 ¦   ¦       
-¦   +---defaultconfigs
-¦   +---mods
-¦   ¦       cobblemon-forge-1.5.2-1.20.1.jar
-¦   ¦       craftedcore-5.5.jar
-¦   ¦       kotlinforforge-4.11.0-all.jar
-¦   ¦       remorphed-4.2.jar
-¦   ¦       walkers-5.2.jar
-¦   ¦       
-¦   +---resourcepacks
-¦   +---saves
-+---run-data
 ¦   +---config
 ¦   ¦       fml.toml
 ¦   ¦       
 ¦   +---defaultconfigs
 ¦   +---logs
-¦   ¦       2025-11-13-1.log.gz
-¦   ¦       2025-11-13-2.log.gz
-¦   ¦       2025-11-15-1.log.gz
+¦   ¦       2026-05-06-1.log.gz
+¦   ¦       2026-05-06-2.log.gz
+¦   ¦       2026-05-06-3.log.gz
+¦   ¦       2026-05-06-4.log.gz
+¦   ¦       2026-05-06-5.log.gz
+¦   ¦       2026-05-06-6.log.gz
+¦   ¦       2026-05-08-1.log.gz
 ¦   ¦       debug-1.log.gz
 ¦   ¦       debug-2.log.gz
 ¦   ¦       debug-3.log.gz
+¦   ¦       debug-4.log.gz
+¦   ¦       debug-5.log.gz
 ¦   ¦       debug.log
 ¦   ¦       latest.log
 ¦   ¦       
 ¦   +---mods
+¦   ¦       cobblemon-forge-1.5.2-1.20.1.jar
+¦   ¦       craftedcore-5.8.2.jar
+¦   ¦       kotlinforforge-4.12.0-all.jar
+¦   ¦       remorphed-4.2.jar
+¦   ¦       walkers-5.8.11.jar
+¦   ¦       
+¦   +---resources
 +---src
-    +---generated
-    ¦   +---resources
     +---main
     ¦   +---java
     ¦   ¦   +---bryanthedragon
-    ¦   ¦       +---morph
-    ¦   ¦           +---cobblemonmorph
+    ¦   ¦       +---cobblemon
+    ¦   ¦           +---morph
     ¦   ¦               ¦   CobblemonMorph.java
     ¦   ¦               ¦   
     ¦   ¦               +---config
     ¦   ¦               ¦       CobblemonMorphConfig.java
     ¦   ¦               ¦       
+    ¦   ¦               +---failsafe
+    ¦   ¦               ¦   ¦   FailSafe.java
+    ¦   ¦               ¦   ¦   
+    ¦   ¦               ¦   +---mixin
+    ¦   ¦               ¦       ¦   MixinFailSafe.java
+    ¦   ¦               ¦       ¦   
+    ¦   ¦               ¦       +---patch
+    ¦   ¦               ¦               MixinSafePatch.java
+    ¦   ¦               ¦               
+    ¦   ¦               +---handler
+    ¦   ¦               ¦   ¦   Handlers.java
+    ¦   ¦               ¦   ¦   
+    ¦   ¦               ¦   +---client
+    ¦   ¦               ¦       ¦   ClientHandler.java
+    ¦   ¦               ¦       ¦   
+    ¦   ¦               ¦       +---shutdown
+    ¦   ¦               ¦               ClientShutdownHandler.java
+    ¦   ¦               ¦               
     ¦   ¦               +---helper
     ¦   ¦               ¦   ¦   CobblemonMorphHelper.java
     ¦   ¦               ¦   ¦   
@@ -218,11 +625,27 @@ C:.
     ¦   ¦               ¦   ¦       CobblemonMorphModHelper.java
     ¦   ¦               ¦   ¦       
     ¦   ¦               ¦   +---registries
+    ¦   ¦               ¦   ¦   ¦   CobblemonMorphModRegistry.java
     ¦   ¦               ¦   ¦   ¦   CobblemonMorphRegistry.java
     ¦   ¦               ¦   ¦   ¦   
+    ¦   ¦               ¦   ¦   +---mod
+    ¦   ¦               ¦   ¦   ¦       CobblemonMorphCobblemonRegistry.java
+    ¦   ¦               ¦   ¦   ¦       
     ¦   ¦               ¦   ¦   +---tabs
-    ¦   ¦               ¦   ¦           CobblemonMorphTabRegistry.java
-    ¦   ¦               ¦   ¦           
+    ¦   ¦               ¦   ¦       ¦   CobblemonMorphTabRegistry.java
+    ¦   ¦               ¦   ¦       ¦   
+    ¦   ¦               ¦   ¦       +---items
+    ¦   ¦               ¦   ¦       ¦   ¦   CobblemonMorphItemsTabRegistry.java
+    ¦   ¦               ¦   ¦       ¦   ¦   
+    ¦   ¦               ¦   ¦       ¦   +---armor
+    ¦   ¦               ¦   ¦       ¦           CobblemonMorphArmorTabRegistry.java
+    ¦   ¦               ¦   ¦       ¦           
+    ¦   ¦               ¦   ¦       +---main
+    ¦   ¦               ¦   ¦       ¦       CobblemonMorphMainTabRegistry.java
+    ¦   ¦               ¦   ¦       ¦       
+    ¦   ¦               ¦   ¦       +---misc
+    ¦   ¦               ¦   ¦               CobblemonMorphMiscTabRegistry.java
+    ¦   ¦               ¦   ¦               
     ¦   ¦               ¦   +---tabs
     ¦   ¦               ¦           CobblemonMorphModTabHelper.java
     ¦   ¦               ¦           
@@ -230,12 +653,17 @@ C:.
     ¦   ¦               ¦   ¦   CobblemonMorphIcons.java
     ¦   ¦               ¦   ¦   
     ¦   ¦               ¦   +---tabs
+    ¦   ¦               ¦       ¦   CobblemonMorphTabsIcons.java
+    ¦   ¦               ¦       ¦   
     ¦   ¦               ¦       +---items
     ¦   ¦               ¦       ¦   ¦   CobblemonMorphItemsTabIcon.java
     ¦   ¦               ¦       ¦   ¦   
     ¦   ¦               ¦       ¦   +---armor
     ¦   ¦               ¦       ¦           CobblemonMorphArmorTabIcon.java
     ¦   ¦               ¦       ¦           
+    ¦   ¦               ¦       +---main
+    ¦   ¦               ¦       ¦       CobblemonMorphMainTabIcon.java
+    ¦   ¦               ¦       ¦       
     ¦   ¦               ¦       +---misc
     ¦   ¦               ¦               CobblemonMorphMiscTabIcon.java
     ¦   ¦               ¦               
@@ -249,7 +677,7 @@ C:.
     ¦   ¦               ¦   ¦   ¦   ¦   BodyArmorItems.java
     ¦   ¦               ¦   ¦   ¦   ¦   
     ¦   ¦               ¦   ¦   ¦   +---bikini
-    ¦   ¦               ¦   ¦   ¦       ¦   BikiniArmorItems.java
+    ¦   ¦               ¦   ¦   ¦       ¦   BikiniArmorItem.java
     ¦   ¦               ¦   ¦   ¦       ¦   
     ¦   ¦               ¦   ¦   ¦       +---bottom
     ¦   ¦               ¦   ¦   ¦       ¦       Bikini_Bottom.java
@@ -309,74 +737,74 @@ C:.
     ¦   ¦               ¦   ¦   ¦               CowboyHat.java
     ¦   ¦               ¦   ¦   ¦               
     ¦   ¦               ¦   ¦   +---leggings
-    ¦   ¦               ¦   ¦   ¦   ¦   LeggingsArmorItems.java
-    ¦   ¦               ¦   ¦   ¦   ¦   
-    ¦   ¦               ¦   ¦   ¦   +---pants
-    ¦   ¦               ¦   ¦   ¦   ¦   ¦   Pants.java
-    ¦   ¦               ¦   ¦   ¦   ¦   ¦   
-    ¦   ¦               ¦   ¦   ¦   ¦   +---longpants
-    ¦   ¦               ¦   ¦   ¦   ¦           Pants_Long.java
-    ¦   ¦               ¦   ¦   ¦   ¦           
-    ¦   ¦               ¦   ¦   ¦   +---shorts
-    ¦   ¦               ¦   ¦   ¦   ¦       Shorts.java
-    ¦   ¦               ¦   ¦   ¦   ¦       
-    ¦   ¦               ¦   ¦   ¦   +---skirt
-    ¦   ¦               ¦   ¦   ¦       ¦   Skirts.java
-    ¦   ¦               ¦   ¦   ¦       ¦   
-    ¦   ¦               ¦   ¦   ¦       +---longskirt
-    ¦   ¦               ¦   ¦   ¦       ¦       Skirt_Long.java
-    ¦   ¦               ¦   ¦   ¦       ¦       
-    ¦   ¦               ¦   ¦   ¦       +---mediumskirt
-    ¦   ¦               ¦   ¦   ¦       ¦       Skirt_Medium.java
-    ¦   ¦               ¦   ¦   ¦       ¦       
-    ¦   ¦               ¦   ¦   ¦       +---shortskirt
-    ¦   ¦               ¦   ¦   ¦               Skirt_Short.java
-    ¦   ¦               ¦   ¦   ¦               
-    ¦   ¦               ¦   ¦   +---materials
-    ¦   ¦               ¦   ¦       ¦   ModArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦   LeggingsArmorItems.java
     ¦   ¦               ¦   ¦       ¦   
-    ¦   ¦               ¦   ¦       +---chestplate
-    ¦   ¦               ¦   ¦           ¦   ModChestplateArmorMaterial.java
+    ¦   ¦               ¦   ¦       +---pants
+    ¦   ¦               ¦   ¦       ¦   ¦   Pants.java
+    ¦   ¦               ¦   ¦       ¦   ¦   
+    ¦   ¦               ¦   ¦       ¦   +---longpants
+    ¦   ¦               ¦   ¦       ¦           Pants_Long.java
+    ¦   ¦               ¦   ¦       ¦           
+    ¦   ¦               ¦   ¦       +---shorts
+    ¦   ¦               ¦   ¦       ¦       Shorts.java
+    ¦   ¦               ¦   ¦       ¦       
+    ¦   ¦               ¦   ¦       +---skirt
+    ¦   ¦               ¦   ¦           ¦   Skirts.java
     ¦   ¦               ¦   ¦           ¦   
-    ¦   ¦               ¦   ¦           +---blazer
-    ¦   ¦               ¦   ¦           ¦       BlazersArmorMaterial.java
+    ¦   ¦               ¦   ¦           +---longskirt
+    ¦   ¦               ¦   ¦           ¦       Skirt_Long.java
     ¦   ¦               ¦   ¦           ¦       
-    ¦   ¦               ¦   ¦           +---cardigan
-    ¦   ¦               ¦   ¦           ¦       CardigansArmorMaterial.java
+    ¦   ¦               ¦   ¦           +---mediumskirt
+    ¦   ¦               ¦   ¦           ¦       Skirt_Medium.java
     ¦   ¦               ¦   ¦           ¦       
-    ¦   ¦               ¦   ¦           +---coat
-    ¦   ¦               ¦   ¦           ¦       CoatsArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦       
-    ¦   ¦               ¦   ¦           +---jacket
-    ¦   ¦               ¦   ¦           ¦       JacketsArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦       
-    ¦   ¦               ¦   ¦           +---robe
-    ¦   ¦               ¦   ¦           ¦       RobesArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦       
-    ¦   ¦               ¦   ¦           +---scarf
-    ¦   ¦               ¦   ¦           ¦   ¦   ScarfsArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦   ¦   
-    ¦   ¦               ¦   ¦           ¦   +---silk
-    ¦   ¦               ¦   ¦           ¦   ¦       Scarf_SilkArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦   ¦       
-    ¦   ¦               ¦   ¦           ¦   +---wool
-    ¦   ¦               ¦   ¦           ¦           Scarf_WoolArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦           
-    ¦   ¦               ¦   ¦           +---shirt
-    ¦   ¦               ¦   ¦           ¦   ¦   ShirtsArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦   ¦   
-    ¦   ¦               ¦   ¦           ¦   +---longshirt
-    ¦   ¦               ¦   ¦           ¦   ¦       Shirt_LongArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦   ¦       
-    ¦   ¦               ¦   ¦           ¦   +---shortshirt
-    ¦   ¦               ¦   ¦           ¦           Shirt_ShortArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦           
-    ¦   ¦               ¦   ¦           +---tunic
-    ¦   ¦               ¦   ¦           ¦       TunicsArmorMaterial.java
-    ¦   ¦               ¦   ¦           ¦       
-    ¦   ¦               ¦   ¦           +---vest
-    ¦   ¦               ¦   ¦                   VestsArmorMaterial.java
+    ¦   ¦               ¦   ¦           +---shortskirt
+    ¦   ¦               ¦   ¦                   Skirt_Short.java
     ¦   ¦               ¦   ¦                   
+    ¦   ¦               ¦   +---materials
+    ¦   ¦               ¦   ¦   ¦   ModArmorMaterial.java
+    ¦   ¦               ¦   ¦   ¦   
+    ¦   ¦               ¦   ¦   +---chestplate
+    ¦   ¦               ¦   ¦       ¦   ModChestplateArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦   
+    ¦   ¦               ¦   ¦       +---blazer
+    ¦   ¦               ¦   ¦       ¦       BlazersArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦       
+    ¦   ¦               ¦   ¦       +---cardigan
+    ¦   ¦               ¦   ¦       ¦       CardigansArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦       
+    ¦   ¦               ¦   ¦       +---coat
+    ¦   ¦               ¦   ¦       ¦       CoatsArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦       
+    ¦   ¦               ¦   ¦       +---jacket
+    ¦   ¦               ¦   ¦       ¦       JacketsArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦       
+    ¦   ¦               ¦   ¦       +---robe
+    ¦   ¦               ¦   ¦       ¦       RobesArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦       
+    ¦   ¦               ¦   ¦       +---scarf
+    ¦   ¦               ¦   ¦       ¦   ¦   ScarfsArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦   ¦   
+    ¦   ¦               ¦   ¦       ¦   +---silk
+    ¦   ¦               ¦   ¦       ¦   ¦       Scarf_SilkArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦   ¦       
+    ¦   ¦               ¦   ¦       ¦   +---wool
+    ¦   ¦               ¦   ¦       ¦           Scarf_WoolArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦           
+    ¦   ¦               ¦   ¦       +---shirt
+    ¦   ¦               ¦   ¦       ¦   ¦   ShirtsArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦   ¦   
+    ¦   ¦               ¦   ¦       ¦   +---longshirt
+    ¦   ¦               ¦   ¦       ¦   ¦       Shirt_LongArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦   ¦       
+    ¦   ¦               ¦   ¦       ¦   +---shortshirt
+    ¦   ¦               ¦   ¦       ¦           Shirt_ShortArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦           
+    ¦   ¦               ¦   ¦       +---tunic
+    ¦   ¦               ¦   ¦       ¦       TunicsArmorMaterial.java
+    ¦   ¦               ¦   ¦       ¦       
+    ¦   ¦               ¦   ¦       +---vest
+    ¦   ¦               ¦   ¦               VestsArmorMaterial.java
+    ¦   ¦               ¦   ¦               
     ¦   ¦               ¦   +---properties
     ¦   ¦               ¦       ¦   ModItemsProperties.java
     ¦   ¦               ¦       ¦   
@@ -390,37 +818,9 @@ C:.
     ¦   ¦                   +---mon
     ¦   ¦                       ¦   MonUtils.java
     ¦   ¦                       ¦   
-    ¦   ¦                       +---base
-    ¦   ¦                       ¦       MonUtilsBase.java
-    ¦   ¦                       ¦       
     ¦   ¦                       +---gen
-    ¦   ¦                           +---eight
-    ¦   ¦                           ¦       Gen8MonUtils.java
-    ¦   ¦                           ¦       
-    ¦   ¦                           +---five
-    ¦   ¦                           ¦       Gen5MonUtils.java
-    ¦   ¦                           ¦       
-    ¦   ¦                           +---four
-    ¦   ¦                           ¦       Gen4MonUtils.java
-    ¦   ¦                           ¦       
-    ¦   ¦                           +---nine
-    ¦   ¦                           ¦       Gen9MonUtils.java
-    ¦   ¦                           ¦       
-    ¦   ¦                           +---one
-    ¦   ¦                           ¦       Gen1MonUtils.java
-    ¦   ¦                           ¦       
-    ¦   ¦                           +---seven
-    ¦   ¦                           ¦       Gen7MonUtils.java
-    ¦   ¦                           ¦       
-    ¦   ¦                           +---six
-    ¦   ¦                           ¦       Gen6MonUtils.java
-    ¦   ¦                           ¦       
-    ¦   ¦                           +---three
-    ¦   ¦                           ¦       Gen3MonUtils.java
-    ¦   ¦                           ¦       
-    ¦   ¦                           +---two
-    ¦   ¦                                   Gen2MonUtils.java
-    ¦   ¦                                   
+    ¦   ¦                               GenIndex.java
+    ¦   ¦                               
     ¦   +---resources
     ¦       ¦   cobblemonmorph.mixins.json
     ¦       ¦   pack.mcmeta
@@ -428,1082 +828,123 @@ C:.
     ¦       +---assets
     ¦       ¦   +---cobblemonmorph
     ¦       ¦       +---cobblemon
-    ¦       ¦       ¦   +---species
-    ¦       ¦       ¦       +---gen
-    ¦       ¦       ¦           +---eight
-    ¦       ¦       ¦           ¦       alcremie.json
-    ¦       ¦       ¦           ¦       appletun.json
-    ¦       ¦       ¦           ¦       applin.json
-    ¦       ¦       ¦           ¦       arctovish.json
-    ¦       ¦       ¦           ¦       arctozolt.json
-    ¦       ¦       ¦           ¦       arrokuda.json
-    ¦       ¦       ¦           ¦       barraskewda.json
-    ¦       ¦       ¦           ¦       basculegion.json
-    ¦       ¦       ¦           ¦       blipbug.json
-    ¦       ¦       ¦           ¦       boltund.json
-    ¦       ¦       ¦           ¦       calyrex.json
-    ¦       ¦       ¦           ¦       carkol.json
-    ¦       ¦       ¦           ¦       centiskorch.json
-    ¦       ¦       ¦           ¦       chewtle.json
-    ¦       ¦       ¦           ¦       cinderace.json
-    ¦       ¦       ¦           ¦       clobbopus.json
-    ¦       ¦       ¦           ¦       coalossal.json
-    ¦       ¦       ¦           ¦       copperajah.json
-    ¦       ¦       ¦           ¦       corviknight.json
-    ¦       ¦       ¦           ¦       corvisquire.json
-    ¦       ¦       ¦           ¦       cramorant.json
-    ¦       ¦       ¦           ¦       cufant.json
-    ¦       ¦       ¦           ¦       cursola.json
-    ¦       ¦       ¦           ¦       dottler.json
-    ¦       ¦       ¦           ¦       dracovish.json
-    ¦       ¦       ¦           ¦       dracozolt.json
-    ¦       ¦       ¦           ¦       dragapult.json
-    ¦       ¦       ¦           ¦       drakloak.json
-    ¦       ¦       ¦           ¦       drednaw.json
-    ¦       ¦       ¦           ¦       dreepy.json
-    ¦       ¦       ¦           ¦       drizzile.json
-    ¦       ¦       ¦           ¦       dubwool.json
-    ¦       ¦       ¦           ¦       duraludon.json
-    ¦       ¦       ¦           ¦       eiscue.json
-    ¦       ¦       ¦           ¦       eldegoss.json
-    ¦       ¦       ¦           ¦       enamorus.json
-    ¦       ¦       ¦           ¦       eternatus.json
-    ¦       ¦       ¦           ¦       falinks.json
-    ¦       ¦       ¦           ¦       flapple.json
-    ¦       ¦       ¦           ¦       frosmoth.json
-    ¦       ¦       ¦           ¦       glastrier.json
-    ¦       ¦       ¦           ¦       gossifleur.json
-    ¦       ¦       ¦           ¦       grapploct.json
-    ¦       ¦       ¦           ¦       greedent.json
-    ¦       ¦       ¦           ¦       grimmsnarl.json
-    ¦       ¦       ¦           ¦       grookey.json
-    ¦       ¦       ¦           ¦       hatenna.json
-    ¦       ¦       ¦           ¦       hatterene.json
-    ¦       ¦       ¦           ¦       hattrem.json
-    ¦       ¦       ¦           ¦       impidimp.json
-    ¦       ¦       ¦           ¦       indeedee.json
-    ¦       ¦       ¦           ¦       inteleon.json
-    ¦       ¦       ¦           ¦       kleavor.json
-    ¦       ¦       ¦           ¦       kubfu.json
-    ¦       ¦       ¦           ¦       milcery.json
-    ¦       ¦       ¦           ¦       morgrem.json
-    ¦       ¦       ¦           ¦       morpeko.json
-    ¦       ¦       ¦           ¦       mrrime.json
-    ¦       ¦       ¦           ¦       nickit.json
-    ¦       ¦       ¦           ¦       obstagoon.json
-    ¦       ¦       ¦           ¦       orbeetle.json
-    ¦       ¦       ¦           ¦       overqwil.json
-    ¦       ¦       ¦           ¦       perrserker.json
-    ¦       ¦       ¦           ¦       pincurchin.json
-    ¦       ¦       ¦           ¦       polteageist.json
-    ¦       ¦       ¦           ¦       raboot.json
-    ¦       ¦       ¦           ¦       regidrago.json
-    ¦       ¦       ¦           ¦       regieleki.json
-    ¦       ¦       ¦           ¦       rillaboom.json
-    ¦       ¦       ¦           ¦       rolycoly.json
-    ¦       ¦       ¦           ¦       rookidee.json
-    ¦       ¦       ¦           ¦       runerigus.json
-    ¦       ¦       ¦           ¦       sandaconda.json
-    ¦       ¦       ¦           ¦       scorbunny.json
-    ¦       ¦       ¦           ¦       silicobra.json
-    ¦       ¦       ¦           ¦       sinistea.json
-    ¦       ¦       ¦           ¦       sirfetchd.json
-    ¦       ¦       ¦           ¦       sizzlipede.json
-    ¦       ¦       ¦           ¦       skwovet.json
-    ¦       ¦       ¦           ¦       sneasler.json
-    ¦       ¦       ¦           ¦       snom.json
-    ¦       ¦       ¦           ¦       sobble.json
-    ¦       ¦       ¦           ¦       spectrier.json
-    ¦       ¦       ¦           ¦       stonjourner.json
-    ¦       ¦       ¦           ¦       thievul.json
-    ¦       ¦       ¦           ¦       thwackey.json
-    ¦       ¦       ¦           ¦       toxel.json
-    ¦       ¦       ¦           ¦       toxtricity.json
-    ¦       ¦       ¦           ¦       ursaluna.json
-    ¦       ¦       ¦           ¦       urshifu.json
-    ¦       ¦       ¦           ¦       wooloo.json
-    ¦       ¦       ¦           ¦       wyrdeer.json
-    ¦       ¦       ¦           ¦       yamper.json
-    ¦       ¦       ¦           ¦       zacian.json
-    ¦       ¦       ¦           ¦       zamazenta.json
-    ¦       ¦       ¦           ¦       zarude.json
-    ¦       ¦       ¦           ¦       
-    ¦       ¦       ¦           +---five
-    ¦       ¦       ¦           ¦       accelgor.json
-    ¦       ¦       ¦           ¦       alomomola.json
-    ¦       ¦       ¦           ¦       amoonguss.json
-    ¦       ¦       ¦           ¦       archen.json
-    ¦       ¦       ¦           ¦       archeops.json
-    ¦       ¦       ¦           ¦       audino.json
-    ¦       ¦       ¦           ¦       axew.json
-    ¦       ¦       ¦           ¦       basculin.json
-    ¦       ¦       ¦           ¦       beartic.json
-    ¦       ¦       ¦           ¦       beheeyem.json
-    ¦       ¦       ¦           ¦       bisharp.json
-    ¦       ¦       ¦           ¦       blitzle.json
-    ¦       ¦       ¦           ¦       boldore.json
-    ¦       ¦       ¦           ¦       bouffalant.json
-    ¦       ¦       ¦           ¦       braviary.json
-    ¦       ¦       ¦           ¦       carracosta.json
-    ¦       ¦       ¦           ¦       chandelure.json
-    ¦       ¦       ¦           ¦       cinccino.json
-    ¦       ¦       ¦           ¦       cobalion.json
-    ¦       ¦       ¦           ¦       cofagrigus.json
-    ¦       ¦       ¦           ¦       conkeldurr.json
-    ¦       ¦       ¦           ¦       cottonee.json
-    ¦       ¦       ¦           ¦       crustle.json
-    ¦       ¦       ¦           ¦       cryogonal.json
-    ¦       ¦       ¦           ¦       cubchoo.json
-    ¦       ¦       ¦           ¦       darmanitan.json
-    ¦       ¦       ¦           ¦       darumaka.json
-    ¦       ¦       ¦           ¦       deerling.json
-    ¦       ¦       ¦           ¦       deino.json
-    ¦       ¦       ¦           ¦       dewott.json
-    ¦       ¦       ¦           ¦       drilbur.json
-    ¦       ¦       ¦           ¦       druddigon.json
-    ¦       ¦       ¦           ¦       ducklett.json
-    ¦       ¦       ¦           ¦       duosion.json
-    ¦       ¦       ¦           ¦       durant.json
-    ¦       ¦       ¦           ¦       dwebble.json
-    ¦       ¦       ¦           ¦       eelektrik.json
-    ¦       ¦       ¦           ¦       eelektross.json
-    ¦       ¦       ¦           ¦       elgyem.json
-    ¦       ¦       ¦           ¦       emboar.json
-    ¦       ¦       ¦           ¦       emolga.json
-    ¦       ¦       ¦           ¦       escavalier.json
-    ¦       ¦       ¦           ¦       excadrill.json
-    ¦       ¦       ¦           ¦       ferroseed.json
-    ¦       ¦       ¦           ¦       ferrothorn.json
-    ¦       ¦       ¦           ¦       foongus.json
-    ¦       ¦       ¦           ¦       fraxure.json
-    ¦       ¦       ¦           ¦       frillish.json
-    ¦       ¦       ¦           ¦       galvantula.json
-    ¦       ¦       ¦           ¦       garbodor.json
-    ¦       ¦       ¦           ¦       genesect.json
-    ¦       ¦       ¦           ¦       gigalith.json
-    ¦       ¦       ¦           ¦       golett.json
-    ¦       ¦       ¦           ¦       golurk.json
-    ¦       ¦       ¦           ¦       gothita.json
-    ¦       ¦       ¦           ¦       gothitelle.json
-    ¦       ¦       ¦           ¦       gothorita.json
-    ¦       ¦       ¦           ¦       gurdurr.json
-    ¦       ¦       ¦           ¦       haxorus.json
-    ¦       ¦       ¦           ¦       heatmor.json
-    ¦       ¦       ¦           ¦       herdier.json
-    ¦       ¦       ¦           ¦       hydreigon.json
-    ¦       ¦       ¦           ¦       jellicent.json
-    ¦       ¦       ¦           ¦       joltik.json
-    ¦       ¦       ¦           ¦       karrablast.json
-    ¦       ¦       ¦           ¦       keldeo.json
-    ¦       ¦       ¦           ¦       klang.json
-    ¦       ¦       ¦           ¦       klink.json
-    ¦       ¦       ¦           ¦       klinklang.json
-    ¦       ¦       ¦           ¦       krokorok.json
-    ¦       ¦       ¦           ¦       krookodile.json
-    ¦       ¦       ¦           ¦       kyurem.json
-    ¦       ¦       ¦           ¦       lampent.json
-    ¦       ¦       ¦           ¦       landorus.json
-    ¦       ¦       ¦           ¦       larvesta.json
-    ¦       ¦       ¦           ¦       leavanny.json
-    ¦       ¦       ¦           ¦       liepard.json
-    ¦       ¦       ¦           ¦       lilligant.json
-    ¦       ¦       ¦           ¦       lillipup.json
-    ¦       ¦       ¦           ¦       litwick.json
-    ¦       ¦       ¦           ¦       mandibuzz.json
-    ¦       ¦       ¦           ¦       maractus.json
-    ¦       ¦       ¦           ¦       meloetta.json
-    ¦       ¦       ¦           ¦       mienfoo.json
-    ¦       ¦       ¦           ¦       mienshao.json
-    ¦       ¦       ¦           ¦       minccino.json
-    ¦       ¦       ¦           ¦       munna.json
-    ¦       ¦       ¦           ¦       musharna.json
-    ¦       ¦       ¦           ¦       oshawott.json
-    ¦       ¦       ¦           ¦       palpitoad.json
-    ¦       ¦       ¦           ¦       panpour.json
-    ¦       ¦       ¦           ¦       pansage.json
-    ¦       ¦       ¦           ¦       pansear.json
-    ¦       ¦       ¦           ¦       patrat.json
-    ¦       ¦       ¦           ¦       pawniard.json
-    ¦       ¦       ¦           ¦       petilil.json
-    ¦       ¦       ¦           ¦       pidove.json
-    ¦       ¦       ¦           ¦       pignite.json
-    ¦       ¦       ¦           ¦       purrloin.json
-    ¦       ¦       ¦           ¦       reshiram.json
-    ¦       ¦       ¦           ¦       reuniclus.json
-    ¦       ¦       ¦           ¦       roggenrola.json
-    ¦       ¦       ¦           ¦       rufflet.json
-    ¦       ¦       ¦           ¦       samurott.json
-    ¦       ¦       ¦           ¦       sandile.json
-    ¦       ¦       ¦           ¦       sawk.json
-    ¦       ¦       ¦           ¦       sawsbuck.json
-    ¦       ¦       ¦           ¦       scolipede.json
-    ¦       ¦       ¦           ¦       scrafty.json
-    ¦       ¦       ¦           ¦       scraggy.json
-    ¦       ¦       ¦           ¦       seismitoad.json
-    ¦       ¦       ¦           ¦       serperior.json
-    ¦       ¦       ¦           ¦       servine.json
-    ¦       ¦       ¦           ¦       sewaddle.json
-    ¦       ¦       ¦           ¦       shelmet.json
-    ¦       ¦       ¦           ¦       sigilyph.json
-    ¦       ¦       ¦           ¦       simipour.json
-    ¦       ¦       ¦           ¦       simisage.json
-    ¦       ¦       ¦           ¦       simisear.json
-    ¦       ¦       ¦           ¦       snivy.json
-    ¦       ¦       ¦           ¦       solosis.json
-    ¦       ¦       ¦           ¦       stoutland.json
-    ¦       ¦       ¦           ¦       stunfisk.json
-    ¦       ¦       ¦           ¦       swadloon.json
-    ¦       ¦       ¦           ¦       swanna.json
-    ¦       ¦       ¦           ¦       swoobat.json
-    ¦       ¦       ¦           ¦       tepig.json
-    ¦       ¦       ¦           ¦       terrakion.json
-    ¦       ¦       ¦           ¦       throh.json
-    ¦       ¦       ¦           ¦       thundurus.json
-    ¦       ¦       ¦           ¦       timburr.json
-    ¦       ¦       ¦           ¦       tirtouga.json
-    ¦       ¦       ¦           ¦       tornadus.json
-    ¦       ¦       ¦           ¦       tranquill.json
-    ¦       ¦       ¦           ¦       trubbish.json
-    ¦       ¦       ¦           ¦       tympole.json
-    ¦       ¦       ¦           ¦       tynamo.json
-    ¦       ¦       ¦           ¦       unfezant.json
-    ¦       ¦       ¦           ¦       vanillish.json
-    ¦       ¦       ¦           ¦       vanillite.json
-    ¦       ¦       ¦           ¦       vanilluxe.json
-    ¦       ¦       ¦           ¦       venipede.json
-    ¦       ¦       ¦           ¦       victini.json
-    ¦       ¦       ¦           ¦       virizion.json
-    ¦       ¦       ¦           ¦       volcarona.json
-    ¦       ¦       ¦           ¦       vullaby.json
-    ¦       ¦       ¦           ¦       watchog.json
-    ¦       ¦       ¦           ¦       whimsicott.json
-    ¦       ¦       ¦           ¦       whirlipede.json
-    ¦       ¦       ¦           ¦       woobat.json
-    ¦       ¦       ¦           ¦       yamask.json
-    ¦       ¦       ¦           ¦       zebstrika.json
-    ¦       ¦       ¦           ¦       zekrom.json
-    ¦       ¦       ¦           ¦       zoroark.json
-    ¦       ¦       ¦           ¦       zorua.json
-    ¦       ¦       ¦           ¦       zweilous.json
-    ¦       ¦       ¦           ¦       
-    ¦       ¦       ¦           +---four
-    ¦       ¦       ¦           ¦       abomasnow.json
-    ¦       ¦       ¦           ¦       ambipom.json
-    ¦       ¦       ¦           ¦       arceus.json
-    ¦       ¦       ¦           ¦       azelf.json
-    ¦       ¦       ¦           ¦       bastiodon.json
-    ¦       ¦       ¦           ¦       bibarel.json
-    ¦       ¦       ¦           ¦       bidoof.json
-    ¦       ¦       ¦           ¦       bonsly.json
-    ¦       ¦       ¦           ¦       bronzong.json
-    ¦       ¦       ¦           ¦       bronzor.json
-    ¦       ¦       ¦           ¦       budew.json
-    ¦       ¦       ¦           ¦       buizel.json
-    ¦       ¦       ¦           ¦       buneary.json
-    ¦       ¦       ¦           ¦       burmy.json
-    ¦       ¦       ¦           ¦       carnivine.json
-    ¦       ¦       ¦           ¦       chatot.json
-    ¦       ¦       ¦           ¦       cherrim.json
-    ¦       ¦       ¦           ¦       cherubi.json
-    ¦       ¦       ¦           ¦       chimchar.json
-    ¦       ¦       ¦           ¦       chingling.json
-    ¦       ¦       ¦           ¦       combee.json
-    ¦       ¦       ¦           ¦       cranidos.json
-    ¦       ¦       ¦           ¦       cresselia.json
-    ¦       ¦       ¦           ¦       croagunk.json
-    ¦       ¦       ¦           ¦       darkrai.json
-    ¦       ¦       ¦           ¦       dialga.json
-    ¦       ¦       ¦           ¦       drapion.json
-    ¦       ¦       ¦           ¦       drifblim.json
-    ¦       ¦       ¦           ¦       drifloon.json
-    ¦       ¦       ¦           ¦       dusknoir.json
-    ¦       ¦       ¦           ¦       electivire.json
-    ¦       ¦       ¦           ¦       empoleon.json
-    ¦       ¦       ¦           ¦       finneon.json
-    ¦       ¦       ¦           ¦       floatzel.json
-    ¦       ¦       ¦           ¦       froslass.json
-    ¦       ¦       ¦           ¦       gabite.json
-    ¦       ¦       ¦           ¦       gallade.json
-    ¦       ¦       ¦           ¦       garchomp.json
-    ¦       ¦       ¦           ¦       gastrodon.json
-    ¦       ¦       ¦           ¦       gible.json
-    ¦       ¦       ¦           ¦       giratina.json
-    ¦       ¦       ¦           ¦       glaceon.json
-    ¦       ¦       ¦           ¦       glameow.json
-    ¦       ¦       ¦           ¦       gliscor.json
-    ¦       ¦       ¦           ¦       grotle.json
-    ¦       ¦       ¦           ¦       happiny.json
-    ¦       ¦       ¦           ¦       heatran.json
-    ¦       ¦       ¦           ¦       hippopotas.json
-    ¦       ¦       ¦           ¦       hippowdon.json
-    ¦       ¦       ¦           ¦       honchkrow.json
-    ¦       ¦       ¦           ¦       infernape.json
-    ¦       ¦       ¦           ¦       kricketot.json
-    ¦       ¦       ¦           ¦       kricketune.json
-    ¦       ¦       ¦           ¦       leafeon.json
-    ¦       ¦       ¦           ¦       lickilicky.json
-    ¦       ¦       ¦           ¦       lopunny.json
-    ¦       ¦       ¦           ¦       lucario.json
-    ¦       ¦       ¦           ¦       lumineon.json
-    ¦       ¦       ¦           ¦       luxio.json
-    ¦       ¦       ¦           ¦       luxray.json
-    ¦       ¦       ¦           ¦       magmortar.json
-    ¦       ¦       ¦           ¦       magnezone.json
-    ¦       ¦       ¦           ¦       mamoswine.json
-    ¦       ¦       ¦           ¦       manaphy.json
-    ¦       ¦       ¦           ¦       mantyke.json
-    ¦       ¦       ¦           ¦       mesprit.json
-    ¦       ¦       ¦           ¦       mimejr.json
-    ¦       ¦       ¦           ¦       mismagius.json
-    ¦       ¦       ¦           ¦       monferno.json
-    ¦       ¦       ¦           ¦       mothim.json
-    ¦       ¦       ¦           ¦       munchlax.json
-    ¦       ¦       ¦           ¦       pachirisu.json
-    ¦       ¦       ¦           ¦       palkia.json
-    ¦       ¦       ¦           ¦       phione.json
-    ¦       ¦       ¦           ¦       piplup.json
-    ¦       ¦       ¦           ¦       porygonz.json
-    ¦       ¦       ¦           ¦       prinplup.json
-    ¦       ¦       ¦           ¦       probopass.json
-    ¦       ¦       ¦           ¦       purugly.json
-    ¦       ¦       ¦           ¦       rampardos.json
-    ¦       ¦       ¦           ¦       regigigas.json
-    ¦       ¦       ¦           ¦       rhyperior.json
-    ¦       ¦       ¦           ¦       riolu.json
-    ¦       ¦       ¦           ¦       roserade.json
-    ¦       ¦       ¦           ¦       rotom.json
-    ¦       ¦       ¦           ¦       shaymin.json
-    ¦       ¦       ¦           ¦       shellos.json
-    ¦       ¦       ¦           ¦       shieldon.json
-    ¦       ¦       ¦           ¦       shinx.json
-    ¦       ¦       ¦           ¦       skorupi.json
-    ¦       ¦       ¦           ¦       skuntank.json
-    ¦       ¦       ¦           ¦       snover.json
-    ¦       ¦       ¦           ¦       spiritomb.json
-    ¦       ¦       ¦           ¦       staraptor.json
-    ¦       ¦       ¦           ¦       staravia.json
-    ¦       ¦       ¦           ¦       starly.json
-    ¦       ¦       ¦           ¦       stunky.json
-    ¦       ¦       ¦           ¦       tangrowth.json
-    ¦       ¦       ¦           ¦       togekiss.json
-    ¦       ¦       ¦           ¦       torterra.json
-    ¦       ¦       ¦           ¦       toxicroak.json
-    ¦       ¦       ¦           ¦       turtwig.json
-    ¦       ¦       ¦           ¦       uxie.json
-    ¦       ¦       ¦           ¦       vespiquen.json
-    ¦       ¦       ¦           ¦       weavile.json
-    ¦       ¦       ¦           ¦       wormadam.json
-    ¦       ¦       ¦           ¦       yanmega.json
-    ¦       ¦       ¦           ¦       
-    ¦       ¦       ¦           +---nine
-    ¦       ¦       ¦           ¦       annihilape.json
-    ¦       ¦       ¦           ¦       arboliva.json
-    ¦       ¦       ¦           ¦       archaludon.json
-    ¦       ¦       ¦           ¦       arctibax.json
-    ¦       ¦       ¦           ¦       armarouge.json
-    ¦       ¦       ¦           ¦       baxcalibur.json
-    ¦       ¦       ¦           ¦       bellibolt.json
-    ¦       ¦       ¦           ¦       bombirdier.json
-    ¦       ¦       ¦           ¦       brambleghast.json
-    ¦       ¦       ¦           ¦       bramblin.json
-    ¦       ¦       ¦           ¦       brutebonnet.json
-    ¦       ¦       ¦           ¦       capsakid.json
-    ¦       ¦       ¦           ¦       ceruledge.json
-    ¦       ¦       ¦           ¦       cetitan.json
-    ¦       ¦       ¦           ¦       cetoddle.json
-    ¦       ¦       ¦           ¦       charcadet.json
-    ¦       ¦       ¦           ¦       chienpao.json
-    ¦       ¦       ¦           ¦       chiyu.json
-    ¦       ¦       ¦           ¦       clodsire.json
-    ¦       ¦       ¦           ¦       crocalor.json
-    ¦       ¦       ¦           ¦       cyclizar.json
-    ¦       ¦       ¦           ¦       dachsbun.json
-    ¦       ¦       ¦           ¦       dipplin.json
-    ¦       ¦       ¦           ¦       dolliv.json
-    ¦       ¦       ¦           ¦       dondozo.json
-    ¦       ¦       ¦           ¦       dudunsparce.json
-    ¦       ¦       ¦           ¦       espathra.json
-    ¦       ¦       ¦           ¦       farigiraf.json
-    ¦       ¦       ¦           ¦       fezandipiti.json
-    ¦       ¦       ¦           ¦       fidough.json
-    ¦       ¦       ¦           ¦       finizen.json
-    ¦       ¦       ¦           ¦       flamigo.json
-    ¦       ¦       ¦           ¦       flittle.json
-    ¦       ¦       ¦           ¦       floragato.json
-    ¦       ¦       ¦           ¦       fluttermane.json
-    ¦       ¦       ¦           ¦       frigibax.json
-    ¦       ¦       ¦           ¦       fuecoco.json
-    ¦       ¦       ¦           ¦       garganacl.json
-    ¦       ¦       ¦           ¦       gholdengo.json
-    ¦       ¦       ¦           ¦       gimmighoul.json
-    ¦       ¦       ¦           ¦       glimmet.json
-    ¦       ¦       ¦           ¦       glimmora.json
-    ¦       ¦       ¦           ¦       gougingfire.json
-    ¦       ¦       ¦           ¦       grafaiai.json
-    ¦       ¦       ¦           ¦       greattusk.json
-    ¦       ¦       ¦           ¦       greavard.json
-    ¦       ¦       ¦           ¦       houndstone.json
-    ¦       ¦       ¦           ¦       hydrapple.json
-    ¦       ¦       ¦           ¦       ironboulder.json
-    ¦       ¦       ¦           ¦       ironbundle.json
-    ¦       ¦       ¦           ¦       ironcrown.json
-    ¦       ¦       ¦           ¦       ironhands.json
-    ¦       ¦       ¦           ¦       ironjugulis.json
-    ¦       ¦       ¦           ¦       ironleaves.json
-    ¦       ¦       ¦           ¦       ironmoth.json
-    ¦       ¦       ¦           ¦       ironthorns.json
-    ¦       ¦       ¦           ¦       irontreads.json
-    ¦       ¦       ¦           ¦       ironvaliant.json
-    ¦       ¦       ¦           ¦       kilowattrel.json
-    ¦       ¦       ¦           ¦       kingambit.json
-    ¦       ¦       ¦           ¦       klawf.json
-    ¦       ¦       ¦           ¦       koraidon.json
-    ¦       ¦       ¦           ¦       lechonk.json
-    ¦       ¦       ¦           ¦       lokix.json
-    ¦       ¦       ¦           ¦       mabosstiff.json
-    ¦       ¦       ¦           ¦       maschiff.json
-    ¦       ¦       ¦           ¦       maushold.json
-    ¦       ¦       ¦           ¦       meowscarada.json
-    ¦       ¦       ¦           ¦       miraidon.json
-    ¦       ¦       ¦           ¦       munkidori.json
-    ¦       ¦       ¦           ¦       nacli.json
-    ¦       ¦       ¦           ¦       naclstack.json
-    ¦       ¦       ¦           ¦       nymble.json
-    ¦       ¦       ¦           ¦       ogerpon.json
-    ¦       ¦       ¦           ¦       oinkologne.json
-    ¦       ¦       ¦           ¦       okidogi.json
-    ¦       ¦       ¦           ¦       orthworm.json
-    ¦       ¦       ¦           ¦       palafin.json
-    ¦       ¦       ¦           ¦       pawmi.json
-    ¦       ¦       ¦           ¦       pawmo.json
-    ¦       ¦       ¦           ¦       pawmot.json
-    ¦       ¦       ¦           ¦       pecharunt.json
-    ¦       ¦       ¦           ¦       poltchageist.json
-    ¦       ¦       ¦           ¦       quaquaval.json
-    ¦       ¦       ¦           ¦       quaxly.json
-    ¦       ¦       ¦           ¦       quaxwell.json
-    ¦       ¦       ¦           ¦       rabsca.json
-    ¦       ¦       ¦           ¦       ragingbolt.json
-    ¦       ¦       ¦           ¦       rellor.json
-    ¦       ¦       ¦           ¦       revavroom.json
-    ¦       ¦       ¦           ¦       roaringmoon.json
-    ¦       ¦       ¦           ¦       sandyshocks.json
-    ¦       ¦       ¦           ¦       scovillain.json
-    ¦       ¦       ¦           ¦       screamtail.json
-    ¦       ¦       ¦           ¦       shroodle.json
-    ¦       ¦       ¦           ¦       sinistcha.json
-    ¦       ¦       ¦           ¦       skeledirge.json
-    ¦       ¦       ¦           ¦       slitherwing.json
-    ¦       ¦       ¦           ¦       smoliv.json
-    ¦       ¦       ¦           ¦       spidops.json
-    ¦       ¦       ¦           ¦       sprigatito.json
-    ¦       ¦       ¦           ¦       squawkabilly.json
-    ¦       ¦       ¦           ¦       tadbulb.json
-    ¦       ¦       ¦           ¦       tandemaus.json
-    ¦       ¦       ¦           ¦       tarountula.json
-    ¦       ¦       ¦           ¦       tatsugiri.json
-    ¦       ¦       ¦           ¦       terapagos.json
-    ¦       ¦       ¦           ¦       tinglu.json
-    ¦       ¦       ¦           ¦       tinkatink.json
-    ¦       ¦       ¦           ¦       tinkaton.json
-    ¦       ¦       ¦           ¦       tinkatuff.json
-    ¦       ¦       ¦           ¦       toedscool.json
-    ¦       ¦       ¦           ¦       toedscruel.json
-    ¦       ¦       ¦           ¦       varoom.json
-    ¦       ¦       ¦           ¦       veluza.json
-    ¦       ¦       ¦           ¦       walkingwake.json
-    ¦       ¦       ¦           ¦       wattrel.json
-    ¦       ¦       ¦           ¦       wiglett.json
-    ¦       ¦       ¦           ¦       wochien.json
-    ¦       ¦       ¦           ¦       wugtrio.json
-    ¦       ¦       ¦           ¦       
-    ¦       ¦       ¦           +---one
-    ¦       ¦       ¦           ¦       abra.json
-    ¦       ¦       ¦           ¦       aerodactyl.json
-    ¦       ¦       ¦           ¦       alakazam.json
-    ¦       ¦       ¦           ¦       arbok.json
-    ¦       ¦       ¦           ¦       arcanine.json
-    ¦       ¦       ¦           ¦       articuno.json
-    ¦       ¦       ¦           ¦       beedrill.json
-    ¦       ¦       ¦           ¦       bellsprout.json
-    ¦       ¦       ¦           ¦       blastoise.json
-    ¦       ¦       ¦           ¦       bulbasaur.json
-    ¦       ¦       ¦           ¦       butterfree.json
-    ¦       ¦       ¦           ¦       caterpie.json
-    ¦       ¦       ¦           ¦       chansey.json
-    ¦       ¦       ¦           ¦       charizard.json
-    ¦       ¦       ¦           ¦       charmander.json
-    ¦       ¦       ¦           ¦       charmeleon.json
-    ¦       ¦       ¦           ¦       clefable.json
-    ¦       ¦       ¦           ¦       clefairy.json
-    ¦       ¦       ¦           ¦       cloyster.json
-    ¦       ¦       ¦           ¦       cubone.json
-    ¦       ¦       ¦           ¦       dewgong.json
-    ¦       ¦       ¦           ¦       diglett.json
-    ¦       ¦       ¦           ¦       ditto.json
-    ¦       ¦       ¦           ¦       dodrio.json
-    ¦       ¦       ¦           ¦       doduo.json
-    ¦       ¦       ¦           ¦       dragonair.json
-    ¦       ¦       ¦           ¦       dragonite.json
-    ¦       ¦       ¦           ¦       dratini.json
-    ¦       ¦       ¦           ¦       drowzee.json
-    ¦       ¦       ¦           ¦       dugtrio.json
-    ¦       ¦       ¦           ¦       eevee.json
-    ¦       ¦       ¦           ¦       ekans.json
-    ¦       ¦       ¦           ¦       electabuzz.json
-    ¦       ¦       ¦           ¦       electrode.json
-    ¦       ¦       ¦           ¦       exeggcute.json
-    ¦       ¦       ¦           ¦       exeggutor.json
-    ¦       ¦       ¦           ¦       farfetchd.json
-    ¦       ¦       ¦           ¦       fearow.json
-    ¦       ¦       ¦           ¦       flareon.json
-    ¦       ¦       ¦           ¦       gastly.json
-    ¦       ¦       ¦           ¦       gengar.json
-    ¦       ¦       ¦           ¦       geodude.json
-    ¦       ¦       ¦           ¦       gloom.json
-    ¦       ¦       ¦           ¦       golbat.json
-    ¦       ¦       ¦           ¦       goldeen.json
-    ¦       ¦       ¦           ¦       golduck.json
-    ¦       ¦       ¦           ¦       golem.json
-    ¦       ¦       ¦           ¦       graveler.json
-    ¦       ¦       ¦           ¦       grimer.json
-    ¦       ¦       ¦           ¦       growlithe.json
-    ¦       ¦       ¦           ¦       gyarados.json
-    ¦       ¦       ¦           ¦       haunter.json
-    ¦       ¦       ¦           ¦       hitmonchan.json
-    ¦       ¦       ¦           ¦       hitmonlee.json
-    ¦       ¦       ¦           ¦       horsea.json
-    ¦       ¦       ¦           ¦       hypno.json
-    ¦       ¦       ¦           ¦       ivysaur.json
-    ¦       ¦       ¦           ¦       jigglypuff.json
-    ¦       ¦       ¦           ¦       jolteon.json
-    ¦       ¦       ¦           ¦       jynx.json
-    ¦       ¦       ¦           ¦       kabuto.json
-    ¦       ¦       ¦           ¦       kabutops.json
-    ¦       ¦       ¦           ¦       kadabra.json
-    ¦       ¦       ¦           ¦       kakuna.json
-    ¦       ¦       ¦           ¦       kangaskhan.json
-    ¦       ¦       ¦           ¦       kingler.json
-    ¦       ¦       ¦           ¦       koffing.json
-    ¦       ¦       ¦           ¦       krabby.json
-    ¦       ¦       ¦           ¦       lapras.json
-    ¦       ¦       ¦           ¦       lickitung.json
-    ¦       ¦       ¦           ¦       machamp.json
-    ¦       ¦       ¦           ¦       machoke.json
-    ¦       ¦       ¦           ¦       machop.json
-    ¦       ¦       ¦           ¦       magikarp.json
-    ¦       ¦       ¦           ¦       magmar.json
-    ¦       ¦       ¦           ¦       magnemite.json
-    ¦       ¦       ¦           ¦       magneton.json
-    ¦       ¦       ¦           ¦       mankey.json
-    ¦       ¦       ¦           ¦       marowak.json
-    ¦       ¦       ¦           ¦       meowth.json
-    ¦       ¦       ¦           ¦       metapod.json
-    ¦       ¦       ¦           ¦       mew.json
-    ¦       ¦       ¦           ¦       mewtwo.json
-    ¦       ¦       ¦           ¦       moltres.json
-    ¦       ¦       ¦           ¦       mrmime.json
-    ¦       ¦       ¦           ¦       muk.json
-    ¦       ¦       ¦           ¦       nidoking.json
-    ¦       ¦       ¦           ¦       nidoqueen.json
-    ¦       ¦       ¦           ¦       nidoranf.json
-    ¦       ¦       ¦           ¦       nidoranm.json
-    ¦       ¦       ¦           ¦       nidorina.json
-    ¦       ¦       ¦           ¦       nidorino.json
-    ¦       ¦       ¦           ¦       ninetales.json
-    ¦       ¦       ¦           ¦       oddish.json
-    ¦       ¦       ¦           ¦       omanyte.json
-    ¦       ¦       ¦           ¦       omastar.json
-    ¦       ¦       ¦           ¦       onix.json
-    ¦       ¦       ¦           ¦       paras.json
-    ¦       ¦       ¦           ¦       parasect.json
-    ¦       ¦       ¦           ¦       persian.json
-    ¦       ¦       ¦           ¦       pidgeot.json
-    ¦       ¦       ¦           ¦       pidgeotto.json
-    ¦       ¦       ¦           ¦       pidgey.json
-    ¦       ¦       ¦           ¦       pikachu.json
-    ¦       ¦       ¦           ¦       pinsir.json
-    ¦       ¦       ¦           ¦       poliwag.json
-    ¦       ¦       ¦           ¦       poliwhirl.json
-    ¦       ¦       ¦           ¦       poliwrath.json
-    ¦       ¦       ¦           ¦       ponyta.json
-    ¦       ¦       ¦           ¦       porygon.json
-    ¦       ¦       ¦           ¦       primeape.json
-    ¦       ¦       ¦           ¦       psyduck.json
-    ¦       ¦       ¦           ¦       raichu.json
-    ¦       ¦       ¦           ¦       rapidash.json
-    ¦       ¦       ¦           ¦       raticate.json
-    ¦       ¦       ¦           ¦       rattata.json
-    ¦       ¦       ¦           ¦       rhydon.json
-    ¦       ¦       ¦           ¦       rhyhorn.json
-    ¦       ¦       ¦           ¦       sandshrew.json
-    ¦       ¦       ¦           ¦       sandslash.json
-    ¦       ¦       ¦           ¦       scyther.json
-    ¦       ¦       ¦           ¦       seadra.json
-    ¦       ¦       ¦           ¦       seaking.json
-    ¦       ¦       ¦           ¦       seel.json
-    ¦       ¦       ¦           ¦       shellder.json
-    ¦       ¦       ¦           ¦       slowbro.json
-    ¦       ¦       ¦           ¦       slowpoke.json
-    ¦       ¦       ¦           ¦       snorlax.json
-    ¦       ¦       ¦           ¦       spearow.json
-    ¦       ¦       ¦           ¦       squirtle.json
-    ¦       ¦       ¦           ¦       starmie.json
-    ¦       ¦       ¦           ¦       staryu.json
-    ¦       ¦       ¦           ¦       tangela.json
-    ¦       ¦       ¦           ¦       tauros.json
-    ¦       ¦       ¦           ¦       tentacool.json
-    ¦       ¦       ¦           ¦       tentacruel.json
-    ¦       ¦       ¦           ¦       vaporeon.json
-    ¦       ¦       ¦           ¦       venomoth.json
-    ¦       ¦       ¦           ¦       venonat.json
-    ¦       ¦       ¦           ¦       venusaur.json
-    ¦       ¦       ¦           ¦       victreebel.json
-    ¦       ¦       ¦           ¦       vileplume.json
-    ¦       ¦       ¦           ¦       voltorb.json
-    ¦       ¦       ¦           ¦       vulpix.json
-    ¦       ¦       ¦           ¦       wartortle.json
-    ¦       ¦       ¦           ¦       weedle.json
-    ¦       ¦       ¦           ¦       weepinbell.json
-    ¦       ¦       ¦           ¦       weezing.json
-    ¦       ¦       ¦           ¦       wigglytuff.json
-    ¦       ¦       ¦           ¦       zapdos.json
-    ¦       ¦       ¦           ¦       zubat.json
-    ¦       ¦       ¦           ¦       
-    ¦       ¦       ¦           +---seven
-    ¦       ¦       ¦           ¦       araquanid.json
-    ¦       ¦       ¦           ¦       bewear.json
-    ¦       ¦       ¦           ¦       blacephalon.json
-    ¦       ¦       ¦           ¦       bounsweet.json
-    ¦       ¦       ¦           ¦       brionne.json
-    ¦       ¦       ¦           ¦       bruxish.json
-    ¦       ¦       ¦           ¦       buzzwole.json
-    ¦       ¦       ¦           ¦       celesteela.json
-    ¦       ¦       ¦           ¦       charjabug.json
-    ¦       ¦       ¦           ¦       comfey.json
-    ¦       ¦       ¦           ¦       cosmoem.json
-    ¦       ¦       ¦           ¦       cosmog.json
-    ¦       ¦       ¦           ¦       crabominable.json
-    ¦       ¦       ¦           ¦       crabrawler.json
-    ¦       ¦       ¦           ¦       cutiefly.json
-    ¦       ¦       ¦           ¦       dartrix.json
-    ¦       ¦       ¦           ¦       decidueye.json
-    ¦       ¦       ¦           ¦       dewpider.json
-    ¦       ¦       ¦           ¦       dhelmise.json
-    ¦       ¦       ¦           ¦       drampa.json
-    ¦       ¦       ¦           ¦       fomantis.json
-    ¦       ¦       ¦           ¦       golisopod.json
-    ¦       ¦       ¦           ¦       grubbin.json
-    ¦       ¦       ¦           ¦       gumshoos.json
-    ¦       ¦       ¦           ¦       guzzlord.json
-    ¦       ¦       ¦           ¦       hakamoo.json
-    ¦       ¦       ¦           ¦       incineroar.json
-    ¦       ¦       ¦           ¦       jangmoo.json
-    ¦       ¦       ¦           ¦       kartana.json
-    ¦       ¦       ¦           ¦       komala.json
-    ¦       ¦       ¦           ¦       kommoo.json
-    ¦       ¦       ¦           ¦       litten.json
-    ¦       ¦       ¦           ¦       lunala.json
-    ¦       ¦       ¦           ¦       lurantis.json
-    ¦       ¦       ¦           ¦       lycanroc.json
-    ¦       ¦       ¦           ¦       magearna.json
-    ¦       ¦       ¦           ¦       mareanie.json
-    ¦       ¦       ¦           ¦       marshadow.json
-    ¦       ¦       ¦           ¦       melmetal.json
-    ¦       ¦       ¦           ¦       meltan.json
-    ¦       ¦       ¦           ¦       mimikyu.json
-    ¦       ¦       ¦           ¦       minior.json
-    ¦       ¦       ¦           ¦       morelull.json
-    ¦       ¦       ¦           ¦       mudbray.json
-    ¦       ¦       ¦           ¦       mudsdale.json
-    ¦       ¦       ¦           ¦       naganadel.json
-    ¦       ¦       ¦           ¦       necrozma.json
-    ¦       ¦       ¦           ¦       nihilego.json
-    ¦       ¦       ¦           ¦       oranguru.json
-    ¦       ¦       ¦           ¦       oricorio.json
-    ¦       ¦       ¦           ¦       palossand.json
-    ¦       ¦       ¦           ¦       passimian.json
-    ¦       ¦       ¦           ¦       pheromosa.json
-    ¦       ¦       ¦           ¦       pikipek.json
-    ¦       ¦       ¦           ¦       poipole.json
-    ¦       ¦       ¦           ¦       popplio.json
-    ¦       ¦       ¦           ¦       primarina.json
-    ¦       ¦       ¦           ¦       pyukumuku.json
-    ¦       ¦       ¦           ¦       ribombee.json
-    ¦       ¦       ¦           ¦       rockruff.json
-    ¦       ¦       ¦           ¦       rowlet.json
-    ¦       ¦       ¦           ¦       salandit.json
-    ¦       ¦       ¦           ¦       salazzle.json
-    ¦       ¦       ¦           ¦       sandygast.json
-    ¦       ¦       ¦           ¦       shiinotic.json
-    ¦       ¦       ¦           ¦       silvally.json
-    ¦       ¦       ¦           ¦       solgaleo.json
-    ¦       ¦       ¦           ¦       stakataka.json
-    ¦       ¦       ¦           ¦       steenee.json
-    ¦       ¦       ¦           ¦       stufful.json
-    ¦       ¦       ¦           ¦       tapubulu.json
-    ¦       ¦       ¦           ¦       tapufini.json
-    ¦       ¦       ¦           ¦       tapukoko.json
-    ¦       ¦       ¦           ¦       tapulele.json
-    ¦       ¦       ¦           ¦       togedemaru.json
-    ¦       ¦       ¦           ¦       torracat.json
-    ¦       ¦       ¦           ¦       toucannon.json
-    ¦       ¦       ¦           ¦       toxapex.json
-    ¦       ¦       ¦           ¦       trumbeak.json
-    ¦       ¦       ¦           ¦       tsareena.json
-    ¦       ¦       ¦           ¦       turtonator.json
-    ¦       ¦       ¦           ¦       typenull.json
-    ¦       ¦       ¦           ¦       vikavolt.json
-    ¦       ¦       ¦           ¦       wimpod.json
-    ¦       ¦       ¦           ¦       wishiwashi.json
-    ¦       ¦       ¦           ¦       xurkitree.json
-    ¦       ¦       ¦           ¦       yungoos.json
-    ¦       ¦       ¦           ¦       zeraora.json
-    ¦       ¦       ¦           ¦       
-    ¦       ¦       ¦           +---six
-    ¦       ¦       ¦           ¦       aegislash.json
-    ¦       ¦       ¦           ¦       amaura.json
-    ¦       ¦       ¦           ¦       aromatisse.json
-    ¦       ¦       ¦           ¦       aurorus.json
-    ¦       ¦       ¦           ¦       avalugg.json
-    ¦       ¦       ¦           ¦       barbaracle.json
-    ¦       ¦       ¦           ¦       bergmite.json
-    ¦       ¦       ¦           ¦       binacle.json
-    ¦       ¦       ¦           ¦       braixen.json
-    ¦       ¦       ¦           ¦       bunnelby.json
-    ¦       ¦       ¦           ¦       carbink.json
-    ¦       ¦       ¦           ¦       chesnaught.json
-    ¦       ¦       ¦           ¦       chespin.json
-    ¦       ¦       ¦           ¦       clauncher.json
-    ¦       ¦       ¦           ¦       clawitzer.json
-    ¦       ¦       ¦           ¦       dedenne.json
-    ¦       ¦       ¦           ¦       delphox.json
-    ¦       ¦       ¦           ¦       diancie.json
-    ¦       ¦       ¦           ¦       diggersby.json
-    ¦       ¦       ¦           ¦       doublade.json
-    ¦       ¦       ¦           ¦       dragalge.json
-    ¦       ¦       ¦           ¦       espurr.json
-    ¦       ¦       ¦           ¦       fennekin.json
-    ¦       ¦       ¦           ¦       flabebe.json
-    ¦       ¦       ¦           ¦       fletchinder.json
-    ¦       ¦       ¦           ¦       fletchling.json
-    ¦       ¦       ¦           ¦       floette.json
-    ¦       ¦       ¦           ¦       florges.json
-    ¦       ¦       ¦           ¦       froakie.json
-    ¦       ¦       ¦           ¦       frogadier.json
-    ¦       ¦       ¦           ¦       furfrou.json
-    ¦       ¦       ¦           ¦       gogoat.json
-    ¦       ¦       ¦           ¦       goodra.json
-    ¦       ¦       ¦           ¦       goomy.json
-    ¦       ¦       ¦           ¦       gourgeist.json
-    ¦       ¦       ¦           ¦       greninja.json
-    ¦       ¦       ¦           ¦       hawlucha.json
-    ¦       ¦       ¦           ¦       heliolisk.json
-    ¦       ¦       ¦           ¦       helioptile.json
-    ¦       ¦       ¦           ¦       honedge.json
-    ¦       ¦       ¦           ¦       hoopa.json
-    ¦       ¦       ¦           ¦       inkay.json
-    ¦       ¦       ¦           ¦       klefki.json
-    ¦       ¦       ¦           ¦       litleo.json
-    ¦       ¦       ¦           ¦       malamar.json
-    ¦       ¦       ¦           ¦       meowstic.json
-    ¦       ¦       ¦           ¦       noibat.json
-    ¦       ¦       ¦           ¦       noivern.json
-    ¦       ¦       ¦           ¦       pancham.json
-    ¦       ¦       ¦           ¦       pangoro.json
-    ¦       ¦       ¦           ¦       phantump.json
-    ¦       ¦       ¦           ¦       pumpkaboo.json
-    ¦       ¦       ¦           ¦       pyroar.json
-    ¦       ¦       ¦           ¦       quilladin.json
-    ¦       ¦       ¦           ¦       scatterbug.json
-    ¦       ¦       ¦           ¦       skiddo.json
-    ¦       ¦       ¦           ¦       skrelp.json
-    ¦       ¦       ¦           ¦       sliggoo.json
-    ¦       ¦       ¦           ¦       slurpuff.json
-    ¦       ¦       ¦           ¦       spewpa.json
-    ¦       ¦       ¦           ¦       spritzee.json
-    ¦       ¦       ¦           ¦       swirlix.json
-    ¦       ¦       ¦           ¦       sylveon.json
-    ¦       ¦       ¦           ¦       talonflame.json
-    ¦       ¦       ¦           ¦       trevenant.json
-    ¦       ¦       ¦           ¦       tyrantrum.json
-    ¦       ¦       ¦           ¦       tyrunt.json
-    ¦       ¦       ¦           ¦       vivillon.json
-    ¦       ¦       ¦           ¦       volcanion.json
-    ¦       ¦       ¦           ¦       xerneas.json
-    ¦       ¦       ¦           ¦       yveltal.json
-    ¦       ¦       ¦           ¦       zygarde.json
-    ¦       ¦       ¦           ¦       
-    ¦       ¦       ¦           +---three
-    ¦       ¦       ¦           ¦       absol.json
-    ¦       ¦       ¦           ¦       aggron.json
-    ¦       ¦       ¦           ¦       altaria.json
-    ¦       ¦       ¦           ¦       anorith.json
-    ¦       ¦       ¦           ¦       armaldo.json
-    ¦       ¦       ¦           ¦       aron.json
-    ¦       ¦       ¦           ¦       azurill.json
-    ¦       ¦       ¦           ¦       bagon.json
-    ¦       ¦       ¦           ¦       baltoy.json
-    ¦       ¦       ¦           ¦       banette.json
-    ¦       ¦       ¦           ¦       barboach.json
-    ¦       ¦       ¦           ¦       beautifly.json
-    ¦       ¦       ¦           ¦       beldum.json
-    ¦       ¦       ¦           ¦       blaziken.json
-    ¦       ¦       ¦           ¦       breloom.json
-    ¦       ¦       ¦           ¦       cacnea.json
-    ¦       ¦       ¦           ¦       cacturne.json
-    ¦       ¦       ¦           ¦       camerupt.json
-    ¦       ¦       ¦           ¦       carvanha.json
-    ¦       ¦       ¦           ¦       cascoon.json
-    ¦       ¦       ¦           ¦       castform.json
-    ¦       ¦       ¦           ¦       chimecho.json
-    ¦       ¦       ¦           ¦       clamperl.json
-    ¦       ¦       ¦           ¦       claydol.json
-    ¦       ¦       ¦           ¦       combusken.json
-    ¦       ¦       ¦           ¦       corphish.json
-    ¦       ¦       ¦           ¦       cradily.json
-    ¦       ¦       ¦           ¦       crawdaunt.json
-    ¦       ¦       ¦           ¦       delcatty.json
-    ¦       ¦       ¦           ¦       deoxys.json
-    ¦       ¦       ¦           ¦       dusclops.json
-    ¦       ¦       ¦           ¦       duskull.json
-    ¦       ¦       ¦           ¦       dustox.json
-    ¦       ¦       ¦           ¦       electrike.json
-    ¦       ¦       ¦           ¦       exploud.json
-    ¦       ¦       ¦           ¦       feebas.json
-    ¦       ¦       ¦           ¦       flygon.json
-    ¦       ¦       ¦           ¦       gardevoir.json
-    ¦       ¦       ¦           ¦       glalie.json
-    ¦       ¦       ¦           ¦       gorebyss.json
-    ¦       ¦       ¦           ¦       groudon.json
-    ¦       ¦       ¦           ¦       grovyle.json
-    ¦       ¦       ¦           ¦       grumpig.json
-    ¦       ¦       ¦           ¦       gulpin.json
-    ¦       ¦       ¦           ¦       hariyama.json
-    ¦       ¦       ¦           ¦       huntail.json
-    ¦       ¦       ¦           ¦       illumise.json
-    ¦       ¦       ¦           ¦       jirachi.json
-    ¦       ¦       ¦           ¦       kecleon.json
-    ¦       ¦       ¦           ¦       kirlia.json
-    ¦       ¦       ¦           ¦       kyogre.json
-    ¦       ¦       ¦           ¦       lairon.json
-    ¦       ¦       ¦           ¦       latias.json
-    ¦       ¦       ¦           ¦       latios.json
-    ¦       ¦       ¦           ¦       lileep.json
-    ¦       ¦       ¦           ¦       linoone.json
-    ¦       ¦       ¦           ¦       lombre.json
-    ¦       ¦       ¦           ¦       lotad.json
-    ¦       ¦       ¦           ¦       loudred.json
-    ¦       ¦       ¦           ¦       ludicolo.json
-    ¦       ¦       ¦           ¦       lunatone.json
-    ¦       ¦       ¦           ¦       luvdisc.json
-    ¦       ¦       ¦           ¦       makuhita.json
-    ¦       ¦       ¦           ¦       manectric.json
-    ¦       ¦       ¦           ¦       marshtomp.json
-    ¦       ¦       ¦           ¦       masquerain.json
-    ¦       ¦       ¦           ¦       mawile.json
-    ¦       ¦       ¦           ¦       medicham.json
-    ¦       ¦       ¦           ¦       meditite.json
-    ¦       ¦       ¦           ¦       metagross.json
-    ¦       ¦       ¦           ¦       metang.json
-    ¦       ¦       ¦           ¦       mightyena.json
-    ¦       ¦       ¦           ¦       milotic.json
-    ¦       ¦       ¦           ¦       minun.json
-    ¦       ¦       ¦           ¦       mudkip.json
-    ¦       ¦       ¦           ¦       nincada.json
-    ¦       ¦       ¦           ¦       ninjask.json
-    ¦       ¦       ¦           ¦       nosepass.json
-    ¦       ¦       ¦           ¦       numel.json
-    ¦       ¦       ¦           ¦       nuzleaf.json
-    ¦       ¦       ¦           ¦       pelipper.json
-    ¦       ¦       ¦           ¦       plusle.json
-    ¦       ¦       ¦           ¦       poochyena.json
-    ¦       ¦       ¦           ¦       ralts.json
-    ¦       ¦       ¦           ¦       rayquaza.json
-    ¦       ¦       ¦           ¦       regice.json
-    ¦       ¦       ¦           ¦       regirock.json
-    ¦       ¦       ¦           ¦       registeel.json
-    ¦       ¦       ¦           ¦       relicanth.json
-    ¦       ¦       ¦           ¦       roselia.json
-    ¦       ¦       ¦           ¦       sableye.json
-    ¦       ¦       ¦           ¦       salamence.json
-    ¦       ¦       ¦           ¦       sceptile.json
-    ¦       ¦       ¦           ¦       sealeo.json
-    ¦       ¦       ¦           ¦       seedot.json
-    ¦       ¦       ¦           ¦       seviper.json
-    ¦       ¦       ¦           ¦       sharpedo.json
-    ¦       ¦       ¦           ¦       shedinja.json
-    ¦       ¦       ¦           ¦       shelgon.json
-    ¦       ¦       ¦           ¦       shiftry.json
-    ¦       ¦       ¦           ¦       shroomish.json
-    ¦       ¦       ¦           ¦       shuppet.json
-    ¦       ¦       ¦           ¦       silcoon.json
-    ¦       ¦       ¦           ¦       skitty.json
-    ¦       ¦       ¦           ¦       slaking.json
-    ¦       ¦       ¦           ¦       slakoth.json
-    ¦       ¦       ¦           ¦       snorunt.json
-    ¦       ¦       ¦           ¦       solrock.json
-    ¦       ¦       ¦           ¦       spheal.json
-    ¦       ¦       ¦           ¦       spinda.json
-    ¦       ¦       ¦           ¦       spoink.json
-    ¦       ¦       ¦           ¦       surskit.json
-    ¦       ¦       ¦           ¦       swablu.json
-    ¦       ¦       ¦           ¦       swalot.json
-    ¦       ¦       ¦           ¦       swampert.json
-    ¦       ¦       ¦           ¦       swellow.json
-    ¦       ¦       ¦           ¦       taillow.json
-    ¦       ¦       ¦           ¦       torchic.json
-    ¦       ¦       ¦           ¦       torkoal.json
-    ¦       ¦       ¦           ¦       trapinch.json
-    ¦       ¦       ¦           ¦       treecko.json
-    ¦       ¦       ¦           ¦       tropius.json
-    ¦       ¦       ¦           ¦       vibrava.json
-    ¦       ¦       ¦           ¦       vigoroth.json
-    ¦       ¦       ¦           ¦       volbeat.json
-    ¦       ¦       ¦           ¦       wailmer.json
-    ¦       ¦       ¦           ¦       wailord.json
-    ¦       ¦       ¦           ¦       walrein.json
-    ¦       ¦       ¦           ¦       whiscash.json
-    ¦       ¦       ¦           ¦       whismur.json
-    ¦       ¦       ¦           ¦       wingull.json
-    ¦       ¦       ¦           ¦       wurmple.json
-    ¦       ¦       ¦           ¦       wynaut.json
-    ¦       ¦       ¦           ¦       zangoose.json
-    ¦       ¦       ¦           ¦       zigzagoon.json
-    ¦       ¦       ¦           ¦       
-    ¦       ¦       ¦           +---two
-    ¦       ¦       ¦                   aipom.json
-    ¦       ¦       ¦                   ampharos.json
-    ¦       ¦       ¦                   ariados.json
-    ¦       ¦       ¦                   azumarill.json
-    ¦       ¦       ¦                   bayleef.json
-    ¦       ¦       ¦                   bellossom.json
-    ¦       ¦       ¦                   blissey.json
-    ¦       ¦       ¦                   celebi.json
-    ¦       ¦       ¦                   chikorita.json
-    ¦       ¦       ¦                   chinchou.json
-    ¦       ¦       ¦                   cleffa.json
-    ¦       ¦       ¦                   corsola.json
-    ¦       ¦       ¦                   crobat.json
-    ¦       ¦       ¦                   croconaw.json
-    ¦       ¦       ¦                   cyndaquil.json
-    ¦       ¦       ¦                   delibird.json
-    ¦       ¦       ¦                   donphan.json
-    ¦       ¦       ¦                   dunsparce.json
-    ¦       ¦       ¦                   elekid.json
-    ¦       ¦       ¦                   entei.json
-    ¦       ¦       ¦                   espeon.json
-    ¦       ¦       ¦                   feraligatr.json
-    ¦       ¦       ¦                   flaaffy.json
-    ¦       ¦       ¦                   forretress.json
-    ¦       ¦       ¦                   furret.json
-    ¦       ¦       ¦                   girafarig.json
-    ¦       ¦       ¦                   gligar.json
-    ¦       ¦       ¦                   granbull.json
-    ¦       ¦       ¦                   heracross.json
-    ¦       ¦       ¦                   hitmontop.json
-    ¦       ¦       ¦                   hooh.json
-    ¦       ¦       ¦                   hoothoot.json
-    ¦       ¦       ¦                   hoppip.json
-    ¦       ¦       ¦                   houndoom.json
-    ¦       ¦       ¦                   houndour.json
-    ¦       ¦       ¦                   igglybuff.json
-    ¦       ¦       ¦                   jumpluff.json
-    ¦       ¦       ¦                   kingdra.json
-    ¦       ¦       ¦                   lanturn.json
-    ¦       ¦       ¦                   larvitar.json
-    ¦       ¦       ¦                   ledian.json
-    ¦       ¦       ¦                   ledyba.json
-    ¦       ¦       ¦                   lugia.json
-    ¦       ¦       ¦                   magby.json
-    ¦       ¦       ¦                   magcargo.json
-    ¦       ¦       ¦                   mantine.json
-    ¦       ¦       ¦                   mareep.json
-    ¦       ¦       ¦                   marill.json
-    ¦       ¦       ¦                   meganium.json
-    ¦       ¦       ¦                   miltank.json
-    ¦       ¦       ¦                   misdreavus.json
-    ¦       ¦       ¦                   murkrow.json
-    ¦       ¦       ¦                   natu.json
-    ¦       ¦       ¦                   noctowl.json
-    ¦       ¦       ¦                   octillery.json
-    ¦       ¦       ¦                   phanpy.json
-    ¦       ¦       ¦                   pichu.json
-    ¦       ¦       ¦                   piloswine.json
-    ¦       ¦       ¦                   pineco.json
-    ¦       ¦       ¦                   politoed.json
-    ¦       ¦       ¦                   porygon2.json
-    ¦       ¦       ¦                   pupitar.json
-    ¦       ¦       ¦                   quagsire.json
-    ¦       ¦       ¦                   quilava.json
-    ¦       ¦       ¦                   qwilfish.json
-    ¦       ¦       ¦                   raikou.json
-    ¦       ¦       ¦                   remoraid.json
-    ¦       ¦       ¦                   scizor.json
-    ¦       ¦       ¦                   sentret.json
-    ¦       ¦       ¦                   shuckle.json
-    ¦       ¦       ¦                   skarmory.json
-    ¦       ¦       ¦                   skiploom.json
-    ¦       ¦       ¦                   slowking.json
-    ¦       ¦       ¦                   slugma.json
-    ¦       ¦       ¦                   smeargle.json
-    ¦       ¦       ¦                   smoochum.json
-    ¦       ¦       ¦                   sneasel.json
-    ¦       ¦       ¦                   snubbull.json
-    ¦       ¦       ¦                   spinarak.json
-    ¦       ¦       ¦                   stantler.json
-    ¦       ¦       ¦                   steelix.json
-    ¦       ¦       ¦                   sudowoodo.json
-    ¦       ¦       ¦                   suicune.json
-    ¦       ¦       ¦                   sunflora.json
-    ¦       ¦       ¦                   sunkern.json
-    ¦       ¦       ¦                   swinub.json
-    ¦       ¦       ¦                   teddiursa.json
-    ¦       ¦       ¦                   togepi.json
-    ¦       ¦       ¦                   togetic.json
-    ¦       ¦       ¦                   totodile.json
-    ¦       ¦       ¦                   typhlosion.json
-    ¦       ¦       ¦                   tyranitar.json
-    ¦       ¦       ¦                   tyrogue.json
-    ¦       ¦       ¦                   umbreon.json
-    ¦       ¦       ¦                   unown.json
-    ¦       ¦       ¦                   ursaring.json
-    ¦       ¦       ¦                   wobbuffet.json
-    ¦       ¦       ¦                   wooper.json
-    ¦       ¦       ¦                   xatu.json
-    ¦       ¦       ¦                   yanma.json
-    ¦       ¦       ¦                   
+    ¦       ¦       ¦   +---icons
+    ¦       ¦       ¦       +---items
+    ¦       ¦       ¦           +---spawn
+    ¦       ¦       ¦               +---eggs
+    ¦       ¦       ¦                   +---species
+    ¦       ¦       ¦                   ¦   +---gen
+    ¦       ¦       ¦                   ¦       +---eight
+    ¦       ¦       ¦                   ¦       ¦       gen8
+    ¦       ¦       ¦                   ¦       ¦       
+    ¦       ¦       ¦                   ¦       +---five
+    ¦       ¦       ¦                   ¦       ¦       gen5
+    ¦       ¦       ¦                   ¦       ¦       
+    ¦       ¦       ¦                   ¦       +---four
+    ¦       ¦       ¦                   ¦       ¦       gen4
+    ¦       ¦       ¦                   ¦       ¦       
+    ¦       ¦       ¦                   ¦       +---nine
+    ¦       ¦       ¦                   ¦       ¦       gen9
+    ¦       ¦       ¦                   ¦       ¦       
+    ¦       ¦       ¦                   ¦       +---one
+    ¦       ¦       ¦                   ¦       ¦       gen1
+    ¦       ¦       ¦                   ¦       ¦       
+    ¦       ¦       ¦                   ¦       +---seven
+    ¦       ¦       ¦                   ¦       ¦       gen7
+    ¦       ¦       ¦                   ¦       ¦       
+    ¦       ¦       ¦                   ¦       +---six
+    ¦       ¦       ¦                   ¦       ¦       gen6
+    ¦       ¦       ¦                   ¦       ¦       
+    ¦       ¦       ¦                   ¦       +---three
+    ¦       ¦       ¦                   ¦       ¦       gen3
+    ¦       ¦       ¦                   ¦       ¦       
+    ¦       ¦       ¦                   ¦       +---two
+    ¦       ¦       ¦                   ¦               gen2
+    ¦       ¦       ¦                   ¦               
+    ¦       ¦       ¦                   +---type
+    ¦       ¦       ¦                       +---bug
+    ¦       ¦       ¦                       ¦       bug.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---fairy
+    ¦       ¦       ¦                       ¦       fairy.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---fighting
+    ¦       ¦       ¦                       ¦       fighting.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---fire
+    ¦       ¦       ¦                       ¦       fire.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---flying
+    ¦       ¦       ¦                       ¦       flying.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---ghost
+    ¦       ¦       ¦                       ¦       ghost.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---grass
+    ¦       ¦       ¦                       ¦       grass.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---ground
+    ¦       ¦       ¦                       ¦       ground.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---ice
+    ¦       ¦       ¦                       ¦       ice.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---poison
+    ¦       ¦       ¦                       ¦       poison.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---psychic
+    ¦       ¦       ¦                       ¦       psychic.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---rock
+    ¦       ¦       ¦                       ¦       rock.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---steel
+    ¦       ¦       ¦                       ¦       steel.txt
+    ¦       ¦       ¦                       ¦       
+    ¦       ¦       ¦                       +---water
+    ¦       ¦       ¦                               water.txt
+    ¦       ¦       ¦                               
     ¦       ¦       +---morph
-    ¦       ¦           ¦   MonMorph.json
-    ¦       ¦           ¦   
-    ¦       ¦           +---gen
-    ¦       ¦               +---eight
-    ¦       ¦               ¦       Gen8MonMorph.json
-    ¦       ¦               ¦       
-    ¦       ¦               +---five
-    ¦       ¦               ¦       Gen5MonMorph.json
-    ¦       ¦               ¦       
-    ¦       ¦               +---four
-    ¦       ¦               ¦       Gen4MonMorph.json
-    ¦       ¦               ¦       
-    ¦       ¦               +---nine
-    ¦       ¦               ¦       Gen9MonMorph.json
-    ¦       ¦               ¦       
-    ¦       ¦               +---one
-    ¦       ¦               ¦       Gen1MonMorph.json
-    ¦       ¦               ¦       
-    ¦       ¦               +---seven
-    ¦       ¦               ¦       Gen7MonMorph.json
-    ¦       ¦               ¦       
-    ¦       ¦               +---six
-    ¦       ¦               ¦       Gen6MonMorph.json
-    ¦       ¦               ¦       
-    ¦       ¦               +---three
-    ¦       ¦               ¦       Gen3MonMorph.json
-    ¦       ¦               ¦       
-    ¦       ¦               +---two
-    ¦       ¦                       Gen2MonMorph.json
-    ¦       ¦                       
+    ¦       ¦       ¦   ¦   MonMorph.json
+    ¦       ¦       ¦   ¦   
+    ¦       ¦       ¦   +---gen
+    ¦       ¦       ¦       +---eight
+    ¦       ¦       ¦       ¦       Gen8MonMorph.json
+    ¦       ¦       ¦       ¦       
+    ¦       ¦       ¦       +---five
+    ¦       ¦       ¦       ¦       Gen5MonMorph.json
+    ¦       ¦       ¦       ¦       
+    ¦       ¦       ¦       +---four
+    ¦       ¦       ¦       ¦       Gen4MonMorph.json
+    ¦       ¦       ¦       ¦       
+    ¦       ¦       ¦       +---nine
+    ¦       ¦       ¦       ¦       Gen9MonMorph.json
+    ¦       ¦       ¦       ¦       
+    ¦       ¦       ¦       +---one
+    ¦       ¦       ¦       ¦       Gen1MonMorph.json
+    ¦       ¦       ¦       ¦       
+    ¦       ¦       ¦       +---seven
+    ¦       ¦       ¦       ¦       Gen7MonMorph.json
+    ¦       ¦       ¦       ¦       
+    ¦       ¦       ¦       +---six
+    ¦       ¦       ¦       ¦       Gen6MonMorph.json
+    ¦       ¦       ¦       ¦       
+    ¦       ¦       ¦       +---three
+    ¦       ¦       ¦       ¦       Gen3MonMorph.json
+    ¦       ¦       ¦       ¦       
+    ¦       ¦       ¦       +---two
+    ¦       ¦       ¦               Gen2MonMorph.json
+    ¦       ¦       ¦               
+    ¦       ¦       +---tabs
+    ¦       ¦           +---items
+    ¦       ¦           ¦       items.txt
+    ¦       ¦           ¦       
+    ¦       ¦           +---misc
+    ¦       ¦           ¦       misc.txt
+    ¦       ¦           ¦       
+    ¦       ¦           +---nature
+    ¦       ¦                   nature.txt
+    ¦       ¦                   
     ¦       +---META-INF
     ¦               mods.toml
     ¦               

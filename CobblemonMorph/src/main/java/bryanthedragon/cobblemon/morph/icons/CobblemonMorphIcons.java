@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.icons;
+package bryanthedragon.cobblemon.morph.icons;
 
-import bryanthedragon.morph.cobblemonmorph.icons.tabs.CobblemonMorphTabsIcons;
+import bryanthedragon.cobblemon.morph.icons.tabs.CobblemonMorphTabsIcons;
 
 public class CobblemonMorphIcons 
 {

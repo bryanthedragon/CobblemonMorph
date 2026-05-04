@@ -1,8 +1,8 @@
-package bryanthedragon.morph.cobblemonmorph.items.materials.chestplate.shirt.longshirt;
+package bryanthedragon.cobblemon.morph.items.materials.chestplate.shirt.longshirt;
 
 import net.minecraft.resources.ResourceLocation;
 
-import bryanthedragon.morph.cobblemonmorph.items.materials.chestplate.shirt.ShirtsArmorMaterial;
+import bryanthedragon.cobblemon.morph.items.materials.chestplate.shirt.ShirtsArmorMaterial;
 
 public class Shirt_LongArmorMaterial extends ShirtsArmorMaterial
 {

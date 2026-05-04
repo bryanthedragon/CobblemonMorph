@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.materials.chestplate.cardigan;
+package bryanthedragon.cobblemon.morph.items.materials.chestplate.cardigan;
 
-import bryanthedragon.morph.cobblemonmorph.items.materials.chestplate.ModChestplateArmorMaterial;
+import bryanthedragon.cobblemon.morph.items.materials.chestplate.ModChestplateArmorMaterial;
 import net.minecraft.resources.ResourceLocation;
 
 public class CardigansArmorMaterial extends ModChestplateArmorMaterial

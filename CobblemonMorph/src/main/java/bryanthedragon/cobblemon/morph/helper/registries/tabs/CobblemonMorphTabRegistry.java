@@ -1,10 +1,10 @@
-package bryanthedragon.morph.cobblemonmorph.helper.registries.tabs;
+package bryanthedragon.cobblemon.morph.helper.registries.tabs;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
-import bryanthedragon.morph.cobblemonmorph.helper.registries.CobblemonMorphRegistry;
-import bryanthedragon.morph.cobblemonmorph.helper.registries.tabs.items.CobblemonMorphItemsTabRegistry;
-import bryanthedragon.morph.cobblemonmorph.helper.registries.tabs.main.CobblemonMorphMainTabRegistry;
-import bryanthedragon.morph.cobblemonmorph.helper.registries.tabs.misc.CobblemonMorphMiscTabRegistry;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.helper.registries.CobblemonMorphRegistry;
+import bryanthedragon.cobblemon.morph.helper.registries.tabs.items.CobblemonMorphItemsTabRegistry;
+import bryanthedragon.cobblemon.morph.helper.registries.tabs.main.CobblemonMorphMainTabRegistry;
+import bryanthedragon.cobblemon.morph.helper.registries.tabs.misc.CobblemonMorphMiscTabRegistry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;

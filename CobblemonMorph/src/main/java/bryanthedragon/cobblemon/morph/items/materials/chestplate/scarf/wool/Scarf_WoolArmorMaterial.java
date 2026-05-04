@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.materials.chestplate.scarf.wool;
+package bryanthedragon.cobblemon.morph.items.materials.chestplate.scarf.wool;
 
-import bryanthedragon.morph.cobblemonmorph.items.materials.chestplate.scarf.ScarfsArmorMaterial;
+import bryanthedragon.cobblemon.morph.items.materials.chestplate.scarf.ScarfsArmorMaterial;
 
 import net.minecraft.resources.ResourceLocation;
 

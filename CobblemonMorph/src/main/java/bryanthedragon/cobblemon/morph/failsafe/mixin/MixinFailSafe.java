@@ -1,7 +1,7 @@
-package bryanthedragon.morph.cobblemonmorph.failsafe.mixin;
+package bryanthedragon.cobblemon.morph.failsafe.mixin;
 
-import bryanthedragon.morph.cobblemonmorph.failsafe.mixin.patch.MixinSafePatch;
-import bryanthedragon.morph.cobblemonmorph.failsafe.FailSafe;
+import bryanthedragon.cobblemon.morph.failsafe.mixin.patch.MixinSafePatch;
+import bryanthedragon.cobblemon.morph.failsafe.FailSafe;
 
 public class MixinFailSafe extends FailSafe {
     public static final MixinSafePatch SafePatchInstance = new MixinSafePatch();

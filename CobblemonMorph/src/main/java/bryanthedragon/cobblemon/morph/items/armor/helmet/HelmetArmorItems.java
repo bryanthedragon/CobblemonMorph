@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.helmet;
+package bryanthedragon.cobblemon.morph.items.armor.helmet;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.ModArmorItems;
+import bryanthedragon.cobblemon.morph.items.armor.ModArmorItems;
 
 public class HelmetArmorItems extends ModArmorItems
 {

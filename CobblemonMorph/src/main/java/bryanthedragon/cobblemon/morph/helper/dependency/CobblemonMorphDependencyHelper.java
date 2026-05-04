@@ -1,15 +1,15 @@
-package bryanthedragon.morph.cobblemonmorph.helper.dependency;
+package bryanthedragon.cobblemon.morph.helper.dependency;
 
 import java.net.URL;
 import java.util.Optional;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
-import bryanthedragon.morph.cobblemonmorph.helper.dependency.cobblemon.CobblemonMorphCobblemonHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.dependency.craftedcore.CobblemonMorphCraftedcoreHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.dependency.minecraft.CobblemonMorphMinecraftHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.dependency.remorph.CobblemonMorphRemorphHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.dependency.kotlin.CobblemonMorphKotlinHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.dependency.walkers.CobblemonMorphWalkersHelper;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.helper.dependency.cobblemon.CobblemonMorphCobblemonHelper;
+import bryanthedragon.cobblemon.morph.helper.dependency.craftedcore.CobblemonMorphCraftedcoreHelper;
+import bryanthedragon.cobblemon.morph.helper.dependency.minecraft.CobblemonMorphMinecraftHelper;
+import bryanthedragon.cobblemon.morph.helper.dependency.remorph.CobblemonMorphRemorphHelper;
+import bryanthedragon.cobblemon.morph.helper.dependency.kotlin.CobblemonMorphKotlinHelper;
+import bryanthedragon.cobblemon.morph.helper.dependency.walkers.CobblemonMorphWalkersHelper;
 
 public class CobblemonMorphDependencyHelper extends CobblemonMorph
 {

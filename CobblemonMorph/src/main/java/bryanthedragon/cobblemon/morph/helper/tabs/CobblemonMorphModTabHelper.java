@@ -1,7 +1,7 @@
-package bryanthedragon.morph.cobblemonmorph.helper.tabs;
+package bryanthedragon.cobblemon.morph.helper.tabs;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
-import bryanthedragon.morph.cobblemonmorph.helper.registries.tabs.CobblemonMorphTabRegistry;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.helper.registries.tabs.CobblemonMorphTabRegistry;
 
 import net.minecraftforge.eventbus.api.IEventBus;
 

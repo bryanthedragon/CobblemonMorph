@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.leggings.skirt.shortskirt;
+package bryanthedragon.cobblemon.morph.items.armor.leggings.skirt.shortskirt;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.leggings.skirt.Skirts;
+import bryanthedragon.cobblemon.morph.items.armor.leggings.skirt.Skirts;
 
 public class Skirt_Short extends Skirts
 {

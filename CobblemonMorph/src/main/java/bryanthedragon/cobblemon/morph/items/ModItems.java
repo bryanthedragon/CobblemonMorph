@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items;
+package bryanthedragon.cobblemon.morph.items;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
 
 import net.minecraft.world.item.Item;
 

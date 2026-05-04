@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.helper.mod;
+package bryanthedragon.cobblemon.morph.helper.mod;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
 
 import org.slf4j.Logger;
 

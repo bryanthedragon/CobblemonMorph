@@ -1,6 +1,4 @@
-package bryanthedragon.morph.cobblemonmorph;
-
-import bryanthedragon.morph.cobblemonmorph.helper.dependency.CobblemonMorphDependencyHelper;
+package bryanthedragon.cobblemon.morph;
 
 import com.mojang.logging.LogUtils;
 
@@ -24,15 +22,17 @@ public class CobblemonMorph
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    @SuppressWarnings("removal")
     public CobblemonMorph()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
-        CobblemonMorphDependencyHelper.dependencyCheck();
     }
+
+    // public CobblemonMorph() {
+    //     System.out.println("Max heap MB = " + Runtime.getRuntime().maxMemory() / 1024 / 1024);
+    // }
 
     /**
      * Called when the mod is being setup. This is a good time to initialize any config values that need to be accessed

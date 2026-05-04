@@ -1,11 +1,11 @@
-package bryanthedragon.morph.cobblemonmorph.failsafe.mixin.patch;
+package bryanthedragon.cobblemon.morph.failsafe.mixin.patch;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import bryanthedragon.morph.cobblemonmorph.failsafe.mixin.MixinFailSafe;
+import bryanthedragon.cobblemon.morph.failsafe.mixin.MixinFailSafe;
 
 import net.minecraft.client.Minecraft;
 

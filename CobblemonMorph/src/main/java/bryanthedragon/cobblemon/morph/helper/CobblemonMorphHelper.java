@@ -1,12 +1,12 @@
-package bryanthedragon.morph.cobblemonmorph.helper;
+package bryanthedragon.cobblemon.morph.helper;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
-import bryanthedragon.morph.cobblemonmorph.helper.tabs.CobblemonMorphModTabHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.mixins.CobblemonMorphMixinsHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.logger.CobblemonMorphLoggerHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.item.CobblemonMorphItemHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.client.CobblemonMorphClientHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.dependency.CobblemonMorphDependencyHelper;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.helper.tabs.CobblemonMorphModTabHelper;
+import bryanthedragon.cobblemon.morph.helper.mixins.CobblemonMorphMixinsHelper;
+import bryanthedragon.cobblemon.morph.helper.logger.CobblemonMorphLoggerHelper;
+import bryanthedragon.cobblemon.morph.helper.item.CobblemonMorphItemHelper;
+import bryanthedragon.cobblemon.morph.helper.client.CobblemonMorphClientHelper;
+import bryanthedragon.cobblemon.morph.helper.dependency.CobblemonMorphDependencyHelper;
 
 public class CobblemonMorphHelper extends CobblemonMorph
 {

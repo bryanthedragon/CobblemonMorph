@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.failsafe;
+package bryanthedragon.cobblemon.morph.failsafe;
 
-import bryanthedragon.morph.cobblemonmorph.failsafe.mixin.MixinFailSafe;
+import bryanthedragon.cobblemon.morph.failsafe.mixin.MixinFailSafe;
 
 public class FailSafe {
 

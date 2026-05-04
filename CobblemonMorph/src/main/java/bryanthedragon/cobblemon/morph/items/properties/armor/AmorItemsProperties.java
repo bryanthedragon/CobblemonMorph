@@ -1,4 +1,4 @@
-package bryanthedragon.morph.cobblemonmorph.items.properties.armor;
+package bryanthedragon.cobblemon.morph.items.properties.armor;
 
 public class AmorItemsProperties 
 {

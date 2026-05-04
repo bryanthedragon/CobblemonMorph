@@ -1,7 +1,7 @@
-package bryanthedragon.morph.cobblemonmorph.helper.registries.tabs.items.armor;
+package bryanthedragon.cobblemon.morph.helper.registries.tabs.items.armor;
 
-import bryanthedragon.morph.cobblemonmorph.icons.tabs.items.armor.CobblemonMorphArmorTabIcon;
-import bryanthedragon.morph.cobblemonmorph.helper.registries.tabs.items.CobblemonMorphItemsTabRegistry;
+import bryanthedragon.cobblemon.morph.icons.tabs.items.armor.CobblemonMorphArmorTabIcon;
+import bryanthedragon.cobblemon.morph.helper.registries.tabs.items.CobblemonMorphItemsTabRegistry;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;

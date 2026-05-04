@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.armor.helmet.hat.cowboy;
+package bryanthedragon.cobblemon.morph.items.armor.helmet.hat.cowboy;
 
-import bryanthedragon.morph.cobblemonmorph.items.armor.helmet.hat.Hats;
+import bryanthedragon.cobblemon.morph.items.armor.helmet.hat.Hats;
 
 public class CowboyHat extends Hats
 {

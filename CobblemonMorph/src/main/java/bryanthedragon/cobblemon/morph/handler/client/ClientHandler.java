@@ -1,16 +1,20 @@
-package bryanthedragon.morph.cobblemonmorph.handler.client;
+package bryanthedragon.cobblemon.morph.handler.client;
 
-import bryanthedragon.morph.cobblemonmorph.handler.Handler;
-import bryanthedragon.morph.cobblemonmorph.handler.client.shutdown.ClientShutdownHandler;
+import bryanthedragon.cobblemon.morph.handler.Handlers;
 
-public class ClientHandler extends Handler {
-    ClientShutdownHandler ShutdownHandlerInstance = new ClientShutdownHandler();
+public class ClientHandler extends Handlers {
 
-    public void init() {
-        System.out.println("Initializing client handler");
+    private final HandlerType type = HandlerType.CLIENT;
+
+    protected enum ClientType {
+        SHUTDOWN
     }
 
-    public ClientShutdownHandler getShutdownHandler() {
-        return ShutdownHandlerInstance;
+    protected HandlerType getType() {
+        return type;
+    }
+
+    protected void printType() {
+        System.err.println(this.type);
     }
 }

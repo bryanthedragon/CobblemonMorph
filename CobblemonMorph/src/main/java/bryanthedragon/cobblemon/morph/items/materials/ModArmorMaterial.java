@@ -1,4 +1,4 @@
-package bryanthedragon.morph.cobblemonmorph.items.materials;
+package bryanthedragon.cobblemon.morph.items.materials;
 
 import net.minecraft.resources.ResourceLocation;
 

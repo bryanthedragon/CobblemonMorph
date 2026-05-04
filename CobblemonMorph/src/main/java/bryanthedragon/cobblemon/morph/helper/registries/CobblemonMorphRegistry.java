@@ -1,7 +1,7 @@
-package bryanthedragon.morph.cobblemonmorph.helper.registries;
+package bryanthedragon.cobblemon.morph.helper.registries;
 
-import bryanthedragon.morph.cobblemonmorph.helper.CobblemonMorphHelper;
-import bryanthedragon.morph.cobblemonmorph.helper.registries.tabs.CobblemonMorphTabRegistry;
+import bryanthedragon.cobblemon.morph.helper.CobblemonMorphHelper;
+import bryanthedragon.cobblemon.morph.helper.registries.tabs.CobblemonMorphTabRegistry;
 
 public class CobblemonMorphRegistry extends CobblemonMorphHelper
 {

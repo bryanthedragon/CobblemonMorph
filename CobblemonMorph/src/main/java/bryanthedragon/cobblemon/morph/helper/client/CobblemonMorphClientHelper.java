@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.helper.client;
+package bryanthedragon.cobblemon.morph.helper.client;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
 
 import net.minecraft.client.Minecraft;
 

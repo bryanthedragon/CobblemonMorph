@@ -1,12 +1,15 @@
-package bryanthedragon.morph.cobblemonmorph.handler.client.shutdown;
+package bryanthedragon.cobblemon.morph.handler.client.shutdown;
 
-import bryanthedragon.morph.cobblemonmorph.handler.client.ClientHandler;
+import bryanthedragon.cobblemon.morph.handler.client.ClientHandler;
+
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class ClientShutdownHandler extends ClientHandler {
+
+    private final ClientType type = ClientType.SHUTDOWN;
 
     private static boolean wasRunning = true;
 
@@ -18,5 +21,8 @@ public class ClientShutdownHandler extends ClientHandler {
                 System.out.println("Client shutting down");
             }
         }
+    }
+    protected void printType() {
+        System.err.println(this.type);
     }
 }

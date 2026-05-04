@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.items.properties;
+package bryanthedragon.cobblemon.morph.items.properties;
 
-import bryanthedragon.morph.cobblemonmorph.items.properties.armor.AmorItemsProperties;
+import bryanthedragon.cobblemon.morph.items.properties.armor.AmorItemsProperties;
 
 public class ModItemsProperties 
 {

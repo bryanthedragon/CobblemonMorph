@@ -1,6 +1,6 @@
-package bryanthedragon.morph.cobblemonmorph.helper.logger;
+package bryanthedragon.cobblemon.morph.helper.logger;
 
-import bryanthedragon.morph.cobblemonmorph.CobblemonMorph;
+import bryanthedragon.cobblemon.morph.CobblemonMorph;
 
 public class CobblemonMorphLoggerHelper extends CobblemonMorph
 {
